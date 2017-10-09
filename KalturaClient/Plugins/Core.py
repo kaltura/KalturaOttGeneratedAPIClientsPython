@@ -31,7 +31,7 @@ from __future__ import absolute_import
 
 from ..Base import *
 
-API_VERSION = '4.5.31.43118'
+API_VERSION = '4.5.32.15170'
 
 ########## enums ##########
 # @package Kaltura
@@ -10321,7 +10321,8 @@ class KalturaSubscriptionEntitlement(KalturaEntitlement):
             isInGracePeriod=NotImplemented,
             paymentGatewayId=NotImplemented,
             paymentMethodId=NotImplemented,
-            scheduledSubscriptionId=NotImplemented):
+            scheduledSubscriptionId=NotImplemented,
+            isSuspended=NotImplemented):
         KalturaEntitlement.__init__(self,
             id,
             entitlementId,
@@ -10370,6 +10371,11 @@ class KalturaSubscriptionEntitlement(KalturaEntitlement):
         # @var int
         self.scheduledSubscriptionId = scheduledSubscriptionId
 
+        # Indicates if the subscription suspended
+        # @var bool
+        # @readonly
+        self.isSuspended = isSuspended
+
 
     PROPERTY_LOADERS = {
         'nextRenewalDate': getXmlNodeInt, 
@@ -10379,6 +10385,7 @@ class KalturaSubscriptionEntitlement(KalturaEntitlement):
         'paymentGatewayId': getXmlNodeInt, 
         'paymentMethodId': getXmlNodeInt, 
         'scheduledSubscriptionId': getXmlNodeInt, 
+        'isSuspended': getXmlNodeBool, 
     }
 
     def fromXml(self, node):
@@ -10422,6 +10429,9 @@ class KalturaSubscriptionEntitlement(KalturaEntitlement):
 
     def setScheduledSubscriptionId(self, newScheduledSubscriptionId):
         self.scheduledSubscriptionId = newScheduledSubscriptionId
+
+    def getIsSuspended(self):
+        return self.isSuspended
 
 
 # @package Kaltura
@@ -23350,6 +23360,16 @@ class KalturaHouseholdPaymentGatewayService(KalturaServiceBase):
         resultNode = self.client.doQueue()
         return KalturaObjectFactory.create(resultNode, 'KalturaHouseholdPaymentGatewayListResponse')
 
+    def resume(self, paymentGatewayId):
+        """Resumes all the entitlements of the given payment gateway"""
+
+        kparams = KalturaParams()
+        kparams.addIntIfDefined("paymentGatewayId", paymentGatewayId);
+        self.client.queueServiceActionCall("householdpaymentgateway", "resume", None, kparams)
+        if self.client.isMultiRequest():
+            return self.client.getMultiRequestResult()
+        resultNode = self.client.doQueue()
+
     def setChargeID(self, paymentGatewayExternalId, chargeId):
         """Set user billing account identifier (charge ID), for a specific household and a specific payment gateway"""
 
@@ -23361,6 +23381,16 @@ class KalturaHouseholdPaymentGatewayService(KalturaServiceBase):
             return self.client.getMultiRequestResult()
         resultNode = self.client.doQueue()
         return getXmlNodeBool(resultNode)
+
+    def suspend(self, paymentGatewayId):
+        """Suspends all the entitlements of the given payment gateway"""
+
+        kparams = KalturaParams()
+        kparams.addIntIfDefined("paymentGatewayId", paymentGatewayId);
+        self.client.queueServiceActionCall("householdpaymentgateway", "suspend", None, kparams)
+        if self.client.isMultiRequest():
+            return self.client.getMultiRequestResult()
+        resultNode = self.client.doQueue()
 
 
 # @package Kaltura
