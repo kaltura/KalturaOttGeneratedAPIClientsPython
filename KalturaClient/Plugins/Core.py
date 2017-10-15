@@ -31,7 +31,7 @@ from __future__ import absolute_import
 
 from ..Base import *
 
-API_VERSION = '4.5.5.21732'
+API_VERSION = '4.5.5.14502'
 
 ########## enums ##########
 # @package Kaltura
@@ -21423,7 +21423,7 @@ class KalturaAnnouncementService(KalturaServiceBase):
         if self.client.isMultiRequest():
             return self.client.getMultiRequestResult()
         resultNode = self.client.doQueue()
-        return KalturaObjectFactory.create(resultNode, KalturaAnnouncement)
+        return KalturaObjectFactory.create(resultNode, 'KalturaAnnouncement')
 
     def delete(self, id):
         """Delete an existing announcing. Announcement cannot be delete while being sent."""
@@ -21456,7 +21456,7 @@ class KalturaAnnouncementService(KalturaServiceBase):
         if self.client.isMultiRequest():
             return self.client.getMultiRequestResult()
         resultNode = self.client.doQueue()
-        return KalturaObjectFactory.create(resultNode, KalturaAnnouncementListResponse)
+        return KalturaObjectFactory.create(resultNode, 'KalturaAnnouncementListResponse')
 
     def update(self, announcementId, announcement):
         """Update an existing future system announcement push notification. Announcement can only be updated only before sending"""
@@ -21468,7 +21468,7 @@ class KalturaAnnouncementService(KalturaServiceBase):
         if self.client.isMultiRequest():
             return self.client.getMultiRequestResult()
         resultNode = self.client.doQueue()
-        return KalturaObjectFactory.create(resultNode, KalturaAnnouncement)
+        return KalturaObjectFactory.create(resultNode, 'KalturaAnnouncement')
 
     def updateStatus(self, id, status):
         """Update a system announcement status"""
@@ -21498,7 +21498,7 @@ class KalturaAppTokenService(KalturaServiceBase):
         if self.client.isMultiRequest():
             return self.client.getMultiRequestResult()
         resultNode = self.client.doQueue()
-        return KalturaObjectFactory.create(resultNode, KalturaAppToken)
+        return KalturaObjectFactory.create(resultNode, 'KalturaAppToken')
 
     def delete(self, id):
         """Delete application authentication token by id"""
@@ -21520,7 +21520,7 @@ class KalturaAppTokenService(KalturaServiceBase):
         if self.client.isMultiRequest():
             return self.client.getMultiRequestResult()
         resultNode = self.client.doQueue()
-        return KalturaObjectFactory.create(resultNode, KalturaAppToken)
+        return KalturaObjectFactory.create(resultNode, 'KalturaAppToken')
 
     def startSession(self, id, tokenHash, userId = NotImplemented, expiry = NotImplemented, udid = NotImplemented):
         """Starts a new KS (Kaltura Session) based on application authentication token id"""
@@ -21535,7 +21535,7 @@ class KalturaAppTokenService(KalturaServiceBase):
         if self.client.isMultiRequest():
             return self.client.getMultiRequestResult()
         resultNode = self.client.doQueue()
-        return KalturaObjectFactory.create(resultNode, KalturaSessionInfo)
+        return KalturaObjectFactory.create(resultNode, 'KalturaSessionInfo')
 
 
 # @package Kaltura
@@ -21553,7 +21553,7 @@ class KalturaAssetCommentService(KalturaServiceBase):
         if self.client.isMultiRequest():
             return self.client.getMultiRequestResult()
         resultNode = self.client.doQueue()
-        return KalturaObjectFactory.create(resultNode, KalturaAssetComment)
+        return KalturaObjectFactory.create(resultNode, 'KalturaAssetComment')
 
     def list(self, filter, pager = NotImplemented):
         """Returns asset comments by asset id"""
@@ -21565,7 +21565,7 @@ class KalturaAssetCommentService(KalturaServiceBase):
         if self.client.isMultiRequest():
             return self.client.getMultiRequestResult()
         resultNode = self.client.doQueue()
-        return KalturaObjectFactory.create(resultNode, KalturaAssetCommentListResponse)
+        return KalturaObjectFactory.create(resultNode, 'KalturaAssetCommentListResponse')
 
 
 # @package Kaltura
@@ -21583,7 +21583,7 @@ class KalturaAssetService(KalturaServiceBase):
         if self.client.isMultiRequest():
             return self.client.getMultiRequestResult()
         resultNode = self.client.doQueue()
-        return KalturaObjectFactory.create(resultNode, KalturaAssetCount)
+        return KalturaObjectFactory.create(resultNode, 'KalturaAssetCount')
 
     def get(self, id, assetReferenceType):
         """Returns media or EPG asset by media / EPG internal or external identifier"""
@@ -21595,7 +21595,7 @@ class KalturaAssetService(KalturaServiceBase):
         if self.client.isMultiRequest():
             return self.client.getMultiRequestResult()
         resultNode = self.client.doQueue()
-        return KalturaObjectFactory.create(resultNode, KalturaAsset)
+        return KalturaObjectFactory.create(resultNode, 'KalturaAsset')
 
     def getPlaybackContext(self, assetId, assetType, contextDataParams):
         """This action delivers all data relevant for player"""
@@ -21608,7 +21608,7 @@ class KalturaAssetService(KalturaServiceBase):
         if self.client.isMultiRequest():
             return self.client.getMultiRequestResult()
         resultNode = self.client.doQueue()
-        return KalturaObjectFactory.create(resultNode, KalturaPlaybackContext)
+        return KalturaObjectFactory.create(resultNode, 'KalturaPlaybackContext')
 
     def list(self, filter = NotImplemented, pager = NotImplemented):
         """Returns media or EPG assets. Filters by media identifiers or by EPG internal or external identifier."""
@@ -21620,7 +21620,7 @@ class KalturaAssetService(KalturaServiceBase):
         if self.client.isMultiRequest():
             return self.client.getMultiRequestResult()
         resultNode = self.client.doQueue()
-        return KalturaObjectFactory.create(resultNode, KalturaAssetListResponse)
+        return KalturaObjectFactory.create(resultNode, 'KalturaAssetListResponse')
 
 
 # @package Kaltura
@@ -21639,7 +21639,7 @@ class KalturaAssetFileService(KalturaServiceBase):
         if self.client.isMultiRequest():
             return self.client.getMultiRequestResult()
         resultNode = self.client.doQueue()
-        return KalturaObjectFactory.create(resultNode, KalturaAssetFileContext)
+        return KalturaObjectFactory.create(resultNode, 'KalturaAssetFileContext')
 
     def playManifest(self, partnerId, assetId, assetType, assetFileId, contextType, ks = NotImplemented):
         """Redirects to play manifest"""
@@ -21673,7 +21673,7 @@ class KalturaAssetHistoryService(KalturaServiceBase):
         if self.client.isMultiRequest():
             return self.client.getMultiRequestResult()
         resultNode = self.client.doQueue()
-        return KalturaObjectFactory.create(resultNode, KalturaAssetHistoryListResponse)
+        return KalturaObjectFactory.create(resultNode, 'KalturaAssetHistoryListResponse')
 
 
 # @package Kaltura
@@ -21691,7 +21691,7 @@ class KalturaAssetStatisticsService(KalturaServiceBase):
         if self.client.isMultiRequest():
             return self.client.getMultiRequestResult()
         resultNode = self.client.doQueue()
-        return KalturaObjectFactory.create(resultNode, KalturaAssetStatisticsListResponse)
+        return KalturaObjectFactory.create(resultNode, 'KalturaAssetStatisticsListResponse')
 
 
 # @package Kaltura
@@ -21722,7 +21722,7 @@ class KalturaBookmarkService(KalturaServiceBase):
         if self.client.isMultiRequest():
             return self.client.getMultiRequestResult()
         resultNode = self.client.doQueue()
-        return KalturaObjectFactory.create(resultNode, KalturaBookmarkListResponse)
+        return KalturaObjectFactory.create(resultNode, 'KalturaBookmarkListResponse')
 
 
 # @package Kaltura
@@ -21740,7 +21740,7 @@ class KalturaCdnAdapterProfileService(KalturaServiceBase):
         if self.client.isMultiRequest():
             return self.client.getMultiRequestResult()
         resultNode = self.client.doQueue()
-        return KalturaObjectFactory.create(resultNode, KalturaCDNAdapterProfile)
+        return KalturaObjectFactory.create(resultNode, 'KalturaCDNAdapterProfile')
 
     def delete(self, adapterId):
         """Delete CDN adapter by CDN adapter id"""
@@ -21762,7 +21762,7 @@ class KalturaCdnAdapterProfileService(KalturaServiceBase):
         if self.client.isMultiRequest():
             return self.client.getMultiRequestResult()
         resultNode = self.client.doQueue()
-        return KalturaObjectFactory.create(resultNode, KalturaCDNAdapterProfile)
+        return KalturaObjectFactory.create(resultNode, 'KalturaCDNAdapterProfile')
 
     def list(self):
         """Returns all CDN adapters for partner"""
@@ -21772,7 +21772,7 @@ class KalturaCdnAdapterProfileService(KalturaServiceBase):
         if self.client.isMultiRequest():
             return self.client.getMultiRequestResult()
         resultNode = self.client.doQueue()
-        return KalturaObjectFactory.create(resultNode, KalturaCDNAdapterProfileListResponse)
+        return KalturaObjectFactory.create(resultNode, 'KalturaCDNAdapterProfileListResponse')
 
     def update(self, adapterId, adapter):
         """Update CDN adapter details"""
@@ -21784,7 +21784,7 @@ class KalturaCdnAdapterProfileService(KalturaServiceBase):
         if self.client.isMultiRequest():
             return self.client.getMultiRequestResult()
         resultNode = self.client.doQueue()
-        return KalturaObjectFactory.create(resultNode, KalturaCDNAdapterProfile)
+        return KalturaObjectFactory.create(resultNode, 'KalturaCDNAdapterProfile')
 
 
 # @package Kaltura
@@ -21801,7 +21801,7 @@ class KalturaCdnPartnerSettingsService(KalturaServiceBase):
         if self.client.isMultiRequest():
             return self.client.getMultiRequestResult()
         resultNode = self.client.doQueue()
-        return KalturaObjectFactory.create(resultNode, KalturaCDNPartnerSettings)
+        return KalturaObjectFactory.create(resultNode, 'KalturaCDNPartnerSettings')
 
     def update(self, settings):
         """Configure the partner's CDN settings (default adapters)"""
@@ -21812,7 +21812,7 @@ class KalturaCdnPartnerSettingsService(KalturaServiceBase):
         if self.client.isMultiRequest():
             return self.client.getMultiRequestResult()
         resultNode = self.client.doQueue()
-        return KalturaObjectFactory.create(resultNode, KalturaCDNPartnerSettings)
+        return KalturaObjectFactory.create(resultNode, 'KalturaCDNPartnerSettings')
 
 
 # @package Kaltura
@@ -21830,7 +21830,7 @@ class KalturaCDVRAdapterProfileService(KalturaServiceBase):
         if self.client.isMultiRequest():
             return self.client.getMultiRequestResult()
         resultNode = self.client.doQueue()
-        return KalturaObjectFactory.create(resultNode, KalturaCDVRAdapterProfile)
+        return KalturaObjectFactory.create(resultNode, 'KalturaCDVRAdapterProfile')
 
     def delete(self, adapterId):
         """Delete C-DVR adapter by C-DVR adapter id"""
@@ -21852,7 +21852,7 @@ class KalturaCDVRAdapterProfileService(KalturaServiceBase):
         if self.client.isMultiRequest():
             return self.client.getMultiRequestResult()
         resultNode = self.client.doQueue()
-        return KalturaObjectFactory.create(resultNode, KalturaCDVRAdapterProfile)
+        return KalturaObjectFactory.create(resultNode, 'KalturaCDVRAdapterProfile')
 
     def list(self):
         """Returns all C-DVR adapters for partner"""
@@ -21862,7 +21862,7 @@ class KalturaCDVRAdapterProfileService(KalturaServiceBase):
         if self.client.isMultiRequest():
             return self.client.getMultiRequestResult()
         resultNode = self.client.doQueue()
-        return KalturaObjectFactory.create(resultNode, KalturaCDVRAdapterProfileListResponse)
+        return KalturaObjectFactory.create(resultNode, 'KalturaCDVRAdapterProfileListResponse')
 
     def update(self, adapterId, adapter):
         """Update C-DVR adapter details"""
@@ -21874,7 +21874,7 @@ class KalturaCDVRAdapterProfileService(KalturaServiceBase):
         if self.client.isMultiRequest():
             return self.client.getMultiRequestResult()
         resultNode = self.client.doQueue()
-        return KalturaObjectFactory.create(resultNode, KalturaCDVRAdapterProfile)
+        return KalturaObjectFactory.create(resultNode, 'KalturaCDVRAdapterProfile')
 
 
 # @package Kaltura
@@ -21892,7 +21892,7 @@ class KalturaChannelService(KalturaServiceBase):
         if self.client.isMultiRequest():
             return self.client.getMultiRequestResult()
         resultNode = self.client.doQueue()
-        return KalturaObjectFactory.create(resultNode, KalturaChannel)
+        return KalturaObjectFactory.create(resultNode, 'KalturaChannel')
 
     def delete(self, channelId):
         """Delete channel by its channel id"""
@@ -21914,7 +21914,7 @@ class KalturaChannelService(KalturaServiceBase):
         if self.client.isMultiRequest():
             return self.client.getMultiRequestResult()
         resultNode = self.client.doQueue()
-        return KalturaObjectFactory.create(resultNode, KalturaChannel)
+        return KalturaObjectFactory.create(resultNode, 'KalturaChannel')
 
     def update(self, channelId, channel):
         """Update channel details. Currently supports only KSQL channel"""
@@ -21926,7 +21926,7 @@ class KalturaChannelService(KalturaServiceBase):
         if self.client.isMultiRequest():
             return self.client.getMultiRequestResult()
         resultNode = self.client.doQueue()
-        return KalturaObjectFactory.create(resultNode, KalturaChannel)
+        return KalturaObjectFactory.create(resultNode, 'KalturaChannel')
 
 
 # @package Kaltura
@@ -21944,7 +21944,7 @@ class KalturaCompensationService(KalturaServiceBase):
         if self.client.isMultiRequest():
             return self.client.getMultiRequestResult()
         resultNode = self.client.doQueue()
-        return KalturaObjectFactory.create(resultNode, KalturaCompensation)
+        return KalturaObjectFactory.create(resultNode, 'KalturaCompensation')
 
     def delete(self, id):
         """Delete a compensation by identifier"""
@@ -21965,7 +21965,7 @@ class KalturaCompensationService(KalturaServiceBase):
         if self.client.isMultiRequest():
             return self.client.getMultiRequestResult()
         resultNode = self.client.doQueue()
-        return KalturaObjectFactory.create(resultNode, KalturaCompensation)
+        return KalturaObjectFactory.create(resultNode, 'KalturaCompensation')
 
 
 # @package Kaltura
@@ -21983,7 +21983,7 @@ class KalturaConfigurationGroupService(KalturaServiceBase):
         if self.client.isMultiRequest():
             return self.client.getMultiRequestResult()
         resultNode = self.client.doQueue()
-        return KalturaObjectFactory.create(resultNode, KalturaConfigurationGroup)
+        return KalturaObjectFactory.create(resultNode, 'KalturaConfigurationGroup')
 
     def delete(self, id):
         """Remove a configuration group, including its tags, device configurations and devices associations"""
@@ -22005,7 +22005,7 @@ class KalturaConfigurationGroupService(KalturaServiceBase):
         if self.client.isMultiRequest():
             return self.client.getMultiRequestResult()
         resultNode = self.client.doQueue()
-        return KalturaObjectFactory.create(resultNode, KalturaConfigurationGroup)
+        return KalturaObjectFactory.create(resultNode, 'KalturaConfigurationGroup')
 
     def list(self):
         """Return the list of configuration groups"""
@@ -22015,7 +22015,7 @@ class KalturaConfigurationGroupService(KalturaServiceBase):
         if self.client.isMultiRequest():
             return self.client.getMultiRequestResult()
         resultNode = self.client.doQueue()
-        return KalturaObjectFactory.create(resultNode, KalturaConfigurationGroupListResponse)
+        return KalturaObjectFactory.create(resultNode, 'KalturaConfigurationGroupListResponse')
 
     def update(self, id, configurationGroup):
         """Update configuration group name"""
@@ -22027,7 +22027,7 @@ class KalturaConfigurationGroupService(KalturaServiceBase):
         if self.client.isMultiRequest():
             return self.client.getMultiRequestResult()
         resultNode = self.client.doQueue()
-        return KalturaObjectFactory.create(resultNode, KalturaConfigurationGroup)
+        return KalturaObjectFactory.create(resultNode, 'KalturaConfigurationGroup')
 
 
 # @package Kaltura
@@ -22067,7 +22067,7 @@ class KalturaConfigurationGroupDeviceService(KalturaServiceBase):
         if self.client.isMultiRequest():
             return self.client.getMultiRequestResult()
         resultNode = self.client.doQueue()
-        return KalturaObjectFactory.create(resultNode, KalturaConfigurationGroupDevice)
+        return KalturaObjectFactory.create(resultNode, 'KalturaConfigurationGroupDevice')
 
     def list(self, filter, pager = NotImplemented):
         """Return the list of associated devices for a given configuration group"""
@@ -22079,7 +22079,7 @@ class KalturaConfigurationGroupDeviceService(KalturaServiceBase):
         if self.client.isMultiRequest():
             return self.client.getMultiRequestResult()
         resultNode = self.client.doQueue()
-        return KalturaObjectFactory.create(resultNode, KalturaConfigurationGroupDeviceListResponse)
+        return KalturaObjectFactory.create(resultNode, 'KalturaConfigurationGroupDeviceListResponse')
 
 
 # @package Kaltura
@@ -22097,7 +22097,7 @@ class KalturaConfigurationGroupTagService(KalturaServiceBase):
         if self.client.isMultiRequest():
             return self.client.getMultiRequestResult()
         resultNode = self.client.doQueue()
-        return KalturaObjectFactory.create(resultNode, KalturaConfigurationGroupTag)
+        return KalturaObjectFactory.create(resultNode, 'KalturaConfigurationGroupTag')
 
     def delete(self, tag):
         """Remove a tag association from configuration group"""
@@ -22119,7 +22119,7 @@ class KalturaConfigurationGroupTagService(KalturaServiceBase):
         if self.client.isMultiRequest():
             return self.client.getMultiRequestResult()
         resultNode = self.client.doQueue()
-        return KalturaObjectFactory.create(resultNode, KalturaConfigurationGroupTag)
+        return KalturaObjectFactory.create(resultNode, 'KalturaConfigurationGroupTag')
 
     def list(self, filter):
         """Return list of tags for a configuration group"""
@@ -22130,7 +22130,7 @@ class KalturaConfigurationGroupTagService(KalturaServiceBase):
         if self.client.isMultiRequest():
             return self.client.getMultiRequestResult()
         resultNode = self.client.doQueue()
-        return KalturaObjectFactory.create(resultNode, KalturaConfigurationGroupTagListResponse)
+        return KalturaObjectFactory.create(resultNode, 'KalturaConfigurationGroupTagListResponse')
 
 
 # @package Kaltura
@@ -22148,7 +22148,7 @@ class KalturaConfigurationsService(KalturaServiceBase):
         if self.client.isMultiRequest():
             return self.client.getMultiRequestResult()
         resultNode = self.client.doQueue()
-        return KalturaObjectFactory.create(resultNode, KalturaConfigurations)
+        return KalturaObjectFactory.create(resultNode, 'KalturaConfigurations')
 
     def delete(self, id):
         """Delete a device configuration"""
@@ -22170,7 +22170,7 @@ class KalturaConfigurationsService(KalturaServiceBase):
         if self.client.isMultiRequest():
             return self.client.getMultiRequestResult()
         resultNode = self.client.doQueue()
-        return KalturaObjectFactory.create(resultNode, KalturaConfigurations)
+        return KalturaObjectFactory.create(resultNode, 'KalturaConfigurations')
 
     def list(self, filter):
         """Return a list of device configurations of a configuration group"""
@@ -22181,7 +22181,7 @@ class KalturaConfigurationsService(KalturaServiceBase):
         if self.client.isMultiRequest():
             return self.client.getMultiRequestResult()
         resultNode = self.client.doQueue()
-        return KalturaObjectFactory.create(resultNode, KalturaConfigurationsListResponse)
+        return KalturaObjectFactory.create(resultNode, 'KalturaConfigurationsListResponse')
 
     def serveByDevice(self, applicationName, clientVersion, platform, udid, tag, partnerId = 0):
         """Return a device configuration applicable for a specific device (UDID), app name, software version, platform and optionally a configuration group's tag"""
@@ -22206,7 +22206,7 @@ class KalturaConfigurationsService(KalturaServiceBase):
         if self.client.isMultiRequest():
             return self.client.getMultiRequestResult()
         resultNode = self.client.doQueue()
-        return KalturaObjectFactory.create(resultNode, KalturaConfigurations)
+        return KalturaObjectFactory.create(resultNode, 'KalturaConfigurations')
 
 
 # @package Kaltura
@@ -22224,7 +22224,7 @@ class KalturaCountryService(KalturaServiceBase):
         if self.client.isMultiRequest():
             return self.client.getMultiRequestResult()
         resultNode = self.client.doQueue()
-        return KalturaObjectFactory.create(resultNode, KalturaCountryListResponse)
+        return KalturaObjectFactory.create(resultNode, 'KalturaCountryListResponse')
 
 
 # @package Kaltura
@@ -22242,7 +22242,7 @@ class KalturaCouponService(KalturaServiceBase):
         if self.client.isMultiRequest():
             return self.client.getMultiRequestResult()
         resultNode = self.client.doQueue()
-        return KalturaObjectFactory.create(resultNode, KalturaCoupon)
+        return KalturaObjectFactory.create(resultNode, 'KalturaCoupon')
 
 
 # @package Kaltura
@@ -22260,7 +22260,7 @@ class KalturaCurrencyService(KalturaServiceBase):
         if self.client.isMultiRequest():
             return self.client.getMultiRequestResult()
         resultNode = self.client.doQueue()
-        return KalturaObjectFactory.create(resultNode, KalturaCurrencyListResponse)
+        return KalturaObjectFactory.create(resultNode, 'KalturaCurrencyListResponse')
 
 
 # @package Kaltura
@@ -22277,7 +22277,7 @@ class KalturaDeviceBrandService(KalturaServiceBase):
         if self.client.isMultiRequest():
             return self.client.getMultiRequestResult()
         resultNode = self.client.doQueue()
-        return KalturaObjectFactory.create(resultNode, KalturaDeviceBrandListResponse)
+        return KalturaObjectFactory.create(resultNode, 'KalturaDeviceBrandListResponse')
 
 
 # @package Kaltura
@@ -22294,7 +22294,7 @@ class KalturaDeviceFamilyService(KalturaServiceBase):
         if self.client.isMultiRequest():
             return self.client.getMultiRequestResult()
         resultNode = self.client.doQueue()
-        return KalturaObjectFactory.create(resultNode, KalturaDeviceFamilyListResponse)
+        return KalturaObjectFactory.create(resultNode, 'KalturaDeviceFamilyListResponse')
 
 
 # @package Kaltura
@@ -22312,7 +22312,7 @@ class KalturaEngagementAdapterService(KalturaServiceBase):
         if self.client.isMultiRequest():
             return self.client.getMultiRequestResult()
         resultNode = self.client.doQueue()
-        return KalturaObjectFactory.create(resultNode, KalturaEngagementAdapter)
+        return KalturaObjectFactory.create(resultNode, 'KalturaEngagementAdapter')
 
     def delete(self, id):
         """Delete Engagement adapter by Engagement adapter id"""
@@ -22334,7 +22334,7 @@ class KalturaEngagementAdapterService(KalturaServiceBase):
         if self.client.isMultiRequest():
             return self.client.getMultiRequestResult()
         resultNode = self.client.doQueue()
-        return KalturaObjectFactory.create(resultNode, KalturaEngagementAdapter)
+        return KalturaObjectFactory.create(resultNode, 'KalturaEngagementAdapter')
 
     def get(self, id):
         """Returns all Engagement adapters for partner : id + name"""
@@ -22345,7 +22345,7 @@ class KalturaEngagementAdapterService(KalturaServiceBase):
         if self.client.isMultiRequest():
             return self.client.getMultiRequestResult()
         resultNode = self.client.doQueue()
-        return KalturaObjectFactory.create(resultNode, KalturaEngagementAdapter)
+        return KalturaObjectFactory.create(resultNode, 'KalturaEngagementAdapter')
 
     def list(self):
         """Returns all Engagement adapters for partner : id + name"""
@@ -22355,7 +22355,7 @@ class KalturaEngagementAdapterService(KalturaServiceBase):
         if self.client.isMultiRequest():
             return self.client.getMultiRequestResult()
         resultNode = self.client.doQueue()
-        return KalturaObjectFactory.create(resultNode, KalturaEngagementAdapterListResponse)
+        return KalturaObjectFactory.create(resultNode, 'KalturaEngagementAdapterListResponse')
 
     def update(self, id, engagementAdapter):
         """Update Engagement adapter details"""
@@ -22367,7 +22367,7 @@ class KalturaEngagementAdapterService(KalturaServiceBase):
         if self.client.isMultiRequest():
             return self.client.getMultiRequestResult()
         resultNode = self.client.doQueue()
-        return KalturaObjectFactory.create(resultNode, KalturaEngagementAdapter)
+        return KalturaObjectFactory.create(resultNode, 'KalturaEngagementAdapter')
 
 
 # @package Kaltura
@@ -22385,7 +22385,7 @@ class KalturaEngagementService(KalturaServiceBase):
         if self.client.isMultiRequest():
             return self.client.getMultiRequestResult()
         resultNode = self.client.doQueue()
-        return KalturaObjectFactory.create(resultNode, KalturaEngagement)
+        return KalturaObjectFactory.create(resultNode, 'KalturaEngagement')
 
     def delete(self, id):
         """Delete engagement by engagement adapter id"""
@@ -22407,7 +22407,7 @@ class KalturaEngagementService(KalturaServiceBase):
         if self.client.isMultiRequest():
             return self.client.getMultiRequestResult()
         resultNode = self.client.doQueue()
-        return KalturaObjectFactory.create(resultNode, KalturaEngagement)
+        return KalturaObjectFactory.create(resultNode, 'KalturaEngagement')
 
     def list(self, filter):
         """Returns all Engagement for partner"""
@@ -22418,7 +22418,7 @@ class KalturaEngagementService(KalturaServiceBase):
         if self.client.isMultiRequest():
             return self.client.getMultiRequestResult()
         resultNode = self.client.doQueue()
-        return KalturaObjectFactory.create(resultNode, KalturaEngagementListResponse)
+        return KalturaObjectFactory.create(resultNode, 'KalturaEngagementListResponse')
 
 
 # @package Kaltura
@@ -22506,7 +22506,7 @@ class KalturaEntitlementService(KalturaServiceBase):
         if self.client.isMultiRequest():
             return self.client.getMultiRequestResult()
         resultNode = self.client.doQueue()
-        return KalturaObjectFactory.create(resultNode, KalturaEntitlementListResponse)
+        return KalturaObjectFactory.create(resultNode, 'KalturaEntitlementListResponse')
 
     def swap(self, currentProductId, newProductId, history):
         """Swap current entitlement (subscription) with new entitlement (subscription) - only Grant"""
@@ -22531,7 +22531,7 @@ class KalturaEntitlementService(KalturaServiceBase):
         if self.client.isMultiRequest():
             return self.client.getMultiRequestResult()
         resultNode = self.client.doQueue()
-        return KalturaObjectFactory.create(resultNode, KalturaEntitlement)
+        return KalturaObjectFactory.create(resultNode, 'KalturaEntitlement')
 
 
 # @package Kaltura
@@ -22549,7 +22549,7 @@ class KalturaExportTaskService(KalturaServiceBase):
         if self.client.isMultiRequest():
             return self.client.getMultiRequestResult()
         resultNode = self.client.doQueue()
-        return KalturaObjectFactory.create(resultNode, KalturaExportTask)
+        return KalturaObjectFactory.create(resultNode, 'KalturaExportTask')
 
     def delete(self, id):
         """Deletes an existing bulk export task by task identifier"""
@@ -22571,7 +22571,7 @@ class KalturaExportTaskService(KalturaServiceBase):
         if self.client.isMultiRequest():
             return self.client.getMultiRequestResult()
         resultNode = self.client.doQueue()
-        return KalturaObjectFactory.create(resultNode, KalturaExportTask)
+        return KalturaObjectFactory.create(resultNode, 'KalturaExportTask')
 
     def list(self, filter = NotImplemented):
         """Returns bulk export tasks by tasks identifiers"""
@@ -22582,7 +22582,7 @@ class KalturaExportTaskService(KalturaServiceBase):
         if self.client.isMultiRequest():
             return self.client.getMultiRequestResult()
         resultNode = self.client.doQueue()
-        return KalturaObjectFactory.create(resultNode, KalturaExportTaskListResponse)
+        return KalturaObjectFactory.create(resultNode, 'KalturaExportTaskListResponse')
 
     def update(self, id, task):
         """Updates an existing bulk export task by task identifier"""
@@ -22594,7 +22594,7 @@ class KalturaExportTaskService(KalturaServiceBase):
         if self.client.isMultiRequest():
             return self.client.getMultiRequestResult()
         resultNode = self.client.doQueue()
-        return KalturaObjectFactory.create(resultNode, KalturaExportTask)
+        return KalturaObjectFactory.create(resultNode, 'KalturaExportTask')
 
 
 # @package Kaltura
@@ -22612,7 +22612,7 @@ class KalturaExternalChannelProfileService(KalturaServiceBase):
         if self.client.isMultiRequest():
             return self.client.getMultiRequestResult()
         resultNode = self.client.doQueue()
-        return KalturaObjectFactory.create(resultNode, KalturaExternalChannelProfile)
+        return KalturaObjectFactory.create(resultNode, 'KalturaExternalChannelProfile')
 
     def delete(self, externalChannelId):
         """Delete External channel by External channel id"""
@@ -22633,7 +22633,7 @@ class KalturaExternalChannelProfileService(KalturaServiceBase):
         if self.client.isMultiRequest():
             return self.client.getMultiRequestResult()
         resultNode = self.client.doQueue()
-        return KalturaObjectFactory.create(resultNode, KalturaExternalChannelProfileListResponse)
+        return KalturaObjectFactory.create(resultNode, 'KalturaExternalChannelProfileListResponse')
 
     def update(self, externalChannelId, externalChannel):
         """Update External channel details"""
@@ -22645,7 +22645,7 @@ class KalturaExternalChannelProfileService(KalturaServiceBase):
         if self.client.isMultiRequest():
             return self.client.getMultiRequestResult()
         resultNode = self.client.doQueue()
-        return KalturaObjectFactory.create(resultNode, KalturaExternalChannelProfile)
+        return KalturaObjectFactory.create(resultNode, 'KalturaExternalChannelProfile')
 
 
 # @package Kaltura
@@ -22663,7 +22663,7 @@ class KalturaFavoriteService(KalturaServiceBase):
         if self.client.isMultiRequest():
             return self.client.getMultiRequestResult()
         resultNode = self.client.doQueue()
-        return KalturaObjectFactory.create(resultNode, KalturaFavorite)
+        return KalturaObjectFactory.create(resultNode, 'KalturaFavorite')
 
     def delete(self, id):
         """Remove media from user&#39;s favorite list"""
@@ -22685,7 +22685,7 @@ class KalturaFavoriteService(KalturaServiceBase):
         if self.client.isMultiRequest():
             return self.client.getMultiRequestResult()
         resultNode = self.client.doQueue()
-        return KalturaObjectFactory.create(resultNode, KalturaFavoriteListResponse)
+        return KalturaObjectFactory.create(resultNode, 'KalturaFavoriteListResponse')
 
 
 # @package Kaltura
@@ -22704,7 +22704,7 @@ class KalturaFollowTvSeriesService(KalturaServiceBase):
         if self.client.isMultiRequest():
             return self.client.getMultiRequestResult()
         resultNode = self.client.doQueue()
-        return KalturaObjectFactory.create(resultNode, KalturaFollowTvSeries)
+        return KalturaObjectFactory.create(resultNode, 'KalturaFollowTvSeries')
 
     def delete(self, assetId):
         """Delete a user&#39;s tv series follow.
@@ -22729,7 +22729,7 @@ class KalturaFollowTvSeriesService(KalturaServiceBase):
         if self.client.isMultiRequest():
             return self.client.getMultiRequestResult()
         resultNode = self.client.doQueue()
-        return KalturaObjectFactory.create(resultNode, KalturaFollowTvSeriesListResponse)
+        return KalturaObjectFactory.create(resultNode, 'KalturaFollowTvSeriesListResponse')
 
 
 # @package Kaltura
@@ -22747,7 +22747,7 @@ class KalturaHomeNetworkService(KalturaServiceBase):
         if self.client.isMultiRequest():
             return self.client.getMultiRequestResult()
         resultNode = self.client.doQueue()
-        return KalturaObjectFactory.create(resultNode, KalturaHomeNetwork)
+        return KalturaObjectFactory.create(resultNode, 'KalturaHomeNetwork')
 
     def delete(self, externalId):
         """Delete household's existing home network"""
@@ -22768,7 +22768,7 @@ class KalturaHomeNetworkService(KalturaServiceBase):
         if self.client.isMultiRequest():
             return self.client.getMultiRequestResult()
         resultNode = self.client.doQueue()
-        return KalturaObjectFactory.create(resultNode, KalturaHomeNetworkListResponse)
+        return KalturaObjectFactory.create(resultNode, 'KalturaHomeNetworkListResponse')
 
     def update(self, externalId, homeNetwork):
         """Update and existing home network for a household"""
@@ -22780,7 +22780,7 @@ class KalturaHomeNetworkService(KalturaServiceBase):
         if self.client.isMultiRequest():
             return self.client.getMultiRequestResult()
         resultNode = self.client.doQueue()
-        return KalturaObjectFactory.create(resultNode, KalturaHomeNetwork)
+        return KalturaObjectFactory.create(resultNode, 'KalturaHomeNetwork')
 
 
 # @package Kaltura
@@ -22798,7 +22798,7 @@ class KalturaHouseholdService(KalturaServiceBase):
         if self.client.isMultiRequest():
             return self.client.getMultiRequestResult()
         resultNode = self.client.doQueue()
-        return KalturaObjectFactory.create(resultNode, KalturaHousehold)
+        return KalturaObjectFactory.create(resultNode, 'KalturaHousehold')
 
     def delete(self, id = NotImplemented):
         """Fully delete a household. Delete all of the household information, including users, devices, entitlements, payment methods and notification date."""
@@ -22820,7 +22820,7 @@ class KalturaHouseholdService(KalturaServiceBase):
         if self.client.isMultiRequest():
             return self.client.getMultiRequestResult()
         resultNode = self.client.doQueue()
-        return KalturaObjectFactory.create(resultNode, KalturaHousehold)
+        return KalturaObjectFactory.create(resultNode, 'KalturaHousehold')
 
     def resetFrequency(self, frequencyType):
         """Reset a household's time limitation for removing user or device"""
@@ -22831,7 +22831,7 @@ class KalturaHouseholdService(KalturaServiceBase):
         if self.client.isMultiRequest():
             return self.client.getMultiRequestResult()
         resultNode = self.client.doQueue()
-        return KalturaObjectFactory.create(resultNode, KalturaHousehold)
+        return KalturaObjectFactory.create(resultNode, 'KalturaHousehold')
 
     def resume(self):
         """Resumed a given household service to its previous service settings"""
@@ -22862,7 +22862,7 @@ class KalturaHouseholdService(KalturaServiceBase):
         if self.client.isMultiRequest():
             return self.client.getMultiRequestResult()
         resultNode = self.client.doQueue()
-        return KalturaObjectFactory.create(resultNode, KalturaHousehold)
+        return KalturaObjectFactory.create(resultNode, 'KalturaHousehold')
 
 
 # @package Kaltura
@@ -22880,7 +22880,7 @@ class KalturaHouseholdDeviceService(KalturaServiceBase):
         if self.client.isMultiRequest():
             return self.client.getMultiRequestResult()
         resultNode = self.client.doQueue()
-        return KalturaObjectFactory.create(resultNode, KalturaHouseholdDevice)
+        return KalturaObjectFactory.create(resultNode, 'KalturaHouseholdDevice')
 
     def addByPin(self, deviceName, pin):
         """Registers a device to a household using pin code"""
@@ -22892,7 +22892,7 @@ class KalturaHouseholdDeviceService(KalturaServiceBase):
         if self.client.isMultiRequest():
             return self.client.getMultiRequestResult()
         resultNode = self.client.doQueue()
-        return KalturaObjectFactory.create(resultNode, KalturaHouseholdDevice)
+        return KalturaObjectFactory.create(resultNode, 'KalturaHouseholdDevice')
 
     def delete(self, udid):
         """Removes a device from household"""
@@ -22915,7 +22915,7 @@ class KalturaHouseholdDeviceService(KalturaServiceBase):
         if self.client.isMultiRequest():
             return self.client.getMultiRequestResult()
         resultNode = self.client.doQueue()
-        return KalturaObjectFactory.create(resultNode, KalturaDevicePin)
+        return KalturaObjectFactory.create(resultNode, 'KalturaDevicePin')
 
     def get(self):
         """Returns device registration status to the supplied household"""
@@ -22925,7 +22925,7 @@ class KalturaHouseholdDeviceService(KalturaServiceBase):
         if self.client.isMultiRequest():
             return self.client.getMultiRequestResult()
         resultNode = self.client.doQueue()
-        return KalturaObjectFactory.create(resultNode, KalturaHouseholdDevice)
+        return KalturaObjectFactory.create(resultNode, 'KalturaHouseholdDevice')
 
     def list(self, filter = NotImplemented):
         """Returns the devices within the household"""
@@ -22936,7 +22936,7 @@ class KalturaHouseholdDeviceService(KalturaServiceBase):
         if self.client.isMultiRequest():
             return self.client.getMultiRequestResult()
         resultNode = self.client.doQueue()
-        return KalturaObjectFactory.create(resultNode, KalturaHouseholdDeviceListResponse)
+        return KalturaObjectFactory.create(resultNode, 'KalturaHouseholdDeviceListResponse')
 
     def loginWithPin(self, partnerId, pin, udid = NotImplemented):
         """User sign-in via a time-expired sign-in PIN."""
@@ -22949,7 +22949,7 @@ class KalturaHouseholdDeviceService(KalturaServiceBase):
         if self.client.isMultiRequest():
             return self.client.getMultiRequestResult()
         resultNode = self.client.doQueue()
-        return KalturaObjectFactory.create(resultNode, KalturaLoginResponse)
+        return KalturaObjectFactory.create(resultNode, 'KalturaLoginResponse')
 
     def update(self, udid, device):
         """Update the name of the device by UDID"""
@@ -22961,7 +22961,7 @@ class KalturaHouseholdDeviceService(KalturaServiceBase):
         if self.client.isMultiRequest():
             return self.client.getMultiRequestResult()
         resultNode = self.client.doQueue()
-        return KalturaObjectFactory.create(resultNode, KalturaHouseholdDevice)
+        return KalturaObjectFactory.create(resultNode, 'KalturaHouseholdDevice')
 
     def updateStatus(self, udid, status):
         """Update the name of the device by UDID"""
@@ -22991,7 +22991,7 @@ class KalturaHouseholdLimitationsService(KalturaServiceBase):
         if self.client.isMultiRequest():
             return self.client.getMultiRequestResult()
         resultNode = self.client.doQueue()
-        return KalturaObjectFactory.create(resultNode, KalturaHouseholdLimitations)
+        return KalturaObjectFactory.create(resultNode, 'KalturaHouseholdLimitations')
 
 
 # @package Kaltura
@@ -23044,7 +23044,7 @@ class KalturaHouseholdPaymentGatewayService(KalturaServiceBase):
         if self.client.isMultiRequest():
             return self.client.getMultiRequestResult()
         resultNode = self.client.doQueue()
-        return KalturaObjectFactory.create(resultNode, KalturaPaymentGatewayConfiguration)
+        return KalturaObjectFactory.create(resultNode, 'KalturaPaymentGatewayConfiguration')
 
     def list(self):
         """Get a list of all configured Payment Gateways providers available for the account. For each payment is provided with the household associated payment methods."""
@@ -23054,7 +23054,7 @@ class KalturaHouseholdPaymentGatewayService(KalturaServiceBase):
         if self.client.isMultiRequest():
             return self.client.getMultiRequestResult()
         resultNode = self.client.doQueue()
-        return KalturaObjectFactory.create(resultNode, KalturaHouseholdPaymentGatewayListResponse)
+        return KalturaObjectFactory.create(resultNode, 'KalturaHouseholdPaymentGatewayListResponse')
 
     def setChargeID(self, paymentGatewayExternalId, chargeId):
         """Set user billing account identifier (charge ID), for a specific household and a specific payment gateway"""
@@ -23084,7 +23084,7 @@ class KalturaHouseholdPaymentMethodService(KalturaServiceBase):
         if self.client.isMultiRequest():
             return self.client.getMultiRequestResult()
         resultNode = self.client.doQueue()
-        return KalturaObjectFactory.create(resultNode, KalturaHouseholdPaymentMethod)
+        return KalturaObjectFactory.create(resultNode, 'KalturaHouseholdPaymentMethod')
 
     def forceRemove(self, paymentGatewayId, paymentMethodId):
         """Force remove of a payment method of the household."""
@@ -23106,7 +23106,7 @@ class KalturaHouseholdPaymentMethodService(KalturaServiceBase):
         if self.client.isMultiRequest():
             return self.client.getMultiRequestResult()
         resultNode = self.client.doQueue()
-        return KalturaObjectFactory.create(resultNode, KalturaHouseholdPaymentMethodListResponse)
+        return KalturaObjectFactory.create(resultNode, 'KalturaHouseholdPaymentMethodListResponse')
 
     def remove(self, paymentGatewayId, paymentMethodId):
         """Removes a payment method of the household."""
@@ -23147,7 +23147,7 @@ class KalturaHouseholdPremiumServiceService(KalturaServiceBase):
         if self.client.isMultiRequest():
             return self.client.getMultiRequestResult()
         resultNode = self.client.doQueue()
-        return KalturaObjectFactory.create(resultNode, KalturaHouseholdPremiumServiceListResponse)
+        return KalturaObjectFactory.create(resultNode, 'KalturaHouseholdPremiumServiceListResponse')
 
 
 # @package Kaltura
@@ -23164,7 +23164,7 @@ class KalturaHouseholdQuotaService(KalturaServiceBase):
         if self.client.isMultiRequest():
             return self.client.getMultiRequestResult()
         resultNode = self.client.doQueue()
-        return KalturaObjectFactory.create(resultNode, KalturaHouseholdQuota)
+        return KalturaObjectFactory.create(resultNode, 'KalturaHouseholdQuota')
 
 
 # @package Kaltura
@@ -23182,7 +23182,7 @@ class KalturaHouseholdUserService(KalturaServiceBase):
         if self.client.isMultiRequest():
             return self.client.getMultiRequestResult()
         resultNode = self.client.doQueue()
-        return KalturaObjectFactory.create(resultNode, KalturaHouseholdUser)
+        return KalturaObjectFactory.create(resultNode, 'KalturaHouseholdUser')
 
     def delete(self, id):
         """Removes a user from household"""
@@ -23204,7 +23204,7 @@ class KalturaHouseholdUserService(KalturaServiceBase):
         if self.client.isMultiRequest():
             return self.client.getMultiRequestResult()
         resultNode = self.client.doQueue()
-        return KalturaObjectFactory.create(resultNode, KalturaHouseholdUserListResponse)
+        return KalturaObjectFactory.create(resultNode, 'KalturaHouseholdUserListResponse')
 
 
 # @package Kaltura
@@ -23222,7 +23222,7 @@ class KalturaInboxMessageService(KalturaServiceBase):
         if self.client.isMultiRequest():
             return self.client.getMultiRequestResult()
         resultNode = self.client.doQueue()
-        return KalturaObjectFactory.create(resultNode, KalturaInboxMessage)
+        return KalturaObjectFactory.create(resultNode, 'KalturaInboxMessage')
 
     def list(self, filter = NotImplemented, pager = NotImplemented):
         """List inbox messages"""
@@ -23234,7 +23234,7 @@ class KalturaInboxMessageService(KalturaServiceBase):
         if self.client.isMultiRequest():
             return self.client.getMultiRequestResult()
         resultNode = self.client.doQueue()
-        return KalturaObjectFactory.create(resultNode, KalturaInboxMessageListResponse)
+        return KalturaObjectFactory.create(resultNode, 'KalturaInboxMessageListResponse')
 
     def updateStatus(self, id, status):
         """Updates the message status."""
@@ -23264,7 +23264,7 @@ class KalturaLanguageService(KalturaServiceBase):
         if self.client.isMultiRequest():
             return self.client.getMultiRequestResult()
         resultNode = self.client.doQueue()
-        return KalturaObjectFactory.create(resultNode, KalturaLanguageListResponse)
+        return KalturaObjectFactory.create(resultNode, 'KalturaLanguageListResponse')
 
 
 # @package Kaltura
@@ -23282,7 +23282,7 @@ class KalturaLicensedUrlService(KalturaServiceBase):
         if self.client.isMultiRequest():
             return self.client.getMultiRequestResult()
         resultNode = self.client.doQueue()
-        return KalturaObjectFactory.create(resultNode, KalturaLicensedUrl)
+        return KalturaObjectFactory.create(resultNode, 'KalturaLicensedUrl')
 
 
 # @package Kaltura
@@ -23300,7 +23300,7 @@ class KalturaMessageTemplateService(KalturaServiceBase):
         if self.client.isMultiRequest():
             return self.client.getMultiRequestResult()
         resultNode = self.client.doQueue()
-        return KalturaObjectFactory.create(resultNode, KalturaMessageTemplate)
+        return KalturaObjectFactory.create(resultNode, 'KalturaMessageTemplate')
 
     def update(self, messageType, template):
         """Set the account's push notifications and inbox messages templates"""
@@ -23312,7 +23312,7 @@ class KalturaMessageTemplateService(KalturaServiceBase):
         if self.client.isMultiRequest():
             return self.client.getMultiRequestResult()
         resultNode = self.client.doQueue()
-        return KalturaObjectFactory.create(resultNode, KalturaMessageTemplate)
+        return KalturaObjectFactory.create(resultNode, 'KalturaMessageTemplate')
 
 
 # @package Kaltura
@@ -23330,7 +23330,7 @@ class KalturaMetaService(KalturaServiceBase):
         if self.client.isMultiRequest():
             return self.client.getMultiRequestResult()
         resultNode = self.client.doQueue()
-        return KalturaObjectFactory.create(resultNode, KalturaMetaListResponse)
+        return KalturaObjectFactory.create(resultNode, 'KalturaMetaListResponse')
 
     def update(self, id, meta):
         """Update meta&#39;s user interest"""
@@ -23342,7 +23342,7 @@ class KalturaMetaService(KalturaServiceBase):
         if self.client.isMultiRequest():
             return self.client.getMultiRequestResult()
         resultNode = self.client.doQueue()
-        return KalturaObjectFactory.create(resultNode, KalturaMeta)
+        return KalturaObjectFactory.create(resultNode, 'KalturaMeta')
 
 
 # @package Kaltura
@@ -23361,7 +23361,7 @@ class KalturaNotificationService(KalturaServiceBase):
         if self.client.isMultiRequest():
             return self.client.getMultiRequestResult()
         resultNode = self.client.doQueue()
-        return KalturaObjectFactory.create(resultNode, KalturaRegistryResponse)
+        return KalturaObjectFactory.create(resultNode, 'KalturaRegistryResponse')
 
     def sendPush(self, userId, pushMessage):
         """Sends push notification to user devices"""
@@ -23401,7 +23401,7 @@ class KalturaNotificationsPartnerSettingsService(KalturaServiceBase):
         if self.client.isMultiRequest():
             return self.client.getMultiRequestResult()
         resultNode = self.client.doQueue()
-        return KalturaObjectFactory.create(resultNode, KalturaNotificationsPartnerSettings)
+        return KalturaObjectFactory.create(resultNode, 'KalturaNotificationsPartnerSettings')
 
     def update(self, settings):
         """Update the account notification settings"""
@@ -23429,7 +23429,7 @@ class KalturaNotificationsSettingsService(KalturaServiceBase):
         if self.client.isMultiRequest():
             return self.client.getMultiRequestResult()
         resultNode = self.client.doQueue()
-        return KalturaObjectFactory.create(resultNode, KalturaNotificationsSettings)
+        return KalturaObjectFactory.create(resultNode, 'KalturaNotificationsSettings')
 
     def update(self, settings):
         """Update the user's notification settings."""
@@ -23458,7 +23458,7 @@ class KalturaOssAdapterProfileService(KalturaServiceBase):
         if self.client.isMultiRequest():
             return self.client.getMultiRequestResult()
         resultNode = self.client.doQueue()
-        return KalturaObjectFactory.create(resultNode, KalturaOSSAdapterProfile)
+        return KalturaObjectFactory.create(resultNode, 'KalturaOSSAdapterProfile')
 
     def delete(self, ossAdapterId):
         """Delete OSS adapter by OSS adapter id"""
@@ -23480,7 +23480,7 @@ class KalturaOssAdapterProfileService(KalturaServiceBase):
         if self.client.isMultiRequest():
             return self.client.getMultiRequestResult()
         resultNode = self.client.doQueue()
-        return KalturaObjectFactory.create(resultNode, KalturaOSSAdapterProfile)
+        return KalturaObjectFactory.create(resultNode, 'KalturaOSSAdapterProfile')
 
     def get(self, id):
         """Returns all OSS adapters for partner : id + name"""
@@ -23491,7 +23491,7 @@ class KalturaOssAdapterProfileService(KalturaServiceBase):
         if self.client.isMultiRequest():
             return self.client.getMultiRequestResult()
         resultNode = self.client.doQueue()
-        return KalturaObjectFactory.create(resultNode, KalturaOSSAdapterProfile)
+        return KalturaObjectFactory.create(resultNode, 'KalturaOSSAdapterProfile')
 
     def list(self):
         """Returns all OSS adapters for partner : id + name"""
@@ -23501,7 +23501,7 @@ class KalturaOssAdapterProfileService(KalturaServiceBase):
         if self.client.isMultiRequest():
             return self.client.getMultiRequestResult()
         resultNode = self.client.doQueue()
-        return KalturaObjectFactory.create(resultNode, KalturaOSSAdapterProfileListResponse)
+        return KalturaObjectFactory.create(resultNode, 'KalturaOSSAdapterProfileListResponse')
 
     def update(self, ossAdapterId, ossAdapter):
         """Update OSS adapter details"""
@@ -23513,7 +23513,7 @@ class KalturaOssAdapterProfileService(KalturaServiceBase):
         if self.client.isMultiRequest():
             return self.client.getMultiRequestResult()
         resultNode = self.client.doQueue()
-        return KalturaObjectFactory.create(resultNode, KalturaOSSAdapterProfile)
+        return KalturaObjectFactory.create(resultNode, 'KalturaOSSAdapterProfile')
 
 
 # @package Kaltura
@@ -23531,7 +23531,7 @@ class KalturaOttCategoryService(KalturaServiceBase):
         if self.client.isMultiRequest():
             return self.client.getMultiRequestResult()
         resultNode = self.client.doQueue()
-        return KalturaObjectFactory.create(resultNode, KalturaOTTCategory)
+        return KalturaObjectFactory.create(resultNode, 'KalturaOTTCategory')
 
 
 # @package Kaltura
@@ -23551,7 +23551,7 @@ class KalturaOttUserService(KalturaServiceBase):
         if self.client.isMultiRequest():
             return self.client.getMultiRequestResult()
         resultNode = self.client.doQueue()
-        return KalturaObjectFactory.create(resultNode, KalturaOTTUser)
+        return KalturaObjectFactory.create(resultNode, 'KalturaOTTUser')
 
     def addRole(self, roleId):
         """Edit user details."""
@@ -23574,7 +23574,7 @@ class KalturaOttUserService(KalturaServiceBase):
         if self.client.isMultiRequest():
             return self.client.getMultiRequestResult()
         resultNode = self.client.doQueue()
-        return KalturaObjectFactory.create(resultNode, KalturaLoginSession)
+        return KalturaObjectFactory.create(resultNode, 'KalturaLoginSession')
 
     def delete(self):
         """Permanently delete a user. User to delete cannot be an exclusive household master, and cannot be default user."""
@@ -23594,7 +23594,7 @@ class KalturaOttUserService(KalturaServiceBase):
         if self.client.isMultiRequest():
             return self.client.getMultiRequestResult()
         resultNode = self.client.doQueue()
-        return KalturaObjectFactory.create(resultNode, KalturaOTTUser)
+        return KalturaObjectFactory.create(resultNode, 'KalturaOTTUser')
 
     def getEncryptedUserId(self):
         """Returns the identifier of the user encrypted with SHA1 using configured key"""
@@ -23604,7 +23604,7 @@ class KalturaOttUserService(KalturaServiceBase):
         if self.client.isMultiRequest():
             return self.client.getMultiRequestResult()
         resultNode = self.client.doQueue()
-        return KalturaObjectFactory.create(resultNode, KalturaStringValue)
+        return KalturaObjectFactory.create(resultNode, 'KalturaStringValue')
 
     def list(self, filter = NotImplemented):
         """Retrieve user by external identifier or username or if filter is null all user in the master or the user itself"""
@@ -23615,7 +23615,7 @@ class KalturaOttUserService(KalturaServiceBase):
         if self.client.isMultiRequest():
             return self.client.getMultiRequestResult()
         resultNode = self.client.doQueue()
-        return KalturaObjectFactory.create(resultNode, KalturaOTTUserListResponse)
+        return KalturaObjectFactory.create(resultNode, 'KalturaOTTUserListResponse')
 
     def login(self, partnerId, username = NotImplemented, password = NotImplemented, extraParams = NotImplemented, udid = NotImplemented):
         """login with user name and password."""
@@ -23630,7 +23630,7 @@ class KalturaOttUserService(KalturaServiceBase):
         if self.client.isMultiRequest():
             return self.client.getMultiRequestResult()
         resultNode = self.client.doQueue()
-        return KalturaObjectFactory.create(resultNode, KalturaLoginResponse)
+        return KalturaObjectFactory.create(resultNode, 'KalturaLoginResponse')
 
     def loginWithPin(self, partnerId, pin, udid = NotImplemented, secret = NotImplemented):
         """User sign-in via a time-expired sign-in PIN."""
@@ -23644,7 +23644,7 @@ class KalturaOttUserService(KalturaServiceBase):
         if self.client.isMultiRequest():
             return self.client.getMultiRequestResult()
         resultNode = self.client.doQueue()
-        return KalturaObjectFactory.create(resultNode, KalturaLoginResponse)
+        return KalturaObjectFactory.create(resultNode, 'KalturaLoginResponse')
 
     def logout(self):
         """Logout the calling user."""
@@ -23666,7 +23666,7 @@ class KalturaOttUserService(KalturaServiceBase):
         if self.client.isMultiRequest():
             return self.client.getMultiRequestResult()
         resultNode = self.client.doQueue()
-        return KalturaObjectFactory.create(resultNode, KalturaLoginSession)
+        return KalturaObjectFactory.create(resultNode, 'KalturaLoginSession')
 
     def register(self, partnerId, user, password):
         """Sign up a new user."""
@@ -23679,7 +23679,7 @@ class KalturaOttUserService(KalturaServiceBase):
         if self.client.isMultiRequest():
             return self.client.getMultiRequestResult()
         resultNode = self.client.doQueue()
-        return KalturaObjectFactory.create(resultNode, KalturaOTTUser)
+        return KalturaObjectFactory.create(resultNode, 'KalturaOTTUser')
 
     def resendActivationToken(self, partnerId, username):
         """Resend the activation token to a user"""
@@ -23716,7 +23716,7 @@ class KalturaOttUserService(KalturaServiceBase):
         if self.client.isMultiRequest():
             return self.client.getMultiRequestResult()
         resultNode = self.client.doQueue()
-        return KalturaObjectFactory.create(resultNode, KalturaOTTUser)
+        return KalturaObjectFactory.create(resultNode, 'KalturaOTTUser')
 
     def update(self, user, id = NotImplemented):
         """Update user information"""
@@ -23728,7 +23728,7 @@ class KalturaOttUserService(KalturaServiceBase):
         if self.client.isMultiRequest():
             return self.client.getMultiRequestResult()
         resultNode = self.client.doQueue()
-        return KalturaObjectFactory.create(resultNode, KalturaOTTUser)
+        return KalturaObjectFactory.create(resultNode, 'KalturaOTTUser')
 
     def updateLoginData(self, username, oldPassword, newPassword):
         """Given a user name and existing password, change to a new password."""
@@ -23806,7 +23806,7 @@ class KalturaParentalRuleService(KalturaServiceBase):
         if self.client.isMultiRequest():
             return self.client.getMultiRequestResult()
         resultNode = self.client.doQueue()
-        return KalturaObjectFactory.create(resultNode, KalturaParentalRuleListResponse)
+        return KalturaObjectFactory.create(resultNode, 'KalturaParentalRuleListResponse')
 
 
 # @package Kaltura
@@ -23842,7 +23842,7 @@ class KalturaPaymentGatewayProfileService(KalturaServiceBase):
         if self.client.isMultiRequest():
             return self.client.getMultiRequestResult()
         resultNode = self.client.doQueue()
-        return KalturaObjectFactory.create(resultNode, KalturaPaymentGatewayProfile)
+        return KalturaObjectFactory.create(resultNode, 'KalturaPaymentGatewayProfile')
 
     def delete(self, paymentGatewayId):
         """Delete payment gateway by payment gateway id"""
@@ -23864,7 +23864,7 @@ class KalturaPaymentGatewayProfileService(KalturaServiceBase):
         if self.client.isMultiRequest():
             return self.client.getMultiRequestResult()
         resultNode = self.client.doQueue()
-        return KalturaObjectFactory.create(resultNode, KalturaPaymentGatewayProfile)
+        return KalturaObjectFactory.create(resultNode, 'KalturaPaymentGatewayProfile')
 
     def getConfiguration(self, alias, intent, extraParameters):
         """Gets the Payment Gateway Configuration for the payment gateway identifier given"""
@@ -23877,7 +23877,7 @@ class KalturaPaymentGatewayProfileService(KalturaServiceBase):
         if self.client.isMultiRequest():
             return self.client.getMultiRequestResult()
         resultNode = self.client.doQueue()
-        return KalturaObjectFactory.create(resultNode, KalturaPaymentGatewayConfiguration)
+        return KalturaObjectFactory.create(resultNode, 'KalturaPaymentGatewayConfiguration')
 
     def list(self):
         """Returns all payment gateways for partner : id + name"""
@@ -23887,7 +23887,7 @@ class KalturaPaymentGatewayProfileService(KalturaServiceBase):
         if self.client.isMultiRequest():
             return self.client.getMultiRequestResult()
         resultNode = self.client.doQueue()
-        return KalturaObjectFactory.create(resultNode, KalturaPaymentGatewayProfileListResponse)
+        return KalturaObjectFactory.create(resultNode, 'KalturaPaymentGatewayProfileListResponse')
 
     def update(self, paymentGatewayId, paymentGateway):
         """Update payment gateway details"""
@@ -23899,7 +23899,7 @@ class KalturaPaymentGatewayProfileService(KalturaServiceBase):
         if self.client.isMultiRequest():
             return self.client.getMultiRequestResult()
         resultNode = self.client.doQueue()
-        return KalturaObjectFactory.create(resultNode, KalturaPaymentGatewayProfile)
+        return KalturaObjectFactory.create(resultNode, 'KalturaPaymentGatewayProfile')
 
 
 # @package Kaltura
@@ -23917,7 +23917,7 @@ class KalturaPaymentMethodProfileService(KalturaServiceBase):
         if self.client.isMultiRequest():
             return self.client.getMultiRequestResult()
         resultNode = self.client.doQueue()
-        return KalturaObjectFactory.create(resultNode, KalturaPaymentMethodProfile)
+        return KalturaObjectFactory.create(resultNode, 'KalturaPaymentMethodProfile')
 
     def delete(self, paymentMethodId):
         """Delete payment method profile"""
@@ -23939,7 +23939,7 @@ class KalturaPaymentMethodProfileService(KalturaServiceBase):
         if self.client.isMultiRequest():
             return self.client.getMultiRequestResult()
         resultNode = self.client.doQueue()
-        return KalturaObjectFactory.create(resultNode, KalturaPaymentMethodProfileListResponse)
+        return KalturaObjectFactory.create(resultNode, 'KalturaPaymentMethodProfileListResponse')
 
     def update(self, paymentMethodId, paymentMethod):
         """Update payment method"""
@@ -23951,7 +23951,7 @@ class KalturaPaymentMethodProfileService(KalturaServiceBase):
         if self.client.isMultiRequest():
             return self.client.getMultiRequestResult()
         resultNode = self.client.doQueue()
-        return KalturaObjectFactory.create(resultNode, KalturaPaymentMethodProfile)
+        return KalturaObjectFactory.create(resultNode, 'KalturaPaymentMethodProfile')
 
 
 # @package Kaltura
@@ -23971,7 +23971,7 @@ class KalturaPersonalFeedService(KalturaServiceBase):
         if self.client.isMultiRequest():
             return self.client.getMultiRequestResult()
         resultNode = self.client.doQueue()
-        return KalturaObjectFactory.create(resultNode, KalturaPersonalFeedListResponse)
+        return KalturaObjectFactory.create(resultNode, 'KalturaPersonalFeedListResponse')
 
 
 # @package Kaltura
@@ -23991,7 +23991,7 @@ class KalturaPinService(KalturaServiceBase):
         if self.client.isMultiRequest():
             return self.client.getMultiRequestResult()
         resultNode = self.client.doQueue()
-        return KalturaObjectFactory.create(resultNode, KalturaPin)
+        return KalturaObjectFactory.create(resultNode, 'KalturaPin')
 
     def update(self, by, type, pin, ruleId = NotImplemented):
         """Set the parental or purchase PIN that applies for the user or the household."""
@@ -24005,7 +24005,7 @@ class KalturaPinService(KalturaServiceBase):
         if self.client.isMultiRequest():
             return self.client.getMultiRequestResult()
         resultNode = self.client.doQueue()
-        return KalturaObjectFactory.create(resultNode, KalturaPin)
+        return KalturaObjectFactory.create(resultNode, 'KalturaPin')
 
     def validate(self, pin, type, ruleId = NotImplemented):
         """Validate a purchase or parental PIN for a user."""
@@ -24036,7 +24036,7 @@ class KalturaPpvService(KalturaServiceBase):
         if self.client.isMultiRequest():
             return self.client.getMultiRequestResult()
         resultNode = self.client.doQueue()
-        return KalturaObjectFactory.create(resultNode, KalturaPpv)
+        return KalturaObjectFactory.create(resultNode, 'KalturaPpv')
 
 
 # @package Kaltura
@@ -24054,7 +24054,7 @@ class KalturaPriceDetailsService(KalturaServiceBase):
         if self.client.isMultiRequest():
             return self.client.getMultiRequestResult()
         resultNode = self.client.doQueue()
-        return KalturaObjectFactory.create(resultNode, KalturaPriceDetailsListResponse)
+        return KalturaObjectFactory.create(resultNode, 'KalturaPriceDetailsListResponse')
 
 
 # @package Kaltura
@@ -24072,7 +24072,7 @@ class KalturaPricePlanService(KalturaServiceBase):
         if self.client.isMultiRequest():
             return self.client.getMultiRequestResult()
         resultNode = self.client.doQueue()
-        return KalturaObjectFactory.create(resultNode, KalturaPricePlanListResponse)
+        return KalturaObjectFactory.create(resultNode, 'KalturaPricePlanListResponse')
 
     def update(self, id, pricePlan):
         """Updates a price plan"""
@@ -24084,7 +24084,7 @@ class KalturaPricePlanService(KalturaServiceBase):
         if self.client.isMultiRequest():
             return self.client.getMultiRequestResult()
         resultNode = self.client.doQueue()
-        return KalturaObjectFactory.create(resultNode, KalturaPricePlan)
+        return KalturaObjectFactory.create(resultNode, 'KalturaPricePlan')
 
 
 # @package Kaltura
@@ -24102,7 +24102,7 @@ class KalturaProductPriceService(KalturaServiceBase):
         if self.client.isMultiRequest():
             return self.client.getMultiRequestResult()
         resultNode = self.client.doQueue()
-        return KalturaObjectFactory.create(resultNode, KalturaProductPriceListResponse)
+        return KalturaObjectFactory.create(resultNode, 'KalturaProductPriceListResponse')
 
 
 # @package Kaltura
@@ -24121,7 +24121,7 @@ class KalturaPurchaseSettingsService(KalturaServiceBase):
         if self.client.isMultiRequest():
             return self.client.getMultiRequestResult()
         resultNode = self.client.doQueue()
-        return KalturaObjectFactory.create(resultNode, KalturaPurchaseSettings)
+        return KalturaObjectFactory.create(resultNode, 'KalturaPurchaseSettings')
 
     def update(self, entityReference, settings):
         """Set a purchase PIN for the household or user"""
@@ -24133,7 +24133,7 @@ class KalturaPurchaseSettingsService(KalturaServiceBase):
         if self.client.isMultiRequest():
             return self.client.getMultiRequestResult()
         resultNode = self.client.doQueue()
-        return KalturaObjectFactory.create(resultNode, KalturaPurchaseSettings)
+        return KalturaObjectFactory.create(resultNode, 'KalturaPurchaseSettings')
 
 
 # @package Kaltura
@@ -24151,7 +24151,7 @@ class KalturaRecommendationProfileService(KalturaServiceBase):
         if self.client.isMultiRequest():
             return self.client.getMultiRequestResult()
         resultNode = self.client.doQueue()
-        return KalturaObjectFactory.create(resultNode, KalturaRecommendationProfile)
+        return KalturaObjectFactory.create(resultNode, 'KalturaRecommendationProfile')
 
     def delete(self, id):
         """Delete recommendation engine by recommendation engine id"""
@@ -24173,7 +24173,7 @@ class KalturaRecommendationProfileService(KalturaServiceBase):
         if self.client.isMultiRequest():
             return self.client.getMultiRequestResult()
         resultNode = self.client.doQueue()
-        return KalturaObjectFactory.create(resultNode, KalturaRecommendationProfile)
+        return KalturaObjectFactory.create(resultNode, 'KalturaRecommendationProfile')
 
     def list(self):
         """Returns all recommendation engines for partner"""
@@ -24183,7 +24183,7 @@ class KalturaRecommendationProfileService(KalturaServiceBase):
         if self.client.isMultiRequest():
             return self.client.getMultiRequestResult()
         resultNode = self.client.doQueue()
-        return KalturaObjectFactory.create(resultNode, KalturaRecommendationProfileListResponse)
+        return KalturaObjectFactory.create(resultNode, 'KalturaRecommendationProfileListResponse')
 
     def update(self, recommendationEngineId, recommendationEngine):
         """Update recommendation engine details"""
@@ -24195,7 +24195,7 @@ class KalturaRecommendationProfileService(KalturaServiceBase):
         if self.client.isMultiRequest():
             return self.client.getMultiRequestResult()
         resultNode = self.client.doQueue()
-        return KalturaObjectFactory.create(resultNode, KalturaRecommendationProfile)
+        return KalturaObjectFactory.create(resultNode, 'KalturaRecommendationProfile')
 
 
 # @package Kaltura
@@ -24213,7 +24213,7 @@ class KalturaRecordingService(KalturaServiceBase):
         if self.client.isMultiRequest():
             return self.client.getMultiRequestResult()
         resultNode = self.client.doQueue()
-        return KalturaObjectFactory.create(resultNode, KalturaRecording)
+        return KalturaObjectFactory.create(resultNode, 'KalturaRecording')
 
     def cancel(self, id):
         """Cancel a previously requested recording. Cancel recording can be called for recording in status Scheduled or Recording Only"""
@@ -24224,7 +24224,7 @@ class KalturaRecordingService(KalturaServiceBase):
         if self.client.isMultiRequest():
             return self.client.getMultiRequestResult()
         resultNode = self.client.doQueue()
-        return KalturaObjectFactory.create(resultNode, KalturaRecording)
+        return KalturaObjectFactory.create(resultNode, 'KalturaRecording')
 
     def delete(self, id):
         """Delete one or more user recording(s). Delete recording can be called only for recordings in status Recorded"""
@@ -24235,7 +24235,7 @@ class KalturaRecordingService(KalturaServiceBase):
         if self.client.isMultiRequest():
             return self.client.getMultiRequestResult()
         resultNode = self.client.doQueue()
-        return KalturaObjectFactory.create(resultNode, KalturaRecording)
+        return KalturaObjectFactory.create(resultNode, 'KalturaRecording')
 
     def get(self, id):
         """Returns recording object by internal identifier"""
@@ -24246,7 +24246,7 @@ class KalturaRecordingService(KalturaServiceBase):
         if self.client.isMultiRequest():
             return self.client.getMultiRequestResult()
         resultNode = self.client.doQueue()
-        return KalturaObjectFactory.create(resultNode, KalturaRecording)
+        return KalturaObjectFactory.create(resultNode, 'KalturaRecording')
 
     def list(self, filter = NotImplemented, pager = NotImplemented):
         """Return a list of recordings for the household with optional filter by status and KSQL."""
@@ -24258,7 +24258,7 @@ class KalturaRecordingService(KalturaServiceBase):
         if self.client.isMultiRequest():
             return self.client.getMultiRequestResult()
         resultNode = self.client.doQueue()
-        return KalturaObjectFactory.create(resultNode, KalturaRecordingListResponse)
+        return KalturaObjectFactory.create(resultNode, 'KalturaRecordingListResponse')
 
     def protect(self, id):
         """Protects an existing recording from the cleanup process for the defined protection period"""
@@ -24269,7 +24269,7 @@ class KalturaRecordingService(KalturaServiceBase):
         if self.client.isMultiRequest():
             return self.client.getMultiRequestResult()
         resultNode = self.client.doQueue()
-        return KalturaObjectFactory.create(resultNode, KalturaRecording)
+        return KalturaObjectFactory.create(resultNode, 'KalturaRecording')
 
 
 # @package Kaltura
@@ -24287,7 +24287,7 @@ class KalturaRegionService(KalturaServiceBase):
         if self.client.isMultiRequest():
             return self.client.getMultiRequestResult()
         resultNode = self.client.doQueue()
-        return KalturaObjectFactory.create(resultNode, KalturaRegionListResponse)
+        return KalturaObjectFactory.create(resultNode, 'KalturaRegionListResponse')
 
 
 # @package Kaltura
@@ -24304,7 +24304,7 @@ class KalturaRegistrySettingsService(KalturaServiceBase):
         if self.client.isMultiRequest():
             return self.client.getMultiRequestResult()
         resultNode = self.client.doQueue()
-        return KalturaObjectFactory.create(resultNode, KalturaRegistrySettingsListResponse)
+        return KalturaObjectFactory.create(resultNode, 'KalturaRegistrySettingsListResponse')
 
 
 # @package Kaltura
@@ -24322,7 +24322,7 @@ class KalturaReminderService(KalturaServiceBase):
         if self.client.isMultiRequest():
             return self.client.getMultiRequestResult()
         resultNode = self.client.doQueue()
-        return KalturaObjectFactory.create(resultNode, KalturaReminder)
+        return KalturaObjectFactory.create(resultNode, 'KalturaReminder')
 
     def delete(self, id, type):
         """Delete a reminder. Reminder cannot be delete while being sent."""
@@ -24346,7 +24346,7 @@ class KalturaReminderService(KalturaServiceBase):
         if self.client.isMultiRequest():
             return self.client.getMultiRequestResult()
         resultNode = self.client.doQueue()
-        return KalturaObjectFactory.create(resultNode, KalturaReminderListResponse)
+        return KalturaObjectFactory.create(resultNode, 'KalturaReminderListResponse')
 
 
 # @package Kaltura
@@ -24364,7 +24364,7 @@ class KalturaReportService(KalturaServiceBase):
         if self.client.isMultiRequest():
             return self.client.getMultiRequestResult()
         resultNode = self.client.doQueue()
-        return KalturaObjectFactory.create(resultNode, KalturaReport)
+        return KalturaObjectFactory.create(resultNode, 'KalturaReport')
 
     def list(self, filter, pager = NotImplemented):
         """Return device configurations retrieval log. Supports paging and can be filtered with the parameter &quot;FromData&quot;."""
@@ -24376,7 +24376,7 @@ class KalturaReportService(KalturaServiceBase):
         if self.client.isMultiRequest():
             return self.client.getMultiRequestResult()
         resultNode = self.client.doQueue()
-        return KalturaObjectFactory.create(resultNode, KalturaReportListResponse)
+        return KalturaObjectFactory.create(resultNode, 'KalturaReportListResponse')
 
 
 # @package Kaltura
@@ -24418,7 +24418,7 @@ class KalturaSearchHistoryService(KalturaServiceBase):
         if self.client.isMultiRequest():
             return self.client.getMultiRequestResult()
         resultNode = self.client.doQueue()
-        return KalturaObjectFactory.create(resultNode, KalturaSearchHistoryListResponse)
+        return KalturaObjectFactory.create(resultNode, 'KalturaSearchHistoryListResponse')
 
 
 # @package Kaltura
@@ -24436,7 +24436,7 @@ class KalturaSeriesRecordingService(KalturaServiceBase):
         if self.client.isMultiRequest():
             return self.client.getMultiRequestResult()
         resultNode = self.client.doQueue()
-        return KalturaObjectFactory.create(resultNode, KalturaSeriesRecording)
+        return KalturaObjectFactory.create(resultNode, 'KalturaSeriesRecording')
 
     def cancel(self, id):
         """Cancel a previously requested series recording. Cancel series recording can be called for recording in status Scheduled or Recording Only"""
@@ -24447,7 +24447,7 @@ class KalturaSeriesRecordingService(KalturaServiceBase):
         if self.client.isMultiRequest():
             return self.client.getMultiRequestResult()
         resultNode = self.client.doQueue()
-        return KalturaObjectFactory.create(resultNode, KalturaSeriesRecording)
+        return KalturaObjectFactory.create(resultNode, 'KalturaSeriesRecording')
 
     def cancelByEpgId(self, id, epgId):
         """Cancel EPG recording that was recorded as part of series"""
@@ -24459,7 +24459,7 @@ class KalturaSeriesRecordingService(KalturaServiceBase):
         if self.client.isMultiRequest():
             return self.client.getMultiRequestResult()
         resultNode = self.client.doQueue()
-        return KalturaObjectFactory.create(resultNode, KalturaSeriesRecording)
+        return KalturaObjectFactory.create(resultNode, 'KalturaSeriesRecording')
 
     def cancelBySeasonNumber(self, id, seasonNumber):
         """Cancel Season recording epgs that was recorded as part of series"""
@@ -24471,7 +24471,7 @@ class KalturaSeriesRecordingService(KalturaServiceBase):
         if self.client.isMultiRequest():
             return self.client.getMultiRequestResult()
         resultNode = self.client.doQueue()
-        return KalturaObjectFactory.create(resultNode, KalturaSeriesRecording)
+        return KalturaObjectFactory.create(resultNode, 'KalturaSeriesRecording')
 
     def delete(self, id):
         """Delete series recording(s). Delete series recording can be called recordings in any status"""
@@ -24482,7 +24482,7 @@ class KalturaSeriesRecordingService(KalturaServiceBase):
         if self.client.isMultiRequest():
             return self.client.getMultiRequestResult()
         resultNode = self.client.doQueue()
-        return KalturaObjectFactory.create(resultNode, KalturaSeriesRecording)
+        return KalturaObjectFactory.create(resultNode, 'KalturaSeriesRecording')
 
     def deleteBySeasonNumber(self, id, seasonNumber):
         """Delete Season recording epgs that was recorded as part of series"""
@@ -24494,7 +24494,7 @@ class KalturaSeriesRecordingService(KalturaServiceBase):
         if self.client.isMultiRequest():
             return self.client.getMultiRequestResult()
         resultNode = self.client.doQueue()
-        return KalturaObjectFactory.create(resultNode, KalturaSeriesRecording)
+        return KalturaObjectFactory.create(resultNode, 'KalturaSeriesRecording')
 
     def list(self, filter = NotImplemented):
         """Return a list of series recordings for the household with optional filter by status and KSQL."""
@@ -24505,7 +24505,7 @@ class KalturaSeriesRecordingService(KalturaServiceBase):
         if self.client.isMultiRequest():
             return self.client.getMultiRequestResult()
         resultNode = self.client.doQueue()
-        return KalturaObjectFactory.create(resultNode, KalturaSeriesRecordingListResponse)
+        return KalturaObjectFactory.create(resultNode, 'KalturaSeriesRecordingListResponse')
 
 
 # @package Kaltura
@@ -24523,7 +24523,7 @@ class KalturaSessionService(KalturaServiceBase):
         if self.client.isMultiRequest():
             return self.client.getMultiRequestResult()
         resultNode = self.client.doQueue()
-        return KalturaObjectFactory.create(resultNode, KalturaSession)
+        return KalturaObjectFactory.create(resultNode, 'KalturaSession')
 
     def revoke(self):
         """Revokes all the sessions (KS) of a given user"""
@@ -24544,7 +24544,7 @@ class KalturaSessionService(KalturaServiceBase):
         if self.client.isMultiRequest():
             return self.client.getMultiRequestResult()
         resultNode = self.client.doQueue()
-        return KalturaObjectFactory.create(resultNode, KalturaLoginSession)
+        return KalturaObjectFactory.create(resultNode, 'KalturaLoginSession')
 
 
 # @package Kaltura
@@ -24562,7 +24562,7 @@ class KalturaSocialActionService(KalturaServiceBase):
         if self.client.isMultiRequest():
             return self.client.getMultiRequestResult()
         resultNode = self.client.doQueue()
-        return KalturaObjectFactory.create(resultNode, KalturaUserSocialActionResponse)
+        return KalturaObjectFactory.create(resultNode, 'KalturaUserSocialActionResponse')
 
     def delete(self, id):
         """delete user social action"""
@@ -24573,7 +24573,7 @@ class KalturaSocialActionService(KalturaServiceBase):
         if self.client.isMultiRequest():
             return self.client.getMultiRequestResult()
         resultNode = self.client.doQueue()
-        return KalturaObjectFactory.createArray(resultNode, KalturaNetworkActionStatus)
+        return KalturaObjectFactory.createArray(resultNode, 'KalturaNetworkActionStatus')
 
     def list(self, filter, pager = NotImplemented):
         """Get list of user social actions"""
@@ -24585,7 +24585,7 @@ class KalturaSocialActionService(KalturaServiceBase):
         if self.client.isMultiRequest():
             return self.client.getMultiRequestResult()
         resultNode = self.client.doQueue()
-        return KalturaObjectFactory.create(resultNode, KalturaSocialActionListResponse)
+        return KalturaObjectFactory.create(resultNode, 'KalturaSocialActionListResponse')
 
 
 # @package Kaltura
@@ -24604,7 +24604,7 @@ class KalturaSocialCommentService(KalturaServiceBase):
         if self.client.isMultiRequest():
             return self.client.getMultiRequestResult()
         resultNode = self.client.doQueue()
-        return KalturaObjectFactory.create(resultNode, KalturaSocialCommentListResponse)
+        return KalturaObjectFactory.create(resultNode, 'KalturaSocialCommentListResponse')
 
 
 # @package Kaltura
@@ -24622,7 +24622,7 @@ class KalturaSocialService(KalturaServiceBase):
         if self.client.isMultiRequest():
             return self.client.getMultiRequestResult()
         resultNode = self.client.doQueue()
-        return KalturaObjectFactory.create(resultNode, KalturaSocial)
+        return KalturaObjectFactory.create(resultNode, 'KalturaSocial')
 
     def getByToken(self, partnerId, token, type):
         """Return the user object with social information according to a provided external social token"""
@@ -24635,7 +24635,7 @@ class KalturaSocialService(KalturaServiceBase):
         if self.client.isMultiRequest():
             return self.client.getMultiRequestResult()
         resultNode = self.client.doQueue()
-        return KalturaObjectFactory.create(resultNode, KalturaSocial)
+        return KalturaObjectFactory.create(resultNode, 'KalturaSocial')
 
     def getConfiguration(self, type, partnerId = NotImplemented):
         """Retrieve the social network's configuration information"""
@@ -24647,7 +24647,7 @@ class KalturaSocialService(KalturaServiceBase):
         if self.client.isMultiRequest():
             return self.client.getMultiRequestResult()
         resultNode = self.client.doQueue()
-        return KalturaObjectFactory.create(resultNode, KalturaSocialConfig)
+        return KalturaObjectFactory.create(resultNode, 'KalturaSocialConfig')
 
     def login(self, partnerId, token, type, udid = NotImplemented):
         """Login using social token"""
@@ -24661,7 +24661,7 @@ class KalturaSocialService(KalturaServiceBase):
         if self.client.isMultiRequest():
             return self.client.getMultiRequestResult()
         resultNode = self.client.doQueue()
-        return KalturaObjectFactory.create(resultNode, KalturaLoginResponse)
+        return KalturaObjectFactory.create(resultNode, 'KalturaLoginResponse')
 
     def merge(self, token, type):
         """Connect an existing user in the system to an external social network user"""
@@ -24673,7 +24673,7 @@ class KalturaSocialService(KalturaServiceBase):
         if self.client.isMultiRequest():
             return self.client.getMultiRequestResult()
         resultNode = self.client.doQueue()
-        return KalturaObjectFactory.create(resultNode, KalturaSocial)
+        return KalturaObjectFactory.create(resultNode, 'KalturaSocial')
 
     def register(self, partnerId, token, type, email = NotImplemented):
         """Create a new user in the system using a provided external social token"""
@@ -24687,7 +24687,7 @@ class KalturaSocialService(KalturaServiceBase):
         if self.client.isMultiRequest():
             return self.client.getMultiRequestResult()
         resultNode = self.client.doQueue()
-        return KalturaObjectFactory.create(resultNode, KalturaSocial)
+        return KalturaObjectFactory.create(resultNode, 'KalturaSocial')
 
     def unmerge(self, type):
         """Disconnect an existing user in the system from its external social network user"""
@@ -24698,7 +24698,7 @@ class KalturaSocialService(KalturaServiceBase):
         if self.client.isMultiRequest():
             return self.client.getMultiRequestResult()
         resultNode = self.client.doQueue()
-        return KalturaObjectFactory.create(resultNode, KalturaSocial)
+        return KalturaObjectFactory.create(resultNode, 'KalturaSocial')
 
     def UpdateConfiguration(self, configuration):
         """Set the user social network's configuration information"""
@@ -24709,7 +24709,7 @@ class KalturaSocialService(KalturaServiceBase):
         if self.client.isMultiRequest():
             return self.client.getMultiRequestResult()
         resultNode = self.client.doQueue()
-        return KalturaObjectFactory.create(resultNode, KalturaSocialConfig)
+        return KalturaObjectFactory.create(resultNode, 'KalturaSocialConfig')
 
 
 # @package Kaltura
@@ -24728,7 +24728,7 @@ class KalturaSocialFriendActivityService(KalturaServiceBase):
         if self.client.isMultiRequest():
             return self.client.getMultiRequestResult()
         resultNode = self.client.doQueue()
-        return KalturaObjectFactory.create(resultNode, KalturaSocialFriendActivityListResponse)
+        return KalturaObjectFactory.create(resultNode, 'KalturaSocialFriendActivityListResponse')
 
 
 # @package Kaltura
@@ -24746,7 +24746,7 @@ class KalturaSubscriptionService(KalturaServiceBase):
         if self.client.isMultiRequest():
             return self.client.getMultiRequestResult()
         resultNode = self.client.doQueue()
-        return KalturaObjectFactory.create(resultNode, KalturaSubscriptionListResponse)
+        return KalturaObjectFactory.create(resultNode, 'KalturaSubscriptionListResponse')
 
     def validateCoupon(self, id, code):
         """Returns information about a coupon for subscription"""
@@ -24758,7 +24758,7 @@ class KalturaSubscriptionService(KalturaServiceBase):
         if self.client.isMultiRequest():
             return self.client.getMultiRequestResult()
         resultNode = self.client.doQueue()
-        return KalturaObjectFactory.create(resultNode, KalturaCoupon)
+        return KalturaObjectFactory.create(resultNode, 'KalturaCoupon')
 
 
 # @package Kaltura
@@ -24776,7 +24776,7 @@ class KalturaSubscriptionSetService(KalturaServiceBase):
         if self.client.isMultiRequest():
             return self.client.getMultiRequestResult()
         resultNode = self.client.doQueue()
-        return KalturaObjectFactory.create(resultNode, KalturaSubscriptionSet)
+        return KalturaObjectFactory.create(resultNode, 'KalturaSubscriptionSet')
 
     def delete(self, id):
         """Delete a subscriptionSet"""
@@ -24798,7 +24798,7 @@ class KalturaSubscriptionSetService(KalturaServiceBase):
         if self.client.isMultiRequest():
             return self.client.getMultiRequestResult()
         resultNode = self.client.doQueue()
-        return KalturaObjectFactory.create(resultNode, KalturaSubscriptionSet)
+        return KalturaObjectFactory.create(resultNode, 'KalturaSubscriptionSet')
 
     def list(self, filter = NotImplemented):
         """Returns a list of subscriptionSets requested by ids or subscription ids"""
@@ -24809,7 +24809,7 @@ class KalturaSubscriptionSetService(KalturaServiceBase):
         if self.client.isMultiRequest():
             return self.client.getMultiRequestResult()
         resultNode = self.client.doQueue()
-        return KalturaObjectFactory.create(resultNode, KalturaSubscriptionSetListResponse)
+        return KalturaObjectFactory.create(resultNode, 'KalturaSubscriptionSetListResponse')
 
     def update(self, id, subscriptionSet):
         """Update the subscriptionSet"""
@@ -24821,7 +24821,7 @@ class KalturaSubscriptionSetService(KalturaServiceBase):
         if self.client.isMultiRequest():
             return self.client.getMultiRequestResult()
         resultNode = self.client.doQueue()
-        return KalturaObjectFactory.create(resultNode, KalturaSubscriptionSet)
+        return KalturaObjectFactory.create(resultNode, 'KalturaSubscriptionSet')
 
 
 # @package Kaltura
@@ -24875,7 +24875,7 @@ class KalturaTimeShiftedTvPartnerSettingsService(KalturaServiceBase):
         if self.client.isMultiRequest():
             return self.client.getMultiRequestResult()
         resultNode = self.client.doQueue()
-        return KalturaObjectFactory.create(resultNode, KalturaTimeShiftedTvPartnerSettings)
+        return KalturaObjectFactory.create(resultNode, 'KalturaTimeShiftedTvPartnerSettings')
 
     def update(self, settings):
         """Configure the account's time-shifted TV settings (catch-up and C-DVR, Trick-play, Start-over)"""
@@ -24915,7 +24915,7 @@ class KalturaTopicService(KalturaServiceBase):
         if self.client.isMultiRequest():
             return self.client.getMultiRequestResult()
         resultNode = self.client.doQueue()
-        return KalturaObjectFactory.create(resultNode, KalturaTopic)
+        return KalturaObjectFactory.create(resultNode, 'KalturaTopic')
 
     def list(self, filter = NotImplemented, pager = NotImplemented):
         """Get list of topics"""
@@ -24927,7 +24927,7 @@ class KalturaTopicService(KalturaServiceBase):
         if self.client.isMultiRequest():
             return self.client.getMultiRequestResult()
         resultNode = self.client.doQueue()
-        return KalturaObjectFactory.create(resultNode, KalturaTopicListResponse)
+        return KalturaObjectFactory.create(resultNode, 'KalturaTopicListResponse')
 
     def updateStatus(self, id, automaticIssueNotification):
         """Updates a topic &quot;automatic issue notification&quot; behavior."""
@@ -24978,7 +24978,7 @@ class KalturaTransactionService(KalturaServiceBase):
         if self.client.isMultiRequest():
             return self.client.getMultiRequestResult()
         resultNode = self.client.doQueue()
-        return KalturaObjectFactory.create(resultNode, KalturaTransaction)
+        return KalturaObjectFactory.create(resultNode, 'KalturaTransaction')
 
     def setWaiver(self, assetId, transactionType):
         """This method shall set the waiver flag on the user entitlement table and the waiver date field to the current date."""
@@ -25014,7 +25014,7 @@ class KalturaTransactionService(KalturaServiceBase):
         if self.client.isMultiRequest():
             return self.client.getMultiRequestResult()
         resultNode = self.client.doQueue()
-        return KalturaObjectFactory.create(resultNode, KalturaTransaction)
+        return KalturaObjectFactory.create(resultNode, 'KalturaTransaction')
 
     def validateReceipt(self, externalReceipt):
         """Verifies PPV/Subscription/Collection client purchase (such as InApp) and entitles the user."""
@@ -25025,7 +25025,7 @@ class KalturaTransactionService(KalturaServiceBase):
         if self.client.isMultiRequest():
             return self.client.getMultiRequestResult()
         resultNode = self.client.doQueue()
-        return KalturaObjectFactory.create(resultNode, KalturaTransaction)
+        return KalturaObjectFactory.create(resultNode, 'KalturaTransaction')
 
 
 # @package Kaltura
@@ -25044,7 +25044,7 @@ class KalturaTransactionHistoryService(KalturaServiceBase):
         if self.client.isMultiRequest():
             return self.client.getMultiRequestResult()
         resultNode = self.client.doQueue()
-        return KalturaObjectFactory.create(resultNode, KalturaBillingTransactionListResponse)
+        return KalturaObjectFactory.create(resultNode, 'KalturaBillingTransactionListResponse')
 
 
 # @package Kaltura
@@ -25062,7 +25062,7 @@ class KalturaUserAssetRuleService(KalturaServiceBase):
         if self.client.isMultiRequest():
             return self.client.getMultiRequestResult()
         resultNode = self.client.doQueue()
-        return KalturaObjectFactory.create(resultNode, KalturaUserAssetRuleListResponse)
+        return KalturaObjectFactory.create(resultNode, 'KalturaUserAssetRuleListResponse')
 
 
 # @package Kaltura
@@ -25080,7 +25080,7 @@ class KalturaUserAssetsListItemService(KalturaServiceBase):
         if self.client.isMultiRequest():
             return self.client.getMultiRequestResult()
         resultNode = self.client.doQueue()
-        return KalturaObjectFactory.create(resultNode, KalturaUserAssetsListItem)
+        return KalturaObjectFactory.create(resultNode, 'KalturaUserAssetsListItem')
 
     def delete(self, assetId, listType):
         """Deletes an item from user's private asset list"""
@@ -25105,7 +25105,7 @@ class KalturaUserAssetsListItemService(KalturaServiceBase):
         if self.client.isMultiRequest():
             return self.client.getMultiRequestResult()
         resultNode = self.client.doQueue()
-        return KalturaObjectFactory.create(resultNode, KalturaUserAssetsListItem)
+        return KalturaObjectFactory.create(resultNode, 'KalturaUserAssetsListItem')
 
 
 # @package Kaltura
@@ -25123,7 +25123,7 @@ class KalturaUserInterestService(KalturaServiceBase):
         if self.client.isMultiRequest():
             return self.client.getMultiRequestResult()
         resultNode = self.client.doQueue()
-        return KalturaObjectFactory.create(resultNode, KalturaUserInterest)
+        return KalturaObjectFactory.create(resultNode, 'KalturaUserInterest')
 
     def delete(self, id):
         """Delete new user interest for partner user"""
@@ -25144,7 +25144,7 @@ class KalturaUserInterestService(KalturaServiceBase):
         if self.client.isMultiRequest():
             return self.client.getMultiRequestResult()
         resultNode = self.client.doQueue()
-        return KalturaObjectFactory.create(resultNode, KalturaUserInterestListResponse)
+        return KalturaObjectFactory.create(resultNode, 'KalturaUserInterestListResponse')
 
 
 # @package Kaltura
@@ -25162,7 +25162,7 @@ class KalturaUserLoginPinService(KalturaServiceBase):
         if self.client.isMultiRequest():
             return self.client.getMultiRequestResult()
         resultNode = self.client.doQueue()
-        return KalturaObjectFactory.create(resultNode, KalturaUserLoginPin)
+        return KalturaObjectFactory.create(resultNode, 'KalturaUserLoginPin')
 
     def delete(self, pinCode):
         """Immediately deletes a given pre set login pin code for the user."""
@@ -25195,7 +25195,7 @@ class KalturaUserLoginPinService(KalturaServiceBase):
         if self.client.isMultiRequest():
             return self.client.getMultiRequestResult()
         resultNode = self.client.doQueue()
-        return KalturaObjectFactory.create(resultNode, KalturaUserLoginPin)
+        return KalturaObjectFactory.create(resultNode, 'KalturaUserLoginPin')
 
 
 # @package Kaltura
@@ -25213,7 +25213,7 @@ class KalturaUserRoleService(KalturaServiceBase):
         if self.client.isMultiRequest():
             return self.client.getMultiRequestResult()
         resultNode = self.client.doQueue()
-        return KalturaObjectFactory.create(resultNode, KalturaUserRoleListResponse)
+        return KalturaObjectFactory.create(resultNode, 'KalturaUserRoleListResponse')
 
 ########## main ##########
 class KalturaCoreClient(KalturaClientPlugin):
