@@ -31,7 +31,7 @@ from __future__ import absolute_import
 
 from ..Base import *
 
-API_VERSION = '4.6.15.17832'
+API_VERSION = '4.6.16.22373'
 
 ########## enums ##########
 # @package Kaltura
@@ -2825,7 +2825,7 @@ class KalturaPaymentGatewayProfile(KalturaPaymentGatewayBaseProfile):
         kparams.addStringIfDefined("transactUrl", self.transactUrl)
         kparams.addStringIfDefined("statusUrl", self.statusUrl)
         kparams.addStringIfDefined("renewUrl", self.renewUrl)
-        kparams.addObjectIfDefined("paymentGatewaySettings", self.paymentGatewaySettings)
+        kparams.addMapIfDefined("paymentGatewaySettings", self.paymentGatewaySettings)
         kparams.addStringIfDefined("externalIdentifier", self.externalIdentifier)
         kparams.addIntIfDefined("pendingInterval", self.pendingInterval)
         kparams.addIntIfDefined("pendingRetries", self.pendingRetries)
@@ -5481,7 +5481,7 @@ class KalturaOTTUser(KalturaBaseOTTUser):
         kparams.addStringIfDefined("affiliateCode", self.affiliateCode)
         kparams.addStringIfDefined("externalId", self.externalId)
         kparams.addObjectIfDefined("userType", self.userType)
-        kparams.addObjectIfDefined("dynamicData", self.dynamicData)
+        kparams.addMapIfDefined("dynamicData", self.dynamicData)
         return kparams
 
     def getHouseholdId(self):
@@ -8031,7 +8031,7 @@ class KalturaEngagementAdapter(KalturaEngagementAdapterBase):
         kparams.addBoolIfDefined("isActive", self.isActive)
         kparams.addStringIfDefined("adapterUrl", self.adapterUrl)
         kparams.addStringIfDefined("providerUrl", self.providerUrl)
-        kparams.addObjectIfDefined("engagementAdapterSettings", self.engagementAdapterSettings)
+        kparams.addMapIfDefined("engagementAdapterSettings", self.engagementAdapterSettings)
         return kparams
 
     def getIsActive(self):
@@ -9520,7 +9520,7 @@ class KalturaCDVRAdapterProfile(KalturaObjectBase):
         kparams.addStringIfDefined("name", self.name)
         kparams.addBoolIfDefined("isActive", self.isActive)
         kparams.addStringIfDefined("adapterUrl", self.adapterUrl)
-        kparams.addObjectIfDefined("settings", self.settings)
+        kparams.addMapIfDefined("settings", self.settings)
         kparams.addStringIfDefined("externalIdentifier", self.externalIdentifier)
         kparams.addBoolIfDefined("dynamicLinksSupport", self.dynamicLinksSupport)
         return kparams
@@ -10962,8 +10962,8 @@ class KalturaAsset(KalturaObjectBase):
         kparams.addObjectIfDefined("multilingualDescription", self.multilingualDescription)
         kparams.addArrayIfDefined("images", self.images)
         kparams.addArrayIfDefined("mediaFiles", self.mediaFiles)
-        kparams.addObjectIfDefined("metas", self.metas)
-        kparams.addObjectIfDefined("tags", self.tags)
+        kparams.addMapIfDefined("metas", self.metas)
+        kparams.addMapIfDefined("tags", self.tags)
         kparams.addIntIfDefined("startDate", self.startDate)
         kparams.addIntIfDefined("endDate", self.endDate)
         kparams.addBoolIfDefined("enableCdvr", self.enableCdvr)
@@ -12306,7 +12306,7 @@ class KalturaOSSAdapterProfile(KalturaOSSAdapterBaseProfile):
         kparams.put("objectType", "KalturaOSSAdapterProfile")
         kparams.addBoolIfDefined("isActive", self.isActive)
         kparams.addStringIfDefined("adapterUrl", self.adapterUrl)
-        kparams.addObjectIfDefined("ossAdapterSettings", self.ossAdapterSettings)
+        kparams.addMapIfDefined("ossAdapterSettings", self.ossAdapterSettings)
         kparams.addStringIfDefined("externalIdentifier", self.externalIdentifier)
         return kparams
 
@@ -13034,7 +13034,7 @@ class KalturaCDNAdapterProfile(KalturaObjectBase):
         kparams.addBoolIfDefined("isActive", self.isActive)
         kparams.addStringIfDefined("adapterUrl", self.adapterUrl)
         kparams.addStringIfDefined("baseUrl", self.baseUrl)
-        kparams.addObjectIfDefined("settings", self.settings)
+        kparams.addMapIfDefined("settings", self.settings)
         kparams.addStringIfDefined("systemName", self.systemName)
         return kparams
 
@@ -13551,7 +13551,7 @@ class KalturaRecommendationProfile(KalturaObjectBase):
         kparams.addStringIfDefined("name", self.name)
         kparams.addBoolIfDefined("isActive", self.isActive)
         kparams.addStringIfDefined("adapterUrl", self.adapterUrl)
-        kparams.addObjectIfDefined("recommendationEngineSettings", self.recommendationEngineSettings)
+        kparams.addMapIfDefined("recommendationEngineSettings", self.recommendationEngineSettings)
         kparams.addStringIfDefined("externalIdentifier", self.externalIdentifier)
         return kparams
 
@@ -23661,7 +23661,7 @@ class KalturaOttUserService(KalturaServiceBase):
         kparams.addIntIfDefined("partnerId", partnerId);
         kparams.addStringIfDefined("username", username)
         kparams.addStringIfDefined("password", password)
-        kparams.addObjectIfDefined("extraParams", extraParams)
+        kparams.addMapIfDefined("extraParams", extraParams)
         kparams.addStringIfDefined("udid", udid)
         self.client.queueServiceActionCall("ottuser", "login", KalturaLoginResponse, kparams)
         if self.client.isMultiRequest():
