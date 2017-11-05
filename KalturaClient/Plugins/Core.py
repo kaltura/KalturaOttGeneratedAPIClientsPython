@@ -31,7 +31,7 @@ from __future__ import absolute_import
 
 from ..Base import *
 
-API_VERSION = '4.6.24.43136'
+API_VERSION = '4.6.26.43120'
 
 ########## enums ##########
 # @package Kaltura
@@ -5652,161 +5652,6 @@ class KalturaBaseChannel(KalturaObjectBase):
 
 # @package Kaltura
 # @subpackage Client
-class KalturaPrice(KalturaObjectBase):
-    """Price"""
-
-    def __init__(self,
-            amount=NotImplemented,
-            currency=NotImplemented,
-            currencySign=NotImplemented,
-            countryId=NotImplemented):
-        KalturaObjectBase.__init__(self)
-
-        # Price
-        # @var float
-        self.amount = amount
-
-        # Currency
-        # @var string
-        self.currency = currency
-
-        # Currency Sign
-        # @var string
-        self.currencySign = currencySign
-
-        # Currency
-        # @var int
-        self.countryId = countryId
-
-
-    PROPERTY_LOADERS = {
-        'amount': getXmlNodeFloat, 
-        'currency': getXmlNodeText, 
-        'currencySign': getXmlNodeText, 
-        'countryId': getXmlNodeInt, 
-    }
-
-    def fromXml(self, node):
-        KalturaObjectBase.fromXml(self, node)
-        self.fromXmlImpl(node, KalturaPrice.PROPERTY_LOADERS)
-
-    def toParams(self):
-        kparams = KalturaObjectBase.toParams(self)
-        kparams.put("objectType", "KalturaPrice")
-        kparams.addFloatIfDefined("amount", self.amount)
-        kparams.addStringIfDefined("currency", self.currency)
-        kparams.addStringIfDefined("currencySign", self.currencySign)
-        kparams.addIntIfDefined("countryId", self.countryId)
-        return kparams
-
-    def getAmount(self):
-        return self.amount
-
-    def setAmount(self, newAmount):
-        self.amount = newAmount
-
-    def getCurrency(self):
-        return self.currency
-
-    def setCurrency(self, newCurrency):
-        self.currency = newCurrency
-
-    def getCurrencySign(self):
-        return self.currencySign
-
-    def setCurrencySign(self, newCurrencySign):
-        self.currencySign = newCurrencySign
-
-    def getCountryId(self):
-        return self.countryId
-
-    def setCountryId(self, newCountryId):
-        self.countryId = newCountryId
-
-
-# @package Kaltura
-# @subpackage Client
-class KalturaPriceDetails(KalturaObjectBase):
-    """Price details"""
-
-    def __init__(self,
-            id=NotImplemented,
-            name=NotImplemented,
-            price=NotImplemented,
-            multiCurrencyPrice=NotImplemented,
-            descriptions=NotImplemented):
-        KalturaObjectBase.__init__(self)
-
-        # The price code identifier
-        # @var int
-        # @readonly
-        self.id = id
-
-        # The price code name
-        # @var string
-        self.name = name
-
-        # The price
-        # @var KalturaPrice
-        # @readonly
-        self.price = price
-
-        # Multi currency prices for all countries and currencies
-        # @var array of KalturaPrice
-        self.multiCurrencyPrice = multiCurrencyPrice
-
-        # A list of the descriptions for this price on different languages (language code and translation)
-        # @var array of KalturaTranslationToken
-        self.descriptions = descriptions
-
-
-    PROPERTY_LOADERS = {
-        'id': getXmlNodeInt, 
-        'name': getXmlNodeText, 
-        'price': (KalturaObjectFactory.create, 'KalturaPrice'), 
-        'multiCurrencyPrice': (KalturaObjectFactory.createArray, 'KalturaPrice'), 
-        'descriptions': (KalturaObjectFactory.createArray, 'KalturaTranslationToken'), 
-    }
-
-    def fromXml(self, node):
-        KalturaObjectBase.fromXml(self, node)
-        self.fromXmlImpl(node, KalturaPriceDetails.PROPERTY_LOADERS)
-
-    def toParams(self):
-        kparams = KalturaObjectBase.toParams(self)
-        kparams.put("objectType", "KalturaPriceDetails")
-        kparams.addStringIfDefined("name", self.name)
-        kparams.addArrayIfDefined("multiCurrencyPrice", self.multiCurrencyPrice)
-        kparams.addArrayIfDefined("descriptions", self.descriptions)
-        return kparams
-
-    def getId(self):
-        return self.id
-
-    def getName(self):
-        return self.name
-
-    def setName(self, newName):
-        self.name = newName
-
-    def getPrice(self):
-        return self.price
-
-    def getMultiCurrencyPrice(self):
-        return self.multiCurrencyPrice
-
-    def setMultiCurrencyPrice(self, newMultiCurrencyPrice):
-        self.multiCurrencyPrice = newMultiCurrencyPrice
-
-    def getDescriptions(self):
-        return self.descriptions
-
-    def setDescriptions(self, newDescriptions):
-        self.descriptions = newDescriptions
-
-
-# @package Kaltura
-# @subpackage Client
 class KalturaDiscountModule(KalturaObjectBase):
     """Discount module"""
 
@@ -6159,7 +6004,6 @@ class KalturaCollection(KalturaObjectBase):
             channels=NotImplemented,
             startDate=NotImplemented,
             endDate=NotImplemented,
-            price=NotImplemented,
             discountModule=NotImplemented,
             name=NotImplemented,
             multilingualName=NotImplemented,
@@ -6168,7 +6012,8 @@ class KalturaCollection(KalturaObjectBase):
             usageModule=NotImplemented,
             couponsGroups=NotImplemented,
             externalId=NotImplemented,
-            productCodes=NotImplemented):
+            productCodes=NotImplemented,
+            priceDetailsId=NotImplemented):
         KalturaObjectBase.__init__(self)
 
         # Collection identifier
@@ -6186,10 +6031,6 @@ class KalturaCollection(KalturaObjectBase):
         # The last date the collection is available for purchasing
         # @var int
         self.endDate = endDate
-
-        # The price of the subscription
-        # @var KalturaPriceDetails
-        self.price = price
 
         # The internal discount module for the subscription
         # @var KalturaDiscountModule
@@ -6227,13 +6068,16 @@ class KalturaCollection(KalturaObjectBase):
         # @var array of KalturaProductCode
         self.productCodes = productCodes
 
+        # The ID of the price details associated with this collection
+        # @var int
+        self.priceDetailsId = priceDetailsId
+
 
     PROPERTY_LOADERS = {
         'id': getXmlNodeText, 
         'channels': (KalturaObjectFactory.createArray, 'KalturaBaseChannel'), 
         'startDate': getXmlNodeInt, 
         'endDate': getXmlNodeInt, 
-        'price': (KalturaObjectFactory.create, 'KalturaPriceDetails'), 
         'discountModule': (KalturaObjectFactory.create, 'KalturaDiscountModule'), 
         'name': getXmlNodeText, 
         'multilingualName': (KalturaObjectFactory.create, 'KalturaMultilingualString'), 
@@ -6243,6 +6087,7 @@ class KalturaCollection(KalturaObjectBase):
         'couponsGroups': (KalturaObjectFactory.createArray, 'KalturaCouponsGroup'), 
         'externalId': getXmlNodeText, 
         'productCodes': (KalturaObjectFactory.createArray, 'KalturaProductCode'), 
+        'priceDetailsId': getXmlNodeInt, 
     }
 
     def fromXml(self, node):
@@ -6256,7 +6101,6 @@ class KalturaCollection(KalturaObjectBase):
         kparams.addArrayIfDefined("channels", self.channels)
         kparams.addIntIfDefined("startDate", self.startDate)
         kparams.addIntIfDefined("endDate", self.endDate)
-        kparams.addObjectIfDefined("price", self.price)
         kparams.addObjectIfDefined("discountModule", self.discountModule)
         kparams.addStringIfDefined("name", self.name)
         kparams.addObjectIfDefined("multilingualName", self.multilingualName)
@@ -6266,6 +6110,7 @@ class KalturaCollection(KalturaObjectBase):
         kparams.addArrayIfDefined("couponsGroups", self.couponsGroups)
         kparams.addStringIfDefined("externalId", self.externalId)
         kparams.addArrayIfDefined("productCodes", self.productCodes)
+        kparams.addIntIfDefined("priceDetailsId", self.priceDetailsId)
         return kparams
 
     def getId(self):
@@ -6291,12 +6136,6 @@ class KalturaCollection(KalturaObjectBase):
 
     def setEndDate(self, newEndDate):
         self.endDate = newEndDate
-
-    def getPrice(self):
-        return self.price
-
-    def setPrice(self, newPrice):
-        self.price = newPrice
 
     def getDiscountModule(self):
         return self.discountModule
@@ -6351,6 +6190,12 @@ class KalturaCollection(KalturaObjectBase):
 
     def setProductCodes(self, newProductCodes):
         self.productCodes = newProductCodes
+
+    def getPriceDetailsId(self):
+        return self.priceDetailsId
+
+    def setPriceDetailsId(self, newPriceDetailsId):
+        self.priceDetailsId = newPriceDetailsId
 
 
 # @package Kaltura
@@ -6863,6 +6708,80 @@ class KalturaSubscriptionSwitchSet(KalturaSubscriptionSet):
 
 # @package Kaltura
 # @subpackage Client
+class KalturaPrice(KalturaObjectBase):
+    """Price"""
+
+    def __init__(self,
+            amount=NotImplemented,
+            currency=NotImplemented,
+            currencySign=NotImplemented,
+            countryId=NotImplemented):
+        KalturaObjectBase.__init__(self)
+
+        # Price
+        # @var float
+        self.amount = amount
+
+        # Currency
+        # @var string
+        self.currency = currency
+
+        # Currency Sign
+        # @var string
+        self.currencySign = currencySign
+
+        # Currency
+        # @var int
+        self.countryId = countryId
+
+
+    PROPERTY_LOADERS = {
+        'amount': getXmlNodeFloat, 
+        'currency': getXmlNodeText, 
+        'currencySign': getXmlNodeText, 
+        'countryId': getXmlNodeInt, 
+    }
+
+    def fromXml(self, node):
+        KalturaObjectBase.fromXml(self, node)
+        self.fromXmlImpl(node, KalturaPrice.PROPERTY_LOADERS)
+
+    def toParams(self):
+        kparams = KalturaObjectBase.toParams(self)
+        kparams.put("objectType", "KalturaPrice")
+        kparams.addFloatIfDefined("amount", self.amount)
+        kparams.addStringIfDefined("currency", self.currency)
+        kparams.addStringIfDefined("currencySign", self.currencySign)
+        kparams.addIntIfDefined("countryId", self.countryId)
+        return kparams
+
+    def getAmount(self):
+        return self.amount
+
+    def setAmount(self, newAmount):
+        self.amount = newAmount
+
+    def getCurrency(self):
+        return self.currency
+
+    def setCurrency(self, newCurrency):
+        self.currency = newCurrency
+
+    def getCurrencySign(self):
+        return self.currencySign
+
+    def setCurrencySign(self, newCurrencySign):
+        self.currencySign = newCurrencySign
+
+    def getCountryId(self):
+        return self.countryId
+
+    def setCountryId(self, newCountryId):
+        self.countryId = newCountryId
+
+
+# @package Kaltura
+# @subpackage Client
 class KalturaProductPrice(KalturaObjectBase):
     def __init__(self,
             productId=NotImplemented,
@@ -7292,6 +7211,87 @@ class KalturaSubscriptionPrice(KalturaProductPrice):
 
     def setEndDate(self, newEndDate):
         self.endDate = newEndDate
+
+
+# @package Kaltura
+# @subpackage Client
+class KalturaPriceDetails(KalturaObjectBase):
+    """Price details"""
+
+    def __init__(self,
+            id=NotImplemented,
+            name=NotImplemented,
+            price=NotImplemented,
+            multiCurrencyPrice=NotImplemented,
+            descriptions=NotImplemented):
+        KalturaObjectBase.__init__(self)
+
+        # The price code identifier
+        # @var int
+        # @readonly
+        self.id = id
+
+        # The price code name
+        # @var string
+        self.name = name
+
+        # The price
+        # @var KalturaPrice
+        # @readonly
+        self.price = price
+
+        # Multi currency prices for all countries and currencies
+        # @var array of KalturaPrice
+        self.multiCurrencyPrice = multiCurrencyPrice
+
+        # A list of the descriptions for this price on different languages (language code and translation)
+        # @var array of KalturaTranslationToken
+        self.descriptions = descriptions
+
+
+    PROPERTY_LOADERS = {
+        'id': getXmlNodeInt, 
+        'name': getXmlNodeText, 
+        'price': (KalturaObjectFactory.create, 'KalturaPrice'), 
+        'multiCurrencyPrice': (KalturaObjectFactory.createArray, 'KalturaPrice'), 
+        'descriptions': (KalturaObjectFactory.createArray, 'KalturaTranslationToken'), 
+    }
+
+    def fromXml(self, node):
+        KalturaObjectBase.fromXml(self, node)
+        self.fromXmlImpl(node, KalturaPriceDetails.PROPERTY_LOADERS)
+
+    def toParams(self):
+        kparams = KalturaObjectBase.toParams(self)
+        kparams.put("objectType", "KalturaPriceDetails")
+        kparams.addStringIfDefined("name", self.name)
+        kparams.addArrayIfDefined("multiCurrencyPrice", self.multiCurrencyPrice)
+        kparams.addArrayIfDefined("descriptions", self.descriptions)
+        return kparams
+
+    def getId(self):
+        return self.id
+
+    def getName(self):
+        return self.name
+
+    def setName(self, newName):
+        self.name = newName
+
+    def getPrice(self):
+        return self.price
+
+    def getMultiCurrencyPrice(self):
+        return self.multiCurrencyPrice
+
+    def setMultiCurrencyPrice(self, newMultiCurrencyPrice):
+        self.multiCurrencyPrice = newMultiCurrencyPrice
+
+    def getDescriptions(self):
+        return self.descriptions
+
+    def setDescriptions(self, newDescriptions):
+        self.descriptions = newDescriptions
 
 
 # @package Kaltura
@@ -15219,7 +15219,8 @@ class KalturaCollectionFilter(KalturaFilter):
 
     def __init__(self,
             orderBy=NotImplemented,
-            collectionIdIn=NotImplemented):
+            collectionIdIn=NotImplemented,
+            mediaFileIdEqual=NotImplemented):
         KalturaFilter.__init__(self,
             orderBy)
 
@@ -15227,9 +15228,14 @@ class KalturaCollectionFilter(KalturaFilter):
         # @var string
         self.collectionIdIn = collectionIdIn
 
+        # Media-file ID to get the subscriptions by
+        # @var int
+        self.mediaFileIdEqual = mediaFileIdEqual
+
 
     PROPERTY_LOADERS = {
         'collectionIdIn': getXmlNodeText, 
+        'mediaFileIdEqual': getXmlNodeInt, 
     }
 
     def fromXml(self, node):
@@ -15240,6 +15246,7 @@ class KalturaCollectionFilter(KalturaFilter):
         kparams = KalturaFilter.toParams(self)
         kparams.put("objectType", "KalturaCollectionFilter")
         kparams.addStringIfDefined("collectionIdIn", self.collectionIdIn)
+        kparams.addIntIfDefined("mediaFileIdEqual", self.mediaFileIdEqual)
         return kparams
 
     def getCollectionIdIn(self):
@@ -15247,6 +15254,12 @@ class KalturaCollectionFilter(KalturaFilter):
 
     def setCollectionIdIn(self, newCollectionIdIn):
         self.collectionIdIn = newCollectionIdIn
+
+    def getMediaFileIdEqual(self):
+        return self.mediaFileIdEqual
+
+    def setMediaFileIdEqual(self, newMediaFileIdEqual):
+        self.mediaFileIdEqual = newMediaFileIdEqual
 
 
 # @package Kaltura
@@ -25917,8 +25930,6 @@ class KalturaCoreClient(KalturaClientPlugin):
             'KalturaOTTUser': KalturaOTTUser,
             'KalturaOTTUserListResponse': KalturaOTTUserListResponse,
             'KalturaBaseChannel': KalturaBaseChannel,
-            'KalturaPrice': KalturaPrice,
-            'KalturaPriceDetails': KalturaPriceDetails,
             'KalturaDiscountModule': KalturaDiscountModule,
             'KalturaUsageModule': KalturaUsageModule,
             'KalturaCouponsGroup': KalturaCouponsGroup,
@@ -25934,11 +25945,13 @@ class KalturaCoreClient(KalturaClientPlugin):
             'KalturaSubscriptionSetListResponse': KalturaSubscriptionSetListResponse,
             'KalturaSubscriptionDependencySet': KalturaSubscriptionDependencySet,
             'KalturaSubscriptionSwitchSet': KalturaSubscriptionSwitchSet,
+            'KalturaPrice': KalturaPrice,
             'KalturaProductPrice': KalturaProductPrice,
             'KalturaProductPriceListResponse': KalturaProductPriceListResponse,
             'KalturaCollectionPrice': KalturaCollectionPrice,
             'KalturaPpvPrice': KalturaPpvPrice,
             'KalturaSubscriptionPrice': KalturaSubscriptionPrice,
+            'KalturaPriceDetails': KalturaPriceDetails,
             'KalturaPriceDetailsListResponse': KalturaPriceDetailsListResponse,
             'KalturaPricePlanListResponse': KalturaPricePlanListResponse,
             'KalturaPreviewModule': KalturaPreviewModule,
