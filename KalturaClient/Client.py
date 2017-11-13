@@ -99,7 +99,7 @@ class KalturaClient(object):
         self.callsQueue = []
         self.requestHeaders = {}
         self.clientConfiguration = {
-			'clientTag': 'python-17-10-30',
+			'clientTag': 'python-17-11-13',
 			'apiVersion': API_VERSION,
 		}
         self.requestConfiguration = {}
@@ -109,6 +109,8 @@ class KalturaClient(object):
         if (logger):
             self.shouldLog = True
 
+        KalturaObjectFactory.registerObjects({'KalturaObjectBase': KalturaObjectBase})
+		
         self.loadPlugins()
         self.loadConfigurations()
 
