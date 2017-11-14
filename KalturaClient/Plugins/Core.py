@@ -31,7 +31,7 @@ from __future__ import absolute_import
 
 from ..Base import *
 
-API_VERSION = '4.6.40.16155'
+API_VERSION = '4.6.41.17920'
 
 ########## enums ##########
 # @package Kaltura
@@ -23179,12 +23179,11 @@ class KalturaHouseholdService(KalturaServiceBase):
         resultNode = self.client.doQueue()
         return KalturaObjectFactory.create(resultNode, 'KalturaHousehold')
 
-    def delete(self, id = NotImplemented, purge = False):
+    def delete(self, id = NotImplemented):
         """Fully delete a household. Delete all of the household information, including users, devices, entitlements, payment methods and notification date."""
 
         kparams = KalturaParams()
         kparams.addIntIfDefined("id", id);
-        kparams.addBoolIfDefined("purge", purge);
         self.client.queueServiceActionCall("household", "delete", "None", kparams)
         if self.client.isMultiRequest():
             return self.client.getMultiRequestResult()
