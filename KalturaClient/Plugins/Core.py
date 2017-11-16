@@ -31,7 +31,7 @@ from __future__ import absolute_import
 
 from ..Base import *
 
-API_VERSION = '4.6.23.13353'
+API_VERSION = '4.6.24.18700'
 
 ########## enums ##########
 # @package Kaltura
@@ -2994,41 +2994,6 @@ class KalturaTranslationToken(KalturaObjectBase):
 
 # @package Kaltura
 # @subpackage Client
-class KalturaMultilingualString(KalturaObjectBase):
-    """Translated string"""
-
-    def __init__(self,
-            values=NotImplemented):
-        KalturaObjectBase.__init__(self)
-
-        # All values in different languages
-        # @var array of KalturaTranslationToken
-        self.values = values
-
-
-    PROPERTY_LOADERS = {
-        'values': (KalturaObjectFactory.createArray, 'KalturaTranslationToken'), 
-    }
-
-    def fromXml(self, node):
-        KalturaObjectBase.fromXml(self, node)
-        self.fromXmlImpl(node, KalturaMultilingualString.PROPERTY_LOADERS)
-
-    def toParams(self):
-        kparams = KalturaObjectBase.toParams(self)
-        kparams.put("objectType", "KalturaMultilingualString")
-        kparams.addArrayIfDefined("values", self.values)
-        return kparams
-
-    def getValues(self):
-        return self.values
-
-    def setValues(self, newValues):
-        self.values = newValues
-
-
-# @package Kaltura
-# @subpackage Client
 class KalturaMultilingualStringValue(KalturaValue):
     """Array of translated strings"""
 
@@ -3044,13 +3009,13 @@ class KalturaMultilingualStringValue(KalturaValue):
         self.value = value
 
         # Value
-        # @var KalturaMultilingualString
+        # @var array of KalturaTranslationToken
         self.multilingualValue = multilingualValue
 
 
     PROPERTY_LOADERS = {
         'value': getXmlNodeText, 
-        'multilingualValue': (KalturaObjectFactory.create, 'KalturaMultilingualString'), 
+        'multilingualValue': (KalturaObjectFactory.createArray, 'KalturaTranslationToken'), 
     }
 
     def fromXml(self, node):
@@ -3061,7 +3026,7 @@ class KalturaMultilingualStringValue(KalturaValue):
         kparams = KalturaValue.toParams(self)
         kparams.put("objectType", "KalturaMultilingualStringValue")
         kparams.addStringIfDefined("value", self.value)
-        kparams.addObjectIfDefined("multilingualValue", self.multilingualValue)
+        kparams.addArrayIfDefined("multilingualValue", self.multilingualValue)
         return kparams
 
     def getValue(self):
@@ -7072,7 +7037,7 @@ class KalturaSubscription(KalturaObjectBase):
         self.name = name
 
         # Name of the subscription
-        # @var KalturaMultilingualString
+        # @var array of KalturaTranslationToken
         self.multilingualName = multilingualName
 
         # description of the subscription
@@ -7080,7 +7045,7 @@ class KalturaSubscription(KalturaObjectBase):
         self.description = description
 
         # description of the subscription
-        # @var KalturaMultilingualString
+        # @var array of KalturaTranslationToken
         self.multilingualDescription = multilingualDescription
 
         # Identifier of the media associated with the subscription
@@ -7164,9 +7129,9 @@ class KalturaSubscription(KalturaObjectBase):
         'price': (KalturaObjectFactory.create, 'KalturaPriceDetails'), 
         'discountModule': (KalturaObjectFactory.create, 'KalturaDiscountModule'), 
         'name': getXmlNodeText, 
-        'multilingualName': (KalturaObjectFactory.create, 'KalturaMultilingualString'), 
+        'multilingualName': (KalturaObjectFactory.createArray, 'KalturaTranslationToken'), 
         'description': getXmlNodeText, 
-        'multilingualDescription': (KalturaObjectFactory.create, 'KalturaMultilingualString'), 
+        'multilingualDescription': (KalturaObjectFactory.createArray, 'KalturaTranslationToken'), 
         'mediaId': getXmlNodeInt, 
         'prorityInOrder': getXmlNodeInt, 
         'pricePlanIds': getXmlNodeText, 
@@ -7204,9 +7169,9 @@ class KalturaSubscription(KalturaObjectBase):
         kparams.addObjectIfDefined("price", self.price)
         kparams.addObjectIfDefined("discountModule", self.discountModule)
         kparams.addStringIfDefined("name", self.name)
-        kparams.addObjectIfDefined("multilingualName", self.multilingualName)
+        kparams.addArrayIfDefined("multilingualName", self.multilingualName)
         kparams.addStringIfDefined("description", self.description)
-        kparams.addObjectIfDefined("multilingualDescription", self.multilingualDescription)
+        kparams.addArrayIfDefined("multilingualDescription", self.multilingualDescription)
         kparams.addIntIfDefined("mediaId", self.mediaId)
         kparams.addIntIfDefined("prorityInOrder", self.prorityInOrder)
         kparams.addStringIfDefined("pricePlanIds", self.pricePlanIds)
@@ -10872,7 +10837,7 @@ class KalturaAsset(KalturaObjectBase):
         self.name = name
 
         # Asset name
-        # @var KalturaMultilingualString
+        # @var array of KalturaTranslationToken
         self.multilingualName = multilingualName
 
         # Asset description
@@ -10880,7 +10845,7 @@ class KalturaAsset(KalturaObjectBase):
         self.description = description
 
         # Asset description
-        # @var KalturaMultilingualString
+        # @var array of KalturaTranslationToken
         self.multilingualDescription = multilingualDescription
 
         # Collection of images details that can be used to represent this asset
@@ -10932,9 +10897,9 @@ class KalturaAsset(KalturaObjectBase):
         'id': getXmlNodeInt, 
         'type': getXmlNodeInt, 
         'name': getXmlNodeText, 
-        'multilingualName': (KalturaObjectFactory.create, 'KalturaMultilingualString'), 
+        'multilingualName': (KalturaObjectFactory.createArray, 'KalturaTranslationToken'), 
         'description': getXmlNodeText, 
-        'multilingualDescription': (KalturaObjectFactory.create, 'KalturaMultilingualString'), 
+        'multilingualDescription': (KalturaObjectFactory.createArray, 'KalturaTranslationToken'), 
         'images': (KalturaObjectFactory.createArray, 'KalturaMediaImage'), 
         'mediaFiles': (KalturaObjectFactory.createArray, 'KalturaMediaFile'), 
         'metas': (KalturaObjectFactory.createMap, 'KalturaValue'), 
@@ -10957,9 +10922,9 @@ class KalturaAsset(KalturaObjectBase):
         kparams.put("objectType", "KalturaAsset")
         kparams.addIntIfDefined("type", self.type)
         kparams.addStringIfDefined("name", self.name)
-        kparams.addObjectIfDefined("multilingualName", self.multilingualName)
+        kparams.addArrayIfDefined("multilingualName", self.multilingualName)
         kparams.addStringIfDefined("description", self.description)
-        kparams.addObjectIfDefined("multilingualDescription", self.multilingualDescription)
+        kparams.addArrayIfDefined("multilingualDescription", self.multilingualDescription)
         kparams.addArrayIfDefined("images", self.images)
         kparams.addArrayIfDefined("mediaFiles", self.mediaFiles)
         kparams.addMapIfDefined("metas", self.metas)
@@ -14202,6 +14167,39 @@ class KalturaRequestConfiguration(KalturaObjectBase):
 
 # @package Kaltura
 # @subpackage Client
+class KalturaFilter(KalturaObjectBase):
+    def __init__(self,
+            orderBy=NotImplemented):
+        KalturaObjectBase.__init__(self)
+
+        # order by
+        # @var string
+        self.orderBy = orderBy
+
+
+    PROPERTY_LOADERS = {
+        'orderBy': getXmlNodeText, 
+    }
+
+    def fromXml(self, node):
+        KalturaObjectBase.fromXml(self, node)
+        self.fromXmlImpl(node, KalturaFilter.PROPERTY_LOADERS)
+
+    def toParams(self):
+        kparams = KalturaObjectBase.toParams(self)
+        kparams.put("objectType", "KalturaFilter")
+        kparams.addStringIfDefined("orderBy", self.orderBy)
+        return kparams
+
+    def getOrderBy(self):
+        return self.orderBy
+
+    def setOrderBy(self, newOrderBy):
+        self.orderBy = newOrderBy
+
+
+# @package Kaltura
+# @subpackage Client
 class KalturaDetachedResponseProfile(KalturaBaseResponseProfile):
     """Define specific base profile response"""
 
@@ -14283,39 +14281,6 @@ class KalturaRelatedObjectFilter(KalturaFilter):
         kparams = KalturaFilter.toParams(self)
         kparams.put("objectType", "KalturaRelatedObjectFilter")
         return kparams
-
-
-# @package Kaltura
-# @subpackage Client
-class KalturaFilter(KalturaObjectBase):
-    def __init__(self,
-            orderBy=NotImplemented):
-        KalturaObjectBase.__init__(self)
-
-        # order by
-        # @var string
-        self.orderBy = orderBy
-
-
-    PROPERTY_LOADERS = {
-        'orderBy': getXmlNodeText, 
-    }
-
-    def fromXml(self, node):
-        KalturaObjectBase.fromXml(self, node)
-        self.fromXmlImpl(node, KalturaFilter.PROPERTY_LOADERS)
-
-    def toParams(self):
-        kparams = KalturaObjectBase.toParams(self)
-        kparams.put("objectType", "KalturaFilter")
-        kparams.addStringIfDefined("orderBy", self.orderBy)
-        return kparams
-
-    def getOrderBy(self):
-        return self.orderBy
-
-    def setOrderBy(self, newOrderBy):
-        self.orderBy = newOrderBy
 
 
 # @package Kaltura
@@ -25523,7 +25488,6 @@ class KalturaCoreClient(KalturaClientPlugin):
             'KalturaPaymentGatewayProfile': KalturaPaymentGatewayProfile,
             'KalturaPaymentGatewayProfileListResponse': KalturaPaymentGatewayProfileListResponse,
             'KalturaTranslationToken': KalturaTranslationToken,
-            'KalturaMultilingualString': KalturaMultilingualString,
             'KalturaMultilingualStringValue': KalturaMultilingualStringValue,
             'KalturaLongValue': KalturaLongValue,
             'KalturaDoubleValue': KalturaDoubleValue,
@@ -25690,9 +25654,9 @@ class KalturaCoreClient(KalturaClientPlugin):
             'KalturaClientConfiguration': KalturaClientConfiguration,
             'KalturaBaseResponseProfile': KalturaBaseResponseProfile,
             'KalturaRequestConfiguration': KalturaRequestConfiguration,
+            'KalturaFilter': KalturaFilter,
             'KalturaDetachedResponseProfile': KalturaDetachedResponseProfile,
             'KalturaRelatedObjectFilter': KalturaRelatedObjectFilter,
-            'KalturaFilter': KalturaFilter,
             'KalturaSocialCommentFilter': KalturaSocialCommentFilter,
             'KalturaSocialFriendActivityFilter': KalturaSocialFriendActivityFilter,
             'KalturaSocialActionFilter': KalturaSocialActionFilter,
