@@ -31,7 +31,7 @@ from __future__ import absolute_import
 
 from ..Base import *
 
-API_VERSION = '4.6.52.43142'
+API_VERSION = '4.6.53.18113'
 
 ########## enums ##########
 # @package Kaltura
@@ -451,6 +451,7 @@ class KalturaDrmSchemeName(object):
     FAIRPLAY = "FAIRPLAY"
     WIDEVINE = "WIDEVINE"
     PLAYREADY = "PLAYREADY"
+    CUSTOM_DRM = "CUSTOM_DRM"
 
     def __init__(self, value):
         self.value = value
@@ -5091,6 +5092,43 @@ class KalturaFairPlayPlaybackPluginData(KalturaDrmPlaybackPluginData):
 
     def setCertificate(self, newCertificate):
         self.certificate = newCertificate
+
+
+# @package Kaltura
+# @subpackage Client
+class KalturaCustomDrmPlaybackPluginData(KalturaDrmPlaybackPluginData):
+    def __init__(self,
+            scheme=NotImplemented,
+            licenseURL=NotImplemented,
+            data=NotImplemented):
+        KalturaDrmPlaybackPluginData.__init__(self,
+            scheme,
+            licenseURL)
+
+        # Custom DRM license data
+        # @var string
+        self.data = data
+
+
+    PROPERTY_LOADERS = {
+        'data': getXmlNodeText, 
+    }
+
+    def fromXml(self, node):
+        KalturaDrmPlaybackPluginData.fromXml(self, node)
+        self.fromXmlImpl(node, KalturaCustomDrmPlaybackPluginData.PROPERTY_LOADERS)
+
+    def toParams(self):
+        kparams = KalturaDrmPlaybackPluginData.toParams(self)
+        kparams.put("objectType", "KalturaCustomDrmPlaybackPluginData")
+        kparams.addStringIfDefined("data", self.data)
+        return kparams
+
+    def getData(self):
+        return self.data
+
+    def setData(self, newData):
+        self.data = newData
 
 
 # @package Kaltura
@@ -25888,6 +25926,7 @@ class KalturaCoreClient(KalturaClientPlugin):
             'KalturaDrmPlaybackPluginData': KalturaDrmPlaybackPluginData,
             'KalturaPlaybackSource': KalturaPlaybackSource,
             'KalturaFairPlayPlaybackPluginData': KalturaFairPlayPlaybackPluginData,
+            'KalturaCustomDrmPlaybackPluginData': KalturaCustomDrmPlaybackPluginData,
             'KalturaBaseOTTUser': KalturaBaseOTTUser,
             'KalturaCountry': KalturaCountry,
             'KalturaOTTUserType': KalturaOTTUserType,
