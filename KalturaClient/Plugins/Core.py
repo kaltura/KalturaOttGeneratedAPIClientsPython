@@ -31,7 +31,7 @@ from __future__ import absolute_import
 
 from ..Base import *
 
-API_VERSION = '4.6.57.19028'
+API_VERSION = '4.6.58.24412'
 
 ########## enums ##########
 # @package Kaltura
@@ -21729,6 +21729,51 @@ class KalturaUserLoginPin(KalturaObjectBase):
         return self.userId
 
 
+# @package Kaltura
+# @subpackage Client
+class KalturaOTTUserDynamicData(KalturaObjectBase):
+    """User dynamic data"""
+
+    def __init__(self,
+            userId=NotImplemented,
+            dynamicData=NotImplemented):
+        KalturaObjectBase.__init__(self)
+
+        # User identifier
+        # @var string
+        # @readonly
+        self.userId = userId
+
+        # Dynamic data
+        # @var map
+        self.dynamicData = dynamicData
+
+
+    PROPERTY_LOADERS = {
+        'userId': getXmlNodeText, 
+        'dynamicData': (KalturaObjectFactory.createMap, 'KalturaStringValue'), 
+    }
+
+    def fromXml(self, node):
+        KalturaObjectBase.fromXml(self, node)
+        self.fromXmlImpl(node, KalturaOTTUserDynamicData.PROPERTY_LOADERS)
+
+    def toParams(self):
+        kparams = KalturaObjectBase.toParams(self)
+        kparams.put("objectType", "KalturaOTTUserDynamicData")
+        kparams.addMapIfDefined("dynamicData", self.dynamicData)
+        return kparams
+
+    def getUserId(self):
+        return self.userId
+
+    def getDynamicData(self):
+        return self.dynamicData
+
+    def setDynamicData(self, newDynamicData):
+        self.dynamicData = newDynamicData
+
+
 ########## services ##########
 
 # @package Kaltura
@@ -24121,6 +24166,18 @@ class KalturaOttUserService(KalturaServiceBase):
         resultNode = self.client.doQueue()
         return KalturaObjectFactory.create(resultNode, 'KalturaOTTUser')
 
+    def updateDynamicData(self, key, value):
+        """Update user dynamic data"""
+
+        kparams = KalturaParams()
+        kparams.addStringIfDefined("key", key)
+        kparams.addObjectIfDefined("value", value)
+        self.client.queueServiceActionCall("ottuser", "updateDynamicData", "KalturaOTTUserDynamicData", kparams)
+        if self.client.isMultiRequest():
+            return self.client.getMultiRequestResult()
+        resultNode = self.client.doQueue()
+        return KalturaObjectFactory.create(resultNode, 'KalturaOTTUserDynamicData')
+
     def updateLoginData(self, username, oldPassword, newPassword):
         """Given a user name and existing password, change to a new password."""
 
@@ -26183,6 +26240,7 @@ class KalturaCoreClient(KalturaClientPlugin):
             'KalturaTransaction': KalturaTransaction,
             'KalturaTransactionStatus': KalturaTransactionStatus,
             'KalturaUserLoginPin': KalturaUserLoginPin,
+            'KalturaOTTUserDynamicData': KalturaOTTUserDynamicData,
         }
 
     # @return string
