@@ -31,7 +31,7 @@ from __future__ import absolute_import
 
 from ..Base import *
 
-API_VERSION = '4.6.58.24412'
+API_VERSION = '4.6.60.30011'
 
 ########## enums ##########
 # @package Kaltura
@@ -3204,6 +3204,109 @@ class KalturaIntegerValue(KalturaValue):
 
 # @package Kaltura
 # @subpackage Client
+class KalturaPluginData(KalturaObjectBase):
+    def __init__(self):
+        KalturaObjectBase.__init__(self)
+
+
+    PROPERTY_LOADERS = {
+    }
+
+    def fromXml(self, node):
+        KalturaObjectBase.fromXml(self, node)
+        self.fromXmlImpl(node, KalturaPluginData.PROPERTY_LOADERS)
+
+    def toParams(self):
+        kparams = KalturaObjectBase.toParams(self)
+        kparams.put("objectType", "KalturaPluginData")
+        return kparams
+
+
+# @package Kaltura
+# @subpackage Client
+class KalturaDrmPlaybackPluginData(KalturaPluginData):
+    def __init__(self,
+            scheme=NotImplemented,
+            licenseURL=NotImplemented):
+        KalturaPluginData.__init__(self)
+
+        # Scheme
+        # @var KalturaDrmSchemeName
+        self.scheme = scheme
+
+        # License URL
+        # @var string
+        self.licenseURL = licenseURL
+
+
+    PROPERTY_LOADERS = {
+        'scheme': (KalturaEnumsFactory.createString, "KalturaDrmSchemeName"), 
+        'licenseURL': getXmlNodeText, 
+    }
+
+    def fromXml(self, node):
+        KalturaPluginData.fromXml(self, node)
+        self.fromXmlImpl(node, KalturaDrmPlaybackPluginData.PROPERTY_LOADERS)
+
+    def toParams(self):
+        kparams = KalturaPluginData.toParams(self)
+        kparams.put("objectType", "KalturaDrmPlaybackPluginData")
+        kparams.addStringEnumIfDefined("scheme", self.scheme)
+        kparams.addStringIfDefined("licenseURL", self.licenseURL)
+        return kparams
+
+    def getScheme(self):
+        return self.scheme
+
+    def setScheme(self, newScheme):
+        self.scheme = newScheme
+
+    def getLicenseURL(self):
+        return self.licenseURL
+
+    def setLicenseURL(self, newLicenseURL):
+        self.licenseURL = newLicenseURL
+
+
+# @package Kaltura
+# @subpackage Client
+class KalturaCustomDrmPlaybackPluginData(KalturaDrmPlaybackPluginData):
+    def __init__(self,
+            scheme=NotImplemented,
+            licenseURL=NotImplemented,
+            data=NotImplemented):
+        KalturaDrmPlaybackPluginData.__init__(self,
+            scheme,
+            licenseURL)
+
+        # Custom DRM license data
+        # @var string
+        self.data = data
+
+
+    PROPERTY_LOADERS = {
+        'data': getXmlNodeText, 
+    }
+
+    def fromXml(self, node):
+        KalturaDrmPlaybackPluginData.fromXml(self, node)
+        self.fromXmlImpl(node, KalturaCustomDrmPlaybackPluginData.PROPERTY_LOADERS)
+
+    def toParams(self):
+        kparams = KalturaDrmPlaybackPluginData.toParams(self)
+        kparams.put("objectType", "KalturaCustomDrmPlaybackPluginData")
+        kparams.addStringIfDefined("data", self.data)
+        return kparams
+
+    def getData(self):
+        return self.data
+
+    def setData(self, newData):
+        self.data = newData
+
+
+# @package Kaltura
+# @subpackage Client
 class KalturaHouseholdDevice(KalturaObjectBase):
     """Device details"""
 
@@ -3214,7 +3317,8 @@ class KalturaHouseholdDevice(KalturaObjectBase):
             brandId=NotImplemented,
             activatedOn=NotImplemented,
             status=NotImplemented,
-            deviceFamilyId=NotImplemented):
+            deviceFamilyId=NotImplemented,
+            drm=NotImplemented):
         KalturaObjectBase.__init__(self)
 
         # Household identifier
@@ -3248,6 +3352,11 @@ class KalturaHouseholdDevice(KalturaObjectBase):
         # @readonly
         self.deviceFamilyId = deviceFamilyId
 
+        # Device DRM data
+        # @var KalturaCustomDrmPlaybackPluginData
+        # @readonly
+        self.drm = drm
+
 
     PROPERTY_LOADERS = {
         'householdId': getXmlNodeInt, 
@@ -3257,6 +3366,7 @@ class KalturaHouseholdDevice(KalturaObjectBase):
         'activatedOn': getXmlNodeInt, 
         'status': (KalturaEnumsFactory.createString, "KalturaDeviceStatus"), 
         'deviceFamilyId': getXmlNodeInt, 
+        'drm': (KalturaObjectFactory.create, 'KalturaCustomDrmPlaybackPluginData'), 
     }
 
     def fromXml(self, node):
@@ -3309,6 +3419,9 @@ class KalturaHouseholdDevice(KalturaObjectBase):
     def getDeviceFamilyId(self):
         return self.deviceFamilyId
 
+    def getDrm(self):
+        return self.drm
+
 
 # @package Kaltura
 # @subpackage Client
@@ -3343,6 +3456,43 @@ class KalturaHouseholdDeviceListResponse(KalturaListResponse):
 
     def setObjects(self, newObjects):
         self.objects = newObjects
+
+
+# @package Kaltura
+# @subpackage Client
+class KalturaFairPlayPlaybackPluginData(KalturaDrmPlaybackPluginData):
+    def __init__(self,
+            scheme=NotImplemented,
+            licenseURL=NotImplemented,
+            certificate=NotImplemented):
+        KalturaDrmPlaybackPluginData.__init__(self,
+            scheme,
+            licenseURL)
+
+        # Custom data string
+        # @var string
+        self.certificate = certificate
+
+
+    PROPERTY_LOADERS = {
+        'certificate': getXmlNodeText, 
+    }
+
+    def fromXml(self, node):
+        KalturaDrmPlaybackPluginData.fromXml(self, node)
+        self.fromXmlImpl(node, KalturaFairPlayPlaybackPluginData.PROPERTY_LOADERS)
+
+    def toParams(self):
+        kparams = KalturaDrmPlaybackPluginData.toParams(self)
+        kparams.put("objectType", "KalturaFairPlayPlaybackPluginData")
+        kparams.addStringIfDefined("certificate", self.certificate)
+        return kparams
+
+    def getCertificate(self):
+        return self.certificate
+
+    def setCertificate(self, newCertificate):
+        self.certificate = newCertificate
 
 
 # @package Kaltura
@@ -4906,72 +5056,6 @@ class KalturaFavoriteListResponse(KalturaListResponse):
 
 # @package Kaltura
 # @subpackage Client
-class KalturaPluginData(KalturaObjectBase):
-    def __init__(self):
-        KalturaObjectBase.__init__(self)
-
-
-    PROPERTY_LOADERS = {
-    }
-
-    def fromXml(self, node):
-        KalturaObjectBase.fromXml(self, node)
-        self.fromXmlImpl(node, KalturaPluginData.PROPERTY_LOADERS)
-
-    def toParams(self):
-        kparams = KalturaObjectBase.toParams(self)
-        kparams.put("objectType", "KalturaPluginData")
-        return kparams
-
-
-# @package Kaltura
-# @subpackage Client
-class KalturaDrmPlaybackPluginData(KalturaPluginData):
-    def __init__(self,
-            scheme=NotImplemented,
-            licenseURL=NotImplemented):
-        KalturaPluginData.__init__(self)
-
-        # Scheme
-        # @var KalturaDrmSchemeName
-        self.scheme = scheme
-
-        # License URL
-        # @var string
-        self.licenseURL = licenseURL
-
-
-    PROPERTY_LOADERS = {
-        'scheme': (KalturaEnumsFactory.createString, "KalturaDrmSchemeName"), 
-        'licenseURL': getXmlNodeText, 
-    }
-
-    def fromXml(self, node):
-        KalturaPluginData.fromXml(self, node)
-        self.fromXmlImpl(node, KalturaDrmPlaybackPluginData.PROPERTY_LOADERS)
-
-    def toParams(self):
-        kparams = KalturaPluginData.toParams(self)
-        kparams.put("objectType", "KalturaDrmPlaybackPluginData")
-        kparams.addStringEnumIfDefined("scheme", self.scheme)
-        kparams.addStringIfDefined("licenseURL", self.licenseURL)
-        return kparams
-
-    def getScheme(self):
-        return self.scheme
-
-    def setScheme(self, newScheme):
-        self.scheme = newScheme
-
-    def getLicenseURL(self):
-        return self.licenseURL
-
-    def setLicenseURL(self, newLicenseURL):
-        self.licenseURL = newLicenseURL
-
-
-# @package Kaltura
-# @subpackage Client
 class KalturaPlaybackSource(KalturaMediaFile):
     def __init__(self,
             assetId=NotImplemented,
@@ -5055,80 +5139,6 @@ class KalturaPlaybackSource(KalturaMediaFile):
 
     def setDrm(self, newDrm):
         self.drm = newDrm
-
-
-# @package Kaltura
-# @subpackage Client
-class KalturaFairPlayPlaybackPluginData(KalturaDrmPlaybackPluginData):
-    def __init__(self,
-            scheme=NotImplemented,
-            licenseURL=NotImplemented,
-            certificate=NotImplemented):
-        KalturaDrmPlaybackPluginData.__init__(self,
-            scheme,
-            licenseURL)
-
-        # Custom data string
-        # @var string
-        self.certificate = certificate
-
-
-    PROPERTY_LOADERS = {
-        'certificate': getXmlNodeText, 
-    }
-
-    def fromXml(self, node):
-        KalturaDrmPlaybackPluginData.fromXml(self, node)
-        self.fromXmlImpl(node, KalturaFairPlayPlaybackPluginData.PROPERTY_LOADERS)
-
-    def toParams(self):
-        kparams = KalturaDrmPlaybackPluginData.toParams(self)
-        kparams.put("objectType", "KalturaFairPlayPlaybackPluginData")
-        kparams.addStringIfDefined("certificate", self.certificate)
-        return kparams
-
-    def getCertificate(self):
-        return self.certificate
-
-    def setCertificate(self, newCertificate):
-        self.certificate = newCertificate
-
-
-# @package Kaltura
-# @subpackage Client
-class KalturaCustomDrmPlaybackPluginData(KalturaDrmPlaybackPluginData):
-    def __init__(self,
-            scheme=NotImplemented,
-            licenseURL=NotImplemented,
-            data=NotImplemented):
-        KalturaDrmPlaybackPluginData.__init__(self,
-            scheme,
-            licenseURL)
-
-        # Custom DRM license data
-        # @var string
-        self.data = data
-
-
-    PROPERTY_LOADERS = {
-        'data': getXmlNodeText, 
-    }
-
-    def fromXml(self, node):
-        KalturaDrmPlaybackPluginData.fromXml(self, node)
-        self.fromXmlImpl(node, KalturaCustomDrmPlaybackPluginData.PROPERTY_LOADERS)
-
-    def toParams(self):
-        kparams = KalturaDrmPlaybackPluginData.toParams(self)
-        kparams.put("objectType", "KalturaCustomDrmPlaybackPluginData")
-        kparams.addStringIfDefined("data", self.data)
-        return kparams
-
-    def getData(self):
-        return self.data
-
-    def setData(self, newData):
-        self.data = newData
 
 
 # @package Kaltura
@@ -25953,8 +25963,12 @@ class KalturaCoreClient(KalturaClientPlugin):
             'KalturaDoubleValue': KalturaDoubleValue,
             'KalturaBooleanValue': KalturaBooleanValue,
             'KalturaIntegerValue': KalturaIntegerValue,
+            'KalturaPluginData': KalturaPluginData,
+            'KalturaDrmPlaybackPluginData': KalturaDrmPlaybackPluginData,
+            'KalturaCustomDrmPlaybackPluginData': KalturaCustomDrmPlaybackPluginData,
             'KalturaHouseholdDevice': KalturaHouseholdDevice,
             'KalturaHouseholdDeviceListResponse': KalturaHouseholdDeviceListResponse,
+            'KalturaFairPlayPlaybackPluginData': KalturaFairPlayPlaybackPluginData,
             'KalturaHouseholdUser': KalturaHouseholdUser,
             'KalturaHouseholdUserListResponse': KalturaHouseholdUserListResponse,
             'KalturaHomeNetwork': KalturaHomeNetwork,
@@ -25979,11 +25993,7 @@ class KalturaCoreClient(KalturaClientPlugin):
             'KalturaMultilingualStringValueArray': KalturaMultilingualStringValueArray,
             'KalturaFavorite': KalturaFavorite,
             'KalturaFavoriteListResponse': KalturaFavoriteListResponse,
-            'KalturaPluginData': KalturaPluginData,
-            'KalturaDrmPlaybackPluginData': KalturaDrmPlaybackPluginData,
             'KalturaPlaybackSource': KalturaPlaybackSource,
-            'KalturaFairPlayPlaybackPluginData': KalturaFairPlayPlaybackPluginData,
-            'KalturaCustomDrmPlaybackPluginData': KalturaCustomDrmPlaybackPluginData,
             'KalturaBaseOTTUser': KalturaBaseOTTUser,
             'KalturaCountry': KalturaCountry,
             'KalturaOTTUserType': KalturaOTTUserType,
