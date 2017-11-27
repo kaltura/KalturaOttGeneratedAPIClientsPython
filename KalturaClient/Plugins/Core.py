@@ -31,7 +31,7 @@ from __future__ import absolute_import
 
 from ..Base import *
 
-API_VERSION = '4.6.65.43132'
+API_VERSION = '4.6.66.16066'
 
 ########## enums ##########
 # @package Kaltura
@@ -21746,7 +21746,8 @@ class KalturaOTTUserDynamicData(KalturaObjectBase):
 
     def __init__(self,
             userId=NotImplemented,
-            dynamicData=NotImplemented):
+            key=NotImplemented,
+            value=NotImplemented):
         KalturaObjectBase.__init__(self)
 
         # User identifier
@@ -21754,14 +21755,19 @@ class KalturaOTTUserDynamicData(KalturaObjectBase):
         # @readonly
         self.userId = userId
 
-        # Dynamic data
-        # @var map
-        self.dynamicData = dynamicData
+        # Key
+        # @var string
+        self.key = key
+
+        # Value
+        # @var KalturaStringValue
+        self.value = value
 
 
     PROPERTY_LOADERS = {
         'userId': getXmlNodeText, 
-        'dynamicData': (KalturaObjectFactory.createMap, 'KalturaStringValue'), 
+        'key': getXmlNodeText, 
+        'value': (KalturaObjectFactory.create, 'KalturaStringValue'), 
     }
 
     def fromXml(self, node):
@@ -21771,17 +21777,24 @@ class KalturaOTTUserDynamicData(KalturaObjectBase):
     def toParams(self):
         kparams = KalturaObjectBase.toParams(self)
         kparams.put("objectType", "KalturaOTTUserDynamicData")
-        kparams.addMapIfDefined("dynamicData", self.dynamicData)
+        kparams.addStringIfDefined("key", self.key)
+        kparams.addObjectIfDefined("value", self.value)
         return kparams
 
     def getUserId(self):
         return self.userId
 
-    def getDynamicData(self):
-        return self.dynamicData
+    def getKey(self):
+        return self.key
 
-    def setDynamicData(self, newDynamicData):
-        self.dynamicData = newDynamicData
+    def setKey(self, newKey):
+        self.key = newKey
+
+    def getValue(self):
+        return self.value
+
+    def setValue(self, newValue):
+        self.value = newValue
 
 
 ########## services ##########
