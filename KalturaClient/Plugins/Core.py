@@ -31,7 +31,7 @@ from __future__ import absolute_import
 
 from ..Base import *
 
-API_VERSION = '4.7.0.43135'
+API_VERSION = '4.7.3.25091'
 
 ########## enums ##########
 # @package Kaltura
@@ -2754,7 +2754,8 @@ class KalturaPaymentGatewayProfile(KalturaPaymentGatewayBaseProfile):
             pendingRetries=NotImplemented,
             sharedSecret=NotImplemented,
             renewIntervalMinutes=NotImplemented,
-            renewStartMinutes=NotImplemented):
+            renewStartMinutes=NotImplemented,
+            externalVerification=NotImplemented):
         KalturaPaymentGatewayBaseProfile.__init__(self,
             id,
             name,
@@ -2809,6 +2810,10 @@ class KalturaPaymentGatewayProfile(KalturaPaymentGatewayBaseProfile):
         # @var int
         self.renewStartMinutes = renewStartMinutes
 
+        # Payment gateway external verification
+        # @var bool
+        self.externalVerification = externalVerification
+
 
     PROPERTY_LOADERS = {
         'isActive': getXmlNodeInt, 
@@ -2823,6 +2828,7 @@ class KalturaPaymentGatewayProfile(KalturaPaymentGatewayBaseProfile):
         'sharedSecret': getXmlNodeText, 
         'renewIntervalMinutes': getXmlNodeInt, 
         'renewStartMinutes': getXmlNodeInt, 
+        'externalVerification': getXmlNodeBool, 
     }
 
     def fromXml(self, node):
@@ -2844,6 +2850,7 @@ class KalturaPaymentGatewayProfile(KalturaPaymentGatewayBaseProfile):
         kparams.addStringIfDefined("sharedSecret", self.sharedSecret)
         kparams.addIntIfDefined("renewIntervalMinutes", self.renewIntervalMinutes)
         kparams.addIntIfDefined("renewStartMinutes", self.renewStartMinutes)
+        kparams.addBoolIfDefined("externalVerification", self.externalVerification)
         return kparams
 
     def getIsActive(self):
@@ -2917,6 +2924,12 @@ class KalturaPaymentGatewayProfile(KalturaPaymentGatewayBaseProfile):
 
     def setRenewStartMinutes(self, newRenewStartMinutes):
         self.renewStartMinutes = newRenewStartMinutes
+
+    def getExternalVerification(self):
+        return self.externalVerification
+
+    def setExternalVerification(self, newExternalVerification):
+        self.externalVerification = newExternalVerification
 
 
 # @package Kaltura
