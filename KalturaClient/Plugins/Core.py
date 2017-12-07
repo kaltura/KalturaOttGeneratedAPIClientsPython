@@ -31,7 +31,7 @@ from __future__ import absolute_import
 
 from ..Base import *
 
-API_VERSION = '4.7.3.43133'
+API_VERSION = '4.7.7.12679'
 
 ########## enums ##########
 # @package Kaltura
@@ -10279,7 +10279,7 @@ class KalturaEntitlement(KalturaObjectBase):
 
     def __init__(self,
             id=NotImplemented,
-            entitlementId=NotImplemented,
+            productId=NotImplemented,
             currentUses=NotImplemented,
             endDate=NotImplemented,
             currentDate=NotImplemented,
@@ -10299,10 +10299,10 @@ class KalturaEntitlement(KalturaObjectBase):
         # @readonly
         self.id = id
 
-        # Entitlement identifier
+        # Product identifier
         # @var string
         # @readonly
-        self.entitlementId = entitlementId
+        self.productId = productId
 
         # The current number of uses
         # @var int
@@ -10367,7 +10367,7 @@ class KalturaEntitlement(KalturaObjectBase):
 
     PROPERTY_LOADERS = {
         'id': getXmlNodeInt, 
-        'entitlementId': getXmlNodeText, 
+        'productId': getXmlNodeText, 
         'currentUses': getXmlNodeInt, 
         'endDate': getXmlNodeInt, 
         'currentDate': getXmlNodeInt, 
@@ -10394,8 +10394,8 @@ class KalturaEntitlement(KalturaObjectBase):
     def getId(self):
         return self.id
 
-    def getEntitlementId(self):
-        return self.entitlementId
+    def getProductId(self):
+        return self.productId
 
     def getCurrentUses(self):
         return self.currentUses
@@ -10476,7 +10476,7 @@ class KalturaEntitlementListResponse(KalturaListResponse):
 class KalturaCollectionEntitlement(KalturaEntitlement):
     def __init__(self,
             id=NotImplemented,
-            entitlementId=NotImplemented,
+            productId=NotImplemented,
             currentUses=NotImplemented,
             endDate=NotImplemented,
             currentDate=NotImplemented,
@@ -10491,7 +10491,7 @@ class KalturaCollectionEntitlement(KalturaEntitlement):
             householdId=NotImplemented):
         KalturaEntitlement.__init__(self,
             id,
-            entitlementId,
+            productId,
             currentUses,
             endDate,
             currentDate,
@@ -10526,7 +10526,7 @@ class KalturaPpvEntitlement(KalturaEntitlement):
 
     def __init__(self,
             id=NotImplemented,
-            entitlementId=NotImplemented,
+            productId=NotImplemented,
             currentUses=NotImplemented,
             endDate=NotImplemented,
             currentDate=NotImplemented,
@@ -10543,7 +10543,7 @@ class KalturaPpvEntitlement(KalturaEntitlement):
             mediaId=NotImplemented):
         KalturaEntitlement.__init__(self,
             id,
-            entitlementId,
+            productId,
             currentUses,
             endDate,
             currentDate,
@@ -10596,7 +10596,7 @@ class KalturaSubscriptionEntitlement(KalturaEntitlement):
 
     def __init__(self,
             id=NotImplemented,
-            entitlementId=NotImplemented,
+            productId=NotImplemented,
             currentUses=NotImplemented,
             endDate=NotImplemented,
             currentDate=NotImplemented,
@@ -10615,11 +10615,11 @@ class KalturaSubscriptionEntitlement(KalturaEntitlement):
             isInGracePeriod=NotImplemented,
             paymentGatewayId=NotImplemented,
             paymentMethodId=NotImplemented,
-            scheduledSubscriptionId=NotImplemented,
+            unifiedPaymentId=NotImplemented,
             isSuspended=NotImplemented):
         KalturaEntitlement.__init__(self,
             id,
-            entitlementId,
+            productId,
             currentUses,
             endDate,
             currentDate,
@@ -10661,9 +10661,9 @@ class KalturaSubscriptionEntitlement(KalturaEntitlement):
         # @var int
         self.paymentMethodId = paymentMethodId
 
-        # Scheduled Subscription Identifier
+        # Unified payment identifier
         # @var int
-        self.scheduledSubscriptionId = scheduledSubscriptionId
+        self.unifiedPaymentId = unifiedPaymentId
 
         # Indicates if the subscription suspended
         # @var bool
@@ -10678,7 +10678,7 @@ class KalturaSubscriptionEntitlement(KalturaEntitlement):
         'isInGracePeriod': getXmlNodeBool, 
         'paymentGatewayId': getXmlNodeInt, 
         'paymentMethodId': getXmlNodeInt, 
-        'scheduledSubscriptionId': getXmlNodeInt, 
+        'unifiedPaymentId': getXmlNodeInt, 
         'isSuspended': getXmlNodeBool, 
     }
 
@@ -10691,7 +10691,7 @@ class KalturaSubscriptionEntitlement(KalturaEntitlement):
         kparams.put("objectType", "KalturaSubscriptionEntitlement")
         kparams.addIntIfDefined("paymentGatewayId", self.paymentGatewayId)
         kparams.addIntIfDefined("paymentMethodId", self.paymentMethodId)
-        kparams.addIntIfDefined("scheduledSubscriptionId", self.scheduledSubscriptionId)
+        kparams.addIntIfDefined("unifiedPaymentId", self.unifiedPaymentId)
         return kparams
 
     def getNextRenewalDate(self):
@@ -10718,11 +10718,11 @@ class KalturaSubscriptionEntitlement(KalturaEntitlement):
     def setPaymentMethodId(self, newPaymentMethodId):
         self.paymentMethodId = newPaymentMethodId
 
-    def getScheduledSubscriptionId(self):
-        return self.scheduledSubscriptionId
+    def getUnifiedPaymentId(self):
+        return self.unifiedPaymentId
 
-    def setScheduledSubscriptionId(self, newScheduledSubscriptionId):
-        self.scheduledSubscriptionId = newScheduledSubscriptionId
+    def setUnifiedPaymentId(self, newUnifiedPaymentId):
+        self.unifiedPaymentId = newUnifiedPaymentId
 
     def getIsSuspended(self):
         return self.isSuspended
@@ -16782,7 +16782,7 @@ class KalturaEntitlementFilter(KalturaFilter):
 
     def __init__(self,
             orderBy=NotImplemented,
-            entitlementTypeEqual=NotImplemented,
+            productTypeEqual=NotImplemented,
             entityReferenceEqual=NotImplemented,
             isExpiredEqual=NotImplemented):
         KalturaFilter.__init__(self,
@@ -16790,7 +16790,7 @@ class KalturaEntitlementFilter(KalturaFilter):
 
         # The type of the entitlements to return
         # @var KalturaTransactionType
-        self.entitlementTypeEqual = entitlementTypeEqual
+        self.productTypeEqual = productTypeEqual
 
         # Reference type to filter by
         # @var KalturaEntityReferenceBy
@@ -16802,7 +16802,7 @@ class KalturaEntitlementFilter(KalturaFilter):
 
 
     PROPERTY_LOADERS = {
-        'entitlementTypeEqual': (KalturaEnumsFactory.createString, "KalturaTransactionType"), 
+        'productTypeEqual': (KalturaEnumsFactory.createString, "KalturaTransactionType"), 
         'entityReferenceEqual': (KalturaEnumsFactory.createString, "KalturaEntityReferenceBy"), 
         'isExpiredEqual': getXmlNodeBool, 
     }
@@ -16814,16 +16814,16 @@ class KalturaEntitlementFilter(KalturaFilter):
     def toParams(self):
         kparams = KalturaFilter.toParams(self)
         kparams.put("objectType", "KalturaEntitlementFilter")
-        kparams.addStringEnumIfDefined("entitlementTypeEqual", self.entitlementTypeEqual)
+        kparams.addStringEnumIfDefined("productTypeEqual", self.productTypeEqual)
         kparams.addStringEnumIfDefined("entityReferenceEqual", self.entityReferenceEqual)
         kparams.addBoolIfDefined("isExpiredEqual", self.isExpiredEqual)
         return kparams
 
-    def getEntitlementTypeEqual(self):
-        return self.entitlementTypeEqual
+    def getProductTypeEqual(self):
+        return self.productTypeEqual
 
-    def setEntitlementTypeEqual(self, newEntitlementTypeEqual):
-        self.entitlementTypeEqual = newEntitlementTypeEqual
+    def setProductTypeEqual(self, newProductTypeEqual):
+        self.productTypeEqual = newProductTypeEqual
 
     def getEntityReferenceEqual(self):
         return self.entityReferenceEqual
@@ -18720,6 +18720,137 @@ class KalturaEmailMessage(KalturaObjectBase):
 
     def setExtraParameters(self, newExtraParameters):
         self.extraParameters = newExtraParameters
+
+
+# @package Kaltura
+# @subpackage Client
+class KalturaEntitlementRenewalBase(KalturaObjectBase):
+    def __init__(self,
+            price=NotImplemented,
+            purchaseId=NotImplemented,
+            subscriptionId=NotImplemented):
+        KalturaObjectBase.__init__(self)
+
+        # Price that is going to be paid on the renewal
+        # @var float
+        self.price = price
+
+        # Puchase ID
+        # @var int
+        self.purchaseId = purchaseId
+
+        # Subscription ID
+        # @var int
+        self.subscriptionId = subscriptionId
+
+
+    PROPERTY_LOADERS = {
+        'price': getXmlNodeFloat, 
+        'purchaseId': getXmlNodeInt, 
+        'subscriptionId': getXmlNodeInt, 
+    }
+
+    def fromXml(self, node):
+        KalturaObjectBase.fromXml(self, node)
+        self.fromXmlImpl(node, KalturaEntitlementRenewalBase.PROPERTY_LOADERS)
+
+    def toParams(self):
+        kparams = KalturaObjectBase.toParams(self)
+        kparams.put("objectType", "KalturaEntitlementRenewalBase")
+        kparams.addFloatIfDefined("price", self.price)
+        kparams.addIntIfDefined("purchaseId", self.purchaseId)
+        kparams.addIntIfDefined("subscriptionId", self.subscriptionId)
+        return kparams
+
+    def getPrice(self):
+        return self.price
+
+    def setPrice(self, newPrice):
+        self.price = newPrice
+
+    def getPurchaseId(self):
+        return self.purchaseId
+
+    def setPurchaseId(self, newPurchaseId):
+        self.purchaseId = newPurchaseId
+
+    def getSubscriptionId(self):
+        return self.subscriptionId
+
+    def setSubscriptionId(self, newSubscriptionId):
+        self.subscriptionId = newSubscriptionId
+
+
+# @package Kaltura
+# @subpackage Client
+class KalturaUnifiedPaymentRenewal(KalturaObjectBase):
+    def __init__(self,
+            price=NotImplemented,
+            date=NotImplemented,
+            unifiedPaymentId=NotImplemented,
+            entitlements=NotImplemented):
+        KalturaObjectBase.__init__(self)
+
+        # Price that is going to be paid on the renewal
+        # @var KalturaPrice
+        self.price = price
+
+        # Next renewal date
+        # @var int
+        self.date = date
+
+        # Unified payment ID
+        # @var int
+        self.unifiedPaymentId = unifiedPaymentId
+
+        # List of entitlements in this unified payment renewal
+        # @var array of KalturaEntitlementRenewalBase
+        self.entitlements = entitlements
+
+
+    PROPERTY_LOADERS = {
+        'price': (KalturaObjectFactory.create, 'KalturaPrice'), 
+        'date': getXmlNodeInt, 
+        'unifiedPaymentId': getXmlNodeInt, 
+        'entitlements': (KalturaObjectFactory.createArray, 'KalturaEntitlementRenewalBase'), 
+    }
+
+    def fromXml(self, node):
+        KalturaObjectBase.fromXml(self, node)
+        self.fromXmlImpl(node, KalturaUnifiedPaymentRenewal.PROPERTY_LOADERS)
+
+    def toParams(self):
+        kparams = KalturaObjectBase.toParams(self)
+        kparams.put("objectType", "KalturaUnifiedPaymentRenewal")
+        kparams.addObjectIfDefined("price", self.price)
+        kparams.addIntIfDefined("date", self.date)
+        kparams.addIntIfDefined("unifiedPaymentId", self.unifiedPaymentId)
+        kparams.addArrayIfDefined("entitlements", self.entitlements)
+        return kparams
+
+    def getPrice(self):
+        return self.price
+
+    def setPrice(self, newPrice):
+        self.price = newPrice
+
+    def getDate(self):
+        return self.date
+
+    def setDate(self, newDate):
+        self.date = newDate
+
+    def getUnifiedPaymentId(self):
+        return self.unifiedPaymentId
+
+    def setUnifiedPaymentId(self, newUnifiedPaymentId):
+        self.unifiedPaymentId = newUnifiedPaymentId
+
+    def getEntitlements(self):
+        return self.entitlements
+
+    def setEntitlements(self, newEntitlements):
+        self.entitlements = newEntitlements
 
 
 # @package Kaltura
@@ -20886,6 +21017,78 @@ class KalturaOTTCategory(KalturaObjectBase):
 
 # @package Kaltura
 # @subpackage Client
+class KalturaEntitlementRenewal(KalturaObjectBase):
+    def __init__(self,
+            price=NotImplemented,
+            date=NotImplemented,
+            purchaseId=NotImplemented,
+            subscriptionId=NotImplemented):
+        KalturaObjectBase.__init__(self)
+
+        # Price that is going to be paid on the renewal
+        # @var KalturaPrice
+        self.price = price
+
+        # Next renewal date
+        # @var int
+        self.date = date
+
+        # Puchase ID
+        # @var int
+        self.purchaseId = purchaseId
+
+        # Subscription ID
+        # @var int
+        self.subscriptionId = subscriptionId
+
+
+    PROPERTY_LOADERS = {
+        'price': (KalturaObjectFactory.create, 'KalturaPrice'), 
+        'date': getXmlNodeInt, 
+        'purchaseId': getXmlNodeInt, 
+        'subscriptionId': getXmlNodeInt, 
+    }
+
+    def fromXml(self, node):
+        KalturaObjectBase.fromXml(self, node)
+        self.fromXmlImpl(node, KalturaEntitlementRenewal.PROPERTY_LOADERS)
+
+    def toParams(self):
+        kparams = KalturaObjectBase.toParams(self)
+        kparams.put("objectType", "KalturaEntitlementRenewal")
+        kparams.addObjectIfDefined("price", self.price)
+        kparams.addIntIfDefined("date", self.date)
+        kparams.addIntIfDefined("purchaseId", self.purchaseId)
+        kparams.addIntIfDefined("subscriptionId", self.subscriptionId)
+        return kparams
+
+    def getPrice(self):
+        return self.price
+
+    def setPrice(self, newPrice):
+        self.price = newPrice
+
+    def getDate(self):
+        return self.date
+
+    def setDate(self, newDate):
+        self.date = newDate
+
+    def getPurchaseId(self):
+        return self.purchaseId
+
+    def setPurchaseId(self, newPurchaseId):
+        self.purchaseId = newPurchaseId
+
+    def getSubscriptionId(self):
+        return self.subscriptionId
+
+    def setSubscriptionId(self, newSubscriptionId):
+        self.subscriptionId = newSubscriptionId
+
+
+# @package Kaltura
+# @subpackage Client
 class KalturaSocial(KalturaObjectBase):
     def __init__(self,
             id=NotImplemented,
@@ -22944,6 +23147,17 @@ class KalturaEntitlementService(KalturaServiceBase):
             return self.client.getMultiRequestResult()
         resultNode = self.client.doQueue()
         return getXmlNodeBool(resultNode)
+
+    def getNextRenewal(self, id):
+        """Returns the data about the next renewal"""
+
+        kparams = KalturaParams()
+        kparams.addIntIfDefined("id", id);
+        self.client.queueServiceActionCall("entitlement", "getNextRenewal", "KalturaEntitlementRenewal", kparams)
+        if self.client.isMultiRequest():
+            return self.client.getMultiRequestResult()
+        resultNode = self.client.doQueue()
+        return KalturaObjectFactory.create(resultNode, 'KalturaEntitlementRenewal')
 
     def grant(self, productId, productType, history, contentId = 0):
         """Grant household for an entitlement for a PPV or Subscription."""
@@ -25533,6 +25747,24 @@ class KalturaTransactionHistoryService(KalturaServiceBase):
 
 # @package Kaltura
 # @subpackage Client
+class KalturaUnifiedPaymentService(KalturaServiceBase):
+    def __init__(self, client = None):
+        KalturaServiceBase.__init__(self, client)
+
+    def getNextRenewal(self, id):
+        """Returns the data about the next renewal"""
+
+        kparams = KalturaParams()
+        kparams.addIntIfDefined("id", id);
+        self.client.queueServiceActionCall("unifiedpayment", "getNextRenewal", "KalturaUnifiedPaymentRenewal", kparams)
+        if self.client.isMultiRequest():
+            return self.client.getMultiRequestResult()
+        resultNode = self.client.doQueue()
+        return KalturaObjectFactory.create(resultNode, 'KalturaUnifiedPaymentRenewal')
+
+
+# @package Kaltura
+# @subpackage Client
 class KalturaUserAssetRuleService(KalturaServiceBase):
     def __init__(self, client = None):
         KalturaServiceBase.__init__(self, client)
@@ -25830,6 +26062,7 @@ class KalturaCoreClient(KalturaClientPlugin):
             'topic': KalturaTopicService,
             'transaction': KalturaTransactionService,
             'transactionHistory': KalturaTransactionHistoryService,
+            'unifiedPayment': KalturaUnifiedPaymentService,
             'userAssetRule': KalturaUserAssetRuleService,
             'userAssetsListItem': KalturaUserAssetsListItemService,
             'userInterest': KalturaUserInterestService,
@@ -26235,6 +26468,8 @@ class KalturaCoreClient(KalturaClientPlugin):
             'KalturaCompensation': KalturaCompensation,
             'KalturaKeyValue': KalturaKeyValue,
             'KalturaEmailMessage': KalturaEmailMessage,
+            'KalturaEntitlementRenewalBase': KalturaEntitlementRenewalBase,
+            'KalturaUnifiedPaymentRenewal': KalturaUnifiedPaymentRenewal,
             'KalturaNetworkActionStatus': KalturaNetworkActionStatus,
             'KalturaUserSocialActionResponse': KalturaUserSocialActionResponse,
             'KalturaPaymentGatewayConfiguration': KalturaPaymentGatewayConfiguration,
@@ -26263,6 +26498,7 @@ class KalturaCoreClient(KalturaClientPlugin):
             'KalturaPurchaseSettings': KalturaPurchaseSettings,
             'KalturaCoupon': KalturaCoupon,
             'KalturaOTTCategory': KalturaOTTCategory,
+            'KalturaEntitlementRenewal': KalturaEntitlementRenewal,
             'KalturaSocial': KalturaSocial,
             'KalturaFacebookSocial': KalturaFacebookSocial,
             'KalturaSocialConfig': KalturaSocialConfig,
