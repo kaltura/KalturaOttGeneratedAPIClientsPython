@@ -31,7 +31,7 @@ from __future__ import absolute_import
 
 from ..Base import *
 
-API_VERSION = '4.4.13.28475'
+API_VERSION = '4.4.13.16459'
 
 ########## enums ##########
 # @package Kaltura
