@@ -31,7 +31,7 @@ from __future__ import absolute_import
 
 from ..Base import *
 
-API_VERSION = '4.7.8.16892'
+API_VERSION = '4.7.16.43124'
 
 ########## enums ##########
 # @package Kaltura
@@ -6756,7 +6756,7 @@ class KalturaPrice(KalturaObjectBase):
         # @var string
         self.currencySign = currencySign
 
-        # Currency
+        # Country ID
         # @var int
         self.countryId = countryId
 
@@ -10615,6 +10615,7 @@ class KalturaSubscriptionEntitlement(KalturaEntitlement):
             isInGracePeriod=NotImplemented,
             paymentGatewayId=NotImplemented,
             paymentMethodId=NotImplemented,
+            scheduledSubscriptionId=NotImplemented,
             unifiedPaymentId=NotImplemented,
             isSuspended=NotImplemented):
         KalturaEntitlement.__init__(self,
@@ -10661,6 +10662,10 @@ class KalturaSubscriptionEntitlement(KalturaEntitlement):
         # @var int
         self.paymentMethodId = paymentMethodId
 
+        # Scheduled Subscription Identifier
+        # @var int
+        self.scheduledSubscriptionId = scheduledSubscriptionId
+
         # Unified payment identifier
         # @var int
         self.unifiedPaymentId = unifiedPaymentId
@@ -10678,6 +10683,7 @@ class KalturaSubscriptionEntitlement(KalturaEntitlement):
         'isInGracePeriod': getXmlNodeBool, 
         'paymentGatewayId': getXmlNodeInt, 
         'paymentMethodId': getXmlNodeInt, 
+        'scheduledSubscriptionId': getXmlNodeInt, 
         'unifiedPaymentId': getXmlNodeInt, 
         'isSuspended': getXmlNodeBool, 
     }
@@ -10691,6 +10697,7 @@ class KalturaSubscriptionEntitlement(KalturaEntitlement):
         kparams.put("objectType", "KalturaSubscriptionEntitlement")
         kparams.addIntIfDefined("paymentGatewayId", self.paymentGatewayId)
         kparams.addIntIfDefined("paymentMethodId", self.paymentMethodId)
+        kparams.addIntIfDefined("scheduledSubscriptionId", self.scheduledSubscriptionId)
         kparams.addIntIfDefined("unifiedPaymentId", self.unifiedPaymentId)
         return kparams
 
@@ -10717,6 +10724,12 @@ class KalturaSubscriptionEntitlement(KalturaEntitlement):
 
     def setPaymentMethodId(self, newPaymentMethodId):
         self.paymentMethodId = newPaymentMethodId
+
+    def getScheduledSubscriptionId(self):
+        return self.scheduledSubscriptionId
+
+    def setScheduledSubscriptionId(self, newScheduledSubscriptionId):
+        self.scheduledSubscriptionId = newScheduledSubscriptionId
 
     def getUnifiedPaymentId(self):
         return self.unifiedPaymentId
@@ -23093,12 +23106,12 @@ class KalturaEntitlementService(KalturaServiceBase):
     def __init__(self, client = None):
         KalturaServiceBase.__init__(self, client)
 
-    def cancel(self, assetId, transactionType):
+    def cancel(self, assetId, productType):
         """Immediately cancel a subscription, PPV or collection. Cancel is possible only if within cancellation window and content not already consumed"""
 
         kparams = KalturaParams()
         kparams.addIntIfDefined("assetId", assetId);
-        kparams.addStringIfDefined("transactionType", transactionType)
+        kparams.addStringIfDefined("productType", productType)
         self.client.queueServiceActionCall("entitlement", "cancel", "None", kparams)
         if self.client.isMultiRequest():
             return self.client.getMultiRequestResult()
@@ -23136,12 +23149,12 @@ class KalturaEntitlementService(KalturaServiceBase):
         resultNode = self.client.doQueue()
         return getXmlNodeBool(resultNode)
 
-    def forceCancel(self, assetId, transactionType):
+    def forceCancel(self, assetId, productType):
         """Immediately cancel a subscription, PPV or collection. Cancel applies regardless of cancellation window and content consumption status"""
 
         kparams = KalturaParams()
         kparams.addIntIfDefined("assetId", assetId);
-        kparams.addStringIfDefined("transactionType", transactionType)
+        kparams.addStringIfDefined("productType", productType)
         self.client.queueServiceActionCall("entitlement", "forceCancel", "None", kparams)
         if self.client.isMultiRequest():
             return self.client.getMultiRequestResult()
