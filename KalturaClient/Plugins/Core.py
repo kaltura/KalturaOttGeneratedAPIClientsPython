@@ -31,7 +31,7 @@ from __future__ import absolute_import
 
 from ..Base import *
 
-API_VERSION = '4.7.39.21901'
+API_VERSION = '4.7.46.15545'
 
 ########## enums ##########
 # @package Kaltura
@@ -1644,154 +1644,6 @@ class KalturaApiExceptionArg(KalturaObjectBase):
 
     def setValue(self, newValue):
         self.value = newValue
-
-
-# @package Kaltura
-# @subpackage Client
-class KalturaPromotion(KalturaObjectBase):
-    def __init__(self,
-            link=NotImplemented,
-            text=NotImplemented,
-            startTime=NotImplemented,
-            endTime=NotImplemented):
-        KalturaObjectBase.__init__(self)
-
-        # Link
-        # @var string
-        self.link = link
-
-        # Text
-        # @var string
-        self.text = text
-
-        # StartTime
-        # @var int
-        self.startTime = startTime
-
-        # EndTime
-        # @var int
-        self.endTime = endTime
-
-
-    PROPERTY_LOADERS = {
-        'link': getXmlNodeText, 
-        'text': getXmlNodeText, 
-        'startTime': getXmlNodeInt, 
-        'endTime': getXmlNodeInt, 
-    }
-
-    def fromXml(self, node):
-        KalturaObjectBase.fromXml(self, node)
-        self.fromXmlImpl(node, KalturaPromotion.PROPERTY_LOADERS)
-
-    def toParams(self):
-        kparams = KalturaObjectBase.toParams(self)
-        kparams.put("objectType", "KalturaPromotion")
-        kparams.addStringIfDefined("link", self.link)
-        kparams.addStringIfDefined("text", self.text)
-        kparams.addIntIfDefined("startTime", self.startTime)
-        kparams.addIntIfDefined("endTime", self.endTime)
-        return kparams
-
-    def getLink(self):
-        return self.link
-
-    def setLink(self, newLink):
-        self.link = newLink
-
-    def getText(self):
-        return self.text
-
-    def setText(self, newText):
-        self.text = newText
-
-    def getStartTime(self):
-        return self.startTime
-
-    def setStartTime(self, newStartTime):
-        self.startTime = newStartTime
-
-    def getEndTime(self):
-        return self.endTime
-
-    def setEndTime(self, newEndTime):
-        self.endTime = newEndTime
-
-
-# @package Kaltura
-# @subpackage Client
-class KalturaPromotionListResponse(KalturaListResponse):
-    """Prices list"""
-
-    def __init__(self,
-            totalCount=NotImplemented,
-            entryId=NotImplemented,
-            partnerId=NotImplemented,
-            uiConfId=NotImplemented,
-            objects=NotImplemented):
-        KalturaListResponse.__init__(self,
-            totalCount)
-
-        # EntryId
-        # @var string
-        self.entryId = entryId
-
-        # PartnerId
-        # @var int
-        self.partnerId = partnerId
-
-        # UiConfId
-        # @var int
-        self.uiConfId = uiConfId
-
-        # A list of promotions
-        # @var array of KalturaPromotion
-        self.objects = objects
-
-
-    PROPERTY_LOADERS = {
-        'entryId': getXmlNodeText, 
-        'partnerId': getXmlNodeInt, 
-        'uiConfId': getXmlNodeInt, 
-        'objects': (KalturaObjectFactory.createArray, 'KalturaPromotion'), 
-    }
-
-    def fromXml(self, node):
-        KalturaListResponse.fromXml(self, node)
-        self.fromXmlImpl(node, KalturaPromotionListResponse.PROPERTY_LOADERS)
-
-    def toParams(self):
-        kparams = KalturaListResponse.toParams(self)
-        kparams.put("objectType", "KalturaPromotionListResponse")
-        kparams.addStringIfDefined("entryId", self.entryId)
-        kparams.addIntIfDefined("partnerId", self.partnerId)
-        kparams.addIntIfDefined("uiConfId", self.uiConfId)
-        kparams.addArrayIfDefined("objects", self.objects)
-        return kparams
-
-    def getEntryId(self):
-        return self.entryId
-
-    def setEntryId(self, newEntryId):
-        self.entryId = newEntryId
-
-    def getPartnerId(self):
-        return self.partnerId
-
-    def setPartnerId(self, newPartnerId):
-        self.partnerId = newPartnerId
-
-    def getUiConfId(self):
-        return self.uiConfId
-
-    def setUiConfId(self, newUiConfId):
-        self.uiConfId = newUiConfId
-
-    def getObjects(self):
-        return self.objects
-
-    def setObjects(self, newObjects):
-        self.objects = newObjects
 
 
 # @package Kaltura
@@ -24941,23 +24793,6 @@ class KalturaProductPriceService(KalturaServiceBase):
 
 # @package Kaltura
 # @subpackage Client
-class KalturaPromotionService(KalturaServiceBase):
-    def __init__(self, client = None):
-        KalturaServiceBase.__init__(self, client)
-
-    def list(self):
-        """Returns promotions list regarding to mediaId"""
-
-        kparams = KalturaParams()
-        self.client.queueServiceActionCall("promotion", "list", "KalturaPromotionListResponse", kparams)
-        if self.client.isMultiRequest():
-            return self.client.getMultiRequestResult()
-        resultNode = self.client.doQueue()
-        return KalturaObjectFactory.create(resultNode, 'KalturaPromotionListResponse')
-
-
-# @package Kaltura
-# @subpackage Client
 class KalturaPurchaseSettingsService(KalturaServiceBase):
     def __init__(self, client = None):
         KalturaServiceBase.__init__(self, client)
@@ -26194,7 +26029,6 @@ class KalturaCoreClient(KalturaClientPlugin):
             'priceDetails': KalturaPriceDetailsService,
             'pricePlan': KalturaPricePlanService,
             'productPrice': KalturaProductPriceService,
-            'promotion': KalturaPromotionService,
             'purchaseSettings': KalturaPurchaseSettingsService,
             'recommendationProfile': KalturaRecommendationProfileService,
             'recording': KalturaRecordingService,
@@ -26348,8 +26182,6 @@ class KalturaCoreClient(KalturaClientPlugin):
         return {
             'KalturaListResponse': KalturaListResponse,
             'KalturaApiExceptionArg': KalturaApiExceptionArg,
-            'KalturaPromotion': KalturaPromotion,
-            'KalturaPromotionListResponse': KalturaPromotionListResponse,
             'KalturaSocialComment': KalturaSocialComment,
             'KalturaSocialCommentListResponse': KalturaSocialCommentListResponse,
             'KalturaSocialNetworkComment': KalturaSocialNetworkComment,
