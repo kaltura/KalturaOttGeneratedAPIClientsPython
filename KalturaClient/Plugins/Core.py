@@ -31,7 +31,7 @@ from __future__ import absolute_import
 
 from ..Base import *
 
-API_VERSION = '4.7.46.15545'
+API_VERSION = '4.7.48.15791'
 
 ########## enums ##########
 # @package Kaltura
@@ -4594,7 +4594,8 @@ class KalturaMediaFile(KalturaObjectBase):
             cdnCode=NotImplemented,
             altCdnCode=NotImplemented,
             ppvModules=NotImplemented,
-            productCode=NotImplemented):
+            productCode=NotImplemented,
+            fileSize=NotImplemented):
         KalturaObjectBase.__init__(self)
 
         # Unique identifier for the asset
@@ -4654,6 +4655,10 @@ class KalturaMediaFile(KalturaObjectBase):
         # @var string
         self.productCode = productCode
 
+        # File size
+        # @var int
+        self.fileSize = fileSize
+
 
     PROPERTY_LOADERS = {
         'assetId': getXmlNodeInt, 
@@ -4670,6 +4675,7 @@ class KalturaMediaFile(KalturaObjectBase):
         'altCdnCode': getXmlNodeText, 
         'ppvModules': (KalturaObjectFactory.create, 'KalturaStringValueArray'), 
         'productCode': getXmlNodeText, 
+        'fileSize': getXmlNodeInt, 
     }
 
     def fromXml(self, node):
@@ -4692,6 +4698,7 @@ class KalturaMediaFile(KalturaObjectBase):
         kparams.addStringIfDefined("altCdnCode", self.altCdnCode)
         kparams.addObjectIfDefined("ppvModules", self.ppvModules)
         kparams.addStringIfDefined("productCode", self.productCode)
+        kparams.addIntIfDefined("fileSize", self.fileSize)
         return kparams
 
     def getAssetId(self):
@@ -4774,6 +4781,12 @@ class KalturaMediaFile(KalturaObjectBase):
 
     def setProductCode(self, newProductCode):
         self.productCode = newProductCode
+
+    def getFileSize(self):
+        return self.fileSize
+
+    def setFileSize(self, newFileSize):
+        self.fileSize = newFileSize
 
 
 # @package Kaltura
@@ -5085,6 +5098,7 @@ class KalturaPlaybackSource(KalturaMediaFile):
             altCdnCode=NotImplemented,
             ppvModules=NotImplemented,
             productCode=NotImplemented,
+            fileSize=NotImplemented,
             format=NotImplemented,
             protocols=NotImplemented,
             drm=NotImplemented):
@@ -5102,7 +5116,8 @@ class KalturaPlaybackSource(KalturaMediaFile):
             cdnCode,
             altCdnCode,
             ppvModules,
-            productCode)
+            productCode,
+            fileSize)
 
         # Source format according to delivery profile streamer type (applehttp, mpegdash etc.)
         # @var string
