@@ -31,7 +31,7 @@ from __future__ import absolute_import
 
 from ..Base import *
 
-API_VERSION = '4.7.228.19042'
+API_VERSION = '4.7.229.25725'
 
 ########## enums ##########
 # @package Kaltura
@@ -10747,7 +10747,9 @@ class KalturaMediaFileType(KalturaObjectBase):
             isTrailer=NotImplemented,
             streamerType=NotImplemented,
             drmProfileId=NotImplemented,
-            quality=NotImplemented):
+            quality=NotImplemented,
+            videoCodecs=NotImplemented,
+            audioCodecs=NotImplemented):
         KalturaObjectBase.__init__(self)
 
         # Unique identifier
@@ -10796,6 +10798,14 @@ class KalturaMediaFileType(KalturaObjectBase):
         # @var KalturaMediaFileTypeQuality
         self.quality = quality
 
+        # List of comma separated video codecs
+        # @var string
+        self.videoCodecs = videoCodecs
+
+        # List of comma separated audio codecs
+        # @var string
+        self.audioCodecs = audioCodecs
+
 
     PROPERTY_LOADERS = {
         'id': getXmlNodeInt, 
@@ -10808,6 +10818,8 @@ class KalturaMediaFileType(KalturaObjectBase):
         'streamerType': (KalturaEnumsFactory.createString, "KalturaMediaFileStreamerType"), 
         'drmProfileId': getXmlNodeInt, 
         'quality': (KalturaEnumsFactory.createString, "KalturaMediaFileTypeQuality"), 
+        'videoCodecs': getXmlNodeText, 
+        'audioCodecs': getXmlNodeText, 
     }
 
     def fromXml(self, node):
@@ -10824,6 +10836,8 @@ class KalturaMediaFileType(KalturaObjectBase):
         kparams.addStringEnumIfDefined("streamerType", self.streamerType)
         kparams.addIntIfDefined("drmProfileId", self.drmProfileId)
         kparams.addStringEnumIfDefined("quality", self.quality)
+        kparams.addStringIfDefined("videoCodecs", self.videoCodecs)
+        kparams.addStringIfDefined("audioCodecs", self.audioCodecs)
         return kparams
 
     def getId(self):
@@ -10876,6 +10890,18 @@ class KalturaMediaFileType(KalturaObjectBase):
 
     def setQuality(self, newQuality):
         self.quality = newQuality
+
+    def getVideoCodecs(self):
+        return self.videoCodecs
+
+    def setVideoCodecs(self, newVideoCodecs):
+        self.videoCodecs = newVideoCodecs
+
+    def getAudioCodecs(self):
+        return self.audioCodecs
+
+    def setAudioCodecs(self, newAudioCodecs):
+        self.audioCodecs = newAudioCodecs
 
 
 # @package Kaltura
