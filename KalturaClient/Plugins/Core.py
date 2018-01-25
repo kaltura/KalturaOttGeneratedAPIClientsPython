@@ -31,7 +31,7 @@ from __future__ import absolute_import
 
 from ..Base import *
 
-API_VERSION = '4.7.230.23063'
+API_VERSION = '4.7.232.28495'
 
 ########## enums ##########
 # @package Kaltura
@@ -13670,6 +13670,7 @@ class KalturaMeta(KalturaObjectBase):
 
         # Meta system name for the partner
         # @var string
+        # @insertonly
         self.systemName = systemName
 
         # Meta data type
