@@ -31,7 +31,7 @@ from __future__ import absolute_import
 
 from ..Base import *
 
-API_VERSION = '4.7.244.19817'
+API_VERSION = '4.7.245.29665'
 
 ########## enums ##########
 # @package Kaltura
@@ -11521,7 +11521,10 @@ class KalturaImageListResponse(KalturaListResponse):
 class KalturaRatio(KalturaObjectBase):
     def __init__(self,
             id=NotImplemented,
-            name=NotImplemented):
+            name=NotImplemented,
+            height=NotImplemented,
+            width=NotImplemented,
+            acceptedErrorMarginPrecentage=NotImplemented):
         KalturaObjectBase.__init__(self)
 
         # ID
@@ -11533,10 +11536,26 @@ class KalturaRatio(KalturaObjectBase):
         # @var string
         self.name = name
 
+        # Height
+        # @var int
+        self.height = height
+
+        # Width
+        # @var int
+        self.width = width
+
+        # Accepted error margin precentage of an image uploaded for this ratio
+        #             0 - no validation, everything accepted
+        # @var int
+        self.acceptedErrorMarginPrecentage = acceptedErrorMarginPrecentage
+
 
     PROPERTY_LOADERS = {
         'id': getXmlNodeInt, 
         'name': getXmlNodeText, 
+        'height': getXmlNodeInt, 
+        'width': getXmlNodeInt, 
+        'acceptedErrorMarginPrecentage': getXmlNodeInt, 
     }
 
     def fromXml(self, node):
@@ -11547,6 +11566,9 @@ class KalturaRatio(KalturaObjectBase):
         kparams = KalturaObjectBase.toParams(self)
         kparams.put("objectType", "KalturaRatio")
         kparams.addStringIfDefined("name", self.name)
+        kparams.addIntIfDefined("height", self.height)
+        kparams.addIntIfDefined("width", self.width)
+        kparams.addIntIfDefined("acceptedErrorMarginPrecentage", self.acceptedErrorMarginPrecentage)
         return kparams
 
     def getId(self):
@@ -11557,6 +11579,24 @@ class KalturaRatio(KalturaObjectBase):
 
     def setName(self, newName):
         self.name = newName
+
+    def getHeight(self):
+        return self.height
+
+    def setHeight(self, newHeight):
+        self.height = newHeight
+
+    def getWidth(self):
+        return self.width
+
+    def setWidth(self, newWidth):
+        self.width = newWidth
+
+    def getAcceptedErrorMarginPrecentage(self):
+        return self.acceptedErrorMarginPrecentage
+
+    def setAcceptedErrorMarginPrecentage(self, newAcceptedErrorMarginPrecentage):
+        self.acceptedErrorMarginPrecentage = newAcceptedErrorMarginPrecentage
 
 
 # @package Kaltura
