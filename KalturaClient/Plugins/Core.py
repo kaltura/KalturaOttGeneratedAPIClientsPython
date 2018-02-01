@@ -31,7 +31,7 @@ from __future__ import absolute_import
 
 from ..Base import *
 
-API_VERSION = '4.7.68.13605'
+API_VERSION = '4.7.77.25624'
 
 ########## enums ##########
 # @package Kaltura
@@ -8904,7 +8904,8 @@ class KalturaAnnouncement(KalturaObjectBase):
             status=NotImplemented,
             recipients=NotImplemented,
             id=NotImplemented,
-            imageUrl=NotImplemented):
+            imageUrl=NotImplemented,
+            includeMail=NotImplemented):
         KalturaObjectBase.__init__(self)
 
         # Announcement name
@@ -8945,6 +8946,10 @@ class KalturaAnnouncement(KalturaObjectBase):
         # @var string
         self.imageUrl = imageUrl
 
+        # Include Mail
+        # @var bool
+        self.includeMail = includeMail
+
 
     PROPERTY_LOADERS = {
         'name': getXmlNodeText, 
@@ -8956,6 +8961,7 @@ class KalturaAnnouncement(KalturaObjectBase):
         'recipients': (KalturaEnumsFactory.createString, "KalturaAnnouncementRecipientsType"), 
         'id': getXmlNodeInt, 
         'imageUrl': getXmlNodeText, 
+        'includeMail': getXmlNodeBool, 
     }
 
     def fromXml(self, node):
@@ -8972,6 +8978,7 @@ class KalturaAnnouncement(KalturaObjectBase):
         kparams.addStringIfDefined("timezone", self.timezone)
         kparams.addStringEnumIfDefined("recipients", self.recipients)
         kparams.addStringIfDefined("imageUrl", self.imageUrl)
+        kparams.addBoolIfDefined("includeMail", self.includeMail)
         return kparams
 
     def getName(self):
@@ -9021,6 +9028,12 @@ class KalturaAnnouncement(KalturaObjectBase):
 
     def setImageUrl(self, newImageUrl):
         self.imageUrl = newImageUrl
+
+    def getIncludeMail(self):
+        return self.includeMail
+
+    def setIncludeMail(self, newIncludeMail):
+        self.includeMail = newIncludeMail
 
 
 # @package Kaltura
@@ -19040,7 +19053,9 @@ class KalturaMessageTemplate(KalturaObjectBase):
             messageType=NotImplemented,
             sound=NotImplemented,
             action=NotImplemented,
-            url=NotImplemented):
+            url=NotImplemented,
+            mailTemplate=NotImplemented,
+            mailSubject=NotImplemented):
         KalturaObjectBase.__init__(self)
 
         # The message template with placeholders
@@ -19067,6 +19082,14 @@ class KalturaMessageTemplate(KalturaObjectBase):
         # @var string
         self.url = url
 
+        # Mail template name
+        # @var string
+        self.mailTemplate = mailTemplate
+
+        # Mail subject
+        # @var string
+        self.mailSubject = mailSubject
+
 
     PROPERTY_LOADERS = {
         'message': getXmlNodeText, 
@@ -19075,6 +19098,8 @@ class KalturaMessageTemplate(KalturaObjectBase):
         'sound': getXmlNodeText, 
         'action': getXmlNodeText, 
         'url': getXmlNodeText, 
+        'mailTemplate': getXmlNodeText, 
+        'mailSubject': getXmlNodeText, 
     }
 
     def fromXml(self, node):
@@ -19090,6 +19115,8 @@ class KalturaMessageTemplate(KalturaObjectBase):
         kparams.addStringIfDefined("sound", self.sound)
         kparams.addStringIfDefined("action", self.action)
         kparams.addStringIfDefined("url", self.url)
+        kparams.addStringIfDefined("mailTemplate", self.mailTemplate)
+        kparams.addStringIfDefined("mailSubject", self.mailSubject)
         return kparams
 
     def getMessage(self):
@@ -19127,6 +19154,18 @@ class KalturaMessageTemplate(KalturaObjectBase):
 
     def setUrl(self, newUrl):
         self.url = newUrl
+
+    def getMailTemplate(self):
+        return self.mailTemplate
+
+    def setMailTemplate(self, newMailTemplate):
+        self.mailTemplate = newMailTemplate
+
+    def getMailSubject(self):
+        return self.mailSubject
+
+    def setMailSubject(self, newMailSubject):
+        self.mailSubject = newMailSubject
 
 
 # @package Kaltura
@@ -19657,7 +19696,8 @@ class KalturaNotificationsPartnerSettings(KalturaObjectBase):
             churnMailTemplateName=NotImplemented,
             churnMailSubject=NotImplemented,
             senderEmail=NotImplemented,
-            mailSenderName=NotImplemented):
+            mailSenderName=NotImplemented,
+            mailNotificationAdapterId=NotImplemented):
         KalturaObjectBase.__init__(self)
 
         # Push notification capability is enabled for the account
@@ -19720,6 +19760,10 @@ class KalturaNotificationsPartnerSettings(KalturaObjectBase):
         # @var string
         self.mailSenderName = mailSenderName
 
+        # Mail notification adapter identifier
+        # @var int
+        self.mailNotificationAdapterId = mailNotificationAdapterId
+
 
     PROPERTY_LOADERS = {
         'pushNotificationEnabled': getXmlNodeBool, 
@@ -19737,6 +19781,7 @@ class KalturaNotificationsPartnerSettings(KalturaObjectBase):
         'churnMailSubject': getXmlNodeText, 
         'senderEmail': getXmlNodeText, 
         'mailSenderName': getXmlNodeText, 
+        'mailNotificationAdapterId': getXmlNodeInt, 
     }
 
     def fromXml(self, node):
@@ -19761,6 +19806,7 @@ class KalturaNotificationsPartnerSettings(KalturaObjectBase):
         kparams.addStringIfDefined("churnMailSubject", self.churnMailSubject)
         kparams.addStringIfDefined("senderEmail", self.senderEmail)
         kparams.addStringIfDefined("mailSenderName", self.mailSenderName)
+        kparams.addIntIfDefined("mailNotificationAdapterId", self.mailNotificationAdapterId)
         return kparams
 
     def getPushNotificationEnabled(self):
@@ -19852,6 +19898,12 @@ class KalturaNotificationsPartnerSettings(KalturaObjectBase):
 
     def setMailSenderName(self, newMailSenderName):
         self.mailSenderName = newMailSenderName
+
+    def getMailNotificationAdapterId(self):
+        return self.mailNotificationAdapterId
+
+    def setMailNotificationAdapterId(self, newMailNotificationAdapterId):
+        self.mailNotificationAdapterId = newMailNotificationAdapterId
 
 
 # @package Kaltura
