@@ -31,7 +31,7 @@ from __future__ import absolute_import
 
 from ..Base import *
 
-API_VERSION = '4.7.79.18706'
+API_VERSION = '4.7.81.22900'
 
 ########## enums ##########
 # @package Kaltura
@@ -8905,7 +8905,9 @@ class KalturaAnnouncement(KalturaObjectBase):
             recipients=NotImplemented,
             id=NotImplemented,
             imageUrl=NotImplemented,
-            includeMail=NotImplemented):
+            includeMail=NotImplemented,
+            mailTemplate=NotImplemented,
+            mailSubject=NotImplemented):
         KalturaObjectBase.__init__(self)
 
         # Announcement name
@@ -8950,6 +8952,14 @@ class KalturaAnnouncement(KalturaObjectBase):
         # @var bool
         self.includeMail = includeMail
 
+        # Mail Template
+        # @var string
+        self.mailTemplate = mailTemplate
+
+        # Mail Subject
+        # @var string
+        self.mailSubject = mailSubject
+
 
     PROPERTY_LOADERS = {
         'name': getXmlNodeText, 
@@ -8962,6 +8972,8 @@ class KalturaAnnouncement(KalturaObjectBase):
         'id': getXmlNodeInt, 
         'imageUrl': getXmlNodeText, 
         'includeMail': getXmlNodeBool, 
+        'mailTemplate': getXmlNodeText, 
+        'mailSubject': getXmlNodeText, 
     }
 
     def fromXml(self, node):
@@ -8979,6 +8991,8 @@ class KalturaAnnouncement(KalturaObjectBase):
         kparams.addStringEnumIfDefined("recipients", self.recipients)
         kparams.addStringIfDefined("imageUrl", self.imageUrl)
         kparams.addBoolIfDefined("includeMail", self.includeMail)
+        kparams.addStringIfDefined("mailTemplate", self.mailTemplate)
+        kparams.addStringIfDefined("mailSubject", self.mailSubject)
         return kparams
 
     def getName(self):
@@ -9034,6 +9048,18 @@ class KalturaAnnouncement(KalturaObjectBase):
 
     def setIncludeMail(self, newIncludeMail):
         self.includeMail = newIncludeMail
+
+    def getMailTemplate(self):
+        return self.mailTemplate
+
+    def setMailTemplate(self, newMailTemplate):
+        self.mailTemplate = newMailTemplate
+
+    def getMailSubject(self):
+        return self.mailSubject
+
+    def setMailSubject(self, newMailSubject):
+        self.mailSubject = newMailSubject
 
 
 # @package Kaltura
