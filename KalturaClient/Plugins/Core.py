@@ -31,7 +31,7 @@ from __future__ import absolute_import
 
 from ..Base import *
 
-API_VERSION = '4.7.81.43150'
+API_VERSION = '4.7.82.15150'
 
 ########## enums ##########
 # @package Kaltura
@@ -19937,7 +19937,8 @@ class KalturaNotificationsPartnerSettings(KalturaObjectBase):
 class KalturaNotificationsSettings(KalturaObjectBase):
     def __init__(self,
             pushNotificationEnabled=NotImplemented,
-            pushFollowEnabled=NotImplemented):
+            pushFollowEnabled=NotImplemented,
+            mailEnabled=NotImplemented):
         KalturaObjectBase.__init__(self)
 
         # Specify if the user want to receive push notifications or not
@@ -19948,10 +19949,15 @@ class KalturaNotificationsSettings(KalturaObjectBase):
         # @var bool
         self.pushFollowEnabled = pushFollowEnabled
 
+        # Specify if the user want to receive mail notifications or not
+        # @var bool
+        self.mailEnabled = mailEnabled
+
 
     PROPERTY_LOADERS = {
         'pushNotificationEnabled': getXmlNodeBool, 
         'pushFollowEnabled': getXmlNodeBool, 
+        'mailEnabled': getXmlNodeBool, 
     }
 
     def fromXml(self, node):
@@ -19963,6 +19969,7 @@ class KalturaNotificationsSettings(KalturaObjectBase):
         kparams.put("objectType", "KalturaNotificationsSettings")
         kparams.addBoolIfDefined("pushNotificationEnabled", self.pushNotificationEnabled)
         kparams.addBoolIfDefined("pushFollowEnabled", self.pushFollowEnabled)
+        kparams.addBoolIfDefined("mailEnabled", self.mailEnabled)
         return kparams
 
     def getPushNotificationEnabled(self):
@@ -19976,6 +19983,12 @@ class KalturaNotificationsSettings(KalturaObjectBase):
 
     def setPushFollowEnabled(self, newPushFollowEnabled):
         self.pushFollowEnabled = newPushFollowEnabled
+
+    def getMailEnabled(self):
+        return self.mailEnabled
+
+    def setMailEnabled(self, newMailEnabled):
+        self.mailEnabled = newMailEnabled
 
 
 # @package Kaltura
