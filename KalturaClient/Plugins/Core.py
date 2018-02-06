@@ -31,7 +31,7 @@ from __future__ import absolute_import
 
 from ..Base import *
 
-API_VERSION = '4.7.82.43145'
+API_VERSION = '4.7.84.14911'
 
 ########## enums ##########
 # @package Kaltura
@@ -19081,7 +19081,8 @@ class KalturaMessageTemplate(KalturaObjectBase):
             action=NotImplemented,
             url=NotImplemented,
             mailTemplate=NotImplemented,
-            mailSubject=NotImplemented):
+            mailSubject=NotImplemented,
+            ratioId=NotImplemented):
         KalturaObjectBase.__init__(self)
 
         # The message template with placeholders
@@ -19116,6 +19117,10 @@ class KalturaMessageTemplate(KalturaObjectBase):
         # @var string
         self.mailSubject = mailSubject
 
+        # Ratio identifier
+        # @var string
+        self.ratioId = ratioId
+
 
     PROPERTY_LOADERS = {
         'message': getXmlNodeText, 
@@ -19126,6 +19131,7 @@ class KalturaMessageTemplate(KalturaObjectBase):
         'url': getXmlNodeText, 
         'mailTemplate': getXmlNodeText, 
         'mailSubject': getXmlNodeText, 
+        'ratioId': getXmlNodeText, 
     }
 
     def fromXml(self, node):
@@ -19143,6 +19149,7 @@ class KalturaMessageTemplate(KalturaObjectBase):
         kparams.addStringIfDefined("url", self.url)
         kparams.addStringIfDefined("mailTemplate", self.mailTemplate)
         kparams.addStringIfDefined("mailSubject", self.mailSubject)
+        kparams.addStringIfDefined("ratioId", self.ratioId)
         return kparams
 
     def getMessage(self):
@@ -19192,6 +19199,12 @@ class KalturaMessageTemplate(KalturaObjectBase):
 
     def setMailSubject(self, newMailSubject):
         self.mailSubject = newMailSubject
+
+    def getRatioId(self):
+        return self.ratioId
+
+    def setRatioId(self, newRatioId):
+        self.ratioId = newRatioId
 
 
 # @package Kaltura
