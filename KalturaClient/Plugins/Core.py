@@ -31,7 +31,7 @@ from __future__ import absolute_import
 
 from ..Base import *
 
-API_VERSION = '4.7.246.20200'
+API_VERSION = '4.7.247.16898'
 
 ########## enums ##########
 # @package Kaltura
@@ -26015,6 +26015,7 @@ class KalturaImageService(KalturaServiceBase):
         if self.client.isMultiRequest():
             return self.client.getMultiRequestResult()
         resultNode = self.client.doQueue()
+        return getXmlNodeBool(resultNode)
 
 
 # @package Kaltura
