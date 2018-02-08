@@ -31,7 +31,7 @@ from __future__ import absolute_import
 
 from ..Base import *
 
-API_VERSION = '4.7.84.27760'
+API_VERSION = '4.7.85.43152'
 
 ########## enums ##########
 # @package Kaltura
@@ -23502,6 +23502,18 @@ class KalturaFollowTvSeriesService(KalturaServiceBase):
         resultNode = self.client.doQueue()
         return getXmlNodeBool(resultNode)
 
+    def deleteWithToken(self, assetId, token, partnerId):
+        """Delete a user&#39;s tv series follow."""
+
+        kparams = KalturaParams()
+        kparams.addIntIfDefined("assetId", assetId);
+        kparams.addStringIfDefined("token", token)
+        kparams.addIntIfDefined("partnerId", partnerId);
+        self.client.queueServiceActionCall("followtvseries", "deleteWithToken", "None", kparams)
+        if self.client.isMultiRequest():
+            return self.client.getMultiRequestResult()
+        resultNode = self.client.doQueue()
+
     def list(self, filter, pager = NotImplemented):
         """List user&#39;s tv series follows.
                     Possible status codes:"""
@@ -24252,6 +24264,19 @@ class KalturaNotificationsSettingsService(KalturaServiceBase):
 
         kparams = KalturaParams()
         kparams.addObjectIfDefined("settings", settings)
+        self.client.queueServiceActionCall("notificationssettings", "update", "None", kparams)
+        if self.client.isMultiRequest():
+            return self.client.getMultiRequestResult()
+        resultNode = self.client.doQueue()
+        return getXmlNodeBool(resultNode)
+
+    def update(self, settings, token, partnerId):
+        """Update the user's notification settings."""
+
+        kparams = KalturaParams()
+        kparams.addObjectIfDefined("settings", settings)
+        kparams.addStringIfDefined("token", token)
+        kparams.addIntIfDefined("partnerId", partnerId);
         self.client.queueServiceActionCall("notificationssettings", "update", "None", kparams)
         if self.client.isMultiRequest():
             return self.client.getMultiRequestResult()
@@ -25152,6 +25177,19 @@ class KalturaReminderService(KalturaServiceBase):
         resultNode = self.client.doQueue()
         return getXmlNodeBool(resultNode)
 
+    def deleteWithToken(self, id, type, token, partnerId):
+        """Delete a reminder. Reminder cannot be delete while being sent."""
+
+        kparams = KalturaParams()
+        kparams.addIntIfDefined("id", id);
+        kparams.addStringIfDefined("type", type)
+        kparams.addStringIfDefined("token", token)
+        kparams.addIntIfDefined("partnerId", partnerId);
+        self.client.queueServiceActionCall("reminder", "deleteWithToken", "None", kparams)
+        if self.client.isMultiRequest():
+            return self.client.getMultiRequestResult()
+        resultNode = self.client.doQueue()
+
     def list(self, filter, pager = NotImplemented):
         """Return a list of reminders with optional filter by KSQL."""
 
@@ -25969,6 +26007,18 @@ class KalturaUserInterestService(KalturaServiceBase):
             return self.client.getMultiRequestResult()
         resultNode = self.client.doQueue()
         return getXmlNodeBool(resultNode)
+
+    def deleteWithToken(self, id, token, partnerId):
+        """Delete new user interest for partner user"""
+
+        kparams = KalturaParams()
+        kparams.addStringIfDefined("id", id)
+        kparams.addStringIfDefined("token", token)
+        kparams.addIntIfDefined("partnerId", partnerId);
+        self.client.queueServiceActionCall("userinterest", "deleteWithToken", "None", kparams)
+        if self.client.isMultiRequest():
+            return self.client.getMultiRequestResult()
+        resultNode = self.client.doQueue()
 
     def list(self):
         """Returns all Engagement for partner"""
