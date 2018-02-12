@@ -31,7 +31,7 @@ from __future__ import absolute_import
 
 from ..Base import *
 
-API_VERSION = '4.7.85.43134'
+API_VERSION = '4.7.86.17921'
 
 ########## enums ##########
 # @package Kaltura
@@ -24270,14 +24270,14 @@ class KalturaNotificationsSettingsService(KalturaServiceBase):
         resultNode = self.client.doQueue()
         return getXmlNodeBool(resultNode)
 
-    def update(self, settings, token, partnerId):
+    def updateWithToken(self, settings, token, partnerId):
         """Update the user's notification settings."""
 
         kparams = KalturaParams()
         kparams.addObjectIfDefined("settings", settings)
         kparams.addStringIfDefined("token", token)
         kparams.addIntIfDefined("partnerId", partnerId);
-        self.client.queueServiceActionCall("notificationssettings", "update", "None", kparams)
+        self.client.queueServiceActionCall("notificationssettings", "updateWithToken", "None", kparams)
         if self.client.isMultiRequest():
             return self.client.getMultiRequestResult()
         resultNode = self.client.doQueue()
