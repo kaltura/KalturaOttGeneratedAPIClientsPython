@@ -31,7 +31,7 @@ from __future__ import absolute_import
 
 from ..Base import *
 
-API_VERSION = '4.7.250.17926'
+API_VERSION = '4.7.251.27682'
 
 ########## enums ##########
 # @package Kaltura
@@ -11095,7 +11095,9 @@ class KalturaChannel(KalturaObjectBase):
             multilingualDescription=NotImplemented,
             images=NotImplemented,
             isActive=NotImplemented,
-            orderBy=NotImplemented):
+            orderBy=NotImplemented,
+            createDate=NotImplemented,
+            updateDate=NotImplemented):
         KalturaObjectBase.__init__(self)
 
         # Unique identifier for the channel
@@ -11135,6 +11137,16 @@ class KalturaChannel(KalturaObjectBase):
         # @var KalturaChannelOrder
         self.orderBy = orderBy
 
+        # Specifies when was the Channel was created. Date and time represented as epoch.
+        # @var int
+        # @readonly
+        self.createDate = createDate
+
+        # Specifies when was the Channel last updated. Date and time represented as epoch.
+        # @var int
+        # @readonly
+        self.updateDate = updateDate
+
 
     PROPERTY_LOADERS = {
         'id': getXmlNodeInt, 
@@ -11146,6 +11158,8 @@ class KalturaChannel(KalturaObjectBase):
         'images': (KalturaObjectFactory.createArray, 'KalturaMediaImage'), 
         'isActive': getXmlNodeBool, 
         'orderBy': (KalturaObjectFactory.create, 'KalturaChannelOrder'), 
+        'createDate': getXmlNodeInt, 
+        'updateDate': getXmlNodeInt, 
     }
 
     def fromXml(self, node):
@@ -11216,6 +11230,12 @@ class KalturaChannel(KalturaObjectBase):
     def setOrderBy(self, newOrderBy):
         self.orderBy = newOrderBy
 
+    def getCreateDate(self):
+        return self.createDate
+
+    def getUpdateDate(self):
+        return self.updateDate
+
 
 # @package Kaltura
 # @subpackage Client
@@ -11265,6 +11285,8 @@ class KalturaDynamicChannel(KalturaChannel):
             images=NotImplemented,
             isActive=NotImplemented,
             orderBy=NotImplemented,
+            createDate=NotImplemented,
+            updateDate=NotImplemented,
             kSql=NotImplemented):
         KalturaChannel.__init__(self,
             id,
@@ -11275,7 +11297,9 @@ class KalturaDynamicChannel(KalturaChannel):
             multilingualDescription,
             images,
             isActive,
-            orderBy)
+            orderBy,
+            createDate,
+            updateDate)
 
         # Search assets using dynamic criteria. Provided collection of nested expressions with key, comparison operators, value, and logical conjunction.
         #             Possible keys: any Tag or Meta defined in the system and the following reserved keys: start_date, end_date. 
@@ -11398,6 +11422,8 @@ class KalturaManualChannel(KalturaChannel):
             images=NotImplemented,
             isActive=NotImplemented,
             orderBy=NotImplemented,
+            createDate=NotImplemented,
+            updateDate=NotImplemented,
             mediaIds=NotImplemented):
         KalturaChannel.__init__(self,
             id,
@@ -11408,7 +11434,9 @@ class KalturaManualChannel(KalturaChannel):
             multilingualDescription,
             images,
             isActive,
-            orderBy)
+            orderBy,
+            createDate,
+            updateDate)
 
         # A list of comma separated media ids associated with this channel, according to the order of the medias in the channel.
         # @var string
@@ -24609,7 +24637,7 @@ class KalturaChannelService(KalturaServiceBase):
         KalturaServiceBase.__init__(self, client)
 
     def add(self, channel):
-        """Insert new channel for partner. Currently supports only KSQL channel"""
+        """Insert new channel for partner. Supports KalturaDynamicChannel or KalturaManualChannel"""
 
         kparams = KalturaParams()
         kparams.addObjectIfDefined("channel", channel)
@@ -24654,7 +24682,7 @@ class KalturaChannelService(KalturaServiceBase):
         return KalturaObjectFactory.create(resultNode, 'KalturaChannelListResponse')
 
     def update(self, channelId, channel):
-        """Update channel details. Currently supports only KSQL channel"""
+        """Update channel details. Supports KalturaDynamicChannel or KalturaManualChannel"""
 
         kparams = KalturaParams()
         kparams.addIntIfDefined("channelId", channelId);
