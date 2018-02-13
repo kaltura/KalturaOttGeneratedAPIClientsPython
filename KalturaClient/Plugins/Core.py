@@ -31,7 +31,7 @@ from __future__ import absolute_import
 
 from ..Base import *
 
-API_VERSION = '4.7.249.30158'
+API_VERSION = '4.7.250.17926'
 
 ########## enums ##########
 # @package Kaltura
@@ -333,6 +333,28 @@ class KalturaChannelEnrichment(object):
 # @package Kaltura
 # @subpackage Client
 class KalturaChannelOrderBy(object):
+    ORDER_NUM = "ORDER_NUM"
+    RELEVANCY_DESC = "RELEVANCY_DESC"
+    NAME_ASC = "NAME_ASC"
+    NAME_DESC = "NAME_DESC"
+    VIEWS_DESC = "VIEWS_DESC"
+    RATINGS_DESC = "RATINGS_DESC"
+    VOTES_DESC = "VOTES_DESC"
+    START_DATE_DESC = "START_DATE_DESC"
+    START_DATE_ASC = "START_DATE_ASC"
+    LIKES_DESC = "LIKES_DESC"
+    CREATE_DATE_ASC = "CREATE_DATE_ASC"
+    CREATE_DATE_DESC = "CREATE_DATE_DESC"
+
+    def __init__(self, value):
+        self.value = value
+
+    def getValue(self):
+        return self.value
+
+# @package Kaltura
+# @subpackage Client
+class KalturaChannelsOrderBy(object):
     NONE = "NONE"
     NAME_ASC = "NAME_ASC"
     NAME_DESC = "NAME_DESC"
@@ -10965,6 +10987,102 @@ class KalturaAssetGroupBy(KalturaObjectBase):
 
 # @package Kaltura
 # @subpackage Client
+class KalturaDynamicOrderBy(KalturaObjectBase):
+    """Kaltura Asset Order"""
+
+    def __init__(self,
+            name=NotImplemented,
+            orderBy=NotImplemented):
+        KalturaObjectBase.__init__(self)
+
+        # order by name
+        # @var string
+        self.name = name
+
+        # order by meta asc/desc
+        # @var KalturaMetaTagOrderBy
+        self.orderBy = orderBy
+
+
+    PROPERTY_LOADERS = {
+        'name': getXmlNodeText, 
+        'orderBy': (KalturaEnumsFactory.createString, "KalturaMetaTagOrderBy"), 
+    }
+
+    def fromXml(self, node):
+        KalturaObjectBase.fromXml(self, node)
+        self.fromXmlImpl(node, KalturaDynamicOrderBy.PROPERTY_LOADERS)
+
+    def toParams(self):
+        kparams = KalturaObjectBase.toParams(self)
+        kparams.put("objectType", "KalturaDynamicOrderBy")
+        kparams.addStringIfDefined("name", self.name)
+        kparams.addStringEnumIfDefined("orderBy", self.orderBy)
+        return kparams
+
+    def getName(self):
+        return self.name
+
+    def setName(self, newName):
+        self.name = newName
+
+    def getOrderBy(self):
+        return self.orderBy
+
+    def setOrderBy(self, newOrderBy):
+        self.orderBy = newOrderBy
+
+
+# @package Kaltura
+# @subpackage Client
+class KalturaChannelOrder(KalturaObjectBase):
+    """Channel order details"""
+
+    def __init__(self,
+            dynamicOrderBy=NotImplemented,
+            orderBy=NotImplemented):
+        KalturaObjectBase.__init__(self)
+
+        # Channel dynamic order by (meta)
+        # @var KalturaDynamicOrderBy
+        self.dynamicOrderBy = dynamicOrderBy
+
+        # Channel order by
+        # @var KalturaChannelOrderBy
+        self.orderBy = orderBy
+
+
+    PROPERTY_LOADERS = {
+        'dynamicOrderBy': (KalturaObjectFactory.create, 'KalturaDynamicOrderBy'), 
+        'orderBy': (KalturaEnumsFactory.createString, "KalturaChannelOrderBy"), 
+    }
+
+    def fromXml(self, node):
+        KalturaObjectBase.fromXml(self, node)
+        self.fromXmlImpl(node, KalturaChannelOrder.PROPERTY_LOADERS)
+
+    def toParams(self):
+        kparams = KalturaObjectBase.toParams(self)
+        kparams.put("objectType", "KalturaChannelOrder")
+        kparams.addObjectIfDefined("dynamicOrderBy", self.dynamicOrderBy)
+        kparams.addStringEnumIfDefined("orderBy", self.orderBy)
+        return kparams
+
+    def getDynamicOrderBy(self):
+        return self.dynamicOrderBy
+
+    def setDynamicOrderBy(self, newDynamicOrderBy):
+        self.dynamicOrderBy = newDynamicOrderBy
+
+    def getOrderBy(self):
+        return self.orderBy
+
+    def setOrderBy(self, newOrderBy):
+        self.orderBy = newOrderBy
+
+
+# @package Kaltura
+# @subpackage Client
 class KalturaChannel(KalturaObjectBase):
     """Channel details"""
 
@@ -10976,7 +11094,8 @@ class KalturaChannel(KalturaObjectBase):
             description=NotImplemented,
             multilingualDescription=NotImplemented,
             images=NotImplemented,
-            isActive=NotImplemented):
+            isActive=NotImplemented,
+            orderBy=NotImplemented):
         KalturaObjectBase.__init__(self)
 
         # Unique identifier for the channel
@@ -11012,6 +11131,10 @@ class KalturaChannel(KalturaObjectBase):
         # @var bool
         self.isActive = isActive
 
+        # Channel order by
+        # @var KalturaChannelOrder
+        self.orderBy = orderBy
+
 
     PROPERTY_LOADERS = {
         'id': getXmlNodeInt, 
@@ -11022,6 +11145,7 @@ class KalturaChannel(KalturaObjectBase):
         'multilingualDescription': (KalturaObjectFactory.createArray, 'KalturaTranslationToken'), 
         'images': (KalturaObjectFactory.createArray, 'KalturaMediaImage'), 
         'isActive': getXmlNodeBool, 
+        'orderBy': (KalturaObjectFactory.create, 'KalturaChannelOrder'), 
     }
 
     def fromXml(self, node):
@@ -11038,6 +11162,7 @@ class KalturaChannel(KalturaObjectBase):
         kparams.addArrayIfDefined("multilingualDescription", self.multilingualDescription)
         kparams.addArrayIfDefined("images", self.images)
         kparams.addBoolIfDefined("isActive", self.isActive)
+        kparams.addObjectIfDefined("orderBy", self.orderBy)
         return kparams
 
     def getId(self):
@@ -11084,6 +11209,12 @@ class KalturaChannel(KalturaObjectBase):
 
     def setIsActive(self, newIsActive):
         self.isActive = newIsActive
+
+    def getOrderBy(self):
+        return self.orderBy
+
+    def setOrderBy(self, newOrderBy):
+        self.orderBy = newOrderBy
 
 
 # @package Kaltura
@@ -11133,6 +11264,7 @@ class KalturaDynamicChannel(KalturaChannel):
             multilingualDescription=NotImplemented,
             images=NotImplemented,
             isActive=NotImplemented,
+            orderBy=NotImplemented,
             kSql=NotImplemented):
         KalturaChannel.__init__(self,
             id,
@@ -11142,7 +11274,8 @@ class KalturaDynamicChannel(KalturaChannel):
             description,
             multilingualDescription,
             images,
-            isActive)
+            isActive,
+            orderBy)
 
         # Search assets using dynamic criteria. Provided collection of nested expressions with key, comparison operators, value, and logical conjunction.
         #             Possible keys: any Tag or Meta defined in the system and the following reserved keys: start_date, end_date. 
@@ -11254,54 +11387,6 @@ class KalturaAssetFieldGroupBy(KalturaAssetGroupBy):
 
 # @package Kaltura
 # @subpackage Client
-class KalturaDynamicOrderBy(KalturaObjectBase):
-    """Kaltura Asset Order"""
-
-    def __init__(self,
-            name=NotImplemented,
-            orderBy=NotImplemented):
-        KalturaObjectBase.__init__(self)
-
-        # order by name
-        # @var string
-        self.name = name
-
-        # order by meta asc/desc
-        # @var KalturaMetaTagOrderBy
-        self.orderBy = orderBy
-
-
-    PROPERTY_LOADERS = {
-        'name': getXmlNodeText, 
-        'orderBy': (KalturaEnumsFactory.createString, "KalturaMetaTagOrderBy"), 
-    }
-
-    def fromXml(self, node):
-        KalturaObjectBase.fromXml(self, node)
-        self.fromXmlImpl(node, KalturaDynamicOrderBy.PROPERTY_LOADERS)
-
-    def toParams(self):
-        kparams = KalturaObjectBase.toParams(self)
-        kparams.put("objectType", "KalturaDynamicOrderBy")
-        kparams.addStringIfDefined("name", self.name)
-        kparams.addStringEnumIfDefined("orderBy", self.orderBy)
-        return kparams
-
-    def getName(self):
-        return self.name
-
-    def setName(self, newName):
-        self.name = newName
-
-    def getOrderBy(self):
-        return self.orderBy
-
-    def setOrderBy(self, newOrderBy):
-        self.orderBy = newOrderBy
-
-
-# @package Kaltura
-# @subpackage Client
 class KalturaManualChannel(KalturaChannel):
     def __init__(self,
             id=NotImplemented,
@@ -11312,8 +11397,8 @@ class KalturaManualChannel(KalturaChannel):
             multilingualDescription=NotImplemented,
             images=NotImplemented,
             isActive=NotImplemented,
-            mediaIds=NotImplemented,
-            dynamicOrderBy=NotImplemented):
+            orderBy=NotImplemented,
+            mediaIds=NotImplemented):
         KalturaChannel.__init__(self,
             id,
             name,
@@ -11322,20 +11407,16 @@ class KalturaManualChannel(KalturaChannel):
             description,
             multilingualDescription,
             images,
-            isActive)
+            isActive,
+            orderBy)
 
         # A list of comma separated media ids associated with this channel, according to the order of the medias in the channel.
         # @var string
         self.mediaIds = mediaIds
 
-        # dynamicOrderBy - order by Meta
-        # @var KalturaDynamicOrderBy
-        self.dynamicOrderBy = dynamicOrderBy
-
 
     PROPERTY_LOADERS = {
         'mediaIds': getXmlNodeText, 
-        'dynamicOrderBy': (KalturaObjectFactory.create, 'KalturaDynamicOrderBy'), 
     }
 
     def fromXml(self, node):
@@ -11346,7 +11427,6 @@ class KalturaManualChannel(KalturaChannel):
         kparams = KalturaChannel.toParams(self)
         kparams.put("objectType", "KalturaManualChannel")
         kparams.addStringIfDefined("mediaIds", self.mediaIds)
-        kparams.addObjectIfDefined("dynamicOrderBy", self.dynamicOrderBy)
         return kparams
 
     def getMediaIds(self):
@@ -11354,12 +11434,6 @@ class KalturaManualChannel(KalturaChannel):
 
     def setMediaIds(self, newMediaIds):
         self.mediaIds = newMediaIds
-
-    def getDynamicOrderBy(self):
-        return self.dynamicOrderBy
-
-    def setDynamicOrderBy(self, newDynamicOrderBy):
-        self.dynamicOrderBy = newDynamicOrderBy
 
 
 # @package Kaltura
@@ -28503,6 +28577,7 @@ class KalturaCoreClient(KalturaClientPlugin):
             'KalturaBundleType': KalturaBundleType,
             'KalturaChannelEnrichment': KalturaChannelEnrichment,
             'KalturaChannelOrderBy': KalturaChannelOrderBy,
+            'KalturaChannelsOrderBy': KalturaChannelsOrderBy,
             'KalturaCollectionOrderBy': KalturaCollectionOrderBy,
             'KalturaCompensationType': KalturaCompensationType,
             'KalturaConfigurationGroupDeviceOrderBy': KalturaConfigurationGroupDeviceOrderBy,
@@ -28748,12 +28823,13 @@ class KalturaCoreClient(KalturaClientPlugin):
             'KalturaMediaFileType': KalturaMediaFileType,
             'KalturaMediaFileTypeListResponse': KalturaMediaFileTypeListResponse,
             'KalturaAssetGroupBy': KalturaAssetGroupBy,
+            'KalturaDynamicOrderBy': KalturaDynamicOrderBy,
+            'KalturaChannelOrder': KalturaChannelOrder,
             'KalturaChannel': KalturaChannel,
             'KalturaChannelListResponse': KalturaChannelListResponse,
             'KalturaDynamicChannel': KalturaDynamicChannel,
             'KalturaAssetMetaOrTagGroupBy': KalturaAssetMetaOrTagGroupBy,
             'KalturaAssetFieldGroupBy': KalturaAssetFieldGroupBy,
-            'KalturaDynamicOrderBy': KalturaDynamicOrderBy,
             'KalturaManualChannel': KalturaManualChannel,
             'KalturaImage': KalturaImage,
             'KalturaImageListResponse': KalturaImageListResponse,
