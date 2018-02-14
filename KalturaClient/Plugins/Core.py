@@ -31,7 +31,7 @@ from __future__ import absolute_import
 
 from ..Base import *
 
-API_VERSION = '4.7.252.28944'
+API_VERSION = '4.7.253.23530'
 
 ########## enums ##########
 # @package Kaltura
@@ -11040,7 +11040,8 @@ class KalturaChannelOrder(KalturaObjectBase):
 
     def __init__(self,
             dynamicOrderBy=NotImplemented,
-            orderBy=NotImplemented):
+            orderBy=NotImplemented,
+            slidingWindowPeriod=NotImplemented):
         KalturaObjectBase.__init__(self)
 
         # Channel dynamic order by (meta)
@@ -11051,10 +11052,15 @@ class KalturaChannelOrder(KalturaObjectBase):
         # @var KalturaChannelOrderBy
         self.orderBy = orderBy
 
+        # Sliding window period in minutes
+        # @var int
+        self.slidingWindowPeriod = slidingWindowPeriod
+
 
     PROPERTY_LOADERS = {
         'dynamicOrderBy': (KalturaObjectFactory.create, 'KalturaDynamicOrderBy'), 
         'orderBy': (KalturaEnumsFactory.createString, "KalturaChannelOrderBy"), 
+        'slidingWindowPeriod': getXmlNodeInt, 
     }
 
     def fromXml(self, node):
@@ -11066,6 +11072,7 @@ class KalturaChannelOrder(KalturaObjectBase):
         kparams.put("objectType", "KalturaChannelOrder")
         kparams.addObjectIfDefined("dynamicOrderBy", self.dynamicOrderBy)
         kparams.addStringEnumIfDefined("orderBy", self.orderBy)
+        kparams.addIntIfDefined("slidingWindowPeriod", self.slidingWindowPeriod)
         return kparams
 
     def getDynamicOrderBy(self):
@@ -11079,6 +11086,12 @@ class KalturaChannelOrder(KalturaObjectBase):
 
     def setOrderBy(self, newOrderBy):
         self.orderBy = newOrderBy
+
+    def getSlidingWindowPeriod(self):
+        return self.slidingWindowPeriod
+
+    def setSlidingWindowPeriod(self, newSlidingWindowPeriod):
+        self.slidingWindowPeriod = newSlidingWindowPeriod
 
 
 # @package Kaltura
