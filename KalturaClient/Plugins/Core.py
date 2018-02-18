@@ -31,7 +31,7 @@ from __future__ import absolute_import
 
 from ..Base import *
 
-API_VERSION = '4.7.258.27668'
+API_VERSION = '4.7.259.30079'
 
 ########## enums ##########
 # @package Kaltura
@@ -18531,10 +18531,15 @@ class KalturaRecordingFilter(KalturaFilter):
 class KalturaChannelsFilter(KalturaFilter):
     def __init__(self,
             orderBy=NotImplemented,
+            idEqual=NotImplemented,
             nameEqual=NotImplemented,
             nameStartsWith=NotImplemented):
         KalturaFilter.__init__(self,
             orderBy)
+
+        # channel identifier to filter by
+        # @var int
+        self.idEqual = idEqual
 
         # Exact channel name to filter by
         # @var string
@@ -18546,6 +18551,7 @@ class KalturaChannelsFilter(KalturaFilter):
 
 
     PROPERTY_LOADERS = {
+        'idEqual': getXmlNodeInt, 
         'nameEqual': getXmlNodeText, 
         'nameStartsWith': getXmlNodeText, 
     }
@@ -18557,9 +18563,16 @@ class KalturaChannelsFilter(KalturaFilter):
     def toParams(self):
         kparams = KalturaFilter.toParams(self)
         kparams.put("objectType", "KalturaChannelsFilter")
+        kparams.addIntIfDefined("idEqual", self.idEqual)
         kparams.addStringIfDefined("nameEqual", self.nameEqual)
         kparams.addStringIfDefined("nameStartsWith", self.nameStartsWith)
         return kparams
+
+    def getIdEqual(self):
+        return self.idEqual
+
+    def setIdEqual(self, newIdEqual):
+        self.idEqual = newIdEqual
 
     def getNameEqual(self):
         return self.nameEqual
