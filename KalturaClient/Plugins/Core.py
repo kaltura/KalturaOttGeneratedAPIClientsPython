@@ -31,7 +31,7 @@ from __future__ import absolute_import
 
 from ..Base import *
 
-API_VERSION = '4.7.257.25145'
+API_VERSION = '4.7.258.27668'
 
 ########## enums ##########
 # @package Kaltura
@@ -24672,7 +24672,7 @@ class KalturaChannelService(KalturaServiceBase):
         return getXmlNodeBool(resultNode)
 
     def get(self, id):
-        """Returns channel info"""
+        """Returns channel"""
 
         kparams = KalturaParams()
         kparams.addIntIfDefined("id", id);
