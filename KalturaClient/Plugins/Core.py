@@ -31,7 +31,7 @@ from __future__ import absolute_import
 
 from ..Base import *
 
-API_VERSION = '4.7.256.34001'
+API_VERSION = '4.7.257.25145'
 
 ########## enums ##########
 # @package Kaltura
@@ -4724,7 +4724,7 @@ class KalturaMediaFile(KalturaObjectBase):
             fileSize=NotImplemented,
             additionalData=NotImplemented,
             altStreamingCode=NotImplemented,
-            altStreamingSuplierId=NotImplemented,
+            altStreamingSupplierId=NotImplemented,
             endDate=NotImplemented,
             startDate=NotImplemented,
             externalStoreId=NotImplemented,
@@ -4732,7 +4732,7 @@ class KalturaMediaFile(KalturaObjectBase):
             language=NotImplemented,
             orderNum=NotImplemented,
             outputProtecationLevel=NotImplemented,
-            streamingSuplierId=NotImplemented,
+            streamingSupplierId=NotImplemented,
             status=NotImplemented):
         KalturaObjectBase.__init__(self)
 
@@ -4779,7 +4779,7 @@ class KalturaMediaFile(KalturaObjectBase):
 
         # Alternative streaming supplier identifier
         # @var int
-        self.altStreamingSuplierId = altStreamingSuplierId
+        self.altStreamingSupplierId = altStreamingSupplierId
 
         # EndDate
         # @var int
@@ -4809,9 +4809,9 @@ class KalturaMediaFile(KalturaObjectBase):
         # @var string
         self.outputProtecationLevel = outputProtecationLevel
 
-        # StreamingSuplierId
-        # @var string
-        self.streamingSuplierId = streamingSuplierId
+        # StreamingSupplierId
+        # @var int
+        self.streamingSupplierId = streamingSupplierId
 
         # The media file status
         # @var bool
@@ -4829,7 +4829,7 @@ class KalturaMediaFile(KalturaObjectBase):
         'fileSize': getXmlNodeInt, 
         'additionalData': getXmlNodeText, 
         'altStreamingCode': getXmlNodeText, 
-        'altStreamingSuplierId': getXmlNodeInt, 
+        'altStreamingSupplierId': getXmlNodeInt, 
         'endDate': getXmlNodeInt, 
         'startDate': getXmlNodeInt, 
         'externalStoreId': getXmlNodeInt, 
@@ -4837,7 +4837,7 @@ class KalturaMediaFile(KalturaObjectBase):
         'language': getXmlNodeText, 
         'orderNum': getXmlNodeInt, 
         'outputProtecationLevel': getXmlNodeText, 
-        'streamingSuplierId': getXmlNodeText, 
+        'streamingSupplierId': getXmlNodeInt, 
         'status': getXmlNodeBool, 
     }
 
@@ -4857,7 +4857,7 @@ class KalturaMediaFile(KalturaObjectBase):
         kparams.addIntIfDefined("fileSize", self.fileSize)
         kparams.addStringIfDefined("additionalData", self.additionalData)
         kparams.addStringIfDefined("altStreamingCode", self.altStreamingCode)
-        kparams.addIntIfDefined("altStreamingSuplierId", self.altStreamingSuplierId)
+        kparams.addIntIfDefined("altStreamingSupplierId", self.altStreamingSupplierId)
         kparams.addIntIfDefined("endDate", self.endDate)
         kparams.addIntIfDefined("startDate", self.startDate)
         kparams.addIntIfDefined("externalStoreId", self.externalStoreId)
@@ -4865,7 +4865,7 @@ class KalturaMediaFile(KalturaObjectBase):
         kparams.addStringIfDefined("language", self.language)
         kparams.addIntIfDefined("orderNum", self.orderNum)
         kparams.addStringIfDefined("outputProtecationLevel", self.outputProtecationLevel)
-        kparams.addStringIfDefined("streamingSuplierId", self.streamingSuplierId)
+        kparams.addIntIfDefined("streamingSupplierId", self.streamingSupplierId)
         kparams.addBoolIfDefined("status", self.status)
         return kparams
 
@@ -4926,11 +4926,11 @@ class KalturaMediaFile(KalturaObjectBase):
     def setAltStreamingCode(self, newAltStreamingCode):
         self.altStreamingCode = newAltStreamingCode
 
-    def getAltStreamingSuplierId(self):
-        return self.altStreamingSuplierId
+    def getAltStreamingSupplierId(self):
+        return self.altStreamingSupplierId
 
-    def setAltStreamingSuplierId(self, newAltStreamingSuplierId):
-        self.altStreamingSuplierId = newAltStreamingSuplierId
+    def setAltStreamingSupplierId(self, newAltStreamingSupplierId):
+        self.altStreamingSupplierId = newAltStreamingSupplierId
 
     def getEndDate(self):
         return self.endDate
@@ -4974,11 +4974,11 @@ class KalturaMediaFile(KalturaObjectBase):
     def setOutputProtecationLevel(self, newOutputProtecationLevel):
         self.outputProtecationLevel = newOutputProtecationLevel
 
-    def getStreamingSuplierId(self):
-        return self.streamingSuplierId
+    def getStreamingSupplierId(self):
+        return self.streamingSupplierId
 
-    def setStreamingSuplierId(self, newStreamingSuplierId):
-        self.streamingSuplierId = newStreamingSuplierId
+    def setStreamingSupplierId(self, newStreamingSupplierId):
+        self.streamingSupplierId = newStreamingSupplierId
 
     def getStatus(self):
         return self.status
@@ -5292,7 +5292,7 @@ class KalturaPlaybackSource(KalturaMediaFile):
             fileSize=NotImplemented,
             additionalData=NotImplemented,
             altStreamingCode=NotImplemented,
-            altStreamingSuplierId=NotImplemented,
+            altStreamingSupplierId=NotImplemented,
             endDate=NotImplemented,
             startDate=NotImplemented,
             externalStoreId=NotImplemented,
@@ -5300,7 +5300,7 @@ class KalturaPlaybackSource(KalturaMediaFile):
             language=NotImplemented,
             orderNum=NotImplemented,
             outputProtecationLevel=NotImplemented,
-            streamingSuplierId=NotImplemented,
+            streamingSupplierId=NotImplemented,
             status=NotImplemented,
             format=NotImplemented,
             protocols=NotImplemented,
@@ -5316,7 +5316,7 @@ class KalturaPlaybackSource(KalturaMediaFile):
             fileSize,
             additionalData,
             altStreamingCode,
-            altStreamingSuplierId,
+            altStreamingSupplierId,
             endDate,
             startDate,
             externalStoreId,
@@ -5324,7 +5324,7 @@ class KalturaPlaybackSource(KalturaMediaFile):
             language,
             orderNum,
             outputProtecationLevel,
-            streamingSuplierId,
+            streamingSupplierId,
             status)
 
         # Source format according to delivery profile streamer type (applehttp, mpegdash etc.)
