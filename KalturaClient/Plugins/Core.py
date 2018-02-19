@@ -31,7 +31,7 @@ from __future__ import absolute_import
 
 from ..Base import *
 
-API_VERSION = '4.7.90.26662'
+API_VERSION = '4.7.94.30978'
 
 ########## enums ##########
 # @package Kaltura
@@ -19736,7 +19736,8 @@ class KalturaNotificationsPartnerSettings(KalturaObjectBase):
             churnMailSubject=NotImplemented,
             senderEmail=NotImplemented,
             mailSenderName=NotImplemented,
-            mailNotificationAdapterId=NotImplemented):
+            mailNotificationAdapterId=NotImplemented,
+            smsEnabled=NotImplemented):
         KalturaObjectBase.__init__(self)
 
         # Push notification capability is enabled for the account
@@ -19803,6 +19804,10 @@ class KalturaNotificationsPartnerSettings(KalturaObjectBase):
         # @var int
         self.mailNotificationAdapterId = mailNotificationAdapterId
 
+        # SMS capability is enabled for the account
+        # @var bool
+        self.smsEnabled = smsEnabled
+
 
     PROPERTY_LOADERS = {
         'pushNotificationEnabled': getXmlNodeBool, 
@@ -19821,6 +19826,7 @@ class KalturaNotificationsPartnerSettings(KalturaObjectBase):
         'senderEmail': getXmlNodeText, 
         'mailSenderName': getXmlNodeText, 
         'mailNotificationAdapterId': getXmlNodeInt, 
+        'smsEnabled': getXmlNodeBool, 
     }
 
     def fromXml(self, node):
@@ -19846,6 +19852,7 @@ class KalturaNotificationsPartnerSettings(KalturaObjectBase):
         kparams.addStringIfDefined("senderEmail", self.senderEmail)
         kparams.addStringIfDefined("mailSenderName", self.mailSenderName)
         kparams.addIntIfDefined("mailNotificationAdapterId", self.mailNotificationAdapterId)
+        kparams.addBoolIfDefined("smsEnabled", self.smsEnabled)
         return kparams
 
     def getPushNotificationEnabled(self):
@@ -19944,6 +19951,12 @@ class KalturaNotificationsPartnerSettings(KalturaObjectBase):
     def setMailNotificationAdapterId(self, newMailNotificationAdapterId):
         self.mailNotificationAdapterId = newMailNotificationAdapterId
 
+    def getSmsEnabled(self):
+        return self.smsEnabled
+
+    def setSmsEnabled(self, newSmsEnabled):
+        self.smsEnabled = newSmsEnabled
+
 
 # @package Kaltura
 # @subpackage Client
@@ -19951,7 +19964,8 @@ class KalturaNotificationsSettings(KalturaObjectBase):
     def __init__(self,
             pushNotificationEnabled=NotImplemented,
             pushFollowEnabled=NotImplemented,
-            mailEnabled=NotImplemented):
+            mailEnabled=NotImplemented,
+            smsEnabled=NotImplemented):
         KalturaObjectBase.__init__(self)
 
         # Specify if the user want to receive push notifications or not
@@ -19962,15 +19976,20 @@ class KalturaNotificationsSettings(KalturaObjectBase):
         # @var bool
         self.pushFollowEnabled = pushFollowEnabled
 
-        # Specify if the user want to receive mail notifications or not
+        # Specify if the user wants to receive mail notifications or not
         # @var bool
         self.mailEnabled = mailEnabled
+
+        # Specify if the user wants to receive SMS notifications or not
+        # @var bool
+        self.smsEnabled = smsEnabled
 
 
     PROPERTY_LOADERS = {
         'pushNotificationEnabled': getXmlNodeBool, 
         'pushFollowEnabled': getXmlNodeBool, 
         'mailEnabled': getXmlNodeBool, 
+        'smsEnabled': getXmlNodeBool, 
     }
 
     def fromXml(self, node):
@@ -19983,6 +20002,7 @@ class KalturaNotificationsSettings(KalturaObjectBase):
         kparams.addBoolIfDefined("pushNotificationEnabled", self.pushNotificationEnabled)
         kparams.addBoolIfDefined("pushFollowEnabled", self.pushFollowEnabled)
         kparams.addBoolIfDefined("mailEnabled", self.mailEnabled)
+        kparams.addBoolIfDefined("smsEnabled", self.smsEnabled)
         return kparams
 
     def getPushNotificationEnabled(self):
@@ -20002,6 +20022,12 @@ class KalturaNotificationsSettings(KalturaObjectBase):
 
     def setMailEnabled(self, newMailEnabled):
         self.mailEnabled = newMailEnabled
+
+    def getSmsEnabled(self):
+        return self.smsEnabled
+
+    def setSmsEnabled(self, newSmsEnabled):
+        self.smsEnabled = newSmsEnabled
 
 
 # @package Kaltura
