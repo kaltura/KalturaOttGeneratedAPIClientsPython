@@ -31,7 +31,7 @@ from __future__ import absolute_import
 
 from ..Base import *
 
-API_VERSION = '4.7.259.30079'
+API_VERSION = '4.7.261.29769'
 
 ########## enums ##########
 # @package Kaltura
@@ -4724,7 +4724,7 @@ class KalturaMediaFile(KalturaObjectBase):
             fileSize=NotImplemented,
             additionalData=NotImplemented,
             altStreamingCode=NotImplemented,
-            altStreamingSupplierId=NotImplemented,
+            alternativecdnAdapaterProfileId =NotImplemented,
             endDate=NotImplemented,
             startDate=NotImplemented,
             externalStoreId=NotImplemented,
@@ -4732,7 +4732,7 @@ class KalturaMediaFile(KalturaObjectBase):
             language=NotImplemented,
             orderNum=NotImplemented,
             outputProtecationLevel=NotImplemented,
-            streamingSupplierId=NotImplemented,
+            cdnAdapaterProfileId=NotImplemented,
             status=NotImplemented):
         KalturaObjectBase.__init__(self)
 
@@ -4777,9 +4777,9 @@ class KalturaMediaFile(KalturaObjectBase):
         # @var string
         self.altStreamingCode = altStreamingCode
 
-        # Alternative streaming supplier identifier
+        # Alternative cdn adapter profile identifier
         # @var int
-        self.altStreamingSupplierId = altStreamingSupplierId
+        self.alternativecdnAdapaterProfileId  = alternativecdnAdapaterProfileId 
 
         # EndDate
         # @var int
@@ -4790,7 +4790,7 @@ class KalturaMediaFile(KalturaObjectBase):
         self.startDate = startDate
 
         # ExternalStoreId
-        # @var int
+        # @var string
         self.externalStoreId = externalStoreId
 
         # IsDefaultLanguage
@@ -4809,9 +4809,9 @@ class KalturaMediaFile(KalturaObjectBase):
         # @var string
         self.outputProtecationLevel = outputProtecationLevel
 
-        # StreamingSupplierId
+        # cdn adapter profile identifier
         # @var int
-        self.streamingSupplierId = streamingSupplierId
+        self.cdnAdapaterProfileId = cdnAdapaterProfileId
 
         # The media file status
         # @var bool
@@ -4829,15 +4829,15 @@ class KalturaMediaFile(KalturaObjectBase):
         'fileSize': getXmlNodeInt, 
         'additionalData': getXmlNodeText, 
         'altStreamingCode': getXmlNodeText, 
-        'altStreamingSupplierId': getXmlNodeInt, 
+        'alternativecdnAdapaterProfileId ': getXmlNodeInt, 
         'endDate': getXmlNodeInt, 
         'startDate': getXmlNodeInt, 
-        'externalStoreId': getXmlNodeInt, 
+        'externalStoreId': getXmlNodeText, 
         'isDefaultLanguage': getXmlNodeBool, 
         'language': getXmlNodeText, 
         'orderNum': getXmlNodeInt, 
         'outputProtecationLevel': getXmlNodeText, 
-        'streamingSupplierId': getXmlNodeInt, 
+        'cdnAdapaterProfileId': getXmlNodeInt, 
         'status': getXmlNodeBool, 
     }
 
@@ -4857,15 +4857,15 @@ class KalturaMediaFile(KalturaObjectBase):
         kparams.addIntIfDefined("fileSize", self.fileSize)
         kparams.addStringIfDefined("additionalData", self.additionalData)
         kparams.addStringIfDefined("altStreamingCode", self.altStreamingCode)
-        kparams.addIntIfDefined("altStreamingSupplierId", self.altStreamingSupplierId)
+        kparams.addIntIfDefined("alternativecdnAdapaterProfileId ", self.alternativecdnAdapaterProfileId )
         kparams.addIntIfDefined("endDate", self.endDate)
         kparams.addIntIfDefined("startDate", self.startDate)
-        kparams.addIntIfDefined("externalStoreId", self.externalStoreId)
+        kparams.addStringIfDefined("externalStoreId", self.externalStoreId)
         kparams.addBoolIfDefined("isDefaultLanguage", self.isDefaultLanguage)
         kparams.addStringIfDefined("language", self.language)
         kparams.addIntIfDefined("orderNum", self.orderNum)
         kparams.addStringIfDefined("outputProtecationLevel", self.outputProtecationLevel)
-        kparams.addIntIfDefined("streamingSupplierId", self.streamingSupplierId)
+        kparams.addIntIfDefined("cdnAdapaterProfileId", self.cdnAdapaterProfileId)
         kparams.addBoolIfDefined("status", self.status)
         return kparams
 
@@ -4926,11 +4926,11 @@ class KalturaMediaFile(KalturaObjectBase):
     def setAltStreamingCode(self, newAltStreamingCode):
         self.altStreamingCode = newAltStreamingCode
 
-    def getAltStreamingSupplierId(self):
-        return self.altStreamingSupplierId
+    def getAlternativecdnAdapaterProfileId (self):
+        return self.alternativecdnAdapaterProfileId 
 
-    def setAltStreamingSupplierId(self, newAltStreamingSupplierId):
-        self.altStreamingSupplierId = newAltStreamingSupplierId
+    def setAlternativecdnAdapaterProfileId (self, newAlternativecdnAdapaterProfileId ):
+        self.alternativecdnAdapaterProfileId  = newAlternativecdnAdapaterProfileId 
 
     def getEndDate(self):
         return self.endDate
@@ -4974,11 +4974,11 @@ class KalturaMediaFile(KalturaObjectBase):
     def setOutputProtecationLevel(self, newOutputProtecationLevel):
         self.outputProtecationLevel = newOutputProtecationLevel
 
-    def getStreamingSupplierId(self):
-        return self.streamingSupplierId
+    def getCdnAdapaterProfileId(self):
+        return self.cdnAdapaterProfileId
 
-    def setStreamingSupplierId(self, newStreamingSupplierId):
-        self.streamingSupplierId = newStreamingSupplierId
+    def setCdnAdapaterProfileId(self, newCdnAdapaterProfileId):
+        self.cdnAdapaterProfileId = newCdnAdapaterProfileId
 
     def getStatus(self):
         return self.status
@@ -5292,7 +5292,7 @@ class KalturaPlaybackSource(KalturaMediaFile):
             fileSize=NotImplemented,
             additionalData=NotImplemented,
             altStreamingCode=NotImplemented,
-            altStreamingSupplierId=NotImplemented,
+            alternativecdnAdapaterProfileId =NotImplemented,
             endDate=NotImplemented,
             startDate=NotImplemented,
             externalStoreId=NotImplemented,
@@ -5300,7 +5300,7 @@ class KalturaPlaybackSource(KalturaMediaFile):
             language=NotImplemented,
             orderNum=NotImplemented,
             outputProtecationLevel=NotImplemented,
-            streamingSupplierId=NotImplemented,
+            cdnAdapaterProfileId=NotImplemented,
             status=NotImplemented,
             format=NotImplemented,
             protocols=NotImplemented,
@@ -5316,7 +5316,7 @@ class KalturaPlaybackSource(KalturaMediaFile):
             fileSize,
             additionalData,
             altStreamingCode,
-            altStreamingSupplierId,
+            alternativecdnAdapaterProfileId ,
             endDate,
             startDate,
             externalStoreId,
@@ -5324,7 +5324,7 @@ class KalturaPlaybackSource(KalturaMediaFile):
             language,
             orderNum,
             outputProtecationLevel,
-            streamingSupplierId,
+            cdnAdapaterProfileId,
             status)
 
         # Source format according to delivery profile streamer type (applehttp, mpegdash etc.)
@@ -11041,7 +11041,7 @@ class KalturaChannelOrder(KalturaObjectBase):
     def __init__(self,
             dynamicOrderBy=NotImplemented,
             orderBy=NotImplemented,
-            slidingWindowPeriod=NotImplemented):
+            period=NotImplemented):
         KalturaObjectBase.__init__(self)
 
         # Channel dynamic order by (meta)
@@ -11052,15 +11052,15 @@ class KalturaChannelOrder(KalturaObjectBase):
         # @var KalturaChannelOrderBy
         self.orderBy = orderBy
 
-        # Sliding window period in minutes
+        # Sliding window period in minutes, used only when ordering by LIKES_DESC / VOTES_DESC / RATINGS_DESC / VIEWS_DESC
         # @var int
-        self.slidingWindowPeriod = slidingWindowPeriod
+        self.period = period
 
 
     PROPERTY_LOADERS = {
         'dynamicOrderBy': (KalturaObjectFactory.create, 'KalturaDynamicOrderBy'), 
         'orderBy': (KalturaEnumsFactory.createString, "KalturaChannelOrderBy"), 
-        'slidingWindowPeriod': getXmlNodeInt, 
+        'period': getXmlNodeInt, 
     }
 
     def fromXml(self, node):
@@ -11072,7 +11072,7 @@ class KalturaChannelOrder(KalturaObjectBase):
         kparams.put("objectType", "KalturaChannelOrder")
         kparams.addObjectIfDefined("dynamicOrderBy", self.dynamicOrderBy)
         kparams.addStringEnumIfDefined("orderBy", self.orderBy)
-        kparams.addIntIfDefined("slidingWindowPeriod", self.slidingWindowPeriod)
+        kparams.addIntIfDefined("period", self.period)
         return kparams
 
     def getDynamicOrderBy(self):
@@ -11087,11 +11087,11 @@ class KalturaChannelOrder(KalturaObjectBase):
     def setOrderBy(self, newOrderBy):
         self.orderBy = newOrderBy
 
-    def getSlidingWindowPeriod(self):
-        return self.slidingWindowPeriod
+    def getPeriod(self):
+        return self.period
 
-    def setSlidingWindowPeriod(self, newSlidingWindowPeriod):
-        self.slidingWindowPeriod = newSlidingWindowPeriod
+    def setPeriod(self, newPeriod):
+        self.period = newPeriod
 
 
 # @package Kaltura
