@@ -31,7 +31,7 @@ from __future__ import absolute_import
 
 from ..Base import *
 
-API_VERSION = '4.7.261.29769'
+API_VERSION = '4.7.262.30870'
 
 ########## enums ##########
 # @package Kaltura
@@ -4724,7 +4724,7 @@ class KalturaMediaFile(KalturaObjectBase):
             fileSize=NotImplemented,
             additionalData=NotImplemented,
             altStreamingCode=NotImplemented,
-            alternativecdnAdapaterProfileId =NotImplemented,
+            alternativecdnAdapaterProfileId=NotImplemented,
             endDate=NotImplemented,
             startDate=NotImplemented,
             externalStoreId=NotImplemented,
@@ -4779,7 +4779,7 @@ class KalturaMediaFile(KalturaObjectBase):
 
         # Alternative cdn adapter profile identifier
         # @var int
-        self.alternativecdnAdapaterProfileId  = alternativecdnAdapaterProfileId 
+        self.alternativecdnAdapaterProfileId = alternativecdnAdapaterProfileId
 
         # EndDate
         # @var int
@@ -4829,7 +4829,7 @@ class KalturaMediaFile(KalturaObjectBase):
         'fileSize': getXmlNodeInt, 
         'additionalData': getXmlNodeText, 
         'altStreamingCode': getXmlNodeText, 
-        'alternativecdnAdapaterProfileId ': getXmlNodeInt, 
+        'alternativecdnAdapaterProfileId': getXmlNodeInt, 
         'endDate': getXmlNodeInt, 
         'startDate': getXmlNodeInt, 
         'externalStoreId': getXmlNodeText, 
@@ -4857,7 +4857,7 @@ class KalturaMediaFile(KalturaObjectBase):
         kparams.addIntIfDefined("fileSize", self.fileSize)
         kparams.addStringIfDefined("additionalData", self.additionalData)
         kparams.addStringIfDefined("altStreamingCode", self.altStreamingCode)
-        kparams.addIntIfDefined("alternativecdnAdapaterProfileId ", self.alternativecdnAdapaterProfileId )
+        kparams.addIntIfDefined("alternativecdnAdapaterProfileId", self.alternativecdnAdapaterProfileId)
         kparams.addIntIfDefined("endDate", self.endDate)
         kparams.addIntIfDefined("startDate", self.startDate)
         kparams.addStringIfDefined("externalStoreId", self.externalStoreId)
@@ -4926,11 +4926,11 @@ class KalturaMediaFile(KalturaObjectBase):
     def setAltStreamingCode(self, newAltStreamingCode):
         self.altStreamingCode = newAltStreamingCode
 
-    def getAlternativecdnAdapaterProfileId (self):
-        return self.alternativecdnAdapaterProfileId 
+    def getAlternativecdnAdapaterProfileId(self):
+        return self.alternativecdnAdapaterProfileId
 
-    def setAlternativecdnAdapaterProfileId (self, newAlternativecdnAdapaterProfileId ):
-        self.alternativecdnAdapaterProfileId  = newAlternativecdnAdapaterProfileId 
+    def setAlternativecdnAdapaterProfileId(self, newAlternativecdnAdapaterProfileId):
+        self.alternativecdnAdapaterProfileId = newAlternativecdnAdapaterProfileId
 
     def getEndDate(self):
         return self.endDate
@@ -5292,7 +5292,7 @@ class KalturaPlaybackSource(KalturaMediaFile):
             fileSize=NotImplemented,
             additionalData=NotImplemented,
             altStreamingCode=NotImplemented,
-            alternativecdnAdapaterProfileId =NotImplemented,
+            alternativecdnAdapaterProfileId=NotImplemented,
             endDate=NotImplemented,
             startDate=NotImplemented,
             externalStoreId=NotImplemented,
@@ -5316,7 +5316,7 @@ class KalturaPlaybackSource(KalturaMediaFile):
             fileSize,
             additionalData,
             altStreamingCode,
-            alternativecdnAdapaterProfileId ,
+            alternativecdnAdapaterProfileId,
             endDate,
             startDate,
             externalStoreId,
