@@ -31,7 +31,7 @@ from __future__ import absolute_import
 
 from ..Base import *
 
-API_VERSION = '4.7.94.21329'
+API_VERSION = '4.7.95.14178'
 
 ########## enums ##########
 # @package Kaltura
@@ -8907,7 +8907,8 @@ class KalturaAnnouncement(KalturaObjectBase):
             imageUrl=NotImplemented,
             includeMail=NotImplemented,
             mailTemplate=NotImplemented,
-            mailSubject=NotImplemented):
+            mailSubject=NotImplemented,
+            includeSms=NotImplemented):
         KalturaObjectBase.__init__(self)
 
         # Announcement name
@@ -8960,6 +8961,10 @@ class KalturaAnnouncement(KalturaObjectBase):
         # @var string
         self.mailSubject = mailSubject
 
+        # Include SMS
+        # @var bool
+        self.includeSms = includeSms
+
 
     PROPERTY_LOADERS = {
         'name': getXmlNodeText, 
@@ -8974,6 +8979,7 @@ class KalturaAnnouncement(KalturaObjectBase):
         'includeMail': getXmlNodeBool, 
         'mailTemplate': getXmlNodeText, 
         'mailSubject': getXmlNodeText, 
+        'includeSms': getXmlNodeBool, 
     }
 
     def fromXml(self, node):
@@ -8993,6 +8999,7 @@ class KalturaAnnouncement(KalturaObjectBase):
         kparams.addBoolIfDefined("includeMail", self.includeMail)
         kparams.addStringIfDefined("mailTemplate", self.mailTemplate)
         kparams.addStringIfDefined("mailSubject", self.mailSubject)
+        kparams.addBoolIfDefined("includeSms", self.includeSms)
         return kparams
 
     def getName(self):
@@ -9060,6 +9067,12 @@ class KalturaAnnouncement(KalturaObjectBase):
 
     def setMailSubject(self, newMailSubject):
         self.mailSubject = newMailSubject
+
+    def getIncludeSms(self):
+        return self.includeSms
+
+    def setIncludeSms(self, newIncludeSms):
+        self.includeSms = newIncludeSms
 
 
 # @package Kaltura
