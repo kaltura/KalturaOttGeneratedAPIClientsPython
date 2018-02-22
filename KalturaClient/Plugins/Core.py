@@ -31,7 +31,7 @@ from __future__ import absolute_import
 
 from ..Base import *
 
-API_VERSION = '4.7.264.27516'
+API_VERSION = '4.7.265.24749'
 
 ########## enums ##########
 # @package Kaltura
@@ -11639,7 +11639,7 @@ class KalturaRatio(KalturaObjectBase):
             name=NotImplemented,
             height=NotImplemented,
             width=NotImplemented,
-            acceptedErrorMarginPrecentage=NotImplemented):
+            precisionPrecentage=NotImplemented):
         KalturaObjectBase.__init__(self)
 
         # ID
@@ -11662,7 +11662,7 @@ class KalturaRatio(KalturaObjectBase):
         # Accepted error margin precentage of an image uploaded for this ratio
         #             0 - no validation, everything accepted
         # @var int
-        self.acceptedErrorMarginPrecentage = acceptedErrorMarginPrecentage
+        self.precisionPrecentage = precisionPrecentage
 
 
     PROPERTY_LOADERS = {
@@ -11670,7 +11670,7 @@ class KalturaRatio(KalturaObjectBase):
         'name': getXmlNodeText, 
         'height': getXmlNodeInt, 
         'width': getXmlNodeInt, 
-        'acceptedErrorMarginPrecentage': getXmlNodeInt, 
+        'precisionPrecentage': getXmlNodeInt, 
     }
 
     def fromXml(self, node):
@@ -11683,7 +11683,7 @@ class KalturaRatio(KalturaObjectBase):
         kparams.addStringIfDefined("name", self.name)
         kparams.addIntIfDefined("height", self.height)
         kparams.addIntIfDefined("width", self.width)
-        kparams.addIntIfDefined("acceptedErrorMarginPrecentage", self.acceptedErrorMarginPrecentage)
+        kparams.addIntIfDefined("precisionPrecentage", self.precisionPrecentage)
         return kparams
 
     def getId(self):
@@ -11707,11 +11707,11 @@ class KalturaRatio(KalturaObjectBase):
     def setWidth(self, newWidth):
         self.width = newWidth
 
-    def getAcceptedErrorMarginPrecentage(self):
-        return self.acceptedErrorMarginPrecentage
+    def getPrecisionPrecentage(self):
+        return self.precisionPrecentage
 
-    def setAcceptedErrorMarginPrecentage(self, newAcceptedErrorMarginPrecentage):
-        self.acceptedErrorMarginPrecentage = newAcceptedErrorMarginPrecentage
+    def setPrecisionPrecentage(self, newPrecisionPrecentage):
+        self.precisionPrecentage = newPrecisionPrecentage
 
 
 # @package Kaltura
