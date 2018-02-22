@@ -31,7 +31,7 @@ from __future__ import absolute_import
 
 from ..Base import *
 
-API_VERSION = '4.7.96.18193'
+API_VERSION = '4.7.97.17198'
 
 ########## enums ##########
 # @package Kaltura
@@ -24237,6 +24237,17 @@ class KalturaNotificationService(KalturaServiceBase):
         kparams.addIntIfDefined("userId", userId);
         kparams.addObjectIfDefined("pushMessage", pushMessage)
         self.client.queueServiceActionCall("notification", "sendPush", "None", kparams)
+        if self.client.isMultiRequest():
+            return self.client.getMultiRequestResult()
+        resultNode = self.client.doQueue()
+        return getXmlNodeBool(resultNode)
+
+    def sendSms(self, message):
+        """Sends SMS notification to user"""
+
+        kparams = KalturaParams()
+        kparams.addStringIfDefined("message", message)
+        self.client.queueServiceActionCall("notification", "sendSms", "None", kparams)
         if self.client.isMultiRequest():
             return self.client.getMultiRequestResult()
         resultNode = self.client.doQueue()
