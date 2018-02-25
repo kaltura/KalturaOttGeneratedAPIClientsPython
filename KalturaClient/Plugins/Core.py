@@ -31,7 +31,7 @@ from __future__ import absolute_import
 
 from ..Base import *
 
-API_VERSION = '4.7.267.27391'
+API_VERSION = '4.7.268.29937'
 
 ########## enums ##########
 # @package Kaltura
@@ -11140,6 +11140,7 @@ class KalturaChannel(KalturaObjectBase):
 
         # Channel images
         # @var array of KalturaMediaImage
+        # @readonly
         self.images = images
 
         # active status
@@ -11187,7 +11188,6 @@ class KalturaChannel(KalturaObjectBase):
         kparams.addStringIfDefined("systemName", self.systemName)
         kparams.addStringIfDefined("description", self.description)
         kparams.addArrayIfDefined("multilingualDescription", self.multilingualDescription)
-        kparams.addArrayIfDefined("images", self.images)
         kparams.addBoolIfDefined("isActive", self.isActive)
         kparams.addObjectIfDefined("orderBy", self.orderBy)
         return kparams
@@ -11227,9 +11227,6 @@ class KalturaChannel(KalturaObjectBase):
 
     def getImages(self):
         return self.images
-
-    def setImages(self, newImages):
-        self.images = newImages
 
     def getIsActive(self):
         return self.isActive
