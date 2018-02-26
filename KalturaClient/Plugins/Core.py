@@ -31,7 +31,7 @@ from __future__ import absolute_import
 
 from ..Base import *
 
-API_VERSION = '4.7.270.23476'
+API_VERSION = '4.7.272.31631'
 
 ########## enums ##########
 # @package Kaltura
@@ -4724,7 +4724,7 @@ class KalturaMediaFile(KalturaObjectBase):
             fileSize=NotImplemented,
             additionalData=NotImplemented,
             altStreamingCode=NotImplemented,
-            alternativecdnAdapaterProfileId=NotImplemented,
+            alternativeCdnAdapaterProfileId=NotImplemented,
             endDate=NotImplemented,
             startDate=NotImplemented,
             externalStoreId=NotImplemented,
@@ -4779,7 +4779,7 @@ class KalturaMediaFile(KalturaObjectBase):
 
         # Alternative cdn adapter profile identifier
         # @var int
-        self.alternativecdnAdapaterProfileId = alternativecdnAdapaterProfileId
+        self.alternativeCdnAdapaterProfileId = alternativeCdnAdapaterProfileId
 
         # EndDate
         # @var int
@@ -4829,7 +4829,7 @@ class KalturaMediaFile(KalturaObjectBase):
         'fileSize': getXmlNodeInt, 
         'additionalData': getXmlNodeText, 
         'altStreamingCode': getXmlNodeText, 
-        'alternativecdnAdapaterProfileId': getXmlNodeInt, 
+        'alternativeCdnAdapaterProfileId': getXmlNodeInt, 
         'endDate': getXmlNodeInt, 
         'startDate': getXmlNodeInt, 
         'externalStoreId': getXmlNodeText, 
@@ -4857,7 +4857,7 @@ class KalturaMediaFile(KalturaObjectBase):
         kparams.addIntIfDefined("fileSize", self.fileSize)
         kparams.addStringIfDefined("additionalData", self.additionalData)
         kparams.addStringIfDefined("altStreamingCode", self.altStreamingCode)
-        kparams.addIntIfDefined("alternativecdnAdapaterProfileId", self.alternativecdnAdapaterProfileId)
+        kparams.addIntIfDefined("alternativeCdnAdapaterProfileId", self.alternativeCdnAdapaterProfileId)
         kparams.addIntIfDefined("endDate", self.endDate)
         kparams.addIntIfDefined("startDate", self.startDate)
         kparams.addStringIfDefined("externalStoreId", self.externalStoreId)
@@ -4926,11 +4926,11 @@ class KalturaMediaFile(KalturaObjectBase):
     def setAltStreamingCode(self, newAltStreamingCode):
         self.altStreamingCode = newAltStreamingCode
 
-    def getAlternativecdnAdapaterProfileId(self):
-        return self.alternativecdnAdapaterProfileId
+    def getAlternativeCdnAdapaterProfileId(self):
+        return self.alternativeCdnAdapaterProfileId
 
-    def setAlternativecdnAdapaterProfileId(self, newAlternativecdnAdapaterProfileId):
-        self.alternativecdnAdapaterProfileId = newAlternativecdnAdapaterProfileId
+    def setAlternativeCdnAdapaterProfileId(self, newAlternativeCdnAdapaterProfileId):
+        self.alternativeCdnAdapaterProfileId = newAlternativeCdnAdapaterProfileId
 
     def getEndDate(self):
         return self.endDate
@@ -5292,7 +5292,7 @@ class KalturaPlaybackSource(KalturaMediaFile):
             fileSize=NotImplemented,
             additionalData=NotImplemented,
             altStreamingCode=NotImplemented,
-            alternativecdnAdapaterProfileId=NotImplemented,
+            alternativeCdnAdapaterProfileId=NotImplemented,
             endDate=NotImplemented,
             startDate=NotImplemented,
             externalStoreId=NotImplemented,
@@ -5316,7 +5316,7 @@ class KalturaPlaybackSource(KalturaMediaFile):
             fileSize,
             additionalData,
             altStreamingCode,
-            alternativecdnAdapaterProfileId,
+            alternativeCdnAdapaterProfileId,
             endDate,
             startDate,
             externalStoreId,
@@ -11106,7 +11106,6 @@ class KalturaChannel(KalturaObjectBase):
             systemName=NotImplemented,
             description=NotImplemented,
             multilingualDescription=NotImplemented,
-            images=NotImplemented,
             isActive=NotImplemented,
             orderBy=NotImplemented,
             createDate=NotImplemented,
@@ -11138,11 +11137,6 @@ class KalturaChannel(KalturaObjectBase):
         # @var array of KalturaTranslationToken
         self.multilingualDescription = multilingualDescription
 
-        # Channel images
-        # @var array of KalturaMediaImage
-        # @readonly
-        self.images = images
-
         # active status
         # @var bool
         self.isActive = isActive
@@ -11169,7 +11163,6 @@ class KalturaChannel(KalturaObjectBase):
         'systemName': getXmlNodeText, 
         'description': getXmlNodeText, 
         'multilingualDescription': (KalturaObjectFactory.createArray, 'KalturaTranslationToken'), 
-        'images': (KalturaObjectFactory.createArray, 'KalturaMediaImage'), 
         'isActive': getXmlNodeBool, 
         'orderBy': (KalturaObjectFactory.create, 'KalturaChannelOrder'), 
         'createDate': getXmlNodeInt, 
@@ -11224,9 +11217,6 @@ class KalturaChannel(KalturaObjectBase):
 
     def setMultilingualDescription(self, newMultilingualDescription):
         self.multilingualDescription = newMultilingualDescription
-
-    def getImages(self):
-        return self.images
 
     def getIsActive(self):
         return self.isActive
@@ -11292,7 +11282,6 @@ class KalturaDynamicChannel(KalturaChannel):
             systemName=NotImplemented,
             description=NotImplemented,
             multilingualDescription=NotImplemented,
-            images=NotImplemented,
             isActive=NotImplemented,
             orderBy=NotImplemented,
             createDate=NotImplemented,
@@ -11305,7 +11294,6 @@ class KalturaDynamicChannel(KalturaChannel):
             systemName,
             description,
             multilingualDescription,
-            images,
             isActive,
             orderBy,
             createDate,
@@ -11429,7 +11417,6 @@ class KalturaManualChannel(KalturaChannel):
             systemName=NotImplemented,
             description=NotImplemented,
             multilingualDescription=NotImplemented,
-            images=NotImplemented,
             isActive=NotImplemented,
             orderBy=NotImplemented,
             createDate=NotImplemented,
@@ -11442,7 +11429,6 @@ class KalturaManualChannel(KalturaChannel):
             systemName,
             description,
             multilingualDescription,
-            images,
             isActive,
             orderBy,
             createDate,
