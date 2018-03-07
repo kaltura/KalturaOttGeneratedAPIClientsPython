@@ -31,7 +31,7 @@ from __future__ import absolute_import
 
 from ..Base import *
 
-API_VERSION = '4.72.5.23745'
+API_VERSION = '4.72.7.24384'
 
 ########## enums ##########
 # @package Kaltura
@@ -5652,8 +5652,7 @@ class KalturaBaseChannel(KalturaObjectBase):
     """Slim channel"""
 
     def __init__(self,
-            id=NotImplemented,
-            name=NotImplemented):
+            id=NotImplemented):
         KalturaObjectBase.__init__(self)
 
         # Unique identifier for the channel
@@ -5661,14 +5660,9 @@ class KalturaBaseChannel(KalturaObjectBase):
         # @readonly
         self.id = id
 
-        # Channel name
-        # @var string
-        self.name = name
-
 
     PROPERTY_LOADERS = {
         'id': getXmlNodeInt, 
-        'name': getXmlNodeText, 
     }
 
     def fromXml(self, node):
@@ -5678,17 +5672,10 @@ class KalturaBaseChannel(KalturaObjectBase):
     def toParams(self):
         kparams = KalturaObjectBase.toParams(self)
         kparams.put("objectType", "KalturaBaseChannel")
-        kparams.addStringIfDefined("name", self.name)
         return kparams
 
     def getId(self):
         return self.id
-
-    def getName(self):
-        return self.name
-
-    def setName(self, newName):
-        self.name = newName
 
 
 # @package Kaltura
@@ -6314,8 +6301,11 @@ class KalturaChannel(KalturaBaseChannel):
             order=NotImplemented,
             groupBy=NotImplemented):
         KalturaBaseChannel.__init__(self,
-            id,
-            name)
+            id)
+
+        # Channel name
+        # @var string
+        self.name = name
 
         # Cannel description
         # @var string
@@ -6348,6 +6338,7 @@ class KalturaChannel(KalturaBaseChannel):
 
 
     PROPERTY_LOADERS = {
+        'name': getXmlNodeText, 
         'description': getXmlNodeText, 
         'images': (KalturaObjectFactory.createArray, 'KalturaMediaImage'), 
         'assetTypes': (KalturaObjectFactory.createArray, 'KalturaIntegerValue'), 
@@ -6364,6 +6355,7 @@ class KalturaChannel(KalturaBaseChannel):
     def toParams(self):
         kparams = KalturaBaseChannel.toParams(self)
         kparams.put("objectType", "KalturaChannel")
+        kparams.addStringIfDefined("name", self.name)
         kparams.addStringIfDefined("description", self.description)
         kparams.addArrayIfDefined("images", self.images)
         kparams.addArrayIfDefined("assetTypes", self.assetTypes)
@@ -6372,6 +6364,12 @@ class KalturaChannel(KalturaBaseChannel):
         kparams.addStringEnumIfDefined("order", self.order)
         kparams.addObjectIfDefined("groupBy", self.groupBy)
         return kparams
+
+    def getName(self):
+        return self.name
+
+    def setName(self, newName):
+        self.name = newName
 
     def getDescription(self):
         return self.description
@@ -10731,10 +10729,12 @@ class KalturaSubscriptionEntitlement(KalturaEntitlement):
 
         # Scheduled Subscription Identifier
         # @var int
+        # @readonly
         self.scheduledSubscriptionId = scheduledSubscriptionId
 
         # Unified payment identifier
         # @var int
+        # @readonly
         self.unifiedPaymentId = unifiedPaymentId
 
         # Indicates if the subscription suspended
@@ -10764,8 +10764,6 @@ class KalturaSubscriptionEntitlement(KalturaEntitlement):
         kparams.put("objectType", "KalturaSubscriptionEntitlement")
         kparams.addIntIfDefined("paymentGatewayId", self.paymentGatewayId)
         kparams.addIntIfDefined("paymentMethodId", self.paymentMethodId)
-        kparams.addIntIfDefined("scheduledSubscriptionId", self.scheduledSubscriptionId)
-        kparams.addIntIfDefined("unifiedPaymentId", self.unifiedPaymentId)
         return kparams
 
     def getNextRenewalDate(self):
@@ -10795,14 +10793,8 @@ class KalturaSubscriptionEntitlement(KalturaEntitlement):
     def getScheduledSubscriptionId(self):
         return self.scheduledSubscriptionId
 
-    def setScheduledSubscriptionId(self, newScheduledSubscriptionId):
-        self.scheduledSubscriptionId = newScheduledSubscriptionId
-
     def getUnifiedPaymentId(self):
         return self.unifiedPaymentId
-
-    def setUnifiedPaymentId(self, newUnifiedPaymentId):
-        self.unifiedPaymentId = newUnifiedPaymentId
 
     def getIsSuspended(self):
         return self.isSuspended
