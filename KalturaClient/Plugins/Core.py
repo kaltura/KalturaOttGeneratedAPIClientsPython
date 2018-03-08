@@ -8,7 +8,7 @@
 # to do with audio, video, and animation what Wiki platfroms allow them to do with
 # text.
 #
-# Copyright (C) 2006-2018  Kaltura Inc.
+# Copyright (C) 2006-2017  Kaltura Inc.
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU Affero General Public License as
@@ -31,7 +31,7 @@ from __future__ import absolute_import
 
 from ..Base import *
 
-API_VERSION = '4.72.214.15728'
+API_VERSION = '4.72.216.22892'
 
 ########## enums ##########
 # @package Kaltura
@@ -24833,11 +24833,11 @@ class KalturaChannelService(KalturaServiceBase):
         resultNode = self.client.doQueue()
         return KalturaObjectFactory.create(resultNode, 'KalturaChannelListResponse')
 
-    def update(self, channelId, channel):
+    def update(self, id, channel):
         """Update channel details. Supports KalturaDynamicChannel or KalturaManualChannel"""
 
         kparams = KalturaParams()
-        kparams.addIntIfDefined("channelId", channelId);
+        kparams.addIntIfDefined("id", id);
         kparams.addObjectIfDefined("channel", channel)
         self.client.queueServiceActionCall("channel", "update", "KalturaChannel", kparams)
         if self.client.isMultiRequest():
