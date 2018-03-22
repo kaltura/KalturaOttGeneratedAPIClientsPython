@@ -31,7 +31,7 @@ from __future__ import absolute_import
 
 from ..Base import *
 
-API_VERSION = '4.72.67.43129'
+API_VERSION = '4.7.43.17154'
 
 ########## enums ##########
 # @package Kaltura
@@ -5652,7 +5652,8 @@ class KalturaBaseChannel(KalturaObjectBase):
     """Slim channel"""
 
     def __init__(self,
-            id=NotImplemented):
+            id=NotImplemented,
+            name=NotImplemented):
         KalturaObjectBase.__init__(self)
 
         # Unique identifier for the channel
@@ -5660,9 +5661,14 @@ class KalturaBaseChannel(KalturaObjectBase):
         # @readonly
         self.id = id
 
+        # Channel name
+        # @var string
+        self.name = name
+
 
     PROPERTY_LOADERS = {
         'id': getXmlNodeInt, 
+        'name': getXmlNodeText, 
     }
 
     def fromXml(self, node):
@@ -5672,10 +5678,17 @@ class KalturaBaseChannel(KalturaObjectBase):
     def toParams(self):
         kparams = KalturaObjectBase.toParams(self)
         kparams.put("objectType", "KalturaBaseChannel")
+        kparams.addStringIfDefined("name", self.name)
         return kparams
 
     def getId(self):
         return self.id
+
+    def getName(self):
+        return self.name
+
+    def setName(self, newName):
+        self.name = newName
 
 
 # @package Kaltura
@@ -6301,11 +6314,8 @@ class KalturaChannel(KalturaBaseChannel):
             order=NotImplemented,
             groupBy=NotImplemented):
         KalturaBaseChannel.__init__(self,
-            id)
-
-        # Channel name
-        # @var string
-        self.name = name
+            id,
+            name)
 
         # Cannel description
         # @var string
@@ -6338,7 +6348,6 @@ class KalturaChannel(KalturaBaseChannel):
 
 
     PROPERTY_LOADERS = {
-        'name': getXmlNodeText, 
         'description': getXmlNodeText, 
         'images': (KalturaObjectFactory.createArray, 'KalturaMediaImage'), 
         'assetTypes': (KalturaObjectFactory.createArray, 'KalturaIntegerValue'), 
@@ -6355,7 +6364,6 @@ class KalturaChannel(KalturaBaseChannel):
     def toParams(self):
         kparams = KalturaBaseChannel.toParams(self)
         kparams.put("objectType", "KalturaChannel")
-        kparams.addStringIfDefined("name", self.name)
         kparams.addStringIfDefined("description", self.description)
         kparams.addArrayIfDefined("images", self.images)
         kparams.addArrayIfDefined("assetTypes", self.assetTypes)
@@ -6364,12 +6372,6 @@ class KalturaChannel(KalturaBaseChannel):
         kparams.addStringEnumIfDefined("order", self.order)
         kparams.addObjectIfDefined("groupBy", self.groupBy)
         return kparams
-
-    def getName(self):
-        return self.name
-
-    def setName(self, newName):
-        self.name = newName
 
     def getDescription(self):
         return self.description
@@ -8902,11 +8904,7 @@ class KalturaAnnouncement(KalturaObjectBase):
             status=NotImplemented,
             recipients=NotImplemented,
             id=NotImplemented,
-            imageUrl=NotImplemented,
-            includeMail=NotImplemented,
-            mailTemplate=NotImplemented,
-            mailSubject=NotImplemented,
-            includeSms=NotImplemented):
+            imageUrl=NotImplemented):
         KalturaObjectBase.__init__(self)
 
         # Announcement name
@@ -8947,22 +8945,6 @@ class KalturaAnnouncement(KalturaObjectBase):
         # @var string
         self.imageUrl = imageUrl
 
-        # Include Mail
-        # @var bool
-        self.includeMail = includeMail
-
-        # Mail Template
-        # @var string
-        self.mailTemplate = mailTemplate
-
-        # Mail Subject
-        # @var string
-        self.mailSubject = mailSubject
-
-        # Include SMS
-        # @var bool
-        self.includeSms = includeSms
-
 
     PROPERTY_LOADERS = {
         'name': getXmlNodeText, 
@@ -8974,10 +8956,6 @@ class KalturaAnnouncement(KalturaObjectBase):
         'recipients': (KalturaEnumsFactory.createString, "KalturaAnnouncementRecipientsType"), 
         'id': getXmlNodeInt, 
         'imageUrl': getXmlNodeText, 
-        'includeMail': getXmlNodeBool, 
-        'mailTemplate': getXmlNodeText, 
-        'mailSubject': getXmlNodeText, 
-        'includeSms': getXmlNodeBool, 
     }
 
     def fromXml(self, node):
@@ -8994,10 +8972,6 @@ class KalturaAnnouncement(KalturaObjectBase):
         kparams.addStringIfDefined("timezone", self.timezone)
         kparams.addStringEnumIfDefined("recipients", self.recipients)
         kparams.addStringIfDefined("imageUrl", self.imageUrl)
-        kparams.addBoolIfDefined("includeMail", self.includeMail)
-        kparams.addStringIfDefined("mailTemplate", self.mailTemplate)
-        kparams.addStringIfDefined("mailSubject", self.mailSubject)
-        kparams.addBoolIfDefined("includeSms", self.includeSms)
         return kparams
 
     def getName(self):
@@ -9047,30 +9021,6 @@ class KalturaAnnouncement(KalturaObjectBase):
 
     def setImageUrl(self, newImageUrl):
         self.imageUrl = newImageUrl
-
-    def getIncludeMail(self):
-        return self.includeMail
-
-    def setIncludeMail(self, newIncludeMail):
-        self.includeMail = newIncludeMail
-
-    def getMailTemplate(self):
-        return self.mailTemplate
-
-    def setMailTemplate(self, newMailTemplate):
-        self.mailTemplate = newMailTemplate
-
-    def getMailSubject(self):
-        return self.mailSubject
-
-    def setMailSubject(self, newMailSubject):
-        self.mailSubject = newMailSubject
-
-    def getIncludeSms(self):
-        return self.includeSms
-
-    def setIncludeSms(self, newIncludeSms):
-        self.includeSms = newIncludeSms
 
 
 # @package Kaltura
@@ -10729,12 +10679,10 @@ class KalturaSubscriptionEntitlement(KalturaEntitlement):
 
         # Scheduled Subscription Identifier
         # @var int
-        # @readonly
         self.scheduledSubscriptionId = scheduledSubscriptionId
 
         # Unified payment identifier
         # @var int
-        # @readonly
         self.unifiedPaymentId = unifiedPaymentId
 
         # Indicates if the subscription suspended
@@ -10764,6 +10712,8 @@ class KalturaSubscriptionEntitlement(KalturaEntitlement):
         kparams.put("objectType", "KalturaSubscriptionEntitlement")
         kparams.addIntIfDefined("paymentGatewayId", self.paymentGatewayId)
         kparams.addIntIfDefined("paymentMethodId", self.paymentMethodId)
+        kparams.addIntIfDefined("scheduledSubscriptionId", self.scheduledSubscriptionId)
+        kparams.addIntIfDefined("unifiedPaymentId", self.unifiedPaymentId)
         return kparams
 
     def getNextRenewalDate(self):
@@ -10793,8 +10743,14 @@ class KalturaSubscriptionEntitlement(KalturaEntitlement):
     def getScheduledSubscriptionId(self):
         return self.scheduledSubscriptionId
 
+    def setScheduledSubscriptionId(self, newScheduledSubscriptionId):
+        self.scheduledSubscriptionId = newScheduledSubscriptionId
+
     def getUnifiedPaymentId(self):
         return self.unifiedPaymentId
+
+    def setUnifiedPaymentId(self, newUnifiedPaymentId):
+        self.unifiedPaymentId = newUnifiedPaymentId
 
     def getIsSuspended(self):
         return self.isSuspended
@@ -16363,7 +16319,7 @@ class KalturaChannelFilter(KalturaAssetFilter):
         #             parental_rules - only valid value is &quot;true&quot;: When enabled, only assets that the user doesn&#39;t need to provide PIN code will return.
         #             user_interests - only valid value is &quot;true&quot;. When enabled, only assets that the user defined as his interests (by tags and metas) will return.
         #             epg_channel_id - the channel identifier of the EPG program.
-        #             entitled_assets - valid values: &quot;free&quot;, &quot;entitled&quot;, &quot;not_entitled&quot;, &quot;both&quot;. free - gets only free to watch assets. entitled - only those that the user is implicitly entitled to watch.
+        #             entitled_assets - valid values: &quot;free&quot;, &quot;entitled&quot;, &quot;both&quot;. free - gets only free to watch assets. entitled - only those that the user is implicitly entitled to watch.
         #             Comparison operators: for numerical fields =, &gt;, &gt;=, &lt;, &lt;=, : (in). 
         #             For alpha-numerical fields =, != (not), ~ (like), !~, ^ (any word starts with), ^= (phrase starts with), + (exists), !+ (not exists).
         #             Logical conjunction: and, or. 
@@ -16426,7 +16382,7 @@ class KalturaRelatedFilter(KalturaBaseSearchAssetFilter):
         #             parental_rules - only valid value is &quot;true&quot;: When enabled, only assets that the user doesn&#39;t need to provide PIN code will return.
         #             user_interests - only valid value is &quot;true&quot;. When enabled, only assets that the user defined as his interests (by tags and metas) will return.
         #             epg_channel_id - the channel identifier of the EPG program.
-        #             entitled_assets - valid values: &quot;free&quot;, &quot;entitled&quot;, &quot;not_entitled&quot;, &quot;both&quot;. free - gets only free to watch assets. entitled - only those that the user is implicitly entitled to watch.
+        #             entitled_assets - valid values: &quot;free&quot;, &quot;entitled&quot;, &quot;both&quot;. free - gets only free to watch assets. entitled - only those that the user is implicitly entitled to watch.
         #             Comparison operators: for numerical fields =, &gt;, &gt;=, &lt;, &lt;=, : (in). 
         #             For alpha-numerical fields =, != (not), ~ (like), !~, ^ (any word starts with), ^= (phrase starts with), + (exists), !+ (not exists).
         #             Logical conjunction: and, or. 
@@ -16587,7 +16543,7 @@ class KalturaSearchAssetFilter(KalturaBaseSearchAssetFilter):
         #             parental_rules - only valid value is &quot;true&quot;: When enabled, only assets that the user doesn&#39;t need to provide PIN code will return.
         #             user_interests - only valid value is &quot;true&quot;. When enabled, only assets that the user defined as his interests (by tags and metas) will return.
         #             epg_channel_id - the channel identifier of the EPG program.
-        #             entitled_assets - valid values: &quot;free&quot;, &quot;entitled&quot;, &quot;not_entitled&quot;, &quot;both&quot;. free - gets only free to watch assets. entitled - only those that the user is implicitly entitled to watch.
+        #             entitled_assets - valid values: &quot;free&quot;, &quot;entitled&quot;, &quot;both&quot;. free - gets only free to watch assets. entitled - only those that the user is implicitly entitled to watch.
         #             Comparison operators: for numerical fields =, &gt;, &gt;=, &lt;, &lt;=, : (in). 
         #             For alpha-numerical fields =, != (not), ~ (like), !~, ^ (any word starts with), ^= (phrase starts with), + (exists), !+ (not exists).
         #             Logical conjunction: and, or. 
@@ -19084,10 +19040,7 @@ class KalturaMessageTemplate(KalturaObjectBase):
             messageType=NotImplemented,
             sound=NotImplemented,
             action=NotImplemented,
-            url=NotImplemented,
-            mailTemplate=NotImplemented,
-            mailSubject=NotImplemented,
-            ratioId=NotImplemented):
+            url=NotImplemented):
         KalturaObjectBase.__init__(self)
 
         # The message template with placeholders
@@ -19114,18 +19067,6 @@ class KalturaMessageTemplate(KalturaObjectBase):
         # @var string
         self.url = url
 
-        # Mail template name
-        # @var string
-        self.mailTemplate = mailTemplate
-
-        # Mail subject
-        # @var string
-        self.mailSubject = mailSubject
-
-        # Ratio identifier
-        # @var string
-        self.ratioId = ratioId
-
 
     PROPERTY_LOADERS = {
         'message': getXmlNodeText, 
@@ -19134,9 +19075,6 @@ class KalturaMessageTemplate(KalturaObjectBase):
         'sound': getXmlNodeText, 
         'action': getXmlNodeText, 
         'url': getXmlNodeText, 
-        'mailTemplate': getXmlNodeText, 
-        'mailSubject': getXmlNodeText, 
-        'ratioId': getXmlNodeText, 
     }
 
     def fromXml(self, node):
@@ -19152,9 +19090,6 @@ class KalturaMessageTemplate(KalturaObjectBase):
         kparams.addStringIfDefined("sound", self.sound)
         kparams.addStringIfDefined("action", self.action)
         kparams.addStringIfDefined("url", self.url)
-        kparams.addStringIfDefined("mailTemplate", self.mailTemplate)
-        kparams.addStringIfDefined("mailSubject", self.mailSubject)
-        kparams.addStringIfDefined("ratioId", self.ratioId)
         return kparams
 
     def getMessage(self):
@@ -19192,24 +19127,6 @@ class KalturaMessageTemplate(KalturaObjectBase):
 
     def setUrl(self, newUrl):
         self.url = newUrl
-
-    def getMailTemplate(self):
-        return self.mailTemplate
-
-    def setMailTemplate(self, newMailTemplate):
-        self.mailTemplate = newMailTemplate
-
-    def getMailSubject(self):
-        return self.mailSubject
-
-    def setMailSubject(self, newMailSubject):
-        self.mailSubject = newMailSubject
-
-    def getRatioId(self):
-        return self.ratioId
-
-    def setRatioId(self, newRatioId):
-        self.ratioId = newRatioId
 
 
 # @package Kaltura
@@ -19740,9 +19657,7 @@ class KalturaNotificationsPartnerSettings(KalturaObjectBase):
             churnMailTemplateName=NotImplemented,
             churnMailSubject=NotImplemented,
             senderEmail=NotImplemented,
-            mailSenderName=NotImplemented,
-            mailNotificationAdapterId=NotImplemented,
-            smsEnabled=NotImplemented):
+            mailSenderName=NotImplemented):
         KalturaObjectBase.__init__(self)
 
         # Push notification capability is enabled for the account
@@ -19805,14 +19720,6 @@ class KalturaNotificationsPartnerSettings(KalturaObjectBase):
         # @var string
         self.mailSenderName = mailSenderName
 
-        # Mail notification adapter identifier
-        # @var int
-        self.mailNotificationAdapterId = mailNotificationAdapterId
-
-        # SMS capability is enabled for the account
-        # @var bool
-        self.smsEnabled = smsEnabled
-
 
     PROPERTY_LOADERS = {
         'pushNotificationEnabled': getXmlNodeBool, 
@@ -19830,8 +19737,6 @@ class KalturaNotificationsPartnerSettings(KalturaObjectBase):
         'churnMailSubject': getXmlNodeText, 
         'senderEmail': getXmlNodeText, 
         'mailSenderName': getXmlNodeText, 
-        'mailNotificationAdapterId': getXmlNodeInt, 
-        'smsEnabled': getXmlNodeBool, 
     }
 
     def fromXml(self, node):
@@ -19856,8 +19761,6 @@ class KalturaNotificationsPartnerSettings(KalturaObjectBase):
         kparams.addStringIfDefined("churnMailSubject", self.churnMailSubject)
         kparams.addStringIfDefined("senderEmail", self.senderEmail)
         kparams.addStringIfDefined("mailSenderName", self.mailSenderName)
-        kparams.addIntIfDefined("mailNotificationAdapterId", self.mailNotificationAdapterId)
-        kparams.addBoolIfDefined("smsEnabled", self.smsEnabled)
         return kparams
 
     def getPushNotificationEnabled(self):
@@ -19950,27 +19853,13 @@ class KalturaNotificationsPartnerSettings(KalturaObjectBase):
     def setMailSenderName(self, newMailSenderName):
         self.mailSenderName = newMailSenderName
 
-    def getMailNotificationAdapterId(self):
-        return self.mailNotificationAdapterId
-
-    def setMailNotificationAdapterId(self, newMailNotificationAdapterId):
-        self.mailNotificationAdapterId = newMailNotificationAdapterId
-
-    def getSmsEnabled(self):
-        return self.smsEnabled
-
-    def setSmsEnabled(self, newSmsEnabled):
-        self.smsEnabled = newSmsEnabled
-
 
 # @package Kaltura
 # @subpackage Client
 class KalturaNotificationsSettings(KalturaObjectBase):
     def __init__(self,
             pushNotificationEnabled=NotImplemented,
-            pushFollowEnabled=NotImplemented,
-            mailEnabled=NotImplemented,
-            smsEnabled=NotImplemented):
+            pushFollowEnabled=NotImplemented):
         KalturaObjectBase.__init__(self)
 
         # Specify if the user want to receive push notifications or not
@@ -19981,20 +19870,10 @@ class KalturaNotificationsSettings(KalturaObjectBase):
         # @var bool
         self.pushFollowEnabled = pushFollowEnabled
 
-        # Specify if the user wants to receive mail notifications or not
-        # @var bool
-        self.mailEnabled = mailEnabled
-
-        # Specify if the user wants to receive SMS notifications or not
-        # @var bool
-        self.smsEnabled = smsEnabled
-
 
     PROPERTY_LOADERS = {
         'pushNotificationEnabled': getXmlNodeBool, 
         'pushFollowEnabled': getXmlNodeBool, 
-        'mailEnabled': getXmlNodeBool, 
-        'smsEnabled': getXmlNodeBool, 
     }
 
     def fromXml(self, node):
@@ -20006,8 +19885,6 @@ class KalturaNotificationsSettings(KalturaObjectBase):
         kparams.put("objectType", "KalturaNotificationsSettings")
         kparams.addBoolIfDefined("pushNotificationEnabled", self.pushNotificationEnabled)
         kparams.addBoolIfDefined("pushFollowEnabled", self.pushFollowEnabled)
-        kparams.addBoolIfDefined("mailEnabled", self.mailEnabled)
-        kparams.addBoolIfDefined("smsEnabled", self.smsEnabled)
         return kparams
 
     def getPushNotificationEnabled(self):
@@ -20021,18 +19898,6 @@ class KalturaNotificationsSettings(KalturaObjectBase):
 
     def setPushFollowEnabled(self, newPushFollowEnabled):
         self.pushFollowEnabled = newPushFollowEnabled
-
-    def getMailEnabled(self):
-        return self.mailEnabled
-
-    def setMailEnabled(self, newMailEnabled):
-        self.mailEnabled = newMailEnabled
-
-    def getSmsEnabled(self):
-        return self.smsEnabled
-
-    def setSmsEnabled(self, newSmsEnabled):
-        self.smsEnabled = newSmsEnabled
 
 
 # @package Kaltura
@@ -23533,18 +23398,6 @@ class KalturaFollowTvSeriesService(KalturaServiceBase):
         resultNode = self.client.doQueue()
         return getXmlNodeBool(resultNode)
 
-    def deleteWithToken(self, assetId, token, partnerId):
-        """Delete a user&#39;s tv series follow."""
-
-        kparams = KalturaParams()
-        kparams.addIntIfDefined("assetId", assetId);
-        kparams.addStringIfDefined("token", token)
-        kparams.addIntIfDefined("partnerId", partnerId);
-        self.client.queueServiceActionCall("followtvseries", "deleteWithToken", "None", kparams)
-        if self.client.isMultiRequest():
-            return self.client.getMultiRequestResult()
-        resultNode = self.client.doQueue()
-
     def list(self, filter, pager = NotImplemented):
         """List user&#39;s tv series follows.
                     Possible status codes:"""
@@ -24234,17 +24087,6 @@ class KalturaNotificationService(KalturaServiceBase):
         resultNode = self.client.doQueue()
         return getXmlNodeBool(resultNode)
 
-    def sendSms(self, message):
-        """Sends SMS notification to user"""
-
-        kparams = KalturaParams()
-        kparams.addStringIfDefined("message", message)
-        self.client.queueServiceActionCall("notification", "sendSms", "None", kparams)
-        if self.client.isMultiRequest():
-            return self.client.getMultiRequestResult()
-        resultNode = self.client.doQueue()
-        return getXmlNodeBool(resultNode)
-
     def setDevicePushToken(self, pushToken):
         """Registers the device push token to the push service"""
 
@@ -24307,19 +24149,6 @@ class KalturaNotificationsSettingsService(KalturaServiceBase):
         kparams = KalturaParams()
         kparams.addObjectIfDefined("settings", settings)
         self.client.queueServiceActionCall("notificationssettings", "update", "None", kparams)
-        if self.client.isMultiRequest():
-            return self.client.getMultiRequestResult()
-        resultNode = self.client.doQueue()
-        return getXmlNodeBool(resultNode)
-
-    def updateWithToken(self, settings, token, partnerId):
-        """Update the user's notification settings."""
-
-        kparams = KalturaParams()
-        kparams.addObjectIfDefined("settings", settings)
-        kparams.addStringIfDefined("token", token)
-        kparams.addIntIfDefined("partnerId", partnerId);
-        self.client.queueServiceActionCall("notificationssettings", "updateWithToken", "None", kparams)
         if self.client.isMultiRequest():
             return self.client.getMultiRequestResult()
         resultNode = self.client.doQueue()
@@ -25219,19 +25048,6 @@ class KalturaReminderService(KalturaServiceBase):
         resultNode = self.client.doQueue()
         return getXmlNodeBool(resultNode)
 
-    def deleteWithToken(self, id, type, token, partnerId):
-        """Delete a reminder. Reminder cannot be delete while being sent."""
-
-        kparams = KalturaParams()
-        kparams.addIntIfDefined("id", id);
-        kparams.addStringIfDefined("type", type)
-        kparams.addStringIfDefined("token", token)
-        kparams.addIntIfDefined("partnerId", partnerId);
-        self.client.queueServiceActionCall("reminder", "deleteWithToken", "None", kparams)
-        if self.client.isMultiRequest():
-            return self.client.getMultiRequestResult()
-        resultNode = self.client.doQueue()
-
     def list(self, filter, pager = NotImplemented):
         """Return a list of reminders with optional filter by KSQL."""
 
@@ -26049,18 +25865,6 @@ class KalturaUserInterestService(KalturaServiceBase):
             return self.client.getMultiRequestResult()
         resultNode = self.client.doQueue()
         return getXmlNodeBool(resultNode)
-
-    def deleteWithToken(self, id, token, partnerId):
-        """Delete new user interest for partner user"""
-
-        kparams = KalturaParams()
-        kparams.addStringIfDefined("id", id)
-        kparams.addStringIfDefined("token", token)
-        kparams.addIntIfDefined("partnerId", partnerId);
-        self.client.queueServiceActionCall("userinterest", "deleteWithToken", "None", kparams)
-        if self.client.isMultiRequest():
-            return self.client.getMultiRequestResult()
-        resultNode = self.client.doQueue()
 
     def list(self):
         """Returns all Engagement for partner"""
