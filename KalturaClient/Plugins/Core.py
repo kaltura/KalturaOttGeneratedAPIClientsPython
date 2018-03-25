@@ -31,7 +31,7 @@ from __future__ import absolute_import
 
 from ..Base import *
 
-API_VERSION = '4.72.71.20118'
+API_VERSION = '4.72.74.27731'
 
 ########## enums ##########
 # @package Kaltura
@@ -16346,7 +16346,8 @@ class KalturaChannelFilter(KalturaAssetFilter):
             name=NotImplemented,
             dynamicOrderBy=NotImplemented,
             idEqual=NotImplemented,
-            kSql=NotImplemented):
+            kSql=NotImplemented,
+            excludeWatched=NotImplemented):
         KalturaAssetFilter.__init__(self,
             orderBy,
             name,
@@ -16372,10 +16373,15 @@ class KalturaChannelFilter(KalturaAssetFilter):
         # @var string
         self.kSql = kSql
 
+        # Exclude watched asset.
+        # @var bool
+        self.excludeWatched = excludeWatched
+
 
     PROPERTY_LOADERS = {
         'idEqual': getXmlNodeInt, 
         'kSql': getXmlNodeText, 
+        'excludeWatched': getXmlNodeBool, 
     }
 
     def fromXml(self, node):
@@ -16387,6 +16393,7 @@ class KalturaChannelFilter(KalturaAssetFilter):
         kparams.put("objectType", "KalturaChannelFilter")
         kparams.addIntIfDefined("idEqual", self.idEqual)
         kparams.addStringIfDefined("kSql", self.kSql)
+        kparams.addBoolIfDefined("excludeWatched", self.excludeWatched)
         return kparams
 
     def getIdEqual(self):
@@ -16401,6 +16408,12 @@ class KalturaChannelFilter(KalturaAssetFilter):
     def setKSql(self, newKSql):
         self.kSql = newKSql
 
+    def getExcludeWatched(self):
+        return self.excludeWatched
+
+    def setExcludeWatched(self, newExcludeWatched):
+        self.excludeWatched = newExcludeWatched
+
 
 # @package Kaltura
 # @subpackage Client
@@ -16412,7 +16425,8 @@ class KalturaRelatedFilter(KalturaBaseSearchAssetFilter):
             groupBy=NotImplemented,
             kSql=NotImplemented,
             idEqual=NotImplemented,
-            typeIn=NotImplemented):
+            typeIn=NotImplemented,
+            excludeWatched=NotImplemented):
         KalturaBaseSearchAssetFilter.__init__(self,
             orderBy,
             name,
@@ -16445,11 +16459,16 @@ class KalturaRelatedFilter(KalturaBaseSearchAssetFilter):
         # @var string
         self.typeIn = typeIn
 
+        # Exclude watched asset.
+        # @var bool
+        self.excludeWatched = excludeWatched
+
 
     PROPERTY_LOADERS = {
         'kSql': getXmlNodeText, 
         'idEqual': getXmlNodeInt, 
         'typeIn': getXmlNodeText, 
+        'excludeWatched': getXmlNodeBool, 
     }
 
     def fromXml(self, node):
@@ -16462,6 +16481,7 @@ class KalturaRelatedFilter(KalturaBaseSearchAssetFilter):
         kparams.addStringIfDefined("kSql", self.kSql)
         kparams.addIntIfDefined("idEqual", self.idEqual)
         kparams.addStringIfDefined("typeIn", self.typeIn)
+        kparams.addBoolIfDefined("excludeWatched", self.excludeWatched)
         return kparams
 
     def getKSql(self):
@@ -16481,6 +16501,12 @@ class KalturaRelatedFilter(KalturaBaseSearchAssetFilter):
 
     def setTypeIn(self, newTypeIn):
         self.typeIn = newTypeIn
+
+    def getExcludeWatched(self):
+        return self.excludeWatched
+
+    def setExcludeWatched(self, newExcludeWatched):
+        self.excludeWatched = newExcludeWatched
 
 
 # @package Kaltura
@@ -16573,7 +16599,8 @@ class KalturaSearchAssetFilter(KalturaBaseSearchAssetFilter):
             groupBy=NotImplemented,
             kSql=NotImplemented,
             typeIn=NotImplemented,
-            idIn=NotImplemented):
+            idIn=NotImplemented,
+            excludeWatched=NotImplemented):
         KalturaBaseSearchAssetFilter.__init__(self,
             orderBy,
             name,
@@ -16606,11 +16633,16 @@ class KalturaSearchAssetFilter(KalturaBaseSearchAssetFilter):
         # @var string
         self.idIn = idIn
 
+        # Exclude watched asset.
+        # @var bool
+        self.excludeWatched = excludeWatched
+
 
     PROPERTY_LOADERS = {
         'kSql': getXmlNodeText, 
         'typeIn': getXmlNodeText, 
         'idIn': getXmlNodeText, 
+        'excludeWatched': getXmlNodeBool, 
     }
 
     def fromXml(self, node):
@@ -16623,6 +16655,7 @@ class KalturaSearchAssetFilter(KalturaBaseSearchAssetFilter):
         kparams.addStringIfDefined("kSql", self.kSql)
         kparams.addStringIfDefined("typeIn", self.typeIn)
         kparams.addStringIfDefined("idIn", self.idIn)
+        kparams.addBoolIfDefined("excludeWatched", self.excludeWatched)
         return kparams
 
     def getKSql(self):
@@ -16642,6 +16675,12 @@ class KalturaSearchAssetFilter(KalturaBaseSearchAssetFilter):
 
     def setIdIn(self, newIdIn):
         self.idIn = newIdIn
+
+    def getExcludeWatched(self):
+        return self.excludeWatched
+
+    def setExcludeWatched(self, newExcludeWatched):
+        self.excludeWatched = newExcludeWatched
 
 
 # @package Kaltura
