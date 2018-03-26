@@ -29,9 +29,20 @@
 # @subpackage Client
 from __future__ import absolute_import
 
-from ..Base import *
+from ..Base import (
+    getXmlNodeBool,
+    getXmlNodeFloat,
+    getXmlNodeInt,
+    getXmlNodeText,
+    KalturaClientPlugin,
+    KalturaEnumsFactory,
+    KalturaObjectBase,
+    KalturaObjectFactory,
+    KalturaParams,
+    KalturaServiceBase,
+)
 
-API_VERSION = '4.72.224.14093'
+API_VERSION = '4.72.224.16219'
 
 ########## enums ##########
 # @package Kaltura
@@ -28458,8 +28469,7 @@ class KalturaUploadTokenService(KalturaServiceBase):
 
         kparams = KalturaParams()
         kparams.addStringIfDefined("uploadTokenId", uploadTokenId)
-        kfiles = KalturaFiles()
-        kfiles.put("fileData", fileData);
+        kfiles = {"fileData": fileData}
         self.client.queueServiceActionCall("uploadtoken", "upload", "KalturaUploadToken", kparams, kfiles)
         if self.client.isMultiRequest():
             return self.client.getMultiRequestResult()
