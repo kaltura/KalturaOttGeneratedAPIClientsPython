@@ -42,7 +42,7 @@ from ..Base import (
     KalturaServiceBase,
 )
 
-API_VERSION = '4.8.9.24103'
+API_VERSION = '4.8.15.25280'
 
 ########## enums ##########
 # @package Kaltura
@@ -23277,7 +23277,7 @@ class KalturaCouponService(KalturaServiceBase):
 
 # @package Kaltura
 # @subpackage Client
-class KalturaCouponGroupService(KalturaServiceBase):
+class KalturaCouponsGroupService(KalturaServiceBase):
     def __init__(self, client = None):
         KalturaServiceBase.__init__(self, client)
 
@@ -23287,11 +23287,11 @@ class KalturaCouponGroupService(KalturaServiceBase):
         kparams = KalturaParams()
         kparams.addIntIfDefined("id", id);
         kparams.addObjectIfDefined("couponGenerationOptions", couponGenerationOptions)
-        self.client.queueServiceActionCall("coupongroup", "generate", "None", kparams)
+        self.client.queueServiceActionCall("couponsgroup", "generate", "KalturaStringValueArray", kparams)
         if self.client.isMultiRequest():
             return self.client.getMultiRequestResult()
         resultNode = self.client.doQueue()
-        return getXmlNodeText(resultNode)
+        return KalturaObjectFactory.create(resultNode, 'KalturaStringValueArray')
 
 
 # @package Kaltura
@@ -26473,7 +26473,7 @@ class KalturaCoreClient(KalturaClientPlugin):
             'configurations': KalturaConfigurationsService,
             'country': KalturaCountryService,
             'coupon': KalturaCouponService,
-            'couponGroup': KalturaCouponGroupService,
+            'couponsGroup': KalturaCouponsGroupService,
             'currency': KalturaCurrencyService,
             'deviceBrand': KalturaDeviceBrandService,
             'deviceFamily': KalturaDeviceFamilyService,
