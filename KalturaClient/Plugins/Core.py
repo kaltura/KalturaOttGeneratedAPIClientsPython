@@ -42,7 +42,7 @@ from ..Base import (
     KalturaServiceBase,
 )
 
-API_VERSION = '4.8.0.43151'
+API_VERSION = '4.8.2.15840'
 
 ########## enums ##########
 # @package Kaltura
@@ -5875,7 +5875,8 @@ class KalturaCouponsGroup(KalturaObjectBase):
             endDate=NotImplemented,
             maxUsesNumber=NotImplemented,
             maxUsesNumberOnRenewableSub=NotImplemented,
-            couponGroupType=NotImplemented):
+            couponGroupType=NotImplemented,
+            maxHouseholdUses=NotImplemented):
         KalturaObjectBase.__init__(self)
 
         # Coupon group identifier
@@ -5911,6 +5912,10 @@ class KalturaCouponsGroup(KalturaObjectBase):
         # @var KalturaCouponGroupType
         self.couponGroupType = couponGroupType
 
+        # Maximum number of uses per household for each coupon in the group
+        # @var int
+        self.maxHouseholdUses = maxHouseholdUses
+
 
     PROPERTY_LOADERS = {
         'id': getXmlNodeText, 
@@ -5921,6 +5926,7 @@ class KalturaCouponsGroup(KalturaObjectBase):
         'maxUsesNumber': getXmlNodeInt, 
         'maxUsesNumberOnRenewableSub': getXmlNodeInt, 
         'couponGroupType': (KalturaEnumsFactory.createString, "KalturaCouponGroupType"), 
+        'maxHouseholdUses': getXmlNodeInt, 
     }
 
     def fromXml(self, node):
@@ -5937,6 +5943,7 @@ class KalturaCouponsGroup(KalturaObjectBase):
         kparams.addIntIfDefined("maxUsesNumber", self.maxUsesNumber)
         kparams.addIntIfDefined("maxUsesNumberOnRenewableSub", self.maxUsesNumberOnRenewableSub)
         kparams.addStringEnumIfDefined("couponGroupType", self.couponGroupType)
+        kparams.addIntIfDefined("maxHouseholdUses", self.maxHouseholdUses)
         return kparams
 
     def getId(self):
@@ -5983,6 +5990,12 @@ class KalturaCouponsGroup(KalturaObjectBase):
 
     def setCouponGroupType(self, newCouponGroupType):
         self.couponGroupType = newCouponGroupType
+
+    def getMaxHouseholdUses(self):
+        return self.maxHouseholdUses
+
+    def setMaxHouseholdUses(self, newMaxHouseholdUses):
+        self.maxHouseholdUses = newMaxHouseholdUses
 
 
 # @package Kaltura
@@ -18672,6 +18685,133 @@ class KalturaCompensation(KalturaObjectBase):
 
 # @package Kaltura
 # @subpackage Client
+class KalturaCouponGenerationOptions(KalturaObjectBase):
+    """Coupon generation options"""
+
+    def __init__(self):
+        KalturaObjectBase.__init__(self)
+
+
+    PROPERTY_LOADERS = {
+    }
+
+    def fromXml(self, node):
+        KalturaObjectBase.fromXml(self, node)
+        self.fromXmlImpl(node, KalturaCouponGenerationOptions.PROPERTY_LOADERS)
+
+    def toParams(self):
+        kparams = KalturaObjectBase.toParams(self)
+        kparams.put("objectType", "KalturaCouponGenerationOptions")
+        return kparams
+
+
+# @package Kaltura
+# @subpackage Client
+class KalturaPublicCouponGenerationOptions(KalturaCouponGenerationOptions):
+    def __init__(self,
+            code=NotImplemented):
+        KalturaCouponGenerationOptions.__init__(self)
+
+        # Coupon code (name)
+        # @var string
+        self.code = code
+
+
+    PROPERTY_LOADERS = {
+        'code': getXmlNodeText, 
+    }
+
+    def fromXml(self, node):
+        KalturaCouponGenerationOptions.fromXml(self, node)
+        self.fromXmlImpl(node, KalturaPublicCouponGenerationOptions.PROPERTY_LOADERS)
+
+    def toParams(self):
+        kparams = KalturaCouponGenerationOptions.toParams(self)
+        kparams.put("objectType", "KalturaPublicCouponGenerationOptions")
+        kparams.addStringIfDefined("code", self.code)
+        return kparams
+
+    def getCode(self):
+        return self.code
+
+    def setCode(self, newCode):
+        self.code = newCode
+
+
+# @package Kaltura
+# @subpackage Client
+class KalturaRandomCouponGenerationOptions(KalturaCouponGenerationOptions):
+    def __init__(self,
+            numberOfCoupons=NotImplemented,
+            useLetters=NotImplemented,
+            useNumbers=NotImplemented,
+            useSpecialCharacters=NotImplemented):
+        KalturaCouponGenerationOptions.__init__(self)
+
+        # Number of coupons to generate
+        # @var int
+        self.numberOfCoupons = numberOfCoupons
+
+        # Indicates whether to use letters in the generated codes (default is true)
+        # @var bool
+        self.useLetters = useLetters
+
+        # Indicates whether to use numbers in the generated codes (default is true)
+        # @var bool
+        self.useNumbers = useNumbers
+
+        # Indicates whether to use special characters in the generated codes(default is true)
+        # @var bool
+        self.useSpecialCharacters = useSpecialCharacters
+
+
+    PROPERTY_LOADERS = {
+        'numberOfCoupons': getXmlNodeInt, 
+        'useLetters': getXmlNodeBool, 
+        'useNumbers': getXmlNodeBool, 
+        'useSpecialCharacters': getXmlNodeBool, 
+    }
+
+    def fromXml(self, node):
+        KalturaCouponGenerationOptions.fromXml(self, node)
+        self.fromXmlImpl(node, KalturaRandomCouponGenerationOptions.PROPERTY_LOADERS)
+
+    def toParams(self):
+        kparams = KalturaCouponGenerationOptions.toParams(self)
+        kparams.put("objectType", "KalturaRandomCouponGenerationOptions")
+        kparams.addIntIfDefined("numberOfCoupons", self.numberOfCoupons)
+        kparams.addBoolIfDefined("useLetters", self.useLetters)
+        kparams.addBoolIfDefined("useNumbers", self.useNumbers)
+        kparams.addBoolIfDefined("useSpecialCharacters", self.useSpecialCharacters)
+        return kparams
+
+    def getNumberOfCoupons(self):
+        return self.numberOfCoupons
+
+    def setNumberOfCoupons(self, newNumberOfCoupons):
+        self.numberOfCoupons = newNumberOfCoupons
+
+    def getUseLetters(self):
+        return self.useLetters
+
+    def setUseLetters(self, newUseLetters):
+        self.useLetters = newUseLetters
+
+    def getUseNumbers(self):
+        return self.useNumbers
+
+    def setUseNumbers(self, newUseNumbers):
+        self.useNumbers = newUseNumbers
+
+    def getUseSpecialCharacters(self):
+        return self.useSpecialCharacters
+
+    def setUseSpecialCharacters(self, newUseSpecialCharacters):
+        self.useSpecialCharacters = newUseSpecialCharacters
+
+
+# @package Kaltura
+# @subpackage Client
 class KalturaKeyValue(KalturaObjectBase):
     def __init__(self,
             key=NotImplemented,
@@ -21105,7 +21245,9 @@ class KalturaCoupon(KalturaObjectBase):
 
     def __init__(self,
             couponsGroup=NotImplemented,
-            status=NotImplemented):
+            status=NotImplemented,
+            totalUses=NotImplemented,
+            leftUses=NotImplemented):
         KalturaObjectBase.__init__(self)
 
         # Coupons group details
@@ -21118,10 +21260,22 @@ class KalturaCoupon(KalturaObjectBase):
         # @readonly
         self.status = status
 
+        # Total available coupon uses
+        # @var int
+        # @readonly
+        self.totalUses = totalUses
+
+        # Left coupon uses
+        # @var int
+        # @readonly
+        self.leftUses = leftUses
+
 
     PROPERTY_LOADERS = {
         'couponsGroup': (KalturaObjectFactory.create, 'KalturaCouponsGroup'), 
         'status': (KalturaEnumsFactory.createString, "KalturaCouponStatus"), 
+        'totalUses': getXmlNodeInt, 
+        'leftUses': getXmlNodeInt, 
     }
 
     def fromXml(self, node):
@@ -21138,6 +21292,12 @@ class KalturaCoupon(KalturaObjectBase):
 
     def getStatus(self):
         return self.status
+
+    def getTotalUses(self):
+        return self.totalUses
+
+    def getLeftUses(self):
+        return self.leftUses
 
 
 # @package Kaltura
@@ -23113,6 +23273,25 @@ class KalturaCouponService(KalturaServiceBase):
             return self.client.getMultiRequestResult()
         resultNode = self.client.doQueue()
         return KalturaObjectFactory.create(resultNode, 'KalturaCoupon')
+
+
+# @package Kaltura
+# @subpackage Client
+class KalturaCouponGroupService(KalturaServiceBase):
+    def __init__(self, client = None):
+        KalturaServiceBase.__init__(self, client)
+
+    def generate(self, id, couponGenerationOptions):
+        """Generate a coupon"""
+
+        kparams = KalturaParams()
+        kparams.addIntIfDefined("id", id);
+        kparams.addObjectIfDefined("couponGenerationOptions", couponGenerationOptions)
+        self.client.queueServiceActionCall("coupongroup", "generate", "None", kparams)
+        if self.client.isMultiRequest():
+            return self.client.getMultiRequestResult()
+        resultNode = self.client.doQueue()
+        return getXmlNodeText(resultNode)
 
 
 # @package Kaltura
@@ -26294,6 +26473,7 @@ class KalturaCoreClient(KalturaClientPlugin):
             'configurations': KalturaConfigurationsService,
             'country': KalturaCountryService,
             'coupon': KalturaCouponService,
+            'couponGroup': KalturaCouponGroupService,
             'currency': KalturaCurrencyService,
             'deviceBrand': KalturaDeviceBrandService,
             'deviceFamily': KalturaDeviceFamilyService,
@@ -26761,6 +26941,9 @@ class KalturaCoreClient(KalturaClientPlugin):
             'KalturaAssetStatisticsQuery': KalturaAssetStatisticsQuery,
             'KalturaCDNPartnerSettings': KalturaCDNPartnerSettings,
             'KalturaCompensation': KalturaCompensation,
+            'KalturaCouponGenerationOptions': KalturaCouponGenerationOptions,
+            'KalturaPublicCouponGenerationOptions': KalturaPublicCouponGenerationOptions,
+            'KalturaRandomCouponGenerationOptions': KalturaRandomCouponGenerationOptions,
             'KalturaKeyValue': KalturaKeyValue,
             'KalturaEmailMessage': KalturaEmailMessage,
             'KalturaEntitlementRenewalBase': KalturaEntitlementRenewalBase,
