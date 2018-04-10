@@ -42,7 +42,7 @@ from ..Base import (
     KalturaServiceBase,
 )
 
-API_VERSION = '4.8.24.24615'
+API_VERSION = '4.8.31.29070'
 
 ########## enums ##########
 # @package Kaltura
@@ -7274,6 +7274,43 @@ class KalturaSubscriptionPrice(KalturaProductPrice):
 
     def setEndDate(self, newEndDate):
         self.endDate = newEndDate
+
+
+# @package Kaltura
+# @subpackage Client
+class KalturaCouponsGroupListResponse(KalturaListResponse):
+    """Coupons group list"""
+
+    def __init__(self,
+            totalCount=NotImplemented,
+            objects=NotImplemented):
+        KalturaListResponse.__init__(self,
+            totalCount)
+
+        # A list of coupons groups
+        # @var array of KalturaCouponsGroup
+        self.objects = objects
+
+
+    PROPERTY_LOADERS = {
+        'objects': (KalturaObjectFactory.createArray, 'KalturaCouponsGroup'), 
+    }
+
+    def fromXml(self, node):
+        KalturaListResponse.fromXml(self, node)
+        self.fromXmlImpl(node, KalturaCouponsGroupListResponse.PROPERTY_LOADERS)
+
+    def toParams(self):
+        kparams = KalturaListResponse.toParams(self)
+        kparams.put("objectType", "KalturaCouponsGroupListResponse")
+        kparams.addArrayIfDefined("objects", self.objects)
+        return kparams
+
+    def getObjects(self):
+        return self.objects
+
+    def setObjects(self, newObjects):
+        self.objects = newObjects
 
 
 # @package Kaltura
@@ -23304,6 +23341,16 @@ class KalturaCouponsGroupService(KalturaServiceBase):
         resultNode = self.client.doQueue()
         return KalturaObjectFactory.create(resultNode, 'KalturaCouponsGroup')
 
+    def list(self):
+        """Returns information about partner coupons groups"""
+
+        kparams = KalturaParams()
+        self.client.queueServiceActionCall("couponsgroup", "list", "KalturaCouponsGroupListResponse", kparams)
+        if self.client.isMultiRequest():
+            return self.client.getMultiRequestResult()
+        resultNode = self.client.doQueue()
+        return KalturaObjectFactory.create(resultNode, 'KalturaCouponsGroupListResponse')
+
     def update(self, id, couponsGroup):
         """Update coupons group"""
 
@@ -26777,6 +26824,7 @@ class KalturaCoreClient(KalturaClientPlugin):
             'KalturaCollectionPrice': KalturaCollectionPrice,
             'KalturaPpvPrice': KalturaPpvPrice,
             'KalturaSubscriptionPrice': KalturaSubscriptionPrice,
+            'KalturaCouponsGroupListResponse': KalturaCouponsGroupListResponse,
             'KalturaPriceDetails': KalturaPriceDetails,
             'KalturaPriceDetailsListResponse': KalturaPriceDetailsListResponse,
             'KalturaPricePlanListResponse': KalturaPricePlanListResponse,
