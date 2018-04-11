@@ -42,7 +42,7 @@ from ..Base import (
     KalturaServiceBase,
 )
 
-API_VERSION = '4.8.39.33422'
+API_VERSION = '4.8.40.35453'
 
 ########## enums ##########
 # @package Kaltura
@@ -23317,6 +23317,17 @@ class KalturaCouponService(KalturaServiceBase):
 class KalturaCouponsGroupService(KalturaServiceBase):
     def __init__(self, client = None):
         KalturaServiceBase.__init__(self, client)
+
+    def add(self, couponsGroup):
+        """Add coupons group"""
+
+        kparams = KalturaParams()
+        kparams.addObjectIfDefined("couponsGroup", couponsGroup)
+        self.client.queueServiceActionCall("couponsgroup", "add", "KalturaCouponsGroup", kparams)
+        if self.client.isMultiRequest():
+            return self.client.getMultiRequestResult()
+        resultNode = self.client.doQueue()
+        return KalturaObjectFactory.create(resultNode, 'KalturaCouponsGroup')
 
     def delete(self, id):
         """Delete a coupons group"""
