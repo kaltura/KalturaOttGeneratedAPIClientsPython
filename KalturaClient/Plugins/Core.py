@@ -42,7 +42,7 @@ from ..Base import (
     KalturaServiceBase,
 )
 
-API_VERSION = '4.8.41.11611'
+API_VERSION = '4.8.42.12370'
 
 ########## enums ##########
 # @package Kaltura
@@ -4370,6 +4370,7 @@ class KalturaUserInterest(KalturaObjectBase):
 
         # Identifier
         # @var string
+        # @readonly
         self.id = id
 
         # Topic
@@ -4389,15 +4390,11 @@ class KalturaUserInterest(KalturaObjectBase):
     def toParams(self):
         kparams = KalturaObjectBase.toParams(self)
         kparams.put("objectType", "KalturaUserInterest")
-        kparams.addStringIfDefined("id", self.id)
         kparams.addObjectIfDefined("topic", self.topic)
         return kparams
 
     def getId(self):
         return self.id
-
-    def setId(self, newId):
-        self.id = newId
 
     def getTopic(self):
         return self.topic
