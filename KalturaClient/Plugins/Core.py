@@ -42,7 +42,7 @@ from ..Base import (
     KalturaServiceBase,
 )
 
-API_VERSION = '4.8.45.16157'
+API_VERSION = '4.8.46.16603'
 
 ########## enums ##########
 # @package Kaltura
@@ -5867,7 +5867,6 @@ class KalturaCouponsGroup(KalturaObjectBase):
     def __init__(self,
             id=NotImplemented,
             name=NotImplemented,
-            descriptions=NotImplemented,
             startDate=NotImplemented,
             endDate=NotImplemented,
             maxUsesNumber=NotImplemented,
@@ -5884,10 +5883,6 @@ class KalturaCouponsGroup(KalturaObjectBase):
         # Coupon group name
         # @var string
         self.name = name
-
-        # A list of the descriptions of the coupon group on different languages (language code and translation)
-        # @var array of KalturaTranslationToken
-        self.descriptions = descriptions
 
         # The first date the coupons in this coupons group are valid
         # @var int
@@ -5917,7 +5912,6 @@ class KalturaCouponsGroup(KalturaObjectBase):
     PROPERTY_LOADERS = {
         'id': getXmlNodeText, 
         'name': getXmlNodeText, 
-        'descriptions': (KalturaObjectFactory.createArray, 'KalturaTranslationToken'), 
         'startDate': getXmlNodeInt, 
         'endDate': getXmlNodeInt, 
         'maxUsesNumber': getXmlNodeInt, 
@@ -5934,7 +5928,6 @@ class KalturaCouponsGroup(KalturaObjectBase):
         kparams = KalturaObjectBase.toParams(self)
         kparams.put("objectType", "KalturaCouponsGroup")
         kparams.addStringIfDefined("name", self.name)
-        kparams.addArrayIfDefined("descriptions", self.descriptions)
         kparams.addIntIfDefined("startDate", self.startDate)
         kparams.addIntIfDefined("endDate", self.endDate)
         kparams.addIntIfDefined("maxUsesNumber", self.maxUsesNumber)
@@ -5951,12 +5944,6 @@ class KalturaCouponsGroup(KalturaObjectBase):
 
     def setName(self, newName):
         self.name = newName
-
-    def getDescriptions(self):
-        return self.descriptions
-
-    def setDescriptions(self, newDescriptions):
-        self.descriptions = newDescriptions
 
     def getStartDate(self):
         return self.startDate
