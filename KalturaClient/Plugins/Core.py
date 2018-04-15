@@ -29,9 +29,20 @@
 # @subpackage Client
 from __future__ import absolute_import
 
-from ..Base import *
+from ..Base import (
+    getXmlNodeBool,
+    getXmlNodeFloat,
+    getXmlNodeInt,
+    getXmlNodeText,
+    KalturaClientPlugin,
+    KalturaEnumsFactory,
+    KalturaObjectBase,
+    KalturaObjectFactory,
+    KalturaParams,
+    KalturaServiceBase,
+)
 
-API_VERSION = '4.6.38.25393'
+API_VERSION = '4.6.38.20819'
 
 ########## enums ##########
 # @package Kaltura
