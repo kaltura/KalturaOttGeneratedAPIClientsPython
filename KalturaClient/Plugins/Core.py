@@ -42,7 +42,7 @@ from ..Base import (
     KalturaServiceBase,
 )
 
-API_VERSION = '4.8.46.19362'
+API_VERSION = '4.8.50.22085'
 
 ########## enums ##########
 # @package Kaltura
@@ -5872,7 +5872,8 @@ class KalturaCouponsGroup(KalturaObjectBase):
             maxUsesNumber=NotImplemented,
             maxUsesNumberOnRenewableSub=NotImplemented,
             couponGroupType=NotImplemented,
-            maxHouseholdUses=NotImplemented):
+            maxHouseholdUses=NotImplemented,
+            discountCode=NotImplemented):
         KalturaObjectBase.__init__(self)
 
         # Coupon group identifier
@@ -5908,6 +5909,10 @@ class KalturaCouponsGroup(KalturaObjectBase):
         # @var int
         self.maxHouseholdUses = maxHouseholdUses
 
+        # Discount code
+        # @var int
+        self.discountCode = discountCode
+
 
     PROPERTY_LOADERS = {
         'id': getXmlNodeText, 
@@ -5918,6 +5923,7 @@ class KalturaCouponsGroup(KalturaObjectBase):
         'maxUsesNumberOnRenewableSub': getXmlNodeInt, 
         'couponGroupType': (KalturaEnumsFactory.createString, "KalturaCouponGroupType"), 
         'maxHouseholdUses': getXmlNodeInt, 
+        'discountCode': getXmlNodeInt, 
     }
 
     def fromXml(self, node):
@@ -5934,6 +5940,7 @@ class KalturaCouponsGroup(KalturaObjectBase):
         kparams.addIntIfDefined("maxUsesNumberOnRenewableSub", self.maxUsesNumberOnRenewableSub)
         kparams.addStringEnumIfDefined("couponGroupType", self.couponGroupType)
         kparams.addIntIfDefined("maxHouseholdUses", self.maxHouseholdUses)
+        kparams.addIntIfDefined("discountCode", self.discountCode)
         return kparams
 
     def getId(self):
@@ -5980,6 +5987,12 @@ class KalturaCouponsGroup(KalturaObjectBase):
 
     def setMaxHouseholdUses(self, newMaxHouseholdUses):
         self.maxHouseholdUses = newMaxHouseholdUses
+
+    def getDiscountCode(self):
+        return self.discountCode
+
+    def setDiscountCode(self, newDiscountCode):
+        self.discountCode = newDiscountCode
 
 
 # @package Kaltura
