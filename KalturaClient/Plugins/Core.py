@@ -42,7 +42,7 @@ from ..Base import (
     KalturaServiceBase,
 )
 
-API_VERSION = '4.8.58.16731'
+API_VERSION = '4.8.59.25135'
 
 ########## enums ##########
 # @package Kaltura
@@ -17858,7 +17858,9 @@ class KalturaAppToken(KalturaObjectBase):
             hashType=NotImplemented,
             sessionPrivileges=NotImplemented,
             token=NotImplemented,
-            sessionUserId=NotImplemented):
+            sessionUserId=NotImplemented,
+            createDate=NotImplemented,
+            updateDate=NotImplemented):
         KalturaObjectBase.__init__(self)
 
         # The id of the application token
@@ -17896,6 +17898,16 @@ class KalturaAppToken(KalturaObjectBase):
         # @var string
         self.sessionUserId = sessionUserId
 
+        # Create date
+        # @var int
+        # @readonly
+        self.createDate = createDate
+
+        # Update date
+        # @var int
+        # @readonly
+        self.updateDate = updateDate
+
 
     PROPERTY_LOADERS = {
         'id': getXmlNodeText, 
@@ -17906,6 +17918,8 @@ class KalturaAppToken(KalturaObjectBase):
         'sessionPrivileges': getXmlNodeText, 
         'token': getXmlNodeText, 
         'sessionUserId': getXmlNodeText, 
+        'createDate': getXmlNodeInt, 
+        'updateDate': getXmlNodeInt, 
     }
 
     def fromXml(self, node):
@@ -17960,6 +17974,12 @@ class KalturaAppToken(KalturaObjectBase):
 
     def setSessionUserId(self, newSessionUserId):
         self.sessionUserId = newSessionUserId
+
+    def getCreateDate(self):
+        return self.createDate
+
+    def getUpdateDate(self):
+        return self.updateDate
 
 
 # @package Kaltura
