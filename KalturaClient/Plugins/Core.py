@@ -42,7 +42,7 @@ from ..Base import (
     KalturaServiceBase,
 )
 
-API_VERSION = '4.72.226.20652'
+API_VERSION = '4.72.227.25217'
 
 ########## enums ##########
 # @package Kaltura
@@ -11695,14 +11695,17 @@ class KalturaRatio(KalturaObjectBase):
 
         # Name
         # @var string
+        # @insertonly
         self.name = name
 
         # Height
         # @var int
+        # @insertonly
         self.height = height
 
         # Width
         # @var int
+        # @insertonly
         self.width = width
 
         # Accepted error margin precentage of an image uploaded for this ratio
@@ -27450,6 +27453,18 @@ class KalturaRatioService(KalturaServiceBase):
             return self.client.getMultiRequestResult()
         resultNode = self.client.doQueue()
         return KalturaObjectFactory.create(resultNode, 'KalturaRatioListResponse')
+
+    def update(self, id, ratio):
+        """Update group ratio&#39;s PrecisionPrecentage"""
+
+        kparams = KalturaParams()
+        kparams.addIntIfDefined("id", id);
+        kparams.addObjectIfDefined("ratio", ratio)
+        self.client.queueServiceActionCall("ratio", "update", "KalturaRatio", kparams)
+        if self.client.isMultiRequest():
+            return self.client.getMultiRequestResult()
+        resultNode = self.client.doQueue()
+        return KalturaObjectFactory.create(resultNode, 'KalturaRatio')
 
 
 # @package Kaltura
