@@ -42,7 +42,7 @@ from ..Base import (
     KalturaServiceBase,
 )
 
-API_VERSION = '4.72.233.25524'
+API_VERSION = '4.72.234.28978'
 
 ########## enums ##########
 # @package Kaltura
@@ -18742,6 +18742,7 @@ class KalturaChannelsFilter(KalturaFilter):
     def __init__(self,
             orderBy=NotImplemented,
             idEqual=NotImplemented,
+            mediaIdEqual=NotImplemented,
             nameEqual=NotImplemented,
             nameStartsWith=NotImplemented):
         KalturaFilter.__init__(self,
@@ -18751,17 +18752,22 @@ class KalturaChannelsFilter(KalturaFilter):
         # @var int
         self.idEqual = idEqual
 
+        # media identifier to filter by
+        # @var int
+        self.mediaIdEqual = mediaIdEqual
+
         # Exact channel name to filter by
         # @var string
         self.nameEqual = nameEqual
 
-        # Channel name starts with (autocomplete)
+        # Channel name starts with (auto-complete)
         # @var string
         self.nameStartsWith = nameStartsWith
 
 
     PROPERTY_LOADERS = {
         'idEqual': getXmlNodeInt, 
+        'mediaIdEqual': getXmlNodeInt, 
         'nameEqual': getXmlNodeText, 
         'nameStartsWith': getXmlNodeText, 
     }
@@ -18774,6 +18780,7 @@ class KalturaChannelsFilter(KalturaFilter):
         kparams = KalturaFilter.toParams(self)
         kparams.put("objectType", "KalturaChannelsFilter")
         kparams.addIntIfDefined("idEqual", self.idEqual)
+        kparams.addIntIfDefined("mediaIdEqual", self.mediaIdEqual)
         kparams.addStringIfDefined("nameEqual", self.nameEqual)
         kparams.addStringIfDefined("nameStartsWith", self.nameStartsWith)
         return kparams
@@ -18783,6 +18790,12 @@ class KalturaChannelsFilter(KalturaFilter):
 
     def setIdEqual(self, newIdEqual):
         self.idEqual = newIdEqual
+
+    def getMediaIdEqual(self):
+        return self.mediaIdEqual
+
+    def setMediaIdEqual(self, newMediaIdEqual):
+        self.mediaIdEqual = newMediaIdEqual
 
     def getNameEqual(self):
         return self.nameEqual
