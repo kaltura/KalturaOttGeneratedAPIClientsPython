@@ -42,7 +42,7 @@ from ..Base import (
     KalturaServiceBase,
 )
 
-API_VERSION = '4.72.242.17293'
+API_VERSION = '4.72.243.17781'
 
 ########## enums ##########
 # @package Kaltura
@@ -11568,7 +11568,9 @@ class KalturaDynamicChannel(KalturaChannel):
             orderBy=NotImplemented,
             createDate=NotImplemented,
             updateDate=NotImplemented,
-            kSql=NotImplemented):
+            kSql=NotImplemented,
+            assetTypes=NotImplemented,
+            groupBy=NotImplemented):
         KalturaChannel.__init__(self,
             id,
             name,
@@ -11597,9 +11599,20 @@ class KalturaDynamicChannel(KalturaChannel):
         # @var string
         self.kSql = kSql
 
+        # Asset types in the channel.
+        #             -26 is EPG
+        # @var array of KalturaIntegerValue
+        self.assetTypes = assetTypes
+
+        # Channel group by
+        # @var KalturaAssetGroupBy
+        self.groupBy = groupBy
+
 
     PROPERTY_LOADERS = {
         'kSql': getXmlNodeText, 
+        'assetTypes': (KalturaObjectFactory.createArray, 'KalturaIntegerValue'), 
+        'groupBy': (KalturaObjectFactory.create, 'KalturaAssetGroupBy'), 
     }
 
     def fromXml(self, node):
@@ -11610,6 +11623,8 @@ class KalturaDynamicChannel(KalturaChannel):
         kparams = KalturaChannel.toParams(self)
         kparams.put("objectType", "KalturaDynamicChannel")
         kparams.addStringIfDefined("kSql", self.kSql)
+        kparams.addArrayIfDefined("assetTypes", self.assetTypes)
+        kparams.addObjectIfDefined("groupBy", self.groupBy)
         return kparams
 
     def getKSql(self):
@@ -11617,6 +11632,18 @@ class KalturaDynamicChannel(KalturaChannel):
 
     def setKSql(self, newKSql):
         self.kSql = newKSql
+
+    def getAssetTypes(self):
+        return self.assetTypes
+
+    def setAssetTypes(self, newAssetTypes):
+        self.assetTypes = newAssetTypes
+
+    def getGroupBy(self):
+        return self.groupBy
+
+    def setGroupBy(self, newGroupBy):
+        self.groupBy = newGroupBy
 
 
 # @package Kaltura
