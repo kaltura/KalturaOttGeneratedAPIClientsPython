@@ -42,7 +42,7 @@ from ..Base import (
     KalturaServiceBase,
 )
 
-API_VERSION = '4.72.241.16444'
+API_VERSION = '4.72.242.17293'
 
 ########## enums ##########
 # @package Kaltura
@@ -11568,9 +11568,7 @@ class KalturaDynamicChannel(KalturaChannel):
             orderBy=NotImplemented,
             createDate=NotImplemented,
             updateDate=NotImplemented,
-            kSql=NotImplemented,
-            channelAssetTypes=NotImplemented,
-            channelGroupBy=NotImplemented):
+            kSql=NotImplemented):
         KalturaChannel.__init__(self,
             id,
             name,
@@ -11599,20 +11597,9 @@ class KalturaDynamicChannel(KalturaChannel):
         # @var string
         self.kSql = kSql
 
-        # Asset types in the channel.
-        #             -26 is EPG
-        # @var array of KalturaIntegerValue
-        self.channelAssetTypes = channelAssetTypes
-
-        # Channel group by
-        # @var KalturaAssetGroupBy
-        self.channelGroupBy = channelGroupBy
-
 
     PROPERTY_LOADERS = {
         'kSql': getXmlNodeText, 
-        'channelAssetTypes': (KalturaObjectFactory.createArray, 'KalturaIntegerValue'), 
-        'channelGroupBy': (KalturaObjectFactory.create, 'KalturaAssetGroupBy'), 
     }
 
     def fromXml(self, node):
@@ -11623,8 +11610,6 @@ class KalturaDynamicChannel(KalturaChannel):
         kparams = KalturaChannel.toParams(self)
         kparams.put("objectType", "KalturaDynamicChannel")
         kparams.addStringIfDefined("kSql", self.kSql)
-        kparams.addArrayIfDefined("channelAssetTypes", self.channelAssetTypes)
-        kparams.addObjectIfDefined("channelGroupBy", self.channelGroupBy)
         return kparams
 
     def getKSql(self):
@@ -11632,18 +11617,6 @@ class KalturaDynamicChannel(KalturaChannel):
 
     def setKSql(self, newKSql):
         self.kSql = newKSql
-
-    def getChannelAssetTypes(self):
-        return self.channelAssetTypes
-
-    def setChannelAssetTypes(self, newChannelAssetTypes):
-        self.channelAssetTypes = newChannelAssetTypes
-
-    def getChannelGroupBy(self):
-        return self.channelGroupBy
-
-    def setChannelGroupBy(self, newChannelGroupBy):
-        self.channelGroupBy = newChannelGroupBy
 
 
 # @package Kaltura
