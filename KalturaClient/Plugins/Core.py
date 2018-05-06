@@ -42,7 +42,7 @@ from ..Base import (
     KalturaServiceBase,
 )
 
-API_VERSION = '4.72.244.23697'
+API_VERSION = '4.72.245.26835'
 
 ########## enums ##########
 # @package Kaltura
@@ -12540,7 +12540,14 @@ class KalturaLinearMediaAsset(KalturaMediaAsset):
             enableRecordingPlaybackNonEntitledChannelState=NotImplemented,
             enableTrickPlayState=NotImplemented,
             externalIngestId=NotImplemented,
-            externalCdvrId=NotImplemented):
+            externalCdvrId=NotImplemented,
+            enableCdvr=NotImplemented,
+            enableCatchUp=NotImplemented,
+            enableStartOver=NotImplemented,
+            catchUpBuffer=NotImplemented,
+            trickPlayBuffer=NotImplemented,
+            enableRecordingPlaybackNonEntitledChannel=NotImplemented,
+            enableTrickPlay=NotImplemented):
         KalturaMediaAsset.__init__(self,
             id,
             type,
@@ -12599,6 +12606,41 @@ class KalturaLinearMediaAsset(KalturaMediaAsset):
         # @var string
         self.externalCdvrId = externalCdvrId
 
+        # Is CDVR enabled for this asset
+        # @var bool
+        # @readonly
+        self.enableCdvr = enableCdvr
+
+        # Is catch-up enabled for this asset
+        # @var bool
+        # @readonly
+        self.enableCatchUp = enableCatchUp
+
+        # Is start over enabled for this asset
+        # @var bool
+        # @readonly
+        self.enableStartOver = enableStartOver
+
+        # Catch-up buffer
+        # @var int
+        # @readonly
+        self.catchUpBuffer = catchUpBuffer
+
+        # buffer Trick-play
+        # @var int
+        # @readonly
+        self.trickPlayBuffer = trickPlayBuffer
+
+        # Is recording playback for non entitled channel enabled for this asset
+        # @var bool
+        # @readonly
+        self.enableRecordingPlaybackNonEntitledChannel = enableRecordingPlaybackNonEntitledChannel
+
+        # Is trick-play enabled for this asset
+        # @var bool
+        # @readonly
+        self.enableTrickPlay = enableTrickPlay
+
 
     PROPERTY_LOADERS = {
         'enableCdvrState': (KalturaEnumsFactory.createString, "KalturaTimeShiftedTvState"), 
@@ -12610,6 +12652,13 @@ class KalturaLinearMediaAsset(KalturaMediaAsset):
         'enableTrickPlayState': (KalturaEnumsFactory.createString, "KalturaTimeShiftedTvState"), 
         'externalIngestId': getXmlNodeText, 
         'externalCdvrId': getXmlNodeText, 
+        'enableCdvr': getXmlNodeBool, 
+        'enableCatchUp': getXmlNodeBool, 
+        'enableStartOver': getXmlNodeBool, 
+        'catchUpBuffer': getXmlNodeInt, 
+        'trickPlayBuffer': getXmlNodeInt, 
+        'enableRecordingPlaybackNonEntitledChannel': getXmlNodeBool, 
+        'enableTrickPlay': getXmlNodeBool, 
     }
 
     def fromXml(self, node):
@@ -12683,6 +12732,27 @@ class KalturaLinearMediaAsset(KalturaMediaAsset):
 
     def setExternalCdvrId(self, newExternalCdvrId):
         self.externalCdvrId = newExternalCdvrId
+
+    def getEnableCdvr(self):
+        return self.enableCdvr
+
+    def getEnableCatchUp(self):
+        return self.enableCatchUp
+
+    def getEnableStartOver(self):
+        return self.enableStartOver
+
+    def getCatchUpBuffer(self):
+        return self.catchUpBuffer
+
+    def getTrickPlayBuffer(self):
+        return self.trickPlayBuffer
+
+    def getEnableRecordingPlaybackNonEntitledChannel(self):
+        return self.enableRecordingPlaybackNonEntitledChannel
+
+    def getEnableTrickPlay(self):
+        return self.enableTrickPlay
 
 
 # @package Kaltura
