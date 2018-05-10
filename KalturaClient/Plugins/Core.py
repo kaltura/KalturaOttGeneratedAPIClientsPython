@@ -42,7 +42,7 @@ from ..Base import (
     KalturaServiceBase,
 )
 
-API_VERSION = '4.81.44.18995'
+API_VERSION = '4.81.46.21597'
 
 ########## enums ##########
 # @package Kaltura
@@ -1168,6 +1168,7 @@ class KalturaRuleActionType(object):
     BLOCK = "BLOCK"
     START_DATE_OFFSET = "START_DATE_OFFSET"
     END_DATE_OFFSET = "END_DATE_OFFSET"
+    ASSET_USER_BLOCK = "ASSET_USER_BLOCK"
 
     def __init__(self, value):
         self.value = value
@@ -12128,6 +12129,583 @@ class KalturaAssetHistoryListResponse(KalturaListResponse):
 
 # @package Kaltura
 # @subpackage Client
+class KalturaAssetRuleBase(KalturaObjectBase):
+    """Asset rule base"""
+
+    def __init__(self,
+            id=NotImplemented,
+            name=NotImplemented,
+            description=NotImplemented):
+        KalturaObjectBase.__init__(self)
+
+        # ID
+        # @var int
+        # @readonly
+        self.id = id
+
+        # Name
+        # @var string
+        self.name = name
+
+        # Description
+        # @var string
+        self.description = description
+
+
+    PROPERTY_LOADERS = {
+        'id': getXmlNodeInt, 
+        'name': getXmlNodeText, 
+        'description': getXmlNodeText, 
+    }
+
+    def fromXml(self, node):
+        KalturaObjectBase.fromXml(self, node)
+        self.fromXmlImpl(node, KalturaAssetRuleBase.PROPERTY_LOADERS)
+
+    def toParams(self):
+        kparams = KalturaObjectBase.toParams(self)
+        kparams.put("objectType", "KalturaAssetRuleBase")
+        kparams.addStringIfDefined("name", self.name)
+        kparams.addStringIfDefined("description", self.description)
+        return kparams
+
+    def getId(self):
+        return self.id
+
+    def getName(self):
+        return self.name
+
+    def setName(self, newName):
+        self.name = newName
+
+    def getDescription(self):
+        return self.description
+
+    def setDescription(self, newDescription):
+        self.description = newDescription
+
+
+# @package Kaltura
+# @subpackage Client
+class KalturaCondition(KalturaObjectBase):
+    """Condition"""
+
+    def __init__(self,
+            description=NotImplemented):
+        KalturaObjectBase.__init__(self)
+
+        # Description
+        # @var string
+        self.description = description
+
+
+    PROPERTY_LOADERS = {
+        'description': getXmlNodeText, 
+    }
+
+    def fromXml(self, node):
+        KalturaObjectBase.fromXml(self, node)
+        self.fromXmlImpl(node, KalturaCondition.PROPERTY_LOADERS)
+
+    def toParams(self):
+        kparams = KalturaObjectBase.toParams(self)
+        kparams.put("objectType", "KalturaCondition")
+        kparams.addStringIfDefined("description", self.description)
+        return kparams
+
+    def getDescription(self):
+        return self.description
+
+    def setDescription(self, newDescription):
+        self.description = newDescription
+
+
+# @package Kaltura
+# @subpackage Client
+class KalturaAssetCondition(KalturaCondition):
+    """Asset Condition"""
+
+    def __init__(self,
+            description=NotImplemented,
+            ksql=NotImplemented):
+        KalturaCondition.__init__(self,
+            description)
+
+        # KSQL
+        # @var string
+        self.ksql = ksql
+
+
+    PROPERTY_LOADERS = {
+        'ksql': getXmlNodeText, 
+    }
+
+    def fromXml(self, node):
+        KalturaCondition.fromXml(self, node)
+        self.fromXmlImpl(node, KalturaAssetCondition.PROPERTY_LOADERS)
+
+    def toParams(self):
+        kparams = KalturaCondition.toParams(self)
+        kparams.put("objectType", "KalturaAssetCondition")
+        kparams.addStringIfDefined("ksql", self.ksql)
+        return kparams
+
+    def getKsql(self):
+        return self.ksql
+
+    def setKsql(self, newKsql):
+        self.ksql = newKsql
+
+
+# @package Kaltura
+# @subpackage Client
+class KalturaRuleAction(KalturaObjectBase):
+    def __init__(self,
+            type=NotImplemented,
+            description=NotImplemented):
+        KalturaObjectBase.__init__(self)
+
+        # The type of the action
+        # @var KalturaRuleActionType
+        self.type = type
+
+        # Description
+        # @var string
+        self.description = description
+
+
+    PROPERTY_LOADERS = {
+        'type': (KalturaEnumsFactory.createString, "KalturaRuleActionType"), 
+        'description': getXmlNodeText, 
+    }
+
+    def fromXml(self, node):
+        KalturaObjectBase.fromXml(self, node)
+        self.fromXmlImpl(node, KalturaRuleAction.PROPERTY_LOADERS)
+
+    def toParams(self):
+        kparams = KalturaObjectBase.toParams(self)
+        kparams.put("objectType", "KalturaRuleAction")
+        kparams.addStringEnumIfDefined("type", self.type)
+        kparams.addStringIfDefined("description", self.description)
+        return kparams
+
+    def getType(self):
+        return self.type
+
+    def setType(self, newType):
+        self.type = newType
+
+    def getDescription(self):
+        return self.description
+
+    def setDescription(self, newDescription):
+        self.description = newDescription
+
+
+# @package Kaltura
+# @subpackage Client
+class KalturaAssetUserRuleAction(KalturaRuleAction):
+    def __init__(self,
+            type=NotImplemented,
+            description=NotImplemented):
+        KalturaRuleAction.__init__(self,
+            type,
+            description)
+
+
+    PROPERTY_LOADERS = {
+    }
+
+    def fromXml(self, node):
+        KalturaRuleAction.fromXml(self, node)
+        self.fromXmlImpl(node, KalturaAssetUserRuleAction.PROPERTY_LOADERS)
+
+    def toParams(self):
+        kparams = KalturaRuleAction.toParams(self)
+        kparams.put("objectType", "KalturaAssetUserRuleAction")
+        return kparams
+
+
+# @package Kaltura
+# @subpackage Client
+class KalturaAssetUserRule(KalturaAssetRuleBase):
+    """Asset user rule"""
+
+    def __init__(self,
+            id=NotImplemented,
+            name=NotImplemented,
+            description=NotImplemented,
+            conditions=NotImplemented,
+            actions=NotImplemented):
+        KalturaAssetRuleBase.__init__(self,
+            id,
+            name,
+            description)
+
+        # List of Ksql conditions for the user rule
+        # @var array of KalturaAssetCondition
+        self.conditions = conditions
+
+        # List of actions for the user rule
+        # @var array of KalturaAssetUserRuleAction
+        self.actions = actions
+
+
+    PROPERTY_LOADERS = {
+        'conditions': (KalturaObjectFactory.createArray, 'KalturaAssetCondition'), 
+        'actions': (KalturaObjectFactory.createArray, 'KalturaAssetUserRuleAction'), 
+    }
+
+    def fromXml(self, node):
+        KalturaAssetRuleBase.fromXml(self, node)
+        self.fromXmlImpl(node, KalturaAssetUserRule.PROPERTY_LOADERS)
+
+    def toParams(self):
+        kparams = KalturaAssetRuleBase.toParams(self)
+        kparams.put("objectType", "KalturaAssetUserRule")
+        kparams.addArrayIfDefined("conditions", self.conditions)
+        kparams.addArrayIfDefined("actions", self.actions)
+        return kparams
+
+    def getConditions(self):
+        return self.conditions
+
+    def setConditions(self, newConditions):
+        self.conditions = newConditions
+
+    def getActions(self):
+        return self.actions
+
+    def setActions(self, newActions):
+        self.actions = newActions
+
+
+# @package Kaltura
+# @subpackage Client
+class KalturaAssetUserRuleListResponse(KalturaListResponse):
+    def __init__(self,
+            totalCount=NotImplemented,
+            objects=NotImplemented):
+        KalturaListResponse.__init__(self,
+            totalCount)
+
+        # Asset rules
+        # @var array of KalturaAssetUserRule
+        self.objects = objects
+
+
+    PROPERTY_LOADERS = {
+        'objects': (KalturaObjectFactory.createArray, 'KalturaAssetUserRule'), 
+    }
+
+    def fromXml(self, node):
+        KalturaListResponse.fromXml(self, node)
+        self.fromXmlImpl(node, KalturaAssetUserRuleListResponse.PROPERTY_LOADERS)
+
+    def toParams(self):
+        kparams = KalturaListResponse.toParams(self)
+        kparams.put("objectType", "KalturaAssetUserRuleListResponse")
+        kparams.addArrayIfDefined("objects", self.objects)
+        return kparams
+
+    def getObjects(self):
+        return self.objects
+
+    def setObjects(self, newObjects):
+        self.objects = newObjects
+
+
+# @package Kaltura
+# @subpackage Client
+class KalturaAssetRuleAction(KalturaRuleAction):
+    def __init__(self,
+            type=NotImplemented,
+            description=NotImplemented):
+        KalturaRuleAction.__init__(self,
+            type,
+            description)
+
+
+    PROPERTY_LOADERS = {
+    }
+
+    def fromXml(self, node):
+        KalturaRuleAction.fromXml(self, node)
+        self.fromXmlImpl(node, KalturaAssetRuleAction.PROPERTY_LOADERS)
+
+    def toParams(self):
+        kparams = KalturaRuleAction.toParams(self)
+        kparams.put("objectType", "KalturaAssetRuleAction")
+        return kparams
+
+
+# @package Kaltura
+# @subpackage Client
+class KalturaAssetRule(KalturaAssetRuleBase):
+    """Asset rule"""
+
+    def __init__(self,
+            id=NotImplemented,
+            name=NotImplemented,
+            description=NotImplemented,
+            conditions=NotImplemented,
+            actions=NotImplemented):
+        KalturaAssetRuleBase.__init__(self,
+            id,
+            name,
+            description)
+
+        # List of conditions for the rule
+        # @var array of KalturaCondition
+        self.conditions = conditions
+
+        # List of actions for the rule
+        # @var array of KalturaAssetRuleAction
+        self.actions = actions
+
+
+    PROPERTY_LOADERS = {
+        'conditions': (KalturaObjectFactory.createArray, 'KalturaCondition'), 
+        'actions': (KalturaObjectFactory.createArray, 'KalturaAssetRuleAction'), 
+    }
+
+    def fromXml(self, node):
+        KalturaAssetRuleBase.fromXml(self, node)
+        self.fromXmlImpl(node, KalturaAssetRule.PROPERTY_LOADERS)
+
+    def toParams(self):
+        kparams = KalturaAssetRuleBase.toParams(self)
+        kparams.put("objectType", "KalturaAssetRule")
+        kparams.addArrayIfDefined("conditions", self.conditions)
+        kparams.addArrayIfDefined("actions", self.actions)
+        return kparams
+
+    def getConditions(self):
+        return self.conditions
+
+    def setConditions(self, newConditions):
+        self.conditions = newConditions
+
+    def getActions(self):
+        return self.actions
+
+    def setActions(self, newActions):
+        self.actions = newActions
+
+
+# @package Kaltura
+# @subpackage Client
+class KalturaCountryCondition(KalturaCondition):
+    """Country condition"""
+
+    def __init__(self,
+            description=NotImplemented,
+            not_=NotImplemented,
+            countries=NotImplemented):
+        KalturaCondition.__init__(self,
+            description)
+
+        # Indicates whether to apply not on the other properties in the condition
+        # @var bool
+        self.not_ = not_
+
+        # Comma separated countries IDs list
+        # @var string
+        self.countries = countries
+
+
+    PROPERTY_LOADERS = {
+        'not_': getXmlNodeBool, 
+        'countries': getXmlNodeText, 
+    }
+
+    def fromXml(self, node):
+        KalturaCondition.fromXml(self, node)
+        self.fromXmlImpl(node, KalturaCountryCondition.PROPERTY_LOADERS)
+
+    def toParams(self):
+        kparams = KalturaCondition.toParams(self)
+        kparams.put("objectType", "KalturaCountryCondition")
+        kparams.addBoolIfDefined("not", self.not_)
+        kparams.addStringIfDefined("countries", self.countries)
+        return kparams
+
+    def getNot_(self):
+        return self.not_
+
+    def setNot_(self, newNot_):
+        self.not_ = newNot_
+
+    def getCountries(self):
+        return self.countries
+
+    def setCountries(self, newCountries):
+        self.countries = newCountries
+
+
+# @package Kaltura
+# @subpackage Client
+class KalturaAssetUserBlockRuleAction(KalturaAssetUserRuleAction):
+    def __init__(self,
+            type=NotImplemented,
+            description=NotImplemented):
+        KalturaAssetUserRuleAction.__init__(self,
+            type,
+            description)
+
+
+    PROPERTY_LOADERS = {
+    }
+
+    def fromXml(self, node):
+        KalturaAssetUserRuleAction.fromXml(self, node)
+        self.fromXmlImpl(node, KalturaAssetUserBlockRuleAction.PROPERTY_LOADERS)
+
+    def toParams(self):
+        kparams = KalturaAssetUserRuleAction.toParams(self)
+        kparams.put("objectType", "KalturaAssetUserBlockRuleAction")
+        return kparams
+
+
+# @package Kaltura
+# @subpackage Client
+class KalturaAccessControlBlockAction(KalturaAssetRuleAction):
+    def __init__(self,
+            type=NotImplemented,
+            description=NotImplemented):
+        KalturaAssetRuleAction.__init__(self,
+            type,
+            description)
+
+
+    PROPERTY_LOADERS = {
+    }
+
+    def fromXml(self, node):
+        KalturaAssetRuleAction.fromXml(self, node)
+        self.fromXmlImpl(node, KalturaAccessControlBlockAction.PROPERTY_LOADERS)
+
+    def toParams(self):
+        kparams = KalturaAssetRuleAction.toParams(self)
+        kparams.put("objectType", "KalturaAccessControlBlockAction")
+        return kparams
+
+
+# @package Kaltura
+# @subpackage Client
+class KalturaTimeOffsetRuleAction(KalturaAssetRuleAction):
+    """Time offset action"""
+
+    def __init__(self,
+            type=NotImplemented,
+            description=NotImplemented,
+            offset=NotImplemented,
+            timeZone=NotImplemented):
+        KalturaAssetRuleAction.__init__(self,
+            type,
+            description)
+
+        # Offset in seconds
+        # @var int
+        self.offset = offset
+
+        # Indicates whether to add time zone offset to the time
+        # @var bool
+        self.timeZone = timeZone
+
+
+    PROPERTY_LOADERS = {
+        'offset': getXmlNodeInt, 
+        'timeZone': getXmlNodeBool, 
+    }
+
+    def fromXml(self, node):
+        KalturaAssetRuleAction.fromXml(self, node)
+        self.fromXmlImpl(node, KalturaTimeOffsetRuleAction.PROPERTY_LOADERS)
+
+    def toParams(self):
+        kparams = KalturaAssetRuleAction.toParams(self)
+        kparams.put("objectType", "KalturaTimeOffsetRuleAction")
+        kparams.addIntIfDefined("offset", self.offset)
+        kparams.addBoolIfDefined("timeZone", self.timeZone)
+        return kparams
+
+    def getOffset(self):
+        return self.offset
+
+    def setOffset(self, newOffset):
+        self.offset = newOffset
+
+    def getTimeZone(self):
+        return self.timeZone
+
+    def setTimeZone(self, newTimeZone):
+        self.timeZone = newTimeZone
+
+
+# @package Kaltura
+# @subpackage Client
+class KalturaEndDateOffsetRuleAction(KalturaTimeOffsetRuleAction):
+    """End date offset action"""
+
+    def __init__(self,
+            type=NotImplemented,
+            description=NotImplemented,
+            offset=NotImplemented,
+            timeZone=NotImplemented):
+        KalturaTimeOffsetRuleAction.__init__(self,
+            type,
+            description,
+            offset,
+            timeZone)
+
+
+    PROPERTY_LOADERS = {
+    }
+
+    def fromXml(self, node):
+        KalturaTimeOffsetRuleAction.fromXml(self, node)
+        self.fromXmlImpl(node, KalturaEndDateOffsetRuleAction.PROPERTY_LOADERS)
+
+    def toParams(self):
+        kparams = KalturaTimeOffsetRuleAction.toParams(self)
+        kparams.put("objectType", "KalturaEndDateOffsetRuleAction")
+        return kparams
+
+
+# @package Kaltura
+# @subpackage Client
+class KalturaStartDateOffsetRuleAction(KalturaTimeOffsetRuleAction):
+    """Start date offset action"""
+
+    def __init__(self,
+            type=NotImplemented,
+            description=NotImplemented,
+            offset=NotImplemented,
+            timeZone=NotImplemented):
+        KalturaTimeOffsetRuleAction.__init__(self,
+            type,
+            description,
+            offset,
+            timeZone)
+
+
+    PROPERTY_LOADERS = {
+    }
+
+    def fromXml(self, node):
+        KalturaTimeOffsetRuleAction.fromXml(self, node)
+        self.fromXmlImpl(node, KalturaStartDateOffsetRuleAction.PROPERTY_LOADERS)
+
+    def toParams(self):
+        kparams = KalturaTimeOffsetRuleAction.toParams(self)
+        kparams.put("objectType", "KalturaStartDateOffsetRuleAction")
+        return kparams
+
+
+# @package Kaltura
+# @subpackage Client
 class KalturaCurrency(KalturaObjectBase):
     """Currency details"""
 
@@ -12237,171 +12815,6 @@ class KalturaCurrencyListResponse(KalturaListResponse):
 
 # @package Kaltura
 # @subpackage Client
-class KalturaCondition(KalturaObjectBase):
-    """Condition"""
-
-    def __init__(self,
-            description=NotImplemented):
-        KalturaObjectBase.__init__(self)
-
-        # Description
-        # @var string
-        self.description = description
-
-
-    PROPERTY_LOADERS = {
-        'description': getXmlNodeText, 
-    }
-
-    def fromXml(self, node):
-        KalturaObjectBase.fromXml(self, node)
-        self.fromXmlImpl(node, KalturaCondition.PROPERTY_LOADERS)
-
-    def toParams(self):
-        kparams = KalturaObjectBase.toParams(self)
-        kparams.put("objectType", "KalturaCondition")
-        kparams.addStringIfDefined("description", self.description)
-        return kparams
-
-    def getDescription(self):
-        return self.description
-
-    def setDescription(self, newDescription):
-        self.description = newDescription
-
-
-# @package Kaltura
-# @subpackage Client
-class KalturaRuleAction(KalturaObjectBase):
-    def __init__(self,
-            type=NotImplemented,
-            description=NotImplemented):
-        KalturaObjectBase.__init__(self)
-
-        # The type of the action
-        # @var KalturaRuleActionType
-        self.type = type
-
-        # Description
-        # @var string
-        self.description = description
-
-
-    PROPERTY_LOADERS = {
-        'type': (KalturaEnumsFactory.createString, "KalturaRuleActionType"), 
-        'description': getXmlNodeText, 
-    }
-
-    def fromXml(self, node):
-        KalturaObjectBase.fromXml(self, node)
-        self.fromXmlImpl(node, KalturaRuleAction.PROPERTY_LOADERS)
-
-    def toParams(self):
-        kparams = KalturaObjectBase.toParams(self)
-        kparams.put("objectType", "KalturaRuleAction")
-        kparams.addStringEnumIfDefined("type", self.type)
-        kparams.addStringIfDefined("description", self.description)
-        return kparams
-
-    def getType(self):
-        return self.type
-
-    def setType(self, newType):
-        self.type = newType
-
-    def getDescription(self):
-        return self.description
-
-    def setDescription(self, newDescription):
-        self.description = newDescription
-
-
-# @package Kaltura
-# @subpackage Client
-class KalturaAssetRule(KalturaObjectBase):
-    """Asset rule"""
-
-    def __init__(self,
-            id=NotImplemented,
-            name=NotImplemented,
-            description=NotImplemented,
-            conditions=NotImplemented,
-            actions=NotImplemented):
-        KalturaObjectBase.__init__(self)
-
-        # ID
-        # @var int
-        # @readonly
-        self.id = id
-
-        # Name
-        # @var string
-        self.name = name
-
-        # Description
-        # @var string
-        self.description = description
-
-        # List of conditions for the rule
-        # @var array of KalturaCondition
-        self.conditions = conditions
-
-        # List of actions for the rule
-        # @var array of KalturaRuleAction
-        self.actions = actions
-
-
-    PROPERTY_LOADERS = {
-        'id': getXmlNodeInt, 
-        'name': getXmlNodeText, 
-        'description': getXmlNodeText, 
-        'conditions': (KalturaObjectFactory.createArray, 'KalturaCondition'), 
-        'actions': (KalturaObjectFactory.createArray, 'KalturaRuleAction'), 
-    }
-
-    def fromXml(self, node):
-        KalturaObjectBase.fromXml(self, node)
-        self.fromXmlImpl(node, KalturaAssetRule.PROPERTY_LOADERS)
-
-    def toParams(self):
-        kparams = KalturaObjectBase.toParams(self)
-        kparams.put("objectType", "KalturaAssetRule")
-        kparams.addStringIfDefined("name", self.name)
-        kparams.addStringIfDefined("description", self.description)
-        kparams.addArrayIfDefined("conditions", self.conditions)
-        kparams.addArrayIfDefined("actions", self.actions)
-        return kparams
-
-    def getId(self):
-        return self.id
-
-    def getName(self):
-        return self.name
-
-    def setName(self, newName):
-        self.name = newName
-
-    def getDescription(self):
-        return self.description
-
-    def setDescription(self, newDescription):
-        self.description = newDescription
-
-    def getConditions(self):
-        return self.conditions
-
-    def setConditions(self, newConditions):
-        self.conditions = newConditions
-
-    def getActions(self):
-        return self.actions
-
-    def setActions(self, newActions):
-        self.actions = newActions
-
-
-# @package Kaltura
-# @subpackage Client
 class KalturaAssetRuleListResponse(KalturaListResponse):
     def __init__(self,
             totalCount=NotImplemented,
@@ -12433,229 +12846,6 @@ class KalturaAssetRuleListResponse(KalturaListResponse):
 
     def setObjects(self, newObjects):
         self.objects = newObjects
-
-
-# @package Kaltura
-# @subpackage Client
-class KalturaAssetCondition(KalturaCondition):
-    """Asset Condition"""
-
-    def __init__(self,
-            description=NotImplemented,
-            ksql=NotImplemented):
-        KalturaCondition.__init__(self,
-            description)
-
-        # KSQL
-        # @var string
-        self.ksql = ksql
-
-
-    PROPERTY_LOADERS = {
-        'ksql': getXmlNodeText, 
-    }
-
-    def fromXml(self, node):
-        KalturaCondition.fromXml(self, node)
-        self.fromXmlImpl(node, KalturaAssetCondition.PROPERTY_LOADERS)
-
-    def toParams(self):
-        kparams = KalturaCondition.toParams(self)
-        kparams.put("objectType", "KalturaAssetCondition")
-        kparams.addStringIfDefined("ksql", self.ksql)
-        return kparams
-
-    def getKsql(self):
-        return self.ksql
-
-    def setKsql(self, newKsql):
-        self.ksql = newKsql
-
-
-# @package Kaltura
-# @subpackage Client
-class KalturaCountryCondition(KalturaCondition):
-    """Country condition"""
-
-    def __init__(self,
-            description=NotImplemented,
-            not_=NotImplemented,
-            countries=NotImplemented):
-        KalturaCondition.__init__(self,
-            description)
-
-        # Indicates whether to apply not on the other properties in the condition
-        # @var bool
-        self.not_ = not_
-
-        # Comma separated countries IDs list
-        # @var string
-        self.countries = countries
-
-
-    PROPERTY_LOADERS = {
-        'not_': getXmlNodeBool, 
-        'countries': getXmlNodeText, 
-    }
-
-    def fromXml(self, node):
-        KalturaCondition.fromXml(self, node)
-        self.fromXmlImpl(node, KalturaCountryCondition.PROPERTY_LOADERS)
-
-    def toParams(self):
-        kparams = KalturaCondition.toParams(self)
-        kparams.put("objectType", "KalturaCountryCondition")
-        kparams.addBoolIfDefined("not", self.not_)
-        kparams.addStringIfDefined("countries", self.countries)
-        return kparams
-
-    def getNot_(self):
-        return self.not_
-
-    def setNot_(self, newNot_):
-        self.not_ = newNot_
-
-    def getCountries(self):
-        return self.countries
-
-    def setCountries(self, newCountries):
-        self.countries = newCountries
-
-
-# @package Kaltura
-# @subpackage Client
-class KalturaAccessControlBlockAction(KalturaRuleAction):
-    def __init__(self,
-            type=NotImplemented,
-            description=NotImplemented):
-        KalturaRuleAction.__init__(self,
-            type,
-            description)
-
-
-    PROPERTY_LOADERS = {
-    }
-
-    def fromXml(self, node):
-        KalturaRuleAction.fromXml(self, node)
-        self.fromXmlImpl(node, KalturaAccessControlBlockAction.PROPERTY_LOADERS)
-
-    def toParams(self):
-        kparams = KalturaRuleAction.toParams(self)
-        kparams.put("objectType", "KalturaAccessControlBlockAction")
-        return kparams
-
-
-# @package Kaltura
-# @subpackage Client
-class KalturaTimeOffsetRuleAction(KalturaRuleAction):
-    """Time offset action"""
-
-    def __init__(self,
-            type=NotImplemented,
-            description=NotImplemented,
-            offset=NotImplemented,
-            timeZone=NotImplemented):
-        KalturaRuleAction.__init__(self,
-            type,
-            description)
-
-        # Offset in seconds
-        # @var int
-        self.offset = offset
-
-        # Indicates whether to add time zone offset to the time
-        # @var bool
-        self.timeZone = timeZone
-
-
-    PROPERTY_LOADERS = {
-        'offset': getXmlNodeInt, 
-        'timeZone': getXmlNodeBool, 
-    }
-
-    def fromXml(self, node):
-        KalturaRuleAction.fromXml(self, node)
-        self.fromXmlImpl(node, KalturaTimeOffsetRuleAction.PROPERTY_LOADERS)
-
-    def toParams(self):
-        kparams = KalturaRuleAction.toParams(self)
-        kparams.put("objectType", "KalturaTimeOffsetRuleAction")
-        kparams.addIntIfDefined("offset", self.offset)
-        kparams.addBoolIfDefined("timeZone", self.timeZone)
-        return kparams
-
-    def getOffset(self):
-        return self.offset
-
-    def setOffset(self, newOffset):
-        self.offset = newOffset
-
-    def getTimeZone(self):
-        return self.timeZone
-
-    def setTimeZone(self, newTimeZone):
-        self.timeZone = newTimeZone
-
-
-# @package Kaltura
-# @subpackage Client
-class KalturaEndDateOffsetRuleAction(KalturaTimeOffsetRuleAction):
-    """End date offset action"""
-
-    def __init__(self,
-            type=NotImplemented,
-            description=NotImplemented,
-            offset=NotImplemented,
-            timeZone=NotImplemented):
-        KalturaTimeOffsetRuleAction.__init__(self,
-            type,
-            description,
-            offset,
-            timeZone)
-
-
-    PROPERTY_LOADERS = {
-    }
-
-    def fromXml(self, node):
-        KalturaTimeOffsetRuleAction.fromXml(self, node)
-        self.fromXmlImpl(node, KalturaEndDateOffsetRuleAction.PROPERTY_LOADERS)
-
-    def toParams(self):
-        kparams = KalturaTimeOffsetRuleAction.toParams(self)
-        kparams.put("objectType", "KalturaEndDateOffsetRuleAction")
-        return kparams
-
-
-# @package Kaltura
-# @subpackage Client
-class KalturaStartDateOffsetRuleAction(KalturaTimeOffsetRuleAction):
-    """Start date offset action"""
-
-    def __init__(self,
-            type=NotImplemented,
-            description=NotImplemented,
-            offset=NotImplemented,
-            timeZone=NotImplemented):
-        KalturaTimeOffsetRuleAction.__init__(self,
-            type,
-            description,
-            offset,
-            timeZone)
-
-
-    PROPERTY_LOADERS = {
-    }
-
-    def fromXml(self, node):
-        KalturaTimeOffsetRuleAction.fromXml(self, node)
-        self.fromXmlImpl(node, KalturaStartDateOffsetRuleAction.PROPERTY_LOADERS)
-
-    def toParams(self):
-        kparams = KalturaTimeOffsetRuleAction.toParams(self)
-        kparams.put("objectType", "KalturaStartDateOffsetRuleAction")
-        return kparams
 
 
 # @package Kaltura
@@ -23183,6 +23373,24 @@ class KalturaAssetStatisticsService(KalturaServiceBase):
 
 # @package Kaltura
 # @subpackage Client
+class KalturaAssetUserRuleService(KalturaServiceBase):
+    def __init__(self, client = None):
+        KalturaServiceBase.__init__(self, client)
+
+    def add(self, assetUserRule):
+        """Add asset user rule"""
+
+        kparams = KalturaParams()
+        kparams.addObjectIfDefined("assetUserRule", assetUserRule)
+        self.client.queueServiceActionCall("assetuserrule", "add", "KalturaAssetUserRule", kparams)
+        if self.client.isMultiRequest():
+            return self.client.getMultiRequestResult()
+        resultNode = self.client.doQueue()
+        return KalturaObjectFactory.create(resultNode, 'KalturaAssetUserRule')
+
+
+# @package Kaltura
+# @subpackage Client
 class KalturaBookmarkService(KalturaServiceBase):
     def __init__(self, client = None):
         KalturaServiceBase.__init__(self, client)
@@ -26991,6 +27199,7 @@ class KalturaCoreClient(KalturaClientPlugin):
             'assetHistory': KalturaAssetHistoryService,
             'assetRule': KalturaAssetRuleService,
             'assetStatistics': KalturaAssetStatisticsService,
+            'assetUserRule': KalturaAssetUserRuleService,
             'bookmark': KalturaBookmarkService,
             'cdnAdapterProfile': KalturaCdnAdapterProfileService,
             'cdnPartnerSettings': KalturaCdnPartnerSettingsService,
@@ -27352,18 +27561,24 @@ class KalturaCoreClient(KalturaClientPlugin):
             'KalturaAssetStatisticsListResponse': KalturaAssetStatisticsListResponse,
             'KalturaAssetHistory': KalturaAssetHistory,
             'KalturaAssetHistoryListResponse': KalturaAssetHistoryListResponse,
-            'KalturaCurrency': KalturaCurrency,
-            'KalturaCurrencyListResponse': KalturaCurrencyListResponse,
+            'KalturaAssetRuleBase': KalturaAssetRuleBase,
             'KalturaCondition': KalturaCondition,
-            'KalturaRuleAction': KalturaRuleAction,
-            'KalturaAssetRule': KalturaAssetRule,
-            'KalturaAssetRuleListResponse': KalturaAssetRuleListResponse,
             'KalturaAssetCondition': KalturaAssetCondition,
+            'KalturaRuleAction': KalturaRuleAction,
+            'KalturaAssetUserRuleAction': KalturaAssetUserRuleAction,
+            'KalturaAssetUserRule': KalturaAssetUserRule,
+            'KalturaAssetUserRuleListResponse': KalturaAssetUserRuleListResponse,
+            'KalturaAssetRuleAction': KalturaAssetRuleAction,
+            'KalturaAssetRule': KalturaAssetRule,
             'KalturaCountryCondition': KalturaCountryCondition,
+            'KalturaAssetUserBlockRuleAction': KalturaAssetUserBlockRuleAction,
             'KalturaAccessControlBlockAction': KalturaAccessControlBlockAction,
             'KalturaTimeOffsetRuleAction': KalturaTimeOffsetRuleAction,
             'KalturaEndDateOffsetRuleAction': KalturaEndDateOffsetRuleAction,
             'KalturaStartDateOffsetRuleAction': KalturaStartDateOffsetRuleAction,
+            'KalturaCurrency': KalturaCurrency,
+            'KalturaCurrencyListResponse': KalturaCurrencyListResponse,
+            'KalturaAssetRuleListResponse': KalturaAssetRuleListResponse,
             'KalturaLanguage': KalturaLanguage,
             'KalturaLanguageListResponse': KalturaLanguageListResponse,
             'KalturaMeta': KalturaMeta,
