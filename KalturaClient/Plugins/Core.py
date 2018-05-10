@@ -42,7 +42,7 @@ from ..Base import (
     KalturaServiceBase,
 )
 
-API_VERSION = '4.81.47.21925'
+API_VERSION = '4.81.48.22245'
 
 ########## enums ##########
 # @package Kaltura
@@ -1168,7 +1168,7 @@ class KalturaRuleActionType(object):
     BLOCK = "BLOCK"
     START_DATE_OFFSET = "START_DATE_OFFSET"
     END_DATE_OFFSET = "END_DATE_OFFSET"
-    ASSET_USER_BLOCK = "ASSET_USER_BLOCK"
+    USER_BLOCK = "USER_BLOCK"
 
     def __init__(self, value):
         self.value = value
@@ -12546,7 +12546,7 @@ class KalturaCountryCondition(KalturaCondition):
 
 # @package Kaltura
 # @subpackage Client
-class KalturaAssetUserBlockRuleAction(KalturaAssetUserRuleAction):
+class KalturaAssetUserRuleBlockAction(KalturaAssetUserRuleAction):
     def __init__(self,
             type=NotImplemented,
             description=NotImplemented):
@@ -12560,11 +12560,11 @@ class KalturaAssetUserBlockRuleAction(KalturaAssetUserRuleAction):
 
     def fromXml(self, node):
         KalturaAssetUserRuleAction.fromXml(self, node)
-        self.fromXmlImpl(node, KalturaAssetUserBlockRuleAction.PROPERTY_LOADERS)
+        self.fromXmlImpl(node, KalturaAssetUserRuleBlockAction.PROPERTY_LOADERS)
 
     def toParams(self):
         kparams = KalturaAssetUserRuleAction.toParams(self)
-        kparams.put("objectType", "KalturaAssetUserBlockRuleAction")
+        kparams.put("objectType", "KalturaAssetUserRuleBlockAction")
         return kparams
 
 
@@ -27571,7 +27571,7 @@ class KalturaCoreClient(KalturaClientPlugin):
             'KalturaAssetRuleAction': KalturaAssetRuleAction,
             'KalturaAssetRule': KalturaAssetRule,
             'KalturaCountryCondition': KalturaCountryCondition,
-            'KalturaAssetUserBlockRuleAction': KalturaAssetUserBlockRuleAction,
+            'KalturaAssetUserRuleBlockAction': KalturaAssetUserRuleBlockAction,
             'KalturaAccessControlBlockAction': KalturaAccessControlBlockAction,
             'KalturaTimeOffsetRuleAction': KalturaTimeOffsetRuleAction,
             'KalturaEndDateOffsetRuleAction': KalturaEndDateOffsetRuleAction,
