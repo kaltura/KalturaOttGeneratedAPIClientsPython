@@ -42,7 +42,7 @@ from ..Base import (
     KalturaServiceBase,
 )
 
-API_VERSION = '4.81.51.24788'
+API_VERSION = '4.81.52.42018'
 
 ########## enums ##########
 # @package Kaltura
@@ -9381,6 +9381,63 @@ class KalturaTopicListResponse(KalturaListResponse):
 
 # @package Kaltura
 # @subpackage Client
+class KalturaT(KalturaObjectBase):
+    def __init__(self):
+        KalturaObjectBase.__init__(self)
+
+
+    PROPERTY_LOADERS = {
+    }
+
+    def fromXml(self, node):
+        KalturaObjectBase.fromXml(self, node)
+        self.fromXmlImpl(node, KalturaT.PROPERTY_LOADERS)
+
+    def toParams(self):
+        kparams = KalturaObjectBase.toParams(self)
+        kparams.put("objectType", "KalturaT")
+        return kparams
+
+
+# @package Kaltura
+# @subpackage Client
+class KalturaGenericListResponse(KalturaListResponse):
+    """Generic response list"""
+
+    def __init__(self,
+            totalCount=NotImplemented,
+            objects=NotImplemented):
+        KalturaListResponse.__init__(self,
+            totalCount)
+
+        # A list of objects
+        # @var array of KalturaT
+        self.objects = objects
+
+
+    PROPERTY_LOADERS = {
+        'objects': (KalturaObjectFactory.createArray, 'KalturaT'), 
+    }
+
+    def fromXml(self, node):
+        KalturaListResponse.fromXml(self, node)
+        self.fromXmlImpl(node, KalturaGenericListResponse.PROPERTY_LOADERS)
+
+    def toParams(self):
+        kparams = KalturaListResponse.toParams(self)
+        kparams.put("objectType", "KalturaGenericListResponse")
+        kparams.addArrayIfDefined("objects", self.objects)
+        return kparams
+
+    def getObjects(self):
+        return self.objects
+
+    def setObjects(self, newObjects):
+        self.objects = newObjects
+
+
+# @package Kaltura
+# @subpackage Client
 class KalturaIntegerValueListResponse(KalturaListResponse):
     """Integer list wrapper"""
 
@@ -12390,7 +12447,7 @@ class KalturaAssetUserRuleListResponse(KalturaListResponse):
         KalturaListResponse.__init__(self,
             totalCount)
 
-        # Asset rules
+        # Asset user rules
         # @var array of KalturaAssetUserRule
         self.objects = objects
 
@@ -23388,6 +23445,39 @@ class KalturaAssetUserRuleService(KalturaServiceBase):
         resultNode = self.client.doQueue()
         return KalturaObjectFactory.create(resultNode, 'KalturaAssetUserRule')
 
+    def delete(self, id):
+        """Delete asset user rule"""
+
+        kparams = KalturaParams()
+        kparams.addIntIfDefined("id", id);
+        self.client.queueServiceActionCall("assetuserrule", "delete", "None", kparams)
+        if self.client.isMultiRequest():
+            return self.client.getMultiRequestResult()
+        resultNode = self.client.doQueue()
+        return getXmlNodeBool(resultNode)
+
+    def list(self):
+        """Get the list of asset user rules for the partner"""
+
+        kparams = KalturaParams()
+        self.client.queueServiceActionCall("assetuserrule", "list", "KalturaAssetUserRuleListResponse", kparams)
+        if self.client.isMultiRequest():
+            return self.client.getMultiRequestResult()
+        resultNode = self.client.doQueue()
+        return KalturaObjectFactory.create(resultNode, 'KalturaAssetUserRuleListResponse')
+
+    def update(self, id, assetUserRule):
+        """Update asset user rule"""
+
+        kparams = KalturaParams()
+        kparams.addIntIfDefined("id", id);
+        kparams.addObjectIfDefined("assetUserRule", assetUserRule)
+        self.client.queueServiceActionCall("assetuserrule", "update", "KalturaAssetUserRule", kparams)
+        if self.client.isMultiRequest():
+            return self.client.getMultiRequestResult()
+        resultNode = self.client.doQueue()
+        return KalturaObjectFactory.create(resultNode, 'KalturaAssetUserRule')
+
 
 # @package Kaltura
 # @subpackage Client
@@ -27526,6 +27616,8 @@ class KalturaCoreClient(KalturaClientPlugin):
             'KalturaPersonalFeedListResponse': KalturaPersonalFeedListResponse,
             'KalturaTopic': KalturaTopic,
             'KalturaTopicListResponse': KalturaTopicListResponse,
+            'KalturaT': KalturaT,
+            'KalturaGenericListResponse': KalturaGenericListResponse,
             'KalturaIntegerValueListResponse': KalturaIntegerValueListResponse,
             'KalturaReport': KalturaReport,
             'KalturaReportListResponse': KalturaReportListResponse,
