@@ -42,7 +42,7 @@ from ..Base import (
     KalturaServiceBase,
 )
 
-API_VERSION = '4.81.59.22339'
+API_VERSION = '4.81.60.25256'
 
 ########## enums ##########
 # @package Kaltura
@@ -200,6 +200,17 @@ class KalturaAssetType(object):
     MEDIA = "media"
     RECORDING = "recording"
     EPG = "epg"
+
+    def __init__(self, value):
+        self.value = value
+
+    def getValue(self):
+        return self.value
+
+# @package Kaltura
+# @subpackage Client
+class KalturaAssetUserRuleOrderBy(object):
+    NONE = "NONE"
 
     def __init__(self, value):
         self.value = value
@@ -18016,6 +18027,43 @@ class KalturaAssetHistoryFilter(KalturaFilter):
 
 # @package Kaltura
 # @subpackage Client
+class KalturaAssetUserRuleFilter(KalturaFilter):
+    """Asset user rule filter"""
+
+    def __init__(self,
+            orderBy=NotImplemented,
+            associatedUserIdEqualCurrent=NotImplemented):
+        KalturaFilter.__init__(self,
+            orderBy)
+
+        # Indicates if to get the asset user rule list for the associated user or for the entire group
+        # @var bool
+        self.associatedUserIdEqualCurrent = associatedUserIdEqualCurrent
+
+
+    PROPERTY_LOADERS = {
+        'associatedUserIdEqualCurrent': getXmlNodeBool, 
+    }
+
+    def fromXml(self, node):
+        KalturaFilter.fromXml(self, node)
+        self.fromXmlImpl(node, KalturaAssetUserRuleFilter.PROPERTY_LOADERS)
+
+    def toParams(self):
+        kparams = KalturaFilter.toParams(self)
+        kparams.put("objectType", "KalturaAssetUserRuleFilter")
+        kparams.addBoolIfDefined("associatedUserIdEqualCurrent", self.associatedUserIdEqualCurrent)
+        return kparams
+
+    def getAssociatedUserIdEqualCurrent(self):
+        return self.associatedUserIdEqualCurrent
+
+    def setAssociatedUserIdEqualCurrent(self, newAssociatedUserIdEqualCurrent):
+        self.associatedUserIdEqualCurrent = newAssociatedUserIdEqualCurrent
+
+
+# @package Kaltura
+# @subpackage Client
 class KalturaCurrencyFilter(KalturaFilter):
     """Currency filter"""
 
@@ -23445,6 +23493,16 @@ class KalturaAssetUserRuleService(KalturaServiceBase):
         resultNode = self.client.doQueue()
         return KalturaObjectFactory.create(resultNode, 'KalturaAssetUserRule')
 
+    def addRuleToUser(self, ruleId):
+        """Add Asset User Rule To User"""
+
+        kparams = KalturaParams()
+        kparams.addIntIfDefined("ruleId", ruleId);
+        self.client.queueServiceActionCall("assetuserrule", "addRuleToUser", "None", kparams)
+        if self.client.isMultiRequest():
+            return self.client.getMultiRequestResult()
+        resultNode = self.client.doQueue()
+
     def delete(self, id):
         """Delete asset user rule"""
 
@@ -23454,17 +23512,27 @@ class KalturaAssetUserRuleService(KalturaServiceBase):
         if self.client.isMultiRequest():
             return self.client.getMultiRequestResult()
         resultNode = self.client.doQueue()
-        return getXmlNodeBool(resultNode)
 
-    def list(self):
+    def list(self, filter = NotImplemented):
         """Get the list of asset user rules for the partner"""
 
         kparams = KalturaParams()
+        kparams.addObjectIfDefined("filter", filter)
         self.client.queueServiceActionCall("assetuserrule", "list", "KalturaAssetUserRuleListResponse", kparams)
         if self.client.isMultiRequest():
             return self.client.getMultiRequestResult()
         resultNode = self.client.doQueue()
         return KalturaObjectFactory.create(resultNode, 'KalturaAssetUserRuleListResponse')
+
+    def removeRuleToUser(self, ruleId):
+        """Remove asset user rule from user"""
+
+        kparams = KalturaParams()
+        kparams.addIntIfDefined("ruleId", ruleId);
+        self.client.queueServiceActionCall("assetuserrule", "removeRuleToUser", "None", kparams)
+        if self.client.isMultiRequest():
+            return self.client.getMultiRequestResult()
+        resultNode = self.client.doQueue()
 
     def update(self, id, assetUserRule):
         """Update asset user rule"""
@@ -27388,6 +27456,7 @@ class KalturaCoreClient(KalturaClientPlugin):
             'KalturaAssetReferenceType': KalturaAssetReferenceType,
             'KalturaAssetReminderOrderBy': KalturaAssetReminderOrderBy,
             'KalturaAssetType': KalturaAssetType,
+            'KalturaAssetUserRuleOrderBy': KalturaAssetUserRuleOrderBy,
             'KalturaBillingAction': KalturaBillingAction,
             'KalturaBillingItemsType': KalturaBillingItemsType,
             'KalturaBillingPriceType': KalturaBillingPriceType,
@@ -27765,6 +27834,7 @@ class KalturaCoreClient(KalturaClientPlugin):
             'KalturaAssetCommentFilter': KalturaAssetCommentFilter,
             'KalturaBookmarkFilter': KalturaBookmarkFilter,
             'KalturaAssetHistoryFilter': KalturaAssetHistoryFilter,
+            'KalturaAssetUserRuleFilter': KalturaAssetUserRuleFilter,
             'KalturaCurrencyFilter': KalturaCurrencyFilter,
             'KalturaLanguageFilter': KalturaLanguageFilter,
             'KalturaMetaFilter': KalturaMetaFilter,
