@@ -42,7 +42,7 @@ from ..Base import (
     KalturaServiceBase,
 )
 
-API_VERSION = '4.81.60.25256'
+API_VERSION = '4.81.61.27322'
 
 ########## enums ##########
 # @package Kaltura
@@ -5275,7 +5275,8 @@ class KalturaCountry(KalturaObjectBase):
             languagesCode=NotImplemented,
             currency=NotImplemented,
             currencySign=NotImplemented,
-            vatPercent=NotImplemented):
+            vatPercent=NotImplemented,
+            timeZoneId=NotImplemented):
         KalturaObjectBase.__init__(self)
 
         # Country identifier
@@ -5311,6 +5312,10 @@ class KalturaCountry(KalturaObjectBase):
         # @var float
         self.vatPercent = vatPercent
 
+        # Time zone ID
+        # @var string
+        self.timeZoneId = timeZoneId
+
 
     PROPERTY_LOADERS = {
         'id': getXmlNodeInt, 
@@ -5321,6 +5326,7 @@ class KalturaCountry(KalturaObjectBase):
         'currency': getXmlNodeText, 
         'currencySign': getXmlNodeText, 
         'vatPercent': getXmlNodeFloat, 
+        'timeZoneId': getXmlNodeText, 
     }
 
     def fromXml(self, node):
@@ -5337,6 +5343,7 @@ class KalturaCountry(KalturaObjectBase):
         kparams.addStringIfDefined("currency", self.currency)
         kparams.addStringIfDefined("currencySign", self.currencySign)
         kparams.addFloatIfDefined("vatPercent", self.vatPercent)
+        kparams.addStringIfDefined("timeZoneId", self.timeZoneId)
         return kparams
 
     def getId(self):
@@ -5383,6 +5390,12 @@ class KalturaCountry(KalturaObjectBase):
 
     def setVatPercent(self, newVatPercent):
         self.vatPercent = newVatPercent
+
+    def getTimeZoneId(self):
+        return self.timeZoneId
+
+    def setTimeZoneId(self, newTimeZoneId):
+        self.timeZoneId = newTimeZoneId
 
 
 # @package Kaltura
