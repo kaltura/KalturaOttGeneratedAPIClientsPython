@@ -42,7 +42,7 @@ from ..Base import (
     KalturaServiceBase,
 )
 
-API_VERSION = '4.81.61.19404'
+API_VERSION = '4.81.64.25405'
 
 ########## enums ##########
 # @package Kaltura
@@ -18045,17 +18045,17 @@ class KalturaAssetUserRuleFilter(KalturaFilter):
 
     def __init__(self,
             orderBy=NotImplemented,
-            associatedUserIdEqualCurrent=NotImplemented):
+            attachedUserIdEqualCurrent=NotImplemented):
         KalturaFilter.__init__(self,
             orderBy)
 
-        # Indicates if to get the asset user rule list for the associated user or for the entire group
+        # Indicates if to get the asset user rule list for the attached user or for the entire group
         # @var bool
-        self.associatedUserIdEqualCurrent = associatedUserIdEqualCurrent
+        self.attachedUserIdEqualCurrent = attachedUserIdEqualCurrent
 
 
     PROPERTY_LOADERS = {
-        'associatedUserIdEqualCurrent': getXmlNodeBool, 
+        'attachedUserIdEqualCurrent': getXmlNodeBool, 
     }
 
     def fromXml(self, node):
@@ -18065,14 +18065,14 @@ class KalturaAssetUserRuleFilter(KalturaFilter):
     def toParams(self):
         kparams = KalturaFilter.toParams(self)
         kparams.put("objectType", "KalturaAssetUserRuleFilter")
-        kparams.addBoolIfDefined("associatedUserIdEqualCurrent", self.associatedUserIdEqualCurrent)
+        kparams.addBoolIfDefined("attachedUserIdEqualCurrent", self.attachedUserIdEqualCurrent)
         return kparams
 
-    def getAssociatedUserIdEqualCurrent(self):
-        return self.associatedUserIdEqualCurrent
+    def getAttachedUserIdEqualCurrent(self):
+        return self.attachedUserIdEqualCurrent
 
-    def setAssociatedUserIdEqualCurrent(self, newAssociatedUserIdEqualCurrent):
-        self.associatedUserIdEqualCurrent = newAssociatedUserIdEqualCurrent
+    def setAttachedUserIdEqualCurrent(self, newAttachedUserIdEqualCurrent):
+        self.attachedUserIdEqualCurrent = newAttachedUserIdEqualCurrent
 
 
 # @package Kaltura
@@ -23506,12 +23506,12 @@ class KalturaAssetUserRuleService(KalturaServiceBase):
         resultNode = self.client.doQueue()
         return KalturaObjectFactory.create(resultNode, 'KalturaAssetUserRule')
 
-    def addRuleToUser(self, ruleId):
-        """Add Asset User Rule To User"""
+    def attachUser (self, ruleId):
+        """Attach AssetUserRule To User"""
 
         kparams = KalturaParams()
         kparams.addIntIfDefined("ruleId", ruleId);
-        self.client.queueServiceActionCall("assetuserrule", "addRuleToUser", "None", kparams)
+        self.client.queueServiceActionCall("assetuserrule", "attachUser ", "None", kparams)
         if self.client.isMultiRequest():
             return self.client.getMultiRequestResult()
         resultNode = self.client.doQueue()
@@ -23526,6 +23526,16 @@ class KalturaAssetUserRuleService(KalturaServiceBase):
             return self.client.getMultiRequestResult()
         resultNode = self.client.doQueue()
 
+    def detachUser(self, ruleId):
+        """Detach AssetUserRule from user"""
+
+        kparams = KalturaParams()
+        kparams.addIntIfDefined("ruleId", ruleId);
+        self.client.queueServiceActionCall("assetuserrule", "detachUser", "None", kparams)
+        if self.client.isMultiRequest():
+            return self.client.getMultiRequestResult()
+        resultNode = self.client.doQueue()
+
     def list(self, filter = NotImplemented):
         """Get the list of asset user rules for the partner"""
 
@@ -23536,16 +23546,6 @@ class KalturaAssetUserRuleService(KalturaServiceBase):
             return self.client.getMultiRequestResult()
         resultNode = self.client.doQueue()
         return KalturaObjectFactory.create(resultNode, 'KalturaAssetUserRuleListResponse')
-
-    def removeRuleToUser(self, ruleId):
-        """Remove asset user rule from user"""
-
-        kparams = KalturaParams()
-        kparams.addIntIfDefined("ruleId", ruleId);
-        self.client.queueServiceActionCall("assetuserrule", "removeRuleToUser", "None", kparams)
-        if self.client.isMultiRequest():
-            return self.client.getMultiRequestResult()
-        resultNode = self.client.doQueue()
 
     def update(self, id, assetUserRule):
         """Update asset user rule"""
