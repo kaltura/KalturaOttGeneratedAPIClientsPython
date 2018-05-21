@@ -42,7 +42,7 @@ from ..Base import (
     KalturaServiceBase,
 )
 
-API_VERSION = '4.81.64.43143'
+API_VERSION = '4.81.67.30326'
 
 ########## enums ##########
 # @package Kaltura
@@ -1208,6 +1208,7 @@ class KalturaRuleType(object):
     GEO = "geo"
     USER_TYPE = "user_type"
     DEVICE = "device"
+    ASSETUSER = "assetUser"
 
     def __init__(self, value):
         self.value = value
