@@ -42,7 +42,7 @@ from ..Base import (
     KalturaServiceBase,
 )
 
-API_VERSION = '4.81.68.23505'
+API_VERSION = '4.81.69.26023'
 
 ########## enums ##########
 # @package Kaltura
@@ -12349,6 +12349,7 @@ class KalturaRuleAction(KalturaObjectBase):
 
         # The type of the action
         # @var KalturaRuleActionType
+        # @readonly
         self.type = type
 
         # Description
@@ -12368,15 +12369,11 @@ class KalturaRuleAction(KalturaObjectBase):
     def toParams(self):
         kparams = KalturaObjectBase.toParams(self)
         kparams.put("objectType", "KalturaRuleAction")
-        kparams.addStringEnumIfDefined("type", self.type)
         kparams.addStringIfDefined("description", self.description)
         return kparams
 
     def getType(self):
         return self.type
-
-    def setType(self, newType):
-        self.type = newType
 
     def getDescription(self):
         return self.description
