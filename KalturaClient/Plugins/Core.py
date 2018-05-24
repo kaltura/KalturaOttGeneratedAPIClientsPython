@@ -42,7 +42,7 @@ from ..Base import (
     KalturaServiceBase,
 )
 
-API_VERSION = '4.81.77.17218'
+API_VERSION = '4.81.78.22156'
 
 ########## enums ##########
 # @package Kaltura
@@ -4567,6 +4567,41 @@ class KalturaMediaImage(KalturaObjectBase):
 
 # @package Kaltura
 # @subpackage Client
+class KalturaAssetFile(KalturaObjectBase):
+    """Asset file details"""
+
+    def __init__(self,
+            url=NotImplemented):
+        KalturaObjectBase.__init__(self)
+
+        # URL of the media file to be played
+        # @var string
+        self.url = url
+
+
+    PROPERTY_LOADERS = {
+        'url': getXmlNodeText, 
+    }
+
+    def fromXml(self, node):
+        KalturaObjectBase.fromXml(self, node)
+        self.fromXmlImpl(node, KalturaAssetFile.PROPERTY_LOADERS)
+
+    def toParams(self):
+        kparams = KalturaObjectBase.toParams(self)
+        kparams.put("objectType", "KalturaAssetFile")
+        kparams.addStringIfDefined("url", self.url)
+        return kparams
+
+    def getUrl(self):
+        return self.url
+
+    def setUrl(self, newUrl):
+        self.url = newUrl
+
+
+# @package Kaltura
+# @subpackage Client
 class KalturaStringValueArray(KalturaObjectBase):
     def __init__(self,
             objects=NotImplemented):
@@ -4600,14 +4635,14 @@ class KalturaStringValueArray(KalturaObjectBase):
 
 # @package Kaltura
 # @subpackage Client
-class KalturaMediaFile(KalturaObjectBase):
+class KalturaMediaFile(KalturaAssetFile):
     """Media file details"""
 
     def __init__(self,
+            url=NotImplemented,
             assetId=NotImplemented,
             id=NotImplemented,
             type=NotImplemented,
-            url=NotImplemented,
             duration=NotImplemented,
             externalId=NotImplemented,
             billingType=NotImplemented,
@@ -4619,7 +4654,8 @@ class KalturaMediaFile(KalturaObjectBase):
             ppvModules=NotImplemented,
             productCode=NotImplemented,
             fileSize=NotImplemented):
-        KalturaObjectBase.__init__(self)
+        KalturaAssetFile.__init__(self,
+            url)
 
         # Unique identifier for the asset
         # @var int
@@ -4633,10 +4669,6 @@ class KalturaMediaFile(KalturaObjectBase):
         # Device types as defined in the system
         # @var string
         self.type = type
-
-        # URL of the media file to be played
-        # @var string
-        self.url = url
 
         # Duration of the media file
         # @var int
@@ -4687,7 +4719,6 @@ class KalturaMediaFile(KalturaObjectBase):
         'assetId': getXmlNodeInt, 
         'id': getXmlNodeInt, 
         'type': getXmlNodeText, 
-        'url': getXmlNodeText, 
         'duration': getXmlNodeInt, 
         'externalId': getXmlNodeText, 
         'billingType': getXmlNodeText, 
@@ -4702,15 +4733,14 @@ class KalturaMediaFile(KalturaObjectBase):
     }
 
     def fromXml(self, node):
-        KalturaObjectBase.fromXml(self, node)
+        KalturaAssetFile.fromXml(self, node)
         self.fromXmlImpl(node, KalturaMediaFile.PROPERTY_LOADERS)
 
     def toParams(self):
-        kparams = KalturaObjectBase.toParams(self)
+        kparams = KalturaAssetFile.toParams(self)
         kparams.put("objectType", "KalturaMediaFile")
         kparams.addIntIfDefined("assetId", self.assetId)
         kparams.addStringIfDefined("type", self.type)
-        kparams.addStringIfDefined("url", self.url)
         kparams.addIntIfDefined("duration", self.duration)
         kparams.addStringIfDefined("externalId", self.externalId)
         kparams.addStringIfDefined("billingType", self.billingType)
@@ -4738,12 +4768,6 @@ class KalturaMediaFile(KalturaObjectBase):
 
     def setType(self, newType):
         self.type = newType
-
-    def getUrl(self):
-        return self.url
-
-    def setUrl(self, newUrl):
-        self.url = newUrl
 
     def getDuration(self):
         return self.duration
@@ -5107,10 +5131,10 @@ class KalturaFavoriteListResponse(KalturaListResponse):
 # @subpackage Client
 class KalturaPlaybackSource(KalturaMediaFile):
     def __init__(self,
+            url=NotImplemented,
             assetId=NotImplemented,
             id=NotImplemented,
             type=NotImplemented,
-            url=NotImplemented,
             duration=NotImplemented,
             externalId=NotImplemented,
             billingType=NotImplemented,
@@ -5126,10 +5150,10 @@ class KalturaPlaybackSource(KalturaMediaFile):
             protocols=NotImplemented,
             drm=NotImplemented):
         KalturaMediaFile.__init__(self,
+            url,
             assetId,
             id,
             type,
-            url,
             duration,
             externalId,
             billingType,
@@ -23383,11 +23407,11 @@ class KalturaAssetFileService(KalturaServiceBase):
         kparams.addIntIfDefined("assetFileId", assetFileId);
         kparams.addStringIfDefined("contextType", contextType)
         kparams.addStringIfDefined("ks", ks)
-        self.client.queueServiceActionCall("assetfile", "playManifest", "None", kparams)
+        self.client.queueServiceActionCall("assetfile", "playManifest", "KalturaAssetFile", kparams)
         if self.client.isMultiRequest():
             return self.client.getMultiRequestResult()
         resultNode = self.client.doQueue()
-        return getXmlNodeText(resultNode)
+        return KalturaObjectFactory.create(resultNode, 'KalturaAssetFile')
 
 
 # @package Kaltura
@@ -27630,6 +27654,7 @@ class KalturaCoreClient(KalturaClientPlugin):
             'KalturaUserInterest': KalturaUserInterest,
             'KalturaUserInterestListResponse': KalturaUserInterestListResponse,
             'KalturaMediaImage': KalturaMediaImage,
+            'KalturaAssetFile': KalturaAssetFile,
             'KalturaStringValueArray': KalturaStringValueArray,
             'KalturaMediaFile': KalturaMediaFile,
             'KalturaBuzzScore': KalturaBuzzScore,
