@@ -42,7 +42,7 @@ from ..Base import (
     KalturaServiceBase,
 )
 
-API_VERSION = '4.81.73.14434'
+API_VERSION = '4.81.77.17218'
 
 ########## enums ##########
 # @package Kaltura
@@ -23387,6 +23387,7 @@ class KalturaAssetFileService(KalturaServiceBase):
         if self.client.isMultiRequest():
             return self.client.getMultiRequestResult()
         resultNode = self.client.doQueue()
+        return getXmlNodeText(resultNode)
 
 
 # @package Kaltura
