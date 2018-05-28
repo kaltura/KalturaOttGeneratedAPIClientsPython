@@ -42,7 +42,7 @@ from ..Base import (
     KalturaServiceBase,
 )
 
-API_VERSION = '4.81.83.43131'
+API_VERSION = '4.81.84.13672'
 
 ########## enums ##########
 # @package Kaltura
@@ -23529,12 +23529,12 @@ class KalturaAssetUserRuleService(KalturaServiceBase):
         resultNode = self.client.doQueue()
         return KalturaObjectFactory.create(resultNode, 'KalturaAssetUserRule')
 
-    def attachUser (self, ruleId):
+    def attachUser(self, ruleId):
         """Attach AssetUserRule To User"""
 
         kparams = KalturaParams()
         kparams.addIntIfDefined("ruleId", ruleId);
-        self.client.queueServiceActionCall("assetuserrule", "attachUser ", "None", kparams)
+        self.client.queueServiceActionCall("assetuserrule", "attachUser", "None", kparams)
         if self.client.isMultiRequest():
             return self.client.getMultiRequestResult()
         resultNode = self.client.doQueue()
