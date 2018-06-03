@@ -42,7 +42,7 @@ from ..Base import (
     KalturaServiceBase,
 )
 
-API_VERSION = '4.72.256.28251'
+API_VERSION = '4.72.257.16223'
 
 ########## enums ##########
 # @package Kaltura
@@ -852,6 +852,20 @@ class KalturaLanguageOrderBy(object):
     SYSTEM_NAME_DESC = "SYSTEM_NAME_DESC"
     CODE_ASC = "CODE_ASC"
     CODE_DESC = "CODE_DESC"
+
+    def __init__(self, value):
+        self.value = value
+
+    def getValue(self):
+        return self.value
+
+# @package Kaltura
+# @subpackage Client
+class KalturaLinearChannelType(object):
+    UNKNOWN = "UNKNOWN"
+    DTT = "DTT"
+    OTT = "OTT"
+    DTT_AND_OTT = "DTT_AND_OTT"
 
     def __init__(self, value):
         self.value = value
@@ -12548,7 +12562,8 @@ class KalturaLinearMediaAsset(KalturaMediaAsset):
             summedCatchUpBuffer=NotImplemented,
             summedTrickPlayBuffer=NotImplemented,
             recordingPlaybackNonEntitledChannelEnabled=NotImplemented,
-            trickPlayEnabled=NotImplemented):
+            trickPlayEnabled=NotImplemented,
+            channelType=NotImplemented):
         KalturaMediaAsset.__init__(self,
             id,
             type,
@@ -12642,6 +12657,10 @@ class KalturaLinearMediaAsset(KalturaMediaAsset):
         # @readonly
         self.trickPlayEnabled = trickPlayEnabled
 
+        # channel type, possible values: UNKNOWN, DTT, OTT, DTT_AND_OTT
+        # @var KalturaLinearChannelType
+        self.channelType = channelType
+
 
     PROPERTY_LOADERS = {
         'enableCdvrState': (KalturaEnumsFactory.createString, "KalturaTimeShiftedTvState"), 
@@ -12660,6 +12679,7 @@ class KalturaLinearMediaAsset(KalturaMediaAsset):
         'summedTrickPlayBuffer': getXmlNodeInt, 
         'recordingPlaybackNonEntitledChannelEnabled': getXmlNodeBool, 
         'trickPlayEnabled': getXmlNodeBool, 
+        'channelType': (KalturaEnumsFactory.createString, "KalturaLinearChannelType"), 
     }
 
     def fromXml(self, node):
@@ -12678,6 +12698,7 @@ class KalturaLinearMediaAsset(KalturaMediaAsset):
         kparams.addStringEnumIfDefined("enableTrickPlayState", self.enableTrickPlayState)
         kparams.addStringIfDefined("externalEpgIngestId", self.externalEpgIngestId)
         kparams.addStringIfDefined("externalCdvrId", self.externalCdvrId)
+        kparams.addStringEnumIfDefined("channelType", self.channelType)
         return kparams
 
     def getEnableCdvrState(self):
@@ -12754,6 +12775,12 @@ class KalturaLinearMediaAsset(KalturaMediaAsset):
 
     def getTrickPlayEnabled(self):
         return self.trickPlayEnabled
+
+    def getChannelType(self):
+        return self.channelType
+
+    def setChannelType(self, newChannelType):
+        self.channelType = newChannelType
 
 
 # @package Kaltura
@@ -29402,6 +29429,7 @@ class KalturaCoreClient(KalturaClientPlugin):
             'KalturaInboxMessageStatus': KalturaInboxMessageStatus,
             'KalturaInboxMessageType': KalturaInboxMessageType,
             'KalturaLanguageOrderBy': KalturaLanguageOrderBy,
+            'KalturaLinearChannelType': KalturaLinearChannelType,
             'KalturaMediaFileOrderBy': KalturaMediaFileOrderBy,
             'KalturaMediaFileStreamerType': KalturaMediaFileStreamerType,
             'KalturaMediaFileTypeQuality': KalturaMediaFileTypeQuality,
