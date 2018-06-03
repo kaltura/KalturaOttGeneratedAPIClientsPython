@@ -117,7 +117,7 @@ class KalturaClient(object):
         self.callsQueue = []
         self.requestHeaders = {}
         self.clientConfiguration = {
-            'clientTag': 'python-18-05-01',
+            'clientTag': 'python-18-06-03',
             'apiVersion': API_VERSION,
         }
         self.requestConfiguration = {}
@@ -319,11 +319,7 @@ class KalturaClient(object):
         return data
 
     def parsePostResult(self, postResult):
-        if len(postResult) > 1024:
-            self.log("result (xml): %s bytes" % len(postResult))
-        else:
-            self.log("result (xml): %s" % postResult)
-
+        self.log("result (xml): %s" % postResult)
         try:
             resultXml = etree.fromstring(postResult)
         except etree.ParseError as e:
