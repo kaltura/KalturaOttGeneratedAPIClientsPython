@@ -42,7 +42,7 @@ from ..Base import (
     KalturaServiceBase,
 )
 
-API_VERSION = '4.82.8.22548'
+API_VERSION = '4.82.23.25466'
 
 ########## enums ##########
 # @package Kaltura
@@ -924,6 +924,18 @@ class KalturaPersonalFeedOrderBy(object):
     VIEWS_DESC = "VIEWS_DESC"
     RATINGS_DESC = "RATINGS_DESC"
     VOTES_DESC = "VOTES_DESC"
+    START_DATE_DESC = "START_DATE_DESC"
+    START_DATE_ASC = "START_DATE_ASC"
+
+    def __init__(self, value):
+        self.value = value
+
+    def getValue(self):
+        return self.value
+
+# @package Kaltura
+# @subpackage Client
+class KalturaPersonalListOrderBy(object):
     START_DATE_DESC = "START_DATE_DESC"
     START_DATE_ASC = "START_DATE_ASC"
 
@@ -8339,6 +8351,122 @@ class KalturaProductsPriceListResponse(KalturaListResponse):
     def toParams(self):
         kparams = KalturaListResponse.toParams(self)
         kparams.put("objectType", "KalturaProductsPriceListResponse")
+        kparams.addArrayIfDefined("objects", self.objects)
+        return kparams
+
+    def getObjects(self):
+        return self.objects
+
+    def setObjects(self, newObjects):
+        self.objects = newObjects
+
+
+# @package Kaltura
+# @subpackage Client
+class KalturaPersonalList(KalturaObjectBase):
+    def __init__(self,
+            id=NotImplemented,
+            name=NotImplemented,
+            createDate=NotImplemented,
+            ksql=NotImplemented,
+            partnerListType=NotImplemented):
+        KalturaObjectBase.__init__(self)
+
+        # Id
+        # @var int
+        # @readonly
+        self.id = id
+
+        # Name
+        # @var string
+        self.name = name
+
+        # Create Date
+        # @var int
+        # @readonly
+        self.createDate = createDate
+
+        # Ksql
+        # @var string
+        self.ksql = ksql
+
+        # Partner List Type (optional)
+        # @var int
+        self.partnerListType = partnerListType
+
+
+    PROPERTY_LOADERS = {
+        'id': getXmlNodeInt, 
+        'name': getXmlNodeText, 
+        'createDate': getXmlNodeInt, 
+        'ksql': getXmlNodeText, 
+        'partnerListType': getXmlNodeInt, 
+    }
+
+    def fromXml(self, node):
+        KalturaObjectBase.fromXml(self, node)
+        self.fromXmlImpl(node, KalturaPersonalList.PROPERTY_LOADERS)
+
+    def toParams(self):
+        kparams = KalturaObjectBase.toParams(self)
+        kparams.put("objectType", "KalturaPersonalList")
+        kparams.addStringIfDefined("name", self.name)
+        kparams.addStringIfDefined("ksql", self.ksql)
+        kparams.addIntIfDefined("partnerListType", self.partnerListType)
+        return kparams
+
+    def getId(self):
+        return self.id
+
+    def getName(self):
+        return self.name
+
+    def setName(self, newName):
+        self.name = newName
+
+    def getCreateDate(self):
+        return self.createDate
+
+    def getKsql(self):
+        return self.ksql
+
+    def setKsql(self, newKsql):
+        self.ksql = newKsql
+
+    def getPartnerListType(self):
+        return self.partnerListType
+
+    def setPartnerListType(self, newPartnerListType):
+        self.partnerListType = newPartnerListType
+
+
+# @package Kaltura
+# @subpackage Client
+class KalturaPersonalListListResponse(KalturaListResponse):
+    """List of KalturaPersonalList."""
+
+    def __init__(self,
+            totalCount=NotImplemented,
+            objects=NotImplemented):
+        KalturaListResponse.__init__(self,
+            totalCount)
+
+        # Follow data list
+        # @var array of KalturaPersonalList
+        self.objects = objects
+
+
+    PROPERTY_LOADERS = {
+        'objects': (KalturaObjectFactory.createArray, 'KalturaPersonalList'), 
+    }
+
+    def fromXml(self, node):
+        KalturaListResponse.fromXml(self, node)
+        self.fromXmlImpl(node, KalturaPersonalListListResponse.PROPERTY_LOADERS)
+
+    def toParams(self):
+        kparams = KalturaListResponse.toParams(self)
+        kparams.put("objectType", "KalturaPersonalListListResponse")
         kparams.addArrayIfDefined("objects", self.objects)
         return kparams
 
@@ -16565,6 +16693,41 @@ class KalturaSubscriptionFilter(KalturaFilter):
 
 # @package Kaltura
 # @subpackage Client
+class KalturaPersonalListFilter(KalturaFilter):
+    def __init__(self,
+            orderBy=NotImplemented,
+            partnerListTypeEqual=NotImplemented):
+        KalturaFilter.__init__(self,
+            orderBy)
+
+        # partnerListType
+        # @var int
+        self.partnerListTypeEqual = partnerListTypeEqual
+
+
+    PROPERTY_LOADERS = {
+        'partnerListTypeEqual': getXmlNodeInt, 
+    }
+
+    def fromXml(self, node):
+        KalturaFilter.fromXml(self, node)
+        self.fromXmlImpl(node, KalturaPersonalListFilter.PROPERTY_LOADERS)
+
+    def toParams(self):
+        kparams = KalturaFilter.toParams(self)
+        kparams.put("objectType", "KalturaPersonalListFilter")
+        kparams.addIntIfDefined("partnerListTypeEqual", self.partnerListTypeEqual)
+        return kparams
+
+    def getPartnerListTypeEqual(self):
+        return self.partnerListTypeEqual
+
+    def setPartnerListTypeEqual(self, newPartnerListTypeEqual):
+        self.partnerListTypeEqual = newPartnerListTypeEqual
+
+
+# @package Kaltura
+# @subpackage Client
 class KalturaEngagementFilter(KalturaFilter):
     def __init__(self,
             orderBy=NotImplemented,
@@ -17100,6 +17263,87 @@ class KalturaBaseSearchAssetFilter(KalturaAssetFilter):
 
 # @package Kaltura
 # @subpackage Client
+class KalturaPersonalListSearchFilter(KalturaBaseSearchAssetFilter):
+    def __init__(self,
+            orderBy=NotImplemented,
+            name=NotImplemented,
+            dynamicOrderBy=NotImplemented,
+            groupBy=NotImplemented,
+            typeIn=NotImplemented,
+            kSql=NotImplemented,
+            partnerListTypeEqual=NotImplemented):
+        KalturaBaseSearchAssetFilter.__init__(self,
+            orderBy,
+            name,
+            dynamicOrderBy,
+            groupBy)
+
+        # Comma separated list of asset types to search within. 
+        #             Possible values: 0 - EPG linear programs entries, any media type ID (according to media type IDs defined dynamically in the system).
+        #             If omitted - all types should be included.
+        # @var string
+        self.typeIn = typeIn
+
+        # Search assets using dynamic criteria. Provided collection of nested expressions with key, comparison operators, value, and logical conjunction.
+        #             Possible keys: any Tag or Meta defined in the system and the following reserved keys: start_date, end_date. 
+        #             epg_id, media_id - for specific asset IDs.
+        #             geo_block - only valid value is &quot;true&quot;: When enabled, only assets that are not restricted to the user by geo-block rules will return.
+        #             parental_rules - only valid value is &quot;true&quot;: When enabled, only assets that the user doesn&#39;t need to provide PIN code will return.
+        #             user_interests - only valid value is &quot;true&quot;. When enabled, only assets that the user defined as his interests (by tags and metas) will return.
+        #             epg_channel_id - the channel identifier of the EPG program.
+        #             entitled_assets - valid values: &quot;free&quot;, &quot;entitled&quot;, &quot;not_entitled&quot;, &quot;both&quot;. free - gets only free to watch assets. entitled - only those that the user is implicitly entitled to watch.
+        #             Comparison operators: for numerical fields =, &gt;, &gt;=, &lt;, &lt;=, : (in). 
+        #             For alpha-numerical fields =, != (not), ~ (like), !~, ^ (any word starts with), ^= (phrase starts with), + (exists), !+ (not exists).
+        #             Logical conjunction: and, or. 
+        #             Search values are limited to 20 characters each for the next operators: ~, !~, ^, ^=
+        #             (maximum length of entire filter is 2048 characters)
+        # @var string
+        self.kSql = kSql
+
+        # partnerListType
+        # @var int
+        self.partnerListTypeEqual = partnerListTypeEqual
+
+
+    PROPERTY_LOADERS = {
+        'typeIn': getXmlNodeText, 
+        'kSql': getXmlNodeText, 
+        'partnerListTypeEqual': getXmlNodeInt, 
+    }
+
+    def fromXml(self, node):
+        KalturaBaseSearchAssetFilter.fromXml(self, node)
+        self.fromXmlImpl(node, KalturaPersonalListSearchFilter.PROPERTY_LOADERS)
+
+    def toParams(self):
+        kparams = KalturaBaseSearchAssetFilter.toParams(self)
+        kparams.put("objectType", "KalturaPersonalListSearchFilter")
+        kparams.addStringIfDefined("typeIn", self.typeIn)
+        kparams.addStringIfDefined("kSql", self.kSql)
+        kparams.addIntIfDefined("partnerListTypeEqual", self.partnerListTypeEqual)
+        return kparams
+
+    def getTypeIn(self):
+        return self.typeIn
+
+    def setTypeIn(self, newTypeIn):
+        self.typeIn = newTypeIn
+
+    def getKSql(self):
+        return self.kSql
+
+    def setKSql(self, newKSql):
+        self.kSql = newKSql
+
+    def getPartnerListTypeEqual(self):
+        return self.partnerListTypeEqual
+
+    def setPartnerListTypeEqual(self, newPartnerListTypeEqual):
+        self.partnerListTypeEqual = newPartnerListTypeEqual
+
+
+# @package Kaltura
+# @subpackage Client
 class KalturaSearchAssetFilter(KalturaBaseSearchAssetFilter):
     def __init__(self,
             orderBy=NotImplemented,
@@ -17118,7 +17362,7 @@ class KalturaSearchAssetFilter(KalturaBaseSearchAssetFilter):
         # Search assets using dynamic criteria. Provided collection of nested expressions with key, comparison operators, value, and logical conjunction.
         #             Possible keys: any Tag or Meta defined in the system and the following reserved keys: start_date, end_date. 
         #             epg_id, media_id - for specific asset IDs.
-        #             geo_block - only valid value is &quot;true&quot;: When enabled, only assets that are not restriced to the user by geo-block rules will return.
+        #             geo_block - only valid value is &quot;true&quot;: When enabled, only assets that are not restricted to the user by geo-block rules will return.
         #             parental_rules - only valid value is &quot;true&quot;: When enabled, only assets that the user doesn&#39;t need to provide PIN code will return.
         #             user_interests - only valid value is &quot;true&quot;. When enabled, only assets that the user defined as his interests (by tags and metas) will return.
         #             epg_channel_id - the channel identifier of the EPG program.
@@ -17126,7 +17370,7 @@ class KalturaSearchAssetFilter(KalturaBaseSearchAssetFilter):
         #             Comparison operators: for numerical fields =, &gt;, &gt;=, &lt;, &lt;=, : (in). 
         #             For alpha-numerical fields =, != (not), ~ (like), !~, ^ (any word starts with), ^= (phrase starts with), + (exists), !+ (not exists).
         #             Logical conjunction: and, or. 
-        #             Search values are limited to 20 characters each.
+        #             Search values are limited to 20 characters each for the next operators: ~, !~, ^, ^=
         #             (maximum length of entire filter is 2048 characters)
         # @var string
         self.kSql = kSql
@@ -17455,10 +17699,11 @@ class KalturaChannelFilter(KalturaAssetFilter):
         # @var int
         self.idEqual = idEqual
 
-        # Search assets using dynamic criteria. Provided collection of nested expressions with key, comparison operators, value, and logical conjunction.
+        # /// 
+        #             Search assets using dynamic criteria. Provided collection of nested expressions with key, comparison operators, value, and logical conjunction.
         #             Possible keys: any Tag or Meta defined in the system and the following reserved keys: start_date, end_date. 
         #             epg_id, media_id - for specific asset IDs.
-        #             geo_block - only valid value is &quot;true&quot;: When enabled, only assets that are not restriced to the user by geo-block rules will return.
+        #             geo_block - only valid value is &quot;true&quot;: When enabled, only assets that are not restricted to the user by geo-block rules will return.
         #             parental_rules - only valid value is &quot;true&quot;: When enabled, only assets that the user doesn&#39;t need to provide PIN code will return.
         #             user_interests - only valid value is &quot;true&quot;. When enabled, only assets that the user defined as his interests (by tags and metas) will return.
         #             epg_channel_id - the channel identifier of the EPG program.
@@ -17466,7 +17711,7 @@ class KalturaChannelFilter(KalturaAssetFilter):
         #             Comparison operators: for numerical fields =, &gt;, &gt;=, &lt;, &lt;=, : (in). 
         #             For alpha-numerical fields =, != (not), ~ (like), !~, ^ (any word starts with), ^= (phrase starts with), + (exists), !+ (not exists).
         #             Logical conjunction: and, or. 
-        #             Search values are limited to 20 characters each.
+        #             Search values are limited to 20 characters each for the next operators: ~, !~, ^, ^=
         #             (maximum length of entire filter is 2048 characters)
         # @var string
         self.kSql = kSql
@@ -17534,7 +17779,7 @@ class KalturaRelatedFilter(KalturaBaseSearchAssetFilter):
         # Search assets using dynamic criteria. Provided collection of nested expressions with key, comparison operators, value, and logical conjunction.
         #             Possible keys: any Tag or Meta defined in the system and the following reserved keys: start_date, end_date. 
         #             epg_id, media_id - for specific asset IDs.
-        #             geo_block - only valid value is &quot;true&quot;: When enabled, only assets that are not restriced to the user by geo-block rules will return.
+        #             geo_block - only valid value is &quot;true&quot;: When enabled, only assets that are not restricted to the user by geo-block rules will return.
         #             parental_rules - only valid value is &quot;true&quot;: When enabled, only assets that the user doesn&#39;t need to provide PIN code will return.
         #             user_interests - only valid value is &quot;true&quot;. When enabled, only assets that the user defined as his interests (by tags and metas) will return.
         #             epg_channel_id - the channel identifier of the EPG program.
@@ -17542,7 +17787,7 @@ class KalturaRelatedFilter(KalturaBaseSearchAssetFilter):
         #             Comparison operators: for numerical fields =, &gt;, &gt;=, &lt;, &lt;=, : (in). 
         #             For alpha-numerical fields =, != (not), ~ (like), !~, ^ (any word starts with), ^= (phrase starts with), + (exists), !+ (not exists).
         #             Logical conjunction: and, or. 
-        #             Search values are limited to 20 characters each.
+        #             Search values are limited to 20 characters each for the next operators: ~, !~, ^, ^=
         #             (maximum length of entire filter is 2048 characters)
         # @var string
         self.kSql = kSql
@@ -26266,6 +26511,47 @@ class KalturaPersonalFeedService(KalturaServiceBase):
 
 # @package Kaltura
 # @subpackage Client
+class KalturaPersonalListService(KalturaServiceBase):
+    def __init__(self, client = None):
+        KalturaServiceBase.__init__(self, client)
+
+    def add(self, personalList):
+        """Add a user&#39;s personal list item to follow."""
+
+        kparams = KalturaParams()
+        kparams.addObjectIfDefined("personalList", personalList)
+        self.client.queueServiceActionCall("personallist", "add", "KalturaPersonalList", kparams)
+        if self.client.isMultiRequest():
+            return self.client.getMultiRequestResult()
+        resultNode = self.client.doQueue()
+        return KalturaObjectFactory.create(resultNode, 'KalturaPersonalList')
+
+    def delete(self, personalListId):
+        """Remove followed item from user&#39;s personal list"""
+
+        kparams = KalturaParams()
+        kparams.addIntIfDefined("personalListId", personalListId);
+        self.client.queueServiceActionCall("personallist", "delete", "None", kparams)
+        if self.client.isMultiRequest():
+            return self.client.getMultiRequestResult()
+        resultNode = self.client.doQueue()
+
+    def list(self, filter = NotImplemented, pager = NotImplemented):
+        """List user&#39;s tv personal item to follow.
+                    Possible status codes:"""
+
+        kparams = KalturaParams()
+        kparams.addObjectIfDefined("filter", filter)
+        kparams.addObjectIfDefined("pager", pager)
+        self.client.queueServiceActionCall("personallist", "list", "KalturaPersonalListListResponse", kparams)
+        if self.client.isMultiRequest():
+            return self.client.getMultiRequestResult()
+        resultNode = self.client.doQueue()
+        return KalturaObjectFactory.create(resultNode, 'KalturaPersonalListListResponse')
+
+
+# @package Kaltura
+# @subpackage Client
 class KalturaPinService(KalturaServiceBase):
     def __init__(self, client = None):
         KalturaServiceBase.__init__(self, client)
@@ -27657,6 +27943,7 @@ class KalturaCoreClient(KalturaClientPlugin):
             'paymentGatewayProfile': KalturaPaymentGatewayProfileService,
             'paymentMethodProfile': KalturaPaymentMethodProfileService,
             'personalFeed': KalturaPersonalFeedService,
+            'personalList': KalturaPersonalListService,
             'pin': KalturaPinService,
             'ppv': KalturaPpvService,
             'priceDetails': KalturaPriceDetailsService,
@@ -27760,6 +28047,7 @@ class KalturaCoreClient(KalturaClientPlugin):
             'KalturaPaymentMethodProfileOrderBy': KalturaPaymentMethodProfileOrderBy,
             'KalturaPaymentMethodType': KalturaPaymentMethodType,
             'KalturaPersonalFeedOrderBy': KalturaPersonalFeedOrderBy,
+            'KalturaPersonalListOrderBy': KalturaPersonalListOrderBy,
             'KalturaPinType': KalturaPinType,
             'KalturaPlatform': KalturaPlatform,
             'KalturaPlaybackContextType': KalturaPlaybackContextType,
@@ -27917,6 +28205,8 @@ class KalturaCoreClient(KalturaClientPlugin):
             'KalturaNpvrPremiumService': KalturaNpvrPremiumService,
             'KalturaHouseholdPremiumService': KalturaHouseholdPremiumService,
             'KalturaProductsPriceListResponse': KalturaProductsPriceListResponse,
+            'KalturaPersonalList': KalturaPersonalList,
+            'KalturaPersonalListListResponse': KalturaPersonalListListResponse,
             'KalturaEngagement': KalturaEngagement,
             'KalturaEngagementListResponse': KalturaEngagementListResponse,
             'KalturaEngagementAdapterBase': KalturaEngagementAdapterBase,
@@ -28055,6 +28345,7 @@ class KalturaCoreClient(KalturaClientPlugin):
             'KalturaSubscriptionSetFilter': KalturaSubscriptionSetFilter,
             'KalturaSubscriptionDependencySetFilter': KalturaSubscriptionDependencySetFilter,
             'KalturaSubscriptionFilter': KalturaSubscriptionFilter,
+            'KalturaPersonalListFilter': KalturaPersonalListFilter,
             'KalturaEngagementFilter': KalturaEngagementFilter,
             'KalturaReminderFilter': KalturaReminderFilter,
             'KalturaAssetReminderFilter': KalturaAssetReminderFilter,
@@ -28070,6 +28361,7 @@ class KalturaCoreClient(KalturaClientPlugin):
             'KalturaDynamicOrderBy': KalturaDynamicOrderBy,
             'KalturaAssetFilter': KalturaAssetFilter,
             'KalturaBaseSearchAssetFilter': KalturaBaseSearchAssetFilter,
+            'KalturaPersonalListSearchFilter': KalturaPersonalListSearchFilter,
             'KalturaSearchAssetFilter': KalturaSearchAssetFilter,
             'KalturaSearchAssetListFilter': KalturaSearchAssetListFilter,
             'KalturaScheduledRecordingProgramFilter': KalturaScheduledRecordingProgramFilter,
