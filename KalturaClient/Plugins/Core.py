@@ -42,7 +42,7 @@ from ..Base import (
     KalturaServiceBase,
 )
 
-API_VERSION = '4.82.38.16020'
+API_VERSION = '4.82.39.20340'
 
 ########## enums ##########
 # @package Kaltura
@@ -17243,7 +17243,7 @@ class KalturaBaseSearchAssetFilter(KalturaAssetFilter):
             orderBy=NotImplemented,
             name=NotImplemented,
             dynamicOrderBy=NotImplemented,
-            ksql=NotImplemented,
+            kSql=NotImplemented,
             groupBy=NotImplemented):
         KalturaAssetFilter.__init__(self,
             orderBy,
@@ -17265,7 +17265,7 @@ class KalturaBaseSearchAssetFilter(KalturaAssetFilter):
         #             Search values are limited to 20 characters each for the next operators: ~, !~, ^, ^=
         #             (maximum length of entire filter is 2048 characters)
         # @var string
-        self.ksql = ksql
+        self.kSql = kSql
 
         # groupBy
         # @var array of KalturaAssetGroupBy
@@ -17273,7 +17273,7 @@ class KalturaBaseSearchAssetFilter(KalturaAssetFilter):
 
 
     PROPERTY_LOADERS = {
-        'ksql': getXmlNodeText, 
+        'kSql': getXmlNodeText, 
         'groupBy': (KalturaObjectFactory.createArray, 'KalturaAssetGroupBy'), 
     }
 
@@ -17284,15 +17284,15 @@ class KalturaBaseSearchAssetFilter(KalturaAssetFilter):
     def toParams(self):
         kparams = KalturaAssetFilter.toParams(self)
         kparams.put("objectType", "KalturaBaseSearchAssetFilter")
-        kparams.addStringIfDefined("ksql", self.ksql)
+        kparams.addStringIfDefined("kSql", self.kSql)
         kparams.addArrayIfDefined("groupBy", self.groupBy)
         return kparams
 
-    def getKsql(self):
-        return self.ksql
+    def getKSql(self):
+        return self.kSql
 
-    def setKsql(self, newKsql):
-        self.ksql = newKsql
+    def setKSql(self, newKSql):
+        self.kSql = newKSql
 
     def getGroupBy(self):
         return self.groupBy
@@ -17308,14 +17308,14 @@ class KalturaPersonalListSearchFilter(KalturaBaseSearchAssetFilter):
             orderBy=NotImplemented,
             name=NotImplemented,
             dynamicOrderBy=NotImplemented,
-            ksql=NotImplemented,
+            kSql=NotImplemented,
             groupBy=NotImplemented,
             partnerListTypeIn=NotImplemented):
         KalturaBaseSearchAssetFilter.__init__(self,
             orderBy,
             name,
             dynamicOrderBy,
-            ksql,
+            kSql,
             groupBy)
 
         # Comma separated list of partner list types to search within. 
@@ -17352,7 +17352,7 @@ class KalturaSearchAssetFilter(KalturaBaseSearchAssetFilter):
             orderBy=NotImplemented,
             name=NotImplemented,
             dynamicOrderBy=NotImplemented,
-            ksql=NotImplemented,
+            kSql=NotImplemented,
             groupBy=NotImplemented,
             typeIn=NotImplemented,
             idIn=NotImplemented):
@@ -17360,7 +17360,7 @@ class KalturaSearchAssetFilter(KalturaBaseSearchAssetFilter):
             orderBy,
             name,
             dynamicOrderBy,
-            ksql,
+            kSql,
             groupBy)
 
         # (Deprecated - use KalturaBaseSearchAssetFilter.kSql)
@@ -17411,7 +17411,7 @@ class KalturaSearchAssetListFilter(KalturaSearchAssetFilter):
             orderBy=NotImplemented,
             name=NotImplemented,
             dynamicOrderBy=NotImplemented,
-            ksql=NotImplemented,
+            kSql=NotImplemented,
             groupBy=NotImplemented,
             typeIn=NotImplemented,
             idIn=NotImplemented,
@@ -17420,7 +17420,7 @@ class KalturaSearchAssetListFilter(KalturaSearchAssetFilter):
             orderBy,
             name,
             dynamicOrderBy,
-            ksql,
+            kSql,
             groupBy,
             typeIn,
             idIn)
@@ -17747,7 +17747,7 @@ class KalturaRelatedFilter(KalturaBaseSearchAssetFilter):
             orderBy=NotImplemented,
             name=NotImplemented,
             dynamicOrderBy=NotImplemented,
-            ksql=NotImplemented,
+            kSql=NotImplemented,
             groupBy=NotImplemented,
             idEqual=NotImplemented,
             typeIn=NotImplemented,
@@ -17756,7 +17756,7 @@ class KalturaRelatedFilter(KalturaBaseSearchAssetFilter):
             orderBy,
             name,
             dynamicOrderBy,
-            ksql,
+            kSql,
             groupBy)
 
         # the ID of the asset for which to return related assets
