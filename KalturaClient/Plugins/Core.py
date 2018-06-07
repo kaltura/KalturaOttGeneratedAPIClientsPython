@@ -42,7 +42,7 @@ from ..Base import (
     KalturaServiceBase,
 )
 
-API_VERSION = '4.82.37.43141'
+API_VERSION = '4.82.38.16020'
 
 ########## enums ##########
 # @package Kaltura
@@ -936,8 +936,8 @@ class KalturaPersonalFeedOrderBy(object):
 # @package Kaltura
 # @subpackage Client
 class KalturaPersonalListOrderBy(object):
-    START_DATE_DESC = "START_DATE_DESC"
-    START_DATE_ASC = "START_DATE_ASC"
+    CREATE_DATE_DESC = "CREATE_DATE_DESC"
+    CREATE_DATE_ASC = "CREATE_DATE_ASC"
 
     def __init__(self, value):
         self.value = value
