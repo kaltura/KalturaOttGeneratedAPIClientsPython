@@ -42,7 +42,7 @@ from ..Base import (
     KalturaServiceBase,
 )
 
-API_VERSION = '4.82.44.21618'
+API_VERSION = '4.82.49.42002'
 
 ########## enums ##########
 # @package Kaltura
@@ -187,6 +187,17 @@ class KalturaAssetReminderOrderBy(object):
     START_DATE_DESC = "START_DATE_DESC"
     START_DATE_ASC = "START_DATE_ASC"
     LIKES_DESC = "LIKES_DESC"
+
+    def __init__(self, value):
+        self.value = value
+
+    def getValue(self):
+        return self.value
+
+# @package Kaltura
+# @subpackage Client
+class KalturaAssetRuleOrderBy(object):
+    NONE = "NONE"
 
     def __init__(self, value):
         self.value = value
@@ -348,6 +359,18 @@ class KalturaCollectionOrderBy(object):
 class KalturaCompensationType(object):
     PERCENTAGE = "PERCENTAGE"
     FIXED_AMOUNT = "FIXED_AMOUNT"
+
+    def __init__(self, value):
+        self.value = value
+
+    def getValue(self):
+        return self.value
+
+# @package Kaltura
+# @subpackage Client
+class KalturaConcurrencyLimitationType(object):
+    SINGLE = "Single"
+    GROUP = "Group"
 
     def __init__(self, value):
         self.value = value
@@ -1192,6 +1215,19 @@ class KalturaRuleActionType(object):
     START_DATE_OFFSET = "START_DATE_OFFSET"
     END_DATE_OFFSET = "END_DATE_OFFSET"
     USER_BLOCK = "USER_BLOCK"
+
+    def __init__(self, value):
+        self.value = value
+
+    def getValue(self):
+        return self.value
+
+# @package Kaltura
+# @subpackage Client
+class KalturaRuleConditionType(object):
+    ASSET = "ASSET"
+    COUNTRY = "COUNTRY"
+    CONCURRENCY = "CONCURRENCY"
 
     def __init__(self, value):
         self.value = value
@@ -12597,8 +12633,14 @@ class KalturaCondition(KalturaObjectBase):
     """Condition"""
 
     def __init__(self,
+            type=NotImplemented,
             description=NotImplemented):
         KalturaObjectBase.__init__(self)
+
+        # The type of the condition
+        # @var KalturaRuleConditionType
+        # @readonly
+        self.type = type
 
         # Description
         # @var string
@@ -12606,6 +12648,7 @@ class KalturaCondition(KalturaObjectBase):
 
 
     PROPERTY_LOADERS = {
+        'type': (KalturaEnumsFactory.createString, "KalturaRuleConditionType"), 
         'description': getXmlNodeText, 
     }
 
@@ -12618,6 +12661,9 @@ class KalturaCondition(KalturaObjectBase):
         kparams.put("objectType", "KalturaCondition")
         kparams.addStringIfDefined("description", self.description)
         return kparams
+
+    def getType(self):
+        return self.type
 
     def getDescription(self):
         return self.description
@@ -12632,9 +12678,11 @@ class KalturaAssetCondition(KalturaCondition):
     """Asset Condition"""
 
     def __init__(self,
+            type=NotImplemented,
             description=NotImplemented,
             ksql=NotImplemented):
         KalturaCondition.__init__(self,
+            type,
             description)
 
         # KSQL
@@ -12903,10 +12951,12 @@ class KalturaCountryCondition(KalturaCondition):
     """Country condition"""
 
     def __init__(self,
+            type=NotImplemented,
             description=NotImplemented,
             not_=NotImplemented,
             countries=NotImplemented):
         KalturaCondition.__init__(self,
+            type,
             description)
 
         # Indicates whether to apply not on the other properties in the condition
@@ -12945,6 +12995,60 @@ class KalturaCountryCondition(KalturaCondition):
 
     def setCountries(self, newCountries):
         self.countries = newCountries
+
+
+# @package Kaltura
+# @subpackage Client
+class KalturaConcurrencyCondition(KalturaAssetCondition):
+    """Asset Condition"""
+
+    def __init__(self,
+            type=NotImplemented,
+            description=NotImplemented,
+            ksql=NotImplemented,
+            limit=NotImplemented,
+            concurrencyLimitationType=NotImplemented):
+        KalturaAssetCondition.__init__(self,
+            type,
+            description,
+            ksql)
+
+        # Concurrency limitation
+        # @var int
+        self.limit = limit
+
+        # Concurrency limitation type
+        # @var KalturaConcurrencyLimitationType
+        self.concurrencyLimitationType = concurrencyLimitationType
+
+
+    PROPERTY_LOADERS = {
+        'limit': getXmlNodeInt, 
+        'concurrencyLimitationType': (KalturaEnumsFactory.createString, "KalturaConcurrencyLimitationType"), 
+    }
+
+    def fromXml(self, node):
+        KalturaAssetCondition.fromXml(self, node)
+        self.fromXmlImpl(node, KalturaConcurrencyCondition.PROPERTY_LOADERS)
+
+    def toParams(self):
+        kparams = KalturaAssetCondition.toParams(self)
+        kparams.put("objectType", "KalturaConcurrencyCondition")
+        kparams.addIntIfDefined("limit", self.limit)
+        kparams.addStringEnumIfDefined("concurrencyLimitationType", self.concurrencyLimitationType)
+        return kparams
+
+    def getLimit(self):
+        return self.limit
+
+    def setLimit(self, newLimit):
+        self.limit = newLimit
+
+    def getConcurrencyLimitationType(self):
+        return self.concurrencyLimitationType
+
+    def setConcurrencyLimitationType(self, newConcurrencyLimitationType):
+        self.concurrencyLimitationType = newConcurrencyLimitationType
 
 
 # @package Kaltura
@@ -18461,6 +18565,43 @@ class KalturaAssetHistoryFilter(KalturaFilter):
 
 # @package Kaltura
 # @subpackage Client
+class KalturaAssetRuleFilter(KalturaFilter):
+    """Asset rule filter"""
+
+    def __init__(self,
+            orderBy=NotImplemented,
+            conditionsContainType=NotImplemented):
+        KalturaFilter.__init__(self,
+            orderBy)
+
+        # Indicates if to get the asset user rule list for the attached user or for the entire group
+        # @var KalturaRuleConditionType
+        self.conditionsContainType = conditionsContainType
+
+
+    PROPERTY_LOADERS = {
+        'conditionsContainType': (KalturaEnumsFactory.createString, "KalturaRuleConditionType"), 
+    }
+
+    def fromXml(self, node):
+        KalturaFilter.fromXml(self, node)
+        self.fromXmlImpl(node, KalturaAssetRuleFilter.PROPERTY_LOADERS)
+
+    def toParams(self):
+        kparams = KalturaFilter.toParams(self)
+        kparams.put("objectType", "KalturaAssetRuleFilter")
+        kparams.addStringEnumIfDefined("conditionsContainType", self.conditionsContainType)
+        return kparams
+
+    def getConditionsContainType(self):
+        return self.conditionsContainType
+
+    def setConditionsContainType(self, newConditionsContainType):
+        self.conditionsContainType = newConditionsContainType
+
+
+# @package Kaltura
+# @subpackage Client
 class KalturaAssetUserRuleFilter(KalturaFilter):
     """Asset user rule filter"""
 
@@ -23870,10 +24011,11 @@ class KalturaAssetRuleService(KalturaServiceBase):
         resultNode = self.client.doQueue()
         return getXmlNodeBool(resultNode)
 
-    def list(self):
+    def list(self, filter = NotImplemented):
         """Get the list of asset rules for the partner"""
 
         kparams = KalturaParams()
+        kparams.addObjectIfDefined("filter", filter)
         self.client.queueServiceActionCall("assetrule", "list", "KalturaAssetRuleListResponse", kparams)
         if self.client.isMultiRequest():
             return self.client.getMultiRequestResult()
@@ -27954,6 +28096,7 @@ class KalturaCoreClient(KalturaClientPlugin):
             'KalturaAssetOrderBy': KalturaAssetOrderBy,
             'KalturaAssetReferenceType': KalturaAssetReferenceType,
             'KalturaAssetReminderOrderBy': KalturaAssetReminderOrderBy,
+            'KalturaAssetRuleOrderBy': KalturaAssetRuleOrderBy,
             'KalturaAssetType': KalturaAssetType,
             'KalturaAssetUserRuleOrderBy': KalturaAssetUserRuleOrderBy,
             'KalturaBillingAction': KalturaBillingAction,
@@ -27965,6 +28108,7 @@ class KalturaCoreClient(KalturaClientPlugin):
             'KalturaChannelEnrichment': KalturaChannelEnrichment,
             'KalturaCollectionOrderBy': KalturaCollectionOrderBy,
             'KalturaCompensationType': KalturaCompensationType,
+            'KalturaConcurrencyLimitationType': KalturaConcurrencyLimitationType,
             'KalturaConfigurationGroupDeviceOrderBy': KalturaConfigurationGroupDeviceOrderBy,
             'KalturaConfigurationGroupTagOrderBy': KalturaConfigurationGroupTagOrderBy,
             'KalturaConfigurationsOrderBy': KalturaConfigurationsOrderBy,
@@ -28030,6 +28174,7 @@ class KalturaCoreClient(KalturaClientPlugin):
             'KalturaReminderType': KalturaReminderType,
             'KalturaReportOrderBy': KalturaReportOrderBy,
             'KalturaRuleActionType': KalturaRuleActionType,
+            'KalturaRuleConditionType': KalturaRuleConditionType,
             'KalturaRuleLevel': KalturaRuleLevel,
             'KalturaRuleType': KalturaRuleType,
             'KalturaScheduledRecordingAssetType': KalturaScheduledRecordingAssetType,
@@ -28238,6 +28383,7 @@ class KalturaCoreClient(KalturaClientPlugin):
             'KalturaAssetRuleAction': KalturaAssetRuleAction,
             'KalturaAssetRule': KalturaAssetRule,
             'KalturaCountryCondition': KalturaCountryCondition,
+            'KalturaConcurrencyCondition': KalturaConcurrencyCondition,
             'KalturaAssetUserRuleBlockAction': KalturaAssetUserRuleBlockAction,
             'KalturaAccessControlBlockAction': KalturaAccessControlBlockAction,
             'KalturaTimeOffsetRuleAction': KalturaTimeOffsetRuleAction,
@@ -28343,6 +28489,7 @@ class KalturaCoreClient(KalturaClientPlugin):
             'KalturaAssetCommentFilter': KalturaAssetCommentFilter,
             'KalturaBookmarkFilter': KalturaBookmarkFilter,
             'KalturaAssetHistoryFilter': KalturaAssetHistoryFilter,
+            'KalturaAssetRuleFilter': KalturaAssetRuleFilter,
             'KalturaAssetUserRuleFilter': KalturaAssetUserRuleFilter,
             'KalturaCurrencyFilter': KalturaCurrencyFilter,
             'KalturaLanguageFilter': KalturaLanguageFilter,
