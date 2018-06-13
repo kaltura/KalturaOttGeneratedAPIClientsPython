@@ -42,7 +42,7 @@ from ..Base import (
     KalturaServiceBase,
 )
 
-API_VERSION = '4.82.52.21860'
+API_VERSION = '4.82.54.27013'
 
 ########## enums ##########
 # @package Kaltura
@@ -18570,17 +18570,23 @@ class KalturaAssetRuleFilter(KalturaFilter):
 
     def __init__(self,
             orderBy=NotImplemented,
-            conditionsContainType=NotImplemented):
+            conditionsContainType=NotImplemented,
+            assetApplied=NotImplemented):
         KalturaFilter.__init__(self,
             orderBy)
 
-        # Indicates if to get the asset user rule list for the attached user or for the entire group
+        # Indicates which asset rule list to return by it KalturaRuleConditionType
         # @var KalturaRuleConditionType
         self.conditionsContainType = conditionsContainType
+
+        # Indicates if to return an asset rule list that related to specific asset
+        # @var KalturaSlimAsset
+        self.assetApplied = assetApplied
 
 
     PROPERTY_LOADERS = {
         'conditionsContainType': (KalturaEnumsFactory.createString, "KalturaRuleConditionType"), 
+        'assetApplied': (KalturaObjectFactory.create, 'KalturaSlimAsset'), 
     }
 
     def fromXml(self, node):
@@ -18591,6 +18597,7 @@ class KalturaAssetRuleFilter(KalturaFilter):
         kparams = KalturaFilter.toParams(self)
         kparams.put("objectType", "KalturaAssetRuleFilter")
         kparams.addStringEnumIfDefined("conditionsContainType", self.conditionsContainType)
+        kparams.addObjectIfDefined("assetApplied", self.assetApplied)
         return kparams
 
     def getConditionsContainType(self):
@@ -18598,6 +18605,12 @@ class KalturaAssetRuleFilter(KalturaFilter):
 
     def setConditionsContainType(self, newConditionsContainType):
         self.conditionsContainType = newConditionsContainType
+
+    def getAssetApplied(self):
+        return self.assetApplied
+
+    def setAssetApplied(self, newAssetApplied):
+        self.assetApplied = newAssetApplied
 
 
 # @package Kaltura
