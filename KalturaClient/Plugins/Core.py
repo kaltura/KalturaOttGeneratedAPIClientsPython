@@ -42,7 +42,7 @@ from ..Base import (
     KalturaServiceBase,
 )
 
-API_VERSION = '4.82.61.19886'
+API_VERSION = '4.82.72.32512'
 
 ########## enums ##########
 # @package Kaltura
@@ -4350,6 +4350,153 @@ class KalturaConfigurationGroupListResponse(KalturaListResponse):
     def toParams(self):
         kparams = KalturaListResponse.toParams(self)
         kparams.put("objectType", "KalturaConfigurationGroupListResponse")
+        kparams.addArrayIfDefined("objects", self.objects)
+        return kparams
+
+    def getObjects(self):
+        return self.objects
+
+    def setObjects(self, newObjects):
+        self.objects = newObjects
+
+
+# @package Kaltura
+# @subpackage Client
+class KalturaSSOAdapterProfile(KalturaObjectBase):
+    """SSO adapter configuration"""
+
+    def __init__(self,
+            id=NotImplemented,
+            name=NotImplemented,
+            isActive=NotImplemented,
+            adapterUrl=NotImplemented,
+            ssoAdapterSettings=NotImplemented,
+            externalIdentifier=NotImplemented,
+            sharedSecret=NotImplemented):
+        KalturaObjectBase.__init__(self)
+
+        # SSO Adapter id
+        # @var int
+        # @readonly
+        self.id = id
+
+        # SSO Adapter name
+        # @var string
+        self.name = name
+
+        # SSO Adapter is active status
+        # @var int
+        self.isActive = isActive
+
+        # SSO Adapter URL
+        # @var string
+        self.adapterUrl = adapterUrl
+
+        # SSO Adapter extra parameters
+        # @var map
+        self.ssoAdapterSettings = ssoAdapterSettings
+
+        # SSO Adapter external identifier
+        # @var string
+        self.externalIdentifier = externalIdentifier
+
+        # Shared Secret
+        # @var string
+        self.sharedSecret = sharedSecret
+
+
+    PROPERTY_LOADERS = {
+        'id': getXmlNodeInt, 
+        'name': getXmlNodeText, 
+        'isActive': getXmlNodeInt, 
+        'adapterUrl': getXmlNodeText, 
+        'ssoAdapterSettings': (KalturaObjectFactory.createMap, 'KalturaStringValue'), 
+        'externalIdentifier': getXmlNodeText, 
+        'sharedSecret': getXmlNodeText, 
+    }
+
+    def fromXml(self, node):
+        KalturaObjectBase.fromXml(self, node)
+        self.fromXmlImpl(node, KalturaSSOAdapterProfile.PROPERTY_LOADERS)
+
+    def toParams(self):
+        kparams = KalturaObjectBase.toParams(self)
+        kparams.put("objectType", "KalturaSSOAdapterProfile")
+        kparams.addStringIfDefined("name", self.name)
+        kparams.addIntIfDefined("isActive", self.isActive)
+        kparams.addStringIfDefined("adapterUrl", self.adapterUrl)
+        kparams.addMapIfDefined("ssoAdapterSettings", self.ssoAdapterSettings)
+        kparams.addStringIfDefined("externalIdentifier", self.externalIdentifier)
+        kparams.addStringIfDefined("sharedSecret", self.sharedSecret)
+        return kparams
+
+    def getId(self):
+        return self.id
+
+    def getName(self):
+        return self.name
+
+    def setName(self, newName):
+        self.name = newName
+
+    def getIsActive(self):
+        return self.isActive
+
+    def setIsActive(self, newIsActive):
+        self.isActive = newIsActive
+
+    def getAdapterUrl(self):
+        return self.adapterUrl
+
+    def setAdapterUrl(self, newAdapterUrl):
+        self.adapterUrl = newAdapterUrl
+
+    def getSsoAdapterSettings(self):
+        return self.ssoAdapterSettings
+
+    def setSsoAdapterSettings(self, newSsoAdapterSettings):
+        self.ssoAdapterSettings = newSsoAdapterSettings
+
+    def getExternalIdentifier(self):
+        return self.externalIdentifier
+
+    def setExternalIdentifier(self, newExternalIdentifier):
+        self.externalIdentifier = newExternalIdentifier
+
+    def getSharedSecret(self):
+        return self.sharedSecret
+
+    def setSharedSecret(self, newSharedSecret):
+        self.sharedSecret = newSharedSecret
+
+
+# @package Kaltura
+# @subpackage Client
+class KalturaSSOAdapterProfileListResponse(KalturaListResponse):
+    """ssoAdapterProfile list"""
+
+    def __init__(self,
+            totalCount=NotImplemented,
+            objects=NotImplemented):
+        KalturaListResponse.__init__(self,
+            totalCount)
+
+        # A list of payment-gateway profiles
+        # @var array of KalturaSSOAdapterProfile
+        self.objects = objects
+
+
+    PROPERTY_LOADERS = {
+        'objects': (KalturaObjectFactory.createArray, 'KalturaSSOAdapterProfile'), 
+    }
+
+    def fromXml(self, node):
+        KalturaListResponse.fromXml(self, node)
+        self.fromXmlImpl(node, KalturaSSOAdapterProfileListResponse.PROPERTY_LOADERS)
+
+    def toParams(self):
+        kparams = KalturaListResponse.toParams(self)
+        kparams.put("objectType", "KalturaSSOAdapterProfileListResponse")
         kparams.addArrayIfDefined("objects", self.objects)
         return kparams
 
@@ -27440,6 +27587,68 @@ class KalturaSocialFriendActivityService(KalturaServiceBase):
 
 # @package Kaltura
 # @subpackage Client
+class KalturaSsoAdapterProfileService(KalturaServiceBase):
+    def __init__(self, client = None):
+        KalturaServiceBase.__init__(self, client)
+
+    def add(self, ssoAdapter):
+        """Insert new sso adapter for partner"""
+
+        kparams = KalturaParams()
+        kparams.addObjectIfDefined("ssoAdapter", ssoAdapter)
+        self.client.queueServiceActionCall("ssoadapterprofile", "add", "KalturaSSOAdapterProfile", kparams)
+        if self.client.isMultiRequest():
+            return self.client.getMultiRequestResult()
+        resultNode = self.client.doQueue()
+        return KalturaObjectFactory.create(resultNode, 'KalturaSSOAdapterProfile')
+
+    def delete(self, ssoAdapterId):
+        """Delete sso adapters by sso adapters id"""
+
+        kparams = KalturaParams()
+        kparams.addIntIfDefined("ssoAdapterId", ssoAdapterId);
+        self.client.queueServiceActionCall("ssoadapterprofile", "delete", "None", kparams)
+        if self.client.isMultiRequest():
+            return self.client.getMultiRequestResult()
+        resultNode = self.client.doQueue()
+        return getXmlNodeBool(resultNode)
+
+    def generateSharedSecret(self, ssoAdapterId):
+        """Generate SSO Adapter shared secret"""
+
+        kparams = KalturaParams()
+        kparams.addIntIfDefined("ssoAdapterId", ssoAdapterId);
+        self.client.queueServiceActionCall("ssoadapterprofile", "generateSharedSecret", "KalturaSSOAdapterProfile", kparams)
+        if self.client.isMultiRequest():
+            return self.client.getMultiRequestResult()
+        resultNode = self.client.doQueue()
+        return KalturaObjectFactory.create(resultNode, 'KalturaSSOAdapterProfile')
+
+    def list(self):
+        """Returns all sso adapters for partner : id + name"""
+
+        kparams = KalturaParams()
+        self.client.queueServiceActionCall("ssoadapterprofile", "list", "KalturaSSOAdapterProfileListResponse", kparams)
+        if self.client.isMultiRequest():
+            return self.client.getMultiRequestResult()
+        resultNode = self.client.doQueue()
+        return KalturaObjectFactory.create(resultNode, 'KalturaSSOAdapterProfileListResponse')
+
+    def update(self, ssoAdapterId, ssoAdapter):
+        """Update sso adapter details"""
+
+        kparams = KalturaParams()
+        kparams.addIntIfDefined("ssoAdapterId", ssoAdapterId);
+        kparams.addObjectIfDefined("ssoAdapter", ssoAdapter)
+        self.client.queueServiceActionCall("ssoadapterprofile", "update", "KalturaSSOAdapterProfile", kparams)
+        if self.client.isMultiRequest():
+            return self.client.getMultiRequestResult()
+        resultNode = self.client.doQueue()
+        return KalturaObjectFactory.create(resultNode, 'KalturaSSOAdapterProfile')
+
+
+# @package Kaltura
+# @subpackage Client
 class KalturaSubscriptionService(KalturaServiceBase):
     def __init__(self, client = None):
         KalturaServiceBase.__init__(self, client)
@@ -28081,6 +28290,7 @@ class KalturaCoreClient(KalturaClientPlugin):
             'socialComment': KalturaSocialCommentService,
             'social': KalturaSocialService,
             'socialFriendActivity': KalturaSocialFriendActivityService,
+            'ssoAdapterProfile': KalturaSsoAdapterProfileService,
             'subscription': KalturaSubscriptionService,
             'subscriptionSet': KalturaSubscriptionSetService,
             'system': KalturaSystemService,
@@ -28272,6 +28482,8 @@ class KalturaCoreClient(KalturaClientPlugin):
             'KalturaConfigurationIdentifier': KalturaConfigurationIdentifier,
             'KalturaConfigurationGroup': KalturaConfigurationGroup,
             'KalturaConfigurationGroupListResponse': KalturaConfigurationGroupListResponse,
+            'KalturaSSOAdapterProfile': KalturaSSOAdapterProfile,
+            'KalturaSSOAdapterProfileListResponse': KalturaSSOAdapterProfileListResponse,
             'KalturaUserInterestTopic': KalturaUserInterestTopic,
             'KalturaUserInterest': KalturaUserInterest,
             'KalturaUserInterestListResponse': KalturaUserInterestListResponse,
