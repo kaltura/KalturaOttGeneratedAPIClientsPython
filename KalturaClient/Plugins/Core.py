@@ -42,7 +42,7 @@ from ..Base import (
     KalturaServiceBase,
 )
 
-API_VERSION = '4.82.72.43113'
+API_VERSION = '4.82.73.12145'
 
 ########## enums ##########
 # @package Kaltura
@@ -4370,7 +4370,7 @@ class KalturaSSOAdapterProfile(KalturaObjectBase):
             name=NotImplemented,
             isActive=NotImplemented,
             adapterUrl=NotImplemented,
-            ssoAdapterSettings=NotImplemented,
+            settings=NotImplemented,
             externalIdentifier=NotImplemented,
             sharedSecret=NotImplemented):
         KalturaObjectBase.__init__(self)
@@ -4394,7 +4394,7 @@ class KalturaSSOAdapterProfile(KalturaObjectBase):
 
         # SSO Adapter extra parameters
         # @var map
-        self.ssoAdapterSettings = ssoAdapterSettings
+        self.settings = settings
 
         # SSO Adapter external identifier
         # @var string
@@ -4410,7 +4410,7 @@ class KalturaSSOAdapterProfile(KalturaObjectBase):
         'name': getXmlNodeText, 
         'isActive': getXmlNodeInt, 
         'adapterUrl': getXmlNodeText, 
-        'ssoAdapterSettings': (KalturaObjectFactory.createMap, 'KalturaStringValue'), 
+        'settings': (KalturaObjectFactory.createMap, 'KalturaStringValue'), 
         'externalIdentifier': getXmlNodeText, 
         'sharedSecret': getXmlNodeText, 
     }
@@ -4425,7 +4425,7 @@ class KalturaSSOAdapterProfile(KalturaObjectBase):
         kparams.addStringIfDefined("name", self.name)
         kparams.addIntIfDefined("isActive", self.isActive)
         kparams.addStringIfDefined("adapterUrl", self.adapterUrl)
-        kparams.addMapIfDefined("ssoAdapterSettings", self.ssoAdapterSettings)
+        kparams.addMapIfDefined("settings", self.settings)
         kparams.addStringIfDefined("externalIdentifier", self.externalIdentifier)
         kparams.addStringIfDefined("sharedSecret", self.sharedSecret)
         return kparams
@@ -4451,11 +4451,11 @@ class KalturaSSOAdapterProfile(KalturaObjectBase):
     def setAdapterUrl(self, newAdapterUrl):
         self.adapterUrl = newAdapterUrl
 
-    def getSsoAdapterSettings(self):
-        return self.ssoAdapterSettings
+    def getSettings(self):
+        return self.settings
 
-    def setSsoAdapterSettings(self, newSsoAdapterSettings):
-        self.ssoAdapterSettings = newSsoAdapterSettings
+    def setSettings(self, newSettings):
+        self.settings = newSettings
 
     def getExternalIdentifier(self):
         return self.externalIdentifier
