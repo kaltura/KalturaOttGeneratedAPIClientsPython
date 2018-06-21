@@ -42,7 +42,7 @@ from ..Base import (
     KalturaServiceBase,
 )
 
-API_VERSION = '4.82.73.13286'
+API_VERSION = '4.82.80.15234'
 
 ########## enums ##########
 # @package Kaltura
@@ -1004,6 +1004,7 @@ class KalturaPlaybackContextType(object):
     CATCHUP = "CATCHUP"
     START_OVER = "START_OVER"
     PLAYBACK = "PLAYBACK"
+    DOWNLOAD = "DOWNLOAD"
 
     def __init__(self, value):
         self.value = value
@@ -1555,6 +1556,18 @@ class KalturaTransactionType(object):
     PPV = "ppv"
     SUBSCRIPTION = "subscription"
     COLLECTION = "collection"
+
+    def __init__(self, value):
+        self.value = value
+
+    def getValue(self):
+        return self.value
+
+# @package Kaltura
+# @subpackage Client
+class KalturaUrlType(object):
+    PLAYMANIFEST = "PLAYMANIFEST"
+    DIRECT = "DIRECT"
 
     def __init__(self, value):
         self.value = value
@@ -19593,7 +19606,8 @@ class KalturaPlaybackContextOptions(KalturaObjectBase):
             mediaProtocol=NotImplemented,
             streamerType=NotImplemented,
             assetFileIds=NotImplemented,
-            context=NotImplemented):
+            context=NotImplemented,
+            urlType=NotImplemented):
         KalturaObjectBase.__init__(self)
 
         # Protocol of the specific media object (http / https).
@@ -19612,12 +19626,17 @@ class KalturaPlaybackContextOptions(KalturaObjectBase):
         # @var KalturaPlaybackContextType
         self.context = context
 
+        # Url type
+        # @var KalturaUrlType
+        self.urlType = urlType
+
 
     PROPERTY_LOADERS = {
         'mediaProtocol': getXmlNodeText, 
         'streamerType': getXmlNodeText, 
         'assetFileIds': getXmlNodeText, 
         'context': (KalturaEnumsFactory.createString, "KalturaPlaybackContextType"), 
+        'urlType': (KalturaEnumsFactory.createString, "KalturaUrlType"), 
     }
 
     def fromXml(self, node):
@@ -19631,6 +19650,7 @@ class KalturaPlaybackContextOptions(KalturaObjectBase):
         kparams.addStringIfDefined("streamerType", self.streamerType)
         kparams.addStringIfDefined("assetFileIds", self.assetFileIds)
         kparams.addStringEnumIfDefined("context", self.context)
+        kparams.addStringEnumIfDefined("urlType", self.urlType)
         return kparams
 
     def getMediaProtocol(self):
@@ -19656,6 +19676,12 @@ class KalturaPlaybackContextOptions(KalturaObjectBase):
 
     def setContext(self, newContext):
         self.context = newContext
+
+    def getUrlType(self):
+        return self.urlType
+
+    def setUrlType(self, newUrlType):
+        self.urlType = newUrlType
 
 
 # @package Kaltura
@@ -28423,6 +28449,7 @@ class KalturaCoreClient(KalturaClientPlugin):
             'KalturaTransactionAdapterStatus': KalturaTransactionAdapterStatus,
             'KalturaTransactionHistoryOrderBy': KalturaTransactionHistoryOrderBy,
             'KalturaTransactionType': KalturaTransactionType,
+            'KalturaUrlType': KalturaUrlType,
             'KalturaUserAssetRuleOrderBy': KalturaUserAssetRuleOrderBy,
             'KalturaUserAssetsListItemType': KalturaUserAssetsListItemType,
             'KalturaUserAssetsListType': KalturaUserAssetsListType,
