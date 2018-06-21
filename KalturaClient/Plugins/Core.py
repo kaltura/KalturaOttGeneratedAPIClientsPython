@@ -42,7 +42,7 @@ from ..Base import (
     KalturaServiceBase,
 )
 
-API_VERSION = '4.72.258.20188'
+API_VERSION = '4.72.261.19277'
 
 ########## enums ##########
 # @package Kaltura
@@ -14351,7 +14351,7 @@ class KalturaMeta(KalturaObjectBase):
         # @var string
         self.parentId = parentId
 
-        # Specifies when was the meta was created. Date and time represented as epoch.
+        # Specifies when was the meta created. Date and time represented as epoch.
         # @var int
         # @readonly
         self.createDate = createDate
@@ -16145,7 +16145,10 @@ class KalturaParentalRule(KalturaObjectBase):
             mediaTagValues=NotImplemented,
             epgTagValues=NotImplemented,
             isDefault=NotImplemented,
-            origin=NotImplemented):
+            origin=NotImplemented,
+            isActive=NotImplemented,
+            createDate=NotImplemented,
+            updateDate=NotImplemented):
         KalturaObjectBase.__init__(self)
 
         # Unique parental rule identifier
@@ -16195,7 +16198,22 @@ class KalturaParentalRule(KalturaObjectBase):
 
         # Where was this rule defined account, household or user
         # @var KalturaRuleLevel
+        # @readonly
         self.origin = origin
+
+        # active status
+        # @var bool
+        self.isActive = isActive
+
+        # Specifies when was the parental rule created. Date and time represented as epoch.
+        # @var int
+        # @readonly
+        self.createDate = createDate
+
+        # Specifies when was the parental rule last updated. Date and time represented as epoch.
+        # @var int
+        # @readonly
+        self.updateDate = updateDate
 
 
     PROPERTY_LOADERS = {
@@ -16211,6 +16229,9 @@ class KalturaParentalRule(KalturaObjectBase):
         'epgTagValues': (KalturaObjectFactory.createArray, 'KalturaStringValue'), 
         'isDefault': getXmlNodeBool, 
         'origin': (KalturaEnumsFactory.createString, "KalturaRuleLevel"), 
+        'isActive': getXmlNodeBool, 
+        'createDate': getXmlNodeInt, 
+        'updateDate': getXmlNodeInt, 
     }
 
     def fromXml(self, node):
@@ -16230,7 +16251,7 @@ class KalturaParentalRule(KalturaObjectBase):
         kparams.addArrayIfDefined("mediaTagValues", self.mediaTagValues)
         kparams.addArrayIfDefined("epgTagValues", self.epgTagValues)
         kparams.addBoolIfDefined("isDefault", self.isDefault)
-        kparams.addStringEnumIfDefined("origin", self.origin)
+        kparams.addBoolIfDefined("isActive", self.isActive)
         return kparams
 
     def getId(self):
@@ -16299,8 +16320,17 @@ class KalturaParentalRule(KalturaObjectBase):
     def getOrigin(self):
         return self.origin
 
-    def setOrigin(self, newOrigin):
-        self.origin = newOrigin
+    def getIsActive(self):
+        return self.isActive
+
+    def setIsActive(self, newIsActive):
+        self.isActive = newIsActive
+
+    def getCreateDate(self):
+        return self.createDate
+
+    def getUpdateDate(self):
+        return self.updateDate
 
 
 # @package Kaltura
@@ -27597,6 +27627,28 @@ class KalturaParentalRuleService(KalturaServiceBase):
     def __init__(self, client = None):
         KalturaServiceBase.__init__(self, client)
 
+    def add(self, parentalRule):
+        """Add a new parentalRule"""
+
+        kparams = KalturaParams()
+        kparams.addObjectIfDefined("parentalRule", parentalRule)
+        self.client.queueServiceActionCall("parentalrule", "add", "KalturaParentalRule", kparams)
+        if self.client.isMultiRequest():
+            return self.client.getMultiRequestResult()
+        resultNode = self.client.doQueue()
+        return KalturaObjectFactory.create(resultNode, 'KalturaParentalRule')
+
+    def delete(self, id):
+        """Delete an existing parentalRule"""
+
+        kparams = KalturaParams()
+        kparams.addIntIfDefined("id", id);
+        self.client.queueServiceActionCall("parentalrule", "delete", "None", kparams)
+        if self.client.isMultiRequest():
+            return self.client.getMultiRequestResult()
+        resultNode = self.client.doQueue()
+        return getXmlNodeBool(resultNode)
+
     def disable(self, ruleId, entityReference):
         """Disables a parental rule that was previously defined by the household master. Disable can be at specific user or household level."""
 
@@ -27632,6 +27684,17 @@ class KalturaParentalRuleService(KalturaServiceBase):
         resultNode = self.client.doQueue()
         return getXmlNodeBool(resultNode)
 
+    def get(self, id):
+        """Get an existing parentalRule by identifier"""
+
+        kparams = KalturaParams()
+        kparams.addIntIfDefined("id", id);
+        self.client.queueServiceActionCall("parentalrule", "get", "KalturaParentalRule", kparams)
+        if self.client.isMultiRequest():
+            return self.client.getMultiRequestResult()
+        resultNode = self.client.doQueue()
+        return KalturaObjectFactory.create(resultNode, 'KalturaParentalRule')
+
     def list(self, filter):
         """Return the parental rules that applies for the user or household. Can include rules that have been associated in account, household, or user level.
                     Association level is also specified in the response."""
@@ -27643,6 +27706,18 @@ class KalturaParentalRuleService(KalturaServiceBase):
             return self.client.getMultiRequestResult()
         resultNode = self.client.doQueue()
         return KalturaObjectFactory.create(resultNode, 'KalturaParentalRuleListResponse')
+
+    def update(self, id, parentalRule):
+        """Update an existing parentalRule"""
+
+        kparams = KalturaParams()
+        kparams.addIntIfDefined("id", id);
+        kparams.addObjectIfDefined("parentalRule", parentalRule)
+        self.client.queueServiceActionCall("parentalrule", "update", "KalturaParentalRule", kparams)
+        if self.client.isMultiRequest():
+            return self.client.getMultiRequestResult()
+        resultNode = self.client.doQueue()
+        return KalturaObjectFactory.create(resultNode, 'KalturaParentalRule')
 
 
 # @package Kaltura
