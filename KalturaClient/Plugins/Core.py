@@ -42,7 +42,7 @@ from ..Base import (
     KalturaServiceBase,
 )
 
-API_VERSION = '4.72.261.28611'
+API_VERSION = '4.72.262.15114'
 
 ########## enums ##########
 # @package Kaltura
@@ -16194,6 +16194,7 @@ class KalturaParentalRule(KalturaObjectBase):
 
         # Is the rule the default rule of the account
         # @var bool
+        # @readonly
         self.isDefault = isDefault
 
         # Where was this rule defined account, household or user
@@ -16250,7 +16251,6 @@ class KalturaParentalRule(KalturaObjectBase):
         kparams.addStringEnumIfDefined("ruleType", self.ruleType)
         kparams.addArrayIfDefined("mediaTagValues", self.mediaTagValues)
         kparams.addArrayIfDefined("epgTagValues", self.epgTagValues)
-        kparams.addBoolIfDefined("isDefault", self.isDefault)
         kparams.addBoolIfDefined("isActive", self.isActive)
         return kparams
 
@@ -16313,9 +16313,6 @@ class KalturaParentalRule(KalturaObjectBase):
 
     def getIsDefault(self):
         return self.isDefault
-
-    def setIsDefault(self, newIsDefault):
-        self.isDefault = newIsDefault
 
     def getOrigin(self):
         return self.origin

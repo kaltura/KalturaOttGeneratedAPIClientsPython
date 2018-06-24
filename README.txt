@@ -46,7 +46,7 @@ See KalturaClient/tests/README.txt
 == RELEASE NOTES ==
 
 Jan 2017 - Python 3 support. Replaced poster with requests.
-Sep 2015 - support JSON requests, compatible with Kaltura server version 4.72.261.28611 and above. 
+Sep 2015 - support JSON requests, compatible with Kaltura server version 4.72.262.15114 and above. 
 Aug 2013 - the library was refactored to make it installable as a PyPI package.
 	This refactoring changed the way Kaltura client plugin modules are loaded -
 	before the change the metadata plugin (for example) was loaded by:
