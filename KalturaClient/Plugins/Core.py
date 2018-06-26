@@ -42,7 +42,7 @@ from ..Base import (
     KalturaServiceBase,
 )
 
-API_VERSION = '4.82.85.42008'
+API_VERSION = '4.82.94.41999'
 
 ########## enums ##########
 # @package Kaltura
@@ -552,6 +552,18 @@ class KalturaEntityReferenceBy(object):
 
 # @package Kaltura
 # @subpackage Client
+class KalturaEvictionPolicyType(object):
+    FIFO = "FIFO"
+    LIFO = "LIFO"
+
+    def __init__(self, value):
+        self.value = value
+
+    def getValue(self):
+        return self.value
+
+# @package Kaltura
+# @subpackage Client
 class KalturaExportDataType(object):
     VOD = "vod"
     EPG = "epg"
@@ -892,10 +904,22 @@ class KalturaParentalRuleType(object):
 
 # @package Kaltura
 # @subpackage Client
+class KalturaPartnerConfigurationOrderBy(object):
+    NONE = "NONE"
+
+    def __init__(self, value):
+        self.value = value
+
+    def getValue(self):
+        return self.value
+
+# @package Kaltura
+# @subpackage Client
 class KalturaPartnerConfigurationType(object):
     DEFAULTPAYMENTGATEWAY = "DefaultPaymentGateway"
     ENABLEPAYMENTGATEWAYSELECTION = "EnablePaymentGatewaySelection"
     OSSADAPTER = "OSSAdapter"
+    CONCURRENCY = "Concurrency"
 
     def __init__(self, value):
         self.value = value
@@ -11767,7 +11791,8 @@ class KalturaBookmark(KalturaSlimAsset):
             position=NotImplemented,
             positionOwner=NotImplemented,
             finishedWatching=NotImplemented,
-            playerData=NotImplemented):
+            playerData=NotImplemented,
+            programId=NotImplemented):
         KalturaSlimAsset.__init__(self,
             id,
             type)
@@ -11796,6 +11821,10 @@ class KalturaBookmark(KalturaSlimAsset):
         # @var KalturaBookmarkPlayerData
         self.playerData = playerData
 
+        # Program Id
+        # @var int
+        self.programId = programId
+
 
     PROPERTY_LOADERS = {
         'userId': getXmlNodeText, 
@@ -11803,6 +11832,7 @@ class KalturaBookmark(KalturaSlimAsset):
         'positionOwner': (KalturaEnumsFactory.createString, "KalturaPositionOwner"), 
         'finishedWatching': getXmlNodeBool, 
         'playerData': (KalturaObjectFactory.create, 'KalturaBookmarkPlayerData'), 
+        'programId': getXmlNodeInt, 
     }
 
     def fromXml(self, node):
@@ -11814,6 +11844,7 @@ class KalturaBookmark(KalturaSlimAsset):
         kparams.put("objectType", "KalturaBookmark")
         kparams.addIntIfDefined("position", self.position)
         kparams.addObjectIfDefined("playerData", self.playerData)
+        kparams.addIntIfDefined("programId", self.programId)
         return kparams
 
     def getUserId(self):
@@ -11836,6 +11867,12 @@ class KalturaBookmark(KalturaSlimAsset):
 
     def setPlayerData(self, newPlayerData):
         self.playerData = newPlayerData
+
+    def getProgramId(self):
+        return self.programId
+
+    def setProgramId(self, newProgramId):
+        self.programId = newProgramId
 
 
 # @package Kaltura
@@ -12727,6 +12764,159 @@ class KalturaAssetHistoryListResponse(KalturaListResponse):
 
     def setObjects(self, newObjects):
         self.objects = newObjects
+
+
+# @package Kaltura
+# @subpackage Client
+class KalturaPartnerConfiguration(KalturaObjectBase):
+    """Partner  base configuration"""
+
+    def __init__(self):
+        KalturaObjectBase.__init__(self)
+
+
+    PROPERTY_LOADERS = {
+    }
+
+    def fromXml(self, node):
+        KalturaObjectBase.fromXml(self, node)
+        self.fromXmlImpl(node, KalturaPartnerConfiguration.PROPERTY_LOADERS)
+
+    def toParams(self):
+        kparams = KalturaObjectBase.toParams(self)
+        kparams.put("objectType", "KalturaPartnerConfiguration")
+        return kparams
+
+
+# @package Kaltura
+# @subpackage Client
+class KalturaPartnerConfigurationListResponse(KalturaListResponse):
+    def __init__(self,
+            totalCount=NotImplemented,
+            objects=NotImplemented):
+        KalturaListResponse.__init__(self,
+            totalCount)
+
+        # Partner Configurations
+        # @var array of KalturaPartnerConfiguration
+        self.objects = objects
+
+
+    PROPERTY_LOADERS = {
+        'objects': (KalturaObjectFactory.createArray, 'KalturaPartnerConfiguration'), 
+    }
+
+    def fromXml(self, node):
+        KalturaListResponse.fromXml(self, node)
+        self.fromXmlImpl(node, KalturaPartnerConfigurationListResponse.PROPERTY_LOADERS)
+
+    def toParams(self):
+        kparams = KalturaListResponse.toParams(self)
+        kparams.put("objectType", "KalturaPartnerConfigurationListResponse")
+        kparams.addArrayIfDefined("objects", self.objects)
+        return kparams
+
+    def getObjects(self):
+        return self.objects
+
+    def setObjects(self, newObjects):
+        self.objects = newObjects
+
+
+# @package Kaltura
+# @subpackage Client
+class KalturaConcurrencyPartnerConfig(KalturaPartnerConfiguration):
+    """Partner concurrency configuration"""
+
+    def __init__(self,
+            deviceFamilyIds=NotImplemented,
+            evictionPolicy=NotImplemented):
+        KalturaPartnerConfiguration.__init__(self)
+
+        # Comma separated list of device Family Ids order by their priority.
+        # @var string
+        self.deviceFamilyIds = deviceFamilyIds
+
+        # Policy of eviction devices
+        # @var KalturaEvictionPolicyType
+        self.evictionPolicy = evictionPolicy
+
+
+    PROPERTY_LOADERS = {
+        'deviceFamilyIds': getXmlNodeText, 
+        'evictionPolicy': (KalturaEnumsFactory.createString, "KalturaEvictionPolicyType"), 
+    }
+
+    def fromXml(self, node):
+        KalturaPartnerConfiguration.fromXml(self, node)
+        self.fromXmlImpl(node, KalturaConcurrencyPartnerConfig.PROPERTY_LOADERS)
+
+    def toParams(self):
+        kparams = KalturaPartnerConfiguration.toParams(self)
+        kparams.put("objectType", "KalturaConcurrencyPartnerConfig")
+        kparams.addStringIfDefined("deviceFamilyIds", self.deviceFamilyIds)
+        kparams.addStringEnumIfDefined("evictionPolicy", self.evictionPolicy)
+        return kparams
+
+    def getDeviceFamilyIds(self):
+        return self.deviceFamilyIds
+
+    def setDeviceFamilyIds(self, newDeviceFamilyIds):
+        self.deviceFamilyIds = newDeviceFamilyIds
+
+    def getEvictionPolicy(self):
+        return self.evictionPolicy
+
+    def setEvictionPolicy(self, newEvictionPolicy):
+        self.evictionPolicy = newEvictionPolicy
+
+
+# @package Kaltura
+# @subpackage Client
+class KalturaBillingPartnerConfig(KalturaPartnerConfiguration):
+    """Partner billing configuration"""
+
+    def __init__(self,
+            value=NotImplemented,
+            type=NotImplemented):
+        KalturaPartnerConfiguration.__init__(self)
+
+        # configuration value
+        # @var string
+        self.value = value
+
+        # partner configuration type
+        # @var KalturaPartnerConfigurationType
+        self.type = type
+
+
+    PROPERTY_LOADERS = {
+        'value': getXmlNodeText, 
+        'type': (KalturaEnumsFactory.createString, "KalturaPartnerConfigurationType"), 
+    }
+
+    def fromXml(self, node):
+        KalturaPartnerConfiguration.fromXml(self, node)
+        self.fromXmlImpl(node, KalturaBillingPartnerConfig.PROPERTY_LOADERS)
+
+    def toParams(self):
+        kparams = KalturaPartnerConfiguration.toParams(self)
+        kparams.put("objectType", "KalturaBillingPartnerConfig")
+        kparams.addStringIfDefined("value", self.value)
+        kparams.addStringEnumIfDefined("type", self.type)
+        return kparams
+
+    def getValue(self):
+        return self.value
+
+    def setValue(self, newValue):
+        self.value = newValue
+
+    def getType(self):
+        return self.type
+
+    def setType(self, newType):
+        self.type = newType
 
 
 # @package Kaltura
@@ -18725,6 +18915,43 @@ class KalturaAssetHistoryFilter(KalturaFilter):
 
 # @package Kaltura
 # @subpackage Client
+class KalturaPartnerConfigurationFilter(KalturaFilter):
+    """Partner configuration filter"""
+
+    def __init__(self,
+            orderBy=NotImplemented,
+            partnerConfigurationTypeEqual=NotImplemented):
+        KalturaFilter.__init__(self,
+            orderBy)
+
+        # Indicates which partner configuration list to return
+        # @var KalturaPartnerConfigurationType
+        self.partnerConfigurationTypeEqual = partnerConfigurationTypeEqual
+
+
+    PROPERTY_LOADERS = {
+        'partnerConfigurationTypeEqual': (KalturaEnumsFactory.createString, "KalturaPartnerConfigurationType"), 
+    }
+
+    def fromXml(self, node):
+        KalturaFilter.fromXml(self, node)
+        self.fromXmlImpl(node, KalturaPartnerConfigurationFilter.PROPERTY_LOADERS)
+
+    def toParams(self):
+        kparams = KalturaFilter.toParams(self)
+        kparams.put("objectType", "KalturaPartnerConfigurationFilter")
+        kparams.addStringEnumIfDefined("partnerConfigurationTypeEqual", self.partnerConfigurationTypeEqual)
+        return kparams
+
+    def getPartnerConfigurationTypeEqual(self):
+        return self.partnerConfigurationTypeEqual
+
+    def setPartnerConfigurationTypeEqual(self, newPartnerConfigurationTypeEqual):
+        self.partnerConfigurationTypeEqual = newPartnerConfigurationTypeEqual
+
+
+# @package Kaltura
+# @subpackage Client
 class KalturaAssetRuleFilter(KalturaFilter):
     """Asset rule filter"""
 
@@ -18735,7 +18962,8 @@ class KalturaAssetRuleFilter(KalturaFilter):
         KalturaFilter.__init__(self,
             orderBy)
 
-        # Indicates which asset rule list to return by it KalturaRuleConditionType
+        # Indicates which asset rule list to return by it KalturaRuleConditionType.
+        #             Default value: KalturaRuleConditionType.COUNTRY
         # @var KalturaRuleConditionType
         self.conditionsContainType = conditionsContainType
 
@@ -22246,76 +22474,6 @@ class KalturaHouseholdLimitations(KalturaObjectBase):
 
     def getDeviceFamiliesLimitations(self):
         return self.deviceFamiliesLimitations
-
-
-# @package Kaltura
-# @subpackage Client
-class KalturaPartnerConfiguration(KalturaObjectBase):
-    """Partner  base configuration"""
-
-    def __init__(self):
-        KalturaObjectBase.__init__(self)
-
-
-    PROPERTY_LOADERS = {
-    }
-
-    def fromXml(self, node):
-        KalturaObjectBase.fromXml(self, node)
-        self.fromXmlImpl(node, KalturaPartnerConfiguration.PROPERTY_LOADERS)
-
-    def toParams(self):
-        kparams = KalturaObjectBase.toParams(self)
-        kparams.put("objectType", "KalturaPartnerConfiguration")
-        return kparams
-
-
-# @package Kaltura
-# @subpackage Client
-class KalturaBillingPartnerConfig(KalturaPartnerConfiguration):
-    """Partner billing configuration"""
-
-    def __init__(self,
-            value=NotImplemented,
-            type=NotImplemented):
-        KalturaPartnerConfiguration.__init__(self)
-
-        # configuration value
-        # @var string
-        self.value = value
-
-        # partner configuration type
-        # @var KalturaPartnerConfigurationType
-        self.type = type
-
-
-    PROPERTY_LOADERS = {
-        'value': getXmlNodeText, 
-        'type': (KalturaEnumsFactory.createString, "KalturaPartnerConfigurationType"), 
-    }
-
-    def fromXml(self, node):
-        KalturaPartnerConfiguration.fromXml(self, node)
-        self.fromXmlImpl(node, KalturaBillingPartnerConfig.PROPERTY_LOADERS)
-
-    def toParams(self):
-        kparams = KalturaPartnerConfiguration.toParams(self)
-        kparams.put("objectType", "KalturaBillingPartnerConfig")
-        kparams.addStringIfDefined("value", self.value)
-        kparams.addStringEnumIfDefined("type", self.type)
-        return kparams
-
-    def getValue(self):
-        return self.value
-
-    def setValue(self, newValue):
-        self.value = newValue
-
-    def getType(self):
-        return self.type
-
-    def setType(self, newType):
-        self.type = newType
 
 
 # @package Kaltura
@@ -26641,6 +26799,17 @@ class KalturaPartnerConfigurationService(KalturaServiceBase):
     def __init__(self, client = None):
         KalturaServiceBase.__init__(self, client)
 
+    def list(self, filter):
+        """Get the list of PartnerConfiguration"""
+
+        kparams = KalturaParams()
+        kparams.addObjectIfDefined("filter", filter)
+        self.client.queueServiceActionCall("partnerconfiguration", "list", "KalturaPartnerConfigurationListResponse", kparams)
+        if self.client.isMultiRequest():
+            return self.client.getMultiRequestResult()
+        resultNode = self.client.doQueue()
+        return KalturaObjectFactory.create(resultNode, 'KalturaPartnerConfigurationListResponse')
+
     def update(self, configuration):
         """Update Partner Configuration"""
 
@@ -28372,6 +28541,7 @@ class KalturaCoreClient(KalturaClientPlugin):
             'KalturaEngagementType': KalturaEngagementType,
             'KalturaEntitlementOrderBy': KalturaEntitlementOrderBy,
             'KalturaEntityReferenceBy': KalturaEntityReferenceBy,
+            'KalturaEvictionPolicyType': KalturaEvictionPolicyType,
             'KalturaExportDataType': KalturaExportDataType,
             'KalturaExportTaskOrderBy': KalturaExportTaskOrderBy,
             'KalturaExportType': KalturaExportType,
@@ -28399,6 +28569,7 @@ class KalturaCoreClient(KalturaClientPlugin):
             'KalturaOTTUserOrderBy': KalturaOTTUserOrderBy,
             'KalturaParentalRuleOrderBy': KalturaParentalRuleOrderBy,
             'KalturaParentalRuleType': KalturaParentalRuleType,
+            'KalturaPartnerConfigurationOrderBy': KalturaPartnerConfigurationOrderBy,
             'KalturaPartnerConfigurationType': KalturaPartnerConfigurationType,
             'KalturaPaymentMethodProfileOrderBy': KalturaPaymentMethodProfileOrderBy,
             'KalturaPaymentMethodType': KalturaPaymentMethodType,
@@ -28625,6 +28796,10 @@ class KalturaCoreClient(KalturaClientPlugin):
             'KalturaAssetStatisticsListResponse': KalturaAssetStatisticsListResponse,
             'KalturaAssetHistory': KalturaAssetHistory,
             'KalturaAssetHistoryListResponse': KalturaAssetHistoryListResponse,
+            'KalturaPartnerConfiguration': KalturaPartnerConfiguration,
+            'KalturaPartnerConfigurationListResponse': KalturaPartnerConfigurationListResponse,
+            'KalturaConcurrencyPartnerConfig': KalturaConcurrencyPartnerConfig,
+            'KalturaBillingPartnerConfig': KalturaBillingPartnerConfig,
             'KalturaAssetRuleBase': KalturaAssetRuleBase,
             'KalturaCondition': KalturaCondition,
             'KalturaAssetCondition': KalturaAssetCondition,
@@ -28741,6 +28916,7 @@ class KalturaCoreClient(KalturaClientPlugin):
             'KalturaAssetCommentFilter': KalturaAssetCommentFilter,
             'KalturaBookmarkFilter': KalturaBookmarkFilter,
             'KalturaAssetHistoryFilter': KalturaAssetHistoryFilter,
+            'KalturaPartnerConfigurationFilter': KalturaPartnerConfigurationFilter,
             'KalturaAssetRuleFilter': KalturaAssetRuleFilter,
             'KalturaAssetUserRuleFilter': KalturaAssetUserRuleFilter,
             'KalturaCurrencyFilter': KalturaCurrencyFilter,
@@ -28791,8 +28967,6 @@ class KalturaCoreClient(KalturaClientPlugin):
             'KalturaTimeShiftedTvPartnerSettings': KalturaTimeShiftedTvPartnerSettings,
             'KalturaUserAssetsListItem': KalturaUserAssetsListItem,
             'KalturaHouseholdLimitations': KalturaHouseholdLimitations,
-            'KalturaPartnerConfiguration': KalturaPartnerConfiguration,
-            'KalturaBillingPartnerConfig': KalturaBillingPartnerConfig,
             'KalturaLoginSession': KalturaLoginSession,
             'KalturaHousehold': KalturaHousehold,
             'KalturaDevicePin': KalturaDevicePin,
