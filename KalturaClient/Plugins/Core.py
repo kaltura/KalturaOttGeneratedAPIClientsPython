@@ -42,7 +42,7 @@ from ..Base import (
     KalturaServiceBase,
 )
 
-API_VERSION = '4.72.264.27370'
+API_VERSION = '4.72.268.36423'
 
 ########## enums ##########
 # @package Kaltura
@@ -240,6 +240,29 @@ class KalturaAssetType(object):
 
 # @package Kaltura
 # @subpackage Client
+class KalturaBatchJobStatus(object):
+    PENDING = "PENDING"
+    QUEUED = "QUEUED"
+    PROCESSING = "PROCESSING"
+    PROCESSED = "PROCESSED"
+    MOVEFILE = "MOVEFILE"
+    FINISHED = "FINISHED"
+    FAILED = "FAILED"
+    ABORTED = "ABORTED"
+    ALMOST_DONE = "ALMOST_DONE"
+    RETRY = "RETRY"
+    FATAL = "FATAL"
+    DONT_PROCESS = "DONT_PROCESS"
+    FINISHED_PARTIALLY = "FINISHED_PARTIALLY"
+
+    def __init__(self, value):
+        self.value = value
+
+    def getValue(self):
+        return self.value
+
+# @package Kaltura
+# @subpackage Client
 class KalturaBillingAction(object):
     UNKNOWN = "unknown"
     PURCHASE = "purchase"
@@ -311,6 +334,17 @@ class KalturaBookmarkActionType(object):
 class KalturaBookmarkOrderBy(object):
     POSITION_ASC = "POSITION_ASC"
     POSITION_DESC = "POSITION_DESC"
+
+    def __init__(self, value):
+        self.value = value
+
+    def getValue(self):
+        return self.value
+
+# @package Kaltura
+# @subpackage Client
+class KalturaBulkOrderBy(object):
+    NONE = "NONE"
 
     def __init__(self, value):
         self.value = value
@@ -13916,6 +13950,103 @@ class KalturaAssetHistoryListResponse(KalturaListResponse):
 
 # @package Kaltura
 # @subpackage Client
+class KalturaBulk(KalturaObjectBase):
+    def __init__(self,
+            id=NotImplemented,
+            status=NotImplemented,
+            createDate=NotImplemented,
+            updateDate=NotImplemented):
+        KalturaObjectBase.__init__(self)
+
+        # Bulk identifier
+        # @var int
+        # @readonly
+        self.id = id
+
+        # Status
+        # @var KalturaBatchJobStatus
+        # @readonly
+        self.status = status
+
+        # Specifies when was the bulk action created. Date and time represented as epoch
+        # @var int
+        # @readonly
+        self.createDate = createDate
+
+        # Specifies when was the bulk action last updated. Date and time represented as epoch
+        # @var int
+        # @readonly
+        self.updateDate = updateDate
+
+
+    PROPERTY_LOADERS = {
+        'id': getXmlNodeInt, 
+        'status': (KalturaEnumsFactory.createString, "KalturaBatchJobStatus"), 
+        'createDate': getXmlNodeInt, 
+        'updateDate': getXmlNodeInt, 
+    }
+
+    def fromXml(self, node):
+        KalturaObjectBase.fromXml(self, node)
+        self.fromXmlImpl(node, KalturaBulk.PROPERTY_LOADERS)
+
+    def toParams(self):
+        kparams = KalturaObjectBase.toParams(self)
+        kparams.put("objectType", "KalturaBulk")
+        return kparams
+
+    def getId(self):
+        return self.id
+
+    def getStatus(self):
+        return self.status
+
+    def getCreateDate(self):
+        return self.createDate
+
+    def getUpdateDate(self):
+        return self.updateDate
+
+
+# @package Kaltura
+# @subpackage Client
+class KalturaBulkListResponse(KalturaListResponse):
+    """Asset wrapper"""
+
+    def __init__(self,
+            totalCount=NotImplemented,
+            objects=NotImplemented):
+        KalturaListResponse.__init__(self,
+            totalCount)
+
+        # bulk items
+        # @var array of KalturaBulk
+        self.objects = objects
+
+
+    PROPERTY_LOADERS = {
+        'objects': (KalturaObjectFactory.createArray, 'KalturaBulk'), 
+    }
+
+    def fromXml(self, node):
+        KalturaListResponse.fromXml(self, node)
+        self.fromXmlImpl(node, KalturaBulkListResponse.PROPERTY_LOADERS)
+
+    def toParams(self):
+        kparams = KalturaListResponse.toParams(self)
+        kparams.put("objectType", "KalturaBulkListResponse")
+        kparams.addArrayIfDefined("objects", self.objects)
+        return kparams
+
+    def getObjects(self):
+        return self.objects
+
+    def setObjects(self, newObjects):
+        self.objects = newObjects
+
+
+# @package Kaltura
+# @subpackage Client
 class KalturaDrmProfile(KalturaObjectBase):
     """DRM Adapter"""
 
@@ -19051,6 +19182,43 @@ class KalturaSearchExternalFilter(KalturaAssetFilter):
 
     def setTypeIn(self, newTypeIn):
         self.typeIn = newTypeIn
+
+
+# @package Kaltura
+# @subpackage Client
+class KalturaBulkFilter(KalturaPersistedFilter):
+    def __init__(self,
+            orderBy=NotImplemented,
+            name=NotImplemented,
+            statusEqual=NotImplemented):
+        KalturaPersistedFilter.__init__(self,
+            orderBy,
+            name)
+
+        # dynamicOrderBy - order by Meta
+        # @var KalturaBatchJobStatus
+        self.statusEqual = statusEqual
+
+
+    PROPERTY_LOADERS = {
+        'statusEqual': (KalturaEnumsFactory.createString, "KalturaBatchJobStatus"), 
+    }
+
+    def fromXml(self, node):
+        KalturaPersistedFilter.fromXml(self, node)
+        self.fromXmlImpl(node, KalturaBulkFilter.PROPERTY_LOADERS)
+
+    def toParams(self):
+        kparams = KalturaPersistedFilter.toParams(self)
+        kparams.put("objectType", "KalturaBulkFilter")
+        kparams.addStringEnumIfDefined("statusEqual", self.statusEqual)
+        return kparams
+
+    def getStatusEqual(self):
+        return self.statusEqual
+
+    def setStatusEqual(self, newStatusEqual):
+        self.statusEqual = newStatusEqual
 
 
 # @package Kaltura
@@ -25218,6 +25386,36 @@ class KalturaBookmarkService(KalturaServiceBase):
 
 # @package Kaltura
 # @subpackage Client
+class KalturaBulkService(KalturaServiceBase):
+    def __init__(self, client = None):
+        KalturaServiceBase.__init__(self, client)
+
+    def list(self, filter = NotImplemented, pager = NotImplemented):
+        """List bulk actions"""
+
+        kparams = KalturaParams()
+        kparams.addObjectIfDefined("filter", filter)
+        kparams.addObjectIfDefined("pager", pager)
+        self.client.queueServiceActionCall("bulk", "list", "KalturaBulkListResponse", kparams)
+        if self.client.isMultiRequest():
+            return self.client.getMultiRequestResult()
+        resultNode = self.client.doQueue()
+        return KalturaObjectFactory.create(resultNode, 'KalturaBulkListResponse')
+
+    def serveLog (self, id):
+        """ServeLog action returns the log file for the bulk action"""
+
+        kparams = KalturaParams()
+        kparams.addIntIfDefined("id", id);
+        self.client.queueServiceActionCall("bulk", "serveLog ", "KalturaBulk", kparams)
+        if self.client.isMultiRequest():
+            return self.client.getMultiRequestResult()
+        resultNode = self.client.doQueue()
+        return KalturaObjectFactory.create(resultNode, 'KalturaBulk')
+
+
+# @package Kaltura
+# @subpackage Client
 class KalturaCdnAdapterProfileService(KalturaServiceBase):
     def __init__(self, client = None):
         KalturaServiceBase.__init__(self, client)
@@ -29348,6 +29546,7 @@ class KalturaCoreClient(KalturaClientPlugin):
             'assetStruct': KalturaAssetStructService,
             'assetStructMeta': KalturaAssetStructMetaService,
             'bookmark': KalturaBookmarkService,
+            'bulk': KalturaBulkService,
             'cdnAdapterProfile': KalturaCdnAdapterProfileService,
             'cdnPartnerSettings': KalturaCdnPartnerSettingsService,
             'cDVRAdapterProfile': KalturaCDVRAdapterProfileService,
@@ -29454,11 +29653,13 @@ class KalturaCoreClient(KalturaClientPlugin):
             'KalturaAssetStructMetaOrderBy': KalturaAssetStructMetaOrderBy,
             'KalturaAssetStructOrderBy': KalturaAssetStructOrderBy,
             'KalturaAssetType': KalturaAssetType,
+            'KalturaBatchJobStatus': KalturaBatchJobStatus,
             'KalturaBillingAction': KalturaBillingAction,
             'KalturaBillingItemsType': KalturaBillingItemsType,
             'KalturaBillingPriceType': KalturaBillingPriceType,
             'KalturaBookmarkActionType': KalturaBookmarkActionType,
             'KalturaBookmarkOrderBy': KalturaBookmarkOrderBy,
+            'KalturaBulkOrderBy': KalturaBulkOrderBy,
             'KalturaBundleType': KalturaBundleType,
             'KalturaChannelEnrichment': KalturaChannelEnrichment,
             'KalturaChannelOrderBy': KalturaChannelOrderBy,
@@ -29750,6 +29951,8 @@ class KalturaCoreClient(KalturaClientPlugin):
             'KalturaMediaFileListResponse': KalturaMediaFileListResponse,
             'KalturaAssetHistory': KalturaAssetHistory,
             'KalturaAssetHistoryListResponse': KalturaAssetHistoryListResponse,
+            'KalturaBulk': KalturaBulk,
+            'KalturaBulkListResponse': KalturaBulkListResponse,
             'KalturaDrmProfile': KalturaDrmProfile,
             'KalturaDrmProfileListResponse': KalturaDrmProfileListResponse,
             'KalturaCurrency': KalturaCurrency,
@@ -29843,6 +30046,7 @@ class KalturaCoreClient(KalturaClientPlugin):
             'KalturaRelatedExternalFilter': KalturaRelatedExternalFilter,
             'KalturaSearchAssetFilter': KalturaSearchAssetFilter,
             'KalturaSearchExternalFilter': KalturaSearchExternalFilter,
+            'KalturaBulkFilter': KalturaBulkFilter,
             'KalturaAssetStructMetaFilter': KalturaAssetStructMetaFilter,
             'KalturaChannelsFilter': KalturaChannelsFilter,
             'KalturaMediaFileFilter': KalturaMediaFileFilter,
