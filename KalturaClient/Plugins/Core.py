@@ -42,7 +42,7 @@ from ..Base import (
     KalturaServiceBase,
 )
 
-API_VERSION = '4.9.273.41993'
+API_VERSION = '4.9.274.41991'
 
 ########## enums ##########
 # @package Kaltura
@@ -27407,12 +27407,12 @@ class KalturaBulkService(KalturaServiceBase):
         resultNode = self.client.doQueue()
         return KalturaObjectFactory.create(resultNode, 'KalturaBulkListResponse')
 
-    def serveLog (self, id):
+    def serveLog(self, id):
         """ServeLog action returns the log file for the bulk action"""
 
         kparams = KalturaParams()
         kparams.addIntIfDefined("id", id);
-        self.client.queueServiceActionCall("bulk", "serveLog ", "KalturaBulk", kparams)
+        self.client.queueServiceActionCall("bulk", "serveLog", "KalturaBulk", kparams)
         if self.client.isMultiRequest():
             return self.client.getMultiRequestResult()
         resultNode = self.client.doQueue()
