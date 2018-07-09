@@ -42,7 +42,7 @@ from ..Base import (
     KalturaServiceBase,
 )
 
-API_VERSION = '4.9.274.41991'
+API_VERSION = '4.9.283.41996'
 
 ########## enums ##########
 # @package Kaltura
@@ -13819,7 +13819,12 @@ class KalturaAssetStruct(KalturaObjectBase):
             isProtected=NotImplemented,
             metaIds=NotImplemented,
             createDate=NotImplemented,
-            updateDate=NotImplemented):
+            updateDate=NotImplemented,
+            features=NotImplemented,
+            pluralName=NotImplemented,
+            parentId=NotImplemented,
+            connectingMetaId=NotImplemented,
+            connectedParentMetaId=NotImplemented):
         KalturaObjectBase.__init__(self)
 
         # Asset Struct id
@@ -13857,6 +13862,26 @@ class KalturaAssetStruct(KalturaObjectBase):
         # @readonly
         self.updateDate = updateDate
 
+        # List of supported features
+        # @var string
+        self.features = features
+
+        # Plural Name
+        # @var string
+        self.pluralName = pluralName
+
+        # AssetStruct parent Id
+        # @var int
+        self.parentId = parentId
+
+        # connectingMetaId
+        # @var int
+        self.connectingMetaId = connectingMetaId
+
+        # connectedParentMetaId
+        # @var int
+        self.connectedParentMetaId = connectedParentMetaId
+
 
     PROPERTY_LOADERS = {
         'id': getXmlNodeInt, 
@@ -13867,6 +13892,11 @@ class KalturaAssetStruct(KalturaObjectBase):
         'metaIds': getXmlNodeText, 
         'createDate': getXmlNodeInt, 
         'updateDate': getXmlNodeInt, 
+        'features': getXmlNodeText, 
+        'pluralName': getXmlNodeText, 
+        'parentId': getXmlNodeInt, 
+        'connectingMetaId': getXmlNodeInt, 
+        'connectedParentMetaId': getXmlNodeInt, 
     }
 
     def fromXml(self, node):
@@ -13881,6 +13911,11 @@ class KalturaAssetStruct(KalturaObjectBase):
         kparams.addStringIfDefined("systemName", self.systemName)
         kparams.addBoolIfDefined("isProtected", self.isProtected)
         kparams.addStringIfDefined("metaIds", self.metaIds)
+        kparams.addStringIfDefined("features", self.features)
+        kparams.addStringIfDefined("pluralName", self.pluralName)
+        kparams.addIntIfDefined("parentId", self.parentId)
+        kparams.addIntIfDefined("connectingMetaId", self.connectingMetaId)
+        kparams.addIntIfDefined("connectedParentMetaId", self.connectedParentMetaId)
         return kparams
 
     def getId(self):
@@ -13921,6 +13956,36 @@ class KalturaAssetStruct(KalturaObjectBase):
 
     def getUpdateDate(self):
         return self.updateDate
+
+    def getFeatures(self):
+        return self.features
+
+    def setFeatures(self, newFeatures):
+        self.features = newFeatures
+
+    def getPluralName(self):
+        return self.pluralName
+
+    def setPluralName(self, newPluralName):
+        self.pluralName = newPluralName
+
+    def getParentId(self):
+        return self.parentId
+
+    def setParentId(self, newParentId):
+        self.parentId = newParentId
+
+    def getConnectingMetaId(self):
+        return self.connectingMetaId
+
+    def setConnectingMetaId(self, newConnectingMetaId):
+        self.connectingMetaId = newConnectingMetaId
+
+    def getConnectedParentMetaId(self):
+        return self.connectedParentMetaId
+
+    def setConnectedParentMetaId(self, newConnectedParentMetaId):
+        self.connectedParentMetaId = newConnectedParentMetaId
 
 
 # @package Kaltura
@@ -14397,7 +14462,8 @@ class KalturaBookmark(KalturaSlimAsset):
             positionOwner=NotImplemented,
             finishedWatching=NotImplemented,
             playerData=NotImplemented,
-            programId=NotImplemented):
+            programId=NotImplemented,
+            isReportingMode=NotImplemented):
         KalturaSlimAsset.__init__(self,
             id,
             type)
@@ -14430,6 +14496,10 @@ class KalturaBookmark(KalturaSlimAsset):
         # @var int
         self.programId = programId
 
+        # Indicates if the current request is in reporting mode (hit)
+        # @var bool
+        self.isReportingMode = isReportingMode
+
 
     PROPERTY_LOADERS = {
         'userId': getXmlNodeText, 
@@ -14438,6 +14508,7 @@ class KalturaBookmark(KalturaSlimAsset):
         'finishedWatching': getXmlNodeBool, 
         'playerData': (KalturaObjectFactory.create, 'KalturaBookmarkPlayerData'), 
         'programId': getXmlNodeInt, 
+        'isReportingMode': getXmlNodeBool, 
     }
 
     def fromXml(self, node):
@@ -14450,6 +14521,7 @@ class KalturaBookmark(KalturaSlimAsset):
         kparams.addIntIfDefined("position", self.position)
         kparams.addObjectIfDefined("playerData", self.playerData)
         kparams.addIntIfDefined("programId", self.programId)
+        kparams.addBoolIfDefined("isReportingMode", self.isReportingMode)
         return kparams
 
     def getUserId(self):
@@ -14478,6 +14550,12 @@ class KalturaBookmark(KalturaSlimAsset):
 
     def setProgramId(self, newProgramId):
         self.programId = newProgramId
+
+    def getIsReportingMode(self):
+        return self.isReportingMode
+
+    def setIsReportingMode(self, newIsReportingMode):
+        self.isReportingMode = newIsReportingMode
 
 
 # @package Kaltura
@@ -28115,6 +28193,23 @@ class KalturaDiscountDetailsService(KalturaServiceBase):
 
 # @package Kaltura
 # @subpackage Client
+class KalturaDrmProfileService(KalturaServiceBase):
+    def __init__(self, client = None):
+        KalturaServiceBase.__init__(self, client)
+
+    def list(self):
+        """Returns all DRM adapters for partner"""
+
+        kparams = KalturaParams()
+        self.client.queueServiceActionCall("drmprofile", "list", "KalturaDrmProfileListResponse", kparams)
+        if self.client.isMultiRequest():
+            return self.client.getMultiRequestResult()
+        resultNode = self.client.doQueue()
+        return KalturaObjectFactory.create(resultNode, 'KalturaDrmProfileListResponse')
+
+
+# @package Kaltura
+# @subpackage Client
 class KalturaEmailService(KalturaServiceBase):
     def __init__(self, client = None):
         KalturaServiceBase.__init__(self, client)
@@ -31763,6 +31858,7 @@ class KalturaCoreClient(KalturaClientPlugin):
             'deviceBrand': KalturaDeviceBrandService,
             'deviceFamily': KalturaDeviceFamilyService,
             'discountDetails': KalturaDiscountDetailsService,
+            'drmProfile': KalturaDrmProfileService,
             'email': KalturaEmailService,
             'engagementAdapter': KalturaEngagementAdapterService,
             'engagement': KalturaEngagementService,
