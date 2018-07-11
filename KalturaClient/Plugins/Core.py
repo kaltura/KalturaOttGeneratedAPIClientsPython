@@ -42,7 +42,7 @@ from ..Base import (
     KalturaServiceBase,
 )
 
-API_VERSION = '4.9.303.41995'
+API_VERSION = '5.1.18.41996'
 
 ########## enums ##########
 # @package Kaltura
@@ -3029,6 +3029,7 @@ class KalturaMultilingualStringValue(KalturaValue):
 
         # Value
         # @var string
+        # @readonly
         self.value = value
 
         # Value
@@ -3048,15 +3049,11 @@ class KalturaMultilingualStringValue(KalturaValue):
     def toParams(self):
         kparams = KalturaValue.toParams(self)
         kparams.put("objectType", "KalturaMultilingualStringValue")
-        kparams.addStringIfDefined("value", self.value)
         kparams.addArrayIfDefined("multilingualValue", self.multilingualValue)
         return kparams
 
     def getValue(self):
         return self.value
-
-    def setValue(self, newValue):
-        self.value = newValue
 
     def getMultilingualValue(self):
         return self.multilingualValue
@@ -6300,6 +6297,7 @@ class KalturaCollection(KalturaObjectBase):
 
         # Name of the subscription
         # @var string
+        # @readonly
         self.name = name
 
         # Name of the subscription
@@ -6308,6 +6306,7 @@ class KalturaCollection(KalturaObjectBase):
 
         # description of the subscription
         # @var string
+        # @readonly
         self.description = description
 
         # description of the subscription
@@ -6364,9 +6363,7 @@ class KalturaCollection(KalturaObjectBase):
         kparams.addIntIfDefined("startDate", self.startDate)
         kparams.addIntIfDefined("endDate", self.endDate)
         kparams.addObjectIfDefined("discountModule", self.discountModule)
-        kparams.addStringIfDefined("name", self.name)
         kparams.addArrayIfDefined("multilingualName", self.multilingualName)
-        kparams.addStringIfDefined("description", self.description)
         kparams.addArrayIfDefined("multilingualDescription", self.multilingualDescription)
         kparams.addObjectIfDefined("usageModule", self.usageModule)
         kparams.addArrayIfDefined("couponsGroups", self.couponsGroups)
@@ -6408,9 +6405,6 @@ class KalturaCollection(KalturaObjectBase):
     def getName(self):
         return self.name
 
-    def setName(self, newName):
-        self.name = newName
-
     def getMultilingualName(self):
         return self.multilingualName
 
@@ -6419,9 +6413,6 @@ class KalturaCollection(KalturaObjectBase):
 
     def getDescription(self):
         return self.description
-
-    def setDescription(self, newDescription):
-        self.description = newDescription
 
     def getMultilingualDescription(self):
         return self.multilingualDescription
@@ -6649,6 +6640,7 @@ class KalturaChannel(KalturaBaseChannel):
 
         # Channel name
         # @var string
+        # @readonly
         self.name = name
 
         # Channel name
@@ -6661,6 +6653,7 @@ class KalturaChannel(KalturaBaseChannel):
 
         # Cannel description
         # @var string
+        # @readonly
         self.description = description
 
         # Cannel description
@@ -6705,10 +6698,8 @@ class KalturaChannel(KalturaBaseChannel):
     def toParams(self):
         kparams = KalturaBaseChannel.toParams(self)
         kparams.put("objectType", "KalturaChannel")
-        kparams.addStringIfDefined("name", self.name)
         kparams.addArrayIfDefined("multilingualName", self.multilingualName)
         kparams.addStringIfDefined("systemName", self.systemName)
-        kparams.addStringIfDefined("description", self.description)
         kparams.addArrayIfDefined("multilingualDescription", self.multilingualDescription)
         kparams.addBoolIfDefined("isActive", self.isActive)
         kparams.addObjectIfDefined("orderBy", self.orderBy)
@@ -6716,9 +6707,6 @@ class KalturaChannel(KalturaBaseChannel):
 
     def getName(self):
         return self.name
-
-    def setName(self, newName):
-        self.name = newName
 
     def getMultilingualName(self):
         return self.multilingualName
@@ -6734,9 +6722,6 @@ class KalturaChannel(KalturaBaseChannel):
 
     def getDescription(self):
         return self.description
-
-    def setDescription(self, newDescription):
-        self.description = newDescription
 
     def getMultilingualDescription(self):
         return self.multilingualDescription
@@ -8291,6 +8276,7 @@ class KalturaSubscription(KalturaObjectBase):
 
         # Name of the subscription
         # @var string
+        # @readonly
         self.name = name
 
         # Name of the subscription
@@ -8299,6 +8285,7 @@ class KalturaSubscription(KalturaObjectBase):
 
         # description of the subscription
         # @var string
+        # @readonly
         self.description = description
 
         # description of the subscription
@@ -8425,9 +8412,7 @@ class KalturaSubscription(KalturaObjectBase):
         kparams.addBoolIfDefined("isInfiniteRenewal", self.isInfiniteRenewal)
         kparams.addObjectIfDefined("price", self.price)
         kparams.addObjectIfDefined("discountModule", self.discountModule)
-        kparams.addStringIfDefined("name", self.name)
         kparams.addArrayIfDefined("multilingualName", self.multilingualName)
-        kparams.addStringIfDefined("description", self.description)
         kparams.addArrayIfDefined("multilingualDescription", self.multilingualDescription)
         kparams.addIntIfDefined("mediaId", self.mediaId)
         kparams.addIntIfDefined("prorityInOrder", self.prorityInOrder)
@@ -8511,9 +8496,6 @@ class KalturaSubscription(KalturaObjectBase):
     def getName(self):
         return self.name
 
-    def setName(self, newName):
-        self.name = newName
-
     def getMultilingualName(self):
         return self.multilingualName
 
@@ -8522,9 +8504,6 @@ class KalturaSubscription(KalturaObjectBase):
 
     def getDescription(self):
         return self.description
-
-    def setDescription(self, newDescription):
-        self.description = newDescription
 
     def getMultilingualDescription(self):
         return self.multilingualDescription
@@ -10504,6 +10483,7 @@ class KalturaRecording(KalturaObjectBase):
             type=NotImplemented,
             viewableUntilDate=NotImplemented,
             isProtected=NotImplemented,
+            externalId=NotImplemented,
             createDate=NotImplemented,
             updateDate=NotImplemented):
         KalturaObjectBase.__init__(self)
@@ -10513,7 +10493,7 @@ class KalturaRecording(KalturaObjectBase):
         # @readonly
         self.id = id
 
-        # Recording state: scheduled/recording/recorded/canceled/failed/does_not_exists/deleted
+        # Recording state: scheduled/recording/recorded/canceled/failed/deleted
         # @var KalturaRecordingStatus
         # @readonly
         self.status = status
@@ -10537,6 +10517,10 @@ class KalturaRecording(KalturaObjectBase):
         # @readonly
         self.isProtected = isProtected
 
+        # External identifier for the recording
+        # @var string
+        self.externalId = externalId
+
         # Specifies when was the recording created. Date and time represented as epoch.
         # @var int
         # @readonly
@@ -10555,6 +10539,7 @@ class KalturaRecording(KalturaObjectBase):
         'type': (KalturaEnumsFactory.createString, "KalturaRecordingType"), 
         'viewableUntilDate': getXmlNodeInt, 
         'isProtected': getXmlNodeBool, 
+        'externalId': getXmlNodeText, 
         'createDate': getXmlNodeInt, 
         'updateDate': getXmlNodeInt, 
     }
@@ -10567,6 +10552,7 @@ class KalturaRecording(KalturaObjectBase):
         kparams = KalturaObjectBase.toParams(self)
         kparams.put("objectType", "KalturaRecording")
         kparams.addIntIfDefined("assetId", self.assetId)
+        kparams.addStringIfDefined("externalId", self.externalId)
         return kparams
 
     def getId(self):
@@ -10589,6 +10575,12 @@ class KalturaRecording(KalturaObjectBase):
 
     def getIsProtected(self):
         return self.isProtected
+
+    def getExternalId(self):
+        return self.externalId
+
+    def setExternalId(self, newExternalId):
+        self.externalId = newExternalId
 
     def getCreateDate(self):
         return self.createDate
@@ -12508,6 +12500,7 @@ class KalturaTag(KalturaObjectBase):
 
         # Tag
         # @var string
+        # @readonly
         self.tag = tag
 
         # Tag
@@ -12530,7 +12523,6 @@ class KalturaTag(KalturaObjectBase):
         kparams = KalturaObjectBase.toParams(self)
         kparams.put("objectType", "KalturaTag")
         kparams.addIntIfDefined("type", self.type)
-        kparams.addStringIfDefined("tag", self.tag)
         kparams.addArrayIfDefined("multilingualTag", self.multilingualTag)
         return kparams
 
@@ -12545,9 +12537,6 @@ class KalturaTag(KalturaObjectBase):
 
     def getTag(self):
         return self.tag
-
-    def setTag(self, newTag):
-        self.tag = newTag
 
     def getMultilingualTag(self):
         return self.multilingualTag
@@ -12627,6 +12616,7 @@ class KalturaAsset(KalturaObjectBase):
 
         # Asset name
         # @var string
+        # @readonly
         self.name = name
 
         # Asset name
@@ -12635,6 +12625,7 @@ class KalturaAsset(KalturaObjectBase):
 
         # Asset description
         # @var string
+        # @readonly
         self.description = description
 
         # Asset description
@@ -12708,9 +12699,7 @@ class KalturaAsset(KalturaObjectBase):
         kparams = KalturaObjectBase.toParams(self)
         kparams.put("objectType", "KalturaAsset")
         kparams.addIntIfDefined("type", self.type)
-        kparams.addStringIfDefined("name", self.name)
         kparams.addArrayIfDefined("multilingualName", self.multilingualName)
-        kparams.addStringIfDefined("description", self.description)
         kparams.addArrayIfDefined("multilingualDescription", self.multilingualDescription)
         kparams.addMapIfDefined("metas", self.metas)
         kparams.addMapIfDefined("tags", self.tags)
@@ -12731,9 +12720,6 @@ class KalturaAsset(KalturaObjectBase):
     def getName(self):
         return self.name
 
-    def setName(self, newName):
-        self.name = newName
-
     def getMultilingualName(self):
         return self.multilingualName
 
@@ -12742,9 +12728,6 @@ class KalturaAsset(KalturaObjectBase):
 
     def getDescription(self):
         return self.description
-
-    def setDescription(self, newDescription):
-        self.description = newDescription
 
     def getMultilingualDescription(self):
         return self.multilingualDescription
@@ -13442,6 +13425,7 @@ class KalturaAssetStruct(KalturaObjectBase):
 
         # Asset struct name for the partner
         # @var string
+        # @readonly
         self.name = name
 
         # Asset struct name for the partner
@@ -13514,7 +13498,6 @@ class KalturaAssetStruct(KalturaObjectBase):
     def toParams(self):
         kparams = KalturaObjectBase.toParams(self)
         kparams.put("objectType", "KalturaAssetStruct")
-        kparams.addStringIfDefined("name", self.name)
         kparams.addArrayIfDefined("multilingualName", self.multilingualName)
         kparams.addStringIfDefined("systemName", self.systemName)
         kparams.addBoolIfDefined("isProtected", self.isProtected)
@@ -13531,9 +13514,6 @@ class KalturaAssetStruct(KalturaObjectBase):
 
     def getName(self):
         return self.name
-
-    def setName(self, newName):
-        self.name = newName
 
     def getMultilingualName(self):
         return self.multilingualName
@@ -14674,6 +14654,115 @@ class KalturaDrmProfileListResponse(KalturaListResponse):
 
 # @package Kaltura
 # @subpackage Client
+class KalturaMediaConcurrencyRule(KalturaObjectBase):
+    """Media concurrency rule"""
+
+    def __init__(self,
+            id=NotImplemented,
+            name=NotImplemented,
+            concurrencyLimitationType=NotImplemented,
+            limitation=NotImplemented):
+        KalturaObjectBase.__init__(self)
+
+        # Media concurrency rule  identifier
+        # @var string
+        self.id = id
+
+        # Media concurrency rule  name
+        # @var string
+        self.name = name
+
+        # Concurrency limitation type
+        # @var KalturaConcurrencyLimitationType
+        self.concurrencyLimitationType = concurrencyLimitationType
+
+        # Limitation
+        # @var int
+        self.limitation = limitation
+
+
+    PROPERTY_LOADERS = {
+        'id': getXmlNodeText, 
+        'name': getXmlNodeText, 
+        'concurrencyLimitationType': (KalturaEnumsFactory.createString, "KalturaConcurrencyLimitationType"), 
+        'limitation': getXmlNodeInt, 
+    }
+
+    def fromXml(self, node):
+        KalturaObjectBase.fromXml(self, node)
+        self.fromXmlImpl(node, KalturaMediaConcurrencyRule.PROPERTY_LOADERS)
+
+    def toParams(self):
+        kparams = KalturaObjectBase.toParams(self)
+        kparams.put("objectType", "KalturaMediaConcurrencyRule")
+        kparams.addStringIfDefined("id", self.id)
+        kparams.addStringIfDefined("name", self.name)
+        kparams.addStringEnumIfDefined("concurrencyLimitationType", self.concurrencyLimitationType)
+        kparams.addIntIfDefined("limitation", self.limitation)
+        return kparams
+
+    def getId(self):
+        return self.id
+
+    def setId(self, newId):
+        self.id = newId
+
+    def getName(self):
+        return self.name
+
+    def setName(self, newName):
+        self.name = newName
+
+    def getConcurrencyLimitationType(self):
+        return self.concurrencyLimitationType
+
+    def setConcurrencyLimitationType(self, newConcurrencyLimitationType):
+        self.concurrencyLimitationType = newConcurrencyLimitationType
+
+    def getLimitation(self):
+        return self.limitation
+
+    def setLimitation(self, newLimitation):
+        self.limitation = newLimitation
+
+
+# @package Kaltura
+# @subpackage Client
+class KalturaMediaConcurrencyRuleListResponse(KalturaListResponse):
+    def __init__(self,
+            totalCount=NotImplemented,
+            objects=NotImplemented):
+        KalturaListResponse.__init__(self,
+            totalCount)
+
+        # Media CONCURRENCY RULES
+        # @var array of KalturaMediaConcurrencyRule
+        self.objects = objects
+
+
+    PROPERTY_LOADERS = {
+        'objects': (KalturaObjectFactory.createArray, 'KalturaMediaConcurrencyRule'), 
+    }
+
+    def fromXml(self, node):
+        KalturaListResponse.fromXml(self, node)
+        self.fromXmlImpl(node, KalturaMediaConcurrencyRuleListResponse.PROPERTY_LOADERS)
+
+    def toParams(self):
+        kparams = KalturaListResponse.toParams(self)
+        kparams.put("objectType", "KalturaMediaConcurrencyRuleListResponse")
+        kparams.addArrayIfDefined("objects", self.objects)
+        return kparams
+
+    def getObjects(self):
+        return self.objects
+
+    def setObjects(self, newObjects):
+        self.objects = newObjects
+
+
+# @package Kaltura
+# @subpackage Client
 class KalturaAssetRuleBase(KalturaObjectBase):
     """Asset rule base"""
 
@@ -15607,6 +15696,7 @@ class KalturaMeta(KalturaObjectBase):
 
         # Meta name for the partner
         # @var string
+        # @readonly
         self.name = name
 
         # Meta name for the partner
@@ -15677,7 +15767,6 @@ class KalturaMeta(KalturaObjectBase):
     def toParams(self):
         kparams = KalturaObjectBase.toParams(self)
         kparams.put("objectType", "KalturaMeta")
-        kparams.addStringIfDefined("name", self.name)
         kparams.addArrayIfDefined("multilingualName", self.multilingualName)
         kparams.addStringIfDefined("systemName", self.systemName)
         kparams.addStringEnumIfDefined("dataType", self.dataType)
@@ -15693,9 +15782,6 @@ class KalturaMeta(KalturaObjectBase):
 
     def getName(self):
         return self.name
-
-    def setName(self, newName):
-        self.name = newName
 
     def getMultilingualName(self):
         return self.multilingualName
@@ -19654,7 +19740,7 @@ class KalturaRecordingFilter(KalturaFilter):
     def __init__(self,
             orderBy=NotImplemented,
             statusIn=NotImplemented,
-            filterExpression=NotImplemented):
+            kSql=NotImplemented):
         KalturaFilter.__init__(self,
             orderBy)
 
@@ -19664,12 +19750,12 @@ class KalturaRecordingFilter(KalturaFilter):
 
         # KSQL expression
         # @var string
-        self.filterExpression = filterExpression
+        self.kSql = kSql
 
 
     PROPERTY_LOADERS = {
         'statusIn': getXmlNodeText, 
-        'filterExpression': getXmlNodeText, 
+        'kSql': getXmlNodeText, 
     }
 
     def fromXml(self, node):
@@ -19680,7 +19766,7 @@ class KalturaRecordingFilter(KalturaFilter):
         kparams = KalturaFilter.toParams(self)
         kparams.put("objectType", "KalturaRecordingFilter")
         kparams.addStringIfDefined("statusIn", self.statusIn)
-        kparams.addStringIfDefined("filterExpression", self.filterExpression)
+        kparams.addStringIfDefined("kSql", self.kSql)
         return kparams
 
     def getStatusIn(self):
@@ -19689,11 +19775,11 @@ class KalturaRecordingFilter(KalturaFilter):
     def setStatusIn(self, newStatusIn):
         self.statusIn = newStatusIn
 
-    def getFilterExpression(self):
-        return self.filterExpression
+    def getKSql(self):
+        return self.kSql
 
-    def setFilterExpression(self, newFilterExpression):
-        self.filterExpression = newFilterExpression
+    def setKSql(self, newKSql):
+        self.kSql = newKSql
 
 
 # @package Kaltura
@@ -22113,6 +22199,8 @@ class KalturaCoreClient(KalturaClientPlugin):
             'KalturaBulkListResponse': KalturaBulkListResponse,
             'KalturaDrmProfile': KalturaDrmProfile,
             'KalturaDrmProfileListResponse': KalturaDrmProfileListResponse,
+            'KalturaMediaConcurrencyRule': KalturaMediaConcurrencyRule,
+            'KalturaMediaConcurrencyRuleListResponse': KalturaMediaConcurrencyRuleListResponse,
             'KalturaAssetRuleBase': KalturaAssetRuleBase,
             'KalturaCondition': KalturaCondition,
             'KalturaAssetCondition': KalturaAssetCondition,
