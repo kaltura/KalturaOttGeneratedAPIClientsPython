@@ -42,7 +42,7 @@ from ..Base import (
     KalturaServiceBase,
 )
 
-API_VERSION = '5.1.23.26337'
+API_VERSION = '5.1.24.27624'
 
 ########## enums ##########
 # @package Kaltura
@@ -10888,7 +10888,7 @@ class KalturaRecording(KalturaObjectBase):
 
         # Recording Type: single/season/series
         # @var KalturaRecordingType
-        # @readonly
+        # @insertonly
         self.type = type
 
         # Specifies until when the recording is available for viewing. Date and time represented as epoch.
@@ -10898,11 +10898,12 @@ class KalturaRecording(KalturaObjectBase):
 
         # Specifies whether or not the recording is protected
         # @var bool
-        # @readonly
+        # @insertonly
         self.isProtected = isProtected
 
         # External identifier for the recording
         # @var string
+        # @insertonly
         self.externalId = externalId
 
         # Specifies when was the recording created. Date and time represented as epoch.
@@ -10936,6 +10937,8 @@ class KalturaRecording(KalturaObjectBase):
         kparams = KalturaObjectBase.toParams(self)
         kparams.put("objectType", "KalturaRecording")
         kparams.addIntIfDefined("assetId", self.assetId)
+        kparams.addStringEnumIfDefined("type", self.type)
+        kparams.addBoolIfDefined("isProtected", self.isProtected)
         kparams.addStringIfDefined("externalId", self.externalId)
         return kparams
 
@@ -10954,11 +10957,17 @@ class KalturaRecording(KalturaObjectBase):
     def getType(self):
         return self.type
 
+    def setType(self, newType):
+        self.type = newType
+
     def getViewableUntilDate(self):
         return self.viewableUntilDate
 
     def getIsProtected(self):
         return self.isProtected
+
+    def setIsProtected(self, newIsProtected):
+        self.isProtected = newIsProtected
 
     def getExternalId(self):
         return self.externalId
@@ -20124,6 +20133,7 @@ class KalturaRecordingFilter(KalturaFilter):
     def __init__(self,
             orderBy=NotImplemented,
             statusIn=NotImplemented,
+            externalRecordingIdIn=NotImplemented,
             kSql=NotImplemented):
         KalturaFilter.__init__(self,
             orderBy)
@@ -20132,6 +20142,10 @@ class KalturaRecordingFilter(KalturaFilter):
         # @var string
         self.statusIn = statusIn
 
+        # Comma separated external identifiers
+        # @var string
+        self.externalRecordingIdIn = externalRecordingIdIn
+
         # KSQL expression
         # @var string
         self.kSql = kSql
@@ -20139,6 +20153,7 @@ class KalturaRecordingFilter(KalturaFilter):
 
     PROPERTY_LOADERS = {
         'statusIn': getXmlNodeText, 
+        'externalRecordingIdIn': getXmlNodeText, 
         'kSql': getXmlNodeText, 
     }
 
@@ -20150,6 +20165,7 @@ class KalturaRecordingFilter(KalturaFilter):
         kparams = KalturaFilter.toParams(self)
         kparams.put("objectType", "KalturaRecordingFilter")
         kparams.addStringIfDefined("statusIn", self.statusIn)
+        kparams.addStringIfDefined("externalRecordingIdIn", self.externalRecordingIdIn)
         kparams.addStringIfDefined("kSql", self.kSql)
         return kparams
 
@@ -20158,6 +20174,12 @@ class KalturaRecordingFilter(KalturaFilter):
 
     def setStatusIn(self, newStatusIn):
         self.statusIn = newStatusIn
+
+    def getExternalRecordingIdIn(self):
+        return self.externalRecordingIdIn
+
+    def setExternalRecordingIdIn(self, newExternalRecordingIdIn):
+        self.externalRecordingIdIn = newExternalRecordingIdIn
 
     def getKSql(self):
         return self.kSql
@@ -30730,22 +30752,6 @@ class KalturaRecordingService(KalturaServiceBase):
             return self.client.getMultiRequestResult()
         resultNode = self.client.doQueue()
         return KalturaObjectFactory.create(resultNode, 'KalturaRecordingListResponse')
-
-    def notify(self, externalDomainRecordingId, recordingStatus, domainId, externalEpgId = NotImplemented, recordingType = NotImplemented, isProtected = False):
-        """Notify on an external recording"""
-
-        kparams = KalturaParams()
-        kparams.addStringIfDefined("externalDomainRecordingId", externalDomainRecordingId)
-        kparams.addStringIfDefined("recordingStatus", recordingStatus)
-        kparams.addIntIfDefined("domainId", domainId);
-        kparams.addStringIfDefined("externalEpgId", externalEpgId)
-        kparams.addStringIfDefined("recordingType", recordingType)
-        kparams.addBoolIfDefined("isProtected", isProtected);
-        self.client.queueServiceActionCall("recording", "notify", "None", kparams)
-        if self.client.isMultiRequest():
-            return self.client.getMultiRequestResult()
-        resultNode = self.client.doQueue()
-        return getXmlNodeBool(resultNode)
 
     def protect(self, id):
         """Protects an existing recording from the cleanup process for the defined protection period"""
