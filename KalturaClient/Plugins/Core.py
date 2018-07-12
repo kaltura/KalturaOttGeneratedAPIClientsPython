@@ -42,7 +42,7 @@ from ..Base import (
     KalturaServiceBase,
 )
 
-API_VERSION = '4.7.53.19104'
+API_VERSION = '4.7.69.23962'
 
 ########## enums ##########
 # @package Kaltura
@@ -3042,6 +3042,7 @@ class KalturaMultilingualStringValue(KalturaValue):
 
         # Value
         # @var string
+        # @readonly
         self.value = value
 
         # Value
@@ -3061,15 +3062,11 @@ class KalturaMultilingualStringValue(KalturaValue):
     def toParams(self):
         kparams = KalturaValue.toParams(self)
         kparams.put("objectType", "KalturaMultilingualStringValue")
-        kparams.addStringIfDefined("value", self.value)
         kparams.addArrayIfDefined("multilingualValue", self.multilingualValue)
         return kparams
 
     def getValue(self):
         return self.value
-
-    def setValue(self, newValue):
-        self.value = newValue
 
     def getMultilingualValue(self):
         return self.multilingualValue
@@ -4555,39 +4552,6 @@ class KalturaMediaImage(KalturaObjectBase):
 
 # @package Kaltura
 # @subpackage Client
-class KalturaStringValueArray(KalturaObjectBase):
-    def __init__(self,
-            objects=NotImplemented):
-        KalturaObjectBase.__init__(self)
-
-        # List of string values
-        # @var array of KalturaStringValue
-        self.objects = objects
-
-
-    PROPERTY_LOADERS = {
-        'objects': (KalturaObjectFactory.createArray, 'KalturaStringValue'), 
-    }
-
-    def fromXml(self, node):
-        KalturaObjectBase.fromXml(self, node)
-        self.fromXmlImpl(node, KalturaStringValueArray.PROPERTY_LOADERS)
-
-    def toParams(self):
-        kparams = KalturaObjectBase.toParams(self)
-        kparams.put("objectType", "KalturaStringValueArray")
-        kparams.addArrayIfDefined("objects", self.objects)
-        return kparams
-
-    def getObjects(self):
-        return self.objects
-
-    def setObjects(self, newObjects):
-        self.objects = newObjects
-
-
-# @package Kaltura
-# @subpackage Client
 class KalturaMediaFile(KalturaObjectBase):
     """Media file details"""
 
@@ -4598,14 +4562,6 @@ class KalturaMediaFile(KalturaObjectBase):
             url=NotImplemented,
             duration=NotImplemented,
             externalId=NotImplemented,
-            billingType=NotImplemented,
-            quality=NotImplemented,
-            handlingType=NotImplemented,
-            cdnName=NotImplemented,
-            cdnCode=NotImplemented,
-            altCdnCode=NotImplemented,
-            ppvModules=NotImplemented,
-            productCode=NotImplemented,
             fileSize=NotImplemented):
         KalturaObjectBase.__init__(self)
 
@@ -4634,38 +4590,6 @@ class KalturaMediaFile(KalturaObjectBase):
         # @var string
         self.externalId = externalId
 
-        # Billing type
-        # @var string
-        self.billingType = billingType
-
-        # Quality
-        # @var string
-        self.quality = quality
-
-        # Handling type
-        # @var string
-        self.handlingType = handlingType
-
-        # CDN name
-        # @var string
-        self.cdnName = cdnName
-
-        # CDN code
-        # @var string
-        self.cdnCode = cdnCode
-
-        # Alt CDN code
-        # @var string
-        self.altCdnCode = altCdnCode
-
-        # PPV Module
-        # @var KalturaStringValueArray
-        self.ppvModules = ppvModules
-
-        # Product code
-        # @var string
-        self.productCode = productCode
-
         # File size
         # @var int
         self.fileSize = fileSize
@@ -4678,14 +4602,6 @@ class KalturaMediaFile(KalturaObjectBase):
         'url': getXmlNodeText, 
         'duration': getXmlNodeInt, 
         'externalId': getXmlNodeText, 
-        'billingType': getXmlNodeText, 
-        'quality': getXmlNodeText, 
-        'handlingType': getXmlNodeText, 
-        'cdnName': getXmlNodeText, 
-        'cdnCode': getXmlNodeText, 
-        'altCdnCode': getXmlNodeText, 
-        'ppvModules': (KalturaObjectFactory.create, 'KalturaStringValueArray'), 
-        'productCode': getXmlNodeText, 
         'fileSize': getXmlNodeInt, 
     }
 
@@ -4701,14 +4617,6 @@ class KalturaMediaFile(KalturaObjectBase):
         kparams.addStringIfDefined("url", self.url)
         kparams.addIntIfDefined("duration", self.duration)
         kparams.addStringIfDefined("externalId", self.externalId)
-        kparams.addStringIfDefined("billingType", self.billingType)
-        kparams.addStringIfDefined("quality", self.quality)
-        kparams.addStringIfDefined("handlingType", self.handlingType)
-        kparams.addStringIfDefined("cdnName", self.cdnName)
-        kparams.addStringIfDefined("cdnCode", self.cdnCode)
-        kparams.addStringIfDefined("altCdnCode", self.altCdnCode)
-        kparams.addObjectIfDefined("ppvModules", self.ppvModules)
-        kparams.addStringIfDefined("productCode", self.productCode)
         kparams.addIntIfDefined("fileSize", self.fileSize)
         return kparams
 
@@ -4744,54 +4652,6 @@ class KalturaMediaFile(KalturaObjectBase):
 
     def setExternalId(self, newExternalId):
         self.externalId = newExternalId
-
-    def getBillingType(self):
-        return self.billingType
-
-    def setBillingType(self, newBillingType):
-        self.billingType = newBillingType
-
-    def getQuality(self):
-        return self.quality
-
-    def setQuality(self, newQuality):
-        self.quality = newQuality
-
-    def getHandlingType(self):
-        return self.handlingType
-
-    def setHandlingType(self, newHandlingType):
-        self.handlingType = newHandlingType
-
-    def getCdnName(self):
-        return self.cdnName
-
-    def setCdnName(self, newCdnName):
-        self.cdnName = newCdnName
-
-    def getCdnCode(self):
-        return self.cdnCode
-
-    def setCdnCode(self, newCdnCode):
-        self.cdnCode = newCdnCode
-
-    def getAltCdnCode(self):
-        return self.altCdnCode
-
-    def setAltCdnCode(self, newAltCdnCode):
-        self.altCdnCode = newAltCdnCode
-
-    def getPpvModules(self):
-        return self.ppvModules
-
-    def setPpvModules(self, newPpvModules):
-        self.ppvModules = newPpvModules
-
-    def getProductCode(self):
-        return self.productCode
-
-    def setProductCode(self, newProductCode):
-        self.productCode = newProductCode
 
     def getFileSize(self):
         return self.fileSize
@@ -5101,14 +4961,6 @@ class KalturaPlaybackSource(KalturaMediaFile):
             url=NotImplemented,
             duration=NotImplemented,
             externalId=NotImplemented,
-            billingType=NotImplemented,
-            quality=NotImplemented,
-            handlingType=NotImplemented,
-            cdnName=NotImplemented,
-            cdnCode=NotImplemented,
-            altCdnCode=NotImplemented,
-            ppvModules=NotImplemented,
-            productCode=NotImplemented,
             fileSize=NotImplemented,
             format=NotImplemented,
             protocols=NotImplemented,
@@ -5120,14 +4972,6 @@ class KalturaPlaybackSource(KalturaMediaFile):
             url,
             duration,
             externalId,
-            billingType,
-            quality,
-            handlingType,
-            cdnName,
-            cdnCode,
-            altCdnCode,
-            ppvModules,
-            productCode,
             fileSize)
 
         # Source format according to delivery profile streamer type (applehttp, mpegdash etc.)
@@ -6090,6 +5934,7 @@ class KalturaCollection(KalturaObjectBase):
 
         # Name of the subscription
         # @var string
+        # @readonly
         self.name = name
 
         # Name of the subscription
@@ -6098,6 +5943,7 @@ class KalturaCollection(KalturaObjectBase):
 
         # description of the subscription
         # @var string
+        # @readonly
         self.description = description
 
         # description of the subscription
@@ -6154,9 +6000,7 @@ class KalturaCollection(KalturaObjectBase):
         kparams.addIntIfDefined("startDate", self.startDate)
         kparams.addIntIfDefined("endDate", self.endDate)
         kparams.addObjectIfDefined("discountModule", self.discountModule)
-        kparams.addStringIfDefined("name", self.name)
         kparams.addArrayIfDefined("multilingualName", self.multilingualName)
-        kparams.addStringIfDefined("description", self.description)
         kparams.addArrayIfDefined("multilingualDescription", self.multilingualDescription)
         kparams.addObjectIfDefined("usageModule", self.usageModule)
         kparams.addArrayIfDefined("couponsGroups", self.couponsGroups)
@@ -6198,9 +6042,6 @@ class KalturaCollection(KalturaObjectBase):
     def getName(self):
         return self.name
 
-    def setName(self, newName):
-        self.name = newName
-
     def getMultilingualName(self):
         return self.multilingualName
 
@@ -6209,9 +6050,6 @@ class KalturaCollection(KalturaObjectBase):
 
     def getDescription(self):
         return self.description
-
-    def setDescription(self, newDescription):
-        self.description = newDescription
 
     def getMultilingualDescription(self):
         return self.multilingualDescription
@@ -7613,6 +7451,7 @@ class KalturaSubscription(KalturaObjectBase):
 
         # Name of the subscription
         # @var string
+        # @readonly
         self.name = name
 
         # Name of the subscription
@@ -7621,6 +7460,7 @@ class KalturaSubscription(KalturaObjectBase):
 
         # description of the subscription
         # @var string
+        # @readonly
         self.description = description
 
         # description of the subscription
@@ -7747,9 +7587,7 @@ class KalturaSubscription(KalturaObjectBase):
         kparams.addBoolIfDefined("isInfiniteRenewal", self.isInfiniteRenewal)
         kparams.addObjectIfDefined("price", self.price)
         kparams.addObjectIfDefined("discountModule", self.discountModule)
-        kparams.addStringIfDefined("name", self.name)
         kparams.addArrayIfDefined("multilingualName", self.multilingualName)
-        kparams.addStringIfDefined("description", self.description)
         kparams.addArrayIfDefined("multilingualDescription", self.multilingualDescription)
         kparams.addIntIfDefined("mediaId", self.mediaId)
         kparams.addIntIfDefined("prorityInOrder", self.prorityInOrder)
@@ -7833,9 +7671,6 @@ class KalturaSubscription(KalturaObjectBase):
     def getName(self):
         return self.name
 
-    def setName(self, newName):
-        self.name = newName
-
     def getMultilingualName(self):
         return self.multilingualName
 
@@ -7844,9 +7679,6 @@ class KalturaSubscription(KalturaObjectBase):
 
     def getDescription(self):
         return self.description
-
-    def setDescription(self, newDescription):
-        self.description = newDescription
 
     def getMultilingualDescription(self):
         return self.multilingualDescription
@@ -11200,8 +11032,7 @@ class KalturaAsset(KalturaObjectBase):
             enableCdvr=NotImplemented,
             enableCatchUp=NotImplemented,
             enableStartOver=NotImplemented,
-            enableTrickPlay=NotImplemented,
-            externalId=NotImplemented):
+            enableTrickPlay=NotImplemented):
         KalturaObjectBase.__init__(self)
 
         # Unique identifier for the asset
@@ -11216,6 +11047,7 @@ class KalturaAsset(KalturaObjectBase):
 
         # Asset name
         # @var string
+        # @readonly
         self.name = name
 
         # Asset name
@@ -11224,6 +11056,7 @@ class KalturaAsset(KalturaObjectBase):
 
         # Asset description
         # @var string
+        # @readonly
         self.description = description
 
         # Asset description
@@ -11270,10 +11103,6 @@ class KalturaAsset(KalturaObjectBase):
         # @var bool
         self.enableTrickPlay = enableTrickPlay
 
-        # External identifier for the media file
-        # @var string
-        self.externalId = externalId
-
 
     PROPERTY_LOADERS = {
         'id': getXmlNodeInt, 
@@ -11292,7 +11121,6 @@ class KalturaAsset(KalturaObjectBase):
         'enableCatchUp': getXmlNodeBool, 
         'enableStartOver': getXmlNodeBool, 
         'enableTrickPlay': getXmlNodeBool, 
-        'externalId': getXmlNodeText, 
     }
 
     def fromXml(self, node):
@@ -11303,9 +11131,7 @@ class KalturaAsset(KalturaObjectBase):
         kparams = KalturaObjectBase.toParams(self)
         kparams.put("objectType", "KalturaAsset")
         kparams.addIntIfDefined("type", self.type)
-        kparams.addStringIfDefined("name", self.name)
         kparams.addArrayIfDefined("multilingualName", self.multilingualName)
-        kparams.addStringIfDefined("description", self.description)
         kparams.addArrayIfDefined("multilingualDescription", self.multilingualDescription)
         kparams.addArrayIfDefined("images", self.images)
         kparams.addArrayIfDefined("mediaFiles", self.mediaFiles)
@@ -11317,7 +11143,6 @@ class KalturaAsset(KalturaObjectBase):
         kparams.addBoolIfDefined("enableCatchUp", self.enableCatchUp)
         kparams.addBoolIfDefined("enableStartOver", self.enableStartOver)
         kparams.addBoolIfDefined("enableTrickPlay", self.enableTrickPlay)
-        kparams.addStringIfDefined("externalId", self.externalId)
         return kparams
 
     def getId(self):
@@ -11332,9 +11157,6 @@ class KalturaAsset(KalturaObjectBase):
     def getName(self):
         return self.name
 
-    def setName(self, newName):
-        self.name = newName
-
     def getMultilingualName(self):
         return self.multilingualName
 
@@ -11343,9 +11165,6 @@ class KalturaAsset(KalturaObjectBase):
 
     def getDescription(self):
         return self.description
-
-    def setDescription(self, newDescription):
-        self.description = newDescription
 
     def getMultilingualDescription(self):
         return self.multilingualDescription
@@ -11413,12 +11232,6 @@ class KalturaAsset(KalturaObjectBase):
     def setEnableTrickPlay(self, newEnableTrickPlay):
         self.enableTrickPlay = newEnableTrickPlay
 
-    def getExternalId(self):
-        return self.externalId
-
-    def setExternalId(self, newExternalId):
-        self.externalId = newExternalId
-
 
 # @package Kaltura
 # @subpackage Client
@@ -11479,7 +11292,6 @@ class KalturaProgramAsset(KalturaAsset):
             enableCatchUp=NotImplemented,
             enableStartOver=NotImplemented,
             enableTrickPlay=NotImplemented,
-            externalId=NotImplemented,
             epgChannelId=NotImplemented,
             epgId=NotImplemented,
             relatedMediaId=NotImplemented,
@@ -11501,8 +11313,7 @@ class KalturaProgramAsset(KalturaAsset):
             enableCdvr,
             enableCatchUp,
             enableStartOver,
-            enableTrickPlay,
-            externalId)
+            enableTrickPlay)
 
         # EPG channel identifier
         # @var int
@@ -11600,7 +11411,6 @@ class KalturaRecordingAsset(KalturaProgramAsset):
             enableCatchUp=NotImplemented,
             enableStartOver=NotImplemented,
             enableTrickPlay=NotImplemented,
-            externalId=NotImplemented,
             epgChannelId=NotImplemented,
             epgId=NotImplemented,
             relatedMediaId=NotImplemented,
@@ -11625,7 +11435,6 @@ class KalturaRecordingAsset(KalturaProgramAsset):
             enableCatchUp,
             enableStartOver,
             enableTrickPlay,
-            externalId,
             epgChannelId,
             epgId,
             relatedMediaId,
@@ -11692,16 +11501,11 @@ class KalturaMediaAsset(KalturaAsset):
             enableCatchUp=NotImplemented,
             enableStartOver=NotImplemented,
             enableTrickPlay=NotImplemented,
-            externalId=NotImplemented,
             externalIds=NotImplemented,
             catchUpBuffer=NotImplemented,
             trickPlayBuffer=NotImplemented,
             enableRecordingPlaybackNonEntitledChannel=NotImplemented,
-            typeDescription=NotImplemented,
-            entryId=NotImplemented,
-            deviceRule=NotImplemented,
-            geoBlockRule=NotImplemented,
-            watchPermissionRule=NotImplemented):
+            entryId=NotImplemented):
         KalturaAsset.__init__(self,
             id,
             type,
@@ -11718,8 +11522,7 @@ class KalturaMediaAsset(KalturaAsset):
             enableCdvr,
             enableCatchUp,
             enableStartOver,
-            enableTrickPlay,
-            externalId)
+            enableTrickPlay)
 
         # External identifiers
         # @var string
@@ -11738,25 +11541,9 @@ class KalturaMediaAsset(KalturaAsset):
         # @readonly
         self.enableRecordingPlaybackNonEntitledChannel = enableRecordingPlaybackNonEntitledChannel
 
-        # Asset type description
-        # @var string
-        self.typeDescription = typeDescription
-
         # Entry Identifier
         # @var string
         self.entryId = entryId
-
-        # Device rule
-        # @var string
-        self.deviceRule = deviceRule
-
-        # Geo block rule
-        # @var string
-        self.geoBlockRule = geoBlockRule
-
-        # Watch permission rule
-        # @var string
-        self.watchPermissionRule = watchPermissionRule
 
 
     PROPERTY_LOADERS = {
@@ -11764,11 +11551,7 @@ class KalturaMediaAsset(KalturaAsset):
         'catchUpBuffer': getXmlNodeInt, 
         'trickPlayBuffer': getXmlNodeInt, 
         'enableRecordingPlaybackNonEntitledChannel': getXmlNodeBool, 
-        'typeDescription': getXmlNodeText, 
         'entryId': getXmlNodeText, 
-        'deviceRule': getXmlNodeText, 
-        'geoBlockRule': getXmlNodeText, 
-        'watchPermissionRule': getXmlNodeText, 
     }
 
     def fromXml(self, node):
@@ -11781,11 +11564,7 @@ class KalturaMediaAsset(KalturaAsset):
         kparams.addStringIfDefined("externalIds", self.externalIds)
         kparams.addIntIfDefined("catchUpBuffer", self.catchUpBuffer)
         kparams.addIntIfDefined("trickPlayBuffer", self.trickPlayBuffer)
-        kparams.addStringIfDefined("typeDescription", self.typeDescription)
         kparams.addStringIfDefined("entryId", self.entryId)
-        kparams.addStringIfDefined("deviceRule", self.deviceRule)
-        kparams.addStringIfDefined("geoBlockRule", self.geoBlockRule)
-        kparams.addStringIfDefined("watchPermissionRule", self.watchPermissionRule)
         return kparams
 
     def getExternalIds(self):
@@ -11809,35 +11588,11 @@ class KalturaMediaAsset(KalturaAsset):
     def getEnableRecordingPlaybackNonEntitledChannel(self):
         return self.enableRecordingPlaybackNonEntitledChannel
 
-    def getTypeDescription(self):
-        return self.typeDescription
-
-    def setTypeDescription(self, newTypeDescription):
-        self.typeDescription = newTypeDescription
-
     def getEntryId(self):
         return self.entryId
 
     def setEntryId(self, newEntryId):
         self.entryId = newEntryId
-
-    def getDeviceRule(self):
-        return self.deviceRule
-
-    def setDeviceRule(self, newDeviceRule):
-        self.deviceRule = newDeviceRule
-
-    def getGeoBlockRule(self):
-        return self.geoBlockRule
-
-    def setGeoBlockRule(self, newGeoBlockRule):
-        self.geoBlockRule = newGeoBlockRule
-
-    def getWatchPermissionRule(self):
-        return self.watchPermissionRule
-
-    def setWatchPermissionRule(self, newWatchPermissionRule):
-        self.watchPermissionRule = newWatchPermissionRule
 
 
 # @package Kaltura
@@ -26270,7 +26025,6 @@ class KalturaCoreClient(KalturaClientPlugin):
             'KalturaUserInterest': KalturaUserInterest,
             'KalturaUserInterestListResponse': KalturaUserInterestListResponse,
             'KalturaMediaImage': KalturaMediaImage,
-            'KalturaStringValueArray': KalturaStringValueArray,
             'KalturaMediaFile': KalturaMediaFile,
             'KalturaBuzzScore': KalturaBuzzScore,
             'KalturaAssetStatistics': KalturaAssetStatistics,
