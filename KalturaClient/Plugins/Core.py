@@ -42,7 +42,7 @@ from ..Base import (
     KalturaServiceBase,
 )
 
-API_VERSION = '5.1.30.43113'
+API_VERSION = '5.1.31.15727'
 
 ########## enums ##########
 # @package Kaltura
@@ -5109,6 +5109,7 @@ class KalturaMediaFile(KalturaAssetFile):
             url=NotImplemented,
             assetId=NotImplemented,
             id=NotImplemented,
+            type=NotImplemented,
             typeId=NotImplemented,
             duration=NotImplemented,
             externalId=NotImplemented,
@@ -5137,6 +5138,11 @@ class KalturaMediaFile(KalturaAssetFile):
         # @var int
         # @readonly
         self.id = id
+
+        # Deprecated - Device types as defined in the system
+        # @var string
+        # @readonly
+        self.type = type
 
         # Device types identifier as defined in the system
         # @var int
@@ -5210,6 +5216,7 @@ class KalturaMediaFile(KalturaAssetFile):
     PROPERTY_LOADERS = {
         'assetId': getXmlNodeInt, 
         'id': getXmlNodeInt, 
+        'type': getXmlNodeText, 
         'typeId': getXmlNodeInt, 
         'duration': getXmlNodeInt, 
         'externalId': getXmlNodeText, 
@@ -5264,6 +5271,9 @@ class KalturaMediaFile(KalturaAssetFile):
 
     def getId(self):
         return self.id
+
+    def getType(self):
+        return self.type
 
     def getTypeId(self):
         return self.typeId
@@ -5666,6 +5676,7 @@ class KalturaPlaybackSource(KalturaMediaFile):
             url=NotImplemented,
             assetId=NotImplemented,
             id=NotImplemented,
+            type=NotImplemented,
             typeId=NotImplemented,
             duration=NotImplemented,
             externalId=NotImplemented,
@@ -5690,6 +5701,7 @@ class KalturaPlaybackSource(KalturaMediaFile):
             url,
             assetId,
             id,
+            type,
             typeId,
             duration,
             externalId,
