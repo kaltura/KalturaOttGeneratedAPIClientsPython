@@ -42,7 +42,7 @@ from ..Base import (
     KalturaServiceBase,
 )
 
-API_VERSION = '4.9.4.20864'
+API_VERSION = '4.9.9.13406'
 
 ########## enums ##########
 # @package Kaltura
@@ -12930,6 +12930,115 @@ class KalturaBillingPartnerConfig(KalturaPartnerConfiguration):
 
     def setType(self, newType):
         self.type = newType
+
+
+# @package Kaltura
+# @subpackage Client
+class KalturaMediaConcurrencyRule(KalturaObjectBase):
+    """Media concurrency rule"""
+
+    def __init__(self,
+            id=NotImplemented,
+            name=NotImplemented,
+            concurrencyLimitationType=NotImplemented,
+            limitation=NotImplemented):
+        KalturaObjectBase.__init__(self)
+
+        # Media concurrency rule  identifier
+        # @var string
+        self.id = id
+
+        # Media concurrency rule  name
+        # @var string
+        self.name = name
+
+        # Concurrency limitation type
+        # @var KalturaConcurrencyLimitationType
+        self.concurrencyLimitationType = concurrencyLimitationType
+
+        # Limitation
+        # @var int
+        self.limitation = limitation
+
+
+    PROPERTY_LOADERS = {
+        'id': getXmlNodeText, 
+        'name': getXmlNodeText, 
+        'concurrencyLimitationType': (KalturaEnumsFactory.createString, "KalturaConcurrencyLimitationType"), 
+        'limitation': getXmlNodeInt, 
+    }
+
+    def fromXml(self, node):
+        KalturaObjectBase.fromXml(self, node)
+        self.fromXmlImpl(node, KalturaMediaConcurrencyRule.PROPERTY_LOADERS)
+
+    def toParams(self):
+        kparams = KalturaObjectBase.toParams(self)
+        kparams.put("objectType", "KalturaMediaConcurrencyRule")
+        kparams.addStringIfDefined("id", self.id)
+        kparams.addStringIfDefined("name", self.name)
+        kparams.addStringEnumIfDefined("concurrencyLimitationType", self.concurrencyLimitationType)
+        kparams.addIntIfDefined("limitation", self.limitation)
+        return kparams
+
+    def getId(self):
+        return self.id
+
+    def setId(self, newId):
+        self.id = newId
+
+    def getName(self):
+        return self.name
+
+    def setName(self, newName):
+        self.name = newName
+
+    def getConcurrencyLimitationType(self):
+        return self.concurrencyLimitationType
+
+    def setConcurrencyLimitationType(self, newConcurrencyLimitationType):
+        self.concurrencyLimitationType = newConcurrencyLimitationType
+
+    def getLimitation(self):
+        return self.limitation
+
+    def setLimitation(self, newLimitation):
+        self.limitation = newLimitation
+
+
+# @package Kaltura
+# @subpackage Client
+class KalturaMediaConcurrencyRuleListResponse(KalturaListResponse):
+    def __init__(self,
+            totalCount=NotImplemented,
+            objects=NotImplemented):
+        KalturaListResponse.__init__(self,
+            totalCount)
+
+        # Media CONCURRENCY RULES
+        # @var array of KalturaMediaConcurrencyRule
+        self.objects = objects
+
+
+    PROPERTY_LOADERS = {
+        'objects': (KalturaObjectFactory.createArray, 'KalturaMediaConcurrencyRule'), 
+    }
+
+    def fromXml(self, node):
+        KalturaListResponse.fromXml(self, node)
+        self.fromXmlImpl(node, KalturaMediaConcurrencyRuleListResponse.PROPERTY_LOADERS)
+
+    def toParams(self):
+        kparams = KalturaListResponse.toParams(self)
+        kparams.put("objectType", "KalturaMediaConcurrencyRuleListResponse")
+        kparams.addArrayIfDefined("objects", self.objects)
+        return kparams
+
+    def getObjects(self):
+        return self.objects
+
+    def setObjects(self, newObjects):
+        self.objects = newObjects
 
 
 # @package Kaltura
@@ -26260,6 +26369,23 @@ class KalturaLicensedUrlService(KalturaServiceBase):
 
 # @package Kaltura
 # @subpackage Client
+class KalturaMediaConcurrencyRuleService(KalturaServiceBase):
+    def __init__(self, client = None):
+        KalturaServiceBase.__init__(self, client)
+
+    def list(self):
+        """Get the list of meta mappings for the partner"""
+
+        kparams = KalturaParams()
+        self.client.queueServiceActionCall("mediaconcurrencyrule", "list", "KalturaMediaConcurrencyRuleListResponse", kparams)
+        if self.client.isMultiRequest():
+            return self.client.getMultiRequestResult()
+        resultNode = self.client.doQueue()
+        return KalturaObjectFactory.create(resultNode, 'KalturaMediaConcurrencyRuleListResponse')
+
+
+# @package Kaltura
+# @subpackage Client
 class KalturaMessageTemplateService(KalturaServiceBase):
     def __init__(self, client = None):
         KalturaServiceBase.__init__(self, client)
@@ -28465,6 +28591,7 @@ class KalturaCoreClient(KalturaClientPlugin):
             'inboxMessage': KalturaInboxMessageService,
             'language': KalturaLanguageService,
             'licensedUrl': KalturaLicensedUrlService,
+            'mediaConcurrencyRule': KalturaMediaConcurrencyRuleService,
             'messageTemplate': KalturaMessageTemplateService,
             'meta': KalturaMetaService,
             'notification': KalturaNotificationService,
@@ -28813,6 +28940,8 @@ class KalturaCoreClient(KalturaClientPlugin):
             'KalturaPartnerConfigurationListResponse': KalturaPartnerConfigurationListResponse,
             'KalturaConcurrencyPartnerConfig': KalturaConcurrencyPartnerConfig,
             'KalturaBillingPartnerConfig': KalturaBillingPartnerConfig,
+            'KalturaMediaConcurrencyRule': KalturaMediaConcurrencyRule,
+            'KalturaMediaConcurrencyRuleListResponse': KalturaMediaConcurrencyRuleListResponse,
             'KalturaAssetRuleBase': KalturaAssetRuleBase,
             'KalturaCondition': KalturaCondition,
             'KalturaAssetCondition': KalturaAssetCondition,
