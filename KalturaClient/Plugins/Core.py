@@ -42,7 +42,7 @@ from ..Base import (
     KalturaServiceBase,
 )
 
-API_VERSION = '5.1.58.11068'
+API_VERSION = '5.1.78.20771'
 
 ########## enums ##########
 # @package Kaltura
@@ -1441,6 +1441,8 @@ class KalturaRuleActionType(object):
     START_DATE_OFFSET = "START_DATE_OFFSET"
     END_DATE_OFFSET = "END_DATE_OFFSET"
     USER_BLOCK = "USER_BLOCK"
+    ALLOW_PLAYBACK = "ALLOW_PLAYBACK"
+    BLOCK_PLAYBACK = "BLOCK_PLAYBACK"
 
     def __init__(self, value):
         self.value = value
@@ -1454,6 +1456,7 @@ class KalturaRuleConditionType(object):
     ASSET = "ASSET"
     COUNTRY = "COUNTRY"
     CONCURRENCY = "CONCURRENCY"
+    IP_RANGE = "IP_RANGE"
 
     def __init__(self, value):
         self.value = value
@@ -15686,6 +15689,58 @@ class KalturaConcurrencyCondition(KalturaAssetCondition):
 
 # @package Kaltura
 # @subpackage Client
+class KalturaIpRangeCondition(KalturaCondition):
+    """IP range condition"""
+
+    def __init__(self,
+            type=NotImplemented,
+            description=NotImplemented,
+            fromIP=NotImplemented,
+            toIP=NotImplemented):
+        KalturaCondition.__init__(self,
+            type,
+            description)
+
+        # From IP address range
+        # @var string
+        self.fromIP = fromIP
+
+        # TO IP address range
+        # @var string
+        self.toIP = toIP
+
+
+    PROPERTY_LOADERS = {
+        'fromIP': getXmlNodeText, 
+        'toIP': getXmlNodeText, 
+    }
+
+    def fromXml(self, node):
+        KalturaCondition.fromXml(self, node)
+        self.fromXmlImpl(node, KalturaIpRangeCondition.PROPERTY_LOADERS)
+
+    def toParams(self):
+        kparams = KalturaCondition.toParams(self)
+        kparams.put("objectType", "KalturaIpRangeCondition")
+        kparams.addStringIfDefined("fromIP", self.fromIP)
+        kparams.addStringIfDefined("toIP", self.toIP)
+        return kparams
+
+    def getFromIP(self):
+        return self.fromIP
+
+    def setFromIP(self, newFromIP):
+        self.fromIP = newFromIP
+
+    def getToIP(self):
+        return self.toIP
+
+    def setToIP(self, newToIP):
+        self.toIP = newToIP
+
+
+# @package Kaltura
+# @subpackage Client
 class KalturaAssetUserRuleBlockAction(KalturaAssetUserRuleAction):
     def __init__(self,
             type=NotImplemented,
@@ -15841,6 +15896,54 @@ class KalturaStartDateOffsetRuleAction(KalturaTimeOffsetRuleAction):
     def toParams(self):
         kparams = KalturaTimeOffsetRuleAction.toParams(self)
         kparams.put("objectType", "KalturaStartDateOffsetRuleAction")
+        return kparams
+
+
+# @package Kaltura
+# @subpackage Client
+class KalturaAllowPlaybackAction(KalturaAssetRuleAction):
+    def __init__(self,
+            type=NotImplemented,
+            description=NotImplemented):
+        KalturaAssetRuleAction.__init__(self,
+            type,
+            description)
+
+
+    PROPERTY_LOADERS = {
+    }
+
+    def fromXml(self, node):
+        KalturaAssetRuleAction.fromXml(self, node)
+        self.fromXmlImpl(node, KalturaAllowPlaybackAction.PROPERTY_LOADERS)
+
+    def toParams(self):
+        kparams = KalturaAssetRuleAction.toParams(self)
+        kparams.put("objectType", "KalturaAllowPlaybackAction")
+        return kparams
+
+
+# @package Kaltura
+# @subpackage Client
+class KalturaBlockPlaybackAction(KalturaAssetRuleAction):
+    def __init__(self,
+            type=NotImplemented,
+            description=NotImplemented):
+        KalturaAssetRuleAction.__init__(self,
+            type,
+            description)
+
+
+    PROPERTY_LOADERS = {
+    }
+
+    def fromXml(self, node):
+        KalturaAssetRuleAction.fromXml(self, node)
+        self.fromXmlImpl(node, KalturaBlockPlaybackAction.PROPERTY_LOADERS)
+
+    def toParams(self):
+        kparams = KalturaAssetRuleAction.toParams(self)
+        kparams.put("objectType", "KalturaBlockPlaybackAction")
         return kparams
 
 
@@ -32455,11 +32558,14 @@ class KalturaCoreClient(KalturaClientPlugin):
             'KalturaAssetRule': KalturaAssetRule,
             'KalturaCountryCondition': KalturaCountryCondition,
             'KalturaConcurrencyCondition': KalturaConcurrencyCondition,
+            'KalturaIpRangeCondition': KalturaIpRangeCondition,
             'KalturaAssetUserRuleBlockAction': KalturaAssetUserRuleBlockAction,
             'KalturaAccessControlBlockAction': KalturaAccessControlBlockAction,
             'KalturaTimeOffsetRuleAction': KalturaTimeOffsetRuleAction,
             'KalturaEndDateOffsetRuleAction': KalturaEndDateOffsetRuleAction,
             'KalturaStartDateOffsetRuleAction': KalturaStartDateOffsetRuleAction,
+            'KalturaAllowPlaybackAction': KalturaAllowPlaybackAction,
+            'KalturaBlockPlaybackAction': KalturaBlockPlaybackAction,
             'KalturaCurrency': KalturaCurrency,
             'KalturaCurrencyListResponse': KalturaCurrencyListResponse,
             'KalturaAssetRuleListResponse': KalturaAssetRuleListResponse,
