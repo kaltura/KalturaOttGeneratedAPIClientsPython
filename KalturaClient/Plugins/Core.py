@@ -42,7 +42,7 @@ from ..Base import (
     KalturaServiceBase,
 )
 
-API_VERSION = '5.0.1.43123'
+API_VERSION = '5.0.1.21441'
 
 ########## enums ##########
 # @package Kaltura
@@ -7027,9 +7027,11 @@ class KalturaChannel(KalturaBaseChannel):
             id=NotImplemented,
             name=NotImplemented,
             multilingualName=NotImplemented,
+            oldName=NotImplemented,
             systemName=NotImplemented,
             description=NotImplemented,
             multilingualDescription=NotImplemented,
+            oldDescription=NotImplemented,
             isActive=NotImplemented,
             orderBy=NotImplemented,
             createDate=NotImplemented,
@@ -7046,6 +7048,10 @@ class KalturaChannel(KalturaBaseChannel):
         # @var array of KalturaTranslationToken
         self.multilingualName = multilingualName
 
+        # Channel name
+        # @var string
+        self.oldName = oldName
+
         # Channel system name
         # @var string
         self.systemName = systemName
@@ -7058,6 +7064,10 @@ class KalturaChannel(KalturaBaseChannel):
         # Cannel description
         # @var array of KalturaTranslationToken
         self.multilingualDescription = multilingualDescription
+
+        # Cannel description
+        # @var string
+        self.oldDescription = oldDescription
 
         # active status
         # @var bool
@@ -7081,9 +7091,11 @@ class KalturaChannel(KalturaBaseChannel):
     PROPERTY_LOADERS = {
         'name': getXmlNodeText, 
         'multilingualName': (KalturaObjectFactory.createArray, 'KalturaTranslationToken'), 
+        'oldName': getXmlNodeText, 
         'systemName': getXmlNodeText, 
         'description': getXmlNodeText, 
         'multilingualDescription': (KalturaObjectFactory.createArray, 'KalturaTranslationToken'), 
+        'oldDescription': getXmlNodeText, 
         'isActive': getXmlNodeBool, 
         'orderBy': (KalturaObjectFactory.create, 'KalturaChannelOrder'), 
         'createDate': getXmlNodeInt, 
@@ -7098,8 +7110,10 @@ class KalturaChannel(KalturaBaseChannel):
         kparams = KalturaBaseChannel.toParams(self)
         kparams.put("objectType", "KalturaChannel")
         kparams.addArrayIfDefined("multilingualName", self.multilingualName)
+        kparams.addStringIfDefined("oldName", self.oldName)
         kparams.addStringIfDefined("systemName", self.systemName)
         kparams.addArrayIfDefined("multilingualDescription", self.multilingualDescription)
+        kparams.addStringIfDefined("oldDescription", self.oldDescription)
         kparams.addBoolIfDefined("isActive", self.isActive)
         kparams.addObjectIfDefined("orderBy", self.orderBy)
         return kparams
@@ -7112,6 +7126,12 @@ class KalturaChannel(KalturaBaseChannel):
 
     def setMultilingualName(self, newMultilingualName):
         self.multilingualName = newMultilingualName
+
+    def getOldName(self):
+        return self.oldName
+
+    def setOldName(self, newOldName):
+        self.oldName = newOldName
 
     def getSystemName(self):
         return self.systemName
@@ -7127,6 +7147,12 @@ class KalturaChannel(KalturaBaseChannel):
 
     def setMultilingualDescription(self, newMultilingualDescription):
         self.multilingualDescription = newMultilingualDescription
+
+    def getOldDescription(self):
+        return self.oldDescription
+
+    def setOldDescription(self, newOldDescription):
+        self.oldDescription = newOldDescription
 
     def getIsActive(self):
         return self.isActive
@@ -7154,9 +7180,11 @@ class KalturaDynamicChannel(KalturaChannel):
             id=NotImplemented,
             name=NotImplemented,
             multilingualName=NotImplemented,
+            oldName=NotImplemented,
             systemName=NotImplemented,
             description=NotImplemented,
             multilingualDescription=NotImplemented,
+            oldDescription=NotImplemented,
             isActive=NotImplemented,
             orderBy=NotImplemented,
             createDate=NotImplemented,
@@ -7168,9 +7196,11 @@ class KalturaDynamicChannel(KalturaChannel):
             id,
             name,
             multilingualName,
+            oldName,
             systemName,
             description,
             multilingualDescription,
+            oldDescription,
             isActive,
             orderBy,
             createDate,
@@ -7247,9 +7277,11 @@ class KalturaManualChannel(KalturaChannel):
             id=NotImplemented,
             name=NotImplemented,
             multilingualName=NotImplemented,
+            oldName=NotImplemented,
             systemName=NotImplemented,
             description=NotImplemented,
             multilingualDescription=NotImplemented,
+            oldDescription=NotImplemented,
             isActive=NotImplemented,
             orderBy=NotImplemented,
             createDate=NotImplemented,
@@ -7259,9 +7291,11 @@ class KalturaManualChannel(KalturaChannel):
             id,
             name,
             multilingualName,
+            oldName,
             systemName,
             description,
             multilingualDescription,
+            oldDescription,
             isActive,
             orderBy,
             createDate,
