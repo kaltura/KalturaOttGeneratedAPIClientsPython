@@ -42,7 +42,7 @@ from ..Base import (
     KalturaServiceBase,
 )
 
-API_VERSION = '5.0.1.43130'
+API_VERSION = '5.0.1.15791'
 
 ########## enums ##########
 # @package Kaltura
@@ -12176,7 +12176,7 @@ class KalturaMediaAsset(KalturaAsset):
 
 # @package Kaltura
 # @subpackage Client
-class KalturaLinearMediaAsset(KalturaMediaAsset):
+class KalturaLiveAsset(KalturaMediaAsset):
     """Linear media asset info"""
 
     def __init__(self,
@@ -12337,11 +12337,11 @@ class KalturaLinearMediaAsset(KalturaMediaAsset):
 
     def fromXml(self, node):
         KalturaMediaAsset.fromXml(self, node)
-        self.fromXmlImpl(node, KalturaLinearMediaAsset.PROPERTY_LOADERS)
+        self.fromXmlImpl(node, KalturaLiveAsset.PROPERTY_LOADERS)
 
     def toParams(self):
         kparams = KalturaMediaAsset.toParams(self)
-        kparams.put("objectType", "KalturaLinearMediaAsset")
+        kparams.put("objectType", "KalturaLiveAsset")
         kparams.addStringEnumIfDefined("enableCdvrState", self.enableCdvrState)
         kparams.addStringEnumIfDefined("enableCatchUpState", self.enableCatchUpState)
         kparams.addStringEnumIfDefined("enableStartOverState", self.enableStartOverState)
@@ -32541,7 +32541,7 @@ class KalturaCoreClient(KalturaClientPlugin):
             'KalturaAsset': KalturaAsset,
             'KalturaAssetListResponse': KalturaAssetListResponse,
             'KalturaMediaAsset': KalturaMediaAsset,
-            'KalturaLinearMediaAsset': KalturaLinearMediaAsset,
+            'KalturaLiveAsset': KalturaLiveAsset,
             'KalturaProgramAsset': KalturaProgramAsset,
             'KalturaRecordingAsset': KalturaRecordingAsset,
             'KalturaAssetStruct': KalturaAssetStruct,
