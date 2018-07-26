@@ -42,7 +42,7 @@ from ..Base import (
     KalturaServiceBase,
 )
 
-API_VERSION = '5.0.1.22097'
+API_VERSION = '5.0.1.23893'
 
 ########## enums ##########
 # @package Kaltura
@@ -12203,19 +12203,19 @@ class KalturaLiveAsset(KalturaMediaAsset):
             enableCdvrState=NotImplemented,
             enableCatchUpState=NotImplemented,
             enableStartOverState=NotImplemented,
-            bufferCatchUp=NotImplemented,
-            bufferTrickPlay=NotImplemented,
+            bufferCatchUpSetting=NotImplemented,
+            bufferTrickPlaySetting=NotImplemented,
             enableRecordingPlaybackNonEntitledChannelState=NotImplemented,
             enableTrickPlayState=NotImplemented,
             externalEpgIngestId=NotImplemented,
             externalCdvrId=NotImplemented,
-            cdvrEnabled=NotImplemented,
-            catchUpEnabled=NotImplemented,
-            startOverEnabled=NotImplemented,
-            summedCatchUpBuffer=NotImplemented,
-            summedTrickPlayBuffer=NotImplemented,
-            recordingPlaybackNonEntitledChannelEnabled=NotImplemented,
-            trickPlayEnabled=NotImplemented,
+            enableCdvr=NotImplemented,
+            enableCatchUp=NotImplemented,
+            enableStartOver=NotImplemented,
+            catchUpBuffer=NotImplemented,
+            trickPlayBuffer=NotImplemented,
+            enableRecordingPlaybackNonEntitledChannel=NotImplemented,
+            enableTrickPlay=NotImplemented,
             channelType=NotImplemented):
         KalturaMediaAsset.__init__(self,
             id,
@@ -12253,11 +12253,11 @@ class KalturaLiveAsset(KalturaMediaAsset):
 
         # buffer Catch-up, configuration only
         # @var int
-        self.bufferCatchUp = bufferCatchUp
+        self.bufferCatchUpSetting = bufferCatchUpSetting
 
         # buffer Trick-play, configuration only
         # @var int
-        self.bufferTrickPlay = bufferTrickPlay
+        self.bufferTrickPlaySetting = bufferTrickPlaySetting
 
         # Enable Recording playback for non entitled channel, configuration only
         # @var KalturaTimeShiftedTvState
@@ -12278,37 +12278,37 @@ class KalturaLiveAsset(KalturaMediaAsset):
         # Is CDVR enabled for this asset
         # @var bool
         # @readonly
-        self.cdvrEnabled = cdvrEnabled
+        self.enableCdvr = enableCdvr
 
         # Is catch-up enabled for this asset
         # @var bool
         # @readonly
-        self.catchUpEnabled = catchUpEnabled
+        self.enableCatchUp = enableCatchUp
 
         # Is start over enabled for this asset
         # @var bool
         # @readonly
-        self.startOverEnabled = startOverEnabled
+        self.enableStartOver = enableStartOver
 
         # summed Catch-up buffer, the TimeShiftedTvPartnerSettings are also taken into consideration
         # @var int
         # @readonly
-        self.summedCatchUpBuffer = summedCatchUpBuffer
+        self.catchUpBuffer = catchUpBuffer
 
         # summed Trick-play buffer, the TimeShiftedTvPartnerSettings are also taken into consideration
         # @var int
         # @readonly
-        self.summedTrickPlayBuffer = summedTrickPlayBuffer
+        self.trickPlayBuffer = trickPlayBuffer
 
         # Is recording playback for non entitled channel enabled for this asset
         # @var bool
         # @readonly
-        self.recordingPlaybackNonEntitledChannelEnabled = recordingPlaybackNonEntitledChannelEnabled
+        self.enableRecordingPlaybackNonEntitledChannel = enableRecordingPlaybackNonEntitledChannel
 
         # Is trick-play enabled for this asset
         # @var bool
         # @readonly
-        self.trickPlayEnabled = trickPlayEnabled
+        self.enableTrickPlay = enableTrickPlay
 
         # channel type, possible values: UNKNOWN, DTT, OTT, DTT_AND_OTT
         # @var KalturaLinearChannelType
@@ -12319,19 +12319,19 @@ class KalturaLiveAsset(KalturaMediaAsset):
         'enableCdvrState': (KalturaEnumsFactory.createString, "KalturaTimeShiftedTvState"), 
         'enableCatchUpState': (KalturaEnumsFactory.createString, "KalturaTimeShiftedTvState"), 
         'enableStartOverState': (KalturaEnumsFactory.createString, "KalturaTimeShiftedTvState"), 
-        'bufferCatchUp': getXmlNodeInt, 
-        'bufferTrickPlay': getXmlNodeInt, 
+        'bufferCatchUpSetting': getXmlNodeInt, 
+        'bufferTrickPlaySetting': getXmlNodeInt, 
         'enableRecordingPlaybackNonEntitledChannelState': (KalturaEnumsFactory.createString, "KalturaTimeShiftedTvState"), 
         'enableTrickPlayState': (KalturaEnumsFactory.createString, "KalturaTimeShiftedTvState"), 
         'externalEpgIngestId': getXmlNodeText, 
         'externalCdvrId': getXmlNodeText, 
-        'cdvrEnabled': getXmlNodeBool, 
-        'catchUpEnabled': getXmlNodeBool, 
-        'startOverEnabled': getXmlNodeBool, 
-        'summedCatchUpBuffer': getXmlNodeInt, 
-        'summedTrickPlayBuffer': getXmlNodeInt, 
-        'recordingPlaybackNonEntitledChannelEnabled': getXmlNodeBool, 
-        'trickPlayEnabled': getXmlNodeBool, 
+        'enableCdvr': getXmlNodeBool, 
+        'enableCatchUp': getXmlNodeBool, 
+        'enableStartOver': getXmlNodeBool, 
+        'catchUpBuffer': getXmlNodeInt, 
+        'trickPlayBuffer': getXmlNodeInt, 
+        'enableRecordingPlaybackNonEntitledChannel': getXmlNodeBool, 
+        'enableTrickPlay': getXmlNodeBool, 
         'channelType': (KalturaEnumsFactory.createString, "KalturaLinearChannelType"), 
     }
 
@@ -12345,8 +12345,8 @@ class KalturaLiveAsset(KalturaMediaAsset):
         kparams.addStringEnumIfDefined("enableCdvrState", self.enableCdvrState)
         kparams.addStringEnumIfDefined("enableCatchUpState", self.enableCatchUpState)
         kparams.addStringEnumIfDefined("enableStartOverState", self.enableStartOverState)
-        kparams.addIntIfDefined("bufferCatchUp", self.bufferCatchUp)
-        kparams.addIntIfDefined("bufferTrickPlay", self.bufferTrickPlay)
+        kparams.addIntIfDefined("bufferCatchUpSetting", self.bufferCatchUpSetting)
+        kparams.addIntIfDefined("bufferTrickPlaySetting", self.bufferTrickPlaySetting)
         kparams.addStringEnumIfDefined("enableRecordingPlaybackNonEntitledChannelState", self.enableRecordingPlaybackNonEntitledChannelState)
         kparams.addStringEnumIfDefined("enableTrickPlayState", self.enableTrickPlayState)
         kparams.addStringIfDefined("externalEpgIngestId", self.externalEpgIngestId)
@@ -12372,17 +12372,17 @@ class KalturaLiveAsset(KalturaMediaAsset):
     def setEnableStartOverState(self, newEnableStartOverState):
         self.enableStartOverState = newEnableStartOverState
 
-    def getBufferCatchUp(self):
-        return self.bufferCatchUp
+    def getBufferCatchUpSetting(self):
+        return self.bufferCatchUpSetting
 
-    def setBufferCatchUp(self, newBufferCatchUp):
-        self.bufferCatchUp = newBufferCatchUp
+    def setBufferCatchUpSetting(self, newBufferCatchUpSetting):
+        self.bufferCatchUpSetting = newBufferCatchUpSetting
 
-    def getBufferTrickPlay(self):
-        return self.bufferTrickPlay
+    def getBufferTrickPlaySetting(self):
+        return self.bufferTrickPlaySetting
 
-    def setBufferTrickPlay(self, newBufferTrickPlay):
-        self.bufferTrickPlay = newBufferTrickPlay
+    def setBufferTrickPlaySetting(self, newBufferTrickPlaySetting):
+        self.bufferTrickPlaySetting = newBufferTrickPlaySetting
 
     def getEnableRecordingPlaybackNonEntitledChannelState(self):
         return self.enableRecordingPlaybackNonEntitledChannelState
@@ -12408,26 +12408,26 @@ class KalturaLiveAsset(KalturaMediaAsset):
     def setExternalCdvrId(self, newExternalCdvrId):
         self.externalCdvrId = newExternalCdvrId
 
-    def getCdvrEnabled(self):
-        return self.cdvrEnabled
+    def getEnableCdvr(self):
+        return self.enableCdvr
 
-    def getCatchUpEnabled(self):
-        return self.catchUpEnabled
+    def getEnableCatchUp(self):
+        return self.enableCatchUp
 
-    def getStartOverEnabled(self):
-        return self.startOverEnabled
+    def getEnableStartOver(self):
+        return self.enableStartOver
 
-    def getSummedCatchUpBuffer(self):
-        return self.summedCatchUpBuffer
+    def getCatchUpBuffer(self):
+        return self.catchUpBuffer
 
-    def getSummedTrickPlayBuffer(self):
-        return self.summedTrickPlayBuffer
+    def getTrickPlayBuffer(self):
+        return self.trickPlayBuffer
 
-    def getRecordingPlaybackNonEntitledChannelEnabled(self):
-        return self.recordingPlaybackNonEntitledChannelEnabled
+    def getEnableRecordingPlaybackNonEntitledChannel(self):
+        return self.enableRecordingPlaybackNonEntitledChannel
 
-    def getTrickPlayEnabled(self):
-        return self.trickPlayEnabled
+    def getEnableTrickPlay(self):
+        return self.enableTrickPlay
 
     def getChannelType(self):
         return self.channelType
