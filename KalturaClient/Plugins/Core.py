@@ -42,7 +42,7 @@ from ..Base import (
     KalturaServiceBase,
 )
 
-API_VERSION = '5.0.1.43136'
+API_VERSION = '5.0.1.14410'
 
 ########## enums ##########
 # @package Kaltura
@@ -20288,8 +20288,7 @@ class KalturaSearchAssetFilter(KalturaBaseSearchAssetFilter):
             kSql=NotImplemented,
             groupBy=NotImplemented,
             kSql=NotImplemented,
-            typeIn=NotImplemented,
-            idIn=NotImplemented):
+            typeIn=NotImplemented):
         KalturaBaseSearchAssetFilter.__init__(self,
             orderBy,
             name,
@@ -20322,15 +20321,10 @@ class KalturaSearchAssetFilter(KalturaBaseSearchAssetFilter):
         # @var string
         self.typeIn = typeIn
 
-        # Comma separated list of EPG channel ids to search within. *****Deprecated, please use linear_media_id inside kSql instead*****
-        # @var string
-        self.idIn = idIn
-
 
     PROPERTY_LOADERS = {
         'kSql': getXmlNodeText, 
         'typeIn': getXmlNodeText, 
-        'idIn': getXmlNodeText, 
     }
 
     def fromXml(self, node):
@@ -20342,7 +20336,6 @@ class KalturaSearchAssetFilter(KalturaBaseSearchAssetFilter):
         kparams.put("objectType", "KalturaSearchAssetFilter")
         kparams.addStringIfDefined("kSql", self.kSql)
         kparams.addStringIfDefined("typeIn", self.typeIn)
-        kparams.addStringIfDefined("idIn", self.idIn)
         return kparams
 
     def getKSql(self):
@@ -20357,12 +20350,6 @@ class KalturaSearchAssetFilter(KalturaBaseSearchAssetFilter):
     def setTypeIn(self, newTypeIn):
         self.typeIn = newTypeIn
 
-    def getIdIn(self):
-        return self.idIn
-
-    def setIdIn(self, newIdIn):
-        self.idIn = newIdIn
-
 
 # @package Kaltura
 # @subpackage Client
@@ -20375,7 +20362,6 @@ class KalturaSearchAssetListFilter(KalturaSearchAssetFilter):
             groupBy=NotImplemented,
             kSql=NotImplemented,
             typeIn=NotImplemented,
-            idIn=NotImplemented,
             excludeWatched=NotImplemented):
         KalturaSearchAssetFilter.__init__(self,
             orderBy,
@@ -20384,8 +20370,7 @@ class KalturaSearchAssetListFilter(KalturaSearchAssetFilter):
             kSql,
             groupBy,
             kSql,
-            typeIn,
-            idIn)
+            typeIn)
 
         # Exclude watched asset.
         # @var bool
