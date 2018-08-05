@@ -42,7 +42,7 @@ from ..Base import (
     KalturaServiceBase,
 )
 
-API_VERSION = '5.0.1.17059'
+API_VERSION = '5.0.1.31171'
 
 ########## enums ##########
 # @package Kaltura
@@ -6048,7 +6048,10 @@ class KalturaOTTUser(KalturaBaseOTTUser):
             dynamicData=NotImplemented,
             isHouseholdMaster=NotImplemented,
             suspensionState=NotImplemented,
-            userState=NotImplemented):
+            userState=NotImplemented,
+            roleIds=NotImplemented,
+            createDate=NotImplemented,
+            updateDate=NotImplemented):
         KalturaBaseOTTUser.__init__(self,
             id,
             username,
@@ -6116,6 +6119,20 @@ class KalturaOTTUser(KalturaBaseOTTUser):
         # @readonly
         self.userState = userState
 
+        # Comma separated list of role Ids.
+        # @var string
+        self.roleIds = roleIds
+
+        # User create date
+        # @var int
+        # @readonly
+        self.createDate = createDate
+
+        # User last update date
+        # @var int
+        # @readonly
+        self.updateDate = updateDate
+
 
     PROPERTY_LOADERS = {
         'householdId': getXmlNodeInt, 
@@ -6132,6 +6149,9 @@ class KalturaOTTUser(KalturaBaseOTTUser):
         'isHouseholdMaster': getXmlNodeBool, 
         'suspensionState': (KalturaEnumsFactory.createString, "KalturaHouseholdSuspensionState"), 
         'userState': (KalturaEnumsFactory.createString, "KalturaUserState"), 
+        'roleIds': getXmlNodeText, 
+        'createDate': getXmlNodeInt, 
+        'updateDate': getXmlNodeInt, 
     }
 
     def fromXml(self, node):
@@ -6151,6 +6171,7 @@ class KalturaOTTUser(KalturaBaseOTTUser):
         kparams.addStringIfDefined("externalId", self.externalId)
         kparams.addObjectIfDefined("userType", self.userType)
         kparams.addMapIfDefined("dynamicData", self.dynamicData)
+        kparams.addStringIfDefined("roleIds", self.roleIds)
         return kparams
 
     def getHouseholdId(self):
@@ -6224,6 +6245,18 @@ class KalturaOTTUser(KalturaBaseOTTUser):
 
     def getUserState(self):
         return self.userState
+
+    def getRoleIds(self):
+        return self.roleIds
+
+    def setRoleIds(self, newRoleIds):
+        self.roleIds = newRoleIds
+
+    def getCreateDate(self):
+        return self.createDate
+
+    def getUpdateDate(self):
+        return self.updateDate
 
 
 # @package Kaltura
@@ -19276,7 +19309,8 @@ class KalturaOTTUserFilter(KalturaFilter):
             orderBy=NotImplemented,
             usernameEqual=NotImplemented,
             externalIdEqual=NotImplemented,
-            idIn=NotImplemented):
+            idIn=NotImplemented,
+            roleIdsIn=NotImplemented):
         KalturaFilter.__init__(self,
             orderBy)
 
@@ -19292,11 +19326,16 @@ class KalturaOTTUserFilter(KalturaFilter):
         # @var string
         self.idIn = idIn
 
+        # Comma separated list of role Ids.
+        # @var string
+        self.roleIdsIn = roleIdsIn
+
 
     PROPERTY_LOADERS = {
         'usernameEqual': getXmlNodeText, 
         'externalIdEqual': getXmlNodeText, 
         'idIn': getXmlNodeText, 
+        'roleIdsIn': getXmlNodeText, 
     }
 
     def fromXml(self, node):
@@ -19309,6 +19348,7 @@ class KalturaOTTUserFilter(KalturaFilter):
         kparams.addStringIfDefined("usernameEqual", self.usernameEqual)
         kparams.addStringIfDefined("externalIdEqual", self.externalIdEqual)
         kparams.addStringIfDefined("idIn", self.idIn)
+        kparams.addStringIfDefined("roleIdsIn", self.roleIdsIn)
         return kparams
 
     def getUsernameEqual(self):
@@ -19328,6 +19368,12 @@ class KalturaOTTUserFilter(KalturaFilter):
 
     def setIdIn(self, newIdIn):
         self.idIn = newIdIn
+
+    def getRoleIdsIn(self):
+        return self.roleIdsIn
+
+    def setRoleIdsIn(self, newRoleIdsIn):
+        self.roleIdsIn = newRoleIdsIn
 
 
 # @package Kaltura
@@ -30080,7 +30126,7 @@ class KalturaOttUserService(KalturaServiceBase):
         return KalturaObjectFactory.create(resultNode, 'KalturaOTTUser')
 
     def addRole(self, roleId):
-        """Edit user details."""
+        """Deprecate - use Register or Update actions instead by setting user.roleIds parameter"""
 
         kparams = KalturaParams()
         kparams.addIntIfDefined("roleId", roleId);
