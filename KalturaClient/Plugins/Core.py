@@ -42,7 +42,7 @@ from ..Base import (
     KalturaServiceBase,
 )
 
-API_VERSION = '5.0.1.43121'
+API_VERSION = '5.0.1.20140'
 
 ########## enums ##########
 # @package Kaltura
@@ -30433,12 +30433,13 @@ class KalturaOttUserService(KalturaServiceBase):
         resultNode = self.client.doQueue()
         return getXmlNodeBool(resultNode)
 
-    def resetPassword(self, partnerId, username):
+    def resetPassword(self, partnerId, username, templateName = NotImplemented):
         """Send an e-mail with URL to enable the user to set new password."""
 
         kparams = KalturaParams()
         kparams.addIntIfDefined("partnerId", partnerId);
         kparams.addStringIfDefined("username", username)
+        kparams.addStringIfDefined("templateName", templateName)
         self.client.queueServiceActionCall("ottuser", "resetPassword", "None", kparams)
         if self.client.isMultiRequest():
             return self.client.getMultiRequestResult()
