@@ -42,7 +42,7 @@ from ..Base import (
     KalturaServiceBase,
 )
 
-API_VERSION = '5.0.1.17337'
+API_VERSION = '5.0.1.42005'
 
 ########## enums ##########
 # @package Kaltura
@@ -20476,7 +20476,6 @@ class KalturaSearchAssetFilter(KalturaBaseSearchAssetFilter):
             dynamicOrderBy=NotImplemented,
             kSql=NotImplemented,
             groupBy=NotImplemented,
-            kSql=NotImplemented,
             typeIn=NotImplemented):
         KalturaBaseSearchAssetFilter.__init__(self,
             orderBy,
@@ -20484,24 +20483,6 @@ class KalturaSearchAssetFilter(KalturaBaseSearchAssetFilter):
             dynamicOrderBy,
             kSql,
             groupBy)
-
-        # Search assets using dynamic criteria. Provided collection of nested expressions with key, comparison operators, value, and logical conjunction.
-        #             Possible keys: any Tag or Meta defined in the system and the following reserved keys: start_date, end_date. 
-        #             epg_id, media_id - for specific asset IDs.
-        #             geo_block - only valid value is &quot;true&quot;: When enabled, only assets that are not restriced to the user by geo-block rules will return.
-        #             parental_rules - only valid value is &quot;true&quot;: When enabled, only assets that the user doesn&#39;t need to provide PIN code will return.
-        #             user_interests - only valid value is &quot;true&quot;. When enabled, only assets that the user defined as his interests (by tags and metas) will return.
-        #             epg_channel_id - the channel identifier of the EPG program. *****Deprecated, please use linear_media_id instead*****
-        #             linear_media_id - the linear media identifier of the EPG program.
-        #             entitled_assets - valid values: &quot;free&quot;, &quot;entitled&quot;, &quot;both&quot;. free - gets only free to watch assets. entitled - only those that the user is implicitly entitled to watch.
-        #             asset_type - valid values: &quot;media&quot;, &quot;epg&quot;, &quot;recording&quot; or any number that represents media type in group.
-        #             Comparison operators: for numerical fields =, &gt;, &gt;=, &lt;, &lt;=, : (in). 
-        #             For alpha-numerical fields =, != (not), ~ (like), !~, ^ (any word starts with), ^= (phrase starts with), + (exists), !+ (not exists).
-        #             Logical conjunction: and, or. 
-        #             Search values are limited to 20 characters each.
-        #             (maximum length of entire filter is 2048 characters)
-        # @var string
-        self.kSql = kSql
 
         # (Deprecated - use KalturaBaseSearchAssetFilter.kSql)
         #             Comma separated list of asset types to search within. 
@@ -20512,7 +20493,6 @@ class KalturaSearchAssetFilter(KalturaBaseSearchAssetFilter):
 
 
     PROPERTY_LOADERS = {
-        'kSql': getXmlNodeText, 
         'typeIn': getXmlNodeText, 
     }
 
@@ -20523,15 +20503,8 @@ class KalturaSearchAssetFilter(KalturaBaseSearchAssetFilter):
     def toParams(self):
         kparams = KalturaBaseSearchAssetFilter.toParams(self)
         kparams.put("objectType", "KalturaSearchAssetFilter")
-        kparams.addStringIfDefined("kSql", self.kSql)
         kparams.addStringIfDefined("typeIn", self.typeIn)
         return kparams
-
-    def getKSql(self):
-        return self.kSql
-
-    def setKSql(self, newKSql):
-        self.kSql = newKSql
 
     def getTypeIn(self):
         return self.typeIn
@@ -20549,7 +20522,6 @@ class KalturaSearchAssetListFilter(KalturaSearchAssetFilter):
             dynamicOrderBy=NotImplemented,
             kSql=NotImplemented,
             groupBy=NotImplemented,
-            kSql=NotImplemented,
             typeIn=NotImplemented,
             excludeWatched=NotImplemented):
         KalturaSearchAssetFilter.__init__(self,
@@ -20558,7 +20530,6 @@ class KalturaSearchAssetListFilter(KalturaSearchAssetFilter):
             dynamicOrderBy,
             kSql,
             groupBy,
-            kSql,
             typeIn)
 
         # Exclude watched asset.
@@ -20886,7 +20857,6 @@ class KalturaRelatedFilter(KalturaBaseSearchAssetFilter):
             dynamicOrderBy=NotImplemented,
             kSql=NotImplemented,
             groupBy=NotImplemented,
-            kSql=NotImplemented,
             idEqual=NotImplemented,
             typeIn=NotImplemented,
             excludeWatched=NotImplemented):
@@ -20896,23 +20866,6 @@ class KalturaRelatedFilter(KalturaBaseSearchAssetFilter):
             dynamicOrderBy,
             kSql,
             groupBy)
-
-        # Search assets using dynamic criteria. Provided collection of nested expressions with key, comparison operators, value, and logical conjunction.
-        #             Possible keys: any Tag or Meta defined in the system and the following reserved keys: start_date, end_date. 
-        #             epg_id, media_id - for specific asset IDs.
-        #             geo_block - only valid value is &quot;true&quot;: When enabled, only assets that are not restriced to the user by geo-block rules will return.
-        #             parental_rules - only valid value is &quot;true&quot;: When enabled, only assets that the user doesn&#39;t need to provide PIN code will return.
-        #             user_interests - only valid value is &quot;true&quot;. When enabled, only assets that the user defined as his interests (by tags and metas) will return.
-        #             epg_channel_id - the channel identifier of the EPG program. *****Deprecated, please use linear_media_id instead*****
-        #             linear_media_id - the linear media identifier of the EPG program.
-        #             entitled_assets - valid values: &quot;free&quot;, &quot;entitled&quot;, &quot;both&quot;. free - gets only free to watch assets. entitled - only those that the user is implicitly entitled to watch.
-        #             Comparison operators: for numerical fields =, &gt;, &gt;=, &lt;, &lt;=, : (in). 
-        #             For alpha-numerical fields =, != (not), ~ (like), !~, ^ (any word starts with), ^= (phrase starts with), + (exists), !+ (not exists).
-        #             Logical conjunction: and, or. 
-        #             Search values are limited to 20 characters each.
-        #             (maximum length of entire filter is 2048 characters)
-        # @var string
-        self.kSql = kSql
 
         # the ID of the asset for which to return related assets
         # @var int
@@ -20931,7 +20884,6 @@ class KalturaRelatedFilter(KalturaBaseSearchAssetFilter):
 
 
     PROPERTY_LOADERS = {
-        'kSql': getXmlNodeText, 
         'idEqual': getXmlNodeInt, 
         'typeIn': getXmlNodeText, 
         'excludeWatched': getXmlNodeBool, 
@@ -20944,17 +20896,10 @@ class KalturaRelatedFilter(KalturaBaseSearchAssetFilter):
     def toParams(self):
         kparams = KalturaBaseSearchAssetFilter.toParams(self)
         kparams.put("objectType", "KalturaRelatedFilter")
-        kparams.addStringIfDefined("kSql", self.kSql)
         kparams.addIntIfDefined("idEqual", self.idEqual)
         kparams.addStringIfDefined("typeIn", self.typeIn)
         kparams.addBoolIfDefined("excludeWatched", self.excludeWatched)
         return kparams
-
-    def getKSql(self):
-        return self.kSql
-
-    def setKSql(self, newKSql):
-        self.kSql = newKSql
 
     def getIdEqual(self):
         return self.idEqual
