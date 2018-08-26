@@ -42,7 +42,7 @@ from ..Base import (
     KalturaServiceBase,
 )
 
-API_VERSION = '5.0.1.43120'
+API_VERSION = '5.0.1.26221'
 
 ########## enums ##########
 # @package Kaltura
@@ -20871,10 +20871,9 @@ class KalturaRelatedFilter(KalturaBaseSearchAssetFilter):
         # @var int
         self.idEqual = idEqual
 
-        # (Deprecated - use KalturaBaseSearchAssetFilter.kSql)
-        #             Comma separated list of asset types to search within. 
+        # Comma separated list of asset types to search within. 
         #             Possible values: any media type ID (according to media type IDs defined dynamically in the system).
-        #             If omitted -   same type as the provided asset.
+        #             If omitted - same type as the provided asset.
         # @var string
         self.typeIn = typeIn
 
