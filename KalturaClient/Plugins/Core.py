@@ -42,7 +42,7 @@ from ..Base import (
     KalturaServiceBase,
 )
 
-API_VERSION = '5.0.1.22446'
+API_VERSION = '5.0.1.24727'
 
 ########## enums ##########
 # @package Kaltura
@@ -515,6 +515,35 @@ class KalturaConfigurationsOrderBy(object):
 
 # @package Kaltura
 # @subpackage Client
+class KalturaContentAction(object):
+    WATCH_LINEAR = "watch_linear"
+    WATCH_VOD = "watch_vod"
+    CATCHUP = "catchup"
+    NPVR = "npvr"
+    FAVORITE = "favorite"
+    RECORDING = "recording"
+    SOCIAL_ACTION = "social_action"
+
+    def __init__(self, value):
+        self.value = value
+
+    def getValue(self):
+        return self.value
+
+# @package Kaltura
+# @subpackage Client
+class KalturaContentFieldType(object):
+    META = "meta"
+    TAG = "tag"
+
+    def __init__(self, value):
+        self.value = value
+
+    def getValue(self):
+        return self.value
+
+# @package Kaltura
+# @subpackage Client
 class KalturaContextType(object):
     NONE = "none"
     RECORDING = "recording"
@@ -955,6 +984,19 @@ class KalturaLinearChannelType(object):
 
 # @package Kaltura
 # @subpackage Client
+class KalturaMathemticalOperatorType(object):
+    COUNT = "count"
+    SUM = "sum"
+    AVG = "avg"
+
+    def __init__(self, value):
+        self.value = value
+
+    def getValue(self):
+        return self.value
+
+# @package Kaltura
+# @subpackage Client
 class KalturaMediaFileOrderBy(object):
     NONE = "NONE"
 
@@ -1047,6 +1089,18 @@ class KalturaMetaOrderBy(object):
 class KalturaMetaTagOrderBy(object):
     META_ASC = "META_ASC"
     META_DESC = "META_DESC"
+
+    def __init__(self, value):
+        self.value = value
+
+    def getValue(self):
+        return self.value
+
+# @package Kaltura
+# @subpackage Client
+class KalturaMonetizationType(object):
+    PPV = "ppv"
+    SUBSCRIPTION = "subscription"
 
     def __init__(self, value):
         self.value = value
@@ -13798,6 +13852,944 @@ class KalturaBulkListResponse(KalturaListResponse):
 
 # @package Kaltura
 # @subpackage Client
+class KalturaBaseSegmentCondition(KalturaObjectBase):
+    """Base class that defines segment condition"""
+
+    def __init__(self):
+        KalturaObjectBase.__init__(self)
+
+
+    PROPERTY_LOADERS = {
+    }
+
+    def fromXml(self, node):
+        KalturaObjectBase.fromXml(self, node)
+        self.fromXmlImpl(node, KalturaBaseSegmentCondition.PROPERTY_LOADERS)
+
+    def toParams(self):
+        kparams = KalturaObjectBase.toParams(self)
+        kparams.put("objectType", "KalturaBaseSegmentCondition")
+        return kparams
+
+
+# @package Kaltura
+# @subpackage Client
+class KalturaBaseSegmentValue(KalturaObjectBase):
+    """Base class that defines segment value"""
+
+    def __init__(self):
+        KalturaObjectBase.__init__(self)
+
+
+    PROPERTY_LOADERS = {
+    }
+
+    def fromXml(self, node):
+        KalturaObjectBase.fromXml(self, node)
+        self.fromXmlImpl(node, KalturaBaseSegmentValue.PROPERTY_LOADERS)
+
+    def toParams(self):
+        kparams = KalturaObjectBase.toParams(self)
+        kparams.put("objectType", "KalturaBaseSegmentValue")
+        return kparams
+
+
+# @package Kaltura
+# @subpackage Client
+class KalturaSegmentationType(KalturaObjectBase):
+    """Segmentation type - defines at least one segment"""
+
+    def __init__(self,
+            id=NotImplemented,
+            name=NotImplemented,
+            multilingualName=NotImplemented,
+            description=NotImplemented,
+            multilingualDescription=NotImplemented,
+            conditions=NotImplemented,
+            value=NotImplemented):
+        KalturaObjectBase.__init__(self)
+
+        # Id of segmentation type
+        # @var int
+        self.id = id
+
+        # Name of segmentation type
+        # @var string
+        # @readonly
+        self.name = name
+
+        # Name of segmentation type
+        # @var array of KalturaTranslationToken
+        self.multilingualName = multilingualName
+
+        # Description of segmentation type
+        # @var string
+        # @readonly
+        self.description = description
+
+        # Description of segmentation type
+        # @var array of KalturaTranslationToken
+        self.multilingualDescription = multilingualDescription
+
+        # Segmentation conditions - can be empty
+        # @var array of KalturaBaseSegmentCondition
+        self.conditions = conditions
+
+        # Segmentation values - can be empty (so only one segment will be created)
+        # @var KalturaBaseSegmentValue
+        self.value = value
+
+
+    PROPERTY_LOADERS = {
+        'id': getXmlNodeInt, 
+        'name': getXmlNodeText, 
+        'multilingualName': (KalturaObjectFactory.createArray, 'KalturaTranslationToken'), 
+        'description': getXmlNodeText, 
+        'multilingualDescription': (KalturaObjectFactory.createArray, 'KalturaTranslationToken'), 
+        'conditions': (KalturaObjectFactory.createArray, 'KalturaBaseSegmentCondition'), 
+        'value': (KalturaObjectFactory.create, 'KalturaBaseSegmentValue'), 
+    }
+
+    def fromXml(self, node):
+        KalturaObjectBase.fromXml(self, node)
+        self.fromXmlImpl(node, KalturaSegmentationType.PROPERTY_LOADERS)
+
+    def toParams(self):
+        kparams = KalturaObjectBase.toParams(self)
+        kparams.put("objectType", "KalturaSegmentationType")
+        kparams.addIntIfDefined("id", self.id)
+        kparams.addArrayIfDefined("multilingualName", self.multilingualName)
+        kparams.addArrayIfDefined("multilingualDescription", self.multilingualDescription)
+        kparams.addArrayIfDefined("conditions", self.conditions)
+        kparams.addObjectIfDefined("value", self.value)
+        return kparams
+
+    def getId(self):
+        return self.id
+
+    def setId(self, newId):
+        self.id = newId
+
+    def getName(self):
+        return self.name
+
+    def getMultilingualName(self):
+        return self.multilingualName
+
+    def setMultilingualName(self, newMultilingualName):
+        self.multilingualName = newMultilingualName
+
+    def getDescription(self):
+        return self.description
+
+    def getMultilingualDescription(self):
+        return self.multilingualDescription
+
+    def setMultilingualDescription(self, newMultilingualDescription):
+        self.multilingualDescription = newMultilingualDescription
+
+    def getConditions(self):
+        return self.conditions
+
+    def setConditions(self, newConditions):
+        self.conditions = newConditions
+
+    def getValue(self):
+        return self.value
+
+    def setValue(self, newValue):
+        self.value = newValue
+
+
+# @package Kaltura
+# @subpackage Client
+class KalturaSegmentationTypeListResponse(KalturaListResponse):
+    """List of segmentation types"""
+
+    def __init__(self,
+            totalCount=NotImplemented,
+            objects=NotImplemented):
+        KalturaListResponse.__init__(self,
+            totalCount)
+
+        # Segmentation Types
+        # @var array of KalturaSegmentationType
+        self.objects = objects
+
+
+    PROPERTY_LOADERS = {
+        'objects': (KalturaObjectFactory.createArray, 'KalturaSegmentationType'), 
+    }
+
+    def fromXml(self, node):
+        KalturaListResponse.fromXml(self, node)
+        self.fromXmlImpl(node, KalturaSegmentationTypeListResponse.PROPERTY_LOADERS)
+
+    def toParams(self):
+        kparams = KalturaListResponse.toParams(self)
+        kparams.put("objectType", "KalturaSegmentationTypeListResponse")
+        kparams.addArrayIfDefined("objects", self.objects)
+        return kparams
+
+    def getObjects(self):
+        return self.objects
+
+    def setObjects(self, newObjects):
+        self.objects = newObjects
+
+
+# @package Kaltura
+# @subpackage Client
+class KalturaMonetizationCondition(KalturaObjectBase):
+    """Defines a singular monetization condition"""
+
+    def __init__(self,
+            type=NotImplemented,
+            minimumPrice=NotImplemented,
+            multiplier=NotImplemented):
+        KalturaObjectBase.__init__(self)
+
+        # Purchase type
+        # @var KalturaMonetizationType
+        self.type = type
+
+        # Minimum price of purchase
+        # @var int
+        self.minimumPrice = minimumPrice
+
+        # Score multiplier
+        # @var int
+        self.multiplier = multiplier
+
+
+    PROPERTY_LOADERS = {
+        'type': (KalturaEnumsFactory.createString, "KalturaMonetizationType"), 
+        'minimumPrice': getXmlNodeInt, 
+        'multiplier': getXmlNodeInt, 
+    }
+
+    def fromXml(self, node):
+        KalturaObjectBase.fromXml(self, node)
+        self.fromXmlImpl(node, KalturaMonetizationCondition.PROPERTY_LOADERS)
+
+    def toParams(self):
+        kparams = KalturaObjectBase.toParams(self)
+        kparams.put("objectType", "KalturaMonetizationCondition")
+        kparams.addStringEnumIfDefined("type", self.type)
+        kparams.addIntIfDefined("minimumPrice", self.minimumPrice)
+        kparams.addIntIfDefined("multiplier", self.multiplier)
+        return kparams
+
+    def getType(self):
+        return self.type
+
+    def setType(self, newType):
+        self.type = newType
+
+    def getMinimumPrice(self):
+        return self.minimumPrice
+
+    def setMinimumPrice(self, newMinimumPrice):
+        self.minimumPrice = newMinimumPrice
+
+    def getMultiplier(self):
+        return self.multiplier
+
+    def setMultiplier(self, newMultiplier):
+        self.multiplier = newMultiplier
+
+
+# @package Kaltura
+# @subpackage Client
+class KalturaScoredMonetizationCondition(KalturaBaseSegmentCondition):
+    """Defines a condition which is essentially a combination of several monetization-based actions, each has their own score multiplier"""
+
+    def __init__(self,
+            score=NotImplemented,
+            actions=NotImplemented):
+        KalturaBaseSegmentCondition.__init__(self)
+
+        # The minimum score to be met
+        # @var int
+        self.score = score
+
+        # List of the actions that consist the condition
+        # @var array of KalturaMonetizationCondition
+        self.actions = actions
+
+
+    PROPERTY_LOADERS = {
+        'score': getXmlNodeInt, 
+        'actions': (KalturaObjectFactory.createArray, 'KalturaMonetizationCondition'), 
+    }
+
+    def fromXml(self, node):
+        KalturaBaseSegmentCondition.fromXml(self, node)
+        self.fromXmlImpl(node, KalturaScoredMonetizationCondition.PROPERTY_LOADERS)
+
+    def toParams(self):
+        kparams = KalturaBaseSegmentCondition.toParams(self)
+        kparams.put("objectType", "KalturaScoredMonetizationCondition")
+        kparams.addIntIfDefined("score", self.score)
+        kparams.addArrayIfDefined("actions", self.actions)
+        return kparams
+
+    def getScore(self):
+        return self.score
+
+    def setScore(self, newScore):
+        self.score = newScore
+
+    def getActions(self):
+        return self.actions
+
+    def setActions(self, newActions):
+        self.actions = newActions
+
+
+# @package Kaltura
+# @subpackage Client
+class KalturaContentActionCondition(KalturaObjectBase):
+    """Segmentation condition regarding content actions"""
+
+    def __init__(self,
+            action=NotImplemented,
+            length=NotImplemented,
+            multiplier=NotImplemented):
+        KalturaObjectBase.__init__(self)
+
+        # The relevant action to be examined
+        # @var KalturaContentAction
+        self.action = action
+
+        # Optional - if action required specific length to be considered
+        # @var int
+        self.length = length
+
+        # Score multiplier - how much is a single action worth when considering the action
+        # @var int
+        self.multiplier = multiplier
+
+
+    PROPERTY_LOADERS = {
+        'action': (KalturaEnumsFactory.createString, "KalturaContentAction"), 
+        'length': getXmlNodeInt, 
+        'multiplier': getXmlNodeInt, 
+    }
+
+    def fromXml(self, node):
+        KalturaObjectBase.fromXml(self, node)
+        self.fromXmlImpl(node, KalturaContentActionCondition.PROPERTY_LOADERS)
+
+    def toParams(self):
+        kparams = KalturaObjectBase.toParams(self)
+        kparams.put("objectType", "KalturaContentActionCondition")
+        kparams.addStringEnumIfDefined("action", self.action)
+        kparams.addIntIfDefined("length", self.length)
+        kparams.addIntIfDefined("multiplier", self.multiplier)
+        return kparams
+
+    def getAction(self):
+        return self.action
+
+    def setAction(self, newAction):
+        self.action = newAction
+
+    def getLength(self):
+        return self.length
+
+    def setLength(self, newLength):
+        self.length = newLength
+
+    def getMultiplier(self):
+        return self.multiplier
+
+    def setMultiplier(self, newMultiplier):
+        self.multiplier = newMultiplier
+
+
+# @package Kaltura
+# @subpackage Client
+class KalturaContentScoreCondition(KalturaBaseSegmentCondition):
+    """Defines a condition which is essentially a combination of several content-based actions, each has their own score multiplier"""
+
+    def __init__(self,
+            score=NotImplemented,
+            actions=NotImplemented):
+        KalturaBaseSegmentCondition.__init__(self)
+
+        # The minimum score to be met
+        # @var int
+        self.score = score
+
+        # List of the actions that consist the condition
+        # @var array of KalturaContentActionCondition
+        self.actions = actions
+
+
+    PROPERTY_LOADERS = {
+        'score': getXmlNodeInt, 
+        'actions': (KalturaObjectFactory.createArray, 'KalturaContentActionCondition'), 
+    }
+
+    def fromXml(self, node):
+        KalturaBaseSegmentCondition.fromXml(self, node)
+        self.fromXmlImpl(node, KalturaContentScoreCondition.PROPERTY_LOADERS)
+
+    def toParams(self):
+        kparams = KalturaBaseSegmentCondition.toParams(self)
+        kparams.put("objectType", "KalturaContentScoreCondition")
+        kparams.addIntIfDefined("score", self.score)
+        kparams.addArrayIfDefined("actions", self.actions)
+        return kparams
+
+    def getScore(self):
+        return self.score
+
+    def setScore(self, newScore):
+        self.score = newScore
+
+    def getActions(self):
+        return self.actions
+
+    def setActions(self, newActions):
+        self.actions = newActions
+
+
+# @package Kaltura
+# @subpackage Client
+class KalturaUserDataCondition(KalturaBaseSegmentCondition):
+    """User data condition for segmentation"""
+
+    def __init__(self,
+            field=NotImplemented,
+            value=NotImplemented):
+        KalturaBaseSegmentCondition.__init__(self)
+
+        # Field name
+        # @var string
+        self.field = field
+
+        # Value
+        # @var string
+        self.value = value
+
+
+    PROPERTY_LOADERS = {
+        'field': getXmlNodeText, 
+        'value': getXmlNodeText, 
+    }
+
+    def fromXml(self, node):
+        KalturaBaseSegmentCondition.fromXml(self, node)
+        self.fromXmlImpl(node, KalturaUserDataCondition.PROPERTY_LOADERS)
+
+    def toParams(self):
+        kparams = KalturaBaseSegmentCondition.toParams(self)
+        kparams.put("objectType", "KalturaUserDataCondition")
+        kparams.addStringIfDefined("field", self.field)
+        kparams.addStringIfDefined("value", self.value)
+        return kparams
+
+    def getField(self):
+        return self.field
+
+    def setField(self, newField):
+        self.field = newField
+
+    def getValue(self):
+        return self.value
+
+    def setValue(self, newValue):
+        self.value = newValue
+
+
+# @package Kaltura
+# @subpackage Client
+class KalturaSegmentSource(KalturaObjectBase):
+    """Defines which sort is relevant to the condition or the segmentation"""
+
+    def __init__(self):
+        KalturaObjectBase.__init__(self)
+
+
+    PROPERTY_LOADERS = {
+    }
+
+    def fromXml(self, node):
+        KalturaObjectBase.fromXml(self, node)
+        self.fromXmlImpl(node, KalturaSegmentSource.PROPERTY_LOADERS)
+
+    def toParams(self):
+        kparams = KalturaObjectBase.toParams(self)
+        kparams.put("objectType", "KalturaSegmentSource")
+        return kparams
+
+
+# @package Kaltura
+# @subpackage Client
+class KalturaSegmentValue(KalturaObjectBase):
+    """Specific segment value"""
+
+    def __init__(self,
+            id=NotImplemented,
+            name=NotImplemented,
+            multilingualName=NotImplemented,
+            value=NotImplemented,
+            threshold=NotImplemented):
+        KalturaObjectBase.__init__(self)
+
+        # Id of segment
+        # @var int
+        self.id = id
+
+        # Name of segment
+        # @var string
+        # @readonly
+        self.name = name
+
+        # Name of segment
+        # @var array of KalturaTranslationToken
+        self.multilingualName = multilingualName
+
+        # The value of the segment
+        # @var string
+        self.value = value
+
+        # Threshold - minimuim score to be met for this specific value
+        # @var int
+        self.threshold = threshold
+
+
+    PROPERTY_LOADERS = {
+        'id': getXmlNodeInt, 
+        'name': getXmlNodeText, 
+        'multilingualName': (KalturaObjectFactory.createArray, 'KalturaTranslationToken'), 
+        'value': getXmlNodeText, 
+        'threshold': getXmlNodeInt, 
+    }
+
+    def fromXml(self, node):
+        KalturaObjectBase.fromXml(self, node)
+        self.fromXmlImpl(node, KalturaSegmentValue.PROPERTY_LOADERS)
+
+    def toParams(self):
+        kparams = KalturaObjectBase.toParams(self)
+        kparams.put("objectType", "KalturaSegmentValue")
+        kparams.addIntIfDefined("id", self.id)
+        kparams.addArrayIfDefined("multilingualName", self.multilingualName)
+        kparams.addStringIfDefined("value", self.value)
+        kparams.addIntIfDefined("threshold", self.threshold)
+        return kparams
+
+    def getId(self):
+        return self.id
+
+    def setId(self, newId):
+        self.id = newId
+
+    def getName(self):
+        return self.name
+
+    def getMultilingualName(self):
+        return self.multilingualName
+
+    def setMultilingualName(self, newMultilingualName):
+        self.multilingualName = newMultilingualName
+
+    def getValue(self):
+        return self.value
+
+    def setValue(self, newValue):
+        self.value = newValue
+
+    def getThreshold(self):
+        return self.threshold
+
+    def setThreshold(self, newThreshold):
+        self.threshold = newThreshold
+
+
+# @package Kaltura
+# @subpackage Client
+class KalturaSegmentValues(KalturaBaseSegmentValue):
+    """Segmentation type which takes certain values of a tag/meta as segments"""
+
+    def __init__(self,
+            source=NotImplemented,
+            threshold=NotImplemented,
+            values=NotImplemented):
+        KalturaBaseSegmentValue.__init__(self)
+
+        # Segment values source
+        # @var KalturaSegmentSource
+        self.source = source
+
+        # Threshold - minimum score to be met for all values in general (can be overriden)
+        # @var int
+        self.threshold = threshold
+
+        # List of segment values
+        # @var array of KalturaSegmentValue
+        self.values = values
+
+
+    PROPERTY_LOADERS = {
+        'source': (KalturaObjectFactory.create, 'KalturaSegmentSource'), 
+        'threshold': getXmlNodeInt, 
+        'values': (KalturaObjectFactory.createArray, 'KalturaSegmentValue'), 
+    }
+
+    def fromXml(self, node):
+        KalturaBaseSegmentValue.fromXml(self, node)
+        self.fromXmlImpl(node, KalturaSegmentValues.PROPERTY_LOADERS)
+
+    def toParams(self):
+        kparams = KalturaBaseSegmentValue.toParams(self)
+        kparams.put("objectType", "KalturaSegmentValues")
+        kparams.addObjectIfDefined("source", self.source)
+        kparams.addIntIfDefined("threshold", self.threshold)
+        kparams.addArrayIfDefined("values", self.values)
+        return kparams
+
+    def getSource(self):
+        return self.source
+
+    def setSource(self, newSource):
+        self.source = newSource
+
+    def getThreshold(self):
+        return self.threshold
+
+    def setThreshold(self, newThreshold):
+        self.threshold = newThreshold
+
+    def getValues(self):
+        return self.values
+
+    def setValues(self, newValues):
+        self.values = newValues
+
+
+# @package Kaltura
+# @subpackage Client
+class KalturaSegmentAllValues(KalturaSegmentValues):
+    """Segmentation type which takes all values of a tag/meta as segments"""
+
+    def __init__(self,
+            source=NotImplemented,
+            threshold=NotImplemented,
+            values=NotImplemented,
+            nameFormat=NotImplemented):
+        KalturaSegmentValues.__init__(self,
+            source,
+            threshold,
+            values)
+
+        # Segment names&#39; format - they will be automatically generated
+        # @var string
+        self.nameFormat = nameFormat
+
+
+    PROPERTY_LOADERS = {
+        'nameFormat': getXmlNodeText, 
+    }
+
+    def fromXml(self, node):
+        KalturaSegmentValues.fromXml(self, node)
+        self.fromXmlImpl(node, KalturaSegmentAllValues.PROPERTY_LOADERS)
+
+    def toParams(self):
+        kparams = KalturaSegmentValues.toParams(self)
+        kparams.put("objectType", "KalturaSegmentAllValues")
+        kparams.addStringIfDefined("nameFormat", self.nameFormat)
+        return kparams
+
+    def getNameFormat(self):
+        return self.nameFormat
+
+    def setNameFormat(self, newNameFormat):
+        self.nameFormat = newNameFormat
+
+
+# @package Kaltura
+# @subpackage Client
+class KalturaMonetizationSource(KalturaSegmentSource):
+    """Monetization based source (purchases etc.)"""
+
+    def __init__(self,
+            type=NotImplemented,
+            operator=NotImplemented):
+        KalturaSegmentSource.__init__(self)
+
+        # Purchase type
+        # @var KalturaMonetizationType
+        self.type = type
+
+        # Mathermtical operator to calculate
+        # @var KalturaMathemticalOperatorType
+        self.operator = operator
+
+
+    PROPERTY_LOADERS = {
+        'type': (KalturaEnumsFactory.createString, "KalturaMonetizationType"), 
+        'operator': (KalturaEnumsFactory.createString, "KalturaMathemticalOperatorType"), 
+    }
+
+    def fromXml(self, node):
+        KalturaSegmentSource.fromXml(self, node)
+        self.fromXmlImpl(node, KalturaMonetizationSource.PROPERTY_LOADERS)
+
+    def toParams(self):
+        kparams = KalturaSegmentSource.toParams(self)
+        kparams.put("objectType", "KalturaMonetizationSource")
+        kparams.addStringEnumIfDefined("type", self.type)
+        kparams.addStringEnumIfDefined("operator", self.operator)
+        return kparams
+
+    def getType(self):
+        return self.type
+
+    def setType(self, newType):
+        self.type = newType
+
+    def getOperator(self):
+        return self.operator
+
+    def setOperator(self, newOperator):
+        self.operator = newOperator
+
+
+# @package Kaltura
+# @subpackage Client
+class KalturaContentSource(KalturaSegmentSource):
+    """Content based source (meta, tag etc.)"""
+
+    def __init__(self,
+            type=NotImplemented,
+            field=NotImplemented):
+        KalturaSegmentSource.__init__(self)
+
+        # Content data type
+        # @var KalturaContentFieldType
+        self.type = type
+
+        # Field name
+        # @var string
+        self.field = field
+
+
+    PROPERTY_LOADERS = {
+        'type': (KalturaEnumsFactory.createString, "KalturaContentFieldType"), 
+        'field': getXmlNodeText, 
+    }
+
+    def fromXml(self, node):
+        KalturaSegmentSource.fromXml(self, node)
+        self.fromXmlImpl(node, KalturaContentSource.PROPERTY_LOADERS)
+
+    def toParams(self):
+        kparams = KalturaSegmentSource.toParams(self)
+        kparams.put("objectType", "KalturaContentSource")
+        kparams.addStringEnumIfDefined("type", self.type)
+        kparams.addStringIfDefined("field", self.field)
+        return kparams
+
+    def getType(self):
+        return self.type
+
+    def setType(self, newType):
+        self.type = newType
+
+    def getField(self):
+        return self.field
+
+    def setField(self, newField):
+        self.field = newField
+
+
+# @package Kaltura
+# @subpackage Client
+class KalturaUserDynamicDataSource(KalturaSegmentSource):
+    """User dynamic data source"""
+
+    def __init__(self,
+            field=NotImplemented):
+        KalturaSegmentSource.__init__(self)
+
+        # Field name
+        # @var string
+        self.field = field
+
+
+    PROPERTY_LOADERS = {
+        'field': getXmlNodeText, 
+    }
+
+    def fromXml(self, node):
+        KalturaSegmentSource.fromXml(self, node)
+        self.fromXmlImpl(node, KalturaUserDynamicDataSource.PROPERTY_LOADERS)
+
+    def toParams(self):
+        kparams = KalturaSegmentSource.toParams(self)
+        kparams.put("objectType", "KalturaUserDynamicDataSource")
+        kparams.addStringIfDefined("field", self.field)
+        return kparams
+
+    def getField(self):
+        return self.field
+
+    def setField(self, newField):
+        self.field = newField
+
+
+# @package Kaltura
+# @subpackage Client
+class KalturaSegmentRange(KalturaObjectBase):
+    """Segment that is based on a range of values"""
+
+    def __init__(self,
+            name=NotImplemented,
+            multilingualName=NotImplemented,
+            gte=NotImplemented,
+            gt=NotImplemented,
+            lte=NotImplemented,
+            lt=NotImplemented):
+        KalturaObjectBase.__init__(self)
+
+        # Specific segment name
+        # @var string
+        # @readonly
+        self.name = name
+
+        # Specific segment name
+        # @var array of KalturaTranslationToken
+        self.multilingualName = multilingualName
+
+        # Greater than or equals &gt;=
+        # @var float
+        self.gte = gte
+
+        # Greater than &gt;
+        # @var float
+        self.gt = gt
+
+        # Less than or equals
+        # @var float
+        self.lte = lte
+
+        # Less than
+        # @var float
+        self.lt = lt
+
+
+    PROPERTY_LOADERS = {
+        'name': getXmlNodeText, 
+        'multilingualName': (KalturaObjectFactory.createArray, 'KalturaTranslationToken'), 
+        'gte': getXmlNodeFloat, 
+        'gt': getXmlNodeFloat, 
+        'lte': getXmlNodeFloat, 
+        'lt': getXmlNodeFloat, 
+    }
+
+    def fromXml(self, node):
+        KalturaObjectBase.fromXml(self, node)
+        self.fromXmlImpl(node, KalturaSegmentRange.PROPERTY_LOADERS)
+
+    def toParams(self):
+        kparams = KalturaObjectBase.toParams(self)
+        kparams.put("objectType", "KalturaSegmentRange")
+        kparams.addArrayIfDefined("multilingualName", self.multilingualName)
+        kparams.addFloatIfDefined("gte", self.gte)
+        kparams.addFloatIfDefined("gt", self.gt)
+        kparams.addFloatIfDefined("lte", self.lte)
+        kparams.addFloatIfDefined("lt", self.lt)
+        return kparams
+
+    def getName(self):
+        return self.name
+
+    def getMultilingualName(self):
+        return self.multilingualName
+
+    def setMultilingualName(self, newMultilingualName):
+        self.multilingualName = newMultilingualName
+
+    def getGte(self):
+        return self.gte
+
+    def setGte(self, newGte):
+        self.gte = newGte
+
+    def getGt(self):
+        return self.gt
+
+    def setGt(self, newGt):
+        self.gt = newGt
+
+    def getLte(self):
+        return self.lte
+
+    def setLte(self, newLte):
+        self.lte = newLte
+
+    def getLt(self):
+        return self.lt
+
+    def setLt(self, newLt):
+        self.lt = newLt
+
+
+# @package Kaltura
+# @subpackage Client
+class KalturaSegmentRanges(KalturaBaseSegmentValue):
+    """Segmentation type that takes different ranges as segments"""
+
+    def __init__(self,
+            source=NotImplemented,
+            ranges=NotImplemented):
+        KalturaBaseSegmentValue.__init__(self)
+
+        # Range source
+        # @var KalturaSegmentSource
+        self.source = source
+
+        # List of ranges for segmentation
+        # @var array of KalturaSegmentRange
+        self.ranges = ranges
+
+
+    PROPERTY_LOADERS = {
+        'source': (KalturaObjectFactory.create, 'KalturaSegmentSource'), 
+        'ranges': (KalturaObjectFactory.createArray, 'KalturaSegmentRange'), 
+    }
+
+    def fromXml(self, node):
+        KalturaBaseSegmentValue.fromXml(self, node)
+        self.fromXmlImpl(node, KalturaSegmentRanges.PROPERTY_LOADERS)
+
+    def toParams(self):
+        kparams = KalturaBaseSegmentValue.toParams(self)
+        kparams.put("objectType", "KalturaSegmentRanges")
+        kparams.addObjectIfDefined("source", self.source)
+        kparams.addArrayIfDefined("ranges", self.ranges)
+        return kparams
+
+    def getSource(self):
+        return self.source
+
+    def setSource(self, newSource):
+        self.source = newSource
+
+    def getRanges(self):
+        return self.ranges
+
+    def setRanges(self, newRanges):
+        self.ranges = newRanges
+
+
+# @package Kaltura
+# @subpackage Client
 class KalturaSeriesRecording(KalturaObjectBase):
     def __init__(self,
             id=NotImplemented,
@@ -21708,6 +22700,30 @@ class KalturaAssetHistoryFilter(KalturaFilter):
 
     def setDaysLessThanOrEqual(self, newDaysLessThanOrEqual):
         self.daysLessThanOrEqual = newDaysLessThanOrEqual
+
+
+# @package Kaltura
+# @subpackage Client
+class KalturaSegmentationTypeFilter(KalturaFilter):
+    """Filter for segmentation types"""
+
+    def __init__(self,
+            orderBy=NotImplemented):
+        KalturaFilter.__init__(self,
+            orderBy)
+
+
+    PROPERTY_LOADERS = {
+    }
+
+    def fromXml(self, node):
+        KalturaFilter.fromXml(self, node)
+        self.fromXmlImpl(node, KalturaSegmentationTypeFilter.PROPERTY_LOADERS)
+
+    def toParams(self):
+        kparams = KalturaFilter.toParams(self)
+        kparams.put("objectType", "KalturaSegmentationTypeFilter")
+        return kparams
 
 
 # @package Kaltura
@@ -31298,6 +32314,59 @@ class KalturaSearchHistoryService(KalturaServiceBase):
 
 # @package Kaltura
 # @subpackage Client
+class KalturaSegmentationTypeService(KalturaServiceBase):
+    def __init__(self, client = None):
+        KalturaServiceBase.__init__(self, client)
+
+    def add(self, segmentationType):
+        """..."""
+
+        kparams = KalturaParams()
+        kparams.addObjectIfDefined("segmentationType", segmentationType)
+        self.client.queueServiceActionCall("segmentationtype", "add", "KalturaSegmentationType", kparams)
+        if self.client.isMultiRequest():
+            return self.client.getMultiRequestResult()
+        resultNode = self.client.doQueue()
+        return KalturaObjectFactory.create(resultNode, 'KalturaSegmentationType')
+
+    def delete(self, id):
+        """..."""
+
+        kparams = KalturaParams()
+        kparams.addIntIfDefined("id", id);
+        self.client.queueServiceActionCall("segmentationtype", "delete", "None", kparams)
+        if self.client.isMultiRequest():
+            return self.client.getMultiRequestResult()
+        resultNode = self.client.doQueue()
+        return getXmlNodeBool(resultNode)
+
+    def list(self, filter, pager = NotImplemented):
+        """..."""
+
+        kparams = KalturaParams()
+        kparams.addObjectIfDefined("filter", filter)
+        kparams.addObjectIfDefined("pager", pager)
+        self.client.queueServiceActionCall("segmentationtype", "list", "KalturaSegmentationTypeListResponse", kparams)
+        if self.client.isMultiRequest():
+            return self.client.getMultiRequestResult()
+        resultNode = self.client.doQueue()
+        return KalturaObjectFactory.create(resultNode, 'KalturaSegmentationTypeListResponse')
+
+    def update(self, segmentationTypeId, segmentationType):
+        """..."""
+
+        kparams = KalturaParams()
+        kparams.addIntIfDefined("segmentationTypeId", segmentationTypeId);
+        kparams.addObjectIfDefined("segmentationType", segmentationType)
+        self.client.queueServiceActionCall("segmentationtype", "update", "KalturaSegmentationType", kparams)
+        if self.client.isMultiRequest():
+            return self.client.getMultiRequestResult()
+        resultNode = self.client.doQueue()
+        return KalturaObjectFactory.create(resultNode, 'KalturaSegmentationType')
+
+
+# @package Kaltura
+# @subpackage Client
 class KalturaSeriesRecordingService(KalturaServiceBase):
     def __init__(self, client = None):
         KalturaServiceBase.__init__(self, client)
@@ -32399,6 +33468,7 @@ class KalturaCoreClient(KalturaClientPlugin):
             'reminder': KalturaReminderService,
             'report': KalturaReportService,
             'searchHistory': KalturaSearchHistoryService,
+            'segmentationType': KalturaSegmentationTypeService,
             'seriesRecording': KalturaSeriesRecordingService,
             'session': KalturaSessionService,
             'socialAction': KalturaSocialActionService,
@@ -32458,6 +33528,8 @@ class KalturaCoreClient(KalturaClientPlugin):
             'KalturaConfigurationGroupDeviceOrderBy': KalturaConfigurationGroupDeviceOrderBy,
             'KalturaConfigurationGroupTagOrderBy': KalturaConfigurationGroupTagOrderBy,
             'KalturaConfigurationsOrderBy': KalturaConfigurationsOrderBy,
+            'KalturaContentAction': KalturaContentAction,
+            'KalturaContentFieldType': KalturaContentFieldType,
             'KalturaContextType': KalturaContextType,
             'KalturaCountryOrderBy': KalturaCountryOrderBy,
             'KalturaCouponGroupType': KalturaCouponGroupType,
@@ -32493,6 +33565,7 @@ class KalturaCoreClient(KalturaClientPlugin):
             'KalturaInboxMessageType': KalturaInboxMessageType,
             'KalturaLanguageOrderBy': KalturaLanguageOrderBy,
             'KalturaLinearChannelType': KalturaLinearChannelType,
+            'KalturaMathemticalOperatorType': KalturaMathemticalOperatorType,
             'KalturaMediaFileOrderBy': KalturaMediaFileOrderBy,
             'KalturaMediaFileStreamerType': KalturaMediaFileStreamerType,
             'KalturaMediaFileTypeQuality': KalturaMediaFileTypeQuality,
@@ -32500,6 +33573,7 @@ class KalturaCoreClient(KalturaClientPlugin):
             'KalturaMetaDataType': KalturaMetaDataType,
             'KalturaMetaOrderBy': KalturaMetaOrderBy,
             'KalturaMetaTagOrderBy': KalturaMetaTagOrderBy,
+            'KalturaMonetizationType': KalturaMonetizationType,
             'KalturaNotificationType': KalturaNotificationType,
             'KalturaOTTUserOrderBy': KalturaOTTUserOrderBy,
             'KalturaParentalRuleOrderBy': KalturaParentalRuleOrderBy,
@@ -32748,6 +33822,24 @@ class KalturaCoreClient(KalturaClientPlugin):
             'KalturaAssetHistoryListResponse': KalturaAssetHistoryListResponse,
             'KalturaBulk': KalturaBulk,
             'KalturaBulkListResponse': KalturaBulkListResponse,
+            'KalturaBaseSegmentCondition': KalturaBaseSegmentCondition,
+            'KalturaBaseSegmentValue': KalturaBaseSegmentValue,
+            'KalturaSegmentationType': KalturaSegmentationType,
+            'KalturaSegmentationTypeListResponse': KalturaSegmentationTypeListResponse,
+            'KalturaMonetizationCondition': KalturaMonetizationCondition,
+            'KalturaScoredMonetizationCondition': KalturaScoredMonetizationCondition,
+            'KalturaContentActionCondition': KalturaContentActionCondition,
+            'KalturaContentScoreCondition': KalturaContentScoreCondition,
+            'KalturaUserDataCondition': KalturaUserDataCondition,
+            'KalturaSegmentSource': KalturaSegmentSource,
+            'KalturaSegmentValue': KalturaSegmentValue,
+            'KalturaSegmentValues': KalturaSegmentValues,
+            'KalturaSegmentAllValues': KalturaSegmentAllValues,
+            'KalturaMonetizationSource': KalturaMonetizationSource,
+            'KalturaContentSource': KalturaContentSource,
+            'KalturaUserDynamicDataSource': KalturaUserDynamicDataSource,
+            'KalturaSegmentRange': KalturaSegmentRange,
+            'KalturaSegmentRanges': KalturaSegmentRanges,
             'KalturaSeriesRecording': KalturaSeriesRecording,
             'KalturaSeriesRecordingListResponse': KalturaSeriesRecordingListResponse,
             'KalturaHouseholdPremiumServiceListResponse': KalturaHouseholdPremiumServiceListResponse,
@@ -32891,6 +33983,7 @@ class KalturaCoreClient(KalturaClientPlugin):
             'KalturaAssetCommentFilter': KalturaAssetCommentFilter,
             'KalturaBookmarkFilter': KalturaBookmarkFilter,
             'KalturaAssetHistoryFilter': KalturaAssetHistoryFilter,
+            'KalturaSegmentationTypeFilter': KalturaSegmentationTypeFilter,
             'KalturaSeriesRecordingFilter': KalturaSeriesRecordingFilter,
             'KalturaProductPriceFilter': KalturaProductPriceFilter,
             'KalturaEntitlementFilter': KalturaEntitlementFilter,
