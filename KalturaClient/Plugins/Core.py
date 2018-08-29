@@ -42,7 +42,7 @@ from ..Base import (
     KalturaServiceBase,
 )
 
-API_VERSION = '5.0.1.16546'
+API_VERSION = '5.0.1.20324'
 
 ########## enums ##########
 # @package Kaltura
@@ -30091,8 +30091,7 @@ class KalturaFollowTvSeriesService(KalturaServiceBase):
         KalturaServiceBase.__init__(self, client)
 
     def add(self, followTvSeries):
-        """(Deprecated - use personalList.add)
-                    Add a user&#39;s tv series follow.
+        """Add a user&#39;s tv series follow.
                     Possible status codes: UserAlreadyFollowing = 8013, NotFound = 500007, InvalidAssetId = 4024"""
 
         kparams = KalturaParams()
@@ -30104,8 +30103,7 @@ class KalturaFollowTvSeriesService(KalturaServiceBase):
         return KalturaObjectFactory.create(resultNode, 'KalturaFollowTvSeries')
 
     def delete(self, assetId):
-        """(Deprecated - use personalList.delete)
-                    Delete a user&#39;s tv series follow.
+        """Delete a user&#39;s tv series follow.
                     Possible status codes: UserNotFollowing = 8012, NotFound = 500007, InvalidAssetId = 4024, AnnouncementNotFound = 8006"""
 
         kparams = KalturaParams()
@@ -30129,8 +30127,7 @@ class KalturaFollowTvSeriesService(KalturaServiceBase):
         resultNode = self.client.doQueue()
 
     def list(self, filter, pager = NotImplemented):
-        """(Deprecated - use personalList.list)
-                    List user&#39;s tv series follows.
+        """List user&#39;s tv series follows.
                     Possible status codes:"""
 
         kparams = KalturaParams()
