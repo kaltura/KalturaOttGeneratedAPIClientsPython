@@ -42,7 +42,7 @@ from ..Base import (
     KalturaServiceBase,
 )
 
-API_VERSION = '5.0.1.16326'
+API_VERSION = '5.0.1.21411'
 
 ########## enums ##########
 # @package Kaltura
@@ -14356,7 +14356,7 @@ class KalturaSegmentValue(KalturaObjectBase):
         # @var string
         self.value = value
 
-        # Threshold - minimuim score to be met for this specific value
+        # Threshold - minimum score to be met for this specific value
         # @var int
         self.threshold = threshold
 
