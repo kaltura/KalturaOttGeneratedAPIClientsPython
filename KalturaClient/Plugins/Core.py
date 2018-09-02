@@ -42,7 +42,7 @@ from ..Base import (
     KalturaServiceBase,
 )
 
-API_VERSION = '5.0.2.23784'
+API_VERSION = '5.0.2.25605'
 
 ########## enums ##########
 # @package Kaltura
@@ -7317,7 +7317,7 @@ class KalturaDynamicChannel(KalturaChannel):
         #             For alpha-numerical fields =, != (not), ~ (like), !~, ^ (any word starts with), ^= (phrase starts with), + (exists), !+ (not exists).
         #             Logical conjunction: and, or. 
         #             Search values are limited to 20 characters each.
-        #             (maximum length of entire filter is 2048 characters)
+        #             (maximum length of entire filter is 4096 characters)
         # @var string
         self.kSql = kSql
 
@@ -9319,7 +9319,7 @@ class KalturaPersonalList(KalturaObjectBase):
         #             For alpha-numerical fields =, != (not), ~ (like), !~, ^ (any word starts with), ^= (phrase starts with), + (exists), !+ (not exists).
         #             Logical conjunction: and, or. 
         #             Search values are limited to 20 characters each for the next operators: ~, !~, ^, ^=
-        #             (maximum length of entire filter is 2048 characters)
+        #             (maximum length of entire filter is 4096 characters)
         # @var string
         self.ksql = ksql
 
@@ -21377,7 +21377,7 @@ class KalturaBaseSearchAssetFilter(KalturaAssetFilter):
         #             For alpha-numerical fields =, != (not), ~ (like), !~, ^ (any word starts with), ^= (phrase starts with), + (exists), !+ (not exists).
         #             Logical conjunction: and, or. 
         #             Search values are limited to 20 characters each for the next operators: ~, !~, ^, ^=
-        #             (maximum length of entire filter is 2048 characters)
+        #             (maximum length of entire filter is 4096 characters)
         # @var string
         self.kSql = kSql
 
@@ -21794,7 +21794,7 @@ class KalturaChannelFilter(KalturaAssetFilter):
         #             For alpha-numerical fields =, != (not), ~ (like), !~, ^ (any word starts with), ^= (phrase starts with), + (exists), !+ (not exists).
         #             Logical conjunction: and, or. 
         #             Search values are limited to 20 characters each for the next operators: ~, !~, ^, ^=
-        #             (maximum length of entire filter is 2048 characters)
+        #             (maximum length of entire filter is 4096 characters)
         # @var string
         self.kSql = kSql
 
