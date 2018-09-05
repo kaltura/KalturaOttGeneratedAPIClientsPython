@@ -42,7 +42,7 @@ from ..Base import (
     KalturaServiceBase,
 )
 
-API_VERSION = '5.0.2.20065'
+API_VERSION = '5.0.2.23623'
 
 ########## enums ##########
 # @package Kaltura
@@ -12572,7 +12572,11 @@ class KalturaProgramAsset(KalturaAsset):
             epgId=NotImplemented,
             relatedMediaId=NotImplemented,
             crid=NotImplemented,
-            linearAssetId=NotImplemented):
+            linearAssetId=NotImplemented,
+            enableCdvr=NotImplemented,
+            enableCatchUp=NotImplemented,
+            enableStartOver=NotImplemented,
+            enableTrickPlay=NotImplemented):
         KalturaAsset.__init__(self,
             id,
             type,
@@ -12610,6 +12614,26 @@ class KalturaProgramAsset(KalturaAsset):
         # @var int
         self.linearAssetId = linearAssetId
 
+        # Is CDVR enabled for this asset
+        # @var bool
+        # @readonly
+        self.enableCdvr = enableCdvr
+
+        # Is catch-up enabled for this asset
+        # @var bool
+        # @readonly
+        self.enableCatchUp = enableCatchUp
+
+        # Is start over enabled for this asset
+        # @var bool
+        # @readonly
+        self.enableStartOver = enableStartOver
+
+        # Is trick-play enabled for this asset
+        # @var bool
+        # @readonly
+        self.enableTrickPlay = enableTrickPlay
+
 
     PROPERTY_LOADERS = {
         'epgChannelId': getXmlNodeInt, 
@@ -12617,6 +12641,10 @@ class KalturaProgramAsset(KalturaAsset):
         'relatedMediaId': getXmlNodeInt, 
         'crid': getXmlNodeText, 
         'linearAssetId': getXmlNodeInt, 
+        'enableCdvr': getXmlNodeBool, 
+        'enableCatchUp': getXmlNodeBool, 
+        'enableStartOver': getXmlNodeBool, 
+        'enableTrickPlay': getXmlNodeBool, 
     }
 
     def fromXml(self, node):
@@ -12663,6 +12691,18 @@ class KalturaProgramAsset(KalturaAsset):
     def setLinearAssetId(self, newLinearAssetId):
         self.linearAssetId = newLinearAssetId
 
+    def getEnableCdvr(self):
+        return self.enableCdvr
+
+    def getEnableCatchUp(self):
+        return self.enableCatchUp
+
+    def getEnableStartOver(self):
+        return self.enableStartOver
+
+    def getEnableTrickPlay(self):
+        return self.enableTrickPlay
+
 
 # @package Kaltura
 # @subpackage Client
@@ -12690,6 +12730,10 @@ class KalturaRecordingAsset(KalturaProgramAsset):
             relatedMediaId=NotImplemented,
             crid=NotImplemented,
             linearAssetId=NotImplemented,
+            enableCdvr=NotImplemented,
+            enableCatchUp=NotImplemented,
+            enableStartOver=NotImplemented,
+            enableTrickPlay=NotImplemented,
             recordingId=NotImplemented,
             recordingType=NotImplemented):
         KalturaProgramAsset.__init__(self,
@@ -12712,7 +12756,11 @@ class KalturaRecordingAsset(KalturaProgramAsset):
             epgId,
             relatedMediaId,
             crid,
-            linearAssetId)
+            linearAssetId,
+            enableCdvr,
+            enableCatchUp,
+            enableStartOver,
+            enableTrickPlay)
 
         # Recording identifier
         # @var string
