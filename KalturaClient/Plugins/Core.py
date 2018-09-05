@@ -42,7 +42,7 @@ from ..Base import (
     KalturaServiceBase,
 )
 
-API_VERSION = '5.0.2.27144'
+API_VERSION = '5.0.2.28437'
 
 ########## enums ##########
 # @package Kaltura
@@ -7317,7 +7317,7 @@ class KalturaDynamicChannel(KalturaChannel):
         #             For alpha-numerical fields =, != (not), ~ (like), !~, ^ (any word starts with), ^= (phrase starts with), + (exists), !+ (not exists).
         #             Logical conjunction: and, or. 
         #             Search values are limited to 20 characters each.
-        #             (maximum length of entire filter is 4096 characters)
+        #             (maximum length of entire filter is 2048 characters)
         # @var string
         self.kSql = kSql
 
@@ -9319,7 +9319,7 @@ class KalturaPersonalList(KalturaObjectBase):
         #             For alpha-numerical fields =, != (not), ~ (like), !~, ^ (any word starts with), ^= (phrase starts with), + (exists), !+ (not exists).
         #             Logical conjunction: and, or. 
         #             Search values are limited to 20 characters each for the next operators: ~, !~, ^, ^=
-        #             (maximum length of entire filter is 4096 characters)
+        #             (maximum length of entire filter is 2048 characters)
         # @var string
         self.ksql = ksql
 
@@ -11174,8 +11174,7 @@ class KalturaAssetStructMeta(KalturaObjectBase):
             protectFromIngest=NotImplemented,
             defaultIngestValue=NotImplemented,
             createDate=NotImplemented,
-            updateDate=NotImplemented,
-            isInherited=NotImplemented):
+            updateDate=NotImplemented):
         KalturaObjectBase.__init__(self)
 
         # Asset Struct id (template_id)
@@ -11210,10 +11209,6 @@ class KalturaAssetStructMeta(KalturaObjectBase):
         # @readonly
         self.updateDate = updateDate
 
-        # Is inherited
-        # @var bool
-        self.isInherited = isInherited
-
 
     PROPERTY_LOADERS = {
         'assetStructId': getXmlNodeInt, 
@@ -11223,7 +11218,6 @@ class KalturaAssetStructMeta(KalturaObjectBase):
         'defaultIngestValue': getXmlNodeText, 
         'createDate': getXmlNodeInt, 
         'updateDate': getXmlNodeInt, 
-        'isInherited': getXmlNodeBool, 
     }
 
     def fromXml(self, node):
@@ -11236,7 +11230,6 @@ class KalturaAssetStructMeta(KalturaObjectBase):
         kparams.addStringIfDefined("ingestReferencePath", self.ingestReferencePath)
         kparams.addBoolIfDefined("protectFromIngest", self.protectFromIngest)
         kparams.addStringIfDefined("defaultIngestValue", self.defaultIngestValue)
-        kparams.addBoolIfDefined("isInherited", self.isInherited)
         return kparams
 
     def getAssetStructId(self):
@@ -11268,12 +11261,6 @@ class KalturaAssetStructMeta(KalturaObjectBase):
 
     def getUpdateDate(self):
         return self.updateDate
-
-    def getIsInherited(self):
-        return self.isInherited
-
-    def setIsInherited(self, newIsInherited):
-        self.isInherited = newIsInherited
 
 
 # @package Kaltura
@@ -21438,7 +21425,7 @@ class KalturaBaseSearchAssetFilter(KalturaAssetFilter):
         #             For alpha-numerical fields =, != (not), ~ (like), !~, ^ (any word starts with), ^= (phrase starts with), + (exists), !+ (not exists).
         #             Logical conjunction: and, or. 
         #             Search values are limited to 20 characters each for the next operators: ~, !~, ^, ^=
-        #             (maximum length of entire filter is 4096 characters)
+        #             (maximum length of entire filter is 2048 characters)
         # @var string
         self.kSql = kSql
 
@@ -21855,7 +21842,7 @@ class KalturaChannelFilter(KalturaAssetFilter):
         #             For alpha-numerical fields =, != (not), ~ (like), !~, ^ (any word starts with), ^= (phrase starts with), + (exists), !+ (not exists).
         #             Logical conjunction: and, or. 
         #             Search values are limited to 20 characters each for the next operators: ~, !~, ^, ^=
-        #             (maximum length of entire filter is 4096 characters)
+        #             (maximum length of entire filter is 2048 characters)
         # @var string
         self.kSql = kSql
 
