@@ -42,7 +42,7 @@ from ..Base import (
     KalturaServiceBase,
 )
 
-API_VERSION = '5.0.2.43135'
+API_VERSION = '5.0.2.18180'
 
 ########## enums ##########
 # @package Kaltura
@@ -11174,7 +11174,8 @@ class KalturaAssetStructMeta(KalturaObjectBase):
             protectFromIngest=NotImplemented,
             defaultIngestValue=NotImplemented,
             createDate=NotImplemented,
-            updateDate=NotImplemented):
+            updateDate=NotImplemented,
+            isInherited=NotImplemented):
         KalturaObjectBase.__init__(self)
 
         # Asset Struct id (template_id)
@@ -11209,6 +11210,10 @@ class KalturaAssetStructMeta(KalturaObjectBase):
         # @readonly
         self.updateDate = updateDate
 
+        # Is inherited
+        # @var bool
+        self.isInherited = isInherited
+
 
     PROPERTY_LOADERS = {
         'assetStructId': getXmlNodeInt, 
@@ -11218,6 +11223,7 @@ class KalturaAssetStructMeta(KalturaObjectBase):
         'defaultIngestValue': getXmlNodeText, 
         'createDate': getXmlNodeInt, 
         'updateDate': getXmlNodeInt, 
+        'isInherited': getXmlNodeBool, 
     }
 
     def fromXml(self, node):
@@ -11230,6 +11236,7 @@ class KalturaAssetStructMeta(KalturaObjectBase):
         kparams.addStringIfDefined("ingestReferencePath", self.ingestReferencePath)
         kparams.addBoolIfDefined("protectFromIngest", self.protectFromIngest)
         kparams.addStringIfDefined("defaultIngestValue", self.defaultIngestValue)
+        kparams.addBoolIfDefined("isInherited", self.isInherited)
         return kparams
 
     def getAssetStructId(self):
@@ -11261,6 +11268,12 @@ class KalturaAssetStructMeta(KalturaObjectBase):
 
     def getUpdateDate(self):
         return self.updateDate
+
+    def getIsInherited(self):
+        return self.isInherited
+
+    def setIsInherited(self, newIsInherited):
+        self.isInherited = newIsInherited
 
 
 # @package Kaltura
