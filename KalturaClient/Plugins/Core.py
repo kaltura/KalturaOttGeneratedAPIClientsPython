@@ -42,7 +42,7 @@ from ..Base import (
     KalturaServiceBase,
 )
 
-API_VERSION = '5.0.2.15349'
+API_VERSION = '5.0.2.41999'
 
 ########## enums ##########
 # @package Kaltura
@@ -1319,6 +1319,17 @@ class KalturaPlaybackContextType(object):
 class KalturaPositionOwner(object):
     HOUSEHOLD = "household"
     USER = "user"
+
+    def __init__(self, value):
+        self.value = value
+
+    def getValue(self):
+        return self.value
+
+# @package Kaltura
+# @subpackage Client
+class KalturaPpvOrderBy(object):
+    NONE = "NONE"
 
     def __init__(self, value):
         self.value = value
@@ -22720,6 +22731,43 @@ class KalturaRecordingFilter(KalturaFilter):
 
 # @package Kaltura
 # @subpackage Client
+class KalturaPpvFilter(KalturaFilter):
+    """Filtering Asset Struct Metas"""
+
+    def __init__(self,
+            orderBy=NotImplemented,
+            idIn=NotImplemented):
+        KalturaFilter.__init__(self,
+            orderBy)
+
+        # Comma separated identifiers
+        # @var string
+        self.idIn = idIn
+
+
+    PROPERTY_LOADERS = {
+        'idIn': getXmlNodeText, 
+    }
+
+    def fromXml(self, node):
+        KalturaFilter.fromXml(self, node)
+        self.fromXmlImpl(node, KalturaPpvFilter.PROPERTY_LOADERS)
+
+    def toParams(self):
+        kparams = KalturaFilter.toParams(self)
+        kparams.put("objectType", "KalturaPpvFilter")
+        kparams.addStringIfDefined("idIn", self.idIn)
+        return kparams
+
+    def getIdIn(self):
+        return self.idIn
+
+    def setIdIn(self, newIdIn):
+        self.idIn = newIdIn
+
+
+# @package Kaltura
+# @subpackage Client
 class KalturaAssetFilePpvFilter(KalturaFilter):
     """Filtering Asset Struct Metas"""
 
@@ -29110,6 +29158,29 @@ class KalturaAssetFilePpvService(KalturaServiceBase):
     def __init__(self, client = None):
         KalturaServiceBase.__init__(self, client)
 
+    def add(self, assetFilePpv):
+        """Add asset file ppv"""
+
+        kparams = KalturaParams()
+        kparams.addObjectIfDefined("assetFilePpv", assetFilePpv)
+        self.client.queueServiceActionCall("assetfileppv", "add", "KalturaAssetFilePpv", kparams)
+        if self.client.isMultiRequest():
+            return self.client.getMultiRequestResult()
+        resultNode = self.client.doQueue()
+        return KalturaObjectFactory.create(resultNode, 'KalturaAssetFilePpv')
+
+    def delete(self, assetFileId, ppvModuleId):
+        """Delete asset file ppv"""
+
+        kparams = KalturaParams()
+        kparams.addIntIfDefined("assetFileId", assetFileId);
+        kparams.addIntIfDefined("ppvModuleId", ppvModuleId);
+        self.client.queueServiceActionCall("assetfileppv", "delete", "None", kparams)
+        if self.client.isMultiRequest():
+            return self.client.getMultiRequestResult()
+        resultNode = self.client.doQueue()
+        return getXmlNodeBool(resultNode)
+
     def list(self, filter):
         """Return a list of asset files ppvs for the account with optional filter"""
 
@@ -29120,6 +29191,19 @@ class KalturaAssetFilePpvService(KalturaServiceBase):
             return self.client.getMultiRequestResult()
         resultNode = self.client.doQueue()
         return KalturaObjectFactory.create(resultNode, 'KalturaAssetFilePpvListResponse')
+
+    def update(self, assetFileId, ppvModuleId, assetFilePpv):
+        """Update assetFilePpv"""
+
+        kparams = KalturaParams()
+        kparams.addIntIfDefined("assetFileId", assetFileId);
+        kparams.addIntIfDefined("ppvModuleId", ppvModuleId);
+        kparams.addObjectIfDefined("assetFilePpv", assetFilePpv)
+        self.client.queueServiceActionCall("assetfileppv", "update", "KalturaAssetFilePpv", kparams)
+        if self.client.isMultiRequest():
+            return self.client.getMultiRequestResult()
+        resultNode = self.client.doQueue()
+        return KalturaObjectFactory.create(resultNode, 'KalturaAssetFilePpv')
 
 
 # @package Kaltura
@@ -32356,10 +32440,11 @@ class KalturaPpvService(KalturaServiceBase):
         resultNode = self.client.doQueue()
         return KalturaObjectFactory.create(resultNode, 'KalturaPpv')
 
-    def list(self):
+    def list(self, filter = NotImplemented):
         """Returns all ppv objects"""
 
         kparams = KalturaParams()
+        kparams.addObjectIfDefined("filter", filter)
         self.client.queueServiceActionCall("ppv", "list", "KalturaPpvListResponse", kparams)
         if self.client.isMultiRequest():
             return self.client.getMultiRequestResult()
@@ -34124,6 +34209,7 @@ class KalturaCoreClient(KalturaClientPlugin):
             'KalturaPlatform': KalturaPlatform,
             'KalturaPlaybackContextType': KalturaPlaybackContextType,
             'KalturaPositionOwner': KalturaPositionOwner,
+            'KalturaPpvOrderBy': KalturaPpvOrderBy,
             'KalturaPriceDetailsOrderBy': KalturaPriceDetailsOrderBy,
             'KalturaPricePlanOrderBy': KalturaPricePlanOrderBy,
             'KalturaProductPriceOrderBy': KalturaProductPriceOrderBy,
@@ -34515,6 +34601,7 @@ class KalturaCoreClient(KalturaClientPlugin):
             'KalturaTransactionHistoryFilter': KalturaTransactionHistoryFilter,
             'KalturaRecordingContextFilter': KalturaRecordingContextFilter,
             'KalturaRecordingFilter': KalturaRecordingFilter,
+            'KalturaPpvFilter': KalturaPpvFilter,
             'KalturaAssetFilePpvFilter': KalturaAssetFilePpvFilter,
             'KalturaCollectionFilter': KalturaCollectionFilter,
             'KalturaDiscountDetailsFilter': KalturaDiscountDetailsFilter,
