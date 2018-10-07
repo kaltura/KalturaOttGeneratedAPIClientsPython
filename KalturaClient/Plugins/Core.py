@@ -42,7 +42,7 @@ from ..Base import (
     KalturaServiceBase,
 )
 
-API_VERSION = '5.0.3.42005'
+API_VERSION = '5.0.3.24651'
 
 ########## enums ##########
 # @package Kaltura
@@ -546,6 +546,18 @@ class KalturaContentAction(object):
     FAVORITE = "favorite"
     RECORDING = "recording"
     SOCIAL_ACTION = "social_action"
+
+    def __init__(self, value):
+        self.value = value
+
+    def getValue(self):
+        return self.value
+
+# @package Kaltura
+# @subpackage Client
+class KalturaContentActionConditionLengthType(object):
+    MINUTES = "minutes"
+    PERCENTAGE = "percentage"
 
     def __init__(self, value):
         self.value = value
@@ -8414,9 +8426,7 @@ class KalturaSegmentationType(KalturaObjectBase):
     def __init__(self,
             id=NotImplemented,
             name=NotImplemented,
-            multilingualName=NotImplemented,
             description=NotImplemented,
-            multilingualDescription=NotImplemented,
             conditions=NotImplemented,
             value=NotImplemented):
         KalturaObjectBase.__init__(self)
@@ -8427,21 +8437,11 @@ class KalturaSegmentationType(KalturaObjectBase):
 
         # Name of segmentation type
         # @var string
-        # @readonly
         self.name = name
-
-        # Name of segmentation type
-        # @var array of KalturaTranslationToken
-        self.multilingualName = multilingualName
 
         # Description of segmentation type
         # @var string
-        # @readonly
         self.description = description
-
-        # Description of segmentation type
-        # @var array of KalturaTranslationToken
-        self.multilingualDescription = multilingualDescription
 
         # Segmentation conditions - can be empty
         # @var array of KalturaBaseSegmentCondition
@@ -8455,9 +8455,7 @@ class KalturaSegmentationType(KalturaObjectBase):
     PROPERTY_LOADERS = {
         'id': getXmlNodeInt, 
         'name': getXmlNodeText, 
-        'multilingualName': (KalturaObjectFactory.createArray, 'KalturaTranslationToken'), 
         'description': getXmlNodeText, 
-        'multilingualDescription': (KalturaObjectFactory.createArray, 'KalturaTranslationToken'), 
         'conditions': (KalturaObjectFactory.createArray, 'KalturaBaseSegmentCondition'), 
         'value': (KalturaObjectFactory.create, 'KalturaBaseSegmentValue'), 
     }
@@ -8470,8 +8468,8 @@ class KalturaSegmentationType(KalturaObjectBase):
         kparams = KalturaObjectBase.toParams(self)
         kparams.put("objectType", "KalturaSegmentationType")
         kparams.addIntIfDefined("id", self.id)
-        kparams.addArrayIfDefined("multilingualName", self.multilingualName)
-        kparams.addArrayIfDefined("multilingualDescription", self.multilingualDescription)
+        kparams.addStringIfDefined("name", self.name)
+        kparams.addStringIfDefined("description", self.description)
         kparams.addArrayIfDefined("conditions", self.conditions)
         kparams.addObjectIfDefined("value", self.value)
         return kparams
@@ -8485,20 +8483,14 @@ class KalturaSegmentationType(KalturaObjectBase):
     def getName(self):
         return self.name
 
-    def getMultilingualName(self):
-        return self.multilingualName
-
-    def setMultilingualName(self, newMultilingualName):
-        self.multilingualName = newMultilingualName
+    def setName(self, newName):
+        self.name = newName
 
     def getDescription(self):
         return self.description
 
-    def getMultilingualDescription(self):
-        return self.multilingualDescription
-
-    def setMultilingualDescription(self, newMultilingualDescription):
-        self.multilingualDescription = newMultilingualDescription
+    def setDescription(self, newDescription):
+        self.description = newDescription
 
     def getConditions(self):
         return self.conditions
@@ -8617,14 +8609,19 @@ class KalturaScoredMonetizationCondition(KalturaBaseSegmentCondition):
     """Defines a condition which is essentially a combination of several monetization-based actions, each has their own score multiplier"""
 
     def __init__(self,
-            score=NotImplemented,
+            minScore=NotImplemented,
+            maxScore=NotImplemented,
             days=NotImplemented,
             actions=NotImplemented):
         KalturaBaseSegmentCondition.__init__(self)
 
         # The minimum score to be met
         # @var int
-        self.score = score
+        self.minScore = minScore
+
+        # The maximum score to be met
+        # @var int
+        self.maxScore = maxScore
 
         # How many days back should the actions be considered
         # @var int
@@ -8636,7 +8633,8 @@ class KalturaScoredMonetizationCondition(KalturaBaseSegmentCondition):
 
 
     PROPERTY_LOADERS = {
-        'score': getXmlNodeInt, 
+        'minScore': getXmlNodeInt, 
+        'maxScore': getXmlNodeInt, 
         'days': getXmlNodeInt, 
         'actions': (KalturaObjectFactory.createArray, 'KalturaMonetizationCondition'), 
     }
@@ -8648,16 +8646,23 @@ class KalturaScoredMonetizationCondition(KalturaBaseSegmentCondition):
     def toParams(self):
         kparams = KalturaBaseSegmentCondition.toParams(self)
         kparams.put("objectType", "KalturaScoredMonetizationCondition")
-        kparams.addIntIfDefined("score", self.score)
+        kparams.addIntIfDefined("minScore", self.minScore)
+        kparams.addIntIfDefined("maxScore", self.maxScore)
         kparams.addIntIfDefined("days", self.days)
         kparams.addArrayIfDefined("actions", self.actions)
         return kparams
 
-    def getScore(self):
-        return self.score
+    def getMinScore(self):
+        return self.minScore
 
-    def setScore(self, newScore):
-        self.score = newScore
+    def setMinScore(self, newMinScore):
+        self.minScore = newMinScore
+
+    def getMaxScore(self):
+        return self.maxScore
+
+    def setMaxScore(self, newMaxScore):
+        self.maxScore = newMaxScore
 
     def getDays(self):
         return self.days
@@ -8680,6 +8685,7 @@ class KalturaContentActionCondition(KalturaObjectBase):
     def __init__(self,
             action=NotImplemented,
             length=NotImplemented,
+            lengthType=NotImplemented,
             multiplier=NotImplemented):
         KalturaObjectBase.__init__(self)
 
@@ -8687,9 +8693,13 @@ class KalturaContentActionCondition(KalturaObjectBase):
         # @var KalturaContentAction
         self.action = action
 
-        # Optional - if action required specific length to be considered
+        # Optional - if action required specific length to be considered (in percentage or minutes)
         # @var int
         self.length = length
+
+        # Optional - if action required specific length to be considered (in percentage or minutes)
+        # @var KalturaContentActionConditionLengthType
+        self.lengthType = lengthType
 
         # Score multiplier - how much is a single action worth when considering the action
         # @var int
@@ -8699,6 +8709,7 @@ class KalturaContentActionCondition(KalturaObjectBase):
     PROPERTY_LOADERS = {
         'action': (KalturaEnumsFactory.createString, "KalturaContentAction"), 
         'length': getXmlNodeInt, 
+        'lengthType': (KalturaEnumsFactory.createString, "KalturaContentActionConditionLengthType"), 
         'multiplier': getXmlNodeInt, 
     }
 
@@ -8711,6 +8722,7 @@ class KalturaContentActionCondition(KalturaObjectBase):
         kparams.put("objectType", "KalturaContentActionCondition")
         kparams.addStringEnumIfDefined("action", self.action)
         kparams.addIntIfDefined("length", self.length)
+        kparams.addStringEnumIfDefined("lengthType", self.lengthType)
         kparams.addIntIfDefined("multiplier", self.multiplier)
         return kparams
 
@@ -8726,6 +8738,12 @@ class KalturaContentActionCondition(KalturaObjectBase):
     def setLength(self, newLength):
         self.length = newLength
 
+    def getLengthType(self):
+        return self.lengthType
+
+    def setLengthType(self, newLengthType):
+        self.lengthType = newLengthType
+
     def getMultiplier(self):
         return self.multiplier
 
@@ -8739,18 +8757,33 @@ class KalturaContentScoreCondition(KalturaBaseSegmentCondition):
     """Defines a condition which is essentially a combination of several content-based actions, each has their own score multiplier"""
 
     def __init__(self,
-            score=NotImplemented,
+            minScore=NotImplemented,
+            maxScore=NotImplemented,
             days=NotImplemented,
+            field=NotImplemented,
+            value=NotImplemented,
             actions=NotImplemented):
         KalturaBaseSegmentCondition.__init__(self)
 
         # The minimum score to be met
         # @var int
-        self.score = score
+        self.minScore = minScore
+
+        # The maximum score to be met
+        # @var int
+        self.maxScore = maxScore
 
         # How many days back should the actions be considered
         # @var int
         self.days = days
+
+        # If condition should be applied on specific field (and not the one of the segment value)
+        # @var string
+        self.field = field
+
+        # If condition should be applied on specific field (and not the one of the segment value) -
+        # @var string
+        self.value = value
 
         # List of the actions that consist the condition
         # @var array of KalturaContentActionCondition
@@ -8758,8 +8791,11 @@ class KalturaContentScoreCondition(KalturaBaseSegmentCondition):
 
 
     PROPERTY_LOADERS = {
-        'score': getXmlNodeInt, 
+        'minScore': getXmlNodeInt, 
+        'maxScore': getXmlNodeInt, 
         'days': getXmlNodeInt, 
+        'field': getXmlNodeText, 
+        'value': getXmlNodeText, 
         'actions': (KalturaObjectFactory.createArray, 'KalturaContentActionCondition'), 
     }
 
@@ -8770,22 +8806,43 @@ class KalturaContentScoreCondition(KalturaBaseSegmentCondition):
     def toParams(self):
         kparams = KalturaBaseSegmentCondition.toParams(self)
         kparams.put("objectType", "KalturaContentScoreCondition")
-        kparams.addIntIfDefined("score", self.score)
+        kparams.addIntIfDefined("minScore", self.minScore)
+        kparams.addIntIfDefined("maxScore", self.maxScore)
         kparams.addIntIfDefined("days", self.days)
+        kparams.addStringIfDefined("field", self.field)
+        kparams.addStringIfDefined("value", self.value)
         kparams.addArrayIfDefined("actions", self.actions)
         return kparams
 
-    def getScore(self):
-        return self.score
+    def getMinScore(self):
+        return self.minScore
 
-    def setScore(self, newScore):
-        self.score = newScore
+    def setMinScore(self, newMinScore):
+        self.minScore = newMinScore
+
+    def getMaxScore(self):
+        return self.maxScore
+
+    def setMaxScore(self, newMaxScore):
+        self.maxScore = newMaxScore
 
     def getDays(self):
         return self.days
 
     def setDays(self, newDays):
         self.days = newDays
+
+    def getField(self):
+        return self.field
+
+    def setField(self, newField):
+        self.field = newField
+
+    def getValue(self):
+        return self.value
+
+    def setValue(self, newValue):
+        self.value = newValue
 
     def getActions(self):
         return self.actions
@@ -8873,7 +8930,6 @@ class KalturaSegmentValue(KalturaObjectBase):
             id=NotImplemented,
             systematicName=NotImplemented,
             name=NotImplemented,
-            multilingualName=NotImplemented,
             value=NotImplemented,
             threshold=NotImplemented):
         KalturaObjectBase.__init__(self)
@@ -8889,12 +8945,7 @@ class KalturaSegmentValue(KalturaObjectBase):
 
         # Name of segment
         # @var string
-        # @readonly
         self.name = name
-
-        # Name of segment
-        # @var array of KalturaTranslationToken
-        self.multilingualName = multilingualName
 
         # The value of the segment
         # @var string
@@ -8909,7 +8960,6 @@ class KalturaSegmentValue(KalturaObjectBase):
         'id': getXmlNodeInt, 
         'systematicName': getXmlNodeText, 
         'name': getXmlNodeText, 
-        'multilingualName': (KalturaObjectFactory.createArray, 'KalturaTranslationToken'), 
         'value': getXmlNodeText, 
         'threshold': getXmlNodeInt, 
     }
@@ -8922,7 +8972,7 @@ class KalturaSegmentValue(KalturaObjectBase):
         kparams = KalturaObjectBase.toParams(self)
         kparams.put("objectType", "KalturaSegmentValue")
         kparams.addStringIfDefined("systematicName", self.systematicName)
-        kparams.addArrayIfDefined("multilingualName", self.multilingualName)
+        kparams.addStringIfDefined("name", self.name)
         kparams.addStringIfDefined("value", self.value)
         kparams.addIntIfDefined("threshold", self.threshold)
         return kparams
@@ -8939,11 +8989,8 @@ class KalturaSegmentValue(KalturaObjectBase):
     def getName(self):
         return self.name
 
-    def getMultilingualName(self):
-        return self.multilingualName
-
-    def setMultilingualName(self, newMultilingualName):
-        self.multilingualName = newMultilingualName
+    def setName(self, newName):
+        self.name = newName
 
     def getValue(self):
         return self.value
@@ -9172,7 +9219,6 @@ class KalturaSegmentRange(KalturaObjectBase):
             id=NotImplemented,
             systematicName=NotImplemented,
             name=NotImplemented,
-            multilingualName=NotImplemented,
             gte=NotImplemented,
             gt=NotImplemented,
             lte=NotImplemented,
@@ -9191,12 +9237,7 @@ class KalturaSegmentRange(KalturaObjectBase):
 
         # Specific segment name
         # @var string
-        # @readonly
         self.name = name
-
-        # Specific segment name
-        # @var array of KalturaTranslationToken
-        self.multilingualName = multilingualName
 
         # Greater than or equals &gt;=
         # @var float
@@ -9223,7 +9264,6 @@ class KalturaSegmentRange(KalturaObjectBase):
         'id': getXmlNodeInt, 
         'systematicName': getXmlNodeText, 
         'name': getXmlNodeText, 
-        'multilingualName': (KalturaObjectFactory.createArray, 'KalturaTranslationToken'), 
         'gte': getXmlNodeFloat, 
         'gt': getXmlNodeFloat, 
         'lte': getXmlNodeFloat, 
@@ -9239,7 +9279,7 @@ class KalturaSegmentRange(KalturaObjectBase):
         kparams = KalturaObjectBase.toParams(self)
         kparams.put("objectType", "KalturaSegmentRange")
         kparams.addStringIfDefined("systematicName", self.systematicName)
-        kparams.addArrayIfDefined("multilingualName", self.multilingualName)
+        kparams.addStringIfDefined("name", self.name)
         kparams.addFloatIfDefined("gte", self.gte)
         kparams.addFloatIfDefined("gt", self.gt)
         kparams.addFloatIfDefined("lte", self.lte)
@@ -9259,11 +9299,8 @@ class KalturaSegmentRange(KalturaObjectBase):
     def getName(self):
         return self.name
 
-    def getMultilingualName(self):
-        return self.multilingualName
-
-    def setMultilingualName(self, newMultilingualName):
-        self.multilingualName = newMultilingualName
+    def setName(self, newName):
+        self.name = newName
 
     def getGte(self):
         return self.gte
@@ -34150,6 +34187,7 @@ class KalturaCoreClient(KalturaClientPlugin):
             'KalturaConfigurationGroupTagOrderBy': KalturaConfigurationGroupTagOrderBy,
             'KalturaConfigurationsOrderBy': KalturaConfigurationsOrderBy,
             'KalturaContentAction': KalturaContentAction,
+            'KalturaContentActionConditionLengthType': KalturaContentActionConditionLengthType,
             'KalturaContextType': KalturaContextType,
             'KalturaCountryOrderBy': KalturaCountryOrderBy,
             'KalturaCouponGroupType': KalturaCouponGroupType,
