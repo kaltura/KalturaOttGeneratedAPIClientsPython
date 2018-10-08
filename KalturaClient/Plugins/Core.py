@@ -42,7 +42,7 @@ from ..Base import (
     KalturaServiceBase,
 )
 
-API_VERSION = '5.0.3.21326'
+API_VERSION = '5.0.3.25204'
 
 ########## enums ##########
 # @package Kaltura
@@ -25772,7 +25772,8 @@ class KalturaUnifiedPaymentRenewal(KalturaObjectBase):
             price=NotImplemented,
             date=NotImplemented,
             unifiedPaymentId=NotImplemented,
-            entitlements=NotImplemented):
+            entitlements=NotImplemented,
+            userId=NotImplemented):
         KalturaObjectBase.__init__(self)
 
         # Price that is going to be paid on the renewal
@@ -25791,12 +25792,17 @@ class KalturaUnifiedPaymentRenewal(KalturaObjectBase):
         # @var array of KalturaEntitlementRenewalBase
         self.entitlements = entitlements
 
+        # User ID
+        # @var int
+        self.userId = userId
+
 
     PROPERTY_LOADERS = {
         'price': (KalturaObjectFactory.create, 'KalturaPrice'), 
         'date': getXmlNodeInt, 
         'unifiedPaymentId': getXmlNodeInt, 
         'entitlements': (KalturaObjectFactory.createArray, 'KalturaEntitlementRenewalBase'), 
+        'userId': getXmlNodeInt, 
     }
 
     def fromXml(self, node):
@@ -25810,6 +25816,7 @@ class KalturaUnifiedPaymentRenewal(KalturaObjectBase):
         kparams.addIntIfDefined("date", self.date)
         kparams.addIntIfDefined("unifiedPaymentId", self.unifiedPaymentId)
         kparams.addArrayIfDefined("entitlements", self.entitlements)
+        kparams.addIntIfDefined("userId", self.userId)
         return kparams
 
     def getPrice(self):
@@ -25835,6 +25842,12 @@ class KalturaUnifiedPaymentRenewal(KalturaObjectBase):
 
     def setEntitlements(self, newEntitlements):
         self.entitlements = newEntitlements
+
+    def getUserId(self):
+        return self.userId
+
+    def setUserId(self, newUserId):
+        self.userId = newUserId
 
 
 # @package Kaltura
@@ -27882,7 +27895,8 @@ class KalturaEntitlementRenewal(KalturaObjectBase):
             price=NotImplemented,
             date=NotImplemented,
             purchaseId=NotImplemented,
-            subscriptionId=NotImplemented):
+            subscriptionId=NotImplemented,
+            userId=NotImplemented):
         KalturaObjectBase.__init__(self)
 
         # Price that is going to be paid on the renewal
@@ -27901,12 +27915,17 @@ class KalturaEntitlementRenewal(KalturaObjectBase):
         # @var int
         self.subscriptionId = subscriptionId
 
+        # User ID
+        # @var int
+        self.userId = userId
+
 
     PROPERTY_LOADERS = {
         'price': (KalturaObjectFactory.create, 'KalturaPrice'), 
         'date': getXmlNodeInt, 
         'purchaseId': getXmlNodeInt, 
         'subscriptionId': getXmlNodeInt, 
+        'userId': getXmlNodeInt, 
     }
 
     def fromXml(self, node):
@@ -27920,6 +27939,7 @@ class KalturaEntitlementRenewal(KalturaObjectBase):
         kparams.addIntIfDefined("date", self.date)
         kparams.addIntIfDefined("purchaseId", self.purchaseId)
         kparams.addIntIfDefined("subscriptionId", self.subscriptionId)
+        kparams.addIntIfDefined("userId", self.userId)
         return kparams
 
     def getPrice(self):
@@ -27945,6 +27965,12 @@ class KalturaEntitlementRenewal(KalturaObjectBase):
 
     def setSubscriptionId(self, newSubscriptionId):
         self.subscriptionId = newSubscriptionId
+
+    def getUserId(self):
+        return self.userId
+
+    def setUserId(self, newUserId):
+        self.userId = newUserId
 
 
 # @package Kaltura
