@@ -42,7 +42,7 @@ from ..Base import (
     KalturaServiceBase,
 )
 
-API_VERSION = '5.0.3.14038'
+API_VERSION = '5.0.3.20304'
 
 ########## enums ##########
 # @package Kaltura
@@ -8433,6 +8433,7 @@ class KalturaSegmentationType(KalturaObjectBase):
 
         # Id of segmentation type
         # @var int
+        # @readonly
         self.id = id
 
         # Name of segmentation type
@@ -8467,7 +8468,6 @@ class KalturaSegmentationType(KalturaObjectBase):
     def toParams(self):
         kparams = KalturaObjectBase.toParams(self)
         kparams.put("objectType", "KalturaSegmentationType")
-        kparams.addIntIfDefined("id", self.id)
         kparams.addStringIfDefined("name", self.name)
         kparams.addStringIfDefined("description", self.description)
         kparams.addArrayIfDefined("conditions", self.conditions)
@@ -8476,9 +8476,6 @@ class KalturaSegmentationType(KalturaObjectBase):
 
     def getId(self):
         return self.id
-
-    def setId(self, newId):
-        self.id = newId
 
     def getName(self):
         return self.name
@@ -32931,7 +32928,7 @@ class KalturaSegmentationTypeService(KalturaServiceBase):
         KalturaServiceBase.__init__(self, client)
 
     def add(self, segmentationType):
-        """..."""
+        """Adds a new segmentation type to the system"""
 
         kparams = KalturaParams()
         kparams.addObjectIfDefined("segmentationType", segmentationType)
@@ -32953,7 +32950,7 @@ class KalturaSegmentationTypeService(KalturaServiceBase):
         return getXmlNodeBool(resultNode)
 
     def list(self, filter, pager = NotImplemented):
-        """..."""
+        """Lists all segmentation types in group"""
 
         kparams = KalturaParams()
         kparams.addObjectIfDefined("filter", filter)
@@ -32965,7 +32962,7 @@ class KalturaSegmentationTypeService(KalturaServiceBase):
         return KalturaObjectFactory.create(resultNode, 'KalturaSegmentationTypeListResponse')
 
     def update(self, segmentationTypeId, segmentationType):
-        """..."""
+        """Updates an existing segmentation type"""
 
         kparams = KalturaParams()
         kparams.addIntIfDefined("segmentationTypeId", segmentationTypeId);
