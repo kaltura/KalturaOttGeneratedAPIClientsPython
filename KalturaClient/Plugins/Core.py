@@ -42,7 +42,7 @@ from ..Base import (
     KalturaServiceBase,
 )
 
-API_VERSION = '5.0.3.42006'
+API_VERSION = '5.0.3.14284'
 
 ########## enums ##########
 # @package Kaltura
@@ -1341,7 +1341,8 @@ class KalturaPositionOwner(object):
 # @package Kaltura
 # @subpackage Client
 class KalturaPpvOrderBy(object):
-    NONE = "NONE"
+    NAME_ASC = "NAME_ASC"
+    NAME_DESC = "NAME_DESC"
 
     def __init__(self, value):
         self.value = value
