@@ -42,7 +42,7 @@ from ..Base import (
     KalturaServiceBase,
 )
 
-API_VERSION = '5.0.3.41999'
+API_VERSION = '5.0.3.21476'
 
 ########## enums ##########
 # @package Kaltura
@@ -34022,11 +34022,12 @@ class KalturaUserSegmentService(KalturaServiceBase):
         resultNode = self.client.doQueue()
         return KalturaObjectFactory.create(resultNode, 'KalturaUserSegment')
 
-    def delete(self, userId, segmentId):
+    def delete(self, userId, segmentationTypeId, segmentId):
         """Deletes a segment from a user"""
 
         kparams = KalturaParams()
         kparams.addStringIfDefined("userId", userId)
+        kparams.addIntIfDefined("segmentationTypeId", segmentationTypeId);
         kparams.addIntIfDefined("segmentId", segmentId);
         self.client.queueServiceActionCall("usersegment", "delete", "None", kparams)
         if self.client.isMultiRequest():
