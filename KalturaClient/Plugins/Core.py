@@ -42,7 +42,7 @@ from ..Base import (
     KalturaServiceBase,
 )
 
-API_VERSION = '5.0.3.42009'
+API_VERSION = '5.0.3.14741'
 
 ########## enums ##########
 # @package Kaltura
@@ -29501,7 +29501,8 @@ class KalturaAssetService(KalturaServiceBase):
         KalturaServiceBase.__init__(self, client)
 
     def add(self, asset):
-        """Add a new asset"""
+        """Add a new asset.
+                    For metas of type bool-&gt; use kalturaBoolValue, type number-&gt; KalturaDoubleValue, type date -&gt; KalturaLongValue, type string -&gt; KalturaStringValue"""
 
         kparams = KalturaParams()
         kparams.addObjectIfDefined("asset", asset)
@@ -29598,7 +29599,8 @@ class KalturaAssetService(KalturaServiceBase):
         return getXmlNodeBool(resultNode)
 
     def update(self, id, asset):
-        """update an existing asset"""
+        """update an existing asset.
+                    For metas of type bool-&gt; use kalturaBoolValue, type number-&gt; KalturaDoubleValue, type date -&gt; KalturaLongValue, type string -&gt; KalturaStringValue"""
 
         kparams = KalturaParams()
         kparams.addIntIfDefined("id", id);
