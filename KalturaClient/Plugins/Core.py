@@ -42,7 +42,7 @@ from ..Base import (
     KalturaServiceBase,
 )
 
-API_VERSION = '5.0.3.42000'
+API_VERSION = '5.0.3.42004'
 
 ########## enums ##########
 # @package Kaltura
@@ -9391,17 +9391,12 @@ class KalturaUserSegment(KalturaObjectBase):
 
     def __init__(self,
             segmentId=NotImplemented,
-            segmentationTypeId=NotImplemented,
             userId=NotImplemented):
         KalturaObjectBase.__init__(self)
 
         # Segment Id
         # @var int
         self.segmentId = segmentId
-
-        # Segmentation type Id
-        # @var int
-        self.segmentationTypeId = segmentationTypeId
 
         # User Id of segment
         # @var string
@@ -9410,7 +9405,6 @@ class KalturaUserSegment(KalturaObjectBase):
 
     PROPERTY_LOADERS = {
         'segmentId': getXmlNodeInt, 
-        'segmentationTypeId': getXmlNodeInt, 
         'userId': getXmlNodeText, 
     }
 
@@ -9422,7 +9416,6 @@ class KalturaUserSegment(KalturaObjectBase):
         kparams = KalturaObjectBase.toParams(self)
         kparams.put("objectType", "KalturaUserSegment")
         kparams.addIntIfDefined("segmentId", self.segmentId)
-        kparams.addIntIfDefined("segmentationTypeId", self.segmentationTypeId)
         kparams.addStringIfDefined("userId", self.userId)
         return kparams
 
@@ -9431,12 +9424,6 @@ class KalturaUserSegment(KalturaObjectBase):
 
     def setSegmentId(self, newSegmentId):
         self.segmentId = newSegmentId
-
-    def getSegmentationTypeId(self):
-        return self.segmentationTypeId
-
-    def setSegmentationTypeId(self, newSegmentationTypeId):
-        self.segmentationTypeId = newSegmentationTypeId
 
     def getUserId(self):
         return self.userId
@@ -22741,12 +22728,18 @@ class KalturaSegmentationTypeFilter(KalturaFilter):
     """Filter for segmentation types"""
 
     def __init__(self,
-            orderBy=NotImplemented):
+            orderBy=NotImplemented,
+            idIn=NotImplemented):
         KalturaFilter.__init__(self,
             orderBy)
 
+        # Comma separated segmentation types identifieridentifiers
+        # @var string
+        self.idIn = idIn
+
 
     PROPERTY_LOADERS = {
+        'idIn': getXmlNodeText, 
     }
 
     def fromXml(self, node):
@@ -22756,7 +22749,14 @@ class KalturaSegmentationTypeFilter(KalturaFilter):
     def toParams(self):
         kparams = KalturaFilter.toParams(self)
         kparams.put("objectType", "KalturaSegmentationTypeFilter")
+        kparams.addStringIfDefined("idIn", self.idIn)
         return kparams
+
+    def getIdIn(self):
+        return self.idIn
+
+    def setIdIn(self, newIdIn):
+        self.idIn = newIdIn
 
 
 # @package Kaltura
@@ -34507,12 +34507,11 @@ class KalturaUserSegmentService(KalturaServiceBase):
         resultNode = self.client.doQueue()
         return KalturaObjectFactory.create(resultNode, 'KalturaUserSegment')
 
-    def delete(self, userId, segmentationTypeId, segmentId):
+    def delete(self, userId, segmentId):
         """Deletes a segment from a user"""
 
         kparams = KalturaParams()
         kparams.addStringIfDefined("userId", userId)
-        kparams.addIntIfDefined("segmentationTypeId", segmentationTypeId);
         kparams.addIntIfDefined("segmentId", segmentId);
         self.client.queueServiceActionCall("usersegment", "delete", "None", kparams)
         if self.client.isMultiRequest():
