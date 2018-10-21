@@ -42,7 +42,7 @@ from ..Base import (
     KalturaServiceBase,
 )
 
-API_VERSION = '5.0.3.19982'
+API_VERSION = '5.0.3.42014'
 
 ########## enums ##########
 # @package Kaltura
@@ -8900,6 +8900,36 @@ class KalturaUserDataCondition(KalturaBaseSegmentCondition):
 
     def setValue(self, newValue):
         self.value = newValue
+
+
+# @package Kaltura
+# @subpackage Client
+class KalturaDummyValue(KalturaBaseSegmentValue):
+    def __init__(self,
+            id=NotImplemented):
+        KalturaBaseSegmentValue.__init__(self)
+
+        # Id of segment
+        # @var int
+        # @readonly
+        self.id = id
+
+
+    PROPERTY_LOADERS = {
+        'id': getXmlNodeInt, 
+    }
+
+    def fromXml(self, node):
+        KalturaBaseSegmentValue.fromXml(self, node)
+        self.fromXmlImpl(node, KalturaDummyValue.PROPERTY_LOADERS)
+
+    def toParams(self):
+        kparams = KalturaBaseSegmentValue.toParams(self)
+        kparams.put("objectType", "KalturaDummyValue")
+        return kparams
+
+    def getId(self):
+        return self.id
 
 
 # @package Kaltura
@@ -34927,6 +34957,7 @@ class KalturaCoreClient(KalturaClientPlugin):
             'KalturaContentActionCondition': KalturaContentActionCondition,
             'KalturaContentScoreCondition': KalturaContentScoreCondition,
             'KalturaUserDataCondition': KalturaUserDataCondition,
+            'KalturaDummyValue': KalturaDummyValue,
             'KalturaSegmentSource': KalturaSegmentSource,
             'KalturaSegmentValue': KalturaSegmentValue,
             'KalturaSegmentValues': KalturaSegmentValues,
