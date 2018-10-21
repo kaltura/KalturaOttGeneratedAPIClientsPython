@@ -42,7 +42,7 @@ from ..Base import (
     KalturaServiceBase,
 )
 
-API_VERSION = '5.0.3.17186'
+API_VERSION = '5.0.3.17410'
 
 ########## enums ##########
 # @package Kaltura
@@ -33461,7 +33461,7 @@ class KalturaSegmentationTypeService(KalturaServiceBase):
         resultNode = self.client.doQueue()
         return getXmlNodeBool(resultNode)
 
-    def list(self, filter, pager = NotImplemented):
+    def list(self, filter = NotImplemented, pager = NotImplemented):
         """Lists all segmentation types in group"""
 
         kparams = KalturaParams()
