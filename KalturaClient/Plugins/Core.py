@@ -42,7 +42,7 @@ from ..Base import (
     KalturaServiceBase,
 )
 
-API_VERSION = '5.0.3.15088'
+API_VERSION = '5.0.3.25616'
 
 ########## enums ##########
 # @package Kaltura
@@ -8434,7 +8434,9 @@ class KalturaSegmentationType(KalturaObjectBase):
             name=NotImplemented,
             description=NotImplemented,
             conditions=NotImplemented,
-            value=NotImplemented):
+            value=NotImplemented,
+            createDate=NotImplemented,
+            affectsContentOrdering=NotImplemented):
         KalturaObjectBase.__init__(self)
 
         # Id of segmentation type
@@ -8458,6 +8460,15 @@ class KalturaSegmentationType(KalturaObjectBase):
         # @var KalturaBaseSegmentValue
         self.value = value
 
+        # Create date of segmentation type
+        # @var int
+        # @readonly
+        self.createDate = createDate
+
+        # Do the segments of this type affect content ordering of channels and searches
+        # @var bool
+        self.affectsContentOrdering = affectsContentOrdering
+
 
     PROPERTY_LOADERS = {
         'id': getXmlNodeInt, 
@@ -8465,6 +8476,8 @@ class KalturaSegmentationType(KalturaObjectBase):
         'description': getXmlNodeText, 
         'conditions': (KalturaObjectFactory.createArray, 'KalturaBaseSegmentCondition'), 
         'value': (KalturaObjectFactory.create, 'KalturaBaseSegmentValue'), 
+        'createDate': getXmlNodeInt, 
+        'affectsContentOrdering': getXmlNodeBool, 
     }
 
     def fromXml(self, node):
@@ -8478,6 +8491,7 @@ class KalturaSegmentationType(KalturaObjectBase):
         kparams.addStringIfDefined("description", self.description)
         kparams.addArrayIfDefined("conditions", self.conditions)
         kparams.addObjectIfDefined("value", self.value)
+        kparams.addBoolIfDefined("affectsContentOrdering", self.affectsContentOrdering)
         return kparams
 
     def getId(self):
@@ -8506,6 +8520,15 @@ class KalturaSegmentationType(KalturaObjectBase):
 
     def setValue(self, newValue):
         self.value = newValue
+
+    def getCreateDate(self):
+        return self.createDate
+
+    def getAffectsContentOrdering(self):
+        return self.affectsContentOrdering
+
+    def setAffectsContentOrdering(self, newAffectsContentOrdering):
+        self.affectsContentOrdering = newAffectsContentOrdering
 
 
 # @package Kaltura
@@ -8547,125 +8570,71 @@ class KalturaSegmentationTypeListResponse(KalturaListResponse):
 
 # @package Kaltura
 # @subpackage Client
-class KalturaMonetizationCondition(KalturaObjectBase):
-    """Defines a singular monetization condition"""
-
-    def __init__(self,
-            type=NotImplemented,
-            minimumPrice=NotImplemented,
-            multiplier=NotImplemented):
-        KalturaObjectBase.__init__(self)
-
-        # Purchase type
-        # @var KalturaMonetizationType
-        self.type = type
-
-        # Minimum price of purchase
-        # @var int
-        self.minimumPrice = minimumPrice
-
-        # Score multiplier
-        # @var int
-        self.multiplier = multiplier
-
-
-    PROPERTY_LOADERS = {
-        'type': (KalturaEnumsFactory.createString, "KalturaMonetizationType"), 
-        'minimumPrice': getXmlNodeInt, 
-        'multiplier': getXmlNodeInt, 
-    }
-
-    def fromXml(self, node):
-        KalturaObjectBase.fromXml(self, node)
-        self.fromXmlImpl(node, KalturaMonetizationCondition.PROPERTY_LOADERS)
-
-    def toParams(self):
-        kparams = KalturaObjectBase.toParams(self)
-        kparams.put("objectType", "KalturaMonetizationCondition")
-        kparams.addStringEnumIfDefined("type", self.type)
-        kparams.addIntIfDefined("minimumPrice", self.minimumPrice)
-        kparams.addIntIfDefined("multiplier", self.multiplier)
-        return kparams
-
-    def getType(self):
-        return self.type
-
-    def setType(self, newType):
-        self.type = newType
-
-    def getMinimumPrice(self):
-        return self.minimumPrice
-
-    def setMinimumPrice(self, newMinimumPrice):
-        self.minimumPrice = newMinimumPrice
-
-    def getMultiplier(self):
-        return self.multiplier
-
-    def setMultiplier(self, newMultiplier):
-        self.multiplier = newMultiplier
-
-
-# @package Kaltura
-# @subpackage Client
-class KalturaScoredMonetizationCondition(KalturaBaseSegmentCondition):
+class KalturaMonetizationCondition(KalturaBaseSegmentCondition):
     """Defines a condition which is essentially a combination of several monetization-based actions, each has their own score multiplier"""
 
     def __init__(self,
-            minScore=NotImplemented,
-            maxScore=NotImplemented,
+            minValue=NotImplemented,
+            maxValue=NotImplemented,
             days=NotImplemented,
-            actions=NotImplemented):
+            type=NotImplemented,
+            operator=NotImplemented):
         KalturaBaseSegmentCondition.__init__(self)
 
-        # The minimum score to be met
+        # The minimum value to be met
         # @var int
-        self.minScore = minScore
+        self.minValue = minValue
 
-        # The maximum score to be met
+        # The maximum value to be met
         # @var int
-        self.maxScore = maxScore
+        self.maxValue = maxValue
 
         # How many days back should the actions be considered
         # @var int
         self.days = days
 
-        # List of the actions that consist the condition
-        # @var array of KalturaMonetizationCondition
-        self.actions = actions
+        # Purchase type
+        # @var KalturaMonetizationType
+        self.type = type
+
+        # Mathermtical operator to calculate
+        # @var KalturaMathemticalOperatorType
+        self.operator = operator
 
 
     PROPERTY_LOADERS = {
-        'minScore': getXmlNodeInt, 
-        'maxScore': getXmlNodeInt, 
+        'minValue': getXmlNodeInt, 
+        'maxValue': getXmlNodeInt, 
         'days': getXmlNodeInt, 
-        'actions': (KalturaObjectFactory.createArray, 'KalturaMonetizationCondition'), 
+        'type': (KalturaEnumsFactory.createString, "KalturaMonetizationType"), 
+        'operator': (KalturaEnumsFactory.createString, "KalturaMathemticalOperatorType"), 
     }
 
     def fromXml(self, node):
         KalturaBaseSegmentCondition.fromXml(self, node)
-        self.fromXmlImpl(node, KalturaScoredMonetizationCondition.PROPERTY_LOADERS)
+        self.fromXmlImpl(node, KalturaMonetizationCondition.PROPERTY_LOADERS)
 
     def toParams(self):
         kparams = KalturaBaseSegmentCondition.toParams(self)
-        kparams.put("objectType", "KalturaScoredMonetizationCondition")
-        kparams.addIntIfDefined("minScore", self.minScore)
-        kparams.addIntIfDefined("maxScore", self.maxScore)
+        kparams.put("objectType", "KalturaMonetizationCondition")
+        kparams.addIntIfDefined("minValue", self.minValue)
+        kparams.addIntIfDefined("maxValue", self.maxValue)
         kparams.addIntIfDefined("days", self.days)
-        kparams.addArrayIfDefined("actions", self.actions)
+        kparams.addStringEnumIfDefined("type", self.type)
+        kparams.addStringEnumIfDefined("operator", self.operator)
         return kparams
 
-    def getMinScore(self):
-        return self.minScore
+    def getMinValue(self):
+        return self.minValue
 
-    def setMinScore(self, newMinScore):
-        self.minScore = newMinScore
+    def setMinValue(self, newMinValue):
+        self.minValue = newMinValue
 
-    def getMaxScore(self):
-        return self.maxScore
+    def getMaxValue(self):
+        return self.maxValue
 
-    def setMaxScore(self, newMaxScore):
-        self.maxScore = newMaxScore
+    def setMaxValue(self, newMaxValue):
+        self.maxValue = newMaxValue
 
     def getDays(self):
         return self.days
@@ -8673,11 +8642,17 @@ class KalturaScoredMonetizationCondition(KalturaBaseSegmentCondition):
     def setDays(self, newDays):
         self.days = newDays
 
-    def getActions(self):
-        return self.actions
+    def getType(self):
+        return self.type
 
-    def setActions(self, newActions):
-        self.actions = newActions
+    def setType(self, newType):
+        self.type = newType
+
+    def getOperator(self):
+        return self.operator
+
+    def setOperator(self, newOperator):
+        self.operator = newOperator
 
 
 # @package Kaltura
@@ -34953,7 +34928,6 @@ class KalturaCoreClient(KalturaClientPlugin):
             'KalturaSegmentationType': KalturaSegmentationType,
             'KalturaSegmentationTypeListResponse': KalturaSegmentationTypeListResponse,
             'KalturaMonetizationCondition': KalturaMonetizationCondition,
-            'KalturaScoredMonetizationCondition': KalturaScoredMonetizationCondition,
             'KalturaContentActionCondition': KalturaContentActionCondition,
             'KalturaContentScoreCondition': KalturaContentScoreCondition,
             'KalturaUserDataCondition': KalturaUserDataCondition,
