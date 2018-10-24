@@ -42,7 +42,7 @@ from ..Base import (
     KalturaServiceBase,
 )
 
-API_VERSION = '5.0.3.42010'
+API_VERSION = '5.0.3.42022'
 
 ########## enums ##########
 # @package Kaltura
@@ -5235,7 +5235,8 @@ class KalturaMediaFile(KalturaAssetFile):
             orderNum=NotImplemented,
             outputProtecationLevel=NotImplemented,
             cdnAdapaterProfileId=NotImplemented,
-            status=NotImplemented):
+            status=NotImplemented,
+            catalogEndDate=NotImplemented):
         KalturaAssetFile.__init__(self,
             url)
 
@@ -5321,6 +5322,10 @@ class KalturaMediaFile(KalturaAssetFile):
         # @var bool
         self.status = status
 
+        # Catalog end date
+        # @var int
+        self.catalogEndDate = catalogEndDate
+
 
     PROPERTY_LOADERS = {
         'assetId': getXmlNodeInt, 
@@ -5343,6 +5348,7 @@ class KalturaMediaFile(KalturaAssetFile):
         'outputProtecationLevel': getXmlNodeText, 
         'cdnAdapaterProfileId': getXmlNodeInt, 
         'status': getXmlNodeBool, 
+        'catalogEndDate': getXmlNodeInt, 
     }
 
     def fromXml(self, node):
@@ -5370,6 +5376,7 @@ class KalturaMediaFile(KalturaAssetFile):
         kparams.addStringIfDefined("outputProtecationLevel", self.outputProtecationLevel)
         kparams.addIntIfDefined("cdnAdapaterProfileId", self.cdnAdapaterProfileId)
         kparams.addBoolIfDefined("status", self.status)
+        kparams.addIntIfDefined("catalogEndDate", self.catalogEndDate)
         return kparams
 
     def getAssetId(self):
@@ -5485,6 +5492,12 @@ class KalturaMediaFile(KalturaAssetFile):
 
     def setStatus(self, newStatus):
         self.status = newStatus
+
+    def getCatalogEndDate(self):
+        return self.catalogEndDate
+
+    def setCatalogEndDate(self, newCatalogEndDate):
+        self.catalogEndDate = newCatalogEndDate
 
 
 # @package Kaltura
@@ -5803,6 +5816,7 @@ class KalturaPlaybackSource(KalturaMediaFile):
             outputProtecationLevel=NotImplemented,
             cdnAdapaterProfileId=NotImplemented,
             status=NotImplemented,
+            catalogEndDate=NotImplemented,
             format=NotImplemented,
             protocols=NotImplemented,
             drm=NotImplemented):
@@ -5827,7 +5841,8 @@ class KalturaPlaybackSource(KalturaMediaFile):
             orderNum,
             outputProtecationLevel,
             cdnAdapaterProfileId,
-            status)
+            status,
+            catalogEndDate)
 
         # Source format according to delivery profile streamer type (applehttp, mpegdash etc.)
         # @var string
@@ -8435,8 +8450,7 @@ class KalturaSegmentationType(KalturaObjectBase):
             description=NotImplemented,
             conditions=NotImplemented,
             value=NotImplemented,
-            createDate=NotImplemented,
-            affectsContentOrdering=NotImplemented):
+            createDate=NotImplemented):
         KalturaObjectBase.__init__(self)
 
         # Id of segmentation type
@@ -8465,10 +8479,6 @@ class KalturaSegmentationType(KalturaObjectBase):
         # @readonly
         self.createDate = createDate
 
-        # Do the segments of this type affect content ordering of channels and searches
-        # @var bool
-        self.affectsContentOrdering = affectsContentOrdering
-
 
     PROPERTY_LOADERS = {
         'id': getXmlNodeInt, 
@@ -8477,7 +8487,6 @@ class KalturaSegmentationType(KalturaObjectBase):
         'conditions': (KalturaObjectFactory.createArray, 'KalturaBaseSegmentCondition'), 
         'value': (KalturaObjectFactory.create, 'KalturaBaseSegmentValue'), 
         'createDate': getXmlNodeInt, 
-        'affectsContentOrdering': getXmlNodeBool, 
     }
 
     def fromXml(self, node):
@@ -8491,7 +8500,6 @@ class KalturaSegmentationType(KalturaObjectBase):
         kparams.addStringIfDefined("description", self.description)
         kparams.addArrayIfDefined("conditions", self.conditions)
         kparams.addObjectIfDefined("value", self.value)
-        kparams.addBoolIfDefined("affectsContentOrdering", self.affectsContentOrdering)
         return kparams
 
     def getId(self):
@@ -8523,12 +8531,6 @@ class KalturaSegmentationType(KalturaObjectBase):
 
     def getCreateDate(self):
         return self.createDate
-
-    def getAffectsContentOrdering(self):
-        return self.affectsContentOrdering
-
-    def setAffectsContentOrdering(self, newAffectsContentOrdering):
-        self.affectsContentOrdering = newAffectsContentOrdering
 
 
 # @package Kaltura
