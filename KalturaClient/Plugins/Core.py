@@ -42,7 +42,7 @@ from ..Base import (
     KalturaServiceBase,
 )
 
-API_VERSION = '5.0.3.41996'
+API_VERSION = '5.0.3.24418'
 
 ########## enums ##########
 # @package Kaltura
@@ -1643,6 +1643,19 @@ class KalturaSeriesRecordingOrderBy(object):
 # @subpackage Client
 class KalturaSeriesReminderOrderBy(object):
     NONE = "NONE"
+
+    def __init__(self, value):
+        self.value = value
+
+    def getValue(self):
+        return self.value
+
+# @package Kaltura
+# @subpackage Client
+class KalturaSkipOptions(object):
+    NO = "No"
+    PREVIOUS = "Previous"
+    ANY = "Any"
 
     def __init__(self, value):
         self.value = value
@@ -20631,7 +20644,9 @@ class KalturaRequestConfiguration(KalturaObjectBase):
             language=NotImplemented,
             currency=NotImplemented,
             ks=NotImplemented,
-            responseProfile=NotImplemented):
+            responseProfile=NotImplemented,
+            abortAllOnError=NotImplemented,
+            skipOnOrror=NotImplemented):
         KalturaObjectBase.__init__(self)
 
         # Impersonated partner id
@@ -20658,6 +20673,14 @@ class KalturaRequestConfiguration(KalturaObjectBase):
         # @var KalturaBaseResponseProfile
         self.responseProfile = responseProfile
 
+        # Abort all following requests if current request has an error
+        # @var bool
+        self.abortAllOnError = abortAllOnError
+
+        # Skip current request according to skip option
+        # @var KalturaSkipOptions
+        self.skipOnOrror = skipOnOrror
+
 
     PROPERTY_LOADERS = {
         'partnerId': getXmlNodeInt, 
@@ -20666,6 +20689,8 @@ class KalturaRequestConfiguration(KalturaObjectBase):
         'currency': getXmlNodeText, 
         'ks': getXmlNodeText, 
         'responseProfile': (KalturaObjectFactory.create, 'KalturaBaseResponseProfile'), 
+        'abortAllOnError': getXmlNodeBool, 
+        'skipOnOrror': (KalturaEnumsFactory.createString, "KalturaSkipOptions"), 
     }
 
     def fromXml(self, node):
@@ -20681,6 +20706,8 @@ class KalturaRequestConfiguration(KalturaObjectBase):
         kparams.addStringIfDefined("currency", self.currency)
         kparams.addStringIfDefined("ks", self.ks)
         kparams.addObjectIfDefined("responseProfile", self.responseProfile)
+        kparams.addBoolIfDefined("abortAllOnError", self.abortAllOnError)
+        kparams.addStringEnumIfDefined("skipOnOrror", self.skipOnOrror)
         return kparams
 
     def getPartnerId(self):
@@ -20718,6 +20745,18 @@ class KalturaRequestConfiguration(KalturaObjectBase):
 
     def setResponseProfile(self, newResponseProfile):
         self.responseProfile = newResponseProfile
+
+    def getAbortAllOnError(self):
+        return self.abortAllOnError
+
+    def setAbortAllOnError(self, newAbortAllOnError):
+        self.abortAllOnError = newAbortAllOnError
+
+    def getSkipOnOrror(self):
+        return self.skipOnOrror
+
+    def setSkipOnOrror(self, newSkipOnOrror):
+        self.skipOnOrror = newSkipOnOrror
 
 
 # @package Kaltura
@@ -34787,6 +34826,7 @@ class KalturaCoreClient(KalturaClientPlugin):
             'KalturaSearchHistoryOrderBy': KalturaSearchHistoryOrderBy,
             'KalturaSeriesRecordingOrderBy': KalturaSeriesRecordingOrderBy,
             'KalturaSeriesReminderOrderBy': KalturaSeriesReminderOrderBy,
+            'KalturaSkipOptions': KalturaSkipOptions,
             'KalturaSocialActionOrderBy': KalturaSocialActionOrderBy,
             'KalturaSocialActionPrivacy': KalturaSocialActionPrivacy,
             'KalturaSocialActionType': KalturaSocialActionType,
