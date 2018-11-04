@@ -42,7 +42,7 @@ from ..Base import (
     KalturaServiceBase,
 )
 
-API_VERSION = '5.0.3.42004'
+API_VERSION = '5.0.3.16574'
 
 ########## enums ##########
 # @package Kaltura
@@ -16818,7 +16818,9 @@ class KalturaBusinessModuleRule(KalturaRule):
             name=NotImplemented,
             description=NotImplemented,
             conditions=NotImplemented,
-            actions=NotImplemented):
+            actions=NotImplemented,
+            createDate=NotImplemented,
+            updateDate=NotImplemented):
         KalturaRule.__init__(self,
             id,
             name,
@@ -16832,10 +16834,22 @@ class KalturaBusinessModuleRule(KalturaRule):
         # @var array of KalturaApplyDiscountModuleAction
         self.actions = actions
 
+        # Create date of the rule
+        # @var int
+        # @readonly
+        self.createDate = createDate
+
+        # Update date of the rule
+        # @var int
+        # @readonly
+        self.updateDate = updateDate
+
 
     PROPERTY_LOADERS = {
         'conditions': (KalturaObjectFactory.createArray, 'KalturaCondition'), 
         'actions': (KalturaObjectFactory.createArray, 'KalturaApplyDiscountModuleAction'), 
+        'createDate': getXmlNodeInt, 
+        'updateDate': getXmlNodeInt, 
     }
 
     def fromXml(self, node):
@@ -16860,6 +16874,12 @@ class KalturaBusinessModuleRule(KalturaRule):
 
     def setActions(self, newActions):
         self.actions = newActions
+
+    def getCreateDate(self):
+        return self.createDate
+
+    def getUpdateDate(self):
+        return self.updateDate
 
 
 # @package Kaltura
@@ -30087,6 +30107,17 @@ class KalturaBusinessModuleRuleService(KalturaServiceBase):
         if self.client.isMultiRequest():
             return self.client.getMultiRequestResult()
         resultNode = self.client.doQueue()
+
+    def get(self, id):
+        """Get business module rule by ID"""
+
+        kparams = KalturaParams()
+        kparams.addIntIfDefined("id", id);
+        self.client.queueServiceActionCall("businessmodulerule", "get", "KalturaBusinessModuleRule", kparams)
+        if self.client.isMultiRequest():
+            return self.client.getMultiRequestResult()
+        resultNode = self.client.doQueue()
+        return KalturaObjectFactory.create(resultNode, 'KalturaBusinessModuleRule')
 
     def list(self, filter = NotImplemented):
         """Get the list of business module rules for the partner"""
