@@ -42,7 +42,7 @@ from ..Base import (
     KalturaServiceBase,
 )
 
-API_VERSION = '5.0.3.42015'
+API_VERSION = '5.0.3.17592'
 
 ########## enums ##########
 # @package Kaltura
@@ -12195,7 +12195,8 @@ class KalturaChannel(KalturaBaseChannel):
             isActive=NotImplemented,
             orderBy=NotImplemented,
             createDate=NotImplemented,
-            updateDate=NotImplemented):
+            updateDate=NotImplemented,
+            supportSegmentBasedOrdering=NotImplemented):
         KalturaBaseChannel.__init__(self,
             id)
 
@@ -12247,6 +12248,10 @@ class KalturaChannel(KalturaBaseChannel):
         # @readonly
         self.updateDate = updateDate
 
+        # Specifies whether the assets in this channel will be ordered based on their match to the user&#39;s segments (see BEO-5524)
+        # @var bool
+        self.supportSegmentBasedOrdering = supportSegmentBasedOrdering
+
 
     PROPERTY_LOADERS = {
         'name': getXmlNodeText, 
@@ -12260,6 +12265,7 @@ class KalturaChannel(KalturaBaseChannel):
         'orderBy': (KalturaObjectFactory.create, 'KalturaChannelOrder'), 
         'createDate': getXmlNodeInt, 
         'updateDate': getXmlNodeInt, 
+        'supportSegmentBasedOrdering': getXmlNodeBool, 
     }
 
     def fromXml(self, node):
@@ -12276,6 +12282,7 @@ class KalturaChannel(KalturaBaseChannel):
         kparams.addStringIfDefined("oldDescription", self.oldDescription)
         kparams.addBoolIfDefined("isActive", self.isActive)
         kparams.addObjectIfDefined("orderBy", self.orderBy)
+        kparams.addBoolIfDefined("supportSegmentBasedOrdering", self.supportSegmentBasedOrdering)
         return kparams
 
     def getName(self):
@@ -12332,6 +12339,12 @@ class KalturaChannel(KalturaBaseChannel):
     def getUpdateDate(self):
         return self.updateDate
 
+    def getSupportSegmentBasedOrdering(self):
+        return self.supportSegmentBasedOrdering
+
+    def setSupportSegmentBasedOrdering(self, newSupportSegmentBasedOrdering):
+        self.supportSegmentBasedOrdering = newSupportSegmentBasedOrdering
+
 
 # @package Kaltura
 # @subpackage Client
@@ -12349,6 +12362,7 @@ class KalturaDynamicChannel(KalturaChannel):
             orderBy=NotImplemented,
             createDate=NotImplemented,
             updateDate=NotImplemented,
+            supportSegmentBasedOrdering=NotImplemented,
             kSql=NotImplemented,
             assetTypes=NotImplemented,
             groupBy=NotImplemented):
@@ -12364,7 +12378,8 @@ class KalturaDynamicChannel(KalturaChannel):
             isActive,
             orderBy,
             createDate,
-            updateDate)
+            updateDate,
+            supportSegmentBasedOrdering)
 
         # Search assets using dynamic criteria. Provided collection of nested expressions with key, comparison operators, value, and logical conjunction.
         #             Possible keys: any Tag or Meta defined in the system and the following reserved keys: start_date, end_date. 
@@ -12446,6 +12461,7 @@ class KalturaManualChannel(KalturaChannel):
             orderBy=NotImplemented,
             createDate=NotImplemented,
             updateDate=NotImplemented,
+            supportSegmentBasedOrdering=NotImplemented,
             mediaIds=NotImplemented):
         KalturaChannel.__init__(self,
             id,
@@ -12459,7 +12475,8 @@ class KalturaManualChannel(KalturaChannel):
             isActive,
             orderBy,
             createDate,
-            updateDate)
+            updateDate,
+            supportSegmentBasedOrdering)
 
         # A list of comma separated media ids associated with this channel, according to the order of the medias in the channel.
         # @var string
