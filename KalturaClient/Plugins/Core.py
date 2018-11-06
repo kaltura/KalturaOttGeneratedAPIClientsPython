@@ -42,7 +42,7 @@ from ..Base import (
     KalturaServiceBase,
 )
 
-API_VERSION = '5.0.3.17592'
+API_VERSION = '5.0.3.25438'
 
 ########## enums ##########
 # @package Kaltura
@@ -20683,7 +20683,7 @@ class KalturaRequestConfiguration(KalturaObjectBase):
             ks=NotImplemented,
             responseProfile=NotImplemented,
             abortAllOnError=NotImplemented,
-            skipOnOrror=NotImplemented):
+            skipOnError=NotImplemented):
         KalturaObjectBase.__init__(self)
 
         # Impersonated partner id
@@ -20716,7 +20716,7 @@ class KalturaRequestConfiguration(KalturaObjectBase):
 
         # Skip current request according to skip option
         # @var KalturaSkipOptions
-        self.skipOnOrror = skipOnOrror
+        self.skipOnError = skipOnError
 
 
     PROPERTY_LOADERS = {
@@ -20727,7 +20727,7 @@ class KalturaRequestConfiguration(KalturaObjectBase):
         'ks': getXmlNodeText, 
         'responseProfile': (KalturaObjectFactory.create, 'KalturaBaseResponseProfile'), 
         'abortAllOnError': getXmlNodeBool, 
-        'skipOnOrror': (KalturaEnumsFactory.createString, "KalturaSkipOptions"), 
+        'skipOnError': (KalturaEnumsFactory.createString, "KalturaSkipOptions"), 
     }
 
     def fromXml(self, node):
@@ -20744,7 +20744,7 @@ class KalturaRequestConfiguration(KalturaObjectBase):
         kparams.addStringIfDefined("ks", self.ks)
         kparams.addObjectIfDefined("responseProfile", self.responseProfile)
         kparams.addBoolIfDefined("abortAllOnError", self.abortAllOnError)
-        kparams.addStringEnumIfDefined("skipOnOrror", self.skipOnOrror)
+        kparams.addStringEnumIfDefined("skipOnError", self.skipOnError)
         return kparams
 
     def getPartnerId(self):
@@ -20789,11 +20789,11 @@ class KalturaRequestConfiguration(KalturaObjectBase):
     def setAbortAllOnError(self, newAbortAllOnError):
         self.abortAllOnError = newAbortAllOnError
 
-    def getSkipOnOrror(self):
-        return self.skipOnOrror
+    def getSkipOnError(self):
+        return self.skipOnError
 
-    def setSkipOnOrror(self, newSkipOnOrror):
-        self.skipOnOrror = newSkipOnOrror
+    def setSkipOnError(self, newSkipOnError):
+        self.skipOnError = newSkipOnError
 
 
 # @package Kaltura
