@@ -42,7 +42,7 @@ from ..Base import (
     KalturaServiceBase,
 )
 
-API_VERSION = '5.0.3.42006'
+API_VERSION = '5.0.3.42007'
 
 ########## enums ##########
 # @package Kaltura
@@ -8463,7 +8463,8 @@ class KalturaSegmentationType(KalturaObjectBase):
             description=NotImplemented,
             conditions=NotImplemented,
             value=NotImplemented,
-            createDate=NotImplemented):
+            createDate=NotImplemented,
+            version=NotImplemented):
         KalturaObjectBase.__init__(self)
 
         # Id of segmentation type
@@ -8492,6 +8493,11 @@ class KalturaSegmentationType(KalturaObjectBase):
         # @readonly
         self.createDate = createDate
 
+        # Segmentation type version
+        # @var int
+        # @readonly
+        self.version = version
+
 
     PROPERTY_LOADERS = {
         'id': getXmlNodeInt, 
@@ -8500,6 +8506,7 @@ class KalturaSegmentationType(KalturaObjectBase):
         'conditions': (KalturaObjectFactory.createArray, 'KalturaBaseSegmentCondition'), 
         'value': (KalturaObjectFactory.create, 'KalturaBaseSegmentValue'), 
         'createDate': getXmlNodeInt, 
+        'version': getXmlNodeInt, 
     }
 
     def fromXml(self, node):
@@ -8544,6 +8551,9 @@ class KalturaSegmentationType(KalturaObjectBase):
 
     def getCreateDate(self):
         return self.createDate
+
+    def getVersion(self):
+        return self.version
 
 
 # @package Kaltura
