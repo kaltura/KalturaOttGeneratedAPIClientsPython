@@ -42,7 +42,7 @@ from ..Base import (
     KalturaServiceBase,
 )
 
-API_VERSION = '5.0.3.18238'
+API_VERSION = '5.0.3.42016'
 
 ########## enums ##########
 # @package Kaltura
@@ -27928,7 +27928,6 @@ class KalturaHousehold(KalturaObjectBase):
 
         # Household external identifier
         # @var string
-        # @insertonly
         self.externalId = externalId
 
         # Household limitation module identifier
@@ -30392,7 +30391,7 @@ class KalturaCollectionService(KalturaServiceBase):
     def __init__(self, client = None):
         KalturaServiceBase.__init__(self, client)
 
-    def list(self, filter):
+    def list(self, filter = NotImplemented):
         """Returns a list of subscriptions requested by Subscription ID or file ID"""
 
         kparams = KalturaParams()
