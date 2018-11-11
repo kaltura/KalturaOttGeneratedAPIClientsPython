@@ -42,7 +42,7 @@ from ..Base import (
     KalturaServiceBase,
 )
 
-API_VERSION = '5.0.3.42017'
+API_VERSION = '5.0.3.42021'
 
 ########## enums ##########
 # @package Kaltura
@@ -30391,11 +30391,12 @@ class KalturaCollectionService(KalturaServiceBase):
     def __init__(self, client = None):
         KalturaServiceBase.__init__(self, client)
 
-    def list(self, filter = NotImplemented):
+    def list(self, filter = NotImplemented, pager = NotImplemented):
         """Returns a list of subscriptions requested by Subscription ID or file ID"""
 
         kparams = KalturaParams()
         kparams.addObjectIfDefined("filter", filter)
+        kparams.addObjectIfDefined("pager", pager)
         self.client.queueServiceActionCall("collection", "list", "KalturaCollectionListResponse", kparams)
         if self.client.isMultiRequest():
             return self.client.getMultiRequestResult()
@@ -33967,11 +33968,12 @@ class KalturaSubscriptionService(KalturaServiceBase):
     def __init__(self, client = None):
         KalturaServiceBase.__init__(self, client)
 
-    def list(self, filter):
+    def list(self, filter = NotImplemented, pager = NotImplemented):
         """Returns a list of subscriptions requested by Subscription ID or file ID"""
 
         kparams = KalturaParams()
         kparams.addObjectIfDefined("filter", filter)
+        kparams.addObjectIfDefined("pager", pager)
         self.client.queueServiceActionCall("subscription", "list", "KalturaSubscriptionListResponse", kparams)
         if self.client.isMultiRequest():
             return self.client.getMultiRequestResult()
