@@ -42,7 +42,7 @@ from ..Base import (
     KalturaServiceBase,
 )
 
-API_VERSION = '5.0.3.42021'
+API_VERSION = '5.0.3.42027'
 
 ########## enums ##########
 # @package Kaltura
@@ -9132,7 +9132,8 @@ class KalturaMonetizationSource(KalturaSegmentSource):
 
     def __init__(self,
             type=NotImplemented,
-            operator=NotImplemented):
+            operator=NotImplemented,
+            days=NotImplemented):
         KalturaSegmentSource.__init__(self)
 
         # Purchase type
@@ -9143,10 +9144,15 @@ class KalturaMonetizationSource(KalturaSegmentSource):
         # @var KalturaMathemticalOperatorType
         self.operator = operator
 
+        # Days to consider when checking the users&#39; purchaes
+        # @var int
+        self.days = days
+
 
     PROPERTY_LOADERS = {
         'type': (KalturaEnumsFactory.createString, "KalturaMonetizationType"), 
         'operator': (KalturaEnumsFactory.createString, "KalturaMathemticalOperatorType"), 
+        'days': getXmlNodeInt, 
     }
 
     def fromXml(self, node):
@@ -9158,6 +9164,7 @@ class KalturaMonetizationSource(KalturaSegmentSource):
         kparams.put("objectType", "KalturaMonetizationSource")
         kparams.addStringEnumIfDefined("type", self.type)
         kparams.addStringEnumIfDefined("operator", self.operator)
+        kparams.addIntIfDefined("days", self.days)
         return kparams
 
     def getType(self):
@@ -9171,6 +9178,12 @@ class KalturaMonetizationSource(KalturaSegmentSource):
 
     def setOperator(self, newOperator):
         self.operator = newOperator
+
+    def getDays(self):
+        return self.days
+
+    def setDays(self, newDays):
+        self.days = newDays
 
 
 # @package Kaltura
