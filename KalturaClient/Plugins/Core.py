@@ -42,7 +42,7 @@ from ..Base import (
     KalturaServiceBase,
 )
 
-API_VERSION = '5.0.3.42025'
+API_VERSION = '5.0.3.17909'
 
 ########## enums ##########
 # @package Kaltura
@@ -8764,7 +8764,7 @@ class KalturaContentScoreCondition(KalturaBaseSegmentCondition):
             maxScore=NotImplemented,
             days=NotImplemented,
             field=NotImplemented,
-            value=NotImplemented,
+            values=NotImplemented,
             actions=NotImplemented):
         KalturaBaseSegmentCondition.__init__(self)
 
@@ -8784,9 +8784,10 @@ class KalturaContentScoreCondition(KalturaBaseSegmentCondition):
         # @var string
         self.field = field
 
-        # If condition should be applied on specific field (and not the one of the segment value) -
-        # @var string
-        self.value = value
+        # If condition should be applied on specific field (and not the one of the segment value) - 
+        #             list of values to be considered together
+        # @var array of KalturaStringValue
+        self.values = values
 
         # List of the actions that consist the condition
         # @var array of KalturaContentActionCondition
@@ -8798,7 +8799,7 @@ class KalturaContentScoreCondition(KalturaBaseSegmentCondition):
         'maxScore': getXmlNodeInt, 
         'days': getXmlNodeInt, 
         'field': getXmlNodeText, 
-        'value': getXmlNodeText, 
+        'values': (KalturaObjectFactory.createArray, 'KalturaStringValue'), 
         'actions': (KalturaObjectFactory.createArray, 'KalturaContentActionCondition'), 
     }
 
@@ -8813,7 +8814,7 @@ class KalturaContentScoreCondition(KalturaBaseSegmentCondition):
         kparams.addIntIfDefined("maxScore", self.maxScore)
         kparams.addIntIfDefined("days", self.days)
         kparams.addStringIfDefined("field", self.field)
-        kparams.addStringIfDefined("value", self.value)
+        kparams.addArrayIfDefined("values", self.values)
         kparams.addArrayIfDefined("actions", self.actions)
         return kparams
 
@@ -8841,11 +8842,11 @@ class KalturaContentScoreCondition(KalturaBaseSegmentCondition):
     def setField(self, newField):
         self.field = newField
 
-    def getValue(self):
-        return self.value
+    def getValues(self):
+        return self.values
 
-    def setValue(self, newValue):
-        self.value = newValue
+    def setValues(self, newValues):
+        self.values = newValues
 
     def getActions(self):
         return self.actions
@@ -8963,8 +8964,7 @@ class KalturaSegmentValue(KalturaObjectBase):
             id=NotImplemented,
             systematicName=NotImplemented,
             name=NotImplemented,
-            value=NotImplemented,
-            threshold=NotImplemented):
+            value=NotImplemented):
         KalturaObjectBase.__init__(self)
 
         # Id of segment
@@ -8984,17 +8984,12 @@ class KalturaSegmentValue(KalturaObjectBase):
         # @var string
         self.value = value
 
-        # Threshold - minimum score to be met for this specific value
-        # @var int
-        self.threshold = threshold
-
 
     PROPERTY_LOADERS = {
         'id': getXmlNodeInt, 
         'systematicName': getXmlNodeText, 
         'name': getXmlNodeText, 
         'value': getXmlNodeText, 
-        'threshold': getXmlNodeInt, 
     }
 
     def fromXml(self, node):
@@ -9007,7 +9002,6 @@ class KalturaSegmentValue(KalturaObjectBase):
         kparams.addStringIfDefined("systematicName", self.systematicName)
         kparams.addStringIfDefined("name", self.name)
         kparams.addStringIfDefined("value", self.value)
-        kparams.addIntIfDefined("threshold", self.threshold)
         return kparams
 
     def getId(self):
@@ -9030,12 +9024,6 @@ class KalturaSegmentValue(KalturaObjectBase):
 
     def setValue(self, newValue):
         self.value = newValue
-
-    def getThreshold(self):
-        return self.threshold
-
-    def setThreshold(self, newThreshold):
-        self.threshold = newThreshold
 
 
 # @package Kaltura
