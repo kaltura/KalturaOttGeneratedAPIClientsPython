@@ -42,7 +42,7 @@ from ..Base import (
     KalturaServiceBase,
 )
 
-API_VERSION = '5.0.3.23049'
+API_VERSION = '5.0.3.25368'
 
 ########## enums ##########
 # @package Kaltura
@@ -781,6 +781,21 @@ class KalturaFollowTvSeriesOrderBy(object):
 # @subpackage Client
 class KalturaGroupByField(object):
     MEDIA_TYPE_ID = "media_type_id"
+
+    def __init__(self, value):
+        self.value = value
+
+    def getValue(self):
+        return self.value
+
+# @package Kaltura
+# @subpackage Client
+class KalturaGroupByOrder(object):
+    DEFAULTORDER = "defaultOrder"
+    COUNT_ASC = "count_asc"
+    COUNT_DESC = "count_desc"
+    VALUE_ASC = "value_asc"
+    VALUE_DESC = "value_desc"
 
     def __init__(self, value):
         self.value = value
@@ -22116,7 +22131,8 @@ class KalturaBaseSearchAssetFilter(KalturaAssetFilter):
             name=NotImplemented,
             dynamicOrderBy=NotImplemented,
             kSql=NotImplemented,
-            groupBy=NotImplemented):
+            groupBy=NotImplemented,
+            groupOrderBy=NotImplemented):
         KalturaAssetFilter.__init__(self,
             orderBy,
             name,
@@ -22143,10 +22159,15 @@ class KalturaBaseSearchAssetFilter(KalturaAssetFilter):
         # @var array of KalturaAssetGroupBy
         self.groupBy = groupBy
 
+        # order by of grouping
+        # @var KalturaGroupByOrder
+        self.groupOrderBy = groupOrderBy
+
 
     PROPERTY_LOADERS = {
         'kSql': getXmlNodeText, 
         'groupBy': (KalturaObjectFactory.createArray, 'KalturaAssetGroupBy'), 
+        'groupOrderBy': (KalturaEnumsFactory.createString, "KalturaGroupByOrder"), 
     }
 
     def fromXml(self, node):
@@ -22158,6 +22179,7 @@ class KalturaBaseSearchAssetFilter(KalturaAssetFilter):
         kparams.put("objectType", "KalturaBaseSearchAssetFilter")
         kparams.addStringIfDefined("kSql", self.kSql)
         kparams.addArrayIfDefined("groupBy", self.groupBy)
+        kparams.addStringEnumIfDefined("groupOrderBy", self.groupOrderBy)
         return kparams
 
     def getKSql(self):
@@ -22172,6 +22194,12 @@ class KalturaBaseSearchAssetFilter(KalturaAssetFilter):
     def setGroupBy(self, newGroupBy):
         self.groupBy = newGroupBy
 
+    def getGroupOrderBy(self):
+        return self.groupOrderBy
+
+    def setGroupOrderBy(self, newGroupOrderBy):
+        self.groupOrderBy = newGroupOrderBy
+
 
 # @package Kaltura
 # @subpackage Client
@@ -22182,13 +22210,15 @@ class KalturaPersonalListSearchFilter(KalturaBaseSearchAssetFilter):
             dynamicOrderBy=NotImplemented,
             kSql=NotImplemented,
             groupBy=NotImplemented,
+            groupOrderBy=NotImplemented,
             partnerListTypeIn=NotImplemented):
         KalturaBaseSearchAssetFilter.__init__(self,
             orderBy,
             name,
             dynamicOrderBy,
             kSql,
-            groupBy)
+            groupBy,
+            groupOrderBy)
 
         # Comma separated list of partner list types to search within. 
         #             If omitted - all types should be included.
@@ -22226,13 +22256,15 @@ class KalturaSearchAssetFilter(KalturaBaseSearchAssetFilter):
             dynamicOrderBy=NotImplemented,
             kSql=NotImplemented,
             groupBy=NotImplemented,
+            groupOrderBy=NotImplemented,
             typeIn=NotImplemented):
         KalturaBaseSearchAssetFilter.__init__(self,
             orderBy,
             name,
             dynamicOrderBy,
             kSql,
-            groupBy)
+            groupBy,
+            groupOrderBy)
 
         # (Deprecated - use KalturaBaseSearchAssetFilter.kSql)
         #             Comma separated list of asset types to search within. 
@@ -22272,6 +22304,7 @@ class KalturaSearchAssetListFilter(KalturaSearchAssetFilter):
             dynamicOrderBy=NotImplemented,
             kSql=NotImplemented,
             groupBy=NotImplemented,
+            groupOrderBy=NotImplemented,
             typeIn=NotImplemented,
             excludeWatched=NotImplemented):
         KalturaSearchAssetFilter.__init__(self,
@@ -22280,6 +22313,7 @@ class KalturaSearchAssetListFilter(KalturaSearchAssetFilter):
             dynamicOrderBy,
             kSql,
             groupBy,
+            groupOrderBy,
             typeIn)
 
         # Exclude watched asset.
@@ -22607,6 +22641,7 @@ class KalturaRelatedFilter(KalturaBaseSearchAssetFilter):
             dynamicOrderBy=NotImplemented,
             kSql=NotImplemented,
             groupBy=NotImplemented,
+            groupOrderBy=NotImplemented,
             idEqual=NotImplemented,
             typeIn=NotImplemented,
             excludeWatched=NotImplemented):
@@ -22615,7 +22650,8 @@ class KalturaRelatedFilter(KalturaBaseSearchAssetFilter):
             name,
             dynamicOrderBy,
             kSql,
-            groupBy)
+            groupBy,
+            groupOrderBy)
 
         # the ID of the asset for which to return related assets
         # @var int
@@ -34822,6 +34858,7 @@ class KalturaCoreClient(KalturaClientPlugin):
             'KalturaFavoriteOrderBy': KalturaFavoriteOrderBy,
             'KalturaFollowTvSeriesOrderBy': KalturaFollowTvSeriesOrderBy,
             'KalturaGroupByField': KalturaGroupByField,
+            'KalturaGroupByOrder': KalturaGroupByOrder,
             'KalturaHouseholdDeviceOrderBy': KalturaHouseholdDeviceOrderBy,
             'KalturaHouseholdFrequencyType': KalturaHouseholdFrequencyType,
             'KalturaHouseholdPaymentGatewaySelectedBy': KalturaHouseholdPaymentGatewaySelectedBy,
