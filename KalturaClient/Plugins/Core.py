@@ -42,7 +42,7 @@ from ..Base import (
     KalturaServiceBase,
 )
 
-API_VERSION = '5.0.3.42000'
+API_VERSION = '5.0.3.22559'
 
 ########## enums ##########
 # @package Kaltura
@@ -15454,6 +15454,7 @@ class KalturaProgramAsset(KalturaAsset):
 
         # EPG identifier
         # @var string
+        # @readonly
         self.epgId = epgId
 
         # Ralated media identifier
@@ -15466,26 +15467,23 @@ class KalturaProgramAsset(KalturaAsset):
 
         # Id of linear media asset
         # @var int
+        # @readonly
         self.linearAssetId = linearAssetId
 
         # Is CDVR enabled for this asset
         # @var bool
-        # @readonly
         self.enableCdvr = enableCdvr
 
         # Is catch-up enabled for this asset
         # @var bool
-        # @readonly
         self.enableCatchUp = enableCatchUp
 
         # Is start over enabled for this asset
         # @var bool
-        # @readonly
         self.enableStartOver = enableStartOver
 
         # Is trick-play enabled for this asset
         # @var bool
-        # @readonly
         self.enableTrickPlay = enableTrickPlay
 
 
@@ -15509,10 +15507,12 @@ class KalturaProgramAsset(KalturaAsset):
         kparams = KalturaAsset.toParams(self)
         kparams.put("objectType", "KalturaProgramAsset")
         kparams.addIntIfDefined("epgChannelId", self.epgChannelId)
-        kparams.addStringIfDefined("epgId", self.epgId)
         kparams.addIntIfDefined("relatedMediaId", self.relatedMediaId)
         kparams.addStringIfDefined("crid", self.crid)
-        kparams.addIntIfDefined("linearAssetId", self.linearAssetId)
+        kparams.addBoolIfDefined("enableCdvr", self.enableCdvr)
+        kparams.addBoolIfDefined("enableCatchUp", self.enableCatchUp)
+        kparams.addBoolIfDefined("enableStartOver", self.enableStartOver)
+        kparams.addBoolIfDefined("enableTrickPlay", self.enableTrickPlay)
         return kparams
 
     def getEpgChannelId(self):
@@ -15523,9 +15523,6 @@ class KalturaProgramAsset(KalturaAsset):
 
     def getEpgId(self):
         return self.epgId
-
-    def setEpgId(self, newEpgId):
-        self.epgId = newEpgId
 
     def getRelatedMediaId(self):
         return self.relatedMediaId
@@ -15542,20 +15539,29 @@ class KalturaProgramAsset(KalturaAsset):
     def getLinearAssetId(self):
         return self.linearAssetId
 
-    def setLinearAssetId(self, newLinearAssetId):
-        self.linearAssetId = newLinearAssetId
-
     def getEnableCdvr(self):
         return self.enableCdvr
+
+    def setEnableCdvr(self, newEnableCdvr):
+        self.enableCdvr = newEnableCdvr
 
     def getEnableCatchUp(self):
         return self.enableCatchUp
 
+    def setEnableCatchUp(self, newEnableCatchUp):
+        self.enableCatchUp = newEnableCatchUp
+
     def getEnableStartOver(self):
         return self.enableStartOver
 
+    def setEnableStartOver(self, newEnableStartOver):
+        self.enableStartOver = newEnableStartOver
+
     def getEnableTrickPlay(self):
         return self.enableTrickPlay
+
+    def setEnableTrickPlay(self, newEnableTrickPlay):
+        self.enableTrickPlay = newEnableTrickPlay
 
 
 # @package Kaltura
