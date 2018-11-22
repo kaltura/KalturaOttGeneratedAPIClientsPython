@@ -42,7 +42,7 @@ from ..Base import (
     KalturaServiceBase,
 )
 
-API_VERSION = '4.9.10.10363'
+API_VERSION = '4.9.13.19531'
 
 ########## enums ##########
 # @package Kaltura
@@ -22671,7 +22671,6 @@ class KalturaHousehold(KalturaObjectBase):
 
         # Household external identifier
         # @var string
-        # @insertonly
         self.externalId = externalId
 
         # Household limitation module identifier
