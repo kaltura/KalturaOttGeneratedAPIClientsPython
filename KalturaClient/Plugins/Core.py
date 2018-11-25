@@ -42,7 +42,7 @@ from ..Base import (
     KalturaServiceBase,
 )
 
-API_VERSION = '5.0.3.42009'
+API_VERSION = '5.0.3.29535'
 
 ########## enums ##########
 # @package Kaltura
@@ -61,6 +61,19 @@ class KalturaAdsPolicy(object):
 # @subpackage Client
 class KalturaAggregationCountOrderBy(object):
     NONE = "NONE"
+
+    def __init__(self, value):
+        self.value = value
+
+    def getValue(self):
+        return self.value
+
+# @package Kaltura
+# @subpackage Client
+class KalturaAggregationType(object):
+    COUNT = "Count"
+    SUM = "Sum"
+    AVG = "Avg"
 
     def __init__(self, value):
         self.value = value
@@ -1658,6 +1671,20 @@ class KalturaSeriesRecordingOrderBy(object):
 # @subpackage Client
 class KalturaSeriesReminderOrderBy(object):
     NONE = "NONE"
+
+    def __init__(self, value):
+        self.value = value
+
+    def getValue(self):
+        return self.value
+
+# @package Kaltura
+# @subpackage Client
+class KalturaSkipOperators(object):
+    EQUAL = "Equal"
+    UNEQUAL = "UnEqual"
+    LESSTHAN = "LessThan"
+    GREATERTHAN = "GreaterThan"
 
     def __init__(self, value):
         self.value = value
@@ -20704,6 +20731,28 @@ class KalturaBaseResponseProfile(KalturaObjectBase):
 
 # @package Kaltura
 # @subpackage Client
+class KalturaSkipCondition(KalturaObjectBase):
+    """Skip current request according to skip condition"""
+
+    def __init__(self):
+        KalturaObjectBase.__init__(self)
+
+
+    PROPERTY_LOADERS = {
+    }
+
+    def fromXml(self, node):
+        KalturaObjectBase.fromXml(self, node)
+        self.fromXmlImpl(node, KalturaSkipCondition.PROPERTY_LOADERS)
+
+    def toParams(self):
+        kparams = KalturaObjectBase.toParams(self)
+        kparams.put("objectType", "KalturaSkipCondition")
+        return kparams
+
+
+# @package Kaltura
+# @subpackage Client
 class KalturaRequestConfiguration(KalturaObjectBase):
     """Define client request optional configurations"""
 
@@ -20715,7 +20764,7 @@ class KalturaRequestConfiguration(KalturaObjectBase):
             ks=NotImplemented,
             responseProfile=NotImplemented,
             abortAllOnError=NotImplemented,
-            skipOnError=NotImplemented):
+            skipCondition=NotImplemented):
         KalturaObjectBase.__init__(self)
 
         # Impersonated partner id
@@ -20746,9 +20795,9 @@ class KalturaRequestConfiguration(KalturaObjectBase):
         # @var bool
         self.abortAllOnError = abortAllOnError
 
-        # Skip current request according to skip option
-        # @var KalturaSkipOptions
-        self.skipOnError = skipOnError
+        # Skip current request according to skip condition
+        # @var KalturaSkipCondition
+        self.skipCondition = skipCondition
 
 
     PROPERTY_LOADERS = {
@@ -20759,7 +20808,7 @@ class KalturaRequestConfiguration(KalturaObjectBase):
         'ks': getXmlNodeText, 
         'responseProfile': (KalturaObjectFactory.create, 'KalturaBaseResponseProfile'), 
         'abortAllOnError': getXmlNodeBool, 
-        'skipOnError': (KalturaEnumsFactory.createString, "KalturaSkipOptions"), 
+        'skipCondition': (KalturaObjectFactory.create, 'KalturaSkipCondition'), 
     }
 
     def fromXml(self, node):
@@ -20776,7 +20825,7 @@ class KalturaRequestConfiguration(KalturaObjectBase):
         kparams.addStringIfDefined("ks", self.ks)
         kparams.addObjectIfDefined("responseProfile", self.responseProfile)
         kparams.addBoolIfDefined("abortAllOnError", self.abortAllOnError)
-        kparams.addStringEnumIfDefined("skipOnError", self.skipOnError)
+        kparams.addObjectIfDefined("skipCondition", self.skipCondition)
         return kparams
 
     def getPartnerId(self):
@@ -20821,11 +20870,11 @@ class KalturaRequestConfiguration(KalturaObjectBase):
     def setAbortAllOnError(self, newAbortAllOnError):
         self.abortAllOnError = newAbortAllOnError
 
-    def getSkipOnError(self):
-        return self.skipOnError
+    def getSkipCondition(self):
+        return self.skipCondition
 
-    def setSkipOnError(self, newSkipOnError):
-        self.skipOnError = newSkipOnError
+    def setSkipCondition(self, newSkipCondition):
+        self.skipCondition = newSkipCondition
 
 
 # @package Kaltura
@@ -24909,6 +24958,143 @@ class KalturaUserRoleFilter(KalturaFilter):
 
     def setCurrentUserRoleIdsContains(self, newCurrentUserRoleIdsContains):
         self.currentUserRoleIdsContains = newCurrentUserRoleIdsContains
+
+
+# @package Kaltura
+# @subpackage Client
+class KalturaSkipOnErrorCondition(KalturaSkipCondition):
+    """Skips current request if an error occurs according to the selected skip option"""
+
+    def __init__(self,
+            condition=NotImplemented):
+        KalturaSkipCondition.__init__(self)
+
+        # Indicates which error should be considered to skip the current request
+        # @var KalturaSkipOptions
+        self.condition = condition
+
+
+    PROPERTY_LOADERS = {
+        'condition': (KalturaEnumsFactory.createString, "KalturaSkipOptions"), 
+    }
+
+    def fromXml(self, node):
+        KalturaSkipCondition.fromXml(self, node)
+        self.fromXmlImpl(node, KalturaSkipOnErrorCondition.PROPERTY_LOADERS)
+
+    def toParams(self):
+        kparams = KalturaSkipCondition.toParams(self)
+        kparams.put("objectType", "KalturaSkipOnErrorCondition")
+        kparams.addStringEnumIfDefined("condition", self.condition)
+        return kparams
+
+    def getCondition(self):
+        return self.condition
+
+    def setCondition(self, newCondition):
+        self.condition = newCondition
+
+
+# @package Kaltura
+# @subpackage Client
+class KalturaPropertySkipCondition(KalturaSkipCondition):
+    """Skips current request according to condition on given property"""
+
+    def __init__(self,
+            propertyPath=NotImplemented,
+            operator=NotImplemented,
+            value=NotImplemented):
+        KalturaSkipCondition.__init__(self)
+
+        # The property path on which the condition is checked
+        # @var string
+        self.propertyPath = propertyPath
+
+        # The operator that applies the check to the condition
+        # @var KalturaSkipOperators
+        self.operator = operator
+
+        # The value on which the condition is checked
+        # @var string
+        self.value = value
+
+
+    PROPERTY_LOADERS = {
+        'propertyPath': getXmlNodeText, 
+        'operator': (KalturaEnumsFactory.createString, "KalturaSkipOperators"), 
+        'value': getXmlNodeText, 
+    }
+
+    def fromXml(self, node):
+        KalturaSkipCondition.fromXml(self, node)
+        self.fromXmlImpl(node, KalturaPropertySkipCondition.PROPERTY_LOADERS)
+
+    def toParams(self):
+        kparams = KalturaSkipCondition.toParams(self)
+        kparams.put("objectType", "KalturaPropertySkipCondition")
+        kparams.addStringIfDefined("propertyPath", self.propertyPath)
+        kparams.addStringEnumIfDefined("operator", self.operator)
+        kparams.addStringIfDefined("value", self.value)
+        return kparams
+
+    def getPropertyPath(self):
+        return self.propertyPath
+
+    def setPropertyPath(self, newPropertyPath):
+        self.propertyPath = newPropertyPath
+
+    def getOperator(self):
+        return self.operator
+
+    def setOperator(self, newOperator):
+        self.operator = newOperator
+
+    def getValue(self):
+        return self.value
+
+    def setValue(self, newValue):
+        self.value = newValue
+
+
+# @package Kaltura
+# @subpackage Client
+class KalturaAggregatedPropertySkipCondition(KalturaPropertySkipCondition):
+    """Skips current request according to aggregation condition on given property"""
+
+    def __init__(self,
+            propertyPath=NotImplemented,
+            operator=NotImplemented,
+            value=NotImplemented,
+            aggregationType=NotImplemented):
+        KalturaPropertySkipCondition.__init__(self,
+            propertyPath,
+            operator,
+            value)
+
+        # The aggregation type on which the condition is based on
+        # @var KalturaAggregationType
+        self.aggregationType = aggregationType
+
+
+    PROPERTY_LOADERS = {
+        'aggregationType': (KalturaEnumsFactory.createString, "KalturaAggregationType"), 
+    }
+
+    def fromXml(self, node):
+        KalturaPropertySkipCondition.fromXml(self, node)
+        self.fromXmlImpl(node, KalturaAggregatedPropertySkipCondition.PROPERTY_LOADERS)
+
+    def toParams(self):
+        kparams = KalturaPropertySkipCondition.toParams(self)
+        kparams.put("objectType", "KalturaAggregatedPropertySkipCondition")
+        kparams.addStringEnumIfDefined("aggregationType", self.aggregationType)
+        return kparams
+
+    def getAggregationType(self):
+        return self.aggregationType
+
+    def setAggregationType(self, newAggregationType):
+        self.aggregationType = newAggregationType
 
 
 # @package Kaltura
@@ -34811,6 +34997,7 @@ class KalturaCoreClient(KalturaClientPlugin):
         return {
             'KalturaAdsPolicy': KalturaAdsPolicy,
             'KalturaAggregationCountOrderBy': KalturaAggregationCountOrderBy,
+            'KalturaAggregationType': KalturaAggregationType,
             'KalturaAnnouncementOrderBy': KalturaAnnouncementOrderBy,
             'KalturaAnnouncementRecipientsType': KalturaAnnouncementRecipientsType,
             'KalturaAnnouncementStatus': KalturaAnnouncementStatus,
@@ -34929,6 +35116,7 @@ class KalturaCoreClient(KalturaClientPlugin):
             'KalturaSearchHistoryOrderBy': KalturaSearchHistoryOrderBy,
             'KalturaSeriesRecordingOrderBy': KalturaSeriesRecordingOrderBy,
             'KalturaSeriesReminderOrderBy': KalturaSeriesReminderOrderBy,
+            'KalturaSkipOperators': KalturaSkipOperators,
             'KalturaSkipOptions': KalturaSkipOptions,
             'KalturaSocialActionOrderBy': KalturaSocialActionOrderBy,
             'KalturaSocialActionPrivacy': KalturaSocialActionPrivacy,
@@ -35256,6 +35444,7 @@ class KalturaCoreClient(KalturaClientPlugin):
             'KalturaUserRoleListResponse': KalturaUserRoleListResponse,
             'KalturaClientConfiguration': KalturaClientConfiguration,
             'KalturaBaseResponseProfile': KalturaBaseResponseProfile,
+            'KalturaSkipCondition': KalturaSkipCondition,
             'KalturaRequestConfiguration': KalturaRequestConfiguration,
             'KalturaFilter': KalturaFilter,
             'KalturaDetachedResponseProfile': KalturaDetachedResponseProfile,
@@ -35341,6 +35530,9 @@ class KalturaCoreClient(KalturaClientPlugin):
             'KalturaExportTaskFilter': KalturaExportTaskFilter,
             'KalturaPermissionFilter': KalturaPermissionFilter,
             'KalturaUserRoleFilter': KalturaUserRoleFilter,
+            'KalturaSkipOnErrorCondition': KalturaSkipOnErrorCondition,
+            'KalturaPropertySkipCondition': KalturaPropertySkipCondition,
+            'KalturaAggregatedPropertySkipCondition': KalturaAggregatedPropertySkipCondition,
             'KalturaFilterPager': KalturaFilterPager,
             'KalturaAppToken': KalturaAppToken,
             'KalturaSession': KalturaSession,
