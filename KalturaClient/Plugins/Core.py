@@ -42,7 +42,7 @@ from ..Base import (
     KalturaServiceBase,
 )
 
-API_VERSION = '5.0.3.42018'
+API_VERSION = '5.0.3.29164'
 
 ########## enums ##########
 # @package Kaltura
@@ -24104,7 +24104,7 @@ class KalturaAssetStructFilter(KalturaFilter):
         KalturaFilter.__init__(self,
             orderBy)
 
-        # Comma separated identifiers
+        # Comma separated identifiers, id = 0 is identified as program AssetStruct
         # @var string
         self.idIn = idIn
 
