@@ -15477,6 +15477,7 @@ class KalturaProgramAsset(KalturaAsset):
 
         # EPG channel identifier
         # @var int
+        # @readonly
         self.epgChannelId = epgChannelId
 
         # EPG identifier
@@ -15494,7 +15495,7 @@ class KalturaProgramAsset(KalturaAsset):
 
         # Id of linear media asset
         # @var int
-        # @readonly
+        # @insertonly
         self.linearAssetId = linearAssetId
 
         # Is CDVR enabled for this asset
@@ -15533,9 +15534,9 @@ class KalturaProgramAsset(KalturaAsset):
     def toParams(self):
         kparams = KalturaAsset.toParams(self)
         kparams.put("objectType", "KalturaProgramAsset")
-        kparams.addIntIfDefined("epgChannelId", self.epgChannelId)
         kparams.addIntIfDefined("relatedMediaId", self.relatedMediaId)
         kparams.addStringIfDefined("crid", self.crid)
+        kparams.addIntIfDefined("linearAssetId", self.linearAssetId)
         kparams.addBoolIfDefined("enableCdvr", self.enableCdvr)
         kparams.addBoolIfDefined("enableCatchUp", self.enableCatchUp)
         kparams.addBoolIfDefined("enableStartOver", self.enableStartOver)
@@ -15544,9 +15545,6 @@ class KalturaProgramAsset(KalturaAsset):
 
     def getEpgChannelId(self):
         return self.epgChannelId
-
-    def setEpgChannelId(self, newEpgChannelId):
-        self.epgChannelId = newEpgChannelId
 
     def getEpgId(self):
         return self.epgId
@@ -15565,6 +15563,9 @@ class KalturaProgramAsset(KalturaAsset):
 
     def getLinearAssetId(self):
         return self.linearAssetId
+
+    def setLinearAssetId(self, newLinearAssetId):
+        self.linearAssetId = newLinearAssetId
 
     def getEnableCdvr(self):
         return self.enableCdvr
