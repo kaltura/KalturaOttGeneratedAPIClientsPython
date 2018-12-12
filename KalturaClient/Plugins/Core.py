@@ -42,7 +42,7 @@ from ..Base import (
     KalturaServiceBase,
 )
 
-API_VERSION = '5.1.12.20907'
+API_VERSION = '5.1.20.42005'
 
 ########## enums ##########
 # @package Kaltura
@@ -1591,6 +1591,7 @@ class KalturaRuleConditionType(object):
     SEGMENTS = "SEGMENTS"
     DATE = "DATE"
     OR = "OR"
+    HEADER = "HEADER"
 
     def __init__(self, value):
         self.value = value
@@ -1620,6 +1621,7 @@ class KalturaRuleType(object):
     USER_TYPE = "user_type"
     DEVICE = "device"
     ASSETUSER = "assetUser"
+    NETWORK = "network"
 
     def __init__(self, value):
         self.value = value
@@ -17180,6 +17182,45 @@ class KalturaNotCondition(KalturaCondition):
 
 # @package Kaltura
 # @subpackage Client
+class KalturaOrCondition(KalturaNotCondition):
+    def __init__(self,
+            type=NotImplemented,
+            description=NotImplemented,
+            not_=NotImplemented,
+            conditions=NotImplemented):
+        KalturaNotCondition.__init__(self,
+            type,
+            description,
+            not_)
+
+        # List of conditions with or between them
+        # @var array of KalturaCondition
+        self.conditions = conditions
+
+
+    PROPERTY_LOADERS = {
+        'conditions': (KalturaObjectFactory.createArray, 'KalturaCondition'), 
+    }
+
+    def fromXml(self, node):
+        KalturaNotCondition.fromXml(self, node)
+        self.fromXmlImpl(node, KalturaOrCondition.PROPERTY_LOADERS)
+
+    def toParams(self):
+        kparams = KalturaNotCondition.toParams(self)
+        kparams.put("objectType", "KalturaOrCondition")
+        kparams.addArrayIfDefined("conditions", self.conditions)
+        return kparams
+
+    def getConditions(self):
+        return self.conditions
+
+    def setConditions(self, newConditions):
+        self.conditions = newConditions
+
+
+# @package Kaltura
+# @subpackage Client
 class KalturaCountryCondition(KalturaNotCondition):
     """Country condition"""
 
@@ -17275,39 +17316,56 @@ class KalturaDateCondition(KalturaNotCondition):
 
 # @package Kaltura
 # @subpackage Client
-class KalturaOrCondition(KalturaCondition):
+class KalturaHeaderCondition(KalturaNotCondition):
+    """Header condition"""
+
     def __init__(self,
             type=NotImplemented,
             description=NotImplemented,
-            conditions=NotImplemented):
-        KalturaCondition.__init__(self,
+            not_=NotImplemented,
+            key=NotImplemented,
+            value=NotImplemented):
+        KalturaNotCondition.__init__(self,
             type,
-            description)
+            description,
+            not_)
 
-        # List of conditions with or between them
-        # @var array of KalturaCondition
-        self.conditions = conditions
+        # Header key
+        # @var string
+        self.key = key
+
+        # Header value
+        # @var string
+        self.value = value
 
 
     PROPERTY_LOADERS = {
-        'conditions': (KalturaObjectFactory.createArray, 'KalturaCondition'), 
+        'key': getXmlNodeText, 
+        'value': getXmlNodeText, 
     }
 
     def fromXml(self, node):
-        KalturaCondition.fromXml(self, node)
-        self.fromXmlImpl(node, KalturaOrCondition.PROPERTY_LOADERS)
+        KalturaNotCondition.fromXml(self, node)
+        self.fromXmlImpl(node, KalturaHeaderCondition.PROPERTY_LOADERS)
 
     def toParams(self):
-        kparams = KalturaCondition.toParams(self)
-        kparams.put("objectType", "KalturaOrCondition")
-        kparams.addArrayIfDefined("conditions", self.conditions)
+        kparams = KalturaNotCondition.toParams(self)
+        kparams.put("objectType", "KalturaHeaderCondition")
+        kparams.addStringIfDefined("key", self.key)
+        kparams.addStringIfDefined("value", self.value)
         return kparams
 
-    def getConditions(self):
-        return self.conditions
+    def getKey(self):
+        return self.key
 
-    def setConditions(self, newConditions):
-        self.conditions = newConditions
+    def setKey(self, newKey):
+        self.key = newKey
+
+    def getValue(self):
+        return self.value
+
+    def setValue(self, newValue):
+        self.value = newValue
 
 
 # @package Kaltura
@@ -24402,7 +24460,8 @@ class KalturaAssetRuleFilter(KalturaFilter):
     def __init__(self,
             orderBy=NotImplemented,
             conditionsContainType=NotImplemented,
-            assetApplied=NotImplemented):
+            assetApplied=NotImplemented,
+            actionsContainType=NotImplemented):
         KalturaFilter.__init__(self,
             orderBy)
 
@@ -24415,10 +24474,15 @@ class KalturaAssetRuleFilter(KalturaFilter):
         # @var KalturaSlimAsset
         self.assetApplied = assetApplied
 
+        # Indicates which asset rule list to return by this KalturaRuleActionType.
+        # @var KalturaRuleActionType
+        self.actionsContainType = actionsContainType
+
 
     PROPERTY_LOADERS = {
         'conditionsContainType': (KalturaEnumsFactory.createString, "KalturaRuleConditionType"), 
         'assetApplied': (KalturaObjectFactory.create, 'KalturaSlimAsset'), 
+        'actionsContainType': (KalturaEnumsFactory.createString, "KalturaRuleActionType"), 
     }
 
     def fromXml(self, node):
@@ -24430,6 +24494,7 @@ class KalturaAssetRuleFilter(KalturaFilter):
         kparams.put("objectType", "KalturaAssetRuleFilter")
         kparams.addStringEnumIfDefined("conditionsContainType", self.conditionsContainType)
         kparams.addObjectIfDefined("assetApplied", self.assetApplied)
+        kparams.addStringEnumIfDefined("actionsContainType", self.actionsContainType)
         return kparams
 
     def getConditionsContainType(self):
@@ -24443,6 +24508,12 @@ class KalturaAssetRuleFilter(KalturaFilter):
 
     def setAssetApplied(self, newAssetApplied):
         self.assetApplied = newAssetApplied
+
+    def getActionsContainType(self):
+        return self.actionsContainType
+
+    def setActionsContainType(self, newActionsContainType):
+        self.actionsContainType = newActionsContainType
 
 
 # @package Kaltura
@@ -35380,9 +35451,10 @@ class KalturaCoreClient(KalturaClientPlugin):
             'KalturaAssetUserRuleAction': KalturaAssetUserRuleAction,
             'KalturaAssetUserRule': KalturaAssetUserRule,
             'KalturaNotCondition': KalturaNotCondition,
+            'KalturaOrCondition': KalturaOrCondition,
             'KalturaCountryCondition': KalturaCountryCondition,
             'KalturaDateCondition': KalturaDateCondition,
-            'KalturaOrCondition': KalturaOrCondition,
+            'KalturaHeaderCondition': KalturaHeaderCondition,
             'KalturaConcurrencyCondition': KalturaConcurrencyCondition,
             'KalturaIpRangeCondition': KalturaIpRangeCondition,
             'KalturaBusinessModuleCondition': KalturaBusinessModuleCondition,
