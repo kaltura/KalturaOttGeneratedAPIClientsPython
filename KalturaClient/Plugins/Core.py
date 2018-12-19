@@ -42,7 +42,7 @@ from ..Base import (
     KalturaServiceBase,
 )
 
-API_VERSION = '5.1.57.41996'
+API_VERSION = '5.1.60.24074'
 
 ########## enums ##########
 # @package Kaltura
@@ -5876,7 +5876,8 @@ class KalturaPlaybackSource(KalturaMediaFile):
             catalogEndDate=NotImplemented,
             format=NotImplemented,
             protocols=NotImplemented,
-            drm=NotImplemented):
+            drm=NotImplemented,
+            isTokenized=NotImplemented):
         KalturaMediaFile.__init__(self,
             url,
             assetId,
@@ -5913,11 +5914,16 @@ class KalturaPlaybackSource(KalturaMediaFile):
         # @var array of KalturaDrmPlaybackPluginData
         self.drm = drm
 
+        # Is Tokenized
+        # @var bool
+        self.isTokenized = isTokenized
+
 
     PROPERTY_LOADERS = {
         'format': getXmlNodeText, 
         'protocols': getXmlNodeText, 
         'drm': (KalturaObjectFactory.createArray, 'KalturaDrmPlaybackPluginData'), 
+        'isTokenized': getXmlNodeBool, 
     }
 
     def fromXml(self, node):
@@ -5930,6 +5936,7 @@ class KalturaPlaybackSource(KalturaMediaFile):
         kparams.addStringIfDefined("format", self.format)
         kparams.addStringIfDefined("protocols", self.protocols)
         kparams.addArrayIfDefined("drm", self.drm)
+        kparams.addBoolIfDefined("isTokenized", self.isTokenized)
         return kparams
 
     def getFormat(self):
@@ -5949,6 +5956,12 @@ class KalturaPlaybackSource(KalturaMediaFile):
 
     def setDrm(self, newDrm):
         self.drm = newDrm
+
+    def getIsTokenized(self):
+        return self.isTokenized
+
+    def setIsTokenized(self, newIsTokenized):
+        self.isTokenized = newIsTokenized
 
 
 # @package Kaltura
