@@ -42,7 +42,7 @@ from ..Base import (
     KalturaServiceBase,
 )
 
-API_VERSION = '5.1.61.41995'
+API_VERSION = '5.1.74.35250'
 
 ########## enums ##########
 # @package Kaltura
@@ -1356,6 +1356,17 @@ class KalturaPlaybackContextType(object):
 
 # @package Kaltura
 # @subpackage Client
+class KalturaPlaybackProfileOrderBy(object):
+    NAME_ASC = "NAME_ASC"
+
+    def __init__(self, value):
+        self.value = value
+
+    def getValue(self):
+        return self.value
+
+# @package Kaltura
+# @subpackage Client
 class KalturaPositionOwner(object):
     HOUSEHOLD = "household"
     USER = "user"
@@ -1573,6 +1584,7 @@ class KalturaRuleActionType(object):
     ALLOW_PLAYBACK = "ALLOW_PLAYBACK"
     BLOCK_PLAYBACK = "BLOCK_PLAYBACK"
     APPLY_DISCOUNT_MODULE = "APPLY_DISCOUNT_MODULE"
+    APPLY_PLAYBACK_ADAPTER = "APPLY_PLAYBACK_ADAPTER"
 
     def __init__(self, value):
         self.value = value
@@ -16719,6 +16731,148 @@ class KalturaAssetHistoryListResponse(KalturaListResponse):
 
 # @package Kaltura
 # @subpackage Client
+class KalturaPlaybackProfile(KalturaObjectBase):
+    """Playback profile"""
+
+    def __init__(self,
+            id=NotImplemented,
+            name=NotImplemented,
+            isActive=NotImplemented,
+            adapterUrl=NotImplemented,
+            settings=NotImplemented,
+            systemName=NotImplemented,
+            sharedSecret=NotImplemented):
+        KalturaObjectBase.__init__(self)
+
+        # Playback profile identifier
+        # @var int
+        # @readonly
+        self.id = id
+
+        # Playback profile name
+        # @var string
+        self.name = name
+
+        # Playback profile active status
+        # @var bool
+        self.isActive = isActive
+
+        # Playback profile URL
+        # @var string
+        self.adapterUrl = adapterUrl
+
+        # Playback profile settings
+        # @var string
+        self.settings = settings
+
+        # Playback profile alias
+        # @var string
+        self.systemName = systemName
+
+        # Playback adapter shared secret
+        # @var string
+        # @readonly
+        self.sharedSecret = sharedSecret
+
+
+    PROPERTY_LOADERS = {
+        'id': getXmlNodeInt, 
+        'name': getXmlNodeText, 
+        'isActive': getXmlNodeBool, 
+        'adapterUrl': getXmlNodeText, 
+        'settings': getXmlNodeText, 
+        'systemName': getXmlNodeText, 
+        'sharedSecret': getXmlNodeText, 
+    }
+
+    def fromXml(self, node):
+        KalturaObjectBase.fromXml(self, node)
+        self.fromXmlImpl(node, KalturaPlaybackProfile.PROPERTY_LOADERS)
+
+    def toParams(self):
+        kparams = KalturaObjectBase.toParams(self)
+        kparams.put("objectType", "KalturaPlaybackProfile")
+        kparams.addStringIfDefined("name", self.name)
+        kparams.addBoolIfDefined("isActive", self.isActive)
+        kparams.addStringIfDefined("adapterUrl", self.adapterUrl)
+        kparams.addStringIfDefined("settings", self.settings)
+        kparams.addStringIfDefined("systemName", self.systemName)
+        return kparams
+
+    def getId(self):
+        return self.id
+
+    def getName(self):
+        return self.name
+
+    def setName(self, newName):
+        self.name = newName
+
+    def getIsActive(self):
+        return self.isActive
+
+    def setIsActive(self, newIsActive):
+        self.isActive = newIsActive
+
+    def getAdapterUrl(self):
+        return self.adapterUrl
+
+    def setAdapterUrl(self, newAdapterUrl):
+        self.adapterUrl = newAdapterUrl
+
+    def getSettings(self):
+        return self.settings
+
+    def setSettings(self, newSettings):
+        self.settings = newSettings
+
+    def getSystemName(self):
+        return self.systemName
+
+    def setSystemName(self, newSystemName):
+        self.systemName = newSystemName
+
+    def getSharedSecret(self):
+        return self.sharedSecret
+
+
+# @package Kaltura
+# @subpackage Client
+class KalturaPlaybackProfileListResponse(KalturaListResponse):
+    def __init__(self,
+            totalCount=NotImplemented,
+            objects=NotImplemented):
+        KalturaListResponse.__init__(self,
+            totalCount)
+
+        # A list of Engagement adapter
+        # @var array of KalturaPlaybackProfile
+        self.objects = objects
+
+
+    PROPERTY_LOADERS = {
+        'objects': (KalturaObjectFactory.createArray, 'KalturaPlaybackProfile'), 
+    }
+
+    def fromXml(self, node):
+        KalturaListResponse.fromXml(self, node)
+        self.fromXmlImpl(node, KalturaPlaybackProfileListResponse.PROPERTY_LOADERS)
+
+    def toParams(self):
+        kparams = KalturaListResponse.toParams(self)
+        kparams.put("objectType", "KalturaPlaybackProfileListResponse")
+        kparams.addArrayIfDefined("objects", self.objects)
+        return kparams
+
+    def getObjects(self):
+        return self.objects
+
+    def setObjects(self, newObjects):
+        self.objects = newObjects
+
+
+# @package Kaltura
+# @subpackage Client
 class KalturaRule(KalturaObjectBase):
     """Rule base"""
 
@@ -17784,6 +17938,43 @@ class KalturaBlockPlaybackAction(KalturaAssetRuleAction):
         kparams = KalturaAssetRuleAction.toParams(self)
         kparams.put("objectType", "KalturaBlockPlaybackAction")
         return kparams
+
+
+# @package Kaltura
+# @subpackage Client
+class KalturaApplyPlaybackAdapterAction(KalturaAssetRuleAction):
+    def __init__(self,
+            type=NotImplemented,
+            description=NotImplemented,
+            adapterId=NotImplemented):
+        KalturaAssetRuleAction.__init__(self,
+            type,
+            description)
+
+        # Playback Adapter Identifier
+        # @var int
+        self.adapterId = adapterId
+
+
+    PROPERTY_LOADERS = {
+        'adapterId': getXmlNodeInt, 
+    }
+
+    def fromXml(self, node):
+        KalturaAssetRuleAction.fromXml(self, node)
+        self.fromXmlImpl(node, KalturaApplyPlaybackAdapterAction.PROPERTY_LOADERS)
+
+    def toParams(self):
+        kparams = KalturaAssetRuleAction.toParams(self)
+        kparams.put("objectType", "KalturaApplyPlaybackAdapterAction")
+        kparams.addIntIfDefined("adapterId", self.adapterId)
+        return kparams
+
+    def getAdapterId(self):
+        return self.adapterId
+
+    def setAdapterId(self, newAdapterId):
+        self.adapterId = newAdapterId
 
 
 # @package Kaltura
@@ -24467,6 +24658,43 @@ class KalturaBusinessModuleRuleFilter(KalturaFilter):
 
 # @package Kaltura
 # @subpackage Client
+class KalturaPlaybackProfileFilter(KalturaFilter):
+    """User asset rule filter"""
+
+    def __init__(self,
+            orderBy=NotImplemented,
+            playbackProfileEqual=NotImplemented):
+        KalturaFilter.__init__(self,
+            orderBy)
+
+        # Playback profile to filter by
+        # @var int
+        self.playbackProfileEqual = playbackProfileEqual
+
+
+    PROPERTY_LOADERS = {
+        'playbackProfileEqual': getXmlNodeInt, 
+    }
+
+    def fromXml(self, node):
+        KalturaFilter.fromXml(self, node)
+        self.fromXmlImpl(node, KalturaPlaybackProfileFilter.PROPERTY_LOADERS)
+
+    def toParams(self):
+        kparams = KalturaFilter.toParams(self)
+        kparams.put("objectType", "KalturaPlaybackProfileFilter")
+        kparams.addIntIfDefined("playbackProfileEqual", self.playbackProfileEqual)
+        return kparams
+
+    def getPlaybackProfileEqual(self):
+        return self.playbackProfileEqual
+
+    def setPlaybackProfileEqual(self, newPlaybackProfileEqual):
+        self.playbackProfileEqual = newPlaybackProfileEqual
+
+
+# @package Kaltura
+# @subpackage Client
 class KalturaAssetRuleFilter(KalturaFilter):
     """Asset rule filter"""
 
@@ -30036,7 +30264,7 @@ class KalturaAssetFileService(KalturaServiceBase):
         resultNode = self.client.doQueue()
         return KalturaObjectFactory.create(resultNode, 'KalturaAssetFileContext')
 
-    def playManifest(self, partnerId, assetId, assetType, assetFileId, contextType, ks = NotImplemented):
+    def playManifest(self, partnerId, assetId, assetType, assetFileId, contextType, ks = NotImplemented, tokenizedUrl = NotImplemented):
         """Redirects to play manifest"""
 
         kparams = KalturaParams()
@@ -30046,6 +30274,7 @@ class KalturaAssetFileService(KalturaServiceBase):
         kparams.addIntIfDefined("assetFileId", assetFileId);
         kparams.addStringIfDefined("contextType", contextType)
         kparams.addStringIfDefined("ks", ks)
+        kparams.addStringIfDefined("tokenizedUrl", tokenizedUrl)
         self.client.queueServiceActionCall("assetfile", "playManifest", "KalturaAssetFile", kparams)
         if self.client.isMultiRequest():
             return self.client.getMultiRequestResult()
@@ -33389,6 +33618,69 @@ class KalturaPinService(KalturaServiceBase):
 
 # @package Kaltura
 # @subpackage Client
+class KalturaPlaybackProfileService(KalturaServiceBase):
+    def __init__(self, client = None):
+        KalturaServiceBase.__init__(self, client)
+
+    def add(self, playbackProfile):
+        """Insert new Playback adapter for partner"""
+
+        kparams = KalturaParams()
+        kparams.addObjectIfDefined("playbackProfile", playbackProfile)
+        self.client.queueServiceActionCall("playbackprofile", "add", "KalturaPlaybackProfile", kparams)
+        if self.client.isMultiRequest():
+            return self.client.getMultiRequestResult()
+        resultNode = self.client.doQueue()
+        return KalturaObjectFactory.create(resultNode, 'KalturaPlaybackProfile')
+
+    def delete(self, id):
+        """Delete Playback adapter by Playback adapter id"""
+
+        kparams = KalturaParams()
+        kparams.addIntIfDefined("id", id);
+        self.client.queueServiceActionCall("playbackprofile", "delete", "None", kparams)
+        if self.client.isMultiRequest():
+            return self.client.getMultiRequestResult()
+        resultNode = self.client.doQueue()
+        return getXmlNodeBool(resultNode)
+
+    def generateSharedSecret(self, id):
+        """Generate playback adapter shared secret"""
+
+        kparams = KalturaParams()
+        kparams.addIntIfDefined("id", id);
+        self.client.queueServiceActionCall("playbackprofile", "generateSharedSecret", "KalturaPlaybackProfile", kparams)
+        if self.client.isMultiRequest():
+            return self.client.getMultiRequestResult()
+        resultNode = self.client.doQueue()
+        return KalturaObjectFactory.create(resultNode, 'KalturaPlaybackProfile')
+
+    def list(self, filter = NotImplemented):
+        """Returns all playback profiles for partner : id + name"""
+
+        kparams = KalturaParams()
+        kparams.addObjectIfDefined("filter", filter)
+        self.client.queueServiceActionCall("playbackprofile", "list", "KalturaPlaybackProfileListResponse", kparams)
+        if self.client.isMultiRequest():
+            return self.client.getMultiRequestResult()
+        resultNode = self.client.doQueue()
+        return KalturaObjectFactory.create(resultNode, 'KalturaPlaybackProfileListResponse')
+
+    def update(self, id, playbackProfile):
+        """Update Playback adapter details"""
+
+        kparams = KalturaParams()
+        kparams.addIntIfDefined("id", id);
+        kparams.addObjectIfDefined("playbackProfile", playbackProfile)
+        self.client.queueServiceActionCall("playbackprofile", "update", "KalturaPlaybackProfile", kparams)
+        if self.client.isMultiRequest():
+            return self.client.getMultiRequestResult()
+        resultNode = self.client.doQueue()
+        return KalturaObjectFactory.create(resultNode, 'KalturaPlaybackProfile')
+
+
+# @package Kaltura
+# @subpackage Client
 class KalturaPpvService(KalturaServiceBase):
     def __init__(self, client = None):
         KalturaServiceBase.__init__(self, client)
@@ -35039,6 +35331,7 @@ class KalturaCoreClient(KalturaClientPlugin):
             'personalFeed': KalturaPersonalFeedService,
             'personalList': KalturaPersonalListService,
             'pin': KalturaPinService,
+            'playbackProfile': KalturaPlaybackProfileService,
             'ppv': KalturaPpvService,
             'priceDetails': KalturaPriceDetailsService,
             'pricePlan': KalturaPricePlanService,
@@ -35177,6 +35470,7 @@ class KalturaCoreClient(KalturaClientPlugin):
             'KalturaPinType': KalturaPinType,
             'KalturaPlatform': KalturaPlatform,
             'KalturaPlaybackContextType': KalturaPlaybackContextType,
+            'KalturaPlaybackProfileOrderBy': KalturaPlaybackProfileOrderBy,
             'KalturaPositionOwner': KalturaPositionOwner,
             'KalturaPpvOrderBy': KalturaPpvOrderBy,
             'KalturaPriceDetailsOrderBy': KalturaPriceDetailsOrderBy,
@@ -35453,6 +35747,8 @@ class KalturaCoreClient(KalturaClientPlugin):
             'KalturaMediaFileListResponse': KalturaMediaFileListResponse,
             'KalturaAssetHistory': KalturaAssetHistory,
             'KalturaAssetHistoryListResponse': KalturaAssetHistoryListResponse,
+            'KalturaPlaybackProfile': KalturaPlaybackProfile,
+            'KalturaPlaybackProfileListResponse': KalturaPlaybackProfileListResponse,
             'KalturaRule': KalturaRule,
             'KalturaCondition': KalturaCondition,
             'KalturaRuleAction': KalturaRuleAction,
@@ -35479,6 +35775,7 @@ class KalturaCoreClient(KalturaClientPlugin):
             'KalturaStartDateOffsetRuleAction': KalturaStartDateOffsetRuleAction,
             'KalturaAllowPlaybackAction': KalturaAllowPlaybackAction,
             'KalturaBlockPlaybackAction': KalturaBlockPlaybackAction,
+            'KalturaApplyPlaybackAdapterAction': KalturaApplyPlaybackAdapterAction,
             'KalturaAssetUserRuleBlockAction': KalturaAssetUserRuleBlockAction,
             'KalturaAssetRule': KalturaAssetRule,
             'KalturaDrmProfile': KalturaDrmProfile,
@@ -35603,6 +35900,7 @@ class KalturaCoreClient(KalturaClientPlugin):
             'KalturaBookmarkFilter': KalturaBookmarkFilter,
             'KalturaAssetHistoryFilter': KalturaAssetHistoryFilter,
             'KalturaBusinessModuleRuleFilter': KalturaBusinessModuleRuleFilter,
+            'KalturaPlaybackProfileFilter': KalturaPlaybackProfileFilter,
             'KalturaAssetRuleFilter': KalturaAssetRuleFilter,
             'KalturaAssetUserRuleFilter': KalturaAssetUserRuleFilter,
             'KalturaCurrencyFilter': KalturaCurrencyFilter,
