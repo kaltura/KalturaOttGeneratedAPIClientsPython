@@ -42,7 +42,7 @@ from ..Base import (
     KalturaServiceBase,
 )
 
-API_VERSION = '5.1.87.42800'
+API_VERSION = '5.1.98.30364'
 
 ########## enums ##########
 # @package Kaltura
@@ -10058,6 +10058,7 @@ class KalturaRecording(KalturaObjectBase):
 
         # Kaltura unique ID representing the program identifier
         # @var int
+        # @insertonly
         self.assetId = assetId
 
         # Recording Type: single/season/series
@@ -10072,7 +10073,6 @@ class KalturaRecording(KalturaObjectBase):
 
         # Specifies whether or not the recording is protected
         # @var bool
-        # @insertonly
         self.isProtected = isProtected
 
         # Specifies when was the recording created. Date and time represented as epoch.
@@ -33969,12 +33969,13 @@ class KalturaRecordingService(KalturaServiceBase):
         resultNode = self.client.doQueue()
         return KalturaObjectFactory.create(resultNode, 'KalturaRecordingListResponse')
 
-    def protect(self, id):
-        """Protects an existing recording from the cleanup process for the defined protection period"""
+    def update(self, id, recording):
+        """Update an existing recording with is protected field"""
 
         kparams = KalturaParams()
         kparams.addIntIfDefined("id", id);
-        self.client.queueServiceActionCall("recording", "protect", "KalturaRecording", kparams)
+        kparams.addObjectIfDefined("recording", recording)
+        self.client.queueServiceActionCall("recording", "update", "KalturaRecording", kparams)
         if self.client.isMultiRequest():
             return self.client.getMultiRequestResult()
         resultNode = self.client.doQueue()
