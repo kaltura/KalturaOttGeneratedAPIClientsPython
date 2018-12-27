@@ -42,7 +42,7 @@ from ..Base import (
     KalturaServiceBase,
 )
 
-API_VERSION = '5.1.98.42804'
+API_VERSION = '5.1.112.27939'
 
 ########## enums ##########
 # @package Kaltura
@@ -33968,6 +33968,18 @@ class KalturaRecordingService(KalturaServiceBase):
             return self.client.getMultiRequestResult()
         resultNode = self.client.doQueue()
         return KalturaObjectFactory.create(resultNode, 'KalturaRecordingListResponse')
+
+    def protect(self, id):
+        """Deprecated, please use recording.update instead
+                    Protects an existing recording from the cleanup process for the defined protection period"""
+
+        kparams = KalturaParams()
+        kparams.addIntIfDefined("id", id);
+        self.client.queueServiceActionCall("recording", "protect", "KalturaRecording", kparams)
+        if self.client.isMultiRequest():
+            return self.client.getMultiRequestResult()
+        resultNode = self.client.doQueue()
+        return KalturaObjectFactory.create(resultNode, 'KalturaRecording')
 
     def update(self, id, recording):
         """Update an existing recording with is protected field"""
