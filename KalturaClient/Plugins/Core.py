@@ -42,7 +42,7 @@ from ..Base import (
     KalturaServiceBase,
 )
 
-API_VERSION = '5.1.1.18212'
+API_VERSION = '5.1.1.18400'
 
 ########## enums ##########
 # @package Kaltura
@@ -20942,14 +20942,14 @@ class KalturaClientConfiguration(KalturaObjectBase):
         self.apiVersion = apiVersion
 
         # Abort the Multireuqset call if any error occurs in one of the requests
-        # @var string
+        # @var bool
         self.abortOnError = abortOnError
 
 
     PROPERTY_LOADERS = {
         'clientTag': getXmlNodeText, 
         'apiVersion': getXmlNodeText, 
-        'abortOnError': getXmlNodeText, 
+        'abortOnError': getXmlNodeBool, 
     }
 
     def fromXml(self, node):
@@ -20961,7 +20961,7 @@ class KalturaClientConfiguration(KalturaObjectBase):
         kparams.put("objectType", "KalturaClientConfiguration")
         kparams.addStringIfDefined("clientTag", self.clientTag)
         kparams.addStringIfDefined("apiVersion", self.apiVersion)
-        kparams.addStringIfDefined("abortOnError", self.abortOnError)
+        kparams.addBoolIfDefined("abortOnError", self.abortOnError)
         return kparams
 
     def getClientTag(self):
