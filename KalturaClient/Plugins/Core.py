@@ -8,7 +8,7 @@
 # to do with audio, video, and animation what Wiki platfroms allow them to do with
 # text.
 #
-# Copyright (C) 2006-2018  Kaltura Inc.
+# Copyright (C) 2006-2019  Kaltura Inc.
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU Affero General Public License as
@@ -42,7 +42,7 @@ from ..Base import (
     KalturaServiceBase,
 )
 
-API_VERSION = '5.1.1.42816'
+API_VERSION = '5.1.1.42819'
 
 ########## enums ##########
 # @package Kaltura
@@ -11028,7 +11028,27 @@ class KalturaSubscriptionEntitlement(KalturaEntitlement):
 
 # @package Kaltura
 # @subpackage Client
-class KalturaAssetFilePpv(KalturaObjectBase):
+class KalturaOTTObjectSupportNullable(KalturaObjectBase):
+    def __init__(self):
+        KalturaObjectBase.__init__(self)
+
+
+    PROPERTY_LOADERS = {
+    }
+
+    def fromXml(self, node):
+        KalturaObjectBase.fromXml(self, node)
+        self.fromXmlImpl(node, KalturaOTTObjectSupportNullable.PROPERTY_LOADERS)
+
+    def toParams(self):
+        kparams = KalturaObjectBase.toParams(self)
+        kparams.put("objectType", "KalturaOTTObjectSupportNullable")
+        return kparams
+
+
+# @package Kaltura
+# @subpackage Client
+class KalturaAssetFilePpv(KalturaOTTObjectSupportNullable):
     """Asset file ppv"""
 
     def __init__(self,
@@ -11036,7 +11056,7 @@ class KalturaAssetFilePpv(KalturaObjectBase):
             ppvModuleId=NotImplemented,
             startDate=NotImplemented,
             endDate=NotImplemented):
-        KalturaObjectBase.__init__(self)
+        KalturaOTTObjectSupportNullable.__init__(self)
 
         # Asset file identifier
         # @var int
@@ -11063,11 +11083,11 @@ class KalturaAssetFilePpv(KalturaObjectBase):
     }
 
     def fromXml(self, node):
-        KalturaObjectBase.fromXml(self, node)
+        KalturaOTTObjectSupportNullable.fromXml(self, node)
         self.fromXmlImpl(node, KalturaAssetFilePpv.PROPERTY_LOADERS)
 
     def toParams(self):
-        kparams = KalturaObjectBase.toParams(self)
+        kparams = KalturaOTTObjectSupportNullable.toParams(self)
         kparams.put("objectType", "KalturaAssetFilePpv")
         kparams.addIntIfDefined("assetFileId", self.assetFileId)
         kparams.addIntIfDefined("ppvModuleId", self.ppvModuleId)
@@ -35701,6 +35721,7 @@ class KalturaCoreClient(KalturaClientPlugin):
             'KalturaCollectionEntitlement': KalturaCollectionEntitlement,
             'KalturaPpvEntitlement': KalturaPpvEntitlement,
             'KalturaSubscriptionEntitlement': KalturaSubscriptionEntitlement,
+            'KalturaOTTObjectSupportNullable': KalturaOTTObjectSupportNullable,
             'KalturaAssetFilePpv': KalturaAssetFilePpv,
             'KalturaAssetFilePpvListResponse': KalturaAssetFilePpvListResponse,
             'KalturaPriceDetails': KalturaPriceDetails,
