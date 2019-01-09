@@ -42,7 +42,7 @@ from ..Base import (
     KalturaServiceBase,
 )
 
-API_VERSION = '5.1.1.15361'
+API_VERSION = '5.1.1.17792'
 
 ########## enums ##########
 # @package Kaltura
@@ -25982,48 +25982,22 @@ class KalturaCaptionPlaybackPluginData(KalturaObjectBase):
 
 # @package Kaltura
 # @subpackage Client
-class KalturaBumpersPlaybackPluginData(KalturaObjectBase):
-    def __init__(self,
-            url=NotImplemented,
-            streamertype=NotImplemented):
+class KalturaPlaybackPluginData(KalturaObjectBase):
+    def __init__(self):
         KalturaObjectBase.__init__(self)
-
-        # url
-        # @var string
-        self.url = url
-
-        # Streamer type: hls, dash, progressive.
-        # @var string
-        self.streamertype = streamertype
 
 
     PROPERTY_LOADERS = {
-        'url': getXmlNodeText, 
-        'streamertype': getXmlNodeText, 
     }
 
     def fromXml(self, node):
         KalturaObjectBase.fromXml(self, node)
-        self.fromXmlImpl(node, KalturaBumpersPlaybackPluginData.PROPERTY_LOADERS)
+        self.fromXmlImpl(node, KalturaPlaybackPluginData.PROPERTY_LOADERS)
 
     def toParams(self):
         kparams = KalturaObjectBase.toParams(self)
-        kparams.put("objectType", "KalturaBumpersPlaybackPluginData")
-        kparams.addStringIfDefined("url", self.url)
-        kparams.addStringIfDefined("streamertype", self.streamertype)
+        kparams.put("objectType", "KalturaPlaybackPluginData")
         return kparams
-
-    def getUrl(self):
-        return self.url
-
-    def setUrl(self, newUrl):
-        self.url = newUrl
-
-    def getStreamertype(self):
-        return self.streamertype
-
-    def setStreamertype(self, newStreamertype):
-        self.streamertype = newStreamertype
 
 
 # @package Kaltura
@@ -26034,7 +26008,7 @@ class KalturaPlaybackContext(KalturaObjectBase):
             actions=NotImplemented,
             messages=NotImplemented,
             playbackCaptions=NotImplemented,
-            playbackBumpers=NotImplemented):
+            plugins=NotImplemented):
         KalturaObjectBase.__init__(self)
 
         # Sources
@@ -26053,9 +26027,9 @@ class KalturaPlaybackContext(KalturaObjectBase):
         # @var array of KalturaCaptionPlaybackPluginData
         self.playbackCaptions = playbackCaptions
 
-        # Playback bumpers
-        # @var array of KalturaBumpersPlaybackPluginData
-        self.playbackBumpers = playbackBumpers
+        # Plugins
+        # @var array of KalturaPlaybackPluginData
+        self.plugins = plugins
 
 
     PROPERTY_LOADERS = {
@@ -26063,7 +26037,7 @@ class KalturaPlaybackContext(KalturaObjectBase):
         'actions': (KalturaObjectFactory.createArray, 'KalturaRuleAction'), 
         'messages': (KalturaObjectFactory.createArray, 'KalturaAccessControlMessage'), 
         'playbackCaptions': (KalturaObjectFactory.createArray, 'KalturaCaptionPlaybackPluginData'), 
-        'playbackBumpers': (KalturaObjectFactory.createArray, 'KalturaBumpersPlaybackPluginData'), 
+        'plugins': (KalturaObjectFactory.createArray, 'KalturaPlaybackPluginData'), 
     }
 
     def fromXml(self, node):
@@ -26077,7 +26051,7 @@ class KalturaPlaybackContext(KalturaObjectBase):
         kparams.addArrayIfDefined("actions", self.actions)
         kparams.addArrayIfDefined("messages", self.messages)
         kparams.addArrayIfDefined("playbackCaptions", self.playbackCaptions)
-        kparams.addArrayIfDefined("playbackBumpers", self.playbackBumpers)
+        kparams.addArrayIfDefined("plugins", self.plugins)
         return kparams
 
     def getSources(self):
@@ -26104,11 +26078,57 @@ class KalturaPlaybackContext(KalturaObjectBase):
     def setPlaybackCaptions(self, newPlaybackCaptions):
         self.playbackCaptions = newPlaybackCaptions
 
-    def getPlaybackBumpers(self):
-        return self.playbackBumpers
+    def getPlugins(self):
+        return self.plugins
 
-    def setPlaybackBumpers(self, newPlaybackBumpers):
-        self.playbackBumpers = newPlaybackBumpers
+    def setPlugins(self, newPlugins):
+        self.plugins = newPlugins
+
+
+# @package Kaltura
+# @subpackage Client
+class KalturaBumpersPlaybackPluginData(KalturaPlaybackPluginData):
+    def __init__(self,
+            url=NotImplemented,
+            streamertype=NotImplemented):
+        KalturaPlaybackPluginData.__init__(self)
+
+        # url
+        # @var string
+        self.url = url
+
+        # Streamer type: hls, dash, progressive.
+        # @var string
+        self.streamertype = streamertype
+
+
+    PROPERTY_LOADERS = {
+        'url': getXmlNodeText, 
+        'streamertype': getXmlNodeText, 
+    }
+
+    def fromXml(self, node):
+        KalturaPlaybackPluginData.fromXml(self, node)
+        self.fromXmlImpl(node, KalturaBumpersPlaybackPluginData.PROPERTY_LOADERS)
+
+    def toParams(self):
+        kparams = KalturaPlaybackPluginData.toParams(self)
+        kparams.put("objectType", "KalturaBumpersPlaybackPluginData")
+        kparams.addStringIfDefined("url", self.url)
+        kparams.addStringIfDefined("streamertype", self.streamertype)
+        return kparams
+
+    def getUrl(self):
+        return self.url
+
+    def setUrl(self, newUrl):
+        self.url = newUrl
+
+    def getStreamertype(self):
+        return self.streamertype
+
+    def setStreamertype(self, newStreamertype):
+        self.streamertype = newStreamertype
 
 
 # @package Kaltura
@@ -36115,8 +36135,9 @@ class KalturaCoreClient(KalturaClientPlugin):
             'KalturaPlaybackContextOptions': KalturaPlaybackContextOptions,
             'KalturaAccessControlMessage': KalturaAccessControlMessage,
             'KalturaCaptionPlaybackPluginData': KalturaCaptionPlaybackPluginData,
-            'KalturaBumpersPlaybackPluginData': KalturaBumpersPlaybackPluginData,
+            'KalturaPlaybackPluginData': KalturaPlaybackPluginData,
             'KalturaPlaybackContext': KalturaPlaybackContext,
+            'KalturaBumpersPlaybackPluginData': KalturaBumpersPlaybackPluginData,
             'KalturaAdsSource': KalturaAdsSource,
             'KalturaAdsContext': KalturaAdsContext,
             'KalturaAssetFileContext': KalturaAssetFileContext,
