@@ -42,7 +42,7 @@ from ..Base import (
     KalturaServiceBase,
 )
 
-API_VERSION = '5.1.1.42817'
+API_VERSION = '5.1.1.42808'
 
 ########## enums ##########
 # @package Kaltura
@@ -20015,7 +20015,6 @@ class KalturaExportTask(KalturaObjectBase):
             exportType=NotImplemented,
             frequency=NotImplemented,
             notificationUrl=NotImplemented,
-            vodTypes=NotImplemented,
             isActive=NotImplemented):
         KalturaObjectBase.__init__(self)
 
@@ -20053,10 +20052,6 @@ class KalturaExportTask(KalturaObjectBase):
         # @var string
         self.notificationUrl = notificationUrl
 
-        # List of media type identifiers (as configured in TVM) to export. used only in case data_type = vod
-        # @var array of KalturaIntegerValue
-        self.vodTypes = vodTypes
-
         # Indicates if the task is active or not
         # @var bool
         self.isActive = isActive
@@ -20071,7 +20066,6 @@ class KalturaExportTask(KalturaObjectBase):
         'exportType': (KalturaEnumsFactory.createString, "KalturaExportType"), 
         'frequency': getXmlNodeInt, 
         'notificationUrl': getXmlNodeText, 
-        'vodTypes': (KalturaObjectFactory.createArray, 'KalturaIntegerValue'), 
         'isActive': getXmlNodeBool, 
     }
 
@@ -20089,7 +20083,6 @@ class KalturaExportTask(KalturaObjectBase):
         kparams.addStringEnumIfDefined("exportType", self.exportType)
         kparams.addIntIfDefined("frequency", self.frequency)
         kparams.addStringIfDefined("notificationUrl", self.notificationUrl)
-        kparams.addArrayIfDefined("vodTypes", self.vodTypes)
         kparams.addBoolIfDefined("isActive", self.isActive)
         return kparams
 
@@ -20137,12 +20130,6 @@ class KalturaExportTask(KalturaObjectBase):
 
     def setNotificationUrl(self, newNotificationUrl):
         self.notificationUrl = newNotificationUrl
-
-    def getVodTypes(self):
-        return self.vodTypes
-
-    def setVodTypes(self, newVodTypes):
-        self.vodTypes = newVodTypes
 
     def getIsActive(self):
         return self.isActive
