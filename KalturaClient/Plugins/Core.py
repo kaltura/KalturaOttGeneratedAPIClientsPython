@@ -8,7 +8,7 @@
 # to do with audio, video, and animation what Wiki platfroms allow them to do with
 # text.
 #
-# Copyright (C) 2006-2019  Kaltura Inc.
+# Copyright (C) 2006-2018  Kaltura Inc.
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU Affero General Public License as
@@ -42,7 +42,7 @@ from ..Base import (
     KalturaServiceBase,
 )
 
-API_VERSION = '5.1.1.21152'
+API_VERSION = '5.1.1.28292'
 
 ########## enums ##########
 # @package Kaltura
@@ -20936,8 +20936,7 @@ class KalturaClientConfiguration(KalturaObjectBase):
 
     def __init__(self,
             clientTag=NotImplemented,
-            apiVersion=NotImplemented,
-            abortOnError=NotImplemented):
+            apiVersion=NotImplemented):
         KalturaObjectBase.__init__(self)
 
         # Client Tag
@@ -20948,15 +20947,10 @@ class KalturaClientConfiguration(KalturaObjectBase):
         # @var string
         self.apiVersion = apiVersion
 
-        # Abort the Multireuqset call if any error occurs in one of the requests
-        # @var bool
-        self.abortOnError = abortOnError
-
 
     PROPERTY_LOADERS = {
         'clientTag': getXmlNodeText, 
         'apiVersion': getXmlNodeText, 
-        'abortOnError': getXmlNodeBool, 
     }
 
     def fromXml(self, node):
@@ -20968,7 +20962,6 @@ class KalturaClientConfiguration(KalturaObjectBase):
         kparams.put("objectType", "KalturaClientConfiguration")
         kparams.addStringIfDefined("clientTag", self.clientTag)
         kparams.addStringIfDefined("apiVersion", self.apiVersion)
-        kparams.addBoolIfDefined("abortOnError", self.abortOnError)
         return kparams
 
     def getClientTag(self):
@@ -20982,12 +20975,6 @@ class KalturaClientConfiguration(KalturaObjectBase):
 
     def setApiVersion(self, newApiVersion):
         self.apiVersion = newApiVersion
-
-    def getAbortOnError(self):
-        return self.abortOnError
-
-    def setAbortOnError(self, newAbortOnError):
-        self.abortOnError = newAbortOnError
 
 
 # @package Kaltura
@@ -21046,6 +21033,7 @@ class KalturaRequestConfiguration(KalturaObjectBase):
             currency=NotImplemented,
             ks=NotImplemented,
             responseProfile=NotImplemented,
+            abortOnError=NotImplemented,
             abortAllOnError=NotImplemented,
             skipCondition=NotImplemented):
         KalturaObjectBase.__init__(self)
@@ -21074,7 +21062,11 @@ class KalturaRequestConfiguration(KalturaObjectBase):
         # @var KalturaBaseResponseProfile
         self.responseProfile = responseProfile
 
-        # Abort all following requests if current request has an error
+        # Abort the Multireuqset call if any error occurs in one of the requests
+        # @var bool
+        self.abortOnError = abortOnError
+
+        # Abort all following requests in Multireuqset if current request has an error
         # @var bool
         self.abortAllOnError = abortAllOnError
 
@@ -21090,6 +21082,7 @@ class KalturaRequestConfiguration(KalturaObjectBase):
         'currency': getXmlNodeText, 
         'ks': getXmlNodeText, 
         'responseProfile': (KalturaObjectFactory.create, 'KalturaBaseResponseProfile'), 
+        'abortOnError': getXmlNodeBool, 
         'abortAllOnError': getXmlNodeBool, 
         'skipCondition': (KalturaObjectFactory.create, 'KalturaSkipCondition'), 
     }
@@ -21107,6 +21100,7 @@ class KalturaRequestConfiguration(KalturaObjectBase):
         kparams.addStringIfDefined("currency", self.currency)
         kparams.addStringIfDefined("ks", self.ks)
         kparams.addObjectIfDefined("responseProfile", self.responseProfile)
+        kparams.addBoolIfDefined("abortOnError", self.abortOnError)
         kparams.addBoolIfDefined("abortAllOnError", self.abortAllOnError)
         kparams.addObjectIfDefined("skipCondition", self.skipCondition)
         return kparams
@@ -21146,6 +21140,12 @@ class KalturaRequestConfiguration(KalturaObjectBase):
 
     def setResponseProfile(self, newResponseProfile):
         self.responseProfile = newResponseProfile
+
+    def getAbortOnError(self):
+        return self.abortOnError
+
+    def setAbortOnError(self, newAbortOnError):
+        self.abortOnError = newAbortOnError
 
     def getAbortAllOnError(self):
         return self.abortAllOnError
