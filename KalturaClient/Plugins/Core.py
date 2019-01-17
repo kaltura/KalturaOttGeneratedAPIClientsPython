@@ -42,7 +42,7 @@ from ..Base import (
     KalturaServiceBase,
 )
 
-API_VERSION = '5.1.1.15927'
+API_VERSION = '5.1.1.24444'
 
 ########## enums ##########
 # @package Kaltura
@@ -925,6 +925,7 @@ class KalturaImageObjectType(object):
     CATEGORY = "CATEGORY"
     PARTNER = "PARTNER"
     IMAGE_TYPE = "IMAGE_TYPE"
+    PROGRAM_GROUP = "PROGRAM_GROUP"
 
     def __init__(self, value):
         self.value = value
@@ -24202,7 +24203,7 @@ class KalturaImageFilter(KalturaFilter):
         # @var KalturaImageObjectType
         self.imageObjectTypeEqual = imageObjectTypeEqual
 
-        # Filter images that are default on atleast on image type or not default at any
+        # Filter images that are default on at least on image type or not default at any
         # @var bool
         self.isDefaultEqual = isDefaultEqual
 
@@ -32619,7 +32620,7 @@ class KalturaImageService(KalturaServiceBase):
         resultNode = self.client.doQueue()
         return getXmlNodeBool(resultNode)
 
-    def list(self, filter = NotImplemented):
+    def list(self, filter):
         """Get the list of images by different filtering"""
 
         kparams = KalturaParams()
