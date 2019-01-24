@@ -42,7 +42,7 @@ from ..Base import (
     KalturaServiceBase,
 )
 
-API_VERSION = '5.1.1.21077'
+API_VERSION = '5.1.1.23046'
 
 ########## enums ##########
 # @package Kaltura
@@ -16900,6 +16900,51 @@ class KalturaTvmRuleListResponse(KalturaListResponse):
 
     def setObjects(self, newObjects):
         self.objects = newObjects
+
+
+# @package Kaltura
+# @subpackage Client
+class KalturaTvmDeviceRule(KalturaTvmRule):
+    """TVM geo rule"""
+
+    def __init__(self,
+            id=NotImplemented,
+            name=NotImplemented,
+            description=NotImplemented,
+            createDate=NotImplemented,
+            ruleType=NotImplemented,
+            deviceBrandIds=NotImplemented):
+        KalturaTvmRule.__init__(self,
+            id,
+            name,
+            description,
+            createDate,
+            ruleType)
+
+        # Comma separated list of country Ids.
+        # @var string
+        self.deviceBrandIds = deviceBrandIds
+
+
+    PROPERTY_LOADERS = {
+        'deviceBrandIds': getXmlNodeText, 
+    }
+
+    def fromXml(self, node):
+        KalturaTvmRule.fromXml(self, node)
+        self.fromXmlImpl(node, KalturaTvmDeviceRule.PROPERTY_LOADERS)
+
+    def toParams(self):
+        kparams = KalturaTvmRule.toParams(self)
+        kparams.put("objectType", "KalturaTvmDeviceRule")
+        kparams.addStringIfDefined("deviceBrandIds", self.deviceBrandIds)
+        return kparams
+
+    def getDeviceBrandIds(self):
+        return self.deviceBrandIds
+
+    def setDeviceBrandIds(self, newDeviceBrandIds):
+        self.deviceBrandIds = newDeviceBrandIds
 
 
 # @package Kaltura
@@ -36197,6 +36242,7 @@ class KalturaCoreClient(KalturaClientPlugin):
             'KalturaRule': KalturaRule,
             'KalturaTvmRule': KalturaTvmRule,
             'KalturaTvmRuleListResponse': KalturaTvmRuleListResponse,
+            'KalturaTvmDeviceRule': KalturaTvmDeviceRule,
             'KalturaTvmGeoRule': KalturaTvmGeoRule,
             'KalturaCondition': KalturaCondition,
             'KalturaRuleAction': KalturaRuleAction,
