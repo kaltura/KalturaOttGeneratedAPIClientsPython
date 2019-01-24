@@ -42,7 +42,7 @@ from ..Base import (
     KalturaServiceBase,
 )
 
-API_VERSION = '5.1.1.42808'
+API_VERSION = '5.1.1.21077'
 
 ########## enums ##########
 # @package Kaltura
@@ -1984,6 +1984,17 @@ class KalturaTransactionType(object):
     PPV = "ppv"
     SUBSCRIPTION = "subscription"
     COLLECTION = "collection"
+
+    def __init__(self, value):
+        self.value = value
+
+    def getValue(self):
+        return self.value
+
+# @package Kaltura
+# @subpackage Client
+class KalturaTvmRuleOrderBy(object):
+    NONE = "NONE"
 
     def __init__(self, value):
         self.value = value
@@ -16752,148 +16763,6 @@ class KalturaAssetHistoryListResponse(KalturaListResponse):
 
 # @package Kaltura
 # @subpackage Client
-class KalturaPlaybackProfile(KalturaObjectBase):
-    """Playback profile"""
-
-    def __init__(self,
-            id=NotImplemented,
-            name=NotImplemented,
-            isActive=NotImplemented,
-            adapterUrl=NotImplemented,
-            settings=NotImplemented,
-            systemName=NotImplemented,
-            sharedSecret=NotImplemented):
-        KalturaObjectBase.__init__(self)
-
-        # Playback profile identifier
-        # @var int
-        # @readonly
-        self.id = id
-
-        # Playback profile name
-        # @var string
-        self.name = name
-
-        # Playback profile active status
-        # @var bool
-        self.isActive = isActive
-
-        # Playback profile URL
-        # @var string
-        self.adapterUrl = adapterUrl
-
-        # Playback profile settings
-        # @var string
-        self.settings = settings
-
-        # Playback profile alias
-        # @var string
-        self.systemName = systemName
-
-        # Playback adapter shared secret
-        # @var string
-        # @readonly
-        self.sharedSecret = sharedSecret
-
-
-    PROPERTY_LOADERS = {
-        'id': getXmlNodeInt, 
-        'name': getXmlNodeText, 
-        'isActive': getXmlNodeBool, 
-        'adapterUrl': getXmlNodeText, 
-        'settings': getXmlNodeText, 
-        'systemName': getXmlNodeText, 
-        'sharedSecret': getXmlNodeText, 
-    }
-
-    def fromXml(self, node):
-        KalturaObjectBase.fromXml(self, node)
-        self.fromXmlImpl(node, KalturaPlaybackProfile.PROPERTY_LOADERS)
-
-    def toParams(self):
-        kparams = KalturaObjectBase.toParams(self)
-        kparams.put("objectType", "KalturaPlaybackProfile")
-        kparams.addStringIfDefined("name", self.name)
-        kparams.addBoolIfDefined("isActive", self.isActive)
-        kparams.addStringIfDefined("adapterUrl", self.adapterUrl)
-        kparams.addStringIfDefined("settings", self.settings)
-        kparams.addStringIfDefined("systemName", self.systemName)
-        return kparams
-
-    def getId(self):
-        return self.id
-
-    def getName(self):
-        return self.name
-
-    def setName(self, newName):
-        self.name = newName
-
-    def getIsActive(self):
-        return self.isActive
-
-    def setIsActive(self, newIsActive):
-        self.isActive = newIsActive
-
-    def getAdapterUrl(self):
-        return self.adapterUrl
-
-    def setAdapterUrl(self, newAdapterUrl):
-        self.adapterUrl = newAdapterUrl
-
-    def getSettings(self):
-        return self.settings
-
-    def setSettings(self, newSettings):
-        self.settings = newSettings
-
-    def getSystemName(self):
-        return self.systemName
-
-    def setSystemName(self, newSystemName):
-        self.systemName = newSystemName
-
-    def getSharedSecret(self):
-        return self.sharedSecret
-
-
-# @package Kaltura
-# @subpackage Client
-class KalturaPlaybackProfileListResponse(KalturaListResponse):
-    def __init__(self,
-            totalCount=NotImplemented,
-            objects=NotImplemented):
-        KalturaListResponse.__init__(self,
-            totalCount)
-
-        # A list of Engagement adapter
-        # @var array of KalturaPlaybackProfile
-        self.objects = objects
-
-
-    PROPERTY_LOADERS = {
-        'objects': (KalturaObjectFactory.createArray, 'KalturaPlaybackProfile'), 
-    }
-
-    def fromXml(self, node):
-        KalturaListResponse.fromXml(self, node)
-        self.fromXmlImpl(node, KalturaPlaybackProfileListResponse.PROPERTY_LOADERS)
-
-    def toParams(self):
-        kparams = KalturaListResponse.toParams(self)
-        kparams.put("objectType", "KalturaPlaybackProfileListResponse")
-        kparams.addArrayIfDefined("objects", self.objects)
-        return kparams
-
-    def getObjects(self):
-        return self.objects
-
-    def setObjects(self, newObjects):
-        self.objects = newObjects
-
-
-# @package Kaltura
-# @subpackage Client
 class KalturaRule(KalturaObjectBase):
     """Rule base"""
 
@@ -16948,6 +16817,173 @@ class KalturaRule(KalturaObjectBase):
 
     def setDescription(self, newDescription):
         self.description = newDescription
+
+
+# @package Kaltura
+# @subpackage Client
+class KalturaTvmRule(KalturaRule):
+    """TVM rule"""
+
+    def __init__(self,
+            id=NotImplemented,
+            name=NotImplemented,
+            description=NotImplemented,
+            createDate=NotImplemented,
+            ruleType=NotImplemented):
+        KalturaRule.__init__(self,
+            id,
+            name,
+            description)
+
+        # Specifies when was the tvm rule was created. Date and time represented as epoch.
+        # @var int
+        # @readonly
+        self.createDate = createDate
+
+        # Specifies the tvm rule type.
+        # @var KalturaRuleType
+        # @readonly
+        self.ruleType = ruleType
+
+
+    PROPERTY_LOADERS = {
+        'createDate': getXmlNodeInt, 
+        'ruleType': (KalturaEnumsFactory.createString, "KalturaRuleType"), 
+    }
+
+    def fromXml(self, node):
+        KalturaRule.fromXml(self, node)
+        self.fromXmlImpl(node, KalturaTvmRule.PROPERTY_LOADERS)
+
+    def toParams(self):
+        kparams = KalturaRule.toParams(self)
+        kparams.put("objectType", "KalturaTvmRule")
+        return kparams
+
+    def getCreateDate(self):
+        return self.createDate
+
+    def getRuleType(self):
+        return self.ruleType
+
+
+# @package Kaltura
+# @subpackage Client
+class KalturaTvmRuleListResponse(KalturaListResponse):
+    def __init__(self,
+            totalCount=NotImplemented,
+            objects=NotImplemented):
+        KalturaListResponse.__init__(self,
+            totalCount)
+
+        # tvm rules
+        # @var array of KalturaTvmRule
+        self.objects = objects
+
+
+    PROPERTY_LOADERS = {
+        'objects': (KalturaObjectFactory.createArray, 'KalturaTvmRule'), 
+    }
+
+    def fromXml(self, node):
+        KalturaListResponse.fromXml(self, node)
+        self.fromXmlImpl(node, KalturaTvmRuleListResponse.PROPERTY_LOADERS)
+
+    def toParams(self):
+        kparams = KalturaListResponse.toParams(self)
+        kparams.put("objectType", "KalturaTvmRuleListResponse")
+        kparams.addArrayIfDefined("objects", self.objects)
+        return kparams
+
+    def getObjects(self):
+        return self.objects
+
+    def setObjects(self, newObjects):
+        self.objects = newObjects
+
+
+# @package Kaltura
+# @subpackage Client
+class KalturaTvmGeoRule(KalturaTvmRule):
+    """TVM geo rule"""
+
+    def __init__(self,
+            id=NotImplemented,
+            name=NotImplemented,
+            description=NotImplemented,
+            createDate=NotImplemented,
+            ruleType=NotImplemented,
+            onlyOrBut=NotImplemented,
+            countryIds=NotImplemented,
+            proxyRule=NotImplemented,
+            proxyLevel=NotImplemented):
+        KalturaTvmRule.__init__(self,
+            id,
+            name,
+            description,
+            createDate,
+            ruleType)
+
+        # Indicates if the rule is relevent ONLY for the country ids or except country ids here.
+        # @var bool
+        self.onlyOrBut = onlyOrBut
+
+        # Comma separated list of country Ids.
+        # @var string
+        self.countryIds = countryIds
+
+        # proxyRule - what is that?
+        # @var int
+        self.proxyRule = proxyRule
+
+        # proxyLevel - what is that?
+        # @var int
+        self.proxyLevel = proxyLevel
+
+
+    PROPERTY_LOADERS = {
+        'onlyOrBut': getXmlNodeBool, 
+        'countryIds': getXmlNodeText, 
+        'proxyRule': getXmlNodeInt, 
+        'proxyLevel': getXmlNodeInt, 
+    }
+
+    def fromXml(self, node):
+        KalturaTvmRule.fromXml(self, node)
+        self.fromXmlImpl(node, KalturaTvmGeoRule.PROPERTY_LOADERS)
+
+    def toParams(self):
+        kparams = KalturaTvmRule.toParams(self)
+        kparams.put("objectType", "KalturaTvmGeoRule")
+        kparams.addBoolIfDefined("onlyOrBut", self.onlyOrBut)
+        kparams.addStringIfDefined("countryIds", self.countryIds)
+        kparams.addIntIfDefined("proxyRule", self.proxyRule)
+        kparams.addIntIfDefined("proxyLevel", self.proxyLevel)
+        return kparams
+
+    def getOnlyOrBut(self):
+        return self.onlyOrBut
+
+    def setOnlyOrBut(self, newOnlyOrBut):
+        self.onlyOrBut = newOnlyOrBut
+
+    def getCountryIds(self):
+        return self.countryIds
+
+    def setCountryIds(self, newCountryIds):
+        self.countryIds = newCountryIds
+
+    def getProxyRule(self):
+        return self.proxyRule
+
+    def setProxyRule(self, newProxyRule):
+        self.proxyRule = newProxyRule
+
+    def getProxyLevel(self):
+        return self.proxyLevel
+
+    def setProxyLevel(self, newProxyLevel):
+        self.proxyLevel = newProxyLevel
 
 
 # @package Kaltura
@@ -17147,186 +17183,6 @@ class KalturaBusinessModuleRule(KalturaRule):
 
     def getUpdateDate(self):
         return self.updateDate
-
-
-# @package Kaltura
-# @subpackage Client
-class KalturaBusinessModuleRuleListResponse(KalturaListResponse):
-    def __init__(self,
-            totalCount=NotImplemented,
-            objects=NotImplemented):
-        KalturaListResponse.__init__(self,
-            totalCount)
-
-        # Asset rules
-        # @var array of KalturaBusinessModuleRule
-        self.objects = objects
-
-
-    PROPERTY_LOADERS = {
-        'objects': (KalturaObjectFactory.createArray, 'KalturaBusinessModuleRule'), 
-    }
-
-    def fromXml(self, node):
-        KalturaListResponse.fromXml(self, node)
-        self.fromXmlImpl(node, KalturaBusinessModuleRuleListResponse.PROPERTY_LOADERS)
-
-    def toParams(self):
-        kparams = KalturaListResponse.toParams(self)
-        kparams.put("objectType", "KalturaBusinessModuleRuleListResponse")
-        kparams.addArrayIfDefined("objects", self.objects)
-        return kparams
-
-    def getObjects(self):
-        return self.objects
-
-    def setObjects(self, newObjects):
-        self.objects = newObjects
-
-
-# @package Kaltura
-# @subpackage Client
-class KalturaAssetRuleBase(KalturaRule):
-    """Asset rule base"""
-
-    def __init__(self,
-            id=NotImplemented,
-            name=NotImplemented,
-            description=NotImplemented):
-        KalturaRule.__init__(self,
-            id,
-            name,
-            description)
-
-
-    PROPERTY_LOADERS = {
-    }
-
-    def fromXml(self, node):
-        KalturaRule.fromXml(self, node)
-        self.fromXmlImpl(node, KalturaAssetRuleBase.PROPERTY_LOADERS)
-
-    def toParams(self):
-        kparams = KalturaRule.toParams(self)
-        kparams.put("objectType", "KalturaAssetRuleBase")
-        return kparams
-
-
-# @package Kaltura
-# @subpackage Client
-class KalturaAssetCondition(KalturaCondition):
-    """Asset Condition"""
-
-    def __init__(self,
-            type=NotImplemented,
-            description=NotImplemented,
-            ksql=NotImplemented):
-        KalturaCondition.__init__(self,
-            type,
-            description)
-
-        # KSQL
-        # @var string
-        self.ksql = ksql
-
-
-    PROPERTY_LOADERS = {
-        'ksql': getXmlNodeText, 
-    }
-
-    def fromXml(self, node):
-        KalturaCondition.fromXml(self, node)
-        self.fromXmlImpl(node, KalturaAssetCondition.PROPERTY_LOADERS)
-
-    def toParams(self):
-        kparams = KalturaCondition.toParams(self)
-        kparams.put("objectType", "KalturaAssetCondition")
-        kparams.addStringIfDefined("ksql", self.ksql)
-        return kparams
-
-    def getKsql(self):
-        return self.ksql
-
-    def setKsql(self, newKsql):
-        self.ksql = newKsql
-
-
-# @package Kaltura
-# @subpackage Client
-class KalturaAssetUserRuleAction(KalturaRuleAction):
-    def __init__(self,
-            type=NotImplemented,
-            description=NotImplemented):
-        KalturaRuleAction.__init__(self,
-            type,
-            description)
-
-
-    PROPERTY_LOADERS = {
-    }
-
-    def fromXml(self, node):
-        KalturaRuleAction.fromXml(self, node)
-        self.fromXmlImpl(node, KalturaAssetUserRuleAction.PROPERTY_LOADERS)
-
-    def toParams(self):
-        kparams = KalturaRuleAction.toParams(self)
-        kparams.put("objectType", "KalturaAssetUserRuleAction")
-        return kparams
-
-
-# @package Kaltura
-# @subpackage Client
-class KalturaAssetUserRule(KalturaAssetRuleBase):
-    """Asset user rule"""
-
-    def __init__(self,
-            id=NotImplemented,
-            name=NotImplemented,
-            description=NotImplemented,
-            conditions=NotImplemented,
-            actions=NotImplemented):
-        KalturaAssetRuleBase.__init__(self,
-            id,
-            name,
-            description)
-
-        # List of Ksql conditions for the user rule
-        # @var array of KalturaAssetCondition
-        self.conditions = conditions
-
-        # List of actions for the user rule
-        # @var array of KalturaAssetUserRuleAction
-        self.actions = actions
-
-
-    PROPERTY_LOADERS = {
-        'conditions': (KalturaObjectFactory.createArray, 'KalturaAssetCondition'), 
-        'actions': (KalturaObjectFactory.createArray, 'KalturaAssetUserRuleAction'), 
-    }
-
-    def fromXml(self, node):
-        KalturaAssetRuleBase.fromXml(self, node)
-        self.fromXmlImpl(node, KalturaAssetUserRule.PROPERTY_LOADERS)
-
-    def toParams(self):
-        kparams = KalturaAssetRuleBase.toParams(self)
-        kparams.put("objectType", "KalturaAssetUserRule")
-        kparams.addArrayIfDefined("conditions", self.conditions)
-        kparams.addArrayIfDefined("actions", self.actions)
-        return kparams
-
-    def getConditions(self):
-        return self.conditions
-
-    def setConditions(self, newConditions):
-        self.conditions = newConditions
-
-    def getActions(self):
-        return self.actions
-
-    def setActions(self, newActions):
-        self.actions = newActions
 
 
 # @package Kaltura
@@ -17554,6 +17410,45 @@ class KalturaHeaderCondition(KalturaNotCondition):
 
     def setValue(self, newValue):
         self.value = newValue
+
+
+# @package Kaltura
+# @subpackage Client
+class KalturaAssetCondition(KalturaCondition):
+    """Asset Condition"""
+
+    def __init__(self,
+            type=NotImplemented,
+            description=NotImplemented,
+            ksql=NotImplemented):
+        KalturaCondition.__init__(self,
+            type,
+            description)
+
+        # KSQL
+        # @var string
+        self.ksql = ksql
+
+
+    PROPERTY_LOADERS = {
+        'ksql': getXmlNodeText, 
+    }
+
+    def fromXml(self, node):
+        KalturaCondition.fromXml(self, node)
+        self.fromXmlImpl(node, KalturaAssetCondition.PROPERTY_LOADERS)
+
+    def toParams(self):
+        kparams = KalturaCondition.toParams(self)
+        kparams.put("objectType", "KalturaAssetCondition")
+        kparams.addStringIfDefined("ksql", self.ksql)
+        return kparams
+
+    def getKsql(self):
+        return self.ksql
+
+    def setKsql(self, newKsql):
+        self.ksql = newKsql
 
 
 # @package Kaltura
@@ -18000,6 +17895,30 @@ class KalturaApplyPlaybackAdapterAction(KalturaAssetRuleAction):
 
 # @package Kaltura
 # @subpackage Client
+class KalturaAssetUserRuleAction(KalturaRuleAction):
+    def __init__(self,
+            type=NotImplemented,
+            description=NotImplemented):
+        KalturaRuleAction.__init__(self,
+            type,
+            description)
+
+
+    PROPERTY_LOADERS = {
+    }
+
+    def fromXml(self, node):
+        KalturaRuleAction.fromXml(self, node)
+        self.fromXmlImpl(node, KalturaAssetUserRuleAction.PROPERTY_LOADERS)
+
+    def toParams(self):
+        kparams = KalturaRuleAction.toParams(self)
+        kparams.put("objectType", "KalturaAssetUserRuleAction")
+        return kparams
+
+
+# @package Kaltura
+# @subpackage Client
 class KalturaAssetUserRuleBlockAction(KalturaAssetUserRuleAction):
     def __init__(self,
             type=NotImplemented,
@@ -18020,6 +17939,88 @@ class KalturaAssetUserRuleBlockAction(KalturaAssetUserRuleAction):
         kparams = KalturaAssetUserRuleAction.toParams(self)
         kparams.put("objectType", "KalturaAssetUserRuleBlockAction")
         return kparams
+
+
+# @package Kaltura
+# @subpackage Client
+class KalturaAssetRuleBase(KalturaRule):
+    """Asset rule base"""
+
+    def __init__(self,
+            id=NotImplemented,
+            name=NotImplemented,
+            description=NotImplemented):
+        KalturaRule.__init__(self,
+            id,
+            name,
+            description)
+
+
+    PROPERTY_LOADERS = {
+    }
+
+    def fromXml(self, node):
+        KalturaRule.fromXml(self, node)
+        self.fromXmlImpl(node, KalturaAssetRuleBase.PROPERTY_LOADERS)
+
+    def toParams(self):
+        kparams = KalturaRule.toParams(self)
+        kparams.put("objectType", "KalturaAssetRuleBase")
+        return kparams
+
+
+# @package Kaltura
+# @subpackage Client
+class KalturaAssetUserRule(KalturaAssetRuleBase):
+    """Asset user rule"""
+
+    def __init__(self,
+            id=NotImplemented,
+            name=NotImplemented,
+            description=NotImplemented,
+            conditions=NotImplemented,
+            actions=NotImplemented):
+        KalturaAssetRuleBase.__init__(self,
+            id,
+            name,
+            description)
+
+        # List of Ksql conditions for the user rule
+        # @var array of KalturaAssetCondition
+        self.conditions = conditions
+
+        # List of actions for the user rule
+        # @var array of KalturaAssetUserRuleAction
+        self.actions = actions
+
+
+    PROPERTY_LOADERS = {
+        'conditions': (KalturaObjectFactory.createArray, 'KalturaAssetCondition'), 
+        'actions': (KalturaObjectFactory.createArray, 'KalturaAssetUserRuleAction'), 
+    }
+
+    def fromXml(self, node):
+        KalturaAssetRuleBase.fromXml(self, node)
+        self.fromXmlImpl(node, KalturaAssetUserRule.PROPERTY_LOADERS)
+
+    def toParams(self):
+        kparams = KalturaAssetRuleBase.toParams(self)
+        kparams.put("objectType", "KalturaAssetUserRule")
+        kparams.addArrayIfDefined("conditions", self.conditions)
+        kparams.addArrayIfDefined("actions", self.actions)
+        return kparams
+
+    def getConditions(self):
+        return self.conditions
+
+    def setConditions(self, newConditions):
+        self.conditions = newConditions
+
+    def getActions(self):
+        return self.actions
+
+    def setActions(self, newActions):
+        self.actions = newActions
 
 
 # @package Kaltura
@@ -18074,6 +18075,183 @@ class KalturaAssetRule(KalturaAssetRuleBase):
 
     def setActions(self, newActions):
         self.actions = newActions
+
+
+# @package Kaltura
+# @subpackage Client
+class KalturaPlaybackProfile(KalturaObjectBase):
+    """Playback profile"""
+
+    def __init__(self,
+            id=NotImplemented,
+            name=NotImplemented,
+            isActive=NotImplemented,
+            adapterUrl=NotImplemented,
+            settings=NotImplemented,
+            systemName=NotImplemented,
+            sharedSecret=NotImplemented):
+        KalturaObjectBase.__init__(self)
+
+        # Playback profile identifier
+        # @var int
+        # @readonly
+        self.id = id
+
+        # Playback profile name
+        # @var string
+        self.name = name
+
+        # Playback profile active status
+        # @var bool
+        self.isActive = isActive
+
+        # Playback profile URL
+        # @var string
+        self.adapterUrl = adapterUrl
+
+        # Playback profile settings
+        # @var string
+        self.settings = settings
+
+        # Playback profile alias
+        # @var string
+        self.systemName = systemName
+
+        # Playback adapter shared secret
+        # @var string
+        # @readonly
+        self.sharedSecret = sharedSecret
+
+
+    PROPERTY_LOADERS = {
+        'id': getXmlNodeInt, 
+        'name': getXmlNodeText, 
+        'isActive': getXmlNodeBool, 
+        'adapterUrl': getXmlNodeText, 
+        'settings': getXmlNodeText, 
+        'systemName': getXmlNodeText, 
+        'sharedSecret': getXmlNodeText, 
+    }
+
+    def fromXml(self, node):
+        KalturaObjectBase.fromXml(self, node)
+        self.fromXmlImpl(node, KalturaPlaybackProfile.PROPERTY_LOADERS)
+
+    def toParams(self):
+        kparams = KalturaObjectBase.toParams(self)
+        kparams.put("objectType", "KalturaPlaybackProfile")
+        kparams.addStringIfDefined("name", self.name)
+        kparams.addBoolIfDefined("isActive", self.isActive)
+        kparams.addStringIfDefined("adapterUrl", self.adapterUrl)
+        kparams.addStringIfDefined("settings", self.settings)
+        kparams.addStringIfDefined("systemName", self.systemName)
+        return kparams
+
+    def getId(self):
+        return self.id
+
+    def getName(self):
+        return self.name
+
+    def setName(self, newName):
+        self.name = newName
+
+    def getIsActive(self):
+        return self.isActive
+
+    def setIsActive(self, newIsActive):
+        self.isActive = newIsActive
+
+    def getAdapterUrl(self):
+        return self.adapterUrl
+
+    def setAdapterUrl(self, newAdapterUrl):
+        self.adapterUrl = newAdapterUrl
+
+    def getSettings(self):
+        return self.settings
+
+    def setSettings(self, newSettings):
+        self.settings = newSettings
+
+    def getSystemName(self):
+        return self.systemName
+
+    def setSystemName(self, newSystemName):
+        self.systemName = newSystemName
+
+    def getSharedSecret(self):
+        return self.sharedSecret
+
+
+# @package Kaltura
+# @subpackage Client
+class KalturaPlaybackProfileListResponse(KalturaListResponse):
+    def __init__(self,
+            totalCount=NotImplemented,
+            objects=NotImplemented):
+        KalturaListResponse.__init__(self,
+            totalCount)
+
+        # A list of Engagement adapter
+        # @var array of KalturaPlaybackProfile
+        self.objects = objects
+
+
+    PROPERTY_LOADERS = {
+        'objects': (KalturaObjectFactory.createArray, 'KalturaPlaybackProfile'), 
+    }
+
+    def fromXml(self, node):
+        KalturaListResponse.fromXml(self, node)
+        self.fromXmlImpl(node, KalturaPlaybackProfileListResponse.PROPERTY_LOADERS)
+
+    def toParams(self):
+        kparams = KalturaListResponse.toParams(self)
+        kparams.put("objectType", "KalturaPlaybackProfileListResponse")
+        kparams.addArrayIfDefined("objects", self.objects)
+        return kparams
+
+    def getObjects(self):
+        return self.objects
+
+    def setObjects(self, newObjects):
+        self.objects = newObjects
+
+
+# @package Kaltura
+# @subpackage Client
+class KalturaBusinessModuleRuleListResponse(KalturaListResponse):
+    def __init__(self,
+            totalCount=NotImplemented,
+            objects=NotImplemented):
+        KalturaListResponse.__init__(self,
+            totalCount)
+
+        # Asset rules
+        # @var array of KalturaBusinessModuleRule
+        self.objects = objects
+
+
+    PROPERTY_LOADERS = {
+        'objects': (KalturaObjectFactory.createArray, 'KalturaBusinessModuleRule'), 
+    }
+
+    def fromXml(self, node):
+        KalturaListResponse.fromXml(self, node)
+        self.fromXmlImpl(node, KalturaBusinessModuleRuleListResponse.PROPERTY_LOADERS)
+
+    def toParams(self):
+        kparams = KalturaListResponse.toParams(self)
+        kparams.put("objectType", "KalturaBusinessModuleRuleListResponse")
+        kparams.addArrayIfDefined("objects", self.objects)
+        return kparams
+
+    def getObjects(self):
+        return self.objects
+
+    def setObjects(self, newObjects):
+        self.objects = newObjects
 
 
 # @package Kaltura
@@ -24612,6 +24790,56 @@ class KalturaAssetHistoryFilter(KalturaFilter):
 
     def setDaysLessThanOrEqual(self, newDaysLessThanOrEqual):
         self.daysLessThanOrEqual = newDaysLessThanOrEqual
+
+
+# @package Kaltura
+# @subpackage Client
+class KalturaTvmRuleFilter(KalturaFilter):
+    """Asset user rule filter"""
+
+    def __init__(self,
+            orderBy=NotImplemented,
+            ruleTypeEqual=NotImplemented,
+            nameEqual=NotImplemented):
+        KalturaFilter.__init__(self,
+            orderBy)
+
+        # Indicates which tvm rule list to return by their type.
+        # @var KalturaRuleType
+        self.ruleTypeEqual = ruleTypeEqual
+
+        # Indicates which tvm rule list to return by their name.
+        # @var string
+        self.nameEqual = nameEqual
+
+
+    PROPERTY_LOADERS = {
+        'ruleTypeEqual': (KalturaEnumsFactory.createString, "KalturaRuleType"), 
+        'nameEqual': getXmlNodeText, 
+    }
+
+    def fromXml(self, node):
+        KalturaFilter.fromXml(self, node)
+        self.fromXmlImpl(node, KalturaTvmRuleFilter.PROPERTY_LOADERS)
+
+    def toParams(self):
+        kparams = KalturaFilter.toParams(self)
+        kparams.put("objectType", "KalturaTvmRuleFilter")
+        kparams.addStringEnumIfDefined("ruleTypeEqual", self.ruleTypeEqual)
+        kparams.addStringIfDefined("nameEqual", self.nameEqual)
+        return kparams
+
+    def getRuleTypeEqual(self):
+        return self.ruleTypeEqual
+
+    def setRuleTypeEqual(self, newRuleTypeEqual):
+        self.ruleTypeEqual = newRuleTypeEqual
+
+    def getNameEqual(self):
+        return self.nameEqual
+
+    def setNameEqual(self, newNameEqual):
+        self.nameEqual = newNameEqual
 
 
 # @package Kaltura
@@ -35138,6 +35366,24 @@ class KalturaTransactionHistoryService(KalturaServiceBase):
 
 # @package Kaltura
 # @subpackage Client
+class KalturaTvmRuleService(KalturaServiceBase):
+    def __init__(self, client = None):
+        KalturaServiceBase.__init__(self, client)
+
+    def list(self, filter = NotImplemented):
+        """Get the list of tvm rules for the partner"""
+
+        kparams = KalturaParams()
+        kparams.addObjectIfDefined("filter", filter)
+        self.client.queueServiceActionCall("tvmrule", "list", "KalturaTvmRuleListResponse", kparams)
+        if self.client.isMultiRequest():
+            return self.client.getMultiRequestResult()
+        resultNode = self.client.doQueue()
+        return KalturaObjectFactory.create(resultNode, 'KalturaTvmRuleListResponse')
+
+
+# @package Kaltura
+# @subpackage Client
 class KalturaUnifiedPaymentService(KalturaServiceBase):
     def __init__(self, client = None):
         KalturaServiceBase.__init__(self, client)
@@ -35559,6 +35805,7 @@ class KalturaCoreClient(KalturaClientPlugin):
             'topic': KalturaTopicService,
             'transaction': KalturaTransactionService,
             'transactionHistory': KalturaTransactionHistoryService,
+            'tvmRule': KalturaTvmRuleService,
             'unifiedPayment': KalturaUnifiedPaymentService,
             'uploadToken': KalturaUploadTokenService,
             'userAssetRule': KalturaUserAssetRuleService,
@@ -35716,6 +35963,7 @@ class KalturaCoreClient(KalturaClientPlugin):
             'KalturaTransactionAdapterStatus': KalturaTransactionAdapterStatus,
             'KalturaTransactionHistoryOrderBy': KalturaTransactionHistoryOrderBy,
             'KalturaTransactionType': KalturaTransactionType,
+            'KalturaTvmRuleOrderBy': KalturaTvmRuleOrderBy,
             'KalturaUploadTokenStatus': KalturaUploadTokenStatus,
             'KalturaUrlType': KalturaUrlType,
             'KalturaUserAssetRuleOrderBy': KalturaUserAssetRuleOrderBy,
@@ -35946,23 +36194,20 @@ class KalturaCoreClient(KalturaClientPlugin):
             'KalturaMediaFileListResponse': KalturaMediaFileListResponse,
             'KalturaAssetHistory': KalturaAssetHistory,
             'KalturaAssetHistoryListResponse': KalturaAssetHistoryListResponse,
-            'KalturaPlaybackProfile': KalturaPlaybackProfile,
-            'KalturaPlaybackProfileListResponse': KalturaPlaybackProfileListResponse,
             'KalturaRule': KalturaRule,
+            'KalturaTvmRule': KalturaTvmRule,
+            'KalturaTvmRuleListResponse': KalturaTvmRuleListResponse,
+            'KalturaTvmGeoRule': KalturaTvmGeoRule,
             'KalturaCondition': KalturaCondition,
             'KalturaRuleAction': KalturaRuleAction,
             'KalturaApplyDiscountModuleAction': KalturaApplyDiscountModuleAction,
             'KalturaBusinessModuleRule': KalturaBusinessModuleRule,
-            'KalturaBusinessModuleRuleListResponse': KalturaBusinessModuleRuleListResponse,
-            'KalturaAssetRuleBase': KalturaAssetRuleBase,
-            'KalturaAssetCondition': KalturaAssetCondition,
-            'KalturaAssetUserRuleAction': KalturaAssetUserRuleAction,
-            'KalturaAssetUserRule': KalturaAssetUserRule,
             'KalturaNotCondition': KalturaNotCondition,
             'KalturaOrCondition': KalturaOrCondition,
             'KalturaCountryCondition': KalturaCountryCondition,
             'KalturaDateCondition': KalturaDateCondition,
             'KalturaHeaderCondition': KalturaHeaderCondition,
+            'KalturaAssetCondition': KalturaAssetCondition,
             'KalturaConcurrencyCondition': KalturaConcurrencyCondition,
             'KalturaIpRangeCondition': KalturaIpRangeCondition,
             'KalturaBusinessModuleCondition': KalturaBusinessModuleCondition,
@@ -35975,8 +36220,14 @@ class KalturaCoreClient(KalturaClientPlugin):
             'KalturaAllowPlaybackAction': KalturaAllowPlaybackAction,
             'KalturaBlockPlaybackAction': KalturaBlockPlaybackAction,
             'KalturaApplyPlaybackAdapterAction': KalturaApplyPlaybackAdapterAction,
+            'KalturaAssetUserRuleAction': KalturaAssetUserRuleAction,
             'KalturaAssetUserRuleBlockAction': KalturaAssetUserRuleBlockAction,
+            'KalturaAssetRuleBase': KalturaAssetRuleBase,
+            'KalturaAssetUserRule': KalturaAssetUserRule,
             'KalturaAssetRule': KalturaAssetRule,
+            'KalturaPlaybackProfile': KalturaPlaybackProfile,
+            'KalturaPlaybackProfileListResponse': KalturaPlaybackProfileListResponse,
+            'KalturaBusinessModuleRuleListResponse': KalturaBusinessModuleRuleListResponse,
             'KalturaDrmProfile': KalturaDrmProfile,
             'KalturaDrmProfileListResponse': KalturaDrmProfileListResponse,
             'KalturaPermission': KalturaPermission,
@@ -36098,6 +36349,7 @@ class KalturaCoreClient(KalturaClientPlugin):
             'KalturaAssetCommentFilter': KalturaAssetCommentFilter,
             'KalturaBookmarkFilter': KalturaBookmarkFilter,
             'KalturaAssetHistoryFilter': KalturaAssetHistoryFilter,
+            'KalturaTvmRuleFilter': KalturaTvmRuleFilter,
             'KalturaBusinessModuleRuleFilter': KalturaBusinessModuleRuleFilter,
             'KalturaPlaybackProfileFilter': KalturaPlaybackProfileFilter,
             'KalturaAssetRuleFilter': KalturaAssetRuleFilter,
