@@ -42,7 +42,7 @@ from ..Base import (
     KalturaServiceBase,
 )
 
-API_VERSION = '5.1.1.23046'
+API_VERSION = '5.1.1.27235'
 
 ########## enums ##########
 # @package Kaltura
@@ -16960,8 +16960,10 @@ class KalturaTvmGeoRule(KalturaTvmRule):
             ruleType=NotImplemented,
             onlyOrBut=NotImplemented,
             countryIds=NotImplemented,
-            proxyRule=NotImplemented,
-            proxyLevel=NotImplemented):
+            proxyRuleId=NotImplemented,
+            proxyRuleName=NotImplemented,
+            proxyLevelId=NotImplemented,
+            proxyLevelName=NotImplemented):
         KalturaTvmRule.__init__(self,
             id,
             name,
@@ -16969,7 +16971,7 @@ class KalturaTvmGeoRule(KalturaTvmRule):
             createDate,
             ruleType)
 
-        # Indicates if the rule is relevent ONLY for the country ids or except country ids here.
+        # Indicates if the rule is relevent ONLY for the country ids or except country ids here. - is that true?
         # @var bool
         self.onlyOrBut = onlyOrBut
 
@@ -16977,20 +16979,30 @@ class KalturaTvmGeoRule(KalturaTvmRule):
         # @var string
         self.countryIds = countryIds
 
-        # proxyRule - what is that?
+        # proxyRuleId - what is that?
         # @var int
-        self.proxyRule = proxyRule
+        self.proxyRuleId = proxyRuleId
 
-        # proxyLevel - what is that?
+        # proxyRuleName - what is that?
+        # @var string
+        self.proxyRuleName = proxyRuleName
+
+        # proxyLevelId - what is that?
         # @var int
-        self.proxyLevel = proxyLevel
+        self.proxyLevelId = proxyLevelId
+
+        # proxyLevelName - what is that?
+        # @var string
+        self.proxyLevelName = proxyLevelName
 
 
     PROPERTY_LOADERS = {
         'onlyOrBut': getXmlNodeBool, 
         'countryIds': getXmlNodeText, 
-        'proxyRule': getXmlNodeInt, 
-        'proxyLevel': getXmlNodeInt, 
+        'proxyRuleId': getXmlNodeInt, 
+        'proxyRuleName': getXmlNodeText, 
+        'proxyLevelId': getXmlNodeInt, 
+        'proxyLevelName': getXmlNodeText, 
     }
 
     def fromXml(self, node):
@@ -17002,8 +17014,10 @@ class KalturaTvmGeoRule(KalturaTvmRule):
         kparams.put("objectType", "KalturaTvmGeoRule")
         kparams.addBoolIfDefined("onlyOrBut", self.onlyOrBut)
         kparams.addStringIfDefined("countryIds", self.countryIds)
-        kparams.addIntIfDefined("proxyRule", self.proxyRule)
-        kparams.addIntIfDefined("proxyLevel", self.proxyLevel)
+        kparams.addIntIfDefined("proxyRuleId", self.proxyRuleId)
+        kparams.addStringIfDefined("proxyRuleName", self.proxyRuleName)
+        kparams.addIntIfDefined("proxyLevelId", self.proxyLevelId)
+        kparams.addStringIfDefined("proxyLevelName", self.proxyLevelName)
         return kparams
 
     def getOnlyOrBut(self):
@@ -17018,17 +17032,29 @@ class KalturaTvmGeoRule(KalturaTvmRule):
     def setCountryIds(self, newCountryIds):
         self.countryIds = newCountryIds
 
-    def getProxyRule(self):
-        return self.proxyRule
+    def getProxyRuleId(self):
+        return self.proxyRuleId
 
-    def setProxyRule(self, newProxyRule):
-        self.proxyRule = newProxyRule
+    def setProxyRuleId(self, newProxyRuleId):
+        self.proxyRuleId = newProxyRuleId
 
-    def getProxyLevel(self):
-        return self.proxyLevel
+    def getProxyRuleName(self):
+        return self.proxyRuleName
 
-    def setProxyLevel(self, newProxyLevel):
-        self.proxyLevel = newProxyLevel
+    def setProxyRuleName(self, newProxyRuleName):
+        self.proxyRuleName = newProxyRuleName
+
+    def getProxyLevelId(self):
+        return self.proxyLevelId
+
+    def setProxyLevelId(self, newProxyLevelId):
+        self.proxyLevelId = newProxyLevelId
+
+    def getProxyLevelName(self):
+        return self.proxyLevelName
+
+    def setProxyLevelName(self, newProxyLevelName):
+        self.proxyLevelName = newProxyLevelName
 
 
 # @package Kaltura
