@@ -42,7 +42,7 @@ from ..Base import (
     KalturaServiceBase,
 )
 
-API_VERSION = '5.1.1.42818'
+API_VERSION = '5.1.1.28051'
 
 ########## enums ##########
 # @package Kaltura
@@ -1995,6 +1995,18 @@ class KalturaTransactionType(object):
 # @subpackage Client
 class KalturaTvmRuleOrderBy(object):
     NONE = "NONE"
+
+    def __init__(self, value):
+        self.value = value
+
+    def getValue(self):
+        return self.value
+
+# @package Kaltura
+# @subpackage Client
+class KalturaTvmRuleType(object):
+    GEO = "Geo"
+    DEVICE = "Device"
 
     def __init__(self, value):
         self.value = value
@@ -13218,7 +13230,8 @@ class KalturaRecording(KalturaObjectBase):
             viewableUntilDate=NotImplemented,
             isProtected=NotImplemented,
             createDate=NotImplemented,
-            updateDate=NotImplemented):
+            updateDate=NotImplemented,
+            metaData=NotImplemented):
         KalturaObjectBase.__init__(self)
 
         # Kaltura unique ID representing the recording identifier
@@ -13260,6 +13273,10 @@ class KalturaRecording(KalturaObjectBase):
         # @readonly
         self.updateDate = updateDate
 
+        # key/value map field for extra data
+        # @var map
+        self.metaData = metaData
+
 
     PROPERTY_LOADERS = {
         'id': getXmlNodeInt, 
@@ -13270,6 +13287,7 @@ class KalturaRecording(KalturaObjectBase):
         'isProtected': getXmlNodeBool, 
         'createDate': getXmlNodeInt, 
         'updateDate': getXmlNodeInt, 
+        'metaData': (KalturaObjectFactory.createMap, 'KalturaStringValue'), 
     }
 
     def fromXml(self, node):
@@ -13282,6 +13300,7 @@ class KalturaRecording(KalturaObjectBase):
         kparams.addIntIfDefined("assetId", self.assetId)
         kparams.addStringEnumIfDefined("type", self.type)
         kparams.addBoolIfDefined("isProtected", self.isProtected)
+        kparams.addMapIfDefined("metaData", self.metaData)
         return kparams
 
     def getId(self):
@@ -13317,6 +13336,12 @@ class KalturaRecording(KalturaObjectBase):
     def getUpdateDate(self):
         return self.updateDate
 
+    def getMetaData(self):
+        return self.metaData
+
+    def setMetaData(self, newMetaData):
+        self.metaData = newMetaData
+
 
 # @package Kaltura
 # @subpackage Client
@@ -13330,6 +13355,7 @@ class KalturaExternalRecording(KalturaRecording):
             isProtected=NotImplemented,
             createDate=NotImplemented,
             updateDate=NotImplemented,
+            metaData=NotImplemented,
             externalId=NotImplemented):
         KalturaRecording.__init__(self,
             id,
@@ -13339,7 +13365,8 @@ class KalturaExternalRecording(KalturaRecording):
             viewableUntilDate,
             isProtected,
             createDate,
-            updateDate)
+            updateDate,
+            metaData)
 
         # External identifier for the recording
         # @var string
@@ -16841,14 +16868,14 @@ class KalturaTvmRule(KalturaRule):
         self.createDate = createDate
 
         # Specifies the tvm rule type.
-        # @var KalturaRuleType
+        # @var KalturaTvmRuleType
         # @readonly
         self.ruleType = ruleType
 
 
     PROPERTY_LOADERS = {
         'createDate': getXmlNodeInt, 
-        'ruleType': (KalturaEnumsFactory.createString, "KalturaRuleType"), 
+        'ruleType': (KalturaEnumsFactory.createString, "KalturaTvmRuleType"), 
     }
 
     def fromXml(self, node):
@@ -24876,7 +24903,7 @@ class KalturaTvmRuleFilter(KalturaFilter):
             orderBy)
 
         # Indicates which tvm rule list to return by their type.
-        # @var KalturaRuleType
+        # @var KalturaTvmRuleType
         self.ruleTypeEqual = ruleTypeEqual
 
         # Indicates which tvm rule list to return by their name.
@@ -24885,7 +24912,7 @@ class KalturaTvmRuleFilter(KalturaFilter):
 
 
     PROPERTY_LOADERS = {
-        'ruleTypeEqual': (KalturaEnumsFactory.createString, "KalturaRuleType"), 
+        'ruleTypeEqual': (KalturaEnumsFactory.createString, "KalturaTvmRuleType"), 
         'nameEqual': getXmlNodeText, 
     }
 
@@ -29887,7 +29914,8 @@ class KalturaPurchaseBase(KalturaObjectBase):
     def __init__(self,
             productId=NotImplemented,
             contentId=NotImplemented,
-            productType=NotImplemented):
+            productType=NotImplemented,
+            adapterData=NotImplemented):
         KalturaObjectBase.__init__(self)
 
         # Identifier for the package from which this content is offered
@@ -29902,11 +29930,16 @@ class KalturaPurchaseBase(KalturaObjectBase):
         # @var KalturaTransactionType
         self.productType = productType
 
+        # Additional data for the adapter
+        # @var string
+        self.adapterData = adapterData
+
 
     PROPERTY_LOADERS = {
         'productId': getXmlNodeInt, 
         'contentId': getXmlNodeInt, 
         'productType': (KalturaEnumsFactory.createString, "KalturaTransactionType"), 
+        'adapterData': getXmlNodeText, 
     }
 
     def fromXml(self, node):
@@ -29919,6 +29952,7 @@ class KalturaPurchaseBase(KalturaObjectBase):
         kparams.addIntIfDefined("productId", self.productId)
         kparams.addIntIfDefined("contentId", self.contentId)
         kparams.addStringEnumIfDefined("productType", self.productType)
+        kparams.addStringIfDefined("adapterData", self.adapterData)
         return kparams
 
     def getProductId(self):
@@ -29939,6 +29973,12 @@ class KalturaPurchaseBase(KalturaObjectBase):
     def setProductType(self, newProductType):
         self.productType = newProductType
 
+    def getAdapterData(self):
+        return self.adapterData
+
+    def setAdapterData(self, newAdapterData):
+        self.adapterData = newAdapterData
+
 
 # @package Kaltura
 # @subpackage Client
@@ -29947,16 +29987,17 @@ class KalturaPurchase(KalturaPurchaseBase):
             productId=NotImplemented,
             contentId=NotImplemented,
             productType=NotImplemented,
+            adapterData=NotImplemented,
             currency=NotImplemented,
             price=NotImplemented,
             paymentMethodId=NotImplemented,
             paymentGatewayId=NotImplemented,
-            coupon=NotImplemented,
-            adapterData=NotImplemented):
+            coupon=NotImplemented):
         KalturaPurchaseBase.__init__(self,
             productId,
             contentId,
-            productType)
+            productType,
+            adapterData)
 
         # Identifier for paying currency, according to ISO 4217
         # @var string
@@ -29978,10 +30019,6 @@ class KalturaPurchase(KalturaPurchaseBase):
         # @var string
         self.coupon = coupon
 
-        # Additional data for the adapter
-        # @var string
-        self.adapterData = adapterData
-
 
     PROPERTY_LOADERS = {
         'currency': getXmlNodeText, 
@@ -29989,7 +30026,6 @@ class KalturaPurchase(KalturaPurchaseBase):
         'paymentMethodId': getXmlNodeInt, 
         'paymentGatewayId': getXmlNodeInt, 
         'coupon': getXmlNodeText, 
-        'adapterData': getXmlNodeText, 
     }
 
     def fromXml(self, node):
@@ -30004,7 +30040,6 @@ class KalturaPurchase(KalturaPurchaseBase):
         kparams.addIntIfDefined("paymentMethodId", self.paymentMethodId)
         kparams.addIntIfDefined("paymentGatewayId", self.paymentGatewayId)
         kparams.addStringIfDefined("coupon", self.coupon)
-        kparams.addStringIfDefined("adapterData", self.adapterData)
         return kparams
 
     def getCurrency(self):
@@ -30037,12 +30072,6 @@ class KalturaPurchase(KalturaPurchaseBase):
     def setCoupon(self, newCoupon):
         self.coupon = newCoupon
 
-    def getAdapterData(self):
-        return self.adapterData
-
-    def setAdapterData(self, newAdapterData):
-        self.adapterData = newAdapterData
-
 
 # @package Kaltura
 # @subpackage Client
@@ -30051,23 +30080,23 @@ class KalturaPurchaseSession(KalturaPurchase):
             productId=NotImplemented,
             contentId=NotImplemented,
             productType=NotImplemented,
+            adapterData=NotImplemented,
             currency=NotImplemented,
             price=NotImplemented,
             paymentMethodId=NotImplemented,
             paymentGatewayId=NotImplemented,
             coupon=NotImplemented,
-            adapterData=NotImplemented,
             previewModuleId=NotImplemented):
         KalturaPurchase.__init__(self,
             productId,
             contentId,
             productType,
+            adapterData,
             currency,
             price,
             paymentMethodId,
             paymentGatewayId,
-            coupon,
-            adapterData)
+            coupon)
 
         # Preview module identifier (relevant only for subscription)
         # @var int
@@ -30102,12 +30131,14 @@ class KalturaExternalReceipt(KalturaPurchaseBase):
             productId=NotImplemented,
             contentId=NotImplemented,
             productType=NotImplemented,
+            adapterData=NotImplemented,
             receiptId=NotImplemented,
             paymentGatewayName=NotImplemented):
         KalturaPurchaseBase.__init__(self,
             productId,
             contentId,
-            productType)
+            productType,
+            adapterData)
 
         # A unique identifier that was provided by the In-App billing service to validate the purchase
         # @var string
@@ -36035,6 +36066,7 @@ class KalturaCoreClient(KalturaClientPlugin):
             'KalturaTransactionHistoryOrderBy': KalturaTransactionHistoryOrderBy,
             'KalturaTransactionType': KalturaTransactionType,
             'KalturaTvmRuleOrderBy': KalturaTvmRuleOrderBy,
+            'KalturaTvmRuleType': KalturaTvmRuleType,
             'KalturaUploadTokenStatus': KalturaUploadTokenStatus,
             'KalturaUrlType': KalturaUrlType,
             'KalturaUserAssetRuleOrderBy': KalturaUserAssetRuleOrderBy,
