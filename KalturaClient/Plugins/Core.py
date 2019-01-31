@@ -42,7 +42,7 @@ from ..Base import (
     KalturaServiceBase,
 )
 
-API_VERSION = '5.1.1.42810'
+API_VERSION = '5.1.1.16000'
 
 ########## enums ##########
 # @package Kaltura
@@ -13230,8 +13230,7 @@ class KalturaRecording(KalturaObjectBase):
             viewableUntilDate=NotImplemented,
             isProtected=NotImplemented,
             createDate=NotImplemented,
-            updateDate=NotImplemented,
-            metaData=NotImplemented):
+            updateDate=NotImplemented):
         KalturaObjectBase.__init__(self)
 
         # Kaltura unique ID representing the recording identifier
@@ -13273,10 +13272,6 @@ class KalturaRecording(KalturaObjectBase):
         # @readonly
         self.updateDate = updateDate
 
-        # key/value map field for extra data
-        # @var map
-        self.metaData = metaData
-
 
     PROPERTY_LOADERS = {
         'id': getXmlNodeInt, 
@@ -13287,7 +13282,6 @@ class KalturaRecording(KalturaObjectBase):
         'isProtected': getXmlNodeBool, 
         'createDate': getXmlNodeInt, 
         'updateDate': getXmlNodeInt, 
-        'metaData': (KalturaObjectFactory.createMap, 'KalturaStringValue'), 
     }
 
     def fromXml(self, node):
@@ -13300,7 +13294,6 @@ class KalturaRecording(KalturaObjectBase):
         kparams.addIntIfDefined("assetId", self.assetId)
         kparams.addStringEnumIfDefined("type", self.type)
         kparams.addBoolIfDefined("isProtected", self.isProtected)
-        kparams.addMapIfDefined("metaData", self.metaData)
         return kparams
 
     def getId(self):
@@ -13336,12 +13329,6 @@ class KalturaRecording(KalturaObjectBase):
     def getUpdateDate(self):
         return self.updateDate
 
-    def getMetaData(self):
-        return self.metaData
-
-    def setMetaData(self, newMetaData):
-        self.metaData = newMetaData
-
 
 # @package Kaltura
 # @subpackage Client
@@ -13355,8 +13342,8 @@ class KalturaExternalRecording(KalturaRecording):
             isProtected=NotImplemented,
             createDate=NotImplemented,
             updateDate=NotImplemented,
-            metaData=NotImplemented,
-            externalId=NotImplemented):
+            externalId=NotImplemented,
+            metaData=NotImplemented):
         KalturaRecording.__init__(self,
             id,
             status,
@@ -13365,17 +13352,21 @@ class KalturaExternalRecording(KalturaRecording):
             viewableUntilDate,
             isProtected,
             createDate,
-            updateDate,
-            metaData)
+            updateDate)
 
         # External identifier for the recording
         # @var string
         # @insertonly
         self.externalId = externalId
 
+        # key/value map field for extra data
+        # @var map
+        self.metaData = metaData
+
 
     PROPERTY_LOADERS = {
         'externalId': getXmlNodeText, 
+        'metaData': (KalturaObjectFactory.createMap, 'KalturaStringValue'), 
     }
 
     def fromXml(self, node):
@@ -13386,6 +13377,7 @@ class KalturaExternalRecording(KalturaRecording):
         kparams = KalturaRecording.toParams(self)
         kparams.put("objectType", "KalturaExternalRecording")
         kparams.addStringIfDefined("externalId", self.externalId)
+        kparams.addMapIfDefined("metaData", self.metaData)
         return kparams
 
     def getExternalId(self):
@@ -13393,6 +13385,12 @@ class KalturaExternalRecording(KalturaRecording):
 
     def setExternalId(self, newExternalId):
         self.externalId = newExternalId
+
+    def getMetaData(self):
+        return self.metaData
+
+    def setMetaData(self, newMetaData):
+        self.metaData = newMetaData
 
 
 # @package Kaltura
@@ -23948,6 +23946,112 @@ class KalturaSubscriptionFilter(KalturaFilter):
 
 # @package Kaltura
 # @subpackage Client
+class KalturaRecordingFilter(KalturaFilter):
+    """Filtering recordings"""
+
+    def __init__(self,
+            orderBy=NotImplemented,
+            statusIn=NotImplemented,
+            externalRecordingIdIn=NotImplemented,
+            kSql=NotImplemented):
+        KalturaFilter.__init__(self,
+            orderBy)
+
+        # Recording Statuses
+        # @var string
+        self.statusIn = statusIn
+
+        # Comma separated external identifiers
+        # @var string
+        self.externalRecordingIdIn = externalRecordingIdIn
+
+        # KSQL expression
+        # @var string
+        self.kSql = kSql
+
+
+    PROPERTY_LOADERS = {
+        'statusIn': getXmlNodeText, 
+        'externalRecordingIdIn': getXmlNodeText, 
+        'kSql': getXmlNodeText, 
+    }
+
+    def fromXml(self, node):
+        KalturaFilter.fromXml(self, node)
+        self.fromXmlImpl(node, KalturaRecordingFilter.PROPERTY_LOADERS)
+
+    def toParams(self):
+        kparams = KalturaFilter.toParams(self)
+        kparams.put("objectType", "KalturaRecordingFilter")
+        kparams.addStringIfDefined("statusIn", self.statusIn)
+        kparams.addStringIfDefined("externalRecordingIdIn", self.externalRecordingIdIn)
+        kparams.addStringIfDefined("kSql", self.kSql)
+        return kparams
+
+    def getStatusIn(self):
+        return self.statusIn
+
+    def setStatusIn(self, newStatusIn):
+        self.statusIn = newStatusIn
+
+    def getExternalRecordingIdIn(self):
+        return self.externalRecordingIdIn
+
+    def setExternalRecordingIdIn(self, newExternalRecordingIdIn):
+        self.externalRecordingIdIn = newExternalRecordingIdIn
+
+    def getKSql(self):
+        return self.kSql
+
+    def setKSql(self, newKSql):
+        self.kSql = newKSql
+
+
+# @package Kaltura
+# @subpackage Client
+class KalturaExternalRecordingFilter(KalturaRecordingFilter):
+    """Filtering external recordings"""
+
+    def __init__(self,
+            orderBy=NotImplemented,
+            statusIn=NotImplemented,
+            externalRecordingIdIn=NotImplemented,
+            kSql=NotImplemented,
+            metaData=NotImplemented):
+        KalturaRecordingFilter.__init__(self,
+            orderBy,
+            statusIn,
+            externalRecordingIdIn,
+            kSql)
+
+        # MetaData filtering
+        # @var map
+        self.metaData = metaData
+
+
+    PROPERTY_LOADERS = {
+        'metaData': (KalturaObjectFactory.createMap, 'KalturaStringValue'), 
+    }
+
+    def fromXml(self, node):
+        KalturaRecordingFilter.fromXml(self, node)
+        self.fromXmlImpl(node, KalturaExternalRecordingFilter.PROPERTY_LOADERS)
+
+    def toParams(self):
+        kparams = KalturaRecordingFilter.toParams(self)
+        kparams.put("objectType", "KalturaExternalRecordingFilter")
+        kparams.addMapIfDefined("metaData", self.metaData)
+        return kparams
+
+    def getMetaData(self):
+        return self.metaData
+
+    def setMetaData(self, newMetaData):
+        self.metaData = newMetaData
+
+
+# @package Kaltura
+# @subpackage Client
 class KalturaSeriesRecordingFilter(KalturaFilter):
     """Filtering recordings"""
 
@@ -24218,69 +24322,6 @@ class KalturaRecordingContextFilter(KalturaFilter):
 
     def setAssetIdIn(self, newAssetIdIn):
         self.assetIdIn = newAssetIdIn
-
-
-# @package Kaltura
-# @subpackage Client
-class KalturaRecordingFilter(KalturaFilter):
-    """Filtering recordings"""
-
-    def __init__(self,
-            orderBy=NotImplemented,
-            statusIn=NotImplemented,
-            externalRecordingIdIn=NotImplemented,
-            kSql=NotImplemented):
-        KalturaFilter.__init__(self,
-            orderBy)
-
-        # Recording Statuses
-        # @var string
-        self.statusIn = statusIn
-
-        # Comma separated external identifiers
-        # @var string
-        self.externalRecordingIdIn = externalRecordingIdIn
-
-        # KSQL expression
-        # @var string
-        self.kSql = kSql
-
-
-    PROPERTY_LOADERS = {
-        'statusIn': getXmlNodeText, 
-        'externalRecordingIdIn': getXmlNodeText, 
-        'kSql': getXmlNodeText, 
-    }
-
-    def fromXml(self, node):
-        KalturaFilter.fromXml(self, node)
-        self.fromXmlImpl(node, KalturaRecordingFilter.PROPERTY_LOADERS)
-
-    def toParams(self):
-        kparams = KalturaFilter.toParams(self)
-        kparams.put("objectType", "KalturaRecordingFilter")
-        kparams.addStringIfDefined("statusIn", self.statusIn)
-        kparams.addStringIfDefined("externalRecordingIdIn", self.externalRecordingIdIn)
-        kparams.addStringIfDefined("kSql", self.kSql)
-        return kparams
-
-    def getStatusIn(self):
-        return self.statusIn
-
-    def setStatusIn(self, newStatusIn):
-        self.statusIn = newStatusIn
-
-    def getExternalRecordingIdIn(self):
-        return self.externalRecordingIdIn
-
-    def setExternalRecordingIdIn(self, newExternalRecordingIdIn):
-        self.externalRecordingIdIn = newExternalRecordingIdIn
-
-    def getKSql(self):
-        return self.kSql
-
-    def setKSql(self, newKSql):
-        self.kSql = newKSql
 
 
 # @package Kaltura
@@ -33591,7 +33632,7 @@ class KalturaOttUserService(KalturaServiceBase):
         return KalturaObjectFactory.create(resultNode, 'KalturaStringValue')
 
     def list(self, filter = NotImplemented):
-        """Retrieve user by external identifier or username or if filter is null all user in the master or the user itself"""
+        """Returns list of OTTUser (limited to 500 items). Filters by username/external identifier/idIn or roleIdIn"""
 
         kparams = KalturaParams()
         kparams.addObjectIfDefined("filter", filter)
@@ -36437,12 +36478,13 @@ class KalturaCoreClient(KalturaClientPlugin):
             'KalturaSubscriptionSetFilter': KalturaSubscriptionSetFilter,
             'KalturaSubscriptionDependencySetFilter': KalturaSubscriptionDependencySetFilter,
             'KalturaSubscriptionFilter': KalturaSubscriptionFilter,
+            'KalturaRecordingFilter': KalturaRecordingFilter,
+            'KalturaExternalRecordingFilter': KalturaExternalRecordingFilter,
             'KalturaSeriesRecordingFilter': KalturaSeriesRecordingFilter,
             'KalturaProductPriceFilter': KalturaProductPriceFilter,
             'KalturaEntitlementFilter': KalturaEntitlementFilter,
             'KalturaTransactionHistoryFilter': KalturaTransactionHistoryFilter,
             'KalturaRecordingContextFilter': KalturaRecordingContextFilter,
-            'KalturaRecordingFilter': KalturaRecordingFilter,
             'KalturaAssetStructMetaFilter': KalturaAssetStructMetaFilter,
             'KalturaChannelsFilter': KalturaChannelsFilter,
             'KalturaMediaFileFilter': KalturaMediaFileFilter,
