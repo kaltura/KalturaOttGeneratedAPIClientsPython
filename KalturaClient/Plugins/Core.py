@@ -42,7 +42,7 @@ from ..Base import (
     KalturaServiceBase,
 )
 
-API_VERSION = '5.1.1.16693'
+API_VERSION = '5.1.1.18776'
 
 ########## enums ##########
 # @package Kaltura
@@ -644,10 +644,34 @@ class KalturaCurrencyOrderBy(object):
 
 # @package Kaltura
 # @subpackage Client
+class KalturaDeleteMediaPolicy(object):
+    DISABLE = "Disable"
+    DELETE = "Delete"
+
+    def __init__(self, value):
+        self.value = value
+
+    def getValue(self):
+        return self.value
+
+# @package Kaltura
+# @subpackage Client
 class KalturaDeviceStatus(object):
     PENDING = "PENDING"
     ACTIVATED = "ACTIVATED"
     NOT_ACTIVATED = "NOT_ACTIVATED"
+
+    def __init__(self, value):
+        self.value = value
+
+    def getValue(self):
+        return self.value
+
+# @package Kaltura
+# @subpackage Client
+class KalturaDowngradePolicy(object):
+    LIFO = "LIFO"
+    FIFO = "FIFO"
 
     def __init__(self, value):
         self.value = value
@@ -1228,6 +1252,7 @@ class KalturaPartnerConfigurationType(object):
     ENABLEPAYMENTGATEWAYSELECTION = "EnablePaymentGatewaySelection"
     OSSADAPTER = "OSSAdapter"
     CONCURRENCY = "Concurrency"
+    GENERAL = "General"
 
     def __init__(self, value):
         self.value = value
@@ -3765,543 +3790,6 @@ class KalturaIntegerValue(KalturaValue):
 
 # @package Kaltura
 # @subpackage Client
-class KalturaPluginData(KalturaObjectBase):
-    def __init__(self):
-        KalturaObjectBase.__init__(self)
-
-
-    PROPERTY_LOADERS = {
-    }
-
-    def fromXml(self, node):
-        KalturaObjectBase.fromXml(self, node)
-        self.fromXmlImpl(node, KalturaPluginData.PROPERTY_LOADERS)
-
-    def toParams(self):
-        kparams = KalturaObjectBase.toParams(self)
-        kparams.put("objectType", "KalturaPluginData")
-        return kparams
-
-
-# @package Kaltura
-# @subpackage Client
-class KalturaDrmPlaybackPluginData(KalturaPluginData):
-    def __init__(self,
-            scheme=NotImplemented,
-            licenseURL=NotImplemented):
-        KalturaPluginData.__init__(self)
-
-        # Scheme
-        # @var KalturaDrmSchemeName
-        self.scheme = scheme
-
-        # License URL
-        # @var string
-        self.licenseURL = licenseURL
-
-
-    PROPERTY_LOADERS = {
-        'scheme': (KalturaEnumsFactory.createString, "KalturaDrmSchemeName"), 
-        'licenseURL': getXmlNodeText, 
-    }
-
-    def fromXml(self, node):
-        KalturaPluginData.fromXml(self, node)
-        self.fromXmlImpl(node, KalturaDrmPlaybackPluginData.PROPERTY_LOADERS)
-
-    def toParams(self):
-        kparams = KalturaPluginData.toParams(self)
-        kparams.put("objectType", "KalturaDrmPlaybackPluginData")
-        kparams.addStringEnumIfDefined("scheme", self.scheme)
-        kparams.addStringIfDefined("licenseURL", self.licenseURL)
-        return kparams
-
-    def getScheme(self):
-        return self.scheme
-
-    def setScheme(self, newScheme):
-        self.scheme = newScheme
-
-    def getLicenseURL(self):
-        return self.licenseURL
-
-    def setLicenseURL(self, newLicenseURL):
-        self.licenseURL = newLicenseURL
-
-
-# @package Kaltura
-# @subpackage Client
-class KalturaCustomDrmPlaybackPluginData(KalturaDrmPlaybackPluginData):
-    def __init__(self,
-            scheme=NotImplemented,
-            licenseURL=NotImplemented,
-            data=NotImplemented):
-        KalturaDrmPlaybackPluginData.__init__(self,
-            scheme,
-            licenseURL)
-
-        # Custom DRM license data
-        # @var string
-        self.data = data
-
-
-    PROPERTY_LOADERS = {
-        'data': getXmlNodeText, 
-    }
-
-    def fromXml(self, node):
-        KalturaDrmPlaybackPluginData.fromXml(self, node)
-        self.fromXmlImpl(node, KalturaCustomDrmPlaybackPluginData.PROPERTY_LOADERS)
-
-    def toParams(self):
-        kparams = KalturaDrmPlaybackPluginData.toParams(self)
-        kparams.put("objectType", "KalturaCustomDrmPlaybackPluginData")
-        kparams.addStringIfDefined("data", self.data)
-        return kparams
-
-    def getData(self):
-        return self.data
-
-    def setData(self, newData):
-        self.data = newData
-
-
-# @package Kaltura
-# @subpackage Client
-class KalturaHouseholdDevice(KalturaObjectBase):
-    """Device details"""
-
-    def __init__(self,
-            householdId=NotImplemented,
-            udid=NotImplemented,
-            name=NotImplemented,
-            brandId=NotImplemented,
-            activatedOn=NotImplemented,
-            status=NotImplemented,
-            deviceFamilyId=NotImplemented,
-            drm=NotImplemented):
-        KalturaObjectBase.__init__(self)
-
-        # Household identifier
-        # @var int
-        self.householdId = householdId
-
-        # Device UDID
-        # @var string
-        # @insertonly
-        self.udid = udid
-
-        # Device name
-        # @var string
-        self.name = name
-
-        # Device brand identifier
-        # @var int
-        self.brandId = brandId
-
-        # Device activation date (epoch)
-        # @var int
-        self.activatedOn = activatedOn
-
-        # Device state
-        # @var KalturaDeviceStatus
-        # @readonly
-        self.status = status
-
-        # Device family id
-        # @var int
-        # @readonly
-        self.deviceFamilyId = deviceFamilyId
-
-        # Device DRM data
-        # @var KalturaCustomDrmPlaybackPluginData
-        # @readonly
-        self.drm = drm
-
-
-    PROPERTY_LOADERS = {
-        'householdId': getXmlNodeInt, 
-        'udid': getXmlNodeText, 
-        'name': getXmlNodeText, 
-        'brandId': getXmlNodeInt, 
-        'activatedOn': getXmlNodeInt, 
-        'status': (KalturaEnumsFactory.createString, "KalturaDeviceStatus"), 
-        'deviceFamilyId': getXmlNodeInt, 
-        'drm': (KalturaObjectFactory.create, 'KalturaCustomDrmPlaybackPluginData'), 
-    }
-
-    def fromXml(self, node):
-        KalturaObjectBase.fromXml(self, node)
-        self.fromXmlImpl(node, KalturaHouseholdDevice.PROPERTY_LOADERS)
-
-    def toParams(self):
-        kparams = KalturaObjectBase.toParams(self)
-        kparams.put("objectType", "KalturaHouseholdDevice")
-        kparams.addIntIfDefined("householdId", self.householdId)
-        kparams.addStringIfDefined("udid", self.udid)
-        kparams.addStringIfDefined("name", self.name)
-        kparams.addIntIfDefined("brandId", self.brandId)
-        kparams.addIntIfDefined("activatedOn", self.activatedOn)
-        return kparams
-
-    def getHouseholdId(self):
-        return self.householdId
-
-    def setHouseholdId(self, newHouseholdId):
-        self.householdId = newHouseholdId
-
-    def getUdid(self):
-        return self.udid
-
-    def setUdid(self, newUdid):
-        self.udid = newUdid
-
-    def getName(self):
-        return self.name
-
-    def setName(self, newName):
-        self.name = newName
-
-    def getBrandId(self):
-        return self.brandId
-
-    def setBrandId(self, newBrandId):
-        self.brandId = newBrandId
-
-    def getActivatedOn(self):
-        return self.activatedOn
-
-    def setActivatedOn(self, newActivatedOn):
-        self.activatedOn = newActivatedOn
-
-    def getStatus(self):
-        return self.status
-
-    def getDeviceFamilyId(self):
-        return self.deviceFamilyId
-
-    def getDrm(self):
-        return self.drm
-
-
-# @package Kaltura
-# @subpackage Client
-class KalturaHouseholdDeviceListResponse(KalturaListResponse):
-    def __init__(self,
-            totalCount=NotImplemented,
-            objects=NotImplemented):
-        KalturaListResponse.__init__(self,
-            totalCount)
-
-        # Household devices
-        # @var array of KalturaHouseholdDevice
-        self.objects = objects
-
-
-    PROPERTY_LOADERS = {
-        'objects': (KalturaObjectFactory.createArray, 'KalturaHouseholdDevice'), 
-    }
-
-    def fromXml(self, node):
-        KalturaListResponse.fromXml(self, node)
-        self.fromXmlImpl(node, KalturaHouseholdDeviceListResponse.PROPERTY_LOADERS)
-
-    def toParams(self):
-        kparams = KalturaListResponse.toParams(self)
-        kparams.put("objectType", "KalturaHouseholdDeviceListResponse")
-        kparams.addArrayIfDefined("objects", self.objects)
-        return kparams
-
-    def getObjects(self):
-        return self.objects
-
-    def setObjects(self, newObjects):
-        self.objects = newObjects
-
-
-# @package Kaltura
-# @subpackage Client
-class KalturaFairPlayPlaybackPluginData(KalturaDrmPlaybackPluginData):
-    def __init__(self,
-            scheme=NotImplemented,
-            licenseURL=NotImplemented,
-            certificate=NotImplemented):
-        KalturaDrmPlaybackPluginData.__init__(self,
-            scheme,
-            licenseURL)
-
-        # Custom data string
-        # @var string
-        self.certificate = certificate
-
-
-    PROPERTY_LOADERS = {
-        'certificate': getXmlNodeText, 
-    }
-
-    def fromXml(self, node):
-        KalturaDrmPlaybackPluginData.fromXml(self, node)
-        self.fromXmlImpl(node, KalturaFairPlayPlaybackPluginData.PROPERTY_LOADERS)
-
-    def toParams(self):
-        kparams = KalturaDrmPlaybackPluginData.toParams(self)
-        kparams.put("objectType", "KalturaFairPlayPlaybackPluginData")
-        kparams.addStringIfDefined("certificate", self.certificate)
-        return kparams
-
-    def getCertificate(self):
-        return self.certificate
-
-    def setCertificate(self, newCertificate):
-        self.certificate = newCertificate
-
-
-# @package Kaltura
-# @subpackage Client
-class KalturaHouseholdUser(KalturaObjectBase):
-    """Household user"""
-
-    def __init__(self,
-            householdId=NotImplemented,
-            userId=NotImplemented,
-            isMaster=NotImplemented,
-            householdMasterUsername=NotImplemented,
-            status=NotImplemented,
-            isDefault=NotImplemented):
-        KalturaObjectBase.__init__(self)
-
-        # The identifier of the household
-        # @var int
-        self.householdId = householdId
-
-        # The identifier of the user
-        # @var string
-        self.userId = userId
-
-        # True if the user added as master use
-        # @var bool
-        self.isMaster = isMaster
-
-        # The username of the household master for adding a user in status pending for the household master to approve
-        # @var string
-        # @insertonly
-        self.householdMasterUsername = householdMasterUsername
-
-        # The status of the user in the household
-        # @var KalturaHouseholdUserStatus
-        # @readonly
-        self.status = status
-
-        # True if the user is a default user
-        # @var bool
-        # @readonly
-        self.isDefault = isDefault
-
-
-    PROPERTY_LOADERS = {
-        'householdId': getXmlNodeInt, 
-        'userId': getXmlNodeText, 
-        'isMaster': getXmlNodeBool, 
-        'householdMasterUsername': getXmlNodeText, 
-        'status': (KalturaEnumsFactory.createString, "KalturaHouseholdUserStatus"), 
-        'isDefault': getXmlNodeBool, 
-    }
-
-    def fromXml(self, node):
-        KalturaObjectBase.fromXml(self, node)
-        self.fromXmlImpl(node, KalturaHouseholdUser.PROPERTY_LOADERS)
-
-    def toParams(self):
-        kparams = KalturaObjectBase.toParams(self)
-        kparams.put("objectType", "KalturaHouseholdUser")
-        kparams.addIntIfDefined("householdId", self.householdId)
-        kparams.addStringIfDefined("userId", self.userId)
-        kparams.addBoolIfDefined("isMaster", self.isMaster)
-        kparams.addStringIfDefined("householdMasterUsername", self.householdMasterUsername)
-        return kparams
-
-    def getHouseholdId(self):
-        return self.householdId
-
-    def setHouseholdId(self, newHouseholdId):
-        self.householdId = newHouseholdId
-
-    def getUserId(self):
-        return self.userId
-
-    def setUserId(self, newUserId):
-        self.userId = newUserId
-
-    def getIsMaster(self):
-        return self.isMaster
-
-    def setIsMaster(self, newIsMaster):
-        self.isMaster = newIsMaster
-
-    def getHouseholdMasterUsername(self):
-        return self.householdMasterUsername
-
-    def setHouseholdMasterUsername(self, newHouseholdMasterUsername):
-        self.householdMasterUsername = newHouseholdMasterUsername
-
-    def getStatus(self):
-        return self.status
-
-    def getIsDefault(self):
-        return self.isDefault
-
-
-# @package Kaltura
-# @subpackage Client
-class KalturaHouseholdUserListResponse(KalturaListResponse):
-    """Household users list"""
-
-    def __init__(self,
-            totalCount=NotImplemented,
-            objects=NotImplemented):
-        KalturaListResponse.__init__(self,
-            totalCount)
-
-        # Household users
-        # @var array of KalturaHouseholdUser
-        self.objects = objects
-
-
-    PROPERTY_LOADERS = {
-        'objects': (KalturaObjectFactory.createArray, 'KalturaHouseholdUser'), 
-    }
-
-    def fromXml(self, node):
-        KalturaListResponse.fromXml(self, node)
-        self.fromXmlImpl(node, KalturaHouseholdUserListResponse.PROPERTY_LOADERS)
-
-    def toParams(self):
-        kparams = KalturaListResponse.toParams(self)
-        kparams.put("objectType", "KalturaHouseholdUserListResponse")
-        kparams.addArrayIfDefined("objects", self.objects)
-        return kparams
-
-    def getObjects(self):
-        return self.objects
-
-    def setObjects(self, newObjects):
-        self.objects = newObjects
-
-
-# @package Kaltura
-# @subpackage Client
-class KalturaHomeNetwork(KalturaObjectBase):
-    """Home network details"""
-
-    def __init__(self,
-            externalId=NotImplemented,
-            name=NotImplemented,
-            description=NotImplemented,
-            isActive=NotImplemented):
-        KalturaObjectBase.__init__(self)
-
-        # Home network identifier
-        # @var string
-        # @insertonly
-        self.externalId = externalId
-
-        # Home network name
-        # @var string
-        self.name = name
-
-        # Home network description
-        # @var string
-        self.description = description
-
-        # Is home network is active
-        # @var bool
-        self.isActive = isActive
-
-
-    PROPERTY_LOADERS = {
-        'externalId': getXmlNodeText, 
-        'name': getXmlNodeText, 
-        'description': getXmlNodeText, 
-        'isActive': getXmlNodeBool, 
-    }
-
-    def fromXml(self, node):
-        KalturaObjectBase.fromXml(self, node)
-        self.fromXmlImpl(node, KalturaHomeNetwork.PROPERTY_LOADERS)
-
-    def toParams(self):
-        kparams = KalturaObjectBase.toParams(self)
-        kparams.put("objectType", "KalturaHomeNetwork")
-        kparams.addStringIfDefined("externalId", self.externalId)
-        kparams.addStringIfDefined("name", self.name)
-        kparams.addStringIfDefined("description", self.description)
-        kparams.addBoolIfDefined("isActive", self.isActive)
-        return kparams
-
-    def getExternalId(self):
-        return self.externalId
-
-    def setExternalId(self, newExternalId):
-        self.externalId = newExternalId
-
-    def getName(self):
-        return self.name
-
-    def setName(self, newName):
-        self.name = newName
-
-    def getDescription(self):
-        return self.description
-
-    def setDescription(self, newDescription):
-        self.description = newDescription
-
-    def getIsActive(self):
-        return self.isActive
-
-    def setIsActive(self, newIsActive):
-        self.isActive = newIsActive
-
-
-# @package Kaltura
-# @subpackage Client
-class KalturaHomeNetworkListResponse(KalturaListResponse):
-    """Home networks"""
-
-    def __init__(self,
-            totalCount=NotImplemented,
-            objects=NotImplemented):
-        KalturaListResponse.__init__(self,
-            totalCount)
-
-        # Home networks
-        # @var array of KalturaHomeNetwork
-        self.objects = objects
-
-
-    PROPERTY_LOADERS = {
-        'objects': (KalturaObjectFactory.createArray, 'KalturaHomeNetwork'), 
-    }
-
-    def fromXml(self, node):
-        KalturaListResponse.fromXml(self, node)
-        self.fromXmlImpl(node, KalturaHomeNetworkListResponse.PROPERTY_LOADERS)
-
-    def toParams(self):
-        kparams = KalturaListResponse.toParams(self)
-        kparams.put("objectType", "KalturaHomeNetworkListResponse")
-        kparams.addArrayIfDefined("objects", self.objects)
-        return kparams
-
-    def getObjects(self):
-        return self.objects
-
-    def setObjects(self, newObjects):
-        self.objects = newObjects
-
-
-# @package Kaltura
-# @subpackage Client
 class KalturaConfigurations(KalturaObjectBase):
     def __init__(self,
             id=NotImplemented,
@@ -5886,6 +5374,72 @@ class KalturaFavoriteListResponse(KalturaListResponse):
 
 # @package Kaltura
 # @subpackage Client
+class KalturaPluginData(KalturaObjectBase):
+    def __init__(self):
+        KalturaObjectBase.__init__(self)
+
+
+    PROPERTY_LOADERS = {
+    }
+
+    def fromXml(self, node):
+        KalturaObjectBase.fromXml(self, node)
+        self.fromXmlImpl(node, KalturaPluginData.PROPERTY_LOADERS)
+
+    def toParams(self):
+        kparams = KalturaObjectBase.toParams(self)
+        kparams.put("objectType", "KalturaPluginData")
+        return kparams
+
+
+# @package Kaltura
+# @subpackage Client
+class KalturaDrmPlaybackPluginData(KalturaPluginData):
+    def __init__(self,
+            scheme=NotImplemented,
+            licenseURL=NotImplemented):
+        KalturaPluginData.__init__(self)
+
+        # Scheme
+        # @var KalturaDrmSchemeName
+        self.scheme = scheme
+
+        # License URL
+        # @var string
+        self.licenseURL = licenseURL
+
+
+    PROPERTY_LOADERS = {
+        'scheme': (KalturaEnumsFactory.createString, "KalturaDrmSchemeName"), 
+        'licenseURL': getXmlNodeText, 
+    }
+
+    def fromXml(self, node):
+        KalturaPluginData.fromXml(self, node)
+        self.fromXmlImpl(node, KalturaDrmPlaybackPluginData.PROPERTY_LOADERS)
+
+    def toParams(self):
+        kparams = KalturaPluginData.toParams(self)
+        kparams.put("objectType", "KalturaDrmPlaybackPluginData")
+        kparams.addStringEnumIfDefined("scheme", self.scheme)
+        kparams.addStringIfDefined("licenseURL", self.licenseURL)
+        return kparams
+
+    def getScheme(self):
+        return self.scheme
+
+    def setScheme(self, newScheme):
+        self.scheme = newScheme
+
+    def getLicenseURL(self):
+        return self.licenseURL
+
+    def setLicenseURL(self, newLicenseURL):
+        self.licenseURL = newLicenseURL
+
+
+# @package Kaltura
+# @subpackage Client
 class KalturaPlaybackSource(KalturaMediaFile):
     def __init__(self,
             url=NotImplemented,
@@ -5998,6 +5552,80 @@ class KalturaPlaybackSource(KalturaMediaFile):
 
     def setIsTokenized(self, newIsTokenized):
         self.isTokenized = newIsTokenized
+
+
+# @package Kaltura
+# @subpackage Client
+class KalturaFairPlayPlaybackPluginData(KalturaDrmPlaybackPluginData):
+    def __init__(self,
+            scheme=NotImplemented,
+            licenseURL=NotImplemented,
+            certificate=NotImplemented):
+        KalturaDrmPlaybackPluginData.__init__(self,
+            scheme,
+            licenseURL)
+
+        # Custom data string
+        # @var string
+        self.certificate = certificate
+
+
+    PROPERTY_LOADERS = {
+        'certificate': getXmlNodeText, 
+    }
+
+    def fromXml(self, node):
+        KalturaDrmPlaybackPluginData.fromXml(self, node)
+        self.fromXmlImpl(node, KalturaFairPlayPlaybackPluginData.PROPERTY_LOADERS)
+
+    def toParams(self):
+        kparams = KalturaDrmPlaybackPluginData.toParams(self)
+        kparams.put("objectType", "KalturaFairPlayPlaybackPluginData")
+        kparams.addStringIfDefined("certificate", self.certificate)
+        return kparams
+
+    def getCertificate(self):
+        return self.certificate
+
+    def setCertificate(self, newCertificate):
+        self.certificate = newCertificate
+
+
+# @package Kaltura
+# @subpackage Client
+class KalturaCustomDrmPlaybackPluginData(KalturaDrmPlaybackPluginData):
+    def __init__(self,
+            scheme=NotImplemented,
+            licenseURL=NotImplemented,
+            data=NotImplemented):
+        KalturaDrmPlaybackPluginData.__init__(self,
+            scheme,
+            licenseURL)
+
+        # Custom DRM license data
+        # @var string
+        self.data = data
+
+
+    PROPERTY_LOADERS = {
+        'data': getXmlNodeText, 
+    }
+
+    def fromXml(self, node):
+        KalturaDrmPlaybackPluginData.fromXml(self, node)
+        self.fromXmlImpl(node, KalturaCustomDrmPlaybackPluginData.PROPERTY_LOADERS)
+
+    def toParams(self):
+        kparams = KalturaDrmPlaybackPluginData.toParams(self)
+        kparams.put("objectType", "KalturaCustomDrmPlaybackPluginData")
+        kparams.addStringIfDefined("data", self.data)
+        return kparams
+
+    def getData(self):
+        return self.data
+
+    def setData(self, newData):
+        self.data = newData
 
 
 # @package Kaltura
@@ -7888,159 +7516,6 @@ class KalturaTopicListResponse(KalturaListResponse):
 
     def setObjects(self, newObjects):
         self.objects = newObjects
-
-
-# @package Kaltura
-# @subpackage Client
-class KalturaPartnerConfiguration(KalturaObjectBase):
-    """Partner  base configuration"""
-
-    def __init__(self):
-        KalturaObjectBase.__init__(self)
-
-
-    PROPERTY_LOADERS = {
-    }
-
-    def fromXml(self, node):
-        KalturaObjectBase.fromXml(self, node)
-        self.fromXmlImpl(node, KalturaPartnerConfiguration.PROPERTY_LOADERS)
-
-    def toParams(self):
-        kparams = KalturaObjectBase.toParams(self)
-        kparams.put("objectType", "KalturaPartnerConfiguration")
-        return kparams
-
-
-# @package Kaltura
-# @subpackage Client
-class KalturaPartnerConfigurationListResponse(KalturaListResponse):
-    def __init__(self,
-            totalCount=NotImplemented,
-            objects=NotImplemented):
-        KalturaListResponse.__init__(self,
-            totalCount)
-
-        # Partner Configurations
-        # @var array of KalturaPartnerConfiguration
-        self.objects = objects
-
-
-    PROPERTY_LOADERS = {
-        'objects': (KalturaObjectFactory.createArray, 'KalturaPartnerConfiguration'), 
-    }
-
-    def fromXml(self, node):
-        KalturaListResponse.fromXml(self, node)
-        self.fromXmlImpl(node, KalturaPartnerConfigurationListResponse.PROPERTY_LOADERS)
-
-    def toParams(self):
-        kparams = KalturaListResponse.toParams(self)
-        kparams.put("objectType", "KalturaPartnerConfigurationListResponse")
-        kparams.addArrayIfDefined("objects", self.objects)
-        return kparams
-
-    def getObjects(self):
-        return self.objects
-
-    def setObjects(self, newObjects):
-        self.objects = newObjects
-
-
-# @package Kaltura
-# @subpackage Client
-class KalturaConcurrencyPartnerConfig(KalturaPartnerConfiguration):
-    """Partner concurrency configuration"""
-
-    def __init__(self,
-            deviceFamilyIds=NotImplemented,
-            evictionPolicy=NotImplemented):
-        KalturaPartnerConfiguration.__init__(self)
-
-        # Comma separated list of device Family Ids order by their priority.
-        # @var string
-        self.deviceFamilyIds = deviceFamilyIds
-
-        # Policy of eviction devices
-        # @var KalturaEvictionPolicyType
-        self.evictionPolicy = evictionPolicy
-
-
-    PROPERTY_LOADERS = {
-        'deviceFamilyIds': getXmlNodeText, 
-        'evictionPolicy': (KalturaEnumsFactory.createString, "KalturaEvictionPolicyType"), 
-    }
-
-    def fromXml(self, node):
-        KalturaPartnerConfiguration.fromXml(self, node)
-        self.fromXmlImpl(node, KalturaConcurrencyPartnerConfig.PROPERTY_LOADERS)
-
-    def toParams(self):
-        kparams = KalturaPartnerConfiguration.toParams(self)
-        kparams.put("objectType", "KalturaConcurrencyPartnerConfig")
-        kparams.addStringIfDefined("deviceFamilyIds", self.deviceFamilyIds)
-        kparams.addStringEnumIfDefined("evictionPolicy", self.evictionPolicy)
-        return kparams
-
-    def getDeviceFamilyIds(self):
-        return self.deviceFamilyIds
-
-    def setDeviceFamilyIds(self, newDeviceFamilyIds):
-        self.deviceFamilyIds = newDeviceFamilyIds
-
-    def getEvictionPolicy(self):
-        return self.evictionPolicy
-
-    def setEvictionPolicy(self, newEvictionPolicy):
-        self.evictionPolicy = newEvictionPolicy
-
-
-# @package Kaltura
-# @subpackage Client
-class KalturaBillingPartnerConfig(KalturaPartnerConfiguration):
-    """Partner billing configuration"""
-
-    def __init__(self,
-            value=NotImplemented,
-            type=NotImplemented):
-        KalturaPartnerConfiguration.__init__(self)
-
-        # configuration value
-        # @var string
-        self.value = value
-
-        # partner configuration type
-        # @var KalturaPartnerConfigurationType
-        self.type = type
-
-
-    PROPERTY_LOADERS = {
-        'value': getXmlNodeText, 
-        'type': (KalturaEnumsFactory.createString, "KalturaPartnerConfigurationType"), 
-    }
-
-    def fromXml(self, node):
-        KalturaPartnerConfiguration.fromXml(self, node)
-        self.fromXmlImpl(node, KalturaBillingPartnerConfig.PROPERTY_LOADERS)
-
-    def toParams(self):
-        kparams = KalturaPartnerConfiguration.toParams(self)
-        kparams.put("objectType", "KalturaBillingPartnerConfig")
-        kparams.addStringIfDefined("value", self.value)
-        kparams.addStringEnumIfDefined("type", self.type)
-        return kparams
-
-    def getValue(self):
-        return self.value
-
-    def setValue(self, newValue):
-        self.value = newValue
-
-    def getType(self):
-        return self.type
-
-    def setType(self, newType):
-        self.type = newType
 
 
 # @package Kaltura
@@ -12853,6 +12328,1013 @@ class KalturaProductsPriceListResponse(KalturaListResponse):
     def toParams(self):
         kparams = KalturaListResponse.toParams(self)
         kparams.put("objectType", "KalturaProductsPriceListResponse")
+        kparams.addArrayIfDefined("objects", self.objects)
+        return kparams
+
+    def getObjects(self):
+        return self.objects
+
+    def setObjects(self, newObjects):
+        self.objects = newObjects
+
+
+# @package Kaltura
+# @subpackage Client
+class KalturaPartnerConfiguration(KalturaObjectBase):
+    """Partner  base configuration"""
+
+    def __init__(self):
+        KalturaObjectBase.__init__(self)
+
+
+    PROPERTY_LOADERS = {
+    }
+
+    def fromXml(self, node):
+        KalturaObjectBase.fromXml(self, node)
+        self.fromXmlImpl(node, KalturaPartnerConfiguration.PROPERTY_LOADERS)
+
+    def toParams(self):
+        kparams = KalturaObjectBase.toParams(self)
+        kparams.put("objectType", "KalturaPartnerConfiguration")
+        return kparams
+
+
+# @package Kaltura
+# @subpackage Client
+class KalturaPartnerConfigurationListResponse(KalturaListResponse):
+    def __init__(self,
+            totalCount=NotImplemented,
+            objects=NotImplemented):
+        KalturaListResponse.__init__(self,
+            totalCount)
+
+        # Partner Configurations
+        # @var array of KalturaPartnerConfiguration
+        self.objects = objects
+
+
+    PROPERTY_LOADERS = {
+        'objects': (KalturaObjectFactory.createArray, 'KalturaPartnerConfiguration'), 
+    }
+
+    def fromXml(self, node):
+        KalturaListResponse.fromXml(self, node)
+        self.fromXmlImpl(node, KalturaPartnerConfigurationListResponse.PROPERTY_LOADERS)
+
+    def toParams(self):
+        kparams = KalturaListResponse.toParams(self)
+        kparams.put("objectType", "KalturaPartnerConfigurationListResponse")
+        kparams.addArrayIfDefined("objects", self.objects)
+        return kparams
+
+    def getObjects(self):
+        return self.objects
+
+    def setObjects(self, newObjects):
+        self.objects = newObjects
+
+
+# @package Kaltura
+# @subpackage Client
+class KalturaGeneralPartnerConfig(KalturaPartnerConfiguration):
+    """Partner General configuration"""
+
+    def __init__(self,
+            partnerName=NotImplemented,
+            mainLanguage=NotImplemented,
+            secondaryLanguages=NotImplemented,
+            deleteMediaPolicy=NotImplemented,
+            mainCurrency=NotImplemented,
+            secondaryCurrencys=NotImplemented,
+            downgradePolicy=NotImplemented,
+            mailSettings=NotImplemented,
+            dateFormat=NotImplemented,
+            householdLimitationModule=NotImplemented):
+        KalturaPartnerConfiguration.__init__(self)
+
+        # Partner name
+        # @var string
+        self.partnerName = partnerName
+
+        # Main metadata language
+        # @var int
+        self.mainLanguage = mainLanguage
+
+        # A list of comma separated languages ids.
+        # @var string
+        self.secondaryLanguages = secondaryLanguages
+
+        # Delete media policy
+        # @var KalturaDeleteMediaPolicy
+        self.deleteMediaPolicy = deleteMediaPolicy
+
+        # Main currency
+        # @var int
+        self.mainCurrency = mainCurrency
+
+        # A list of comma separated currencys ids.
+        # @var string
+        self.secondaryCurrencys = secondaryCurrencys
+
+        # Downgrade policy
+        # @var KalturaDowngradePolicy
+        self.downgradePolicy = downgradePolicy
+
+        # Mail settings
+        # @var string
+        self.mailSettings = mailSettings
+
+        # Default Date Format for Email notifications (default should be: DD Month YYYY)
+        # @var string
+        self.dateFormat = dateFormat
+
+        # Household limitation&#160;module
+        # @var int
+        self.householdLimitationModule = householdLimitationModule
+
+
+    PROPERTY_LOADERS = {
+        'partnerName': getXmlNodeText, 
+        'mainLanguage': getXmlNodeInt, 
+        'secondaryLanguages': getXmlNodeText, 
+        'deleteMediaPolicy': (KalturaEnumsFactory.createString, "KalturaDeleteMediaPolicy"), 
+        'mainCurrency': getXmlNodeInt, 
+        'secondaryCurrencys': getXmlNodeText, 
+        'downgradePolicy': (KalturaEnumsFactory.createString, "KalturaDowngradePolicy"), 
+        'mailSettings': getXmlNodeText, 
+        'dateFormat': getXmlNodeText, 
+        'householdLimitationModule': getXmlNodeInt, 
+    }
+
+    def fromXml(self, node):
+        KalturaPartnerConfiguration.fromXml(self, node)
+        self.fromXmlImpl(node, KalturaGeneralPartnerConfig.PROPERTY_LOADERS)
+
+    def toParams(self):
+        kparams = KalturaPartnerConfiguration.toParams(self)
+        kparams.put("objectType", "KalturaGeneralPartnerConfig")
+        kparams.addStringIfDefined("partnerName", self.partnerName)
+        kparams.addIntIfDefined("mainLanguage", self.mainLanguage)
+        kparams.addStringIfDefined("secondaryLanguages", self.secondaryLanguages)
+        kparams.addStringEnumIfDefined("deleteMediaPolicy", self.deleteMediaPolicy)
+        kparams.addIntIfDefined("mainCurrency", self.mainCurrency)
+        kparams.addStringIfDefined("secondaryCurrencys", self.secondaryCurrencys)
+        kparams.addStringEnumIfDefined("downgradePolicy", self.downgradePolicy)
+        kparams.addStringIfDefined("mailSettings", self.mailSettings)
+        kparams.addStringIfDefined("dateFormat", self.dateFormat)
+        kparams.addIntIfDefined("householdLimitationModule", self.householdLimitationModule)
+        return kparams
+
+    def getPartnerName(self):
+        return self.partnerName
+
+    def setPartnerName(self, newPartnerName):
+        self.partnerName = newPartnerName
+
+    def getMainLanguage(self):
+        return self.mainLanguage
+
+    def setMainLanguage(self, newMainLanguage):
+        self.mainLanguage = newMainLanguage
+
+    def getSecondaryLanguages(self):
+        return self.secondaryLanguages
+
+    def setSecondaryLanguages(self, newSecondaryLanguages):
+        self.secondaryLanguages = newSecondaryLanguages
+
+    def getDeleteMediaPolicy(self):
+        return self.deleteMediaPolicy
+
+    def setDeleteMediaPolicy(self, newDeleteMediaPolicy):
+        self.deleteMediaPolicy = newDeleteMediaPolicy
+
+    def getMainCurrency(self):
+        return self.mainCurrency
+
+    def setMainCurrency(self, newMainCurrency):
+        self.mainCurrency = newMainCurrency
+
+    def getSecondaryCurrencys(self):
+        return self.secondaryCurrencys
+
+    def setSecondaryCurrencys(self, newSecondaryCurrencys):
+        self.secondaryCurrencys = newSecondaryCurrencys
+
+    def getDowngradePolicy(self):
+        return self.downgradePolicy
+
+    def setDowngradePolicy(self, newDowngradePolicy):
+        self.downgradePolicy = newDowngradePolicy
+
+    def getMailSettings(self):
+        return self.mailSettings
+
+    def setMailSettings(self, newMailSettings):
+        self.mailSettings = newMailSettings
+
+    def getDateFormat(self):
+        return self.dateFormat
+
+    def setDateFormat(self, newDateFormat):
+        self.dateFormat = newDateFormat
+
+    def getHouseholdLimitationModule(self):
+        return self.householdLimitationModule
+
+    def setHouseholdLimitationModule(self, newHouseholdLimitationModule):
+        self.householdLimitationModule = newHouseholdLimitationModule
+
+
+# @package Kaltura
+# @subpackage Client
+class KalturaConcurrencyPartnerConfig(KalturaPartnerConfiguration):
+    """Partner concurrency configuration"""
+
+    def __init__(self,
+            deviceFamilyIds=NotImplemented,
+            evictionPolicy=NotImplemented):
+        KalturaPartnerConfiguration.__init__(self)
+
+        # Comma separated list of device Family Ids order by their priority.
+        # @var string
+        self.deviceFamilyIds = deviceFamilyIds
+
+        # Policy of eviction devices
+        # @var KalturaEvictionPolicyType
+        self.evictionPolicy = evictionPolicy
+
+
+    PROPERTY_LOADERS = {
+        'deviceFamilyIds': getXmlNodeText, 
+        'evictionPolicy': (KalturaEnumsFactory.createString, "KalturaEvictionPolicyType"), 
+    }
+
+    def fromXml(self, node):
+        KalturaPartnerConfiguration.fromXml(self, node)
+        self.fromXmlImpl(node, KalturaConcurrencyPartnerConfig.PROPERTY_LOADERS)
+
+    def toParams(self):
+        kparams = KalturaPartnerConfiguration.toParams(self)
+        kparams.put("objectType", "KalturaConcurrencyPartnerConfig")
+        kparams.addStringIfDefined("deviceFamilyIds", self.deviceFamilyIds)
+        kparams.addStringEnumIfDefined("evictionPolicy", self.evictionPolicy)
+        return kparams
+
+    def getDeviceFamilyIds(self):
+        return self.deviceFamilyIds
+
+    def setDeviceFamilyIds(self, newDeviceFamilyIds):
+        self.deviceFamilyIds = newDeviceFamilyIds
+
+    def getEvictionPolicy(self):
+        return self.evictionPolicy
+
+    def setEvictionPolicy(self, newEvictionPolicy):
+        self.evictionPolicy = newEvictionPolicy
+
+
+# @package Kaltura
+# @subpackage Client
+class KalturaBillingPartnerConfig(KalturaPartnerConfiguration):
+    """Partner billing configuration"""
+
+    def __init__(self,
+            value=NotImplemented,
+            type=NotImplemented):
+        KalturaPartnerConfiguration.__init__(self)
+
+        # configuration value
+        # @var string
+        self.value = value
+
+        # partner configuration type
+        # @var KalturaPartnerConfigurationType
+        self.type = type
+
+
+    PROPERTY_LOADERS = {
+        'value': getXmlNodeText, 
+        'type': (KalturaEnumsFactory.createString, "KalturaPartnerConfigurationType"), 
+    }
+
+    def fromXml(self, node):
+        KalturaPartnerConfiguration.fromXml(self, node)
+        self.fromXmlImpl(node, KalturaBillingPartnerConfig.PROPERTY_LOADERS)
+
+    def toParams(self):
+        kparams = KalturaPartnerConfiguration.toParams(self)
+        kparams.put("objectType", "KalturaBillingPartnerConfig")
+        kparams.addStringIfDefined("value", self.value)
+        kparams.addStringEnumIfDefined("type", self.type)
+        return kparams
+
+    def getValue(self):
+        return self.value
+
+    def setValue(self, newValue):
+        self.value = newValue
+
+    def getType(self):
+        return self.type
+
+    def setType(self, newType):
+        self.type = newType
+
+
+# @package Kaltura
+# @subpackage Client
+class KalturaDeviceFamilyBase(KalturaObjectBase):
+    """Device family details"""
+
+    def __init__(self,
+            id=NotImplemented,
+            name=NotImplemented):
+        KalturaObjectBase.__init__(self)
+
+        # Device family identifier
+        # @var int
+        # @readonly
+        self.id = id
+
+        # Device family name
+        # @var string
+        self.name = name
+
+
+    PROPERTY_LOADERS = {
+        'id': getXmlNodeInt, 
+        'name': getXmlNodeText, 
+    }
+
+    def fromXml(self, node):
+        KalturaObjectBase.fromXml(self, node)
+        self.fromXmlImpl(node, KalturaDeviceFamilyBase.PROPERTY_LOADERS)
+
+    def toParams(self):
+        kparams = KalturaObjectBase.toParams(self)
+        kparams.put("objectType", "KalturaDeviceFamilyBase")
+        kparams.addStringIfDefined("name", self.name)
+        return kparams
+
+    def getId(self):
+        return self.id
+
+    def getName(self):
+        return self.name
+
+    def setName(self, newName):
+        self.name = newName
+
+
+# @package Kaltura
+# @subpackage Client
+class KalturaHouseholdDeviceFamilyLimitations(KalturaDeviceFamilyBase):
+    """Device family limitations details"""
+
+    def __init__(self,
+            id=NotImplemented,
+            name=NotImplemented,
+            frequency=NotImplemented,
+            deviceLimit=NotImplemented,
+            concurrentLimit=NotImplemented):
+        KalturaDeviceFamilyBase.__init__(self,
+            id,
+            name)
+
+        # Allowed device change frequency code
+        # @var int
+        self.frequency = frequency
+
+        # Max number of devices allowed for this family
+        # @var int
+        self.deviceLimit = deviceLimit
+
+        # Max number of streams allowed for this family
+        # @var int
+        self.concurrentLimit = concurrentLimit
+
+
+    PROPERTY_LOADERS = {
+        'frequency': getXmlNodeInt, 
+        'deviceLimit': getXmlNodeInt, 
+        'concurrentLimit': getXmlNodeInt, 
+    }
+
+    def fromXml(self, node):
+        KalturaDeviceFamilyBase.fromXml(self, node)
+        self.fromXmlImpl(node, KalturaHouseholdDeviceFamilyLimitations.PROPERTY_LOADERS)
+
+    def toParams(self):
+        kparams = KalturaDeviceFamilyBase.toParams(self)
+        kparams.put("objectType", "KalturaHouseholdDeviceFamilyLimitations")
+        kparams.addIntIfDefined("frequency", self.frequency)
+        kparams.addIntIfDefined("deviceLimit", self.deviceLimit)
+        kparams.addIntIfDefined("concurrentLimit", self.concurrentLimit)
+        return kparams
+
+    def getFrequency(self):
+        return self.frequency
+
+    def setFrequency(self, newFrequency):
+        self.frequency = newFrequency
+
+    def getDeviceLimit(self):
+        return self.deviceLimit
+
+    def setDeviceLimit(self, newDeviceLimit):
+        self.deviceLimit = newDeviceLimit
+
+    def getConcurrentLimit(self):
+        return self.concurrentLimit
+
+    def setConcurrentLimit(self, newConcurrentLimit):
+        self.concurrentLimit = newConcurrentLimit
+
+
+# @package Kaltura
+# @subpackage Client
+class KalturaHouseholdLimitations(KalturaObjectBase):
+    """Household limitations details"""
+
+    def __init__(self,
+            id=NotImplemented,
+            name=NotImplemented,
+            concurrentLimit=NotImplemented,
+            deviceLimit=NotImplemented,
+            deviceFrequency=NotImplemented,
+            deviceFrequencyDescription=NotImplemented,
+            userFrequency=NotImplemented,
+            userFrequencyDescription=NotImplemented,
+            npvrQuotaInSeconds=NotImplemented,
+            usersLimit=NotImplemented,
+            deviceFamiliesLimitations=NotImplemented):
+        KalturaObjectBase.__init__(self)
+
+        # Household limitation module identifier
+        # @var int
+        # @readonly
+        self.id = id
+
+        # Household limitation module name
+        # @var string
+        # @readonly
+        self.name = name
+
+        # Max number of streams allowed for the household
+        # @var int
+        # @readonly
+        self.concurrentLimit = concurrentLimit
+
+        # Max number of devices allowed for the household
+        # @var int
+        # @readonly
+        self.deviceLimit = deviceLimit
+
+        # Allowed device change frequency code
+        # @var int
+        # @readonly
+        self.deviceFrequency = deviceFrequency
+
+        # Allowed device change frequency description
+        # @var string
+        # @readonly
+        self.deviceFrequencyDescription = deviceFrequencyDescription
+
+        # Allowed user change frequency code
+        # @var int
+        # @readonly
+        self.userFrequency = userFrequency
+
+        # Allowed user change frequency description
+        # @var string
+        # @readonly
+        self.userFrequencyDescription = userFrequencyDescription
+
+        # Allowed NPVR Quota in Seconds
+        # @var int
+        # @readonly
+        self.npvrQuotaInSeconds = npvrQuotaInSeconds
+
+        # Max number of users allowed for the household
+        # @var int
+        # @readonly
+        self.usersLimit = usersLimit
+
+        # Device families limitations
+        # @var array of KalturaHouseholdDeviceFamilyLimitations
+        # @readonly
+        self.deviceFamiliesLimitations = deviceFamiliesLimitations
+
+
+    PROPERTY_LOADERS = {
+        'id': getXmlNodeInt, 
+        'name': getXmlNodeText, 
+        'concurrentLimit': getXmlNodeInt, 
+        'deviceLimit': getXmlNodeInt, 
+        'deviceFrequency': getXmlNodeInt, 
+        'deviceFrequencyDescription': getXmlNodeText, 
+        'userFrequency': getXmlNodeInt, 
+        'userFrequencyDescription': getXmlNodeText, 
+        'npvrQuotaInSeconds': getXmlNodeInt, 
+        'usersLimit': getXmlNodeInt, 
+        'deviceFamiliesLimitations': (KalturaObjectFactory.createArray, 'KalturaHouseholdDeviceFamilyLimitations'), 
+    }
+
+    def fromXml(self, node):
+        KalturaObjectBase.fromXml(self, node)
+        self.fromXmlImpl(node, KalturaHouseholdLimitations.PROPERTY_LOADERS)
+
+    def toParams(self):
+        kparams = KalturaObjectBase.toParams(self)
+        kparams.put("objectType", "KalturaHouseholdLimitations")
+        return kparams
+
+    def getId(self):
+        return self.id
+
+    def getName(self):
+        return self.name
+
+    def getConcurrentLimit(self):
+        return self.concurrentLimit
+
+    def getDeviceLimit(self):
+        return self.deviceLimit
+
+    def getDeviceFrequency(self):
+        return self.deviceFrequency
+
+    def getDeviceFrequencyDescription(self):
+        return self.deviceFrequencyDescription
+
+    def getUserFrequency(self):
+        return self.userFrequency
+
+    def getUserFrequencyDescription(self):
+        return self.userFrequencyDescription
+
+    def getNpvrQuotaInSeconds(self):
+        return self.npvrQuotaInSeconds
+
+    def getUsersLimit(self):
+        return self.usersLimit
+
+    def getDeviceFamiliesLimitations(self):
+        return self.deviceFamiliesLimitations
+
+
+# @package Kaltura
+# @subpackage Client
+class KalturaHouseholdLimitationsListResponse(KalturaListResponse):
+    """Household limitations details"""
+
+    def __init__(self,
+            totalCount=NotImplemented,
+            objects=NotImplemented):
+        KalturaListResponse.__init__(self,
+            totalCount)
+
+        # Household limitations
+        # @var array of KalturaHouseholdLimitations
+        self.objects = objects
+
+
+    PROPERTY_LOADERS = {
+        'objects': (KalturaObjectFactory.createArray, 'KalturaHouseholdLimitations'), 
+    }
+
+    def fromXml(self, node):
+        KalturaListResponse.fromXml(self, node)
+        self.fromXmlImpl(node, KalturaHouseholdLimitationsListResponse.PROPERTY_LOADERS)
+
+    def toParams(self):
+        kparams = KalturaListResponse.toParams(self)
+        kparams.put("objectType", "KalturaHouseholdLimitationsListResponse")
+        kparams.addArrayIfDefined("objects", self.objects)
+        return kparams
+
+    def getObjects(self):
+        return self.objects
+
+    def setObjects(self, newObjects):
+        self.objects = newObjects
+
+
+# @package Kaltura
+# @subpackage Client
+class KalturaHouseholdDevice(KalturaObjectBase):
+    """Device details"""
+
+    def __init__(self,
+            householdId=NotImplemented,
+            udid=NotImplemented,
+            name=NotImplemented,
+            brandId=NotImplemented,
+            activatedOn=NotImplemented,
+            status=NotImplemented,
+            deviceFamilyId=NotImplemented,
+            drm=NotImplemented):
+        KalturaObjectBase.__init__(self)
+
+        # Household identifier
+        # @var int
+        self.householdId = householdId
+
+        # Device UDID
+        # @var string
+        # @insertonly
+        self.udid = udid
+
+        # Device name
+        # @var string
+        self.name = name
+
+        # Device brand identifier
+        # @var int
+        self.brandId = brandId
+
+        # Device activation date (epoch)
+        # @var int
+        self.activatedOn = activatedOn
+
+        # Device state
+        # @var KalturaDeviceStatus
+        # @readonly
+        self.status = status
+
+        # Device family id
+        # @var int
+        # @readonly
+        self.deviceFamilyId = deviceFamilyId
+
+        # Device DRM data
+        # @var KalturaCustomDrmPlaybackPluginData
+        # @readonly
+        self.drm = drm
+
+
+    PROPERTY_LOADERS = {
+        'householdId': getXmlNodeInt, 
+        'udid': getXmlNodeText, 
+        'name': getXmlNodeText, 
+        'brandId': getXmlNodeInt, 
+        'activatedOn': getXmlNodeInt, 
+        'status': (KalturaEnumsFactory.createString, "KalturaDeviceStatus"), 
+        'deviceFamilyId': getXmlNodeInt, 
+        'drm': (KalturaObjectFactory.create, 'KalturaCustomDrmPlaybackPluginData'), 
+    }
+
+    def fromXml(self, node):
+        KalturaObjectBase.fromXml(self, node)
+        self.fromXmlImpl(node, KalturaHouseholdDevice.PROPERTY_LOADERS)
+
+    def toParams(self):
+        kparams = KalturaObjectBase.toParams(self)
+        kparams.put("objectType", "KalturaHouseholdDevice")
+        kparams.addIntIfDefined("householdId", self.householdId)
+        kparams.addStringIfDefined("udid", self.udid)
+        kparams.addStringIfDefined("name", self.name)
+        kparams.addIntIfDefined("brandId", self.brandId)
+        kparams.addIntIfDefined("activatedOn", self.activatedOn)
+        return kparams
+
+    def getHouseholdId(self):
+        return self.householdId
+
+    def setHouseholdId(self, newHouseholdId):
+        self.householdId = newHouseholdId
+
+    def getUdid(self):
+        return self.udid
+
+    def setUdid(self, newUdid):
+        self.udid = newUdid
+
+    def getName(self):
+        return self.name
+
+    def setName(self, newName):
+        self.name = newName
+
+    def getBrandId(self):
+        return self.brandId
+
+    def setBrandId(self, newBrandId):
+        self.brandId = newBrandId
+
+    def getActivatedOn(self):
+        return self.activatedOn
+
+    def setActivatedOn(self, newActivatedOn):
+        self.activatedOn = newActivatedOn
+
+    def getStatus(self):
+        return self.status
+
+    def getDeviceFamilyId(self):
+        return self.deviceFamilyId
+
+    def getDrm(self):
+        return self.drm
+
+
+# @package Kaltura
+# @subpackage Client
+class KalturaDeviceFamily(KalturaDeviceFamilyBase):
+    """Device family details"""
+
+    def __init__(self,
+            id=NotImplemented,
+            name=NotImplemented):
+        KalturaDeviceFamilyBase.__init__(self,
+            id,
+            name)
+
+
+    PROPERTY_LOADERS = {
+    }
+
+    def fromXml(self, node):
+        KalturaDeviceFamilyBase.fromXml(self, node)
+        self.fromXmlImpl(node, KalturaDeviceFamily.PROPERTY_LOADERS)
+
+    def toParams(self):
+        kparams = KalturaDeviceFamilyBase.toParams(self)
+        kparams.put("objectType", "KalturaDeviceFamily")
+        return kparams
+
+
+# @package Kaltura
+# @subpackage Client
+class KalturaHouseholdDeviceListResponse(KalturaListResponse):
+    def __init__(self,
+            totalCount=NotImplemented,
+            objects=NotImplemented):
+        KalturaListResponse.__init__(self,
+            totalCount)
+
+        # Household devices
+        # @var array of KalturaHouseholdDevice
+        self.objects = objects
+
+
+    PROPERTY_LOADERS = {
+        'objects': (KalturaObjectFactory.createArray, 'KalturaHouseholdDevice'), 
+    }
+
+    def fromXml(self, node):
+        KalturaListResponse.fromXml(self, node)
+        self.fromXmlImpl(node, KalturaHouseholdDeviceListResponse.PROPERTY_LOADERS)
+
+    def toParams(self):
+        kparams = KalturaListResponse.toParams(self)
+        kparams.put("objectType", "KalturaHouseholdDeviceListResponse")
+        kparams.addArrayIfDefined("objects", self.objects)
+        return kparams
+
+    def getObjects(self):
+        return self.objects
+
+    def setObjects(self, newObjects):
+        self.objects = newObjects
+
+
+# @package Kaltura
+# @subpackage Client
+class KalturaHouseholdUser(KalturaObjectBase):
+    """Household user"""
+
+    def __init__(self,
+            householdId=NotImplemented,
+            userId=NotImplemented,
+            isMaster=NotImplemented,
+            householdMasterUsername=NotImplemented,
+            status=NotImplemented,
+            isDefault=NotImplemented):
+        KalturaObjectBase.__init__(self)
+
+        # The identifier of the household
+        # @var int
+        self.householdId = householdId
+
+        # The identifier of the user
+        # @var string
+        self.userId = userId
+
+        # True if the user added as master use
+        # @var bool
+        self.isMaster = isMaster
+
+        # The username of the household master for adding a user in status pending for the household master to approve
+        # @var string
+        # @insertonly
+        self.householdMasterUsername = householdMasterUsername
+
+        # The status of the user in the household
+        # @var KalturaHouseholdUserStatus
+        # @readonly
+        self.status = status
+
+        # True if the user is a default user
+        # @var bool
+        # @readonly
+        self.isDefault = isDefault
+
+
+    PROPERTY_LOADERS = {
+        'householdId': getXmlNodeInt, 
+        'userId': getXmlNodeText, 
+        'isMaster': getXmlNodeBool, 
+        'householdMasterUsername': getXmlNodeText, 
+        'status': (KalturaEnumsFactory.createString, "KalturaHouseholdUserStatus"), 
+        'isDefault': getXmlNodeBool, 
+    }
+
+    def fromXml(self, node):
+        KalturaObjectBase.fromXml(self, node)
+        self.fromXmlImpl(node, KalturaHouseholdUser.PROPERTY_LOADERS)
+
+    def toParams(self):
+        kparams = KalturaObjectBase.toParams(self)
+        kparams.put("objectType", "KalturaHouseholdUser")
+        kparams.addIntIfDefined("householdId", self.householdId)
+        kparams.addStringIfDefined("userId", self.userId)
+        kparams.addBoolIfDefined("isMaster", self.isMaster)
+        kparams.addStringIfDefined("householdMasterUsername", self.householdMasterUsername)
+        return kparams
+
+    def getHouseholdId(self):
+        return self.householdId
+
+    def setHouseholdId(self, newHouseholdId):
+        self.householdId = newHouseholdId
+
+    def getUserId(self):
+        return self.userId
+
+    def setUserId(self, newUserId):
+        self.userId = newUserId
+
+    def getIsMaster(self):
+        return self.isMaster
+
+    def setIsMaster(self, newIsMaster):
+        self.isMaster = newIsMaster
+
+    def getHouseholdMasterUsername(self):
+        return self.householdMasterUsername
+
+    def setHouseholdMasterUsername(self, newHouseholdMasterUsername):
+        self.householdMasterUsername = newHouseholdMasterUsername
+
+    def getStatus(self):
+        return self.status
+
+    def getIsDefault(self):
+        return self.isDefault
+
+
+# @package Kaltura
+# @subpackage Client
+class KalturaHouseholdUserListResponse(KalturaListResponse):
+    """Household users list"""
+
+    def __init__(self,
+            totalCount=NotImplemented,
+            objects=NotImplemented):
+        KalturaListResponse.__init__(self,
+            totalCount)
+
+        # Household users
+        # @var array of KalturaHouseholdUser
+        self.objects = objects
+
+
+    PROPERTY_LOADERS = {
+        'objects': (KalturaObjectFactory.createArray, 'KalturaHouseholdUser'), 
+    }
+
+    def fromXml(self, node):
+        KalturaListResponse.fromXml(self, node)
+        self.fromXmlImpl(node, KalturaHouseholdUserListResponse.PROPERTY_LOADERS)
+
+    def toParams(self):
+        kparams = KalturaListResponse.toParams(self)
+        kparams.put("objectType", "KalturaHouseholdUserListResponse")
+        kparams.addArrayIfDefined("objects", self.objects)
+        return kparams
+
+    def getObjects(self):
+        return self.objects
+
+    def setObjects(self, newObjects):
+        self.objects = newObjects
+
+
+# @package Kaltura
+# @subpackage Client
+class KalturaHomeNetwork(KalturaObjectBase):
+    """Home network details"""
+
+    def __init__(self,
+            externalId=NotImplemented,
+            name=NotImplemented,
+            description=NotImplemented,
+            isActive=NotImplemented):
+        KalturaObjectBase.__init__(self)
+
+        # Home network identifier
+        # @var string
+        # @insertonly
+        self.externalId = externalId
+
+        # Home network name
+        # @var string
+        self.name = name
+
+        # Home network description
+        # @var string
+        self.description = description
+
+        # Is home network is active
+        # @var bool
+        self.isActive = isActive
+
+
+    PROPERTY_LOADERS = {
+        'externalId': getXmlNodeText, 
+        'name': getXmlNodeText, 
+        'description': getXmlNodeText, 
+        'isActive': getXmlNodeBool, 
+    }
+
+    def fromXml(self, node):
+        KalturaObjectBase.fromXml(self, node)
+        self.fromXmlImpl(node, KalturaHomeNetwork.PROPERTY_LOADERS)
+
+    def toParams(self):
+        kparams = KalturaObjectBase.toParams(self)
+        kparams.put("objectType", "KalturaHomeNetwork")
+        kparams.addStringIfDefined("externalId", self.externalId)
+        kparams.addStringIfDefined("name", self.name)
+        kparams.addStringIfDefined("description", self.description)
+        kparams.addBoolIfDefined("isActive", self.isActive)
+        return kparams
+
+    def getExternalId(self):
+        return self.externalId
+
+    def setExternalId(self, newExternalId):
+        self.externalId = newExternalId
+
+    def getName(self):
+        return self.name
+
+    def setName(self, newName):
+        self.name = newName
+
+    def getDescription(self):
+        return self.description
+
+    def setDescription(self, newDescription):
+        self.description = newDescription
+
+    def getIsActive(self):
+        return self.isActive
+
+    def setIsActive(self, newIsActive):
+        self.isActive = newIsActive
+
+
+# @package Kaltura
+# @subpackage Client
+class KalturaHomeNetworkListResponse(KalturaListResponse):
+    """Home networks"""
+
+    def __init__(self,
+            totalCount=NotImplemented,
+            objects=NotImplemented):
+        KalturaListResponse.__init__(self,
+            totalCount)
+
+        # Home networks
+        # @var array of KalturaHomeNetwork
+        self.objects = objects
+
+
+    PROPERTY_LOADERS = {
+        'objects': (KalturaObjectFactory.createArray, 'KalturaHomeNetwork'), 
+    }
+
+    def fromXml(self, node):
+        KalturaListResponse.fromXml(self, node)
+        self.fromXmlImpl(node, KalturaHomeNetworkListResponse.PROPERTY_LOADERS)
+
+    def toParams(self):
+        kparams = KalturaListResponse.toParams(self)
+        kparams.put("objectType", "KalturaHomeNetworkListResponse")
         kparams.addArrayIfDefined("objects", self.objects)
         return kparams
 
@@ -18774,11 +19256,16 @@ class KalturaCurrency(KalturaObjectBase):
     """Currency details"""
 
     def __init__(self,
+            id=NotImplemented,
             name=NotImplemented,
             code=NotImplemented,
             sign=NotImplemented,
             isDefault=NotImplemented):
         KalturaObjectBase.__init__(self)
+
+        # Identifier
+        # @var int
+        self.id = id
 
         # Currency name
         # @var string
@@ -18798,6 +19285,7 @@ class KalturaCurrency(KalturaObjectBase):
 
 
     PROPERTY_LOADERS = {
+        'id': getXmlNodeInt, 
         'name': getXmlNodeText, 
         'code': getXmlNodeText, 
         'sign': getXmlNodeText, 
@@ -18811,11 +19299,18 @@ class KalturaCurrency(KalturaObjectBase):
     def toParams(self):
         kparams = KalturaObjectBase.toParams(self)
         kparams.put("objectType", "KalturaCurrency")
+        kparams.addIntIfDefined("id", self.id)
         kparams.addStringIfDefined("name", self.name)
         kparams.addStringIfDefined("code", self.code)
         kparams.addStringIfDefined("sign", self.sign)
         kparams.addBoolIfDefined("isDefault", self.isDefault)
         return kparams
+
+    def getId(self):
+        return self.id
+
+    def setId(self, newId):
+        self.id = newId
 
     def getName(self):
         return self.name
@@ -18918,12 +19413,17 @@ class KalturaLanguage(KalturaObjectBase):
     """Language details"""
 
     def __init__(self,
+            id=NotImplemented,
             name=NotImplemented,
             systemName=NotImplemented,
             code=NotImplemented,
             direction=NotImplemented,
             isDefault=NotImplemented):
         KalturaObjectBase.__init__(self)
+
+        # Identifier
+        # @var int
+        self.id = id
 
         # Language name
         # @var string
@@ -18947,6 +19447,7 @@ class KalturaLanguage(KalturaObjectBase):
 
 
     PROPERTY_LOADERS = {
+        'id': getXmlNodeInt, 
         'name': getXmlNodeText, 
         'systemName': getXmlNodeText, 
         'code': getXmlNodeText, 
@@ -18961,12 +19462,19 @@ class KalturaLanguage(KalturaObjectBase):
     def toParams(self):
         kparams = KalturaObjectBase.toParams(self)
         kparams.put("objectType", "KalturaLanguage")
+        kparams.addIntIfDefined("id", self.id)
         kparams.addStringIfDefined("name", self.name)
         kparams.addStringIfDefined("systemName", self.systemName)
         kparams.addStringIfDefined("code", self.code)
         kparams.addStringIfDefined("direction", self.direction)
         kparams.addBoolIfDefined("isDefault", self.isDefault)
         return kparams
+
+    def getId(self):
+        return self.id
+
+    def setId(self, newId):
+        self.id = newId
 
     def getName(self):
         return self.name
@@ -19676,77 +20184,6 @@ class KalturaSearchHistoryListResponse(KalturaListResponse):
 
 # @package Kaltura
 # @subpackage Client
-class KalturaDeviceFamilyBase(KalturaObjectBase):
-    """Device family details"""
-
-    def __init__(self,
-            id=NotImplemented,
-            name=NotImplemented):
-        KalturaObjectBase.__init__(self)
-
-        # Device family identifier
-        # @var int
-        # @readonly
-        self.id = id
-
-        # Device family name
-        # @var string
-        self.name = name
-
-
-    PROPERTY_LOADERS = {
-        'id': getXmlNodeInt, 
-        'name': getXmlNodeText, 
-    }
-
-    def fromXml(self, node):
-        KalturaObjectBase.fromXml(self, node)
-        self.fromXmlImpl(node, KalturaDeviceFamilyBase.PROPERTY_LOADERS)
-
-    def toParams(self):
-        kparams = KalturaObjectBase.toParams(self)
-        kparams.put("objectType", "KalturaDeviceFamilyBase")
-        kparams.addStringIfDefined("name", self.name)
-        return kparams
-
-    def getId(self):
-        return self.id
-
-    def getName(self):
-        return self.name
-
-    def setName(self, newName):
-        self.name = newName
-
-
-# @package Kaltura
-# @subpackage Client
-class KalturaDeviceFamily(KalturaDeviceFamilyBase):
-    """Device family details"""
-
-    def __init__(self,
-            id=NotImplemented,
-            name=NotImplemented):
-        KalturaDeviceFamilyBase.__init__(self,
-            id,
-            name)
-
-
-    PROPERTY_LOADERS = {
-    }
-
-    def fromXml(self, node):
-        KalturaDeviceFamilyBase.fromXml(self, node)
-        self.fromXmlImpl(node, KalturaDeviceFamily.PROPERTY_LOADERS)
-
-    def toParams(self):
-        kparams = KalturaDeviceFamilyBase.toParams(self)
-        kparams.put("objectType", "KalturaDeviceFamily")
-        return kparams
-
-
-# @package Kaltura
-# @subpackage Client
 class KalturaDeviceFamilyListResponse(KalturaListResponse):
     def __init__(self,
             totalCount=NotImplemented,
@@ -19778,71 +20215,6 @@ class KalturaDeviceFamilyListResponse(KalturaListResponse):
 
     def setObjects(self, newObjects):
         self.objects = newObjects
-
-
-# @package Kaltura
-# @subpackage Client
-class KalturaHouseholdDeviceFamilyLimitations(KalturaDeviceFamilyBase):
-    """Device family limitations details"""
-
-    def __init__(self,
-            id=NotImplemented,
-            name=NotImplemented,
-            frequency=NotImplemented,
-            deviceLimit=NotImplemented,
-            concurrentLimit=NotImplemented):
-        KalturaDeviceFamilyBase.__init__(self,
-            id,
-            name)
-
-        # Allowed device change frequency code
-        # @var int
-        self.frequency = frequency
-
-        # Max number of devices allowed for this family
-        # @var int
-        self.deviceLimit = deviceLimit
-
-        # Max number of streams allowed for this family
-        # @var int
-        self.concurrentLimit = concurrentLimit
-
-
-    PROPERTY_LOADERS = {
-        'frequency': getXmlNodeInt, 
-        'deviceLimit': getXmlNodeInt, 
-        'concurrentLimit': getXmlNodeInt, 
-    }
-
-    def fromXml(self, node):
-        KalturaDeviceFamilyBase.fromXml(self, node)
-        self.fromXmlImpl(node, KalturaHouseholdDeviceFamilyLimitations.PROPERTY_LOADERS)
-
-    def toParams(self):
-        kparams = KalturaDeviceFamilyBase.toParams(self)
-        kparams.put("objectType", "KalturaHouseholdDeviceFamilyLimitations")
-        kparams.addIntIfDefined("frequency", self.frequency)
-        kparams.addIntIfDefined("deviceLimit", self.deviceLimit)
-        kparams.addIntIfDefined("concurrentLimit", self.concurrentLimit)
-        return kparams
-
-    def getFrequency(self):
-        return self.frequency
-
-    def setFrequency(self, newFrequency):
-        self.frequency = newFrequency
-
-    def getDeviceLimit(self):
-        return self.deviceLimit
-
-    def setDeviceLimit(self, newDeviceLimit):
-        self.deviceLimit = newDeviceLimit
-
-    def getConcurrentLimit(self):
-        return self.concurrentLimit
-
-    def setConcurrentLimit(self, newConcurrentLimit):
-        self.concurrentLimit = newConcurrentLimit
 
 
 # @package Kaltura
@@ -21786,89 +22158,6 @@ class KalturaPaymentMethodProfileFilter(KalturaFilter):
 
 # @package Kaltura
 # @subpackage Client
-class KalturaHouseholdDeviceFilter(KalturaFilter):
-    def __init__(self,
-            orderBy=NotImplemented,
-            householdIdEqual=NotImplemented,
-            deviceFamilyIdIn=NotImplemented):
-        KalturaFilter.__init__(self,
-            orderBy)
-
-        # The identifier of the household
-        # @var int
-        self.householdIdEqual = householdIdEqual
-
-        # Device family Ids
-        # @var string
-        self.deviceFamilyIdIn = deviceFamilyIdIn
-
-
-    PROPERTY_LOADERS = {
-        'householdIdEqual': getXmlNodeInt, 
-        'deviceFamilyIdIn': getXmlNodeText, 
-    }
-
-    def fromXml(self, node):
-        KalturaFilter.fromXml(self, node)
-        self.fromXmlImpl(node, KalturaHouseholdDeviceFilter.PROPERTY_LOADERS)
-
-    def toParams(self):
-        kparams = KalturaFilter.toParams(self)
-        kparams.put("objectType", "KalturaHouseholdDeviceFilter")
-        kparams.addIntIfDefined("householdIdEqual", self.householdIdEqual)
-        kparams.addStringIfDefined("deviceFamilyIdIn", self.deviceFamilyIdIn)
-        return kparams
-
-    def getHouseholdIdEqual(self):
-        return self.householdIdEqual
-
-    def setHouseholdIdEqual(self, newHouseholdIdEqual):
-        self.householdIdEqual = newHouseholdIdEqual
-
-    def getDeviceFamilyIdIn(self):
-        return self.deviceFamilyIdIn
-
-    def setDeviceFamilyIdIn(self, newDeviceFamilyIdIn):
-        self.deviceFamilyIdIn = newDeviceFamilyIdIn
-
-
-# @package Kaltura
-# @subpackage Client
-class KalturaHouseholdUserFilter(KalturaFilter):
-    def __init__(self,
-            orderBy=NotImplemented,
-            householdIdEqual=NotImplemented):
-        KalturaFilter.__init__(self,
-            orderBy)
-
-        # The identifier of the household
-        # @var int
-        self.householdIdEqual = householdIdEqual
-
-
-    PROPERTY_LOADERS = {
-        'householdIdEqual': getXmlNodeInt, 
-    }
-
-    def fromXml(self, node):
-        KalturaFilter.fromXml(self, node)
-        self.fromXmlImpl(node, KalturaHouseholdUserFilter.PROPERTY_LOADERS)
-
-    def toParams(self):
-        kparams = KalturaFilter.toParams(self)
-        kparams.put("objectType", "KalturaHouseholdUserFilter")
-        kparams.addIntIfDefined("householdIdEqual", self.householdIdEqual)
-        return kparams
-
-    def getHouseholdIdEqual(self):
-        return self.householdIdEqual
-
-    def setHouseholdIdEqual(self, newHouseholdIdEqual):
-        self.householdIdEqual = newHouseholdIdEqual
-
-
-# @package Kaltura
-# @subpackage Client
 class KalturaConfigurationsFilter(KalturaFilter):
     """Configuration filter"""
 
@@ -22564,43 +22853,6 @@ class KalturaTopicFilter(KalturaFilter):
         kparams = KalturaFilter.toParams(self)
         kparams.put("objectType", "KalturaTopicFilter")
         return kparams
-
-
-# @package Kaltura
-# @subpackage Client
-class KalturaPartnerConfigurationFilter(KalturaFilter):
-    """Partner configuration filter"""
-
-    def __init__(self,
-            orderBy=NotImplemented,
-            partnerConfigurationTypeEqual=NotImplemented):
-        KalturaFilter.__init__(self,
-            orderBy)
-
-        # Indicates which partner configuration list to return
-        # @var KalturaPartnerConfigurationType
-        self.partnerConfigurationTypeEqual = partnerConfigurationTypeEqual
-
-
-    PROPERTY_LOADERS = {
-        'partnerConfigurationTypeEqual': (KalturaEnumsFactory.createString, "KalturaPartnerConfigurationType"), 
-    }
-
-    def fromXml(self, node):
-        KalturaFilter.fromXml(self, node)
-        self.fromXmlImpl(node, KalturaPartnerConfigurationFilter.PROPERTY_LOADERS)
-
-    def toParams(self):
-        kparams = KalturaFilter.toParams(self)
-        kparams.put("objectType", "KalturaPartnerConfigurationFilter")
-        kparams.addStringEnumIfDefined("partnerConfigurationTypeEqual", self.partnerConfigurationTypeEqual)
-        return kparams
-
-    def getPartnerConfigurationTypeEqual(self):
-        return self.partnerConfigurationTypeEqual
-
-    def setPartnerConfigurationTypeEqual(self, newPartnerConfigurationTypeEqual):
-        self.partnerConfigurationTypeEqual = newPartnerConfigurationTypeEqual
 
 
 # @package Kaltura
@@ -23942,6 +24194,126 @@ class KalturaSubscriptionFilter(KalturaFilter):
 
     def setExternalIdIn(self, newExternalIdIn):
         self.externalIdIn = newExternalIdIn
+
+
+# @package Kaltura
+# @subpackage Client
+class KalturaPartnerConfigurationFilter(KalturaFilter):
+    """Partner configuration filter"""
+
+    def __init__(self,
+            orderBy=NotImplemented,
+            partnerConfigurationTypeEqual=NotImplemented):
+        KalturaFilter.__init__(self,
+            orderBy)
+
+        # Indicates which partner configuration list to return
+        # @var KalturaPartnerConfigurationType
+        self.partnerConfigurationTypeEqual = partnerConfigurationTypeEqual
+
+
+    PROPERTY_LOADERS = {
+        'partnerConfigurationTypeEqual': (KalturaEnumsFactory.createString, "KalturaPartnerConfigurationType"), 
+    }
+
+    def fromXml(self, node):
+        KalturaFilter.fromXml(self, node)
+        self.fromXmlImpl(node, KalturaPartnerConfigurationFilter.PROPERTY_LOADERS)
+
+    def toParams(self):
+        kparams = KalturaFilter.toParams(self)
+        kparams.put("objectType", "KalturaPartnerConfigurationFilter")
+        kparams.addStringEnumIfDefined("partnerConfigurationTypeEqual", self.partnerConfigurationTypeEqual)
+        return kparams
+
+    def getPartnerConfigurationTypeEqual(self):
+        return self.partnerConfigurationTypeEqual
+
+    def setPartnerConfigurationTypeEqual(self, newPartnerConfigurationTypeEqual):
+        self.partnerConfigurationTypeEqual = newPartnerConfigurationTypeEqual
+
+
+# @package Kaltura
+# @subpackage Client
+class KalturaHouseholdDeviceFilter(KalturaFilter):
+    def __init__(self,
+            orderBy=NotImplemented,
+            householdIdEqual=NotImplemented,
+            deviceFamilyIdIn=NotImplemented):
+        KalturaFilter.__init__(self,
+            orderBy)
+
+        # The identifier of the household
+        # @var int
+        self.householdIdEqual = householdIdEqual
+
+        # Device family Ids
+        # @var string
+        self.deviceFamilyIdIn = deviceFamilyIdIn
+
+
+    PROPERTY_LOADERS = {
+        'householdIdEqual': getXmlNodeInt, 
+        'deviceFamilyIdIn': getXmlNodeText, 
+    }
+
+    def fromXml(self, node):
+        KalturaFilter.fromXml(self, node)
+        self.fromXmlImpl(node, KalturaHouseholdDeviceFilter.PROPERTY_LOADERS)
+
+    def toParams(self):
+        kparams = KalturaFilter.toParams(self)
+        kparams.put("objectType", "KalturaHouseholdDeviceFilter")
+        kparams.addIntIfDefined("householdIdEqual", self.householdIdEqual)
+        kparams.addStringIfDefined("deviceFamilyIdIn", self.deviceFamilyIdIn)
+        return kparams
+
+    def getHouseholdIdEqual(self):
+        return self.householdIdEqual
+
+    def setHouseholdIdEqual(self, newHouseholdIdEqual):
+        self.householdIdEqual = newHouseholdIdEqual
+
+    def getDeviceFamilyIdIn(self):
+        return self.deviceFamilyIdIn
+
+    def setDeviceFamilyIdIn(self, newDeviceFamilyIdIn):
+        self.deviceFamilyIdIn = newDeviceFamilyIdIn
+
+
+# @package Kaltura
+# @subpackage Client
+class KalturaHouseholdUserFilter(KalturaFilter):
+    def __init__(self,
+            orderBy=NotImplemented,
+            householdIdEqual=NotImplemented):
+        KalturaFilter.__init__(self,
+            orderBy)
+
+        # The identifier of the household
+        # @var int
+        self.householdIdEqual = householdIdEqual
+
+
+    PROPERTY_LOADERS = {
+        'householdIdEqual': getXmlNodeInt, 
+    }
+
+    def fromXml(self, node):
+        KalturaFilter.fromXml(self, node)
+        self.fromXmlImpl(node, KalturaHouseholdUserFilter.PROPERTY_LOADERS)
+
+    def toParams(self):
+        kparams = KalturaFilter.toParams(self)
+        kparams.put("objectType", "KalturaHouseholdUserFilter")
+        kparams.addIntIfDefined("householdIdEqual", self.householdIdEqual)
+        return kparams
+
+    def getHouseholdIdEqual(self):
+        return self.householdIdEqual
+
+    def setHouseholdIdEqual(self, newHouseholdIdEqual):
+        self.householdIdEqual = newHouseholdIdEqual
 
 
 # @package Kaltura
@@ -28819,138 +29191,6 @@ class KalturaUserAssetsListItem(KalturaObjectBase):
 
 # @package Kaltura
 # @subpackage Client
-class KalturaHouseholdLimitations(KalturaObjectBase):
-    """Household limitations details"""
-
-    def __init__(self,
-            id=NotImplemented,
-            name=NotImplemented,
-            concurrentLimit=NotImplemented,
-            deviceLimit=NotImplemented,
-            deviceFrequency=NotImplemented,
-            deviceFrequencyDescription=NotImplemented,
-            userFrequency=NotImplemented,
-            userFrequencyDescription=NotImplemented,
-            npvrQuotaInSeconds=NotImplemented,
-            usersLimit=NotImplemented,
-            deviceFamiliesLimitations=NotImplemented):
-        KalturaObjectBase.__init__(self)
-
-        # Household limitation module identifier
-        # @var int
-        # @readonly
-        self.id = id
-
-        # Household limitation module name
-        # @var string
-        # @readonly
-        self.name = name
-
-        # Max number of streams allowed for the household
-        # @var int
-        # @readonly
-        self.concurrentLimit = concurrentLimit
-
-        # Max number of devices allowed for the household
-        # @var int
-        # @readonly
-        self.deviceLimit = deviceLimit
-
-        # Allowed device change frequency code
-        # @var int
-        # @readonly
-        self.deviceFrequency = deviceFrequency
-
-        # Allowed device change frequency description
-        # @var string
-        # @readonly
-        self.deviceFrequencyDescription = deviceFrequencyDescription
-
-        # Allowed user change frequency code
-        # @var int
-        # @readonly
-        self.userFrequency = userFrequency
-
-        # Allowed user change frequency description
-        # @var string
-        # @readonly
-        self.userFrequencyDescription = userFrequencyDescription
-
-        # Allowed NPVR Quota in Seconds
-        # @var int
-        # @readonly
-        self.npvrQuotaInSeconds = npvrQuotaInSeconds
-
-        # Max number of users allowed for the household
-        # @var int
-        # @readonly
-        self.usersLimit = usersLimit
-
-        # Device families limitations
-        # @var array of KalturaHouseholdDeviceFamilyLimitations
-        # @readonly
-        self.deviceFamiliesLimitations = deviceFamiliesLimitations
-
-
-    PROPERTY_LOADERS = {
-        'id': getXmlNodeInt, 
-        'name': getXmlNodeText, 
-        'concurrentLimit': getXmlNodeInt, 
-        'deviceLimit': getXmlNodeInt, 
-        'deviceFrequency': getXmlNodeInt, 
-        'deviceFrequencyDescription': getXmlNodeText, 
-        'userFrequency': getXmlNodeInt, 
-        'userFrequencyDescription': getXmlNodeText, 
-        'npvrQuotaInSeconds': getXmlNodeInt, 
-        'usersLimit': getXmlNodeInt, 
-        'deviceFamiliesLimitations': (KalturaObjectFactory.createArray, 'KalturaHouseholdDeviceFamilyLimitations'), 
-    }
-
-    def fromXml(self, node):
-        KalturaObjectBase.fromXml(self, node)
-        self.fromXmlImpl(node, KalturaHouseholdLimitations.PROPERTY_LOADERS)
-
-    def toParams(self):
-        kparams = KalturaObjectBase.toParams(self)
-        kparams.put("objectType", "KalturaHouseholdLimitations")
-        return kparams
-
-    def getId(self):
-        return self.id
-
-    def getName(self):
-        return self.name
-
-    def getConcurrentLimit(self):
-        return self.concurrentLimit
-
-    def getDeviceLimit(self):
-        return self.deviceLimit
-
-    def getDeviceFrequency(self):
-        return self.deviceFrequency
-
-    def getDeviceFrequencyDescription(self):
-        return self.deviceFrequencyDescription
-
-    def getUserFrequency(self):
-        return self.userFrequency
-
-    def getUserFrequencyDescription(self):
-        return self.userFrequencyDescription
-
-    def getNpvrQuotaInSeconds(self):
-        return self.npvrQuotaInSeconds
-
-    def getUsersLimit(self):
-        return self.usersLimit
-
-    def getDeviceFamiliesLimitations(self):
-        return self.deviceFamiliesLimitations
-
-
-# @package Kaltura
-# @subpackage Client
 class KalturaLoginSession(KalturaObjectBase):
     """Login response"""
 
@@ -32729,6 +32969,16 @@ class KalturaHouseholdLimitationsService(KalturaServiceBase):
         resultNode = self.client.doQueue()
         return KalturaObjectFactory.create(resultNode, 'KalturaHouseholdLimitations')
 
+    def list(self):
+        """Get the list of PartnerConfiguration"""
+
+        kparams = KalturaParams()
+        self.client.queueServiceActionCall("householdlimitations", "list", "KalturaHouseholdLimitationsListResponse", kparams)
+        if self.client.isMultiRequest():
+            return self.client.getMultiRequestResult()
+        resultNode = self.client.doQueue()
+        return KalturaObjectFactory.create(resultNode, 'KalturaHouseholdLimitationsListResponse')
+
 
 # @package Kaltura
 # @subpackage Client
@@ -36004,7 +36254,9 @@ class KalturaCoreClient(KalturaClientPlugin):
             'KalturaCouponGroupType': KalturaCouponGroupType,
             'KalturaCouponStatus': KalturaCouponStatus,
             'KalturaCurrencyOrderBy': KalturaCurrencyOrderBy,
+            'KalturaDeleteMediaPolicy': KalturaDeleteMediaPolicy,
             'KalturaDeviceStatus': KalturaDeviceStatus,
+            'KalturaDowngradePolicy': KalturaDowngradePolicy,
             'KalturaDrmSchemeName': KalturaDrmSchemeName,
             'KalturaEngagementOrderBy': KalturaEngagementOrderBy,
             'KalturaEngagementType': KalturaEngagementType,
@@ -36150,16 +36402,6 @@ class KalturaCoreClient(KalturaClientPlugin):
             'KalturaDoubleValue': KalturaDoubleValue,
             'KalturaBooleanValue': KalturaBooleanValue,
             'KalturaIntegerValue': KalturaIntegerValue,
-            'KalturaPluginData': KalturaPluginData,
-            'KalturaDrmPlaybackPluginData': KalturaDrmPlaybackPluginData,
-            'KalturaCustomDrmPlaybackPluginData': KalturaCustomDrmPlaybackPluginData,
-            'KalturaHouseholdDevice': KalturaHouseholdDevice,
-            'KalturaHouseholdDeviceListResponse': KalturaHouseholdDeviceListResponse,
-            'KalturaFairPlayPlaybackPluginData': KalturaFairPlayPlaybackPluginData,
-            'KalturaHouseholdUser': KalturaHouseholdUser,
-            'KalturaHouseholdUserListResponse': KalturaHouseholdUserListResponse,
-            'KalturaHomeNetwork': KalturaHomeNetwork,
-            'KalturaHomeNetworkListResponse': KalturaHomeNetworkListResponse,
             'KalturaConfigurations': KalturaConfigurations,
             'KalturaConfigurationsListResponse': KalturaConfigurationsListResponse,
             'KalturaConfigurationGroupDevice': KalturaConfigurationGroupDevice,
@@ -36183,7 +36425,11 @@ class KalturaCoreClient(KalturaClientPlugin):
             'KalturaMultilingualStringValueArray': KalturaMultilingualStringValueArray,
             'KalturaFavorite': KalturaFavorite,
             'KalturaFavoriteListResponse': KalturaFavoriteListResponse,
+            'KalturaPluginData': KalturaPluginData,
+            'KalturaDrmPlaybackPluginData': KalturaDrmPlaybackPluginData,
             'KalturaPlaybackSource': KalturaPlaybackSource,
+            'KalturaFairPlayPlaybackPluginData': KalturaFairPlayPlaybackPluginData,
+            'KalturaCustomDrmPlaybackPluginData': KalturaCustomDrmPlaybackPluginData,
             'KalturaBaseOTTUser': KalturaBaseOTTUser,
             'KalturaCountry': KalturaCountry,
             'KalturaOTTUserType': KalturaOTTUserType,
@@ -36212,10 +36458,6 @@ class KalturaCoreClient(KalturaClientPlugin):
             'KalturaPersonalFeedListResponse': KalturaPersonalFeedListResponse,
             'KalturaTopic': KalturaTopic,
             'KalturaTopicListResponse': KalturaTopicListResponse,
-            'KalturaPartnerConfiguration': KalturaPartnerConfiguration,
-            'KalturaPartnerConfigurationListResponse': KalturaPartnerConfigurationListResponse,
-            'KalturaConcurrencyPartnerConfig': KalturaConcurrencyPartnerConfig,
-            'KalturaBillingPartnerConfig': KalturaBillingPartnerConfig,
             'KalturaT': KalturaT,
             'KalturaGenericListResponse': KalturaGenericListResponse,
             'KalturaIntegerValueListResponse': KalturaIntegerValueListResponse,
@@ -36290,6 +36532,22 @@ class KalturaCoreClient(KalturaClientPlugin):
             'KalturaNpvrPremiumService': KalturaNpvrPremiumService,
             'KalturaHouseholdPremiumService': KalturaHouseholdPremiumService,
             'KalturaProductsPriceListResponse': KalturaProductsPriceListResponse,
+            'KalturaPartnerConfiguration': KalturaPartnerConfiguration,
+            'KalturaPartnerConfigurationListResponse': KalturaPartnerConfigurationListResponse,
+            'KalturaGeneralPartnerConfig': KalturaGeneralPartnerConfig,
+            'KalturaConcurrencyPartnerConfig': KalturaConcurrencyPartnerConfig,
+            'KalturaBillingPartnerConfig': KalturaBillingPartnerConfig,
+            'KalturaDeviceFamilyBase': KalturaDeviceFamilyBase,
+            'KalturaHouseholdDeviceFamilyLimitations': KalturaHouseholdDeviceFamilyLimitations,
+            'KalturaHouseholdLimitations': KalturaHouseholdLimitations,
+            'KalturaHouseholdLimitationsListResponse': KalturaHouseholdLimitationsListResponse,
+            'KalturaHouseholdDevice': KalturaHouseholdDevice,
+            'KalturaDeviceFamily': KalturaDeviceFamily,
+            'KalturaHouseholdDeviceListResponse': KalturaHouseholdDeviceListResponse,
+            'KalturaHouseholdUser': KalturaHouseholdUser,
+            'KalturaHouseholdUserListResponse': KalturaHouseholdUserListResponse,
+            'KalturaHomeNetwork': KalturaHomeNetwork,
+            'KalturaHomeNetworkListResponse': KalturaHomeNetworkListResponse,
             'KalturaSeriesRecording': KalturaSeriesRecording,
             'KalturaSeriesRecordingListResponse': KalturaSeriesRecordingListResponse,
             'KalturaHouseholdPremiumServiceListResponse': KalturaHouseholdPremiumServiceListResponse,
@@ -36396,10 +36654,7 @@ class KalturaCoreClient(KalturaClientPlugin):
             'KalturaOSSAdapterProfileListResponse': KalturaOSSAdapterProfileListResponse,
             'KalturaSearchHistory': KalturaSearchHistory,
             'KalturaSearchHistoryListResponse': KalturaSearchHistoryListResponse,
-            'KalturaDeviceFamilyBase': KalturaDeviceFamilyBase,
-            'KalturaDeviceFamily': KalturaDeviceFamily,
             'KalturaDeviceFamilyListResponse': KalturaDeviceFamilyListResponse,
-            'KalturaHouseholdDeviceFamilyLimitations': KalturaHouseholdDeviceFamilyLimitations,
             'KalturaRegionalChannel': KalturaRegionalChannel,
             'KalturaRegion': KalturaRegion,
             'KalturaRegionListResponse': KalturaRegionListResponse,
@@ -36431,8 +36686,6 @@ class KalturaCoreClient(KalturaClientPlugin):
             'KalturaSocialFriendActivityFilter': KalturaSocialFriendActivityFilter,
             'KalturaSocialActionFilter': KalturaSocialActionFilter,
             'KalturaPaymentMethodProfileFilter': KalturaPaymentMethodProfileFilter,
-            'KalturaHouseholdDeviceFilter': KalturaHouseholdDeviceFilter,
-            'KalturaHouseholdUserFilter': KalturaHouseholdUserFilter,
             'KalturaConfigurationsFilter': KalturaConfigurationsFilter,
             'KalturaReportFilter': KalturaReportFilter,
             'KalturaDeviceReportFilter': KalturaDeviceReportFilter,
@@ -36451,7 +36704,6 @@ class KalturaCoreClient(KalturaClientPlugin):
             'KalturaAnnouncementFilter': KalturaAnnouncementFilter,
             'KalturaPersonalFeedFilter': KalturaPersonalFeedFilter,
             'KalturaTopicFilter': KalturaTopicFilter,
-            'KalturaPartnerConfigurationFilter': KalturaPartnerConfigurationFilter,
             'KalturaAggregationCountFilter': KalturaAggregationCountFilter,
             'KalturaPersistedFilter': KalturaPersistedFilter,
             'KalturaBulkFilter': KalturaBulkFilter,
@@ -36478,6 +36730,9 @@ class KalturaCoreClient(KalturaClientPlugin):
             'KalturaSubscriptionSetFilter': KalturaSubscriptionSetFilter,
             'KalturaSubscriptionDependencySetFilter': KalturaSubscriptionDependencySetFilter,
             'KalturaSubscriptionFilter': KalturaSubscriptionFilter,
+            'KalturaPartnerConfigurationFilter': KalturaPartnerConfigurationFilter,
+            'KalturaHouseholdDeviceFilter': KalturaHouseholdDeviceFilter,
+            'KalturaHouseholdUserFilter': KalturaHouseholdUserFilter,
             'KalturaRecordingFilter': KalturaRecordingFilter,
             'KalturaExternalRecordingFilter': KalturaExternalRecordingFilter,
             'KalturaSeriesRecordingFilter': KalturaSeriesRecordingFilter,
@@ -36557,7 +36812,6 @@ class KalturaCoreClient(KalturaClientPlugin):
             'KalturaNotificationsSettings': KalturaNotificationsSettings,
             'KalturaTimeShiftedTvPartnerSettings': KalturaTimeShiftedTvPartnerSettings,
             'KalturaUserAssetsListItem': KalturaUserAssetsListItem,
-            'KalturaHouseholdLimitations': KalturaHouseholdLimitations,
             'KalturaLoginSession': KalturaLoginSession,
             'KalturaHousehold': KalturaHousehold,
             'KalturaDevicePin': KalturaDevicePin,
