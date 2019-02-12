@@ -42,7 +42,7 @@ from ..Base import (
     KalturaServiceBase,
 )
 
-API_VERSION = '5.1.2.22684'
+API_VERSION = '5.1.2.28525'
 
 ########## enums ##########
 # @package Kaltura
@@ -8475,7 +8475,8 @@ class KalturaUserDataCondition(KalturaBaseSegmentCondition):
 # @subpackage Client
 class KalturaSingleSegmentValue(KalturaBaseSegmentValue):
     def __init__(self,
-            id=NotImplemented):
+            id=NotImplemented,
+            affectedUsers=NotImplemented):
         KalturaBaseSegmentValue.__init__(self)
 
         # Id of segment
@@ -8483,9 +8484,15 @@ class KalturaSingleSegmentValue(KalturaBaseSegmentValue):
         # @readonly
         self.id = id
 
+        # The amount of users that are being affected by this Segmentation type
+        # @var int
+        # @readonly
+        self.affectedUsers = affectedUsers
+
 
     PROPERTY_LOADERS = {
         'id': getXmlNodeInt, 
+        'affectedUsers': getXmlNodeInt, 
     }
 
     def fromXml(self, node):
@@ -8499,6 +8506,9 @@ class KalturaSingleSegmentValue(KalturaBaseSegmentValue):
 
     def getId(self):
         return self.id
+
+    def getAffectedUsers(self):
+        return self.affectedUsers
 
 
 # @package Kaltura
