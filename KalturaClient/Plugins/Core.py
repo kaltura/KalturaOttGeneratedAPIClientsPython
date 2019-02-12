@@ -42,7 +42,7 @@ from ..Base import (
     KalturaServiceBase,
 )
 
-API_VERSION = '5.1.2.42811'
+API_VERSION = '5.1.2.22684'
 
 ########## enums ##########
 # @package Kaltura
@@ -32893,10 +32893,11 @@ class KalturaHouseholdDeviceService(KalturaServiceBase):
         resultNode = self.client.doQueue()
         return KalturaObjectFactory.create(resultNode, 'KalturaDevicePin')
 
-    def get(self):
+    def get(self, udid = NotImplemented):
         """Returns device registration status to the supplied household"""
 
         kparams = KalturaParams()
+        kparams.addStringIfDefined("udid", udid)
         self.client.queueServiceActionCall("householddevice", "get", "KalturaHouseholdDevice", kparams)
         if self.client.isMultiRequest():
             return self.client.getMultiRequestResult()
