@@ -42,7 +42,7 @@ from ..Base import (
     KalturaServiceBase,
 )
 
-API_VERSION = '5.1.2.42812'
+API_VERSION = '5.1.2.42824'
 
 ########## enums ##########
 # @package Kaltura
@@ -13747,7 +13747,6 @@ class KalturaRecording(KalturaObjectBase):
 
         # Specifies until when the recording is available for viewing. Date and time represented as epoch.
         # @var int
-        # @readonly
         self.viewableUntilDate = viewableUntilDate
 
         # Specifies whether or not the recording is protected
@@ -13785,6 +13784,7 @@ class KalturaRecording(KalturaObjectBase):
         kparams.put("objectType", "KalturaRecording")
         kparams.addIntIfDefined("assetId", self.assetId)
         kparams.addStringEnumIfDefined("type", self.type)
+        kparams.addIntIfDefined("viewableUntilDate", self.viewableUntilDate)
         kparams.addBoolIfDefined("isProtected", self.isProtected)
         return kparams
 
@@ -13808,6 +13808,9 @@ class KalturaRecording(KalturaObjectBase):
 
     def getViewableUntilDate(self):
         return self.viewableUntilDate
+
+    def setViewableUntilDate(self, newViewableUntilDate):
+        self.viewableUntilDate = newViewableUntilDate
 
     def getIsProtected(self):
         return self.isProtected
@@ -13835,7 +13838,8 @@ class KalturaExternalRecording(KalturaRecording):
             createDate=NotImplemented,
             updateDate=NotImplemented,
             externalId=NotImplemented,
-            metaData=NotImplemented):
+            metaData=NotImplemented,
+            expiryDate=NotImplemented):
         KalturaRecording.__init__(self,
             id,
             status,
@@ -13855,10 +13859,16 @@ class KalturaExternalRecording(KalturaRecording):
         # @var map
         self.metaData = metaData
 
+        # Specifies until when the recording is available. Date and time represented as epoch.
+        # @var int
+        # @readonly
+        self.expiryDate = expiryDate
+
 
     PROPERTY_LOADERS = {
         'externalId': getXmlNodeText, 
         'metaData': (KalturaObjectFactory.createMap, 'KalturaStringValue'), 
+        'expiryDate': getXmlNodeInt, 
     }
 
     def fromXml(self, node):
@@ -13883,6 +13893,9 @@ class KalturaExternalRecording(KalturaRecording):
 
     def setMetaData(self, newMetaData):
         self.metaData = newMetaData
+
+    def getExpiryDate(self):
+        return self.expiryDate
 
 
 # @package Kaltura
