@@ -42,7 +42,7 @@ from ..Base import (
     KalturaServiceBase,
 )
 
-API_VERSION = '5.1.2.42812'
+API_VERSION = '5.1.2.17630'
 
 ########## enums ##########
 # @package Kaltura
@@ -8475,8 +8475,7 @@ class KalturaUserDataCondition(KalturaBaseSegmentCondition):
 # @subpackage Client
 class KalturaSingleSegmentValue(KalturaBaseSegmentValue):
     def __init__(self,
-            id=NotImplemented,
-            affectedUsers=NotImplemented):
+            id=NotImplemented):
         KalturaBaseSegmentValue.__init__(self)
 
         # Id of segment
@@ -8484,15 +8483,9 @@ class KalturaSingleSegmentValue(KalturaBaseSegmentValue):
         # @readonly
         self.id = id
 
-        # The amount of users that are being affected by this Segmentation type
-        # @var int
-        # @readonly
-        self.affectedUsers = affectedUsers
-
 
     PROPERTY_LOADERS = {
         'id': getXmlNodeInt, 
-        'affectedUsers': getXmlNodeInt, 
     }
 
     def fromXml(self, node):
@@ -8506,9 +8499,6 @@ class KalturaSingleSegmentValue(KalturaBaseSegmentValue):
 
     def getId(self):
         return self.id
-
-    def getAffectedUsers(self):
-        return self.affectedUsers
 
 
 # @package Kaltura
@@ -32903,11 +32893,10 @@ class KalturaHouseholdDeviceService(KalturaServiceBase):
         resultNode = self.client.doQueue()
         return KalturaObjectFactory.create(resultNode, 'KalturaDevicePin')
 
-    def get(self, udid = NotImplemented):
+    def get(self):
         """Returns device registration status to the supplied household"""
 
         kparams = KalturaParams()
-        kparams.addStringIfDefined("udid", udid)
         self.client.queueServiceActionCall("householddevice", "get", "KalturaHouseholdDevice", kparams)
         if self.client.isMultiRequest():
             return self.client.getMultiRequestResult()
