@@ -42,7 +42,7 @@ from ..Base import (
     KalturaServiceBase,
 )
 
-API_VERSION = '5.1.2.17543'
+API_VERSION = '5.1.2.19212'
 
 ########## enums ##########
 # @package Kaltura
@@ -18548,13 +18548,19 @@ class KalturaAssetUserRuleBlockAction(KalturaAssetUserRuleAction):
 class KalturaAssetUserRuleFilterAction(KalturaAssetUserRuleAction):
     def __init__(self,
             type=NotImplemented,
-            description=NotImplemented):
+            description=NotImplemented,
+            applyOnChannel=NotImplemented):
         KalturaAssetUserRuleAction.__init__(self,
             type,
             description)
 
+        # Indicates whether to apply on channel
+        # @var bool
+        self.applyOnChannel = applyOnChannel
+
 
     PROPERTY_LOADERS = {
+        'applyOnChannel': getXmlNodeBool, 
     }
 
     def fromXml(self, node):
@@ -18564,7 +18570,14 @@ class KalturaAssetUserRuleFilterAction(KalturaAssetUserRuleAction):
     def toParams(self):
         kparams = KalturaAssetUserRuleAction.toParams(self)
         kparams.put("objectType", "KalturaAssetUserRuleFilterAction")
+        kparams.addBoolIfDefined("applyOnChannel", self.applyOnChannel)
         return kparams
+
+    def getApplyOnChannel(self):
+        return self.applyOnChannel
+
+    def setApplyOnChannel(self, newApplyOnChannel):
+        self.applyOnChannel = newApplyOnChannel
 
 
 # @package Kaltura
