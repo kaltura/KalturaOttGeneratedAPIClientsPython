@@ -42,7 +42,7 @@ from ..Base import (
     KalturaServiceBase,
 )
 
-API_VERSION = '5.1.2.13973'
+API_VERSION = '5.1.2.17543'
 
 ########## enums ##########
 # @package Kaltura
@@ -1611,6 +1611,7 @@ class KalturaRuleActionType(object):
     BLOCK_PLAYBACK = "BLOCK_PLAYBACK"
     APPLY_DISCOUNT_MODULE = "APPLY_DISCOUNT_MODULE"
     APPLY_PLAYBACK_ADAPTER = "APPLY_PLAYBACK_ADAPTER"
+    FILTER = "FILTER"
 
     def __init__(self, value):
         self.value = value
@@ -18539,6 +18540,30 @@ class KalturaAssetUserRuleBlockAction(KalturaAssetUserRuleAction):
     def toParams(self):
         kparams = KalturaAssetUserRuleAction.toParams(self)
         kparams.put("objectType", "KalturaAssetUserRuleBlockAction")
+        return kparams
+
+
+# @package Kaltura
+# @subpackage Client
+class KalturaAssetUserRuleFilterAction(KalturaAssetUserRuleAction):
+    def __init__(self,
+            type=NotImplemented,
+            description=NotImplemented):
+        KalturaAssetUserRuleAction.__init__(self,
+            type,
+            description)
+
+
+    PROPERTY_LOADERS = {
+    }
+
+    def fromXml(self, node):
+        KalturaAssetUserRuleAction.fromXml(self, node)
+        self.fromXmlImpl(node, KalturaAssetUserRuleFilterAction.PROPERTY_LOADERS)
+
+    def toParams(self):
+        kparams = KalturaAssetUserRuleAction.toParams(self)
+        kparams.put("objectType", "KalturaAssetUserRuleFilterAction")
         return kparams
 
 
@@ -36649,6 +36674,7 @@ class KalturaCoreClient(KalturaClientPlugin):
             'KalturaApplyPlaybackAdapterAction': KalturaApplyPlaybackAdapterAction,
             'KalturaAssetUserRuleAction': KalturaAssetUserRuleAction,
             'KalturaAssetUserRuleBlockAction': KalturaAssetUserRuleBlockAction,
+            'KalturaAssetUserRuleFilterAction': KalturaAssetUserRuleFilterAction,
             'KalturaAssetRuleBase': KalturaAssetRuleBase,
             'KalturaAssetUserRule': KalturaAssetUserRule,
             'KalturaAssetRule': KalturaAssetRule,
