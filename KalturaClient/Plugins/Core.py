@@ -42,7 +42,7 @@ from ..Base import (
     KalturaServiceBase,
 )
 
-API_VERSION = '5.1.1.42297'
+API_VERSION = '5.1.1.19202'
 
 ########## enums ##########
 # @package Kaltura
@@ -1089,6 +1089,7 @@ class KalturaMediaFileStreamerType(object):
     MPEG_DASH = "MPEG_DASH"
     URL = "URL"
     SMOOTH_STREAMING = "SMOOTH_STREAMING"
+    NONE = "NONE"
 
     def __init__(self, value):
         self.value = value
@@ -12417,7 +12418,7 @@ class KalturaGeneralPartnerConfig(KalturaPartnerConfiguration):
             secondaryLanguages=NotImplemented,
             deleteMediaPolicy=NotImplemented,
             mainCurrency=NotImplemented,
-            secondaryCurrencys=NotImplemented,
+            secondaryCurrencies=NotImplemented,
             downgradePolicy=NotImplemented,
             mailSettings=NotImplemented,
             dateFormat=NotImplemented,
@@ -12444,9 +12445,9 @@ class KalturaGeneralPartnerConfig(KalturaPartnerConfiguration):
         # @var int
         self.mainCurrency = mainCurrency
 
-        # A list of comma separated currencys ids.
+        # A list of comma separated currency ids.
         # @var string
-        self.secondaryCurrencys = secondaryCurrencys
+        self.secondaryCurrencies = secondaryCurrencies
 
         # Downgrade policy
         # @var KalturaDowngradePolicy
@@ -12471,7 +12472,7 @@ class KalturaGeneralPartnerConfig(KalturaPartnerConfiguration):
         'secondaryLanguages': getXmlNodeText, 
         'deleteMediaPolicy': (KalturaEnumsFactory.createString, "KalturaDeleteMediaPolicy"), 
         'mainCurrency': getXmlNodeInt, 
-        'secondaryCurrencys': getXmlNodeText, 
+        'secondaryCurrencies': getXmlNodeText, 
         'downgradePolicy': (KalturaEnumsFactory.createString, "KalturaDowngradePolicy"), 
         'mailSettings': getXmlNodeText, 
         'dateFormat': getXmlNodeText, 
@@ -12490,7 +12491,7 @@ class KalturaGeneralPartnerConfig(KalturaPartnerConfiguration):
         kparams.addStringIfDefined("secondaryLanguages", self.secondaryLanguages)
         kparams.addStringEnumIfDefined("deleteMediaPolicy", self.deleteMediaPolicy)
         kparams.addIntIfDefined("mainCurrency", self.mainCurrency)
-        kparams.addStringIfDefined("secondaryCurrencys", self.secondaryCurrencys)
+        kparams.addStringIfDefined("secondaryCurrencies", self.secondaryCurrencies)
         kparams.addStringEnumIfDefined("downgradePolicy", self.downgradePolicy)
         kparams.addStringIfDefined("mailSettings", self.mailSettings)
         kparams.addStringIfDefined("dateFormat", self.dateFormat)
@@ -12527,11 +12528,11 @@ class KalturaGeneralPartnerConfig(KalturaPartnerConfiguration):
     def setMainCurrency(self, newMainCurrency):
         self.mainCurrency = newMainCurrency
 
-    def getSecondaryCurrencys(self):
-        return self.secondaryCurrencys
+    def getSecondaryCurrencies(self):
+        return self.secondaryCurrencies
 
-    def setSecondaryCurrencys(self, newSecondaryCurrencys):
-        self.secondaryCurrencys = newSecondaryCurrencys
+    def setSecondaryCurrencies(self, newSecondaryCurrencies):
+        self.secondaryCurrencies = newSecondaryCurrencies
 
     def getDowngradePolicy(self):
         return self.downgradePolicy
@@ -25622,7 +25623,8 @@ class KalturaCurrencyFilter(KalturaFilter):
 
     def __init__(self,
             orderBy=NotImplemented,
-            codeIn=NotImplemented):
+            codeIn=NotImplemented,
+            excludePartner=NotImplemented):
         KalturaFilter.__init__(self,
             orderBy)
 
@@ -25630,9 +25632,14 @@ class KalturaCurrencyFilter(KalturaFilter):
         # @var string
         self.codeIn = codeIn
 
+        # Exclude partner
+        # @var bool
+        self.excludePartner = excludePartner
+
 
     PROPERTY_LOADERS = {
         'codeIn': getXmlNodeText, 
+        'excludePartner': getXmlNodeBool, 
     }
 
     def fromXml(self, node):
@@ -25643,6 +25650,7 @@ class KalturaCurrencyFilter(KalturaFilter):
         kparams = KalturaFilter.toParams(self)
         kparams.put("objectType", "KalturaCurrencyFilter")
         kparams.addStringIfDefined("codeIn", self.codeIn)
+        kparams.addBoolIfDefined("excludePartner", self.excludePartner)
         return kparams
 
     def getCodeIn(self):
@@ -25650,6 +25658,12 @@ class KalturaCurrencyFilter(KalturaFilter):
 
     def setCodeIn(self, newCodeIn):
         self.codeIn = newCodeIn
+
+    def getExcludePartner(self):
+        return self.excludePartner
+
+    def setExcludePartner(self, newExcludePartner):
+        self.excludePartner = newExcludePartner
 
 
 # @package Kaltura
@@ -25659,7 +25673,8 @@ class KalturaLanguageFilter(KalturaFilter):
 
     def __init__(self,
             orderBy=NotImplemented,
-            codeIn=NotImplemented):
+            codeIn=NotImplemented,
+            excludePartner=NotImplemented):
         KalturaFilter.__init__(self,
             orderBy)
 
@@ -25667,9 +25682,14 @@ class KalturaLanguageFilter(KalturaFilter):
         # @var string
         self.codeIn = codeIn
 
+        # Exclude partner
+        # @var bool
+        self.excludePartner = excludePartner
+
 
     PROPERTY_LOADERS = {
         'codeIn': getXmlNodeText, 
+        'excludePartner': getXmlNodeBool, 
     }
 
     def fromXml(self, node):
@@ -25680,6 +25700,7 @@ class KalturaLanguageFilter(KalturaFilter):
         kparams = KalturaFilter.toParams(self)
         kparams.put("objectType", "KalturaLanguageFilter")
         kparams.addStringIfDefined("codeIn", self.codeIn)
+        kparams.addBoolIfDefined("excludePartner", self.excludePartner)
         return kparams
 
     def getCodeIn(self):
@@ -25687,6 +25708,12 @@ class KalturaLanguageFilter(KalturaFilter):
 
     def setCodeIn(self, newCodeIn):
         self.codeIn = newCodeIn
+
+    def getExcludePartner(self):
+        return self.excludePartner
+
+    def setExcludePartner(self, newExcludePartner):
+        self.excludePartner = newExcludePartner
 
 
 # @package Kaltura
@@ -26580,7 +26607,7 @@ class KalturaPlaybackContextOptions(KalturaObjectBase):
         # @var string
         self.mediaProtocol = mediaProtocol
 
-        # Playback streamer type: applehttp, mpegdash, url.
+        # Playback streamer type: applehttp, mpegdash, url, smothstreaming, none
         # @var string
         self.streamerType = streamerType
 
