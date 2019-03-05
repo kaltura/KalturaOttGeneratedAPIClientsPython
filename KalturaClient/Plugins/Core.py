@@ -42,7 +42,7 @@ from ..Base import (
     KalturaServiceBase,
 )
 
-API_VERSION = '5.1.2.42049'
+API_VERSION = '5.1.2.17963'
 
 ########## enums ##########
 # @package Kaltura
@@ -391,9 +391,16 @@ class KalturaBulkUploadJobAction(object):
 # @package Kaltura
 # @subpackage Client
 class KalturaBulkUploadJobStatus(object):
-    PENDING = "PENDING"
-    UPLOADED = "UPLOADED"
-    QUEUED = "QUEUED"
+    PENDING = "Pending"
+    UPLOADED = "Uploaded"
+    QUEUED = "Queued"
+    PARSING = "Parsing"
+    PROCESSING = "Processing"
+    PROCESSED = "Processed"
+    SUCCESS = "Success"
+    PARTIAL = "Partial"
+    FAILED = "Failed"
+    FATAL = "Fatal"
 
     def __init__(self, value):
         self.value = value
@@ -417,9 +424,9 @@ class KalturaBulkUploadOrderBy(object):
 # @package Kaltura
 # @subpackage Client
 class KalturaBulkUploadResultStatus(object):
-    ERROR = "ERROR"
-    OK = "OK"
-    IN_PROGRESS = "IN_PROGRESS"
+    ERROR = "Error"
+    OK = "Ok"
+    INPROGRESS = "InProgress"
 
     def __init__(self, value):
         self.value = value
@@ -1611,6 +1618,21 @@ class KalturaReminderType(object):
 # @subpackage Client
 class KalturaReportOrderBy(object):
     NONE = "NONE"
+
+    def __init__(self, value):
+        self.value = value
+
+    def getValue(self):
+        return self.value
+
+# @package Kaltura
+# @subpackage Client
+class KalturaResponseType(object):
+    JSON = 1
+    XML = 2
+    JSONP = 9
+    ASSET_XML = 30
+    EXCEL = 31
 
     def __init__(self, value):
         self.value = value
@@ -26861,6 +26883,7 @@ class KalturaPlaybackContextOptions(KalturaObjectBase):
             mediaProtocol=NotImplemented,
             streamerType=NotImplemented,
             assetFileIds=NotImplemented,
+            adapterData=NotImplemented,
             context=NotImplemented,
             urlType=NotImplemented):
         KalturaObjectBase.__init__(self)
@@ -26877,6 +26900,10 @@ class KalturaPlaybackContextOptions(KalturaObjectBase):
         # @var string
         self.assetFileIds = assetFileIds
 
+        # key/value map field for extra data
+        # @var map
+        self.adapterData = adapterData
+
         # Playback context type
         # @var KalturaPlaybackContextType
         self.context = context
@@ -26890,6 +26917,7 @@ class KalturaPlaybackContextOptions(KalturaObjectBase):
         'mediaProtocol': getXmlNodeText, 
         'streamerType': getXmlNodeText, 
         'assetFileIds': getXmlNodeText, 
+        'adapterData': (KalturaObjectFactory.createMap, 'KalturaStringValue'), 
         'context': (KalturaEnumsFactory.createString, "KalturaPlaybackContextType"), 
         'urlType': (KalturaEnumsFactory.createString, "KalturaUrlType"), 
     }
@@ -26904,6 +26932,7 @@ class KalturaPlaybackContextOptions(KalturaObjectBase):
         kparams.addStringIfDefined("mediaProtocol", self.mediaProtocol)
         kparams.addStringIfDefined("streamerType", self.streamerType)
         kparams.addStringIfDefined("assetFileIds", self.assetFileIds)
+        kparams.addMapIfDefined("adapterData", self.adapterData)
         kparams.addStringEnumIfDefined("context", self.context)
         kparams.addStringEnumIfDefined("urlType", self.urlType)
         return kparams
@@ -26925,6 +26954,12 @@ class KalturaPlaybackContextOptions(KalturaObjectBase):
 
     def setAssetFileIds(self, newAssetFileIds):
         self.assetFileIds = newAssetFileIds
+
+    def getAdapterData(self):
+        return self.adapterData
+
+    def setAdapterData(self, newAdapterData):
+        self.adapterData = newAdapterData
 
     def getContext(self):
         return self.context
@@ -27374,6 +27409,60 @@ class KalturaBulkUploadXmlJobData(KalturaBulkUploadJobData):
         kparams = KalturaBulkUploadJobData.toParams(self)
         kparams.put("objectType", "KalturaBulkUploadXmlJobData")
         return kparams
+
+
+# @package Kaltura
+# @subpackage Client
+class KalturaBulkUploadObjectData(KalturaObjectBase):
+    def __init__(self):
+        KalturaObjectBase.__init__(self)
+
+
+    PROPERTY_LOADERS = {
+    }
+
+    def fromXml(self, node):
+        KalturaObjectBase.fromXml(self, node)
+        self.fromXmlImpl(node, KalturaBulkUploadObjectData.PROPERTY_LOADERS)
+
+    def toParams(self):
+        kparams = KalturaObjectBase.toParams(self)
+        kparams.put("objectType", "KalturaBulkUploadObjectData")
+        return kparams
+
+
+# @package Kaltura
+# @subpackage Client
+class KalturaBulkUploadAssetData(KalturaBulkUploadObjectData):
+    def __init__(self,
+            typeId=NotImplemented):
+        KalturaBulkUploadObjectData.__init__(self)
+
+        # Identifies the asset type (EPG, Recording, Movie, TV Series, etc). 
+        #             Possible values: 0 - EPG linear programs, 1 - Recording; or any asset type ID according to the asset types IDs defined in the system.
+        # @var int
+        self.typeId = typeId
+
+
+    PROPERTY_LOADERS = {
+        'typeId': getXmlNodeInt, 
+    }
+
+    def fromXml(self, node):
+        KalturaBulkUploadObjectData.fromXml(self, node)
+        self.fromXmlImpl(node, KalturaBulkUploadAssetData.PROPERTY_LOADERS)
+
+    def toParams(self):
+        kparams = KalturaBulkUploadObjectData.toParams(self)
+        kparams.put("objectType", "KalturaBulkUploadAssetData")
+        kparams.addIntIfDefined("typeId", self.typeId)
+        return kparams
+
+    def getTypeId(self):
+        return self.typeId
+
+    def setTypeId(self, newTypeId):
+        self.typeId = newTypeId
 
 
 # @package Kaltura
@@ -31358,13 +31447,13 @@ class KalturaAssetService(KalturaServiceBase):
         resultNode = self.client.doQueue()
         return KalturaObjectFactory.create(resultNode, 'KalturaAsset')
 
-    def addFromBulkUpload(self, fileData, assetType, bulkUploadJobData):
+    def addFromBulkUpload(self, fileData, bulkUploadJobData, bulkUploadAssetData):
         """Add new bulk upload batch job Conversion profile id can be specified in the API."""
 
         kparams = KalturaParams()
         kfiles = {"fileData": fileData}
-        kparams.addStringIfDefined("assetType", assetType)
         kparams.addObjectIfDefined("bulkUploadJobData", bulkUploadJobData)
+        kparams.addObjectIfDefined("bulkUploadAssetData", bulkUploadAssetData)
         self.client.queueServiceActionCall("asset", "addFromBulkUpload", "KalturaBulkUpload", kparams, kfiles)
         if self.client.isMultiRequest():
             return self.client.getMultiRequestResult()
@@ -31688,6 +31777,17 @@ class KalturaAssetStructService(KalturaServiceBase):
         resultNode = self.client.doQueue()
         return getXmlNodeBool(resultNode)
 
+    def get(self, id):
+        """Get AssetStruct by ID"""
+
+        kparams = KalturaParams()
+        kparams.addIntIfDefined("id", id);
+        self.client.queueServiceActionCall("assetstruct", "get", "KalturaAssetStruct", kparams)
+        if self.client.isMultiRequest():
+            return self.client.getMultiRequestResult()
+        resultNode = self.client.doQueue()
+        return KalturaObjectFactory.create(resultNode, 'KalturaAssetStruct')
+
     def list(self, filter = NotImplemented):
         """Return a list of asset structs for the account with optional filter"""
 
@@ -31850,6 +31950,17 @@ class KalturaBookmarkService(KalturaServiceBase):
 class KalturaBulkUploadService(KalturaServiceBase):
     def __init__(self, client = None):
         KalturaServiceBase.__init__(self, client)
+
+    def get(self, id):
+        """Get BulkUpload by ID"""
+
+        kparams = KalturaParams()
+        kparams.addIntIfDefined("id", id);
+        self.client.queueServiceActionCall("bulkupload", "get", "KalturaBulkUpload", kparams)
+        if self.client.isMultiRequest():
+            return self.client.getMultiRequestResult()
+        resultNode = self.client.doQueue()
+        return KalturaObjectFactory.create(resultNode, 'KalturaBulkUpload')
 
     def list(self, filter = NotImplemented):
         """Get list of KalturaBulkUpload by filter"""
@@ -36747,6 +36858,7 @@ class KalturaCoreClient(KalturaClientPlugin):
             'KalturaRegionOrderBy': KalturaRegionOrderBy,
             'KalturaReminderType': KalturaReminderType,
             'KalturaReportOrderBy': KalturaReportOrderBy,
+            'KalturaResponseType': KalturaResponseType,
             'KalturaRuleActionType': KalturaRuleActionType,
             'KalturaRuleConditionType': KalturaRuleConditionType,
             'KalturaRuleLevel': KalturaRuleLevel,
@@ -37208,6 +37320,8 @@ class KalturaCoreClient(KalturaClientPlugin):
             'KalturaBulkUploadJobData': KalturaBulkUploadJobData,
             'KalturaBulkUploadExcelJobData': KalturaBulkUploadExcelJobData,
             'KalturaBulkUploadXmlJobData': KalturaBulkUploadXmlJobData,
+            'KalturaBulkUploadObjectData': KalturaBulkUploadObjectData,
+            'KalturaBulkUploadAssetData': KalturaBulkUploadAssetData,
             'KalturaAssetFileContext': KalturaAssetFileContext,
             'KalturaAssetStatisticsQuery': KalturaAssetStatisticsQuery,
             'KalturaUploadToken': KalturaUploadToken,
