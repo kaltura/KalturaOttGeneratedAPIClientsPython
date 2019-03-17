@@ -42,7 +42,7 @@ from ..Base import (
     KalturaServiceBase,
 )
 
-API_VERSION = '5.1.2.42046'
+API_VERSION = '5.1.2.14242'
 
 ########## enums ##########
 # @package Kaltura
@@ -7626,8 +7626,7 @@ class KalturaBulkUploadResult(KalturaObjectBase):
             index=NotImplemented,
             bulkUploadId=NotImplemented,
             status=NotImplemented,
-            errorCode=NotImplemented,
-            errorMessage=NotImplemented,
+            error=NotImplemented,
             warnings=NotImplemented):
         KalturaObjectBase.__init__(self)
 
@@ -7651,15 +7650,10 @@ class KalturaBulkUploadResult(KalturaObjectBase):
         # @readonly
         self.status = status
 
-        # Error Code
-        # @var int
+        # Error details
+        # @var KalturaMessage
         # @readonly
-        self.errorCode = errorCode
-
-        # Error Message
-        # @var string
-        # @readonly
-        self.errorMessage = errorMessage
+        self.error = error
 
         # A list of warnings
         # @var array of KalturaMessage
@@ -7672,8 +7666,7 @@ class KalturaBulkUploadResult(KalturaObjectBase):
         'index': getXmlNodeInt, 
         'bulkUploadId': getXmlNodeInt, 
         'status': (KalturaEnumsFactory.createString, "KalturaBulkUploadResultStatus"), 
-        'errorCode': getXmlNodeInt, 
-        'errorMessage': getXmlNodeText, 
+        'error': (KalturaObjectFactory.create, 'KalturaMessage'), 
         'warnings': (KalturaObjectFactory.createArray, 'KalturaMessage'), 
     }
 
@@ -7698,11 +7691,8 @@ class KalturaBulkUploadResult(KalturaObjectBase):
     def getStatus(self):
         return self.status
 
-    def getErrorCode(self):
-        return self.errorCode
-
-    def getErrorMessage(self):
-        return self.errorMessage
+    def getError(self):
+        return self.error
 
     def getWarnings(self):
         return self.warnings
@@ -7865,8 +7855,7 @@ class KalturaBulkUploadAssetResult(KalturaBulkUploadResult):
             index=NotImplemented,
             bulkUploadId=NotImplemented,
             status=NotImplemented,
-            errorCode=NotImplemented,
-            errorMessage=NotImplemented,
+            error=NotImplemented,
             warnings=NotImplemented,
             type=NotImplemented,
             externalId=NotImplemented):
@@ -7875,8 +7864,7 @@ class KalturaBulkUploadAssetResult(KalturaBulkUploadResult):
             index,
             bulkUploadId,
             status,
-            errorCode,
-            errorMessage,
+            error,
             warnings)
 
         # Identifies the asset type (EPG, Recording, Movie, TV Series, etc). 
@@ -7920,8 +7908,7 @@ class KalturaBulkUploadMediaAssetResult(KalturaBulkUploadAssetResult):
             index=NotImplemented,
             bulkUploadId=NotImplemented,
             status=NotImplemented,
-            errorCode=NotImplemented,
-            errorMessage=NotImplemented,
+            error=NotImplemented,
             warnings=NotImplemented,
             type=NotImplemented,
             externalId=NotImplemented):
@@ -7930,8 +7917,7 @@ class KalturaBulkUploadMediaAssetResult(KalturaBulkUploadAssetResult):
             index,
             bulkUploadId,
             status,
-            errorCode,
-            errorMessage,
+            error,
             warnings,
             type,
             externalId)
@@ -23297,7 +23283,7 @@ class KalturaBulkUploadFilter(KalturaFilter):
 
     def __init__(self,
             orderBy=NotImplemented,
-            bulkObjectNameEqual=NotImplemented,
+            bulkObjectTypeEqual=NotImplemented,
             createDateGreaterThanOrEqual=NotImplemented,
             uploadedByUserIdEqualCurrent=NotImplemented,
             statusIn=NotImplemented):
@@ -23306,7 +23292,7 @@ class KalturaBulkUploadFilter(KalturaFilter):
 
         # bulk objects Type name (must be type of KalturaOTTObject)
         # @var string
-        self.bulkObjectNameEqual = bulkObjectNameEqual
+        self.bulkObjectTypeEqual = bulkObjectTypeEqual
 
         # upload date to search within (search in the last 60 days)
         # @var int
@@ -23322,7 +23308,7 @@ class KalturaBulkUploadFilter(KalturaFilter):
 
 
     PROPERTY_LOADERS = {
-        'bulkObjectNameEqual': getXmlNodeText, 
+        'bulkObjectTypeEqual': getXmlNodeText, 
         'createDateGreaterThanOrEqual': getXmlNodeInt, 
         'uploadedByUserIdEqualCurrent': getXmlNodeBool, 
         'statusIn': getXmlNodeText, 
@@ -23335,17 +23321,17 @@ class KalturaBulkUploadFilter(KalturaFilter):
     def toParams(self):
         kparams = KalturaFilter.toParams(self)
         kparams.put("objectType", "KalturaBulkUploadFilter")
-        kparams.addStringIfDefined("bulkObjectNameEqual", self.bulkObjectNameEqual)
+        kparams.addStringIfDefined("bulkObjectTypeEqual", self.bulkObjectTypeEqual)
         kparams.addIntIfDefined("createDateGreaterThanOrEqual", self.createDateGreaterThanOrEqual)
         kparams.addBoolIfDefined("uploadedByUserIdEqualCurrent", self.uploadedByUserIdEqualCurrent)
         kparams.addStringIfDefined("statusIn", self.statusIn)
         return kparams
 
-    def getBulkObjectNameEqual(self):
-        return self.bulkObjectNameEqual
+    def getBulkObjectTypeEqual(self):
+        return self.bulkObjectTypeEqual
 
-    def setBulkObjectNameEqual(self, newBulkObjectNameEqual):
-        self.bulkObjectNameEqual = newBulkObjectNameEqual
+    def setBulkObjectTypeEqual(self, newBulkObjectTypeEqual):
+        self.bulkObjectTypeEqual = newBulkObjectTypeEqual
 
     def getCreateDateGreaterThanOrEqual(self):
         return self.createDateGreaterThanOrEqual
