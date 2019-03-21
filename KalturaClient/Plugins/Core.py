@@ -42,7 +42,7 @@ from ..Base import (
     KalturaServiceBase,
 )
 
-API_VERSION = '5.2.0.207'
+API_VERSION = '5.2.0.15395'
 
 ########## enums ##########
 # @package Kaltura
@@ -17641,6 +17641,177 @@ class KalturaAssetHistoryListResponse(KalturaListResponse):
 
 # @package Kaltura
 # @subpackage Client
+class KalturaIngestProfile(KalturaObjectBase):
+    """Ingest profile"""
+
+    def __init__(self,
+            id=NotImplemented,
+            name=NotImplemented,
+            externalId=NotImplemented,
+            assetTypeId=NotImplemented,
+            transformationAdapterUrl=NotImplemented,
+            transformationAdapterSettings=NotImplemented,
+            transformationAdapterSharedSecret=NotImplemented,
+            defaultAutoFillPolicy=NotImplemented,
+            defaultOverlapPolicy=NotImplemented):
+        KalturaObjectBase.__init__(self)
+
+        # Ingest profile identifier
+        # @var int
+        # @readonly
+        self.id = id
+
+        # Ingest profile name
+        # @var string
+        self.name = name
+
+        # Ingest profile externalId
+        # @var string
+        self.externalId = externalId
+
+        # Type of assets that this profile suppose to ingest: 0 - EPG, 1 - MEDIA
+        # @var int
+        self.assetTypeId = assetTypeId
+
+        # Transformation Adapter URL
+        # @var string
+        self.transformationAdapterUrl = transformationAdapterUrl
+
+        # Transformation Adapter settings
+        # @var string
+        self.transformationAdapterSettings = transformationAdapterSettings
+
+        # Transformation Adapter shared secret
+        # @var string
+        self.transformationAdapterSharedSecret = transformationAdapterSharedSecret
+
+        # Ingest profile default Auto-fill policy
+        # @var int
+        self.defaultAutoFillPolicy = defaultAutoFillPolicy
+
+        # Ingest profile default Overlap policy
+        # @var int
+        self.defaultOverlapPolicy = defaultOverlapPolicy
+
+
+    PROPERTY_LOADERS = {
+        'id': getXmlNodeInt, 
+        'name': getXmlNodeText, 
+        'externalId': getXmlNodeText, 
+        'assetTypeId': getXmlNodeInt, 
+        'transformationAdapterUrl': getXmlNodeText, 
+        'transformationAdapterSettings': getXmlNodeText, 
+        'transformationAdapterSharedSecret': getXmlNodeText, 
+        'defaultAutoFillPolicy': getXmlNodeInt, 
+        'defaultOverlapPolicy': getXmlNodeInt, 
+    }
+
+    def fromXml(self, node):
+        KalturaObjectBase.fromXml(self, node)
+        self.fromXmlImpl(node, KalturaIngestProfile.PROPERTY_LOADERS)
+
+    def toParams(self):
+        kparams = KalturaObjectBase.toParams(self)
+        kparams.put("objectType", "KalturaIngestProfile")
+        kparams.addStringIfDefined("name", self.name)
+        kparams.addStringIfDefined("externalId", self.externalId)
+        kparams.addIntIfDefined("assetTypeId", self.assetTypeId)
+        kparams.addStringIfDefined("transformationAdapterUrl", self.transformationAdapterUrl)
+        kparams.addStringIfDefined("transformationAdapterSettings", self.transformationAdapterSettings)
+        kparams.addStringIfDefined("transformationAdapterSharedSecret", self.transformationAdapterSharedSecret)
+        kparams.addIntIfDefined("defaultAutoFillPolicy", self.defaultAutoFillPolicy)
+        kparams.addIntIfDefined("defaultOverlapPolicy", self.defaultOverlapPolicy)
+        return kparams
+
+    def getId(self):
+        return self.id
+
+    def getName(self):
+        return self.name
+
+    def setName(self, newName):
+        self.name = newName
+
+    def getExternalId(self):
+        return self.externalId
+
+    def setExternalId(self, newExternalId):
+        self.externalId = newExternalId
+
+    def getAssetTypeId(self):
+        return self.assetTypeId
+
+    def setAssetTypeId(self, newAssetTypeId):
+        self.assetTypeId = newAssetTypeId
+
+    def getTransformationAdapterUrl(self):
+        return self.transformationAdapterUrl
+
+    def setTransformationAdapterUrl(self, newTransformationAdapterUrl):
+        self.transformationAdapterUrl = newTransformationAdapterUrl
+
+    def getTransformationAdapterSettings(self):
+        return self.transformationAdapterSettings
+
+    def setTransformationAdapterSettings(self, newTransformationAdapterSettings):
+        self.transformationAdapterSettings = newTransformationAdapterSettings
+
+    def getTransformationAdapterSharedSecret(self):
+        return self.transformationAdapterSharedSecret
+
+    def setTransformationAdapterSharedSecret(self, newTransformationAdapterSharedSecret):
+        self.transformationAdapterSharedSecret = newTransformationAdapterSharedSecret
+
+    def getDefaultAutoFillPolicy(self):
+        return self.defaultAutoFillPolicy
+
+    def setDefaultAutoFillPolicy(self, newDefaultAutoFillPolicy):
+        self.defaultAutoFillPolicy = newDefaultAutoFillPolicy
+
+    def getDefaultOverlapPolicy(self):
+        return self.defaultOverlapPolicy
+
+    def setDefaultOverlapPolicy(self, newDefaultOverlapPolicy):
+        self.defaultOverlapPolicy = newDefaultOverlapPolicy
+
+
+# @package Kaltura
+# @subpackage Client
+class KalturaIngestProfileListResponse(KalturaListResponse):
+    def __init__(self,
+            totalCount=NotImplemented,
+            objects=NotImplemented):
+        KalturaListResponse.__init__(self,
+            totalCount)
+
+        # Adapters
+        # @var array of KalturaIngestProfile
+        self.objects = objects
+
+
+    PROPERTY_LOADERS = {
+        'objects': (KalturaObjectFactory.createArray, 'KalturaIngestProfile'), 
+    }
+
+    def fromXml(self, node):
+        KalturaListResponse.fromXml(self, node)
+        self.fromXmlImpl(node, KalturaIngestProfileListResponse.PROPERTY_LOADERS)
+
+    def toParams(self):
+        kparams = KalturaListResponse.toParams(self)
+        kparams.put("objectType", "KalturaIngestProfileListResponse")
+        kparams.addArrayIfDefined("objects", self.objects)
+        return kparams
+
+    def getObjects(self):
+        return self.objects
+
+    def setObjects(self, newObjects):
+        self.objects = newObjects
+
+
+# @package Kaltura
+# @subpackage Client
 class KalturaRule(KalturaObjectBase):
     """Rule base"""
 
@@ -34021,6 +34192,57 @@ class KalturaInboxMessageService(KalturaServiceBase):
 
 # @package Kaltura
 # @subpackage Client
+class KalturaIngestProfileService(KalturaServiceBase):
+    def __init__(self, client = None):
+        KalturaServiceBase.__init__(self, client)
+
+    def add(self, ingestProfile):
+        """Insert new ingest profile for partner"""
+
+        kparams = KalturaParams()
+        kparams.addObjectIfDefined("ingestProfile", ingestProfile)
+        self.client.queueServiceActionCall("ingestprofile", "add", "KalturaIngestProfile", kparams)
+        if self.client.isMultiRequest():
+            return self.client.getMultiRequestResult()
+        resultNode = self.client.doQueue()
+        return KalturaObjectFactory.create(resultNode, 'KalturaIngestProfile')
+
+    def delete(self, ingestProfileId):
+        """Delete ingest profiles by ingest profiles id"""
+
+        kparams = KalturaParams()
+        kparams.addIntIfDefined("ingestProfileId", ingestProfileId);
+        self.client.queueServiceActionCall("ingestprofile", "delete", "None", kparams)
+        if self.client.isMultiRequest():
+            return self.client.getMultiRequestResult()
+        resultNode = self.client.doQueue()
+        return getXmlNodeBool(resultNode)
+
+    def list(self):
+        """Returns all ingest profiles for partner"""
+
+        kparams = KalturaParams()
+        self.client.queueServiceActionCall("ingestprofile", "list", "KalturaIngestProfileListResponse", kparams)
+        if self.client.isMultiRequest():
+            return self.client.getMultiRequestResult()
+        resultNode = self.client.doQueue()
+        return KalturaObjectFactory.create(resultNode, 'KalturaIngestProfileListResponse')
+
+    def update(self, ingestProfileId, ingestProfile):
+        """Update ingest profile details"""
+
+        kparams = KalturaParams()
+        kparams.addIntIfDefined("ingestProfileId", ingestProfileId);
+        kparams.addObjectIfDefined("ingestProfile", ingestProfile)
+        self.client.queueServiceActionCall("ingestprofile", "update", "KalturaIngestProfile", kparams)
+        if self.client.isMultiRequest():
+            return self.client.getMultiRequestResult()
+        resultNode = self.client.doQueue()
+        return KalturaObjectFactory.create(resultNode, 'KalturaIngestProfile')
+
+
+# @package Kaltura
+# @subpackage Client
 class KalturaLanguageService(KalturaServiceBase):
     def __init__(self, client = None):
         KalturaServiceBase.__init__(self, client)
@@ -36808,6 +37030,7 @@ class KalturaCoreClient(KalturaClientPlugin):
             'image': KalturaImageService,
             'imageType': KalturaImageTypeService,
             'inboxMessage': KalturaInboxMessageService,
+            'IngestProfile': KalturaIngestProfileService,
             'language': KalturaLanguageService,
             'licensedUrl': KalturaLicensedUrlService,
             'mediaConcurrencyRule': KalturaMediaConcurrencyRuleService,
@@ -37264,6 +37487,8 @@ class KalturaCoreClient(KalturaClientPlugin):
             'KalturaMediaFileListResponse': KalturaMediaFileListResponse,
             'KalturaAssetHistory': KalturaAssetHistory,
             'KalturaAssetHistoryListResponse': KalturaAssetHistoryListResponse,
+            'KalturaIngestProfile': KalturaIngestProfile,
+            'KalturaIngestProfileListResponse': KalturaIngestProfileListResponse,
             'KalturaRule': KalturaRule,
             'KalturaTvmRule': KalturaTvmRule,
             'KalturaTvmRuleListResponse': KalturaTvmRuleListResponse,
