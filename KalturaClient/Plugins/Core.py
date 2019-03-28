@@ -42,7 +42,7 @@ from ..Base import (
     KalturaServiceBase,
 )
 
-API_VERSION = '5.2.0.43114'
+API_VERSION = '5.2.0.43091'
 
 ########## enums ##########
 # @package Kaltura
@@ -27689,24 +27689,38 @@ class KalturaBulkUploadExcelJobData(KalturaBulkUploadJobData):
 
 # @package Kaltura
 # @subpackage Client
-class KalturaBulkUploadXmlJobData(KalturaBulkUploadJobData):
+class KalturaBulkUploadIngestJobData(KalturaBulkUploadJobData):
     """instructions for upload data type with xml"""
 
-    def __init__(self):
+    def __init__(self,
+            ingestProfileId=NotImplemented):
         KalturaBulkUploadJobData.__init__(self)
+
+        # Identifies the ingest profile that will handle the ingest of programs
+        #             Ingest profiles are created separately using the ingest profile service
+        # @var int
+        self.ingestProfileId = ingestProfileId
 
 
     PROPERTY_LOADERS = {
+        'ingestProfileId': getXmlNodeInt, 
     }
 
     def fromXml(self, node):
         KalturaBulkUploadJobData.fromXml(self, node)
-        self.fromXmlImpl(node, KalturaBulkUploadXmlJobData.PROPERTY_LOADERS)
+        self.fromXmlImpl(node, KalturaBulkUploadIngestJobData.PROPERTY_LOADERS)
 
     def toParams(self):
         kparams = KalturaBulkUploadJobData.toParams(self)
-        kparams.put("objectType", "KalturaBulkUploadXmlJobData")
+        kparams.put("objectType", "KalturaBulkUploadIngestJobData")
+        kparams.addIntIfDefined("ingestProfileId", self.ingestProfileId)
         return kparams
+
+    def getIngestProfileId(self):
+        return self.ingestProfileId
+
+    def setIngestProfileId(self, newIngestProfileId):
+        self.ingestProfileId = newIngestProfileId
 
 
 # @package Kaltura
@@ -37677,7 +37691,7 @@ class KalturaCoreClient(KalturaClientPlugin):
             'KalturaAdsContext': KalturaAdsContext,
             'KalturaBulkUploadJobData': KalturaBulkUploadJobData,
             'KalturaBulkUploadExcelJobData': KalturaBulkUploadExcelJobData,
-            'KalturaBulkUploadXmlJobData': KalturaBulkUploadXmlJobData,
+            'KalturaBulkUploadIngestJobData': KalturaBulkUploadIngestJobData,
             'KalturaBulkUploadObjectData': KalturaBulkUploadObjectData,
             'KalturaBulkUploadAssetData': KalturaBulkUploadAssetData,
             'KalturaAssetFileContext': KalturaAssetFileContext,
