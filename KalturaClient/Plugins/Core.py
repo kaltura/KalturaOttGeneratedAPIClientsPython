@@ -42,7 +42,7 @@ from ..Base import (
     KalturaServiceBase,
 )
 
-API_VERSION = '5.2.0.43079'
+API_VERSION = '5.2.0.25482'
 
 ########## enums ##########
 # @package Kaltura
@@ -17678,7 +17678,7 @@ class KalturaIngestProfile(KalturaObjectBase):
         self.transformationAdapterUrl = transformationAdapterUrl
 
         # Transformation Adapter settings
-        # @var string
+        # @var map
         self.transformationAdapterSettings = transformationAdapterSettings
 
         # Transformation Adapter shared secret
@@ -17700,7 +17700,7 @@ class KalturaIngestProfile(KalturaObjectBase):
         'externalId': getXmlNodeText, 
         'assetTypeId': getXmlNodeInt, 
         'transformationAdapterUrl': getXmlNodeText, 
-        'transformationAdapterSettings': getXmlNodeText, 
+        'transformationAdapterSettings': (KalturaObjectFactory.createMap, 'KalturaStringValue'), 
         'transformationAdapterSharedSecret': getXmlNodeText, 
         'defaultAutoFillPolicy': getXmlNodeInt, 
         'defaultOverlapPolicy': getXmlNodeInt, 
@@ -17717,7 +17717,7 @@ class KalturaIngestProfile(KalturaObjectBase):
         kparams.addStringIfDefined("externalId", self.externalId)
         kparams.addIntIfDefined("assetTypeId", self.assetTypeId)
         kparams.addStringIfDefined("transformationAdapterUrl", self.transformationAdapterUrl)
-        kparams.addStringIfDefined("transformationAdapterSettings", self.transformationAdapterSettings)
+        kparams.addMapIfDefined("transformationAdapterSettings", self.transformationAdapterSettings)
         kparams.addStringIfDefined("transformationAdapterSharedSecret", self.transformationAdapterSharedSecret)
         kparams.addIntIfDefined("defaultAutoFillPolicy", self.defaultAutoFillPolicy)
         kparams.addIntIfDefined("defaultOverlapPolicy", self.defaultOverlapPolicy)
@@ -27748,7 +27748,7 @@ class KalturaBulkUploadObjectData(KalturaObjectBase):
 # @package Kaltura
 # @subpackage Client
 class KalturaBulkUploadAssetData(KalturaBulkUploadObjectData):
-    """indicates the asset object type in the bulk file"""
+    """indicates the asset object type in the bulk file (this class is not abstract for backward-compatibility)"""
 
     def __init__(self,
             typeId=NotImplemented):
@@ -27779,6 +27779,54 @@ class KalturaBulkUploadAssetData(KalturaBulkUploadObjectData):
 
     def setTypeId(self, newTypeId):
         self.typeId = newTypeId
+
+
+# @package Kaltura
+# @subpackage Client
+class KalturaBulkUploadMediaAssetData(KalturaBulkUploadAssetData):
+    """indicates the media asset object type in the bulk file"""
+
+    def __init__(self,
+            typeId=NotImplemented):
+        KalturaBulkUploadAssetData.__init__(self,
+            typeId)
+
+
+    PROPERTY_LOADERS = {
+    }
+
+    def fromXml(self, node):
+        KalturaBulkUploadAssetData.fromXml(self, node)
+        self.fromXmlImpl(node, KalturaBulkUploadMediaAssetData.PROPERTY_LOADERS)
+
+    def toParams(self):
+        kparams = KalturaBulkUploadAssetData.toParams(self)
+        kparams.put("objectType", "KalturaBulkUploadMediaAssetData")
+        return kparams
+
+
+# @package Kaltura
+# @subpackage Client
+class KalturaBulkUploadEpgAssetData(KalturaBulkUploadAssetData):
+    """indicates the epg asset object type in the bulk file"""
+
+    def __init__(self,
+            typeId=NotImplemented):
+        KalturaBulkUploadAssetData.__init__(self,
+            typeId)
+
+
+    PROPERTY_LOADERS = {
+    }
+
+    def fromXml(self, node):
+        KalturaBulkUploadAssetData.fromXml(self, node)
+        self.fromXmlImpl(node, KalturaBulkUploadEpgAssetData.PROPERTY_LOADERS)
+
+    def toParams(self):
+        kparams = KalturaBulkUploadAssetData.toParams(self)
+        kparams.put("objectType", "KalturaBulkUploadEpgAssetData")
+        return kparams
 
 
 # @package Kaltura
@@ -37694,6 +37742,8 @@ class KalturaCoreClient(KalturaClientPlugin):
             'KalturaBulkUploadIngestJobData': KalturaBulkUploadIngestJobData,
             'KalturaBulkUploadObjectData': KalturaBulkUploadObjectData,
             'KalturaBulkUploadAssetData': KalturaBulkUploadAssetData,
+            'KalturaBulkUploadMediaAssetData': KalturaBulkUploadMediaAssetData,
+            'KalturaBulkUploadEpgAssetData': KalturaBulkUploadEpgAssetData,
             'KalturaAssetFileContext': KalturaAssetFileContext,
             'KalturaAssetStatisticsQuery': KalturaAssetStatisticsQuery,
             'KalturaUploadToken': KalturaUploadToken,
