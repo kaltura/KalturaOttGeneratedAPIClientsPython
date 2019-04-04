@@ -42,7 +42,7 @@ from ..Base import (
     KalturaServiceBase,
 )
 
-API_VERSION = '5.2.0.43081'
+API_VERSION = '5.2.0.43080'
 
 ########## enums ##########
 # @package Kaltura
@@ -30064,16 +30064,22 @@ class KalturaLoginSession(KalturaObjectBase):
     """Login response"""
 
     def __init__(self,
-            ks=NotImplemented):
+            ks=NotImplemented,
+            expiration=NotImplemented):
         KalturaObjectBase.__init__(self)
 
         # Access token in a KS format
         # @var string
         self.ks = ks
 
+        # Expiration
+        # @var int
+        self.expiration = expiration
+
 
     PROPERTY_LOADERS = {
         'ks': getXmlNodeText, 
+        'expiration': getXmlNodeInt, 
     }
 
     def fromXml(self, node):
@@ -30084,6 +30090,7 @@ class KalturaLoginSession(KalturaObjectBase):
         kparams = KalturaObjectBase.toParams(self)
         kparams.put("objectType", "KalturaLoginSession")
         kparams.addStringIfDefined("ks", self.ks)
+        kparams.addIntIfDefined("expiration", self.expiration)
         return kparams
 
     def getKs(self):
@@ -30091,6 +30098,12 @@ class KalturaLoginSession(KalturaObjectBase):
 
     def setKs(self, newKs):
         self.ks = newKs
+
+    def getExpiration(self):
+        return self.expiration
+
+    def setExpiration(self, newExpiration):
+        self.expiration = newExpiration
 
 
 # @package Kaltura
