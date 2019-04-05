@@ -42,7 +42,7 @@ from ..Base import (
     KalturaServiceBase,
 )
 
-API_VERSION = '5.2.0.43080'
+API_VERSION = '5.2.0.43089'
 
 ########## enums ##########
 # @package Kaltura
@@ -7626,7 +7626,7 @@ class KalturaBulkUploadResult(KalturaObjectBase):
             index=NotImplemented,
             bulkUploadId=NotImplemented,
             status=NotImplemented,
-            error=NotImplemented,
+            errors=NotImplemented,
             warnings=NotImplemented):
         KalturaObjectBase.__init__(self)
 
@@ -7650,10 +7650,10 @@ class KalturaBulkUploadResult(KalturaObjectBase):
         # @readonly
         self.status = status
 
-        # Error details
-        # @var KalturaMessage
+        # A list of errors
+        # @var array of KalturaMessage
         # @readonly
-        self.error = error
+        self.errors = errors
 
         # A list of warnings
         # @var array of KalturaMessage
@@ -7666,7 +7666,7 @@ class KalturaBulkUploadResult(KalturaObjectBase):
         'index': getXmlNodeInt, 
         'bulkUploadId': getXmlNodeInt, 
         'status': (KalturaEnumsFactory.createString, "KalturaBulkUploadResultStatus"), 
-        'error': (KalturaObjectFactory.create, 'KalturaMessage'), 
+        'errors': (KalturaObjectFactory.createArray, 'KalturaMessage'), 
         'warnings': (KalturaObjectFactory.createArray, 'KalturaMessage'), 
     }
 
@@ -7691,8 +7691,8 @@ class KalturaBulkUploadResult(KalturaObjectBase):
     def getStatus(self):
         return self.status
 
-    def getError(self):
-        return self.error
+    def getErrors(self):
+        return self.errors
 
     def getWarnings(self):
         return self.warnings
@@ -7855,7 +7855,7 @@ class KalturaBulkUploadAssetResult(KalturaBulkUploadResult):
             index=NotImplemented,
             bulkUploadId=NotImplemented,
             status=NotImplemented,
-            error=NotImplemented,
+            errors=NotImplemented,
             warnings=NotImplemented,
             type=NotImplemented,
             externalId=NotImplemented):
@@ -7864,7 +7864,7 @@ class KalturaBulkUploadAssetResult(KalturaBulkUploadResult):
             index,
             bulkUploadId,
             status,
-            error,
+            errors,
             warnings)
 
         # Identifies the asset type (EPG, Recording, Movie, TV Series, etc). 
@@ -7908,7 +7908,7 @@ class KalturaBulkUploadMediaAssetResult(KalturaBulkUploadAssetResult):
             index=NotImplemented,
             bulkUploadId=NotImplemented,
             status=NotImplemented,
-            error=NotImplemented,
+            errors=NotImplemented,
             warnings=NotImplemented,
             type=NotImplemented,
             externalId=NotImplemented):
@@ -7917,7 +7917,7 @@ class KalturaBulkUploadMediaAssetResult(KalturaBulkUploadAssetResult):
             index,
             bulkUploadId,
             status,
-            error,
+            errors,
             warnings,
             type,
             externalId)
@@ -27748,7 +27748,7 @@ class KalturaBulkUploadObjectData(KalturaObjectBase):
 # @package Kaltura
 # @subpackage Client
 class KalturaBulkUploadAssetData(KalturaBulkUploadObjectData):
-    """indicates the asset object type in the bulk file (this class is not abstract for backward-compatibility)"""
+    """indicates the asset object type in the bulk file"""
 
     def __init__(self,
             typeId=NotImplemented):
@@ -27807,7 +27807,7 @@ class KalturaBulkUploadMediaAssetData(KalturaBulkUploadAssetData):
 
 # @package Kaltura
 # @subpackage Client
-class KalturaBulkUploadEpgAssetData(KalturaBulkUploadAssetData):
+class KalturaBulkUploadProgramAssetData(KalturaBulkUploadAssetData):
     """indicates the epg asset object type in the bulk file"""
 
     def __init__(self,
@@ -27821,11 +27821,11 @@ class KalturaBulkUploadEpgAssetData(KalturaBulkUploadAssetData):
 
     def fromXml(self, node):
         KalturaBulkUploadAssetData.fromXml(self, node)
-        self.fromXmlImpl(node, KalturaBulkUploadEpgAssetData.PROPERTY_LOADERS)
+        self.fromXmlImpl(node, KalturaBulkUploadProgramAssetData.PROPERTY_LOADERS)
 
     def toParams(self):
         kparams = KalturaBulkUploadAssetData.toParams(self)
-        kparams.put("objectType", "KalturaBulkUploadEpgAssetData")
+        kparams.put("objectType", "KalturaBulkUploadProgramAssetData")
         return kparams
 
 
@@ -37756,7 +37756,7 @@ class KalturaCoreClient(KalturaClientPlugin):
             'KalturaBulkUploadObjectData': KalturaBulkUploadObjectData,
             'KalturaBulkUploadAssetData': KalturaBulkUploadAssetData,
             'KalturaBulkUploadMediaAssetData': KalturaBulkUploadMediaAssetData,
-            'KalturaBulkUploadEpgAssetData': KalturaBulkUploadEpgAssetData,
+            'KalturaBulkUploadProgramAssetData': KalturaBulkUploadProgramAssetData,
             'KalturaAssetFileContext': KalturaAssetFileContext,
             'KalturaAssetStatisticsQuery': KalturaAssetStatisticsQuery,
             'KalturaUploadToken': KalturaUploadToken,
