@@ -42,7 +42,7 @@ from ..Base import (
     KalturaServiceBase,
 )
 
-API_VERSION = '5.2.0.43062'
+API_VERSION = '5.2.0.26208'
 
 ########## enums ##########
 # @package Kaltura
@@ -1043,6 +1043,32 @@ class KalturaInboxMessageType(object):
     FOLLOWED = "Followed"
     ENGAGEMENT = "Engagement"
     INTEREST = "Interest"
+
+    def __init__(self, value):
+        self.value = value
+
+    def getValue(self):
+        return self.value
+
+# @package Kaltura
+# @subpackage Client
+class KalturaIngestProfileAutofillPolicy(object):
+    REJECT = "REJECT"
+    AUTOFILL = "AUTOFILL"
+    KEEP_HOLES = "KEEP_HOLES"
+
+    def __init__(self, value):
+        self.value = value
+
+    def getValue(self):
+        return self.value
+
+# @package Kaltura
+# @subpackage Client
+class KalturaIngestProfileOverlapPolicy(object):
+    REJECT = "REJECT"
+    CUT_SOURCE = "CUT_SOURCE"
+    CUT_TARGET = "CUT_TARGET"
 
     def __init__(self, value):
         self.value = value
@@ -7938,6 +7964,140 @@ class KalturaBulkUploadMediaAssetResult(KalturaBulkUploadAssetResult):
 
 # @package Kaltura
 # @subpackage Client
+class KalturaBulkUploadProgramAssetResult(KalturaBulkUploadResult):
+    def __init__(self,
+            objectId=NotImplemented,
+            index=NotImplemented,
+            bulkUploadId=NotImplemented,
+            status=NotImplemented,
+            errors=NotImplemented,
+            warnings=NotImplemented,
+            programId=NotImplemented,
+            programExternalId=NotImplemented,
+            liveAssetId=NotImplemented,
+            liveAssetExternalId=NotImplemented):
+        KalturaBulkUploadResult.__init__(self,
+            objectId,
+            index,
+            bulkUploadId,
+            status,
+            errors,
+            warnings)
+
+        # The programID that was created
+        # @var int
+        # @readonly
+        self.programId = programId
+
+        # The external program Id as was sent in the bulk xml file
+        # @var string
+        # @readonly
+        self.programExternalId = programExternalId
+
+        # The  live asset Id that was identified according liveAssetExternalId that was sent in bulk xml file
+        # @var int
+        # @readonly
+        self.liveAssetId = liveAssetId
+
+        # The external live asset Id as was sent in bulk xml file
+        # @var string
+        # @readonly
+        self.liveAssetExternalId = liveAssetExternalId
+
+
+    PROPERTY_LOADERS = {
+        'programId': getXmlNodeInt, 
+        'programExternalId': getXmlNodeText, 
+        'liveAssetId': getXmlNodeInt, 
+        'liveAssetExternalId': getXmlNodeText, 
+    }
+
+    def fromXml(self, node):
+        KalturaBulkUploadResult.fromXml(self, node)
+        self.fromXmlImpl(node, KalturaBulkUploadProgramAssetResult.PROPERTY_LOADERS)
+
+    def toParams(self):
+        kparams = KalturaBulkUploadResult.toParams(self)
+        kparams.put("objectType", "KalturaBulkUploadProgramAssetResult")
+        return kparams
+
+    def getProgramId(self):
+        return self.programId
+
+    def getProgramExternalId(self):
+        return self.programExternalId
+
+    def getLiveAssetId(self):
+        return self.liveAssetId
+
+    def getLiveAssetExternalId(self):
+        return self.liveAssetExternalId
+
+
+# @package Kaltura
+# @subpackage Client
+class KalturaBulkUploadLiveAssetResult(KalturaBulkUploadResult):
+    def __init__(self,
+            objectId=NotImplemented,
+            index=NotImplemented,
+            bulkUploadId=NotImplemented,
+            status=NotImplemented,
+            errors=NotImplemented,
+            warnings=NotImplemented,
+            id=NotImplemented,
+            externalEpgIngestId=NotImplemented,
+            programs=NotImplemented):
+        KalturaBulkUploadResult.__init__(self,
+            objectId,
+            index,
+            bulkUploadId,
+            status,
+            errors,
+            warnings)
+
+        # The internal kaltura channel id
+        # @var int
+        # @readonly
+        self.id = id
+
+        # Indicates the epg asset object id in the bulk file
+        # @var string
+        # @readonly
+        self.externalEpgIngestId = externalEpgIngestId
+
+        # List of programs that were ingested to the channel
+        # @var array of KalturaBulkUploadProgramAssetResult
+        # @readonly
+        self.programs = programs
+
+
+    PROPERTY_LOADERS = {
+        'id': getXmlNodeInt, 
+        'externalEpgIngestId': getXmlNodeText, 
+        'programs': (KalturaObjectFactory.createArray, 'KalturaBulkUploadProgramAssetResult'), 
+    }
+
+    def fromXml(self, node):
+        KalturaBulkUploadResult.fromXml(self, node)
+        self.fromXmlImpl(node, KalturaBulkUploadLiveAssetResult.PROPERTY_LOADERS)
+
+    def toParams(self):
+        kparams = KalturaBulkUploadResult.toParams(self)
+        kparams.put("objectType", "KalturaBulkUploadLiveAssetResult")
+        return kparams
+
+    def getId(self):
+        return self.id
+
+    def getExternalEpgIngestId(self):
+        return self.externalEpgIngestId
+
+    def getPrograms(self):
+        return self.programs
+
+
+# @package Kaltura
+# @subpackage Client
 class KalturaBaseSegmentCondition(KalturaObjectBase):
     """Base class that defines segment condition"""
 
@@ -10423,7 +10583,8 @@ class KalturaChannel(KalturaBaseChannel):
             createDate=NotImplemented,
             updateDate=NotImplemented,
             supportSegmentBasedOrdering=NotImplemented,
-            assetUserRuleId=NotImplemented):
+            assetUserRuleId=NotImplemented,
+            metaData=NotImplemented):
         KalturaBaseChannel.__init__(self,
             id)
 
@@ -10483,6 +10644,10 @@ class KalturaChannel(KalturaBaseChannel):
         # @var int
         self.assetUserRuleId = assetUserRuleId
 
+        # key/value map field for extra data
+        # @var map
+        self.metaData = metaData
+
 
     PROPERTY_LOADERS = {
         'name': getXmlNodeText, 
@@ -10498,6 +10663,7 @@ class KalturaChannel(KalturaBaseChannel):
         'updateDate': getXmlNodeInt, 
         'supportSegmentBasedOrdering': getXmlNodeBool, 
         'assetUserRuleId': getXmlNodeInt, 
+        'metaData': (KalturaObjectFactory.createMap, 'KalturaStringValue'), 
     }
 
     def fromXml(self, node):
@@ -10516,6 +10682,7 @@ class KalturaChannel(KalturaBaseChannel):
         kparams.addObjectIfDefined("orderBy", self.orderBy)
         kparams.addBoolIfDefined("supportSegmentBasedOrdering", self.supportSegmentBasedOrdering)
         kparams.addIntIfDefined("assetUserRuleId", self.assetUserRuleId)
+        kparams.addMapIfDefined("metaData", self.metaData)
         return kparams
 
     def getName(self):
@@ -10584,6 +10751,12 @@ class KalturaChannel(KalturaBaseChannel):
     def setAssetUserRuleId(self, newAssetUserRuleId):
         self.assetUserRuleId = newAssetUserRuleId
 
+    def getMetaData(self):
+        return self.metaData
+
+    def setMetaData(self, newMetaData):
+        self.metaData = newMetaData
+
 
 # @package Kaltura
 # @subpackage Client
@@ -10603,6 +10776,7 @@ class KalturaDynamicChannel(KalturaChannel):
             updateDate=NotImplemented,
             supportSegmentBasedOrdering=NotImplemented,
             assetUserRuleId=NotImplemented,
+            metaData=NotImplemented,
             kSql=NotImplemented,
             assetTypes=NotImplemented,
             groupBy=NotImplemented):
@@ -10620,7 +10794,8 @@ class KalturaDynamicChannel(KalturaChannel):
             createDate,
             updateDate,
             supportSegmentBasedOrdering,
-            assetUserRuleId)
+            assetUserRuleId,
+            metaData)
 
         # Search assets using dynamic criteria. Provided collection of nested expressions with key, comparison operators, value, and logical conjunction.
         #             Possible keys: any Tag or Meta defined in the system and the following reserved keys: start_date, end_date. 
@@ -10704,6 +10879,7 @@ class KalturaManualChannel(KalturaChannel):
             updateDate=NotImplemented,
             supportSegmentBasedOrdering=NotImplemented,
             assetUserRuleId=NotImplemented,
+            metaData=NotImplemented,
             mediaIds=NotImplemented):
         KalturaChannel.__init__(self,
             id,
@@ -10719,7 +10895,8 @@ class KalturaManualChannel(KalturaChannel):
             createDate,
             updateDate,
             supportSegmentBasedOrdering,
-            assetUserRuleId)
+            assetUserRuleId,
+            metaData)
 
         # A list of comma separated media ids associated with this channel, according to the order of the medias in the channel.
         # @var string
@@ -17686,11 +17863,11 @@ class KalturaIngestProfile(KalturaObjectBase):
         self.transformationAdapterSharedSecret = transformationAdapterSharedSecret
 
         # Ingest profile default Auto-fill policy
-        # @var int
+        # @var KalturaIngestProfileAutofillPolicy
         self.defaultAutoFillPolicy = defaultAutoFillPolicy
 
         # Ingest profile default Overlap policy
-        # @var int
+        # @var KalturaIngestProfileOverlapPolicy
         self.defaultOverlapPolicy = defaultOverlapPolicy
 
 
@@ -17702,8 +17879,8 @@ class KalturaIngestProfile(KalturaObjectBase):
         'transformationAdapterUrl': getXmlNodeText, 
         'transformationAdapterSettings': (KalturaObjectFactory.createMap, 'KalturaStringValue'), 
         'transformationAdapterSharedSecret': getXmlNodeText, 
-        'defaultAutoFillPolicy': getXmlNodeInt, 
-        'defaultOverlapPolicy': getXmlNodeInt, 
+        'defaultAutoFillPolicy': (KalturaEnumsFactory.createString, "KalturaIngestProfileAutofillPolicy"), 
+        'defaultOverlapPolicy': (KalturaEnumsFactory.createString, "KalturaIngestProfileOverlapPolicy"), 
     }
 
     def fromXml(self, node):
@@ -17719,8 +17896,8 @@ class KalturaIngestProfile(KalturaObjectBase):
         kparams.addStringIfDefined("transformationAdapterUrl", self.transformationAdapterUrl)
         kparams.addMapIfDefined("transformationAdapterSettings", self.transformationAdapterSettings)
         kparams.addStringIfDefined("transformationAdapterSharedSecret", self.transformationAdapterSharedSecret)
-        kparams.addIntIfDefined("defaultAutoFillPolicy", self.defaultAutoFillPolicy)
-        kparams.addIntIfDefined("defaultOverlapPolicy", self.defaultOverlapPolicy)
+        kparams.addStringEnumIfDefined("defaultAutoFillPolicy", self.defaultAutoFillPolicy)
+        kparams.addStringEnumIfDefined("defaultOverlapPolicy", self.defaultOverlapPolicy)
         return kparams
 
     def getId(self):
@@ -21449,7 +21626,8 @@ class KalturaExternalChannelProfile(KalturaObjectBase):
             filterExpression=NotImplemented,
             recommendationEngineId=NotImplemented,
             enrichments=NotImplemented,
-            assetUserRuleId=NotImplemented):
+            assetUserRuleId=NotImplemented,
+            metaData=NotImplemented):
         KalturaObjectBase.__init__(self)
 
         # External channel id
@@ -21485,6 +21663,10 @@ class KalturaExternalChannelProfile(KalturaObjectBase):
         # @var int
         self.assetUserRuleId = assetUserRuleId
 
+        # key/value map field for extra data
+        # @var map
+        self.metaData = metaData
+
 
     PROPERTY_LOADERS = {
         'id': getXmlNodeInt, 
@@ -21495,6 +21677,7 @@ class KalturaExternalChannelProfile(KalturaObjectBase):
         'recommendationEngineId': getXmlNodeInt, 
         'enrichments': (KalturaObjectFactory.createArray, 'KalturaChannelEnrichmentHolder'), 
         'assetUserRuleId': getXmlNodeInt, 
+        'metaData': (KalturaObjectFactory.createMap, 'KalturaStringValue'), 
     }
 
     def fromXml(self, node):
@@ -21511,6 +21694,7 @@ class KalturaExternalChannelProfile(KalturaObjectBase):
         kparams.addIntIfDefined("recommendationEngineId", self.recommendationEngineId)
         kparams.addArrayIfDefined("enrichments", self.enrichments)
         kparams.addIntIfDefined("assetUserRuleId", self.assetUserRuleId)
+        kparams.addMapIfDefined("metaData", self.metaData)
         return kparams
 
     def getId(self):
@@ -21557,6 +21741,12 @@ class KalturaExternalChannelProfile(KalturaObjectBase):
 
     def setAssetUserRuleId(self, newAssetUserRuleId):
         self.assetUserRuleId = newAssetUserRuleId
+
+    def getMetaData(self):
+        return self.metaData
+
+    def setMetaData(self, newMetaData):
+        self.metaData = newMetaData
 
 
 # @package Kaltura
@@ -30065,7 +30255,7 @@ class KalturaLoginSession(KalturaObjectBase):
 
     def __init__(self,
             ks=NotImplemented,
-            expiration=NotImplemented):
+            expiry=NotImplemented):
         KalturaObjectBase.__init__(self)
 
         # Access token in a KS format
@@ -30074,12 +30264,12 @@ class KalturaLoginSession(KalturaObjectBase):
 
         # Expiration
         # @var int
-        self.expiration = expiration
+        self.expiry = expiry
 
 
     PROPERTY_LOADERS = {
         'ks': getXmlNodeText, 
-        'expiration': getXmlNodeInt, 
+        'expiry': getXmlNodeInt, 
     }
 
     def fromXml(self, node):
@@ -30090,7 +30280,7 @@ class KalturaLoginSession(KalturaObjectBase):
         kparams = KalturaObjectBase.toParams(self)
         kparams.put("objectType", "KalturaLoginSession")
         kparams.addStringIfDefined("ks", self.ks)
-        kparams.addIntIfDefined("expiration", self.expiration)
+        kparams.addIntIfDefined("expiry", self.expiry)
         return kparams
 
     def getKs(self):
@@ -30099,11 +30289,11 @@ class KalturaLoginSession(KalturaObjectBase):
     def setKs(self, newKs):
         self.ks = newKs
 
-    def getExpiration(self):
-        return self.expiration
+    def getExpiry(self):
+        return self.expiry
 
-    def setExpiration(self, newExpiration):
-        self.expiration = newExpiration
+    def setExpiry(self, newExpiry):
+        self.expiry = newExpiry
 
 
 # @package Kaltura
@@ -37246,6 +37436,8 @@ class KalturaCoreClient(KalturaClientPlugin):
             'KalturaInboxMessageOrderBy': KalturaInboxMessageOrderBy,
             'KalturaInboxMessageStatus': KalturaInboxMessageStatus,
             'KalturaInboxMessageType': KalturaInboxMessageType,
+            'KalturaIngestProfileAutofillPolicy': KalturaIngestProfileAutofillPolicy,
+            'KalturaIngestProfileOverlapPolicy': KalturaIngestProfileOverlapPolicy,
             'KalturaLanguageOrderBy': KalturaLanguageOrderBy,
             'KalturaLinearChannelType': KalturaLinearChannelType,
             'KalturaMathemticalOperatorType': KalturaMathemticalOperatorType,
@@ -37426,6 +37618,8 @@ class KalturaCoreClient(KalturaClientPlugin):
             'KalturaBulkUploadListResponse': KalturaBulkUploadListResponse,
             'KalturaBulkUploadAssetResult': KalturaBulkUploadAssetResult,
             'KalturaBulkUploadMediaAssetResult': KalturaBulkUploadMediaAssetResult,
+            'KalturaBulkUploadProgramAssetResult': KalturaBulkUploadProgramAssetResult,
+            'KalturaBulkUploadLiveAssetResult': KalturaBulkUploadLiveAssetResult,
             'KalturaBaseSegmentCondition': KalturaBaseSegmentCondition,
             'KalturaBaseSegmentValue': KalturaBaseSegmentValue,
             'KalturaSegmentationType': KalturaSegmentationType,
