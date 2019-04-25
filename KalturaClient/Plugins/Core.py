@@ -42,7 +42,7 @@ from ..Base import (
     KalturaServiceBase,
 )
 
-API_VERSION = '5.2.0.43176'
+API_VERSION = '5.2.0.15763'
 
 ########## enums ##########
 # @package Kaltura
@@ -26813,7 +26813,8 @@ class KalturaPermissionFilter(KalturaFilter):
 
     def __init__(self,
             orderBy=NotImplemented,
-            currentUserPermissionsContains=NotImplemented):
+            currentUserPermissionsContains=NotImplemented,
+            roleIdIn=NotImplemented):
         KalturaFilter.__init__(self,
             orderBy)
 
@@ -26821,9 +26822,14 @@ class KalturaPermissionFilter(KalturaFilter):
         # @var bool
         self.currentUserPermissionsContains = currentUserPermissionsContains
 
+        # Return permissions by role ID
+        # @var int
+        self.roleIdIn = roleIdIn
+
 
     PROPERTY_LOADERS = {
         'currentUserPermissionsContains': getXmlNodeBool, 
+        'roleIdIn': getXmlNodeInt, 
     }
 
     def fromXml(self, node):
@@ -26834,6 +26840,7 @@ class KalturaPermissionFilter(KalturaFilter):
         kparams = KalturaFilter.toParams(self)
         kparams.put("objectType", "KalturaPermissionFilter")
         kparams.addBoolIfDefined("currentUserPermissionsContains", self.currentUserPermissionsContains)
+        kparams.addIntIfDefined("roleIdIn", self.roleIdIn)
         return kparams
 
     def getCurrentUserPermissionsContains(self):
@@ -26841,6 +26848,12 @@ class KalturaPermissionFilter(KalturaFilter):
 
     def setCurrentUserPermissionsContains(self, newCurrentUserPermissionsContains):
         self.currentUserPermissionsContains = newCurrentUserPermissionsContains
+
+    def getRoleIdIn(self):
+        return self.roleIdIn
+
+    def setRoleIdIn(self, newRoleIdIn):
+        self.roleIdIn = newRoleIdIn
 
 
 # @package Kaltura
