@@ -42,7 +42,7 @@ from ..Base import (
     KalturaServiceBase,
 )
 
-API_VERSION = '5.2.0.15763'
+API_VERSION = '5.2.0.16263'
 
 ########## enums ##########
 # @package Kaltura
@@ -7974,8 +7974,7 @@ class KalturaBulkUploadProgramAssetResult(KalturaBulkUploadResult):
             warnings=NotImplemented,
             programId=NotImplemented,
             programExternalId=NotImplemented,
-            liveAssetId=NotImplemented,
-            liveAssetExternalId=NotImplemented):
+            liveAssetId=NotImplemented):
         KalturaBulkUploadResult.__init__(self,
             objectId,
             index,
@@ -7999,17 +7998,11 @@ class KalturaBulkUploadProgramAssetResult(KalturaBulkUploadResult):
         # @readonly
         self.liveAssetId = liveAssetId
 
-        # The external live asset Id as was sent in bulk xml file
-        # @var string
-        # @readonly
-        self.liveAssetExternalId = liveAssetExternalId
-
 
     PROPERTY_LOADERS = {
         'programId': getXmlNodeInt, 
         'programExternalId': getXmlNodeText, 
         'liveAssetId': getXmlNodeInt, 
-        'liveAssetExternalId': getXmlNodeText, 
     }
 
     def fromXml(self, node):
@@ -8029,9 +8022,6 @@ class KalturaBulkUploadProgramAssetResult(KalturaBulkUploadResult):
 
     def getLiveAssetId(self):
         return self.liveAssetId
-
-    def getLiveAssetExternalId(self):
-        return self.liveAssetExternalId
 
 
 # @package Kaltura
@@ -29908,7 +29898,8 @@ class KalturaTimeShiftedTvPartnerSettings(KalturaObjectBase):
             nonExistingChannelPlaybackEnabled=NotImplemented,
             quotaOveragePolicy=NotImplemented,
             protectionPolicy=NotImplemented,
-            recoveryGracePeriod=NotImplemented):
+            recoveryGracePeriod=NotImplemented,
+            privateCopyEnabled=NotImplemented):
         KalturaObjectBase.__init__(self)
 
         # Is catch-up enabled
@@ -29995,6 +29986,10 @@ class KalturaTimeShiftedTvPartnerSettings(KalturaObjectBase):
         # @var int
         self.recoveryGracePeriod = recoveryGracePeriod
 
+        # Is private copy enabled for the account
+        # @var bool
+        self.privateCopyEnabled = privateCopyEnabled
+
 
     PROPERTY_LOADERS = {
         'catchUpEnabled': getXmlNodeBool, 
@@ -30018,6 +30013,7 @@ class KalturaTimeShiftedTvPartnerSettings(KalturaObjectBase):
         'quotaOveragePolicy': (KalturaEnumsFactory.createString, "KalturaQuotaOveragePolicy"), 
         'protectionPolicy': (KalturaEnumsFactory.createString, "KalturaProtectionPolicy"), 
         'recoveryGracePeriod': getXmlNodeInt, 
+        'privateCopyEnabled': getXmlNodeBool, 
     }
 
     def fromXml(self, node):
@@ -30048,6 +30044,7 @@ class KalturaTimeShiftedTvPartnerSettings(KalturaObjectBase):
         kparams.addStringEnumIfDefined("quotaOveragePolicy", self.quotaOveragePolicy)
         kparams.addStringEnumIfDefined("protectionPolicy", self.protectionPolicy)
         kparams.addIntIfDefined("recoveryGracePeriod", self.recoveryGracePeriod)
+        kparams.addBoolIfDefined("privateCopyEnabled", self.privateCopyEnabled)
         return kparams
 
     def getCatchUpEnabled(self):
@@ -30175,6 +30172,12 @@ class KalturaTimeShiftedTvPartnerSettings(KalturaObjectBase):
 
     def setRecoveryGracePeriod(self, newRecoveryGracePeriod):
         self.recoveryGracePeriod = newRecoveryGracePeriod
+
+    def getPrivateCopyEnabled(self):
+        return self.privateCopyEnabled
+
+    def setPrivateCopyEnabled(self, newPrivateCopyEnabled):
+        self.privateCopyEnabled = newPrivateCopyEnabled
 
 
 # @package Kaltura
