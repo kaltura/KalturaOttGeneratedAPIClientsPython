@@ -42,7 +42,7 @@ from ..Base import (
     KalturaServiceBase,
 )
 
-API_VERSION = '5.2.0.16263'
+API_VERSION = '5.2.0.43043'
 
 ########## enums ##########
 # @package Kaltura
@@ -236,6 +236,18 @@ class KalturaAssetReminderOrderBy(object):
 # @subpackage Client
 class KalturaAssetRuleOrderBy(object):
     NONE = "NONE"
+
+    def __init__(self, value):
+        self.value = value
+
+    def getValue(self):
+        return self.value
+
+# @package Kaltura
+# @subpackage Client
+class KalturaAssetRuleStatus(object):
+    READY = "READY"
+    IN_PROGRESS = "IN_PROGRESS"
 
     def __init__(self, value):
         self.value = value
@@ -19357,7 +19369,8 @@ class KalturaAssetRule(KalturaAssetRuleBase):
             name=NotImplemented,
             description=NotImplemented,
             conditions=NotImplemented,
-            actions=NotImplemented):
+            actions=NotImplemented,
+            status=NotImplemented):
         KalturaAssetRuleBase.__init__(self,
             id,
             name,
@@ -19371,10 +19384,16 @@ class KalturaAssetRule(KalturaAssetRuleBase):
         # @var array of KalturaAssetRuleAction
         self.actions = actions
 
+        # List of actions for the rule
+        # @var KalturaAssetRuleStatus
+        # @readonly
+        self.status = status
+
 
     PROPERTY_LOADERS = {
         'conditions': (KalturaObjectFactory.createArray, 'KalturaCondition'), 
         'actions': (KalturaObjectFactory.createArray, 'KalturaAssetRuleAction'), 
+        'status': (KalturaEnumsFactory.createString, "KalturaAssetRuleStatus"), 
     }
 
     def fromXml(self, node):
@@ -19399,6 +19418,9 @@ class KalturaAssetRule(KalturaAssetRuleBase):
 
     def setActions(self, newActions):
         self.actions = newActions
+
+    def getStatus(self):
+        return self.status
 
 
 # @package Kaltura
@@ -37391,6 +37413,7 @@ class KalturaCoreClient(KalturaClientPlugin):
             'KalturaAssetReferenceType': KalturaAssetReferenceType,
             'KalturaAssetReminderOrderBy': KalturaAssetReminderOrderBy,
             'KalturaAssetRuleOrderBy': KalturaAssetRuleOrderBy,
+            'KalturaAssetRuleStatus': KalturaAssetRuleStatus,
             'KalturaAssetStructMetaOrderBy': KalturaAssetStructMetaOrderBy,
             'KalturaAssetStructOrderBy': KalturaAssetStructOrderBy,
             'KalturaAssetType': KalturaAssetType,
