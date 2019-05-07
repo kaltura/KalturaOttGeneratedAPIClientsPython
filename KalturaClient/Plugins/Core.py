@@ -42,7 +42,7 @@ from ..Base import (
     KalturaServiceBase,
 )
 
-API_VERSION = '5.2.0.43045'
+API_VERSION = '5.2.0.13718'
 
 ########## enums ##########
 # @package Kaltura
@@ -1194,6 +1194,7 @@ class KalturaMetaDataType(object):
     NUMBER = "NUMBER"
     BOOLEAN = "BOOLEAN"
     DATE = "DATE"
+    RELEATED_ENTITY = "RELEATED_ENTITY"
 
     def __init__(self, value):
         self.value = value
@@ -1629,6 +1630,20 @@ class KalturaRecordingType(object):
 class KalturaRegionOrderBy(object):
     CREATE_DATE_ASC = "CREATE_DATE_ASC"
     CREATE_DATE_DESC = "CREATE_DATE_DESC"
+
+    def __init__(self, value):
+        self.value = value
+
+    def getValue(self):
+        return self.value
+
+# @package Kaltura
+# @subpackage Client
+class KalturaRelatedEntityType(object):
+    CHANNEL = "CHANNEL"
+    EXTERNAL_CHANNEL = "EXTERNAL_CHANNEL"
+    MEDIA = "MEDIA"
+    PROGRAM = "PROGRAM"
 
     def __init__(self, value):
         self.value = value
@@ -15917,6 +15932,85 @@ class KalturaTagListResponse(KalturaListResponse):
 
 # @package Kaltura
 # @subpackage Client
+class KalturaRelatedEntity(KalturaObjectBase):
+    def __init__(self,
+            id=NotImplemented,
+            type=NotImplemented):
+        KalturaObjectBase.__init__(self)
+
+        # Unique identifier for the related entry
+        # @var string
+        self.id = id
+
+        # Defines related entry type
+        # @var KalturaRelatedEntityType
+        self.type = type
+
+
+    PROPERTY_LOADERS = {
+        'id': getXmlNodeText, 
+        'type': (KalturaEnumsFactory.createString, "KalturaRelatedEntityType"), 
+    }
+
+    def fromXml(self, node):
+        KalturaObjectBase.fromXml(self, node)
+        self.fromXmlImpl(node, KalturaRelatedEntity.PROPERTY_LOADERS)
+
+    def toParams(self):
+        kparams = KalturaObjectBase.toParams(self)
+        kparams.put("objectType", "KalturaRelatedEntity")
+        kparams.addStringIfDefined("id", self.id)
+        kparams.addStringEnumIfDefined("type", self.type)
+        return kparams
+
+    def getId(self):
+        return self.id
+
+    def setId(self, newId):
+        self.id = newId
+
+    def getType(self):
+        return self.type
+
+    def setType(self, newType):
+        self.type = newType
+
+
+# @package Kaltura
+# @subpackage Client
+class KalturaRelatedEntityArray(KalturaObjectBase):
+    def __init__(self,
+            objects=NotImplemented):
+        KalturaObjectBase.__init__(self)
+
+        # List of related entities
+        # @var array of KalturaRelatedEntity
+        self.objects = objects
+
+
+    PROPERTY_LOADERS = {
+        'objects': (KalturaObjectFactory.createArray, 'KalturaRelatedEntity'), 
+    }
+
+    def fromXml(self, node):
+        KalturaObjectBase.fromXml(self, node)
+        self.fromXmlImpl(node, KalturaRelatedEntityArray.PROPERTY_LOADERS)
+
+    def toParams(self):
+        kparams = KalturaObjectBase.toParams(self)
+        kparams.put("objectType", "KalturaRelatedEntityArray")
+        kparams.addArrayIfDefined("objects", self.objects)
+        return kparams
+
+    def getObjects(self):
+        return self.objects
+
+    def setObjects(self, newObjects):
+        self.objects = newObjects
+
+
+# @package Kaltura
+# @subpackage Client
 class KalturaAsset(KalturaObjectBase):
     """Asset info"""
 
@@ -15931,6 +16025,7 @@ class KalturaAsset(KalturaObjectBase):
             mediaFiles=NotImplemented,
             metas=NotImplemented,
             tags=NotImplemented,
+            relatedEntities=NotImplemented,
             startDate=NotImplemented,
             endDate=NotImplemented,
             createDate=NotImplemented,
@@ -15985,6 +16080,10 @@ class KalturaAsset(KalturaObjectBase):
         # @var map
         self.tags = tags
 
+        # Dynamic collection of key-value pairs according to the related entity defined in the system
+        # @var map
+        self.relatedEntities = relatedEntities
+
         # Date and time represented as epoch. For VOD - since when the asset is available in the catalog. For EPG/Linear - when the program is aired (can be in the future).
         # @var int
         self.startDate = startDate
@@ -16019,6 +16118,7 @@ class KalturaAsset(KalturaObjectBase):
         'mediaFiles': (KalturaObjectFactory.createArray, 'KalturaMediaFile'), 
         'metas': (KalturaObjectFactory.createMap, 'KalturaValue'), 
         'tags': (KalturaObjectFactory.createMap, 'KalturaMultilingualStringValueArray'), 
+        'relatedEntities': (KalturaObjectFactory.createMap, 'KalturaRelatedEntityArray'), 
         'startDate': getXmlNodeInt, 
         'endDate': getXmlNodeInt, 
         'createDate': getXmlNodeInt, 
@@ -16038,6 +16138,7 @@ class KalturaAsset(KalturaObjectBase):
         kparams.addArrayIfDefined("multilingualDescription", self.multilingualDescription)
         kparams.addMapIfDefined("metas", self.metas)
         kparams.addMapIfDefined("tags", self.tags)
+        kparams.addMapIfDefined("relatedEntities", self.relatedEntities)
         kparams.addIntIfDefined("startDate", self.startDate)
         kparams.addIntIfDefined("endDate", self.endDate)
         kparams.addStringIfDefined("externalId", self.externalId)
@@ -16087,6 +16188,12 @@ class KalturaAsset(KalturaObjectBase):
 
     def setTags(self, newTags):
         self.tags = newTags
+
+    def getRelatedEntities(self):
+        return self.relatedEntities
+
+    def setRelatedEntities(self, newRelatedEntities):
+        self.relatedEntities = newRelatedEntities
 
     def getStartDate(self):
         return self.startDate
@@ -16166,6 +16273,7 @@ class KalturaMediaAsset(KalturaAsset):
             mediaFiles=NotImplemented,
             metas=NotImplemented,
             tags=NotImplemented,
+            relatedEntities=NotImplemented,
             startDate=NotImplemented,
             endDate=NotImplemented,
             createDate=NotImplemented,
@@ -16188,6 +16296,7 @@ class KalturaMediaAsset(KalturaAsset):
             mediaFiles,
             metas,
             tags,
+            relatedEntities,
             startDate,
             endDate,
             createDate,
@@ -16296,6 +16405,7 @@ class KalturaLiveAsset(KalturaMediaAsset):
             mediaFiles=NotImplemented,
             metas=NotImplemented,
             tags=NotImplemented,
+            relatedEntities=NotImplemented,
             startDate=NotImplemented,
             endDate=NotImplemented,
             createDate=NotImplemented,
@@ -16335,6 +16445,7 @@ class KalturaLiveAsset(KalturaMediaAsset):
             mediaFiles,
             metas,
             tags,
+            relatedEntities,
             startDate,
             endDate,
             createDate,
@@ -16560,6 +16671,7 @@ class KalturaProgramAsset(KalturaAsset):
             mediaFiles=NotImplemented,
             metas=NotImplemented,
             tags=NotImplemented,
+            relatedEntities=NotImplemented,
             startDate=NotImplemented,
             endDate=NotImplemented,
             createDate=NotImplemented,
@@ -16585,6 +16697,7 @@ class KalturaProgramAsset(KalturaAsset):
             mediaFiles,
             metas,
             tags,
+            relatedEntities,
             startDate,
             endDate,
             createDate,
@@ -16724,6 +16837,7 @@ class KalturaRecordingAsset(KalturaProgramAsset):
             mediaFiles=NotImplemented,
             metas=NotImplemented,
             tags=NotImplemented,
+            relatedEntities=NotImplemented,
             startDate=NotImplemented,
             endDate=NotImplemented,
             createDate=NotImplemented,
@@ -16751,6 +16865,7 @@ class KalturaRecordingAsset(KalturaProgramAsset):
             mediaFiles,
             metas,
             tags,
+            relatedEntities,
             startDate,
             endDate,
             createDate,
@@ -37517,6 +37632,7 @@ class KalturaCoreClient(KalturaClientPlugin):
             'KalturaRecordingStatus': KalturaRecordingStatus,
             'KalturaRecordingType': KalturaRecordingType,
             'KalturaRegionOrderBy': KalturaRegionOrderBy,
+            'KalturaRelatedEntityType': KalturaRelatedEntityType,
             'KalturaReminderType': KalturaReminderType,
             'KalturaReportOrderBy': KalturaReportOrderBy,
             'KalturaResponseType': KalturaResponseType,
@@ -37773,6 +37889,8 @@ class KalturaCoreClient(KalturaClientPlugin):
             'KalturaRatioListResponse': KalturaRatioListResponse,
             'KalturaTag': KalturaTag,
             'KalturaTagListResponse': KalturaTagListResponse,
+            'KalturaRelatedEntity': KalturaRelatedEntity,
+            'KalturaRelatedEntityArray': KalturaRelatedEntityArray,
             'KalturaAsset': KalturaAsset,
             'KalturaAssetListResponse': KalturaAssetListResponse,
             'KalturaMediaAsset': KalturaMediaAsset,
