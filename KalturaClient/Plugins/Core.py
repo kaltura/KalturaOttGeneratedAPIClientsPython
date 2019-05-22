@@ -42,7 +42,7 @@ from ..Base import (
     KalturaServiceBase,
 )
 
-API_VERSION = '5.2.0.15893'
+API_VERSION = '5.2.0.43029'
 
 ########## enums ##########
 # @package Kaltura
@@ -172,6 +172,30 @@ class KalturaAssetHistoryOrderBy(object):
 class KalturaAssetInheritancePolicy(object):
     ENABLE = "Enable"
     DISABLE = "Disable"
+
+    def __init__(self, value):
+        self.value = value
+
+    def getValue(self):
+        return self.value
+
+# @package Kaltura
+# @subpackage Client
+class KalturaAssetLifeCycleRuleActionType(object):
+    ADD = "ADD"
+    REMOVE = "REMOVE"
+
+    def __init__(self, value):
+        self.value = value
+
+    def getValue(self):
+        return self.value
+
+# @package Kaltura
+# @subpackage Client
+class KalturaAssetLifeCycleRuleTransitionType(object):
+    TAG = "TAG"
+    BUSINESS_MODEL = "BUSINESS_MODEL"
 
     def __init__(self, value):
         self.value = value
@@ -1701,6 +1725,7 @@ class KalturaRuleActionType(object):
     APPLY_DISCOUNT_MODULE = "APPLY_DISCOUNT_MODULE"
     APPLY_PLAYBACK_ADAPTER = "APPLY_PLAYBACK_ADAPTER"
     FILTER = "FILTER"
+    ASSET_LIFE_CYCLE_TRANSITION = "ASSET_LIFE_CYCLE_TRANSITION"
 
     def __init__(self, value):
         self.value = value
@@ -2022,6 +2047,18 @@ class KalturaSubscriptionSetType(object):
 
 # @package Kaltura
 # @subpackage Client
+class KalturaSubscriptionTriggerType(object):
+    START_DATE = "START_DATE"
+    END_DATE = "END_DATE"
+
+    def __init__(self, value):
+        self.value = value
+
+    def getValue(self):
+        return self.value
+
+# @package Kaltura
+# @subpackage Client
 class KalturaTagOrderBy(object):
     NONE = "NONE"
 
@@ -2050,6 +2087,28 @@ class KalturaTopicAutomaticIssueNotification(object):
     INHERIT = "Inherit"
     YES = "Yes"
     NO = "No"
+
+    def __init__(self, value):
+        self.value = value
+
+    def getValue(self):
+        return self.value
+
+# @package Kaltura
+# @subpackage Client
+class KalturaTopicNotificationMessageOrderBy(object):
+    NONE = "NONE"
+
+    def __init__(self, value):
+        self.value = value
+
+    def getValue(self):
+        return self.value
+
+# @package Kaltura
+# @subpackage Client
+class KalturaTopicNotificationOrderBy(object):
+    NONE = "NONE"
 
     def __init__(self, value):
         self.value = value
@@ -12000,7 +12059,8 @@ class KalturaSubscription(KalturaObjectBase):
             productCodes=NotImplemented,
             dependencyType=NotImplemented,
             externalId=NotImplemented,
-            isCancellationBlocked=NotImplemented):
+            isCancellationBlocked=NotImplemented,
+            preSaleDate=NotImplemented):
         KalturaObjectBase.__init__(self)
 
         # Subscription identifier
@@ -12129,6 +12189,10 @@ class KalturaSubscription(KalturaObjectBase):
         # @var bool
         self.isCancellationBlocked = isCancellationBlocked
 
+        # The Pre-Sale date the subscription is available for purchasing
+        # @var int
+        self.preSaleDate = preSaleDate
+
 
     PROPERTY_LOADERS = {
         'id': getXmlNodeText, 
@@ -12162,6 +12226,7 @@ class KalturaSubscription(KalturaObjectBase):
         'dependencyType': (KalturaEnumsFactory.createString, "KalturaSubscriptionDependencyType"), 
         'externalId': getXmlNodeText, 
         'isCancellationBlocked': getXmlNodeBool, 
+        'preSaleDate': getXmlNodeInt, 
     }
 
     def fromXml(self, node):
@@ -12200,6 +12265,7 @@ class KalturaSubscription(KalturaObjectBase):
         kparams.addStringEnumIfDefined("dependencyType", self.dependencyType)
         kparams.addStringIfDefined("externalId", self.externalId)
         kparams.addBoolIfDefined("isCancellationBlocked", self.isCancellationBlocked)
+        kparams.addIntIfDefined("preSaleDate", self.preSaleDate)
         return kparams
 
     def getId(self):
@@ -12381,6 +12447,12 @@ class KalturaSubscription(KalturaObjectBase):
 
     def setIsCancellationBlocked(self, newIsCancellationBlocked):
         self.isCancellationBlocked = newIsCancellationBlocked
+
+    def getPreSaleDate(self):
+        return self.preSaleDate
+
+    def setPreSaleDate(self, newPreSaleDate):
+        self.preSaleDate = newPreSaleDate
 
 
 # @package Kaltura
@@ -12822,6 +12894,465 @@ class KalturaBillingPartnerConfig(KalturaPartnerConfiguration):
 
     def setType(self, newType):
         self.type = newType
+
+
+# @package Kaltura
+# @subpackage Client
+class KalturaSubscribeReference(KalturaObjectBase):
+    def __init__(self):
+        KalturaObjectBase.__init__(self)
+
+
+    PROPERTY_LOADERS = {
+    }
+
+    def fromXml(self, node):
+        KalturaObjectBase.fromXml(self, node)
+        self.fromXmlImpl(node, KalturaSubscribeReference.PROPERTY_LOADERS)
+
+    def toParams(self):
+        kparams = KalturaObjectBase.toParams(self)
+        kparams.put("objectType", "KalturaSubscribeReference")
+        return kparams
+
+
+# @package Kaltura
+# @subpackage Client
+class KalturaTopicNotification(KalturaObjectBase):
+    def __init__(self,
+            id=NotImplemented,
+            name=NotImplemented,
+            description=NotImplemented,
+            subscribeReference=NotImplemented):
+        KalturaObjectBase.__init__(self)
+
+        # Topic notification ID
+        # @var int
+        # @readonly
+        self.id = id
+
+        # Topic notification name
+        # @var string
+        self.name = name
+
+        # Topic notification description
+        # @var string
+        self.description = description
+
+        # Announcement enabled
+        # @var KalturaSubscribeReference
+        self.subscribeReference = subscribeReference
+
+
+    PROPERTY_LOADERS = {
+        'id': getXmlNodeInt, 
+        'name': getXmlNodeText, 
+        'description': getXmlNodeText, 
+        'subscribeReference': (KalturaObjectFactory.create, 'KalturaSubscribeReference'), 
+    }
+
+    def fromXml(self, node):
+        KalturaObjectBase.fromXml(self, node)
+        self.fromXmlImpl(node, KalturaTopicNotification.PROPERTY_LOADERS)
+
+    def toParams(self):
+        kparams = KalturaObjectBase.toParams(self)
+        kparams.put("objectType", "KalturaTopicNotification")
+        kparams.addStringIfDefined("name", self.name)
+        kparams.addStringIfDefined("description", self.description)
+        kparams.addObjectIfDefined("subscribeReference", self.subscribeReference)
+        return kparams
+
+    def getId(self):
+        return self.id
+
+    def getName(self):
+        return self.name
+
+    def setName(self, newName):
+        self.name = newName
+
+    def getDescription(self):
+        return self.description
+
+    def setDescription(self, newDescription):
+        self.description = newDescription
+
+    def getSubscribeReference(self):
+        return self.subscribeReference
+
+    def setSubscribeReference(self, newSubscribeReference):
+        self.subscribeReference = newSubscribeReference
+
+
+# @package Kaltura
+# @subpackage Client
+class KalturaTopicNotificationListResponse(KalturaListResponse):
+    def __init__(self,
+            totalCount=NotImplemented,
+            objects=NotImplemented):
+        KalturaListResponse.__init__(self,
+            totalCount)
+
+        # Topic notifications
+        # @var array of KalturaTopicNotification
+        self.objects = objects
+
+
+    PROPERTY_LOADERS = {
+        'objects': (KalturaObjectFactory.createArray, 'KalturaTopicNotification'), 
+    }
+
+    def fromXml(self, node):
+        KalturaListResponse.fromXml(self, node)
+        self.fromXmlImpl(node, KalturaTopicNotificationListResponse.PROPERTY_LOADERS)
+
+    def toParams(self):
+        kparams = KalturaListResponse.toParams(self)
+        kparams.put("objectType", "KalturaTopicNotificationListResponse")
+        kparams.addArrayIfDefined("objects", self.objects)
+        return kparams
+
+    def getObjects(self):
+        return self.objects
+
+    def setObjects(self, newObjects):
+        self.objects = newObjects
+
+
+# @package Kaltura
+# @subpackage Client
+class KalturaSubscriptionSubscribeReference(KalturaSubscribeReference):
+    def __init__(self,
+            subscriptionId=NotImplemented):
+        KalturaSubscribeReference.__init__(self)
+
+        # Subscription ID
+        # @var int
+        self.subscriptionId = subscriptionId
+
+
+    PROPERTY_LOADERS = {
+        'subscriptionId': getXmlNodeInt, 
+    }
+
+    def fromXml(self, node):
+        KalturaSubscribeReference.fromXml(self, node)
+        self.fromXmlImpl(node, KalturaSubscriptionSubscribeReference.PROPERTY_LOADERS)
+
+    def toParams(self):
+        kparams = KalturaSubscribeReference.toParams(self)
+        kparams.put("objectType", "KalturaSubscriptionSubscribeReference")
+        kparams.addIntIfDefined("subscriptionId", self.subscriptionId)
+        return kparams
+
+    def getSubscriptionId(self):
+        return self.subscriptionId
+
+    def setSubscriptionId(self, newSubscriptionId):
+        self.subscriptionId = newSubscriptionId
+
+
+# @package Kaltura
+# @subpackage Client
+class KalturaTrigger(KalturaObjectBase):
+    def __init__(self):
+        KalturaObjectBase.__init__(self)
+
+
+    PROPERTY_LOADERS = {
+    }
+
+    def fromXml(self, node):
+        KalturaObjectBase.fromXml(self, node)
+        self.fromXmlImpl(node, KalturaTrigger.PROPERTY_LOADERS)
+
+    def toParams(self):
+        kparams = KalturaObjectBase.toParams(self)
+        kparams.put("objectType", "KalturaTrigger")
+        return kparams
+
+
+# @package Kaltura
+# @subpackage Client
+class KalturaDispatcher(KalturaObjectBase):
+    def __init__(self):
+        KalturaObjectBase.__init__(self)
+
+
+    PROPERTY_LOADERS = {
+    }
+
+    def fromXml(self, node):
+        KalturaObjectBase.fromXml(self, node)
+        self.fromXmlImpl(node, KalturaDispatcher.PROPERTY_LOADERS)
+
+    def toParams(self):
+        kparams = KalturaObjectBase.toParams(self)
+        kparams.put("objectType", "KalturaDispatcher")
+        return kparams
+
+
+# @package Kaltura
+# @subpackage Client
+class KalturaTopicNotificationMessage(KalturaObjectBase):
+    def __init__(self,
+            id=NotImplemented,
+            message=NotImplemented,
+            topicNotificationId=NotImplemented,
+            trigger=NotImplemented,
+            dispatchers=NotImplemented):
+        KalturaObjectBase.__init__(self)
+
+        # Topic notification message ID
+        # @var int
+        # @readonly
+        self.id = id
+
+        # Topic notification message
+        # @var string
+        self.message = message
+
+        # Topic notification ID
+        # @var int
+        self.topicNotificationId = topicNotificationId
+
+        # Topic notification message trigger
+        # @var KalturaTrigger
+        self.trigger = trigger
+
+        # Topic notification message dispatchers
+        # @var array of KalturaDispatcher
+        self.dispatchers = dispatchers
+
+
+    PROPERTY_LOADERS = {
+        'id': getXmlNodeInt, 
+        'message': getXmlNodeText, 
+        'topicNotificationId': getXmlNodeInt, 
+        'trigger': (KalturaObjectFactory.create, 'KalturaTrigger'), 
+        'dispatchers': (KalturaObjectFactory.createArray, 'KalturaDispatcher'), 
+    }
+
+    def fromXml(self, node):
+        KalturaObjectBase.fromXml(self, node)
+        self.fromXmlImpl(node, KalturaTopicNotificationMessage.PROPERTY_LOADERS)
+
+    def toParams(self):
+        kparams = KalturaObjectBase.toParams(self)
+        kparams.put("objectType", "KalturaTopicNotificationMessage")
+        kparams.addStringIfDefined("message", self.message)
+        kparams.addIntIfDefined("topicNotificationId", self.topicNotificationId)
+        kparams.addObjectIfDefined("trigger", self.trigger)
+        kparams.addArrayIfDefined("dispatchers", self.dispatchers)
+        return kparams
+
+    def getId(self):
+        return self.id
+
+    def getMessage(self):
+        return self.message
+
+    def setMessage(self, newMessage):
+        self.message = newMessage
+
+    def getTopicNotificationId(self):
+        return self.topicNotificationId
+
+    def setTopicNotificationId(self, newTopicNotificationId):
+        self.topicNotificationId = newTopicNotificationId
+
+    def getTrigger(self):
+        return self.trigger
+
+    def setTrigger(self, newTrigger):
+        self.trigger = newTrigger
+
+    def getDispatchers(self):
+        return self.dispatchers
+
+    def setDispatchers(self, newDispatchers):
+        self.dispatchers = newDispatchers
+
+
+# @package Kaltura
+# @subpackage Client
+class KalturaTopicNotificationMessageListResponse(KalturaListResponse):
+    def __init__(self,
+            totalCount=NotImplemented,
+            objects=NotImplemented):
+        KalturaListResponse.__init__(self,
+            totalCount)
+
+        # Topic notification messages
+        # @var array of KalturaTopicNotificationMessage
+        self.objects = objects
+
+
+    PROPERTY_LOADERS = {
+        'objects': (KalturaObjectFactory.createArray, 'KalturaTopicNotificationMessage'), 
+    }
+
+    def fromXml(self, node):
+        KalturaListResponse.fromXml(self, node)
+        self.fromXmlImpl(node, KalturaTopicNotificationMessageListResponse.PROPERTY_LOADERS)
+
+    def toParams(self):
+        kparams = KalturaListResponse.toParams(self)
+        kparams.put("objectType", "KalturaTopicNotificationMessageListResponse")
+        kparams.addArrayIfDefined("objects", self.objects)
+        return kparams
+
+    def getObjects(self):
+        return self.objects
+
+    def setObjects(self, newObjects):
+        self.objects = newObjects
+
+
+# @package Kaltura
+# @subpackage Client
+class KalturaDateTrigger(KalturaTrigger):
+    def __init__(self,
+            date=NotImplemented):
+        KalturaTrigger.__init__(self)
+
+        # Trigger date
+        # @var int
+        self.date = date
+
+
+    PROPERTY_LOADERS = {
+        'date': getXmlNodeInt, 
+    }
+
+    def fromXml(self, node):
+        KalturaTrigger.fromXml(self, node)
+        self.fromXmlImpl(node, KalturaDateTrigger.PROPERTY_LOADERS)
+
+    def toParams(self):
+        kparams = KalturaTrigger.toParams(self)
+        kparams.put("objectType", "KalturaDateTrigger")
+        kparams.addIntIfDefined("date", self.date)
+        return kparams
+
+    def getDate(self):
+        return self.date
+
+    def setDate(self, newDate):
+        self.date = newDate
+
+
+# @package Kaltura
+# @subpackage Client
+class KalturaSubscriptionTrigger(KalturaTrigger):
+    def __init__(self,
+            type=NotImplemented,
+            offset=NotImplemented):
+        KalturaTrigger.__init__(self)
+
+        # Subscription trigger type
+        # @var KalturaSubscriptionTriggerType
+        self.type = type
+
+        # Subscription trigger offset
+        # @var int
+        self.offset = offset
+
+
+    PROPERTY_LOADERS = {
+        'type': (KalturaEnumsFactory.createString, "KalturaSubscriptionTriggerType"), 
+        'offset': getXmlNodeInt, 
+    }
+
+    def fromXml(self, node):
+        KalturaTrigger.fromXml(self, node)
+        self.fromXmlImpl(node, KalturaSubscriptionTrigger.PROPERTY_LOADERS)
+
+    def toParams(self):
+        kparams = KalturaTrigger.toParams(self)
+        kparams.put("objectType", "KalturaSubscriptionTrigger")
+        kparams.addStringEnumIfDefined("type", self.type)
+        kparams.addIntIfDefined("offset", self.offset)
+        return kparams
+
+    def getType(self):
+        return self.type
+
+    def setType(self, newType):
+        self.type = newType
+
+    def getOffset(self):
+        return self.offset
+
+    def setOffset(self, newOffset):
+        self.offset = newOffset
+
+
+# @package Kaltura
+# @subpackage Client
+class KalturaSmsDispatcher(KalturaDispatcher):
+    def __init__(self):
+        KalturaDispatcher.__init__(self)
+
+
+    PROPERTY_LOADERS = {
+    }
+
+    def fromXml(self, node):
+        KalturaDispatcher.fromXml(self, node)
+        self.fromXmlImpl(node, KalturaSmsDispatcher.PROPERTY_LOADERS)
+
+    def toParams(self):
+        kparams = KalturaDispatcher.toParams(self)
+        kparams.put("objectType", "KalturaSmsDispatcher")
+        return kparams
+
+
+# @package Kaltura
+# @subpackage Client
+class KalturaMailDispatcher(KalturaDispatcher):
+    def __init__(self,
+            bodyTemplate=NotImplemented,
+            subjectTemplate=NotImplemented):
+        KalturaDispatcher.__init__(self)
+
+        # Mail body template
+        # @var string
+        self.bodyTemplate = bodyTemplate
+
+        # Mail subjsct template
+        # @var string
+        self.subjectTemplate = subjectTemplate
+
+
+    PROPERTY_LOADERS = {
+        'bodyTemplate': getXmlNodeText, 
+        'subjectTemplate': getXmlNodeText, 
+    }
+
+    def fromXml(self, node):
+        KalturaDispatcher.fromXml(self, node)
+        self.fromXmlImpl(node, KalturaMailDispatcher.PROPERTY_LOADERS)
+
+    def toParams(self):
+        kparams = KalturaDispatcher.toParams(self)
+        kparams.put("objectType", "KalturaMailDispatcher")
+        kparams.addStringIfDefined("bodyTemplate", self.bodyTemplate)
+        kparams.addStringIfDefined("subjectTemplate", self.subjectTemplate)
+        return kparams
+
+    def getBodyTemplate(self):
+        return self.bodyTemplate
+
+    def setBodyTemplate(self, newBodyTemplate):
+        self.bodyTemplate = newBodyTemplate
+
+    def getSubjectTemplate(self):
+        return self.subjectTemplate
+
+    def setSubjectTemplate(self, newSubjectTemplate):
+        self.subjectTemplate = newSubjectTemplate
 
 
 # @package Kaltura
@@ -19309,6 +19840,148 @@ class KalturaApplyPlaybackAdapterAction(KalturaAssetRuleAction):
 
 # @package Kaltura
 # @subpackage Client
+class KalturaAssetLifeCycleTransitionAction(KalturaAssetRuleAction):
+    def __init__(self,
+            type=NotImplemented,
+            description=NotImplemented,
+            assetLifeCycleRuleActionType=NotImplemented,
+            assetLifeCycleRuleTransitionType=NotImplemented):
+        KalturaAssetRuleAction.__init__(self,
+            type,
+            description)
+
+        # Asset LifeCycle Rule Action Type
+        # @var KalturaAssetLifeCycleRuleActionType
+        self.assetLifeCycleRuleActionType = assetLifeCycleRuleActionType
+
+        # Asset LifeCycle Rule Transition Type
+        # @var KalturaAssetLifeCycleRuleTransitionType
+        # @readonly
+        self.assetLifeCycleRuleTransitionType = assetLifeCycleRuleTransitionType
+
+
+    PROPERTY_LOADERS = {
+        'assetLifeCycleRuleActionType': (KalturaEnumsFactory.createString, "KalturaAssetLifeCycleRuleActionType"), 
+        'assetLifeCycleRuleTransitionType': (KalturaEnumsFactory.createString, "KalturaAssetLifeCycleRuleTransitionType"), 
+    }
+
+    def fromXml(self, node):
+        KalturaAssetRuleAction.fromXml(self, node)
+        self.fromXmlImpl(node, KalturaAssetLifeCycleTransitionAction.PROPERTY_LOADERS)
+
+    def toParams(self):
+        kparams = KalturaAssetRuleAction.toParams(self)
+        kparams.put("objectType", "KalturaAssetLifeCycleTransitionAction")
+        kparams.addStringEnumIfDefined("assetLifeCycleRuleActionType", self.assetLifeCycleRuleActionType)
+        return kparams
+
+    def getAssetLifeCycleRuleActionType(self):
+        return self.assetLifeCycleRuleActionType
+
+    def setAssetLifeCycleRuleActionType(self, newAssetLifeCycleRuleActionType):
+        self.assetLifeCycleRuleActionType = newAssetLifeCycleRuleActionType
+
+    def getAssetLifeCycleRuleTransitionType(self):
+        return self.assetLifeCycleRuleTransitionType
+
+
+# @package Kaltura
+# @subpackage Client
+class KalturaAssetLifeCycleTagTransitionAction(KalturaAssetLifeCycleTransitionAction):
+    def __init__(self,
+            type=NotImplemented,
+            description=NotImplemented,
+            assetLifeCycleRuleActionType=NotImplemented,
+            assetLifeCycleRuleTransitionType=NotImplemented,
+            tagIds=NotImplemented):
+        KalturaAssetLifeCycleTransitionAction.__init__(self,
+            type,
+            description,
+            assetLifeCycleRuleActionType,
+            assetLifeCycleRuleTransitionType)
+
+        # Comma separated list of tag Ids.
+        # @var string
+        self.tagIds = tagIds
+
+
+    PROPERTY_LOADERS = {
+        'tagIds': getXmlNodeText, 
+    }
+
+    def fromXml(self, node):
+        KalturaAssetLifeCycleTransitionAction.fromXml(self, node)
+        self.fromXmlImpl(node, KalturaAssetLifeCycleTagTransitionAction.PROPERTY_LOADERS)
+
+    def toParams(self):
+        kparams = KalturaAssetLifeCycleTransitionAction.toParams(self)
+        kparams.put("objectType", "KalturaAssetLifeCycleTagTransitionAction")
+        kparams.addStringIfDefined("tagIds", self.tagIds)
+        return kparams
+
+    def getTagIds(self):
+        return self.tagIds
+
+    def setTagIds(self, newTagIds):
+        self.tagIds = newTagIds
+
+
+# @package Kaltura
+# @subpackage Client
+class KalturaAssetLifeCycleBuisnessModuleTransitionAction(KalturaAssetLifeCycleTransitionAction):
+    def __init__(self,
+            type=NotImplemented,
+            description=NotImplemented,
+            assetLifeCycleRuleActionType=NotImplemented,
+            assetLifeCycleRuleTransitionType=NotImplemented,
+            fileTypeIds=NotImplemented,
+            ppvIds=NotImplemented):
+        KalturaAssetLifeCycleTransitionAction.__init__(self,
+            type,
+            description,
+            assetLifeCycleRuleActionType,
+            assetLifeCycleRuleTransitionType)
+
+        # Comma separated list of fileType Ids.
+        # @var string
+        self.fileTypeIds = fileTypeIds
+
+        # Comma separated list of ppv Ids.
+        # @var string
+        self.ppvIds = ppvIds
+
+
+    PROPERTY_LOADERS = {
+        'fileTypeIds': getXmlNodeText, 
+        'ppvIds': getXmlNodeText, 
+    }
+
+    def fromXml(self, node):
+        KalturaAssetLifeCycleTransitionAction.fromXml(self, node)
+        self.fromXmlImpl(node, KalturaAssetLifeCycleBuisnessModuleTransitionAction.PROPERTY_LOADERS)
+
+    def toParams(self):
+        kparams = KalturaAssetLifeCycleTransitionAction.toParams(self)
+        kparams.put("objectType", "KalturaAssetLifeCycleBuisnessModuleTransitionAction")
+        kparams.addStringIfDefined("fileTypeIds", self.fileTypeIds)
+        kparams.addStringIfDefined("ppvIds", self.ppvIds)
+        return kparams
+
+    def getFileTypeIds(self):
+        return self.fileTypeIds
+
+    def setFileTypeIds(self, newFileTypeIds):
+        self.fileTypeIds = newFileTypeIds
+
+    def getPpvIds(self):
+        return self.ppvIds
+
+    def setPpvIds(self, newPpvIds):
+        self.ppvIds = newPpvIds
+
+
+# @package Kaltura
+# @subpackage Client
 class KalturaAssetUserRuleAction(KalturaRuleAction):
     def __init__(self,
             type=NotImplemented,
@@ -24354,6 +25027,76 @@ class KalturaPartnerConfigurationFilter(KalturaFilter):
 
     def setPartnerConfigurationTypeEqual(self, newPartnerConfigurationTypeEqual):
         self.partnerConfigurationTypeEqual = newPartnerConfigurationTypeEqual
+
+
+# @package Kaltura
+# @subpackage Client
+class KalturaTopicNotificationFilter(KalturaFilter):
+    def __init__(self,
+            orderBy=NotImplemented,
+            subscribeReference=NotImplemented):
+        KalturaFilter.__init__(self,
+            orderBy)
+
+        # Subscribe rreference
+        # @var KalturaSubscribeReference
+        self.subscribeReference = subscribeReference
+
+
+    PROPERTY_LOADERS = {
+        'subscribeReference': (KalturaObjectFactory.create, 'KalturaSubscribeReference'), 
+    }
+
+    def fromXml(self, node):
+        KalturaFilter.fromXml(self, node)
+        self.fromXmlImpl(node, KalturaTopicNotificationFilter.PROPERTY_LOADERS)
+
+    def toParams(self):
+        kparams = KalturaFilter.toParams(self)
+        kparams.put("objectType", "KalturaTopicNotificationFilter")
+        kparams.addObjectIfDefined("subscribeReference", self.subscribeReference)
+        return kparams
+
+    def getSubscribeReference(self):
+        return self.subscribeReference
+
+    def setSubscribeReference(self, newSubscribeReference):
+        self.subscribeReference = newSubscribeReference
+
+
+# @package Kaltura
+# @subpackage Client
+class KalturaTopicNotificationMessageFilter(KalturaFilter):
+    def __init__(self,
+            orderBy=NotImplemented,
+            topicNotificationIdEqual=NotImplemented):
+        KalturaFilter.__init__(self,
+            orderBy)
+
+        # Topic notification ID
+        # @var int
+        self.topicNotificationIdEqual = topicNotificationIdEqual
+
+
+    PROPERTY_LOADERS = {
+        'topicNotificationIdEqual': getXmlNodeInt, 
+    }
+
+    def fromXml(self, node):
+        KalturaFilter.fromXml(self, node)
+        self.fromXmlImpl(node, KalturaTopicNotificationMessageFilter.PROPERTY_LOADERS)
+
+    def toParams(self):
+        kparams = KalturaFilter.toParams(self)
+        kparams.put("objectType", "KalturaTopicNotificationMessageFilter")
+        kparams.addIntIfDefined("topicNotificationIdEqual", self.topicNotificationIdEqual)
+        return kparams
+
+    def getTopicNotificationIdEqual(self):
+        return self.topicNotificationIdEqual
+
+    def setTopicNotificationIdEqual(self, newTopicNotificationIdEqual):
+        self.topicNotificationIdEqual = newTopicNotificationIdEqual
 
 
 # @package Kaltura
@@ -36955,6 +37698,128 @@ class KalturaTopicService(KalturaServiceBase):
 
 # @package Kaltura
 # @subpackage Client
+class KalturaTopicNotificationService(KalturaServiceBase):
+    def __init__(self, client = None):
+        KalturaServiceBase.__init__(self, client)
+
+    def add(self, topicNotification):
+        """Add a new topic notification"""
+
+        kparams = KalturaParams()
+        kparams.addObjectIfDefined("topicNotification", topicNotification)
+        self.client.queueServiceActionCall("topicnotification", "add", "KalturaTopicNotification", kparams)
+        if self.client.isMultiRequest():
+            return self.client.getMultiRequestResult()
+        resultNode = self.client.doQueue()
+        return KalturaObjectFactory.create(resultNode, 'KalturaTopicNotification')
+
+    def delete(self, id):
+        """Delete an existing topic notification"""
+
+        kparams = KalturaParams()
+        kparams.addIntIfDefined("id", id);
+        self.client.queueServiceActionCall("topicnotification", "delete", "None", kparams)
+        if self.client.isMultiRequest():
+            return self.client.getMultiRequestResult()
+        resultNode = self.client.doQueue()
+
+    def list(self, filter = NotImplemented):
+        """Lists all topic notifications in the system."""
+
+        kparams = KalturaParams()
+        kparams.addObjectIfDefined("filter", filter)
+        self.client.queueServiceActionCall("topicnotification", "list", "KalturaTopicNotificationListResponse", kparams)
+        if self.client.isMultiRequest():
+            return self.client.getMultiRequestResult()
+        resultNode = self.client.doQueue()
+        return KalturaObjectFactory.create(resultNode, 'KalturaTopicNotificationListResponse')
+
+    def subscribe(self, topicNotificationId):
+        """Subscribe a user to a topic notification"""
+
+        kparams = KalturaParams()
+        kparams.addIntIfDefined("topicNotificationId", topicNotificationId);
+        self.client.queueServiceActionCall("topicnotification", "subscribe", "None", kparams)
+        if self.client.isMultiRequest():
+            return self.client.getMultiRequestResult()
+        resultNode = self.client.doQueue()
+
+    def unsubscribe(self, topicNotificationId):
+        """Unubscribe a user from a topic notification"""
+
+        kparams = KalturaParams()
+        kparams.addIntIfDefined("topicNotificationId", topicNotificationId);
+        self.client.queueServiceActionCall("topicnotification", "unsubscribe", "None", kparams)
+        if self.client.isMultiRequest():
+            return self.client.getMultiRequestResult()
+        resultNode = self.client.doQueue()
+
+    def update(self, id, topicNotification):
+        """Update an existing topic notification"""
+
+        kparams = KalturaParams()
+        kparams.addIntIfDefined("id", id);
+        kparams.addObjectIfDefined("topicNotification", topicNotification)
+        self.client.queueServiceActionCall("topicnotification", "update", "KalturaTopicNotification", kparams)
+        if self.client.isMultiRequest():
+            return self.client.getMultiRequestResult()
+        resultNode = self.client.doQueue()
+        return KalturaObjectFactory.create(resultNode, 'KalturaTopicNotification')
+
+
+# @package Kaltura
+# @subpackage Client
+class KalturaTopicNotificationMessageService(KalturaServiceBase):
+    def __init__(self, client = None):
+        KalturaServiceBase.__init__(self, client)
+
+    def add(self, topicNotificationMessage):
+        """Add a new topic notification message"""
+
+        kparams = KalturaParams()
+        kparams.addObjectIfDefined("topicNotificationMessage", topicNotificationMessage)
+        self.client.queueServiceActionCall("topicnotificationmessage", "add", "KalturaTopicNotificationMessage", kparams)
+        if self.client.isMultiRequest():
+            return self.client.getMultiRequestResult()
+        resultNode = self.client.doQueue()
+        return KalturaObjectFactory.create(resultNode, 'KalturaTopicNotificationMessage')
+
+    def delete(self, id):
+        """Delete an existing topic notification message"""
+
+        kparams = KalturaParams()
+        kparams.addIntIfDefined("id", id);
+        self.client.queueServiceActionCall("topicnotificationmessage", "delete", "None", kparams)
+        if self.client.isMultiRequest():
+            return self.client.getMultiRequestResult()
+        resultNode = self.client.doQueue()
+
+    def list(self, filter = NotImplemented):
+        """Lists all topic notifications in the system."""
+
+        kparams = KalturaParams()
+        kparams.addObjectIfDefined("filter", filter)
+        self.client.queueServiceActionCall("topicnotificationmessage", "list", "KalturaTopicNotificationMessageListResponse", kparams)
+        if self.client.isMultiRequest():
+            return self.client.getMultiRequestResult()
+        resultNode = self.client.doQueue()
+        return KalturaObjectFactory.create(resultNode, 'KalturaTopicNotificationMessageListResponse')
+
+    def update(self, id, topicNotificationMessage):
+        """Update an existing topic notification message"""
+
+        kparams = KalturaParams()
+        kparams.addIntIfDefined("id", id);
+        kparams.addObjectIfDefined("topicNotificationMessage", topicNotificationMessage)
+        self.client.queueServiceActionCall("topicnotificationmessage", "update", "KalturaTopicNotificationMessage", kparams)
+        if self.client.isMultiRequest():
+            return self.client.getMultiRequestResult()
+        resultNode = self.client.doQueue()
+        return KalturaObjectFactory.create(resultNode, 'KalturaTopicNotificationMessage')
+
+
+# @package Kaltura
+# @subpackage Client
 class KalturaTransactionService(KalturaServiceBase):
     def __init__(self, client = None):
         KalturaServiceBase.__init__(self, client)
@@ -37498,6 +38363,8 @@ class KalturaCoreClient(KalturaClientPlugin):
             'tag': KalturaTagService,
             'timeShiftedTvPartnerSettings': KalturaTimeShiftedTvPartnerSettingsService,
             'topic': KalturaTopicService,
+            'topicNotification': KalturaTopicNotificationService,
+            'topicNotificationMessage': KalturaTopicNotificationMessageService,
             'transaction': KalturaTransactionService,
             'transactionHistory': KalturaTransactionHistoryService,
             'tvmRule': KalturaTvmRuleService,
@@ -37524,6 +38391,8 @@ class KalturaCoreClient(KalturaClientPlugin):
             'KalturaAssetFilePpvOrderBy': KalturaAssetFilePpvOrderBy,
             'KalturaAssetHistoryOrderBy': KalturaAssetHistoryOrderBy,
             'KalturaAssetInheritancePolicy': KalturaAssetInheritancePolicy,
+            'KalturaAssetLifeCycleRuleActionType': KalturaAssetLifeCycleRuleActionType,
+            'KalturaAssetLifeCycleRuleTransitionType': KalturaAssetLifeCycleRuleTransitionType,
             'KalturaAssetOrderBy': KalturaAssetOrderBy,
             'KalturaAssetReferenceType': KalturaAssetReferenceType,
             'KalturaAssetReminderOrderBy': KalturaAssetReminderOrderBy,
@@ -37660,9 +38529,12 @@ class KalturaCoreClient(KalturaClientPlugin):
             'KalturaSubscriptionOrderBy': KalturaSubscriptionOrderBy,
             'KalturaSubscriptionSetOrderBy': KalturaSubscriptionSetOrderBy,
             'KalturaSubscriptionSetType': KalturaSubscriptionSetType,
+            'KalturaSubscriptionTriggerType': KalturaSubscriptionTriggerType,
             'KalturaTagOrderBy': KalturaTagOrderBy,
             'KalturaTimeShiftedTvState': KalturaTimeShiftedTvState,
             'KalturaTopicAutomaticIssueNotification': KalturaTopicAutomaticIssueNotification,
+            'KalturaTopicNotificationMessageOrderBy': KalturaTopicNotificationMessageOrderBy,
+            'KalturaTopicNotificationOrderBy': KalturaTopicNotificationOrderBy,
             'KalturaTopicOrderBy': KalturaTopicOrderBy,
             'KalturaTransactionAdapterStatus': KalturaTransactionAdapterStatus,
             'KalturaTransactionHistoryOrderBy': KalturaTransactionHistoryOrderBy,
@@ -37845,6 +38717,18 @@ class KalturaCoreClient(KalturaClientPlugin):
             'KalturaGeneralPartnerConfig': KalturaGeneralPartnerConfig,
             'KalturaConcurrencyPartnerConfig': KalturaConcurrencyPartnerConfig,
             'KalturaBillingPartnerConfig': KalturaBillingPartnerConfig,
+            'KalturaSubscribeReference': KalturaSubscribeReference,
+            'KalturaTopicNotification': KalturaTopicNotification,
+            'KalturaTopicNotificationListResponse': KalturaTopicNotificationListResponse,
+            'KalturaSubscriptionSubscribeReference': KalturaSubscriptionSubscribeReference,
+            'KalturaTrigger': KalturaTrigger,
+            'KalturaDispatcher': KalturaDispatcher,
+            'KalturaTopicNotificationMessage': KalturaTopicNotificationMessage,
+            'KalturaTopicNotificationMessageListResponse': KalturaTopicNotificationMessageListResponse,
+            'KalturaDateTrigger': KalturaDateTrigger,
+            'KalturaSubscriptionTrigger': KalturaSubscriptionTrigger,
+            'KalturaSmsDispatcher': KalturaSmsDispatcher,
+            'KalturaMailDispatcher': KalturaMailDispatcher,
             'KalturaT': KalturaT,
             'KalturaGenericListResponse': KalturaGenericListResponse,
             'KalturaIntegerValueListResponse': KalturaIntegerValueListResponse,
@@ -37942,6 +38826,9 @@ class KalturaCoreClient(KalturaClientPlugin):
             'KalturaAllowPlaybackAction': KalturaAllowPlaybackAction,
             'KalturaBlockPlaybackAction': KalturaBlockPlaybackAction,
             'KalturaApplyPlaybackAdapterAction': KalturaApplyPlaybackAdapterAction,
+            'KalturaAssetLifeCycleTransitionAction': KalturaAssetLifeCycleTransitionAction,
+            'KalturaAssetLifeCycleTagTransitionAction': KalturaAssetLifeCycleTagTransitionAction,
+            'KalturaAssetLifeCycleBuisnessModuleTransitionAction': KalturaAssetLifeCycleBuisnessModuleTransitionAction,
             'KalturaAssetUserRuleAction': KalturaAssetUserRuleAction,
             'KalturaAssetUserRuleBlockAction': KalturaAssetUserRuleBlockAction,
             'KalturaAssetUserRuleFilterAction': KalturaAssetUserRuleFilterAction,
@@ -38037,6 +38924,8 @@ class KalturaCoreClient(KalturaClientPlugin):
             'KalturaSubscriptionDependencySetFilter': KalturaSubscriptionDependencySetFilter,
             'KalturaSubscriptionFilter': KalturaSubscriptionFilter,
             'KalturaPartnerConfigurationFilter': KalturaPartnerConfigurationFilter,
+            'KalturaTopicNotificationFilter': KalturaTopicNotificationFilter,
+            'KalturaTopicNotificationMessageFilter': KalturaTopicNotificationMessageFilter,
             'KalturaAggregationCountFilter': KalturaAggregationCountFilter,
             'KalturaPersistedFilter': KalturaPersistedFilter,
             'KalturaAssetFilter': KalturaAssetFilter,
