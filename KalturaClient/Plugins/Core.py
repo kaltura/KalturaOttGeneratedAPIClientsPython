@@ -42,7 +42,7 @@ from ..Base import (
     KalturaServiceBase,
 )
 
-API_VERSION = '5.2.0.43029'
+API_VERSION = '5.2.0.43014'
 
 ########## enums ##########
 # @package Kaltura
@@ -13099,6 +13099,7 @@ class KalturaTopicNotificationMessage(KalturaObjectBase):
     def __init__(self,
             id=NotImplemented,
             message=NotImplemented,
+            imageUrl=NotImplemented,
             topicNotificationId=NotImplemented,
             trigger=NotImplemented,
             dispatchers=NotImplemented):
@@ -13112,6 +13113,10 @@ class KalturaTopicNotificationMessage(KalturaObjectBase):
         # Topic notification message
         # @var string
         self.message = message
+
+        # Topic notification message image URL
+        # @var string
+        self.imageUrl = imageUrl
 
         # Topic notification ID
         # @var int
@@ -13129,6 +13134,7 @@ class KalturaTopicNotificationMessage(KalturaObjectBase):
     PROPERTY_LOADERS = {
         'id': getXmlNodeInt, 
         'message': getXmlNodeText, 
+        'imageUrl': getXmlNodeText, 
         'topicNotificationId': getXmlNodeInt, 
         'trigger': (KalturaObjectFactory.create, 'KalturaTrigger'), 
         'dispatchers': (KalturaObjectFactory.createArray, 'KalturaDispatcher'), 
@@ -13142,6 +13148,7 @@ class KalturaTopicNotificationMessage(KalturaObjectBase):
         kparams = KalturaObjectBase.toParams(self)
         kparams.put("objectType", "KalturaTopicNotificationMessage")
         kparams.addStringIfDefined("message", self.message)
+        kparams.addStringIfDefined("imageUrl", self.imageUrl)
         kparams.addIntIfDefined("topicNotificationId", self.topicNotificationId)
         kparams.addObjectIfDefined("trigger", self.trigger)
         kparams.addArrayIfDefined("dispatchers", self.dispatchers)
@@ -13155,6 +13162,12 @@ class KalturaTopicNotificationMessage(KalturaObjectBase):
 
     def setMessage(self, newMessage):
         self.message = newMessage
+
+    def getImageUrl(self):
+        return self.imageUrl
+
+    def setImageUrl(self, newImageUrl):
+        self.imageUrl = newImageUrl
 
     def getTopicNotificationId(self):
         return self.topicNotificationId
@@ -18643,7 +18656,8 @@ class KalturaRule(KalturaObjectBase):
     def __init__(self,
             id=NotImplemented,
             name=NotImplemented,
-            description=NotImplemented):
+            description=NotImplemented,
+            label=NotImplemented):
         KalturaObjectBase.__init__(self)
 
         # ID
@@ -18659,11 +18673,16 @@ class KalturaRule(KalturaObjectBase):
         # @var string
         self.description = description
 
+        # Label
+        # @var string
+        self.label = label
+
 
     PROPERTY_LOADERS = {
         'id': getXmlNodeInt, 
         'name': getXmlNodeText, 
         'description': getXmlNodeText, 
+        'label': getXmlNodeText, 
     }
 
     def fromXml(self, node):
@@ -18675,6 +18694,7 @@ class KalturaRule(KalturaObjectBase):
         kparams.put("objectType", "KalturaRule")
         kparams.addStringIfDefined("name", self.name)
         kparams.addStringIfDefined("description", self.description)
+        kparams.addStringIfDefined("label", self.label)
         return kparams
 
     def getId(self):
@@ -18692,6 +18712,12 @@ class KalturaRule(KalturaObjectBase):
     def setDescription(self, newDescription):
         self.description = newDescription
 
+    def getLabel(self):
+        return self.label
+
+    def setLabel(self, newLabel):
+        self.label = newLabel
+
 
 # @package Kaltura
 # @subpackage Client
@@ -18702,12 +18728,14 @@ class KalturaTvmRule(KalturaRule):
             id=NotImplemented,
             name=NotImplemented,
             description=NotImplemented,
+            label=NotImplemented,
             createDate=NotImplemented,
             ruleType=NotImplemented):
         KalturaRule.__init__(self,
             id,
             name,
-            description)
+            description,
+            label)
 
         # Specifies when was the tvm rule was created. Date and time represented as epoch.
         # @var int
@@ -18785,6 +18813,7 @@ class KalturaTvmDeviceRule(KalturaTvmRule):
             id=NotImplemented,
             name=NotImplemented,
             description=NotImplemented,
+            label=NotImplemented,
             createDate=NotImplemented,
             ruleType=NotImplemented,
             deviceBrandIds=NotImplemented):
@@ -18792,6 +18821,7 @@ class KalturaTvmDeviceRule(KalturaTvmRule):
             id,
             name,
             description,
+            label,
             createDate,
             ruleType)
 
@@ -18830,6 +18860,7 @@ class KalturaTvmGeoRule(KalturaTvmRule):
             id=NotImplemented,
             name=NotImplemented,
             description=NotImplemented,
+            label=NotImplemented,
             createDate=NotImplemented,
             ruleType=NotImplemented,
             onlyOrBut=NotImplemented,
@@ -18842,6 +18873,7 @@ class KalturaTvmGeoRule(KalturaTvmRule):
             id,
             name,
             description,
+            label,
             createDate,
             ruleType)
 
@@ -19065,6 +19097,7 @@ class KalturaBusinessModuleRule(KalturaRule):
             id=NotImplemented,
             name=NotImplemented,
             description=NotImplemented,
+            label=NotImplemented,
             conditions=NotImplemented,
             actions=NotImplemented,
             createDate=NotImplemented,
@@ -19072,7 +19105,8 @@ class KalturaBusinessModuleRule(KalturaRule):
         KalturaRule.__init__(self,
             id,
             name,
-            description)
+            description,
+            label)
 
         # List of conditions for the rule
         # @var array of KalturaCondition
@@ -20073,11 +20107,13 @@ class KalturaAssetRuleBase(KalturaRule):
     def __init__(self,
             id=NotImplemented,
             name=NotImplemented,
-            description=NotImplemented):
+            description=NotImplemented,
+            label=NotImplemented):
         KalturaRule.__init__(self,
             id,
             name,
-            description)
+            description,
+            label)
 
 
     PROPERTY_LOADERS = {
@@ -20102,12 +20138,14 @@ class KalturaAssetUserRule(KalturaAssetRuleBase):
             id=NotImplemented,
             name=NotImplemented,
             description=NotImplemented,
+            label=NotImplemented,
             conditions=NotImplemented,
             actions=NotImplemented):
         KalturaAssetRuleBase.__init__(self,
             id,
             name,
-            description)
+            description,
+            label)
 
         # List of Ksql conditions for the user rule
         # @var array of KalturaAssetCondition
@@ -20156,13 +20194,15 @@ class KalturaAssetRule(KalturaAssetRuleBase):
             id=NotImplemented,
             name=NotImplemented,
             description=NotImplemented,
+            label=NotImplemented,
             conditions=NotImplemented,
             actions=NotImplemented,
             status=NotImplemented):
         KalturaAssetRuleBase.__init__(self,
             id,
             name,
-            description)
+            description,
+            label)
 
         # List of conditions for the rule
         # @var array of KalturaCondition
@@ -26689,7 +26729,8 @@ class KalturaTagFilter(KalturaFilter):
             tagEqual=NotImplemented,
             tagStartsWith=NotImplemented,
             typeEqual=NotImplemented,
-            languageEqual=NotImplemented):
+            languageEqual=NotImplemented,
+            idIn=NotImplemented):
         KalturaFilter.__init__(self,
             orderBy)
 
@@ -26709,12 +26750,17 @@ class KalturaTagFilter(KalturaFilter):
         # @var string
         self.languageEqual = languageEqual
 
+        # Comma separated identifiers
+        # @var string
+        self.idIn = idIn
+
 
     PROPERTY_LOADERS = {
         'tagEqual': getXmlNodeText, 
         'tagStartsWith': getXmlNodeText, 
         'typeEqual': getXmlNodeInt, 
         'languageEqual': getXmlNodeText, 
+        'idIn': getXmlNodeText, 
     }
 
     def fromXml(self, node):
@@ -26728,6 +26774,7 @@ class KalturaTagFilter(KalturaFilter):
         kparams.addStringIfDefined("tagStartsWith", self.tagStartsWith)
         kparams.addIntIfDefined("typeEqual", self.typeEqual)
         kparams.addStringIfDefined("languageEqual", self.languageEqual)
+        kparams.addStringIfDefined("idIn", self.idIn)
         return kparams
 
     def getTagEqual(self):
@@ -26753,6 +26800,12 @@ class KalturaTagFilter(KalturaFilter):
 
     def setLanguageEqual(self, newLanguageEqual):
         self.languageEqual = newLanguageEqual
+
+    def getIdIn(self):
+        return self.idIn
+
+    def setIdIn(self, newIdIn):
+        self.idIn = newIdIn
 
 
 # @package Kaltura
