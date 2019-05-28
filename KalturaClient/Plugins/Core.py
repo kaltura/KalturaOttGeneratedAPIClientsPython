@@ -42,7 +42,7 @@ from ..Base import (
     KalturaServiceBase,
 )
 
-API_VERSION = '5.2.0.43014'
+API_VERSION = '5.2.0.43007'
 
 ########## enums ##########
 # @package Kaltura
@@ -37847,11 +37847,12 @@ class KalturaTopicNotificationMessageService(KalturaServiceBase):
             return self.client.getMultiRequestResult()
         resultNode = self.client.doQueue()
 
-    def list(self, filter = NotImplemented):
+    def list(self, filter = NotImplemented, pager = NotImplemented):
         """Lists all topic notifications in the system."""
 
         kparams = KalturaParams()
         kparams.addObjectIfDefined("filter", filter)
+        kparams.addObjectIfDefined("pager", pager)
         self.client.queueServiceActionCall("topicnotificationmessage", "list", "KalturaTopicNotificationMessageListResponse", kparams)
         if self.client.isMultiRequest():
             return self.client.getMultiRequestResult()
