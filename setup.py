@@ -1,8 +1,12 @@
 from setuptools import setup
+from os import path
+this_directory = path.abspath(path.dirname(__file__))
+with open(path.join(this_directory, 'README.txt')) as f:
+        long_description = f.read()
 
 setup(
     name='KalturaOttApiClient',
-    version='5.2.0.43007',
+    version='5.2.0.43014',
     url='https://github.com/kaltura/KalturaOttGeneratedAPIClientsPython',
     packages=['KalturaClient', 'KalturaClient.Plugins'],
     install_requires=['requests>=2.4.2', 'requests-toolbelt', 'six'],
@@ -23,5 +27,6 @@ setup(
     ],
     keywords='Kaltura OTT API client',
     description='A Python module for accessing the Kaltura OTT API.',
-    long_description=open('README.txt').read(),
+    long_description=long_description,
+    long_description_content_type="text/plain"
 )
