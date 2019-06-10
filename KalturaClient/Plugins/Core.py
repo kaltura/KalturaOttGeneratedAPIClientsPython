@@ -42,7 +42,7 @@ from ..Base import (
     KalturaServiceBase,
 )
 
-API_VERSION = '5.2.0.16354'
+API_VERSION = '5.2.3.28518'
 
 ########## enums ##########
 # @package Kaltura
@@ -13102,7 +13102,8 @@ class KalturaTopicNotificationMessage(KalturaObjectBase):
             imageUrl=NotImplemented,
             topicNotificationId=NotImplemented,
             trigger=NotImplemented,
-            dispatchers=NotImplemented):
+            dispatchers=NotImplemented,
+            status=NotImplemented):
         KalturaObjectBase.__init__(self)
 
         # Topic notification message ID
@@ -13130,6 +13131,11 @@ class KalturaTopicNotificationMessage(KalturaObjectBase):
         # @var array of KalturaDispatcher
         self.dispatchers = dispatchers
 
+        # Message status
+        # @var KalturaAnnouncementStatus
+        # @readonly
+        self.status = status
+
 
     PROPERTY_LOADERS = {
         'id': getXmlNodeInt, 
@@ -13138,6 +13144,7 @@ class KalturaTopicNotificationMessage(KalturaObjectBase):
         'topicNotificationId': getXmlNodeInt, 
         'trigger': (KalturaObjectFactory.create, 'KalturaTrigger'), 
         'dispatchers': (KalturaObjectFactory.createArray, 'KalturaDispatcher'), 
+        'status': (KalturaEnumsFactory.createString, "KalturaAnnouncementStatus"), 
     }
 
     def fromXml(self, node):
@@ -13186,6 +13193,9 @@ class KalturaTopicNotificationMessage(KalturaObjectBase):
 
     def setDispatchers(self, newDispatchers):
         self.dispatchers = newDispatchers
+
+    def getStatus(self):
+        return self.status
 
 
 # @package Kaltura
@@ -27206,7 +27216,8 @@ class KalturaAssetRuleFilter(KalturaFilter):
             orderBy=NotImplemented,
             conditionsContainType=NotImplemented,
             assetApplied=NotImplemented,
-            actionsContainType=NotImplemented):
+            actionsContainType=NotImplemented,
+            assetRuleIdEqual=NotImplemented):
         KalturaFilter.__init__(self,
             orderBy)
 
@@ -27223,11 +27234,16 @@ class KalturaAssetRuleFilter(KalturaFilter):
         # @var KalturaRuleActionType
         self.actionsContainType = actionsContainType
 
+        # Asset rule id
+        # @var int
+        self.assetRuleIdEqual = assetRuleIdEqual
+
 
     PROPERTY_LOADERS = {
         'conditionsContainType': (KalturaEnumsFactory.createString, "KalturaRuleConditionType"), 
         'assetApplied': (KalturaObjectFactory.create, 'KalturaSlimAsset'), 
         'actionsContainType': (KalturaEnumsFactory.createString, "KalturaRuleActionType"), 
+        'assetRuleIdEqual': getXmlNodeInt, 
     }
 
     def fromXml(self, node):
@@ -27240,6 +27256,7 @@ class KalturaAssetRuleFilter(KalturaFilter):
         kparams.addStringEnumIfDefined("conditionsContainType", self.conditionsContainType)
         kparams.addObjectIfDefined("assetApplied", self.assetApplied)
         kparams.addStringEnumIfDefined("actionsContainType", self.actionsContainType)
+        kparams.addIntIfDefined("assetRuleIdEqual", self.assetRuleIdEqual)
         return kparams
 
     def getConditionsContainType(self):
@@ -27259,6 +27276,12 @@ class KalturaAssetRuleFilter(KalturaFilter):
 
     def setActionsContainType(self, newActionsContainType):
         self.actionsContainType = newActionsContainType
+
+    def getAssetRuleIdEqual(self):
+        return self.assetRuleIdEqual
+
+    def setAssetRuleIdEqual(self, newAssetRuleIdEqual):
+        self.assetRuleIdEqual = newAssetRuleIdEqual
 
 
 # @package Kaltura
@@ -37776,7 +37799,7 @@ class KalturaTopicNotificationService(KalturaServiceBase):
             return self.client.getMultiRequestResult()
         resultNode = self.client.doQueue()
 
-    def list(self, filter = NotImplemented):
+    def list(self, filter):
         """Lists all topic notifications in the system."""
 
         kparams = KalturaParams()
