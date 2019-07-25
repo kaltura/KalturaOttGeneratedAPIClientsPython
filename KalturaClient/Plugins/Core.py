@@ -26404,7 +26404,7 @@ class KalturaHouseholdUserFilter(KalturaFilter):
 
 # @package Kaltura
 # @subpackage Client
-class KalturaHouseoldCouponCodeFilter(KalturaRelatedObjectFilter):
+class KalturaHouseholdCouponCodeFilter(KalturaRelatedObjectFilter):
     """Kaltura Houseold CouponCode Filter"""
 
     def __init__(self,
@@ -26418,11 +26418,11 @@ class KalturaHouseoldCouponCodeFilter(KalturaRelatedObjectFilter):
 
     def fromXml(self, node):
         KalturaRelatedObjectFilter.fromXml(self, node)
-        self.fromXmlImpl(node, KalturaHouseoldCouponCodeFilter.PROPERTY_LOADERS)
+        self.fromXmlImpl(node, KalturaHouseholdCouponCodeFilter.PROPERTY_LOADERS)
 
     def toParams(self):
         kparams = KalturaRelatedObjectFilter.toParams(self)
-        kparams.put("objectType", "KalturaHouseoldCouponCodeFilter")
+        kparams.put("objectType", "KalturaHouseholdCouponCodeFilter")
         return kparams
 
 
@@ -39771,7 +39771,7 @@ class KalturaCoreClient(KalturaClientPlugin):
             'KalturaDeviceReportFilter': KalturaDeviceReportFilter,
             'KalturaHouseholdDeviceFilter': KalturaHouseholdDeviceFilter,
             'KalturaHouseholdUserFilter': KalturaHouseholdUserFilter,
-            'KalturaHouseoldCouponCodeFilter': KalturaHouseoldCouponCodeFilter,
+            'KalturaHouseholdCouponCodeFilter': KalturaHouseholdCouponCodeFilter,
             'KalturaConfigurationGroupDeviceFilter': KalturaConfigurationGroupDeviceFilter,
             'KalturaConfigurationGroupTagFilter': KalturaConfigurationGroupTagFilter,
             'KalturaConfigurationsFilter': KalturaConfigurationsFilter,
