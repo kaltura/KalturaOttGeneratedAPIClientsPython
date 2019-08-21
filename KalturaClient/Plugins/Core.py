@@ -42,7 +42,7 @@ from ..Base import (
     KalturaServiceBase,
 )
 
-API_VERSION = '5.2.6.13438'
+API_VERSION = '5.2.5.13401'
 
 ########## enums ##########
 # @package Kaltura
@@ -6910,9 +6910,7 @@ class KalturaOTTUser(KalturaBaseOTTUser):
             userState=NotImplemented,
             roleIds=NotImplemented,
             createDate=NotImplemented,
-            updateDate=NotImplemented,
-            lastLoginDate=NotImplemented,
-            failedLoginCount=NotImplemented):
+            updateDate=NotImplemented):
         KalturaBaseOTTUser.__init__(self,
             id,
             username,
@@ -6994,16 +6992,6 @@ class KalturaOTTUser(KalturaBaseOTTUser):
         # @readonly
         self.updateDate = updateDate
 
-        # The date of the last successful login
-        # @var int
-        # @readonly
-        self.lastLoginDate = lastLoginDate
-
-        # The number of failed login attempts since the last successful login
-        # @var int
-        # @readonly
-        self.failedLoginCount = failedLoginCount
-
 
     PROPERTY_LOADERS = {
         'householdId': getXmlNodeInt, 
@@ -7023,8 +7011,6 @@ class KalturaOTTUser(KalturaBaseOTTUser):
         'roleIds': getXmlNodeText, 
         'createDate': getXmlNodeInt, 
         'updateDate': getXmlNodeInt, 
-        'lastLoginDate': getXmlNodeInt, 
-        'failedLoginCount': getXmlNodeInt, 
     }
 
     def fromXml(self, node):
@@ -7130,12 +7116,6 @@ class KalturaOTTUser(KalturaBaseOTTUser):
 
     def getUpdateDate(self):
         return self.updateDate
-
-    def getLastLoginDate(self):
-        return self.lastLoginDate
-
-    def getFailedLoginCount(self):
-        return self.failedLoginCount
 
 
 # @package Kaltura
@@ -26522,8 +26502,7 @@ class KalturaIngestProfile(KalturaObjectBase):
             transformationAdapterSettings=NotImplemented,
             transformationAdapterSharedSecret=NotImplemented,
             defaultAutoFillPolicy=NotImplemented,
-            defaultOverlapPolicy=NotImplemented,
-            overlapChannels=NotImplemented):
+            defaultOverlapPolicy=NotImplemented):
         KalturaObjectBase.__init__(self)
 
         # Ingest profile identifier
@@ -26563,10 +26542,6 @@ class KalturaIngestProfile(KalturaObjectBase):
         # @var KalturaIngestProfileOverlapPolicy
         self.defaultOverlapPolicy = defaultOverlapPolicy
 
-        # Ingest profile overlap channels
-        # @var string
-        self.overlapChannels = overlapChannels
-
 
     PROPERTY_LOADERS = {
         'id': getXmlNodeInt, 
@@ -26578,7 +26553,6 @@ class KalturaIngestProfile(KalturaObjectBase):
         'transformationAdapterSharedSecret': getXmlNodeText, 
         'defaultAutoFillPolicy': (KalturaEnumsFactory.createString, "KalturaIngestProfileAutofillPolicy"), 
         'defaultOverlapPolicy': (KalturaEnumsFactory.createString, "KalturaIngestProfileOverlapPolicy"), 
-        'overlapChannels': getXmlNodeText, 
     }
 
     def fromXml(self, node):
@@ -26596,7 +26570,6 @@ class KalturaIngestProfile(KalturaObjectBase):
         kparams.addStringIfDefined("transformationAdapterSharedSecret", self.transformationAdapterSharedSecret)
         kparams.addStringEnumIfDefined("defaultAutoFillPolicy", self.defaultAutoFillPolicy)
         kparams.addStringEnumIfDefined("defaultOverlapPolicy", self.defaultOverlapPolicy)
-        kparams.addStringIfDefined("overlapChannels", self.overlapChannels)
         return kparams
 
     def getId(self):
@@ -26649,12 +26622,6 @@ class KalturaIngestProfile(KalturaObjectBase):
 
     def setDefaultOverlapPolicy(self, newDefaultOverlapPolicy):
         self.defaultOverlapPolicy = newDefaultOverlapPolicy
-
-    def getOverlapChannels(self):
-        return self.overlapChannels
-
-    def setOverlapChannels(self, newOverlapChannels):
-        self.overlapChannels = newOverlapChannels
 
 
 # @package Kaltura
