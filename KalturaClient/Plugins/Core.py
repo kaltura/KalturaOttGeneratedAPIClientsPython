@@ -42,7 +42,7 @@ from ..Base import (
     KalturaServiceBase,
 )
 
-API_VERSION = '5.2.3.19642'
+API_VERSION = '5.2.3.5598'
 
 ########## enums ##########
 # @package Kaltura
@@ -160,19 +160,6 @@ class KalturaAssetFilePpvOrderBy(object):
 # @subpackage Client
 class KalturaAssetHistoryOrderBy(object):
     NONE = "NONE"
-
-    def __init__(self, value):
-        self.value = value
-
-    def getValue(self):
-        return self.value
-
-# @package Kaltura
-# @subpackage Client
-class KalturaAssetIndexStatus(object):
-    OK = "Ok"
-    DELETED = "Deleted"
-    NOTUPDATED = "NotUpdated"
 
     def __init__(self, value):
         self.value = value
@@ -16597,8 +16584,7 @@ class KalturaAsset(KalturaObjectBase):
             endDate=NotImplemented,
             createDate=NotImplemented,
             updateDate=NotImplemented,
-            externalId=NotImplemented,
-            indexStatus=NotImplemented):
+            externalId=NotImplemented):
         KalturaObjectBase.__init__(self)
 
         # Unique identifier for the asset
@@ -16674,11 +16660,6 @@ class KalturaAsset(KalturaObjectBase):
         # @var string
         self.externalId = externalId
 
-        # The media asset index status
-        # @var KalturaAssetIndexStatus
-        # @readonly
-        self.indexStatus = indexStatus
-
 
     PROPERTY_LOADERS = {
         'id': getXmlNodeInt, 
@@ -16697,7 +16678,6 @@ class KalturaAsset(KalturaObjectBase):
         'createDate': getXmlNodeInt, 
         'updateDate': getXmlNodeInt, 
         'externalId': getXmlNodeText, 
-        'indexStatus': (KalturaEnumsFactory.createString, "KalturaAssetIndexStatus"), 
     }
 
     def fromXml(self, node):
@@ -16793,9 +16773,6 @@ class KalturaAsset(KalturaObjectBase):
     def setExternalId(self, newExternalId):
         self.externalId = newExternalId
 
-    def getIndexStatus(self):
-        return self.indexStatus
-
 
 # @package Kaltura
 # @subpackage Client
@@ -16856,7 +16833,6 @@ class KalturaMediaAsset(KalturaAsset):
             createDate=NotImplemented,
             updateDate=NotImplemented,
             externalId=NotImplemented,
-            indexStatus=NotImplemented,
             externalIds=NotImplemented,
             entryId=NotImplemented,
             deviceRuleId=NotImplemented,
@@ -16879,8 +16855,7 @@ class KalturaMediaAsset(KalturaAsset):
             endDate,
             createDate,
             updateDate,
-            externalId,
-            indexStatus)
+            externalId)
 
         # External identifiers
         # @var string
@@ -16990,7 +16965,6 @@ class KalturaLiveAsset(KalturaMediaAsset):
             createDate=NotImplemented,
             updateDate=NotImplemented,
             externalId=NotImplemented,
-            indexStatus=NotImplemented,
             externalIds=NotImplemented,
             entryId=NotImplemented,
             deviceRuleId=NotImplemented,
@@ -17031,7 +17005,6 @@ class KalturaLiveAsset(KalturaMediaAsset):
             createDate,
             updateDate,
             externalId,
-            indexStatus,
             externalIds,
             entryId,
             deviceRuleId,
@@ -17258,7 +17231,6 @@ class KalturaProgramAsset(KalturaAsset):
             createDate=NotImplemented,
             updateDate=NotImplemented,
             externalId=NotImplemented,
-            indexStatus=NotImplemented,
             epgChannelId=NotImplemented,
             epgId=NotImplemented,
             relatedMediaId=NotImplemented,
@@ -17284,8 +17256,7 @@ class KalturaProgramAsset(KalturaAsset):
             endDate,
             createDate,
             updateDate,
-            externalId,
-            indexStatus)
+            externalId)
 
         # EPG channel identifier
         # @var int
@@ -17426,7 +17397,6 @@ class KalturaRecordingAsset(KalturaProgramAsset):
             createDate=NotImplemented,
             updateDate=NotImplemented,
             externalId=NotImplemented,
-            indexStatus=NotImplemented,
             epgChannelId=NotImplemented,
             epgId=NotImplemented,
             relatedMediaId=NotImplemented,
@@ -17455,7 +17425,6 @@ class KalturaRecordingAsset(KalturaProgramAsset):
             createDate,
             updateDate,
             externalId,
-            indexStatus,
             epgChannelId,
             epgId,
             relatedMediaId,
@@ -19118,43 +19087,6 @@ class KalturaBusinessModuleRuleAction(KalturaRuleAction):
 
 # @package Kaltura
 # @subpackage Client
-class KalturaApplyDiscountModuleAction(KalturaBusinessModuleRuleAction):
-    def __init__(self,
-            type=NotImplemented,
-            description=NotImplemented,
-            discountModuleId=NotImplemented):
-        KalturaBusinessModuleRuleAction.__init__(self,
-            type,
-            description)
-
-        # Discount module ID
-        # @var int
-        self.discountModuleId = discountModuleId
-
-
-    PROPERTY_LOADERS = {
-        'discountModuleId': getXmlNodeInt, 
-    }
-
-    def fromXml(self, node):
-        KalturaBusinessModuleRuleAction.fromXml(self, node)
-        self.fromXmlImpl(node, KalturaApplyDiscountModuleAction.PROPERTY_LOADERS)
-
-    def toParams(self):
-        kparams = KalturaBusinessModuleRuleAction.toParams(self)
-        kparams.put("objectType", "KalturaApplyDiscountModuleAction")
-        kparams.addIntIfDefined("discountModuleId", self.discountModuleId)
-        return kparams
-
-    def getDiscountModuleId(self):
-        return self.discountModuleId
-
-    def setDiscountModuleId(self, newDiscountModuleId):
-        self.discountModuleId = newDiscountModuleId
-
-
-# @package Kaltura
-# @subpackage Client
 class KalturaBusinessModuleRule(KalturaRule):
     """Business module rule"""
 
@@ -19178,7 +19110,7 @@ class KalturaBusinessModuleRule(KalturaRule):
         self.conditions = conditions
 
         # List of actions for the rule
-        # @var array of KalturaApplyDiscountModuleAction
+        # @var array of KalturaBusinessModuleRuleAction
         self.actions = actions
 
         # Create date of the rule
@@ -19194,7 +19126,7 @@ class KalturaBusinessModuleRule(KalturaRule):
 
     PROPERTY_LOADERS = {
         'conditions': (KalturaObjectFactory.createArray, 'KalturaCondition'), 
-        'actions': (KalturaObjectFactory.createArray, 'KalturaApplyDiscountModuleAction'), 
+        'actions': (KalturaObjectFactory.createArray, 'KalturaBusinessModuleRuleAction'), 
         'createDate': getXmlNodeInt, 
         'updateDate': getXmlNodeInt, 
     }
@@ -20162,6 +20094,43 @@ class KalturaAssetUserRuleFilterAction(KalturaAssetUserRuleAction):
 
     def setApplyOnChannel(self, newApplyOnChannel):
         self.applyOnChannel = newApplyOnChannel
+
+
+# @package Kaltura
+# @subpackage Client
+class KalturaApplyDiscountModuleAction(KalturaBusinessModuleRuleAction):
+    def __init__(self,
+            type=NotImplemented,
+            description=NotImplemented,
+            discountModuleId=NotImplemented):
+        KalturaBusinessModuleRuleAction.__init__(self,
+            type,
+            description)
+
+        # Discount module ID
+        # @var int
+        self.discountModuleId = discountModuleId
+
+
+    PROPERTY_LOADERS = {
+        'discountModuleId': getXmlNodeInt, 
+    }
+
+    def fromXml(self, node):
+        KalturaBusinessModuleRuleAction.fromXml(self, node)
+        self.fromXmlImpl(node, KalturaApplyDiscountModuleAction.PROPERTY_LOADERS)
+
+    def toParams(self):
+        kparams = KalturaBusinessModuleRuleAction.toParams(self)
+        kparams.put("objectType", "KalturaApplyDiscountModuleAction")
+        kparams.addIntIfDefined("discountModuleId", self.discountModuleId)
+        return kparams
+
+    def getDiscountModuleId(self):
+        return self.discountModuleId
+
+    def setDiscountModuleId(self, newDiscountModuleId):
+        self.discountModuleId = newDiscountModuleId
 
 
 # @package Kaltura
@@ -38535,7 +38504,6 @@ class KalturaCoreClient(KalturaClientPlugin):
             'KalturaAssetCommentOrderBy': KalturaAssetCommentOrderBy,
             'KalturaAssetFilePpvOrderBy': KalturaAssetFilePpvOrderBy,
             'KalturaAssetHistoryOrderBy': KalturaAssetHistoryOrderBy,
-            'KalturaAssetIndexStatus': KalturaAssetIndexStatus,
             'KalturaAssetInheritancePolicy': KalturaAssetInheritancePolicy,
             'KalturaAssetLifeCycleRuleActionType': KalturaAssetLifeCycleRuleActionType,
             'KalturaAssetLifeCycleRuleTransitionType': KalturaAssetLifeCycleRuleTransitionType,
@@ -38953,7 +38921,6 @@ class KalturaCoreClient(KalturaClientPlugin):
             'KalturaCondition': KalturaCondition,
             'KalturaRuleAction': KalturaRuleAction,
             'KalturaBusinessModuleRuleAction': KalturaBusinessModuleRuleAction,
-            'KalturaApplyDiscountModuleAction': KalturaApplyDiscountModuleAction,
             'KalturaBusinessModuleRule': KalturaBusinessModuleRule,
             'KalturaNotCondition': KalturaNotCondition,
             'KalturaOrCondition': KalturaOrCondition,
@@ -38979,6 +38946,7 @@ class KalturaCoreClient(KalturaClientPlugin):
             'KalturaAssetUserRuleAction': KalturaAssetUserRuleAction,
             'KalturaAssetUserRuleBlockAction': KalturaAssetUserRuleBlockAction,
             'KalturaAssetUserRuleFilterAction': KalturaAssetUserRuleFilterAction,
+            'KalturaApplyDiscountModuleAction': KalturaApplyDiscountModuleAction,
             'KalturaAssetRuleBase': KalturaAssetRuleBase,
             'KalturaAssetUserRule': KalturaAssetUserRule,
             'KalturaAssetRule': KalturaAssetRule,
