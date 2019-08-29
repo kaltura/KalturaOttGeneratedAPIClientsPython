@@ -42,7 +42,7 @@ from ..Base import (
     KalturaServiceBase,
 )
 
-API_VERSION = '5.2.2.5494'
+API_VERSION = '5.2.2.5495'
 
 ########## enums ##########
 # @package Kaltura
@@ -1109,6 +1109,7 @@ class KalturaLinearChannelType(object):
     DTT = "DTT"
     OTT = "OTT"
     DTT_AND_OTT = "DTT_AND_OTT"
+    VRM_EXPORT = "VRM_EXPORT"
 
     def __init__(self, value):
         self.value = value
