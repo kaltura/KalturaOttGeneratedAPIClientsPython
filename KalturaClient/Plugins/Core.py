@@ -4644,7 +4644,7 @@ class KalturaEventNotificationFilter(KalturaCrudFilter):
             orderBy=NotImplemented,
             idEqual=NotImplemented,
             objectIdEqual=NotImplemented,
-            objectTypeEqual=NotImplemented):
+            eventObjectTypeEqual=NotImplemented):
         KalturaCrudFilter.__init__(self,
             orderBy)
 
@@ -4658,13 +4658,13 @@ class KalturaEventNotificationFilter(KalturaCrudFilter):
 
         # Indicates which objectType to return by their event notifications.
         # @var string
-        self.objectTypeEqual = objectTypeEqual
+        self.eventObjectTypeEqual = eventObjectTypeEqual
 
 
     PROPERTY_LOADERS = {
         'idEqual': getXmlNodeText, 
         'objectIdEqual': getXmlNodeInt, 
-        'objectTypeEqual': getXmlNodeText, 
+        'eventObjectTypeEqual': getXmlNodeText, 
     }
 
     def fromXml(self, node):
@@ -4676,7 +4676,7 @@ class KalturaEventNotificationFilter(KalturaCrudFilter):
         kparams.put("objectType", "KalturaEventNotificationFilter")
         kparams.addStringIfDefined("idEqual", self.idEqual)
         kparams.addIntIfDefined("objectIdEqual", self.objectIdEqual)
-        kparams.addStringIfDefined("objectTypeEqual", self.objectTypeEqual)
+        kparams.addStringIfDefined("eventObjectTypeEqual", self.eventObjectTypeEqual)
         return kparams
 
     def getIdEqual(self):
@@ -4691,11 +4691,11 @@ class KalturaEventNotificationFilter(KalturaCrudFilter):
     def setObjectIdEqual(self, newObjectIdEqual):
         self.objectIdEqual = newObjectIdEqual
 
-    def getObjectTypeEqual(self):
-        return self.objectTypeEqual
+    def getEventObjectTypeEqual(self):
+        return self.eventObjectTypeEqual
 
-    def setObjectTypeEqual(self, newObjectTypeEqual):
-        self.objectTypeEqual = newObjectTypeEqual
+    def setEventObjectTypeEqual(self, newEventObjectTypeEqual):
+        self.eventObjectTypeEqual = newEventObjectTypeEqual
 
 
 # @package Kaltura
