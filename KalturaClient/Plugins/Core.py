@@ -42,7 +42,7 @@ from ..Base import (
     KalturaServiceBase,
 )
 
-API_VERSION = '5.2.6.13467'
+API_VERSION = '5.2.6.13530'
 
 ########## enums ##########
 # @package Kaltura
@@ -813,6 +813,31 @@ class KalturaEntityReferenceBy(object):
 
 # @package Kaltura
 # @subpackage Client
+class KalturaEventNotificationOrderBy(object):
+    NONE = "NONE"
+
+    def __init__(self, value):
+        self.value = value
+
+    def getValue(self):
+        return self.value
+
+# @package Kaltura
+# @subpackage Client
+class KalturaEventNotificationStatus(object):
+    SENT = "SENT"
+    FAILED = "FAILED"
+    SUCCESS = "SUCCESS"
+    FAILED_TO_SEND = "FAILED_TO_SEND"
+
+    def __init__(self, value):
+        self.value = value
+
+    def getValue(self):
+        return self.value
+
+# @package Kaltura
+# @subpackage Client
 class KalturaEvictionPolicyType(object):
     FIFO = "FIFO"
     LIFO = "LIFO"
@@ -1158,6 +1183,7 @@ class KalturaLinearChannelType(object):
     DTT = "DTT"
     OTT = "OTT"
     DTT_AND_OTT = "DTT_AND_OTT"
+    VRM_EXPORT = "VRM_EXPORT"
 
     def __init__(self, value):
         self.value = value
@@ -4609,6 +4635,67 @@ class KalturaHouseholdCouponFilter(KalturaCrudFilter):
 
     def setBusinessModuleIdEqual(self, newBusinessModuleIdEqual):
         self.businessModuleIdEqual = newBusinessModuleIdEqual
+
+
+# @package Kaltura
+# @subpackage Client
+class KalturaEventNotificationFilter(KalturaCrudFilter):
+    def __init__(self,
+            orderBy=NotImplemented,
+            idEqual=NotImplemented,
+            objectIdEqual=NotImplemented,
+            objectTypeEqual=NotImplemented):
+        KalturaCrudFilter.__init__(self,
+            orderBy)
+
+        # Indicates which event notification to return by their event notifications Id.
+        # @var string
+        self.idEqual = idEqual
+
+        # Indicates which objectId to return by their event notifications.
+        # @var int
+        self.objectIdEqual = objectIdEqual
+
+        # Indicates which objectType to return by their event notifications.
+        # @var string
+        self.objectTypeEqual = objectTypeEqual
+
+
+    PROPERTY_LOADERS = {
+        'idEqual': getXmlNodeText, 
+        'objectIdEqual': getXmlNodeInt, 
+        'objectTypeEqual': getXmlNodeText, 
+    }
+
+    def fromXml(self, node):
+        KalturaCrudFilter.fromXml(self, node)
+        self.fromXmlImpl(node, KalturaEventNotificationFilter.PROPERTY_LOADERS)
+
+    def toParams(self):
+        kparams = KalturaCrudFilter.toParams(self)
+        kparams.put("objectType", "KalturaEventNotificationFilter")
+        kparams.addStringIfDefined("idEqual", self.idEqual)
+        kparams.addIntIfDefined("objectIdEqual", self.objectIdEqual)
+        kparams.addStringIfDefined("objectTypeEqual", self.objectTypeEqual)
+        return kparams
+
+    def getIdEqual(self):
+        return self.idEqual
+
+    def setIdEqual(self, newIdEqual):
+        self.idEqual = newIdEqual
+
+    def getObjectIdEqual(self):
+        return self.objectIdEqual
+
+    def setObjectIdEqual(self, newObjectIdEqual):
+        self.objectIdEqual = newObjectIdEqual
+
+    def getObjectTypeEqual(self):
+        return self.objectTypeEqual
+
+    def setObjectTypeEqual(self, newObjectTypeEqual):
+        self.objectTypeEqual = newObjectTypeEqual
 
 
 # @package Kaltura
@@ -30446,6 +30533,216 @@ class KalturaEntitlementRenewal(KalturaObjectBase):
 
 # @package Kaltura
 # @subpackage Client
+class KalturaCrudObject(KalturaObjectBase):
+    def __init__(self):
+        KalturaObjectBase.__init__(self)
+
+
+    PROPERTY_LOADERS = {
+    }
+
+    def fromXml(self, node):
+        KalturaObjectBase.fromXml(self, node)
+        self.fromXmlImpl(node, KalturaCrudObject.PROPERTY_LOADERS)
+
+    def toParams(self):
+        kparams = KalturaObjectBase.toParams(self)
+        kparams.put("objectType", "KalturaCrudObject")
+        return kparams
+
+
+# @package Kaltura
+# @subpackage Client
+class KalturaEventNotification(KalturaCrudObject):
+    """Household Coupon details"""
+
+    def __init__(self,
+            id=NotImplemented,
+            objectId=NotImplemented,
+            eventObjectType=NotImplemented,
+            message=NotImplemented,
+            status=NotImplemented,
+            actionType=NotImplemented,
+            createDate=NotImplemented,
+            updateDate=NotImplemented):
+        KalturaCrudObject.__init__(self)
+
+        # Identifier
+        # @var string
+        self.id = id
+
+        # Object identifier
+        # @var int
+        self.objectId = objectId
+
+        # Event object type
+        # @var string
+        self.eventObjectType = eventObjectType
+
+        # Message
+        # @var string
+        self.message = message
+
+        # Status
+        # @var KalturaEventNotificationStatus
+        self.status = status
+
+        # Action type
+        # @var string
+        self.actionType = actionType
+
+        # Create date
+        # @var int
+        # @readonly
+        self.createDate = createDate
+
+        # Update date
+        # @var int
+        # @readonly
+        self.updateDate = updateDate
+
+
+    PROPERTY_LOADERS = {
+        'id': getXmlNodeText, 
+        'objectId': getXmlNodeInt, 
+        'eventObjectType': getXmlNodeText, 
+        'message': getXmlNodeText, 
+        'status': (KalturaEnumsFactory.createString, "KalturaEventNotificationStatus"), 
+        'actionType': getXmlNodeText, 
+        'createDate': getXmlNodeInt, 
+        'updateDate': getXmlNodeInt, 
+    }
+
+    def fromXml(self, node):
+        KalturaCrudObject.fromXml(self, node)
+        self.fromXmlImpl(node, KalturaEventNotification.PROPERTY_LOADERS)
+
+    def toParams(self):
+        kparams = KalturaCrudObject.toParams(self)
+        kparams.put("objectType", "KalturaEventNotification")
+        kparams.addStringIfDefined("id", self.id)
+        kparams.addIntIfDefined("objectId", self.objectId)
+        kparams.addStringIfDefined("eventObjectType", self.eventObjectType)
+        kparams.addStringIfDefined("message", self.message)
+        kparams.addStringEnumIfDefined("status", self.status)
+        kparams.addStringIfDefined("actionType", self.actionType)
+        return kparams
+
+    def getId(self):
+        return self.id
+
+    def setId(self, newId):
+        self.id = newId
+
+    def getObjectId(self):
+        return self.objectId
+
+    def setObjectId(self, newObjectId):
+        self.objectId = newObjectId
+
+    def getEventObjectType(self):
+        return self.eventObjectType
+
+    def setEventObjectType(self, newEventObjectType):
+        self.eventObjectType = newEventObjectType
+
+    def getMessage(self):
+        return self.message
+
+    def setMessage(self, newMessage):
+        self.message = newMessage
+
+    def getStatus(self):
+        return self.status
+
+    def setStatus(self, newStatus):
+        self.status = newStatus
+
+    def getActionType(self):
+        return self.actionType
+
+    def setActionType(self, newActionType):
+        self.actionType = newActionType
+
+    def getCreateDate(self):
+        return self.createDate
+
+    def getUpdateDate(self):
+        return self.updateDate
+
+
+# @package Kaltura
+# @subpackage Client
+class KalturaHouseholdCoupon(KalturaCrudObject):
+    """Household Coupon details"""
+
+    def __init__(self,
+            code=NotImplemented):
+        KalturaCrudObject.__init__(self)
+
+        # Coupon code
+        # @var string
+        self.code = code
+
+
+    PROPERTY_LOADERS = {
+        'code': getXmlNodeText, 
+    }
+
+    def fromXml(self, node):
+        KalturaCrudObject.fromXml(self, node)
+        self.fromXmlImpl(node, KalturaHouseholdCoupon.PROPERTY_LOADERS)
+
+    def toParams(self):
+        kparams = KalturaCrudObject.toParams(self)
+        kparams.put("objectType", "KalturaHouseholdCoupon")
+        kparams.addStringIfDefined("code", self.code)
+        return kparams
+
+    def getCode(self):
+        return self.code
+
+    def setCode(self, newCode):
+        self.code = newCode
+
+
+# @package Kaltura
+# @subpackage Client
+class KalturaEventNotificationListResponse(KalturaListResponse):
+    def __init__(self,
+            totalCount=NotImplemented,
+            objects=NotImplemented):
+        KalturaListResponse.__init__(self,
+            totalCount)
+
+        # A list of objects
+        # @var array of KalturaEventNotification
+        self.objects = objects
+
+
+    PROPERTY_LOADERS = {
+        'objects': (KalturaObjectFactory.createArray, 'KalturaEventNotification'), 
+    }
+
+    def fromXml(self, node):
+        KalturaListResponse.fromXml(self, node)
+        self.fromXmlImpl(node, KalturaEventNotificationListResponse.PROPERTY_LOADERS)
+
+    def toParams(self):
+        kparams = KalturaListResponse.toParams(self)
+        kparams.put("objectType", "KalturaEventNotificationListResponse")
+        kparams.addArrayIfDefined("objects", self.objects)
+        return kparams
+
+    def getObjects(self):
+        return self.objects
+
+    def setObjects(self, newObjects):
+        self.objects = newObjects
+
+
+# @package Kaltura
+# @subpackage Client
 class KalturaHousehold(KalturaObjectBase):
     """Household details"""
 
@@ -30626,61 +30923,6 @@ class KalturaHousehold(KalturaObjectBase):
 
     def getRoleId(self):
         return self.roleId
-
-
-# @package Kaltura
-# @subpackage Client
-class KalturaCrudObject(KalturaObjectBase):
-    def __init__(self):
-        KalturaObjectBase.__init__(self)
-
-
-    PROPERTY_LOADERS = {
-    }
-
-    def fromXml(self, node):
-        KalturaObjectBase.fromXml(self, node)
-        self.fromXmlImpl(node, KalturaCrudObject.PROPERTY_LOADERS)
-
-    def toParams(self):
-        kparams = KalturaObjectBase.toParams(self)
-        kparams.put("objectType", "KalturaCrudObject")
-        return kparams
-
-
-# @package Kaltura
-# @subpackage Client
-class KalturaHouseholdCoupon(KalturaCrudObject):
-    """Household Coupon details"""
-
-    def __init__(self,
-            code=NotImplemented):
-        KalturaCrudObject.__init__(self)
-
-        # Coupon code
-        # @var string
-        self.code = code
-
-
-    PROPERTY_LOADERS = {
-        'code': getXmlNodeText, 
-    }
-
-    def fromXml(self, node):
-        KalturaCrudObject.fromXml(self, node)
-        self.fromXmlImpl(node, KalturaHouseholdCoupon.PROPERTY_LOADERS)
-
-    def toParams(self):
-        kparams = KalturaCrudObject.toParams(self)
-        kparams.put("objectType", "KalturaHouseholdCoupon")
-        kparams.addStringIfDefined("code", self.code)
-        return kparams
-
-    def getCode(self):
-        return self.code
-
-    def setCode(self, newCode):
-        self.code = newCode
 
 
 # @package Kaltura
@@ -35311,6 +35553,36 @@ class KalturaEntitlementService(KalturaServiceBase):
 
 # @package Kaltura
 # @subpackage Client
+class KalturaEventNotificationService(KalturaServiceBase):
+    def __init__(self, client = None):
+        KalturaServiceBase.__init__(self, client)
+
+    def update(self, id, objectToUpdate):
+        """eventNotification update"""
+
+        kparams = KalturaParams()
+        kparams.addStringIfDefined("id", id)
+        kparams.addObjectIfDefined("objectToUpdate", objectToUpdate)
+        self.client.queueServiceActionCall("eventnotification", "update", "KalturaEventNotification", kparams)
+        if self.client.isMultiRequest():
+            return self.client.getMultiRequestResult()
+        resultNode = self.client.doQueue()
+        return KalturaObjectFactory.create(resultNode, 'KalturaEventNotification')
+
+    def list(self, filter):
+        """Gets all EventNotification items for a given Object id and type"""
+
+        kparams = KalturaParams()
+        kparams.addObjectIfDefined("filter", filter)
+        self.client.queueServiceActionCall("eventnotification", "list", "KalturaEventNotificationListResponse", kparams)
+        if self.client.isMultiRequest():
+            return self.client.getMultiRequestResult()
+        resultNode = self.client.doQueue()
+        return KalturaObjectFactory.create(resultNode, 'KalturaEventNotificationListResponse')
+
+
+# @package Kaltura
+# @subpackage Client
 class KalturaExportTaskService(KalturaServiceBase):
     def __init__(self, client = None):
         KalturaServiceBase.__init__(self, client)
@@ -39206,6 +39478,7 @@ class KalturaCoreClient(KalturaClientPlugin):
             'engagementAdapter': KalturaEngagementAdapterService,
             'engagement': KalturaEngagementService,
             'entitlement': KalturaEntitlementService,
+            'eventNotification': KalturaEventNotificationService,
             'exportTask': KalturaExportTaskService,
             'externalChannelProfile': KalturaExternalChannelProfileService,
             'favorite': KalturaFavoriteService,
@@ -39348,6 +39621,8 @@ class KalturaCoreClient(KalturaClientPlugin):
             'KalturaEngagementType': KalturaEngagementType,
             'KalturaEntitlementOrderBy': KalturaEntitlementOrderBy,
             'KalturaEntityReferenceBy': KalturaEntityReferenceBy,
+            'KalturaEventNotificationOrderBy': KalturaEventNotificationOrderBy,
+            'KalturaEventNotificationStatus': KalturaEventNotificationStatus,
             'KalturaEvictionPolicyType': KalturaEvictionPolicyType,
             'KalturaExportDataType': KalturaExportDataType,
             'KalturaExportTaskOrderBy': KalturaExportTaskOrderBy,
@@ -39520,6 +39795,7 @@ class KalturaCoreClient(KalturaClientPlugin):
             'KalturaAggregationCountFilter': KalturaAggregationCountFilter,
             'KalturaCrudFilter': KalturaCrudFilter,
             'KalturaHouseholdCouponFilter': KalturaHouseholdCouponFilter,
+            'KalturaEventNotificationFilter': KalturaEventNotificationFilter,
             'KalturaPersistedFilter': KalturaPersistedFilter,
             'KalturaDynamicOrderBy': KalturaDynamicOrderBy,
             'KalturaAssetFilter': KalturaAssetFilter,
@@ -39937,9 +40213,11 @@ class KalturaCoreClient(KalturaClientPlugin):
             'KalturaKeyValue': KalturaKeyValue,
             'KalturaEmailMessage': KalturaEmailMessage,
             'KalturaEntitlementRenewal': KalturaEntitlementRenewal,
-            'KalturaHousehold': KalturaHousehold,
             'KalturaCrudObject': KalturaCrudObject,
+            'KalturaEventNotification': KalturaEventNotification,
             'KalturaHouseholdCoupon': KalturaHouseholdCoupon,
+            'KalturaEventNotificationListResponse': KalturaEventNotificationListResponse,
+            'KalturaHousehold': KalturaHousehold,
             'KalturaHouseholdCouponListResponse': KalturaHouseholdCouponListResponse,
             'KalturaDevicePin': KalturaDevicePin,
             'KalturaLoginSession': KalturaLoginSession,
