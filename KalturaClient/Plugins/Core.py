@@ -42,7 +42,7 @@ from ..Base import (
     KalturaServiceBase,
 )
 
-API_VERSION = '5.2.6.5948'
+API_VERSION = '5.2.6.5958'
 
 ########## enums ##########
 # @package Kaltura
@@ -8389,17 +8389,35 @@ class KalturaPlaybackProfileFilter(KalturaFilter):
 class KalturaRegionFilter(KalturaFilter):
     def __init__(self,
             orderBy=NotImplemented,
-            externalIdIn=NotImplemented):
+            externalIdIn=NotImplemented,
+            idIn=NotImplemented,
+            parentIdEqual=NotImplemented,
+            liveAssetIdEqual=NotImplemented):
         KalturaFilter.__init__(self,
             orderBy)
 
-        # List of comma separated regions external identifiers
+        # List of comma separated regions external IDs
         # @var string
         self.externalIdIn = externalIdIn
+
+        # List of comma separated regions Ids
+        # @var string
+        self.idIn = idIn
+
+        # Region parent ID to filter by
+        # @var int
+        self.parentIdEqual = parentIdEqual
+
+        # Region parent ID to filter by
+        # @var int
+        self.liveAssetIdEqual = liveAssetIdEqual
 
 
     PROPERTY_LOADERS = {
         'externalIdIn': getXmlNodeText, 
+        'idIn': getXmlNodeText, 
+        'parentIdEqual': getXmlNodeInt, 
+        'liveAssetIdEqual': getXmlNodeInt, 
     }
 
     def fromXml(self, node):
@@ -8410,6 +8428,9 @@ class KalturaRegionFilter(KalturaFilter):
         kparams = KalturaFilter.toParams(self)
         kparams.put("objectType", "KalturaRegionFilter")
         kparams.addStringIfDefined("externalIdIn", self.externalIdIn)
+        kparams.addStringIfDefined("idIn", self.idIn)
+        kparams.addIntIfDefined("parentIdEqual", self.parentIdEqual)
+        kparams.addIntIfDefined("liveAssetIdEqual", self.liveAssetIdEqual)
         return kparams
 
     def getExternalIdIn(self):
@@ -8417,6 +8438,24 @@ class KalturaRegionFilter(KalturaFilter):
 
     def setExternalIdIn(self, newExternalIdIn):
         self.externalIdIn = newExternalIdIn
+
+    def getIdIn(self):
+        return self.idIn
+
+    def setIdIn(self, newIdIn):
+        self.idIn = newIdIn
+
+    def getParentIdEqual(self):
+        return self.parentIdEqual
+
+    def setParentIdEqual(self, newParentIdEqual):
+        self.parentIdEqual = newParentIdEqual
+
+    def getLiveAssetIdEqual(self):
+        return self.liveAssetIdEqual
+
+    def setLiveAssetIdEqual(self, newLiveAssetIdEqual):
+        self.liveAssetIdEqual = newLiveAssetIdEqual
 
 
 # @package Kaltura
@@ -15949,7 +15988,9 @@ class KalturaGeneralPartnerConfig(KalturaPartnerConfiguration):
             downgradePolicy=NotImplemented,
             mailSettings=NotImplemented,
             dateFormat=NotImplemented,
-            householdLimitationModule=NotImplemented):
+            householdLimitationModule=NotImplemented,
+            enableRegionFiltering=NotImplemented,
+            defaultRegion=NotImplemented):
         KalturaPartnerConfiguration.__init__(self)
 
         # Partner name
@@ -15992,6 +16033,14 @@ class KalturaGeneralPartnerConfig(KalturaPartnerConfiguration):
         # @var int
         self.householdLimitationModule = householdLimitationModule
 
+        # Enable Region Filtering
+        # @var bool
+        self.enableRegionFiltering = enableRegionFiltering
+
+        # Default Region
+        # @var int
+        self.defaultRegion = defaultRegion
+
 
     PROPERTY_LOADERS = {
         'partnerName': getXmlNodeText, 
@@ -16004,6 +16053,8 @@ class KalturaGeneralPartnerConfig(KalturaPartnerConfiguration):
         'mailSettings': getXmlNodeText, 
         'dateFormat': getXmlNodeText, 
         'householdLimitationModule': getXmlNodeInt, 
+        'enableRegionFiltering': getXmlNodeBool, 
+        'defaultRegion': getXmlNodeInt, 
     }
 
     def fromXml(self, node):
@@ -16023,6 +16074,8 @@ class KalturaGeneralPartnerConfig(KalturaPartnerConfiguration):
         kparams.addStringIfDefined("mailSettings", self.mailSettings)
         kparams.addStringIfDefined("dateFormat", self.dateFormat)
         kparams.addIntIfDefined("householdLimitationModule", self.householdLimitationModule)
+        kparams.addBoolIfDefined("enableRegionFiltering", self.enableRegionFiltering)
+        kparams.addIntIfDefined("defaultRegion", self.defaultRegion)
         return kparams
 
     def getPartnerName(self):
@@ -16084,6 +16137,18 @@ class KalturaGeneralPartnerConfig(KalturaPartnerConfiguration):
 
     def setHouseholdLimitationModule(self, newHouseholdLimitationModule):
         self.householdLimitationModule = newHouseholdLimitationModule
+
+    def getEnableRegionFiltering(self):
+        return self.enableRegionFiltering
+
+    def setEnableRegionFiltering(self, newEnableRegionFiltering):
+        self.enableRegionFiltering = newEnableRegionFiltering
+
+    def getDefaultRegion(self):
+        return self.defaultRegion
+
+    def setDefaultRegion(self, newDefaultRegion):
+        self.defaultRegion = newDefaultRegion
 
 
 # @package Kaltura
@@ -28134,7 +28199,8 @@ class KalturaRegion(KalturaObjectBase):
             name=NotImplemented,
             externalId=NotImplemented,
             isDefault=NotImplemented,
-            linearChannels=NotImplemented):
+            linearChannels=NotImplemented,
+            parentId=NotImplemented):
         KalturaObjectBase.__init__(self)
 
         # Region identifier
@@ -28151,11 +28217,16 @@ class KalturaRegion(KalturaObjectBase):
 
         # Indicates whether this is the default region for the partner
         # @var bool
+        # @readonly
         self.isDefault = isDefault
 
         # List of associated linear channels
         # @var array of KalturaRegionalChannel
         self.linearChannels = linearChannels
+
+        # Parent region ID
+        # @var int
+        self.parentId = parentId
 
 
     PROPERTY_LOADERS = {
@@ -28164,6 +28235,7 @@ class KalturaRegion(KalturaObjectBase):
         'externalId': getXmlNodeText, 
         'isDefault': getXmlNodeBool, 
         'linearChannels': (KalturaObjectFactory.createArray, 'KalturaRegionalChannel'), 
+        'parentId': getXmlNodeInt, 
     }
 
     def fromXml(self, node):
@@ -28176,8 +28248,8 @@ class KalturaRegion(KalturaObjectBase):
         kparams.addIntIfDefined("id", self.id)
         kparams.addStringIfDefined("name", self.name)
         kparams.addStringIfDefined("externalId", self.externalId)
-        kparams.addBoolIfDefined("isDefault", self.isDefault)
         kparams.addArrayIfDefined("linearChannels", self.linearChannels)
+        kparams.addIntIfDefined("parentId", self.parentId)
         return kparams
 
     def getId(self):
@@ -28201,14 +28273,17 @@ class KalturaRegion(KalturaObjectBase):
     def getIsDefault(self):
         return self.isDefault
 
-    def setIsDefault(self, newIsDefault):
-        self.isDefault = newIsDefault
-
     def getLinearChannels(self):
         return self.linearChannels
 
     def setLinearChannels(self, newLinearChannels):
         self.linearChannels = newLinearChannels
+
+    def getParentId(self):
+        return self.parentId
+
+    def setParentId(self, newParentId):
+        self.parentId = newParentId
 
 
 # @package Kaltura
@@ -38030,6 +38105,27 @@ class KalturaRegionService(KalturaServiceBase):
     def __init__(self, client = None):
         KalturaServiceBase.__init__(self, client)
 
+    def add(self, region):
+        """Adds a new region for partner"""
+
+        kparams = KalturaParams()
+        kparams.addObjectIfDefined("region", region)
+        self.client.queueServiceActionCall("region", "add", "KalturaRegion", kparams)
+        if self.client.isMultiRequest():
+            return self.client.getMultiRequestResult()
+        resultNode = self.client.doQueue()
+        return KalturaObjectFactory.create(resultNode, 'KalturaRegion')
+
+    def delete(self, id):
+        """Delete an existing region"""
+
+        kparams = KalturaParams()
+        kparams.addIntIfDefined("id", id);
+        self.client.queueServiceActionCall("region", "delete", "None", kparams)
+        if self.client.isMultiRequest():
+            return self.client.getMultiRequestResult()
+        resultNode = self.client.doQueue()
+
     def list(self, filter):
         """Returns all regions for the partner"""
 
@@ -38040,6 +38136,18 @@ class KalturaRegionService(KalturaServiceBase):
             return self.client.getMultiRequestResult()
         resultNode = self.client.doQueue()
         return KalturaObjectFactory.create(resultNode, 'KalturaRegionListResponse')
+
+    def update(self, id, region):
+        """Update an existing region"""
+
+        kparams = KalturaParams()
+        kparams.addIntIfDefined("id", id);
+        kparams.addObjectIfDefined("region", region)
+        self.client.queueServiceActionCall("region", "update", "KalturaRegion", kparams)
+        if self.client.isMultiRequest():
+            return self.client.getMultiRequestResult()
+        resultNode = self.client.doQueue()
+        return KalturaObjectFactory.create(resultNode, 'KalturaRegion')
 
 
 # @package Kaltura
