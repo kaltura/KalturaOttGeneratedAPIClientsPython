@@ -42,7 +42,7 @@ from ..Base import (
     KalturaServiceBase,
 )
 
-API_VERSION = '5.2.6.5986'
+API_VERSION = '5.2.6.5990'
 
 ########## enums ##########
 # @package Kaltura
@@ -37715,7 +37715,7 @@ class KalturaPasswordPolicyService(KalturaServiceBase):
             return self.client.getMultiRequestResult()
         resultNode = self.client.doQueue()
 
-    def list(self, filter):
+    def list(self, filter = NotImplemented):
         kparams = KalturaParams()
         kparams.addObjectIfDefined("filter", filter)
         self.client.queueServiceActionCall("passwordpolicy", "list", "KalturaPasswordPolicyListResponse", kparams)
