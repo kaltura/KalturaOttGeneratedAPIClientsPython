@@ -42,7 +42,7 @@ from ..Base import (
     KalturaServiceBase,
 )
 
-API_VERSION = '5.2.6.13600'
+API_VERSION = '5.2.6.5992'
 
 ########## enums ##########
 # @package Kaltura
@@ -148,6 +148,17 @@ class KalturaAssetCommentOrderBy(object):
 # @package Kaltura
 # @subpackage Client
 class KalturaAssetFilePpvOrderBy(object):
+    NONE = "NONE"
+
+    def __init__(self, value):
+        self.value = value
+
+    def getValue(self):
+        return self.value
+
+# @package Kaltura
+# @subpackage Client
+class KalturaAssetFirstImagePerRatioOrderBy(object):
     NONE = "NONE"
 
     def __init__(self, value):
@@ -6472,6 +6483,30 @@ class KalturaAssetCommentFilter(KalturaFilter):
 
     def setAssetTypeEqual(self, newAssetTypeEqual):
         self.assetTypeEqual = newAssetTypeEqual
+
+
+# @package Kaltura
+# @subpackage Client
+class KalturaAssetFirstImagePerRatioFilter(KalturaRelatedObjectFilter):
+    """Kaltura asset first image per ratio filter"""
+
+    def __init__(self,
+            orderBy=NotImplemented):
+        KalturaRelatedObjectFilter.__init__(self,
+            orderBy)
+
+
+    PROPERTY_LOADERS = {
+    }
+
+    def fromXml(self, node):
+        KalturaRelatedObjectFilter.fromXml(self, node)
+        self.fromXmlImpl(node, KalturaAssetFirstImagePerRatioFilter.PROPERTY_LOADERS)
+
+    def toParams(self):
+        kparams = KalturaRelatedObjectFilter.toParams(self)
+        kparams.put("objectType", "KalturaAssetFirstImagePerRatioFilter")
+        return kparams
 
 
 # @package Kaltura
@@ -39970,6 +40005,7 @@ class KalturaCoreClient(KalturaClientPlugin):
             'KalturaAppTokenHashType': KalturaAppTokenHashType,
             'KalturaAssetCommentOrderBy': KalturaAssetCommentOrderBy,
             'KalturaAssetFilePpvOrderBy': KalturaAssetFilePpvOrderBy,
+            'KalturaAssetFirstImagePerRatioOrderBy': KalturaAssetFirstImagePerRatioOrderBy,
             'KalturaAssetHistoryOrderBy': KalturaAssetHistoryOrderBy,
             'KalturaAssetIndexStatus': KalturaAssetIndexStatus,
             'KalturaAssetInheritancePolicy': KalturaAssetInheritancePolicy,
@@ -40230,6 +40266,7 @@ class KalturaCoreClient(KalturaClientPlugin):
             'KalturaRecordingContextFilter': KalturaRecordingContextFilter,
             'KalturaTransactionHistoryFilter': KalturaTransactionHistoryFilter,
             'KalturaAssetCommentFilter': KalturaAssetCommentFilter,
+            'KalturaAssetFirstImagePerRatioFilter': KalturaAssetFirstImagePerRatioFilter,
             'KalturaAssetHistoryFilter': KalturaAssetHistoryFilter,
             'KalturaAssetStructFilter': KalturaAssetStructFilter,
             'KalturaAssetStructMetaFilter': KalturaAssetStructMetaFilter,
