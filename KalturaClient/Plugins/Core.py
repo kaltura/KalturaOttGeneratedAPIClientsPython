@@ -42,7 +42,7 @@ from ..Base import (
     KalturaServiceBase,
 )
 
-API_VERSION = '5.2.6.6036'
+API_VERSION = '5.2.6.6037'
 
 ########## enums ##########
 # @package Kaltura
@@ -30829,7 +30829,7 @@ class KalturaEventNotification(KalturaCrudObject):
 
 # @package Kaltura
 # @subpackage Client
-class KalturaRegex(KalturaObjectBase):
+class KalturaRegexExpression(KalturaObjectBase):
     """KalturaRegex"""
 
     def __init__(self,
@@ -30853,11 +30853,11 @@ class KalturaRegex(KalturaObjectBase):
 
     def fromXml(self, node):
         KalturaObjectBase.fromXml(self, node)
-        self.fromXmlImpl(node, KalturaRegex.PROPERTY_LOADERS)
+        self.fromXmlImpl(node, KalturaRegexExpression.PROPERTY_LOADERS)
 
     def toParams(self):
         kparams = KalturaObjectBase.toParams(self)
-        kparams.put("objectType", "KalturaRegex")
+        kparams.put("objectType", "KalturaRegexExpression")
         kparams.addStringIfDefined("expression", self.expression)
         kparams.addStringIfDefined("description", self.description)
         return kparams
@@ -30912,7 +30912,7 @@ class KalturaPasswordPolicy(KalturaCrudObject):
         self.expiration = expiration
 
         # array of  KalturaRegex
-        # @var array of KalturaRegex
+        # @var array of KalturaRegexExpression
         self.complexities = complexities
 
         # the number of passwords failures before the account is locked.
@@ -30926,7 +30926,7 @@ class KalturaPasswordPolicy(KalturaCrudObject):
         'userRoleIds': getXmlNodeText, 
         'historyCount': getXmlNodeInt, 
         'expiration': getXmlNodeInt, 
-        'complexities': (KalturaObjectFactory.createArray, 'KalturaRegex'), 
+        'complexities': (KalturaObjectFactory.createArray, 'KalturaRegexExpression'), 
         'lockoutFailuresCount': getXmlNodeInt, 
     }
 
@@ -40651,7 +40651,7 @@ class KalturaCoreClient(KalturaClientPlugin):
             'KalturaEntitlementRenewal': KalturaEntitlementRenewal,
             'KalturaCrudObject': KalturaCrudObject,
             'KalturaEventNotification': KalturaEventNotification,
-            'KalturaRegex': KalturaRegex,
+            'KalturaRegexExpression': KalturaRegexExpression,
             'KalturaPasswordPolicy': KalturaPasswordPolicy,
             'KalturaHouseholdCoupon': KalturaHouseholdCoupon,
             'KalturaEventNotificationListResponse': KalturaEventNotificationListResponse,
