@@ -42,7 +42,7 @@ from ..Base import (
     KalturaServiceBase,
 )
 
-API_VERSION = '5.2.6.13610'
+API_VERSION = '5.2.7.0'
 
 ########## enums ##########
 # @package Kaltura
@@ -159,6 +159,17 @@ class KalturaAssetFilePpvOrderBy(object):
 # @package Kaltura
 # @subpackage Client
 class KalturaAssetHistoryOrderBy(object):
+    NONE = "NONE"
+
+    def __init__(self, value):
+        self.value = value
+
+    def getValue(self):
+        return self.value
+
+# @package Kaltura
+# @subpackage Client
+class KalturaAssetImagePerRatioOrderBy(object):
     NONE = "NONE"
 
     def __init__(self, value):
@@ -3283,7 +3294,9 @@ class KalturaHouseholdCouponFilter(KalturaCrudFilter):
     def __init__(self,
             orderBy=NotImplemented,
             businessModuleTypeEqual=NotImplemented,
-            businessModuleIdEqual=NotImplemented):
+            businessModuleIdEqual=NotImplemented,
+            couponCode=NotImplemented,
+            status=NotImplemented):
         KalturaCrudFilter.__init__(self,
             orderBy)
 
@@ -3295,10 +3308,20 @@ class KalturaHouseholdCouponFilter(KalturaCrudFilter):
         # @var int
         self.businessModuleIdEqual = businessModuleIdEqual
 
+        # Allow clients to inquiry if a specific coupon is part of an HH's wallet or not
+        # @var string
+        self.couponCode = couponCode
+
+        # Allow clients to filter out coupons which are valid/invalid
+        # @var KalturaCouponStatus
+        self.status = status
+
 
     PROPERTY_LOADERS = {
         'businessModuleTypeEqual': (KalturaEnumsFactory.createString, "KalturaTransactionType"), 
         'businessModuleIdEqual': getXmlNodeInt, 
+        'couponCode': getXmlNodeText, 
+        'status': (KalturaEnumsFactory.createString, "KalturaCouponStatus"), 
     }
 
     def fromXml(self, node):
@@ -3310,6 +3333,8 @@ class KalturaHouseholdCouponFilter(KalturaCrudFilter):
         kparams.put("objectType", "KalturaHouseholdCouponFilter")
         kparams.addStringEnumIfDefined("businessModuleTypeEqual", self.businessModuleTypeEqual)
         kparams.addIntIfDefined("businessModuleIdEqual", self.businessModuleIdEqual)
+        kparams.addStringIfDefined("couponCode", self.couponCode)
+        kparams.addStringEnumIfDefined("status", self.status)
         return kparams
 
     def getBusinessModuleTypeEqual(self):
@@ -3323,6 +3348,18 @@ class KalturaHouseholdCouponFilter(KalturaCrudFilter):
 
     def setBusinessModuleIdEqual(self, newBusinessModuleIdEqual):
         self.businessModuleIdEqual = newBusinessModuleIdEqual
+
+    def getCouponCode(self):
+        return self.couponCode
+
+    def setCouponCode(self, newCouponCode):
+        self.couponCode = newCouponCode
+
+    def getStatus(self):
+        return self.status
+
+    def setStatus(self, newStatus):
+        self.status = newStatus
 
 
 # @package Kaltura
@@ -3790,7 +3827,8 @@ class KalturaCollectionFilter(KalturaFilter):
     def __init__(self,
             orderBy=NotImplemented,
             collectionIdIn=NotImplemented,
-            mediaFileIdEqual=NotImplemented):
+            mediaFileIdEqual=NotImplemented,
+            couponGroupIdEqual=NotImplemented):
         KalturaFilter.__init__(self,
             orderBy)
 
@@ -3802,10 +3840,15 @@ class KalturaCollectionFilter(KalturaFilter):
         # @var int
         self.mediaFileIdEqual = mediaFileIdEqual
 
+        # couponGroupIdEqual
+        # @var int
+        self.couponGroupIdEqual = couponGroupIdEqual
+
 
     PROPERTY_LOADERS = {
         'collectionIdIn': getXmlNodeText, 
         'mediaFileIdEqual': getXmlNodeInt, 
+        'couponGroupIdEqual': getXmlNodeInt, 
     }
 
     def fromXml(self, node):
@@ -3817,6 +3860,7 @@ class KalturaCollectionFilter(KalturaFilter):
         kparams.put("objectType", "KalturaCollectionFilter")
         kparams.addStringIfDefined("collectionIdIn", self.collectionIdIn)
         kparams.addIntIfDefined("mediaFileIdEqual", self.mediaFileIdEqual)
+        kparams.addIntIfDefined("couponGroupIdEqual", self.couponGroupIdEqual)
         return kparams
 
     def getCollectionIdIn(self):
@@ -3830,6 +3874,12 @@ class KalturaCollectionFilter(KalturaFilter):
 
     def setMediaFileIdEqual(self, newMediaFileIdEqual):
         self.mediaFileIdEqual = newMediaFileIdEqual
+
+    def getCouponGroupIdEqual(self):
+        return self.couponGroupIdEqual
+
+    def setCouponGroupIdEqual(self, newCouponGroupIdEqual):
+        self.couponGroupIdEqual = newCouponGroupIdEqual
 
 
 # @package Kaltura
@@ -3909,7 +3959,8 @@ class KalturaPpvFilter(KalturaFilter):
 
     def __init__(self,
             orderBy=NotImplemented,
-            idIn=NotImplemented):
+            idIn=NotImplemented,
+            couponGroupIdEqual=NotImplemented):
         KalturaFilter.__init__(self,
             orderBy)
 
@@ -3917,9 +3968,14 @@ class KalturaPpvFilter(KalturaFilter):
         # @var string
         self.idIn = idIn
 
+        # couponGroupIdEqual
+        # @var int
+        self.couponGroupIdEqual = couponGroupIdEqual
+
 
     PROPERTY_LOADERS = {
         'idIn': getXmlNodeText, 
+        'couponGroupIdEqual': getXmlNodeInt, 
     }
 
     def fromXml(self, node):
@@ -3930,6 +3986,7 @@ class KalturaPpvFilter(KalturaFilter):
         kparams = KalturaFilter.toParams(self)
         kparams.put("objectType", "KalturaPpvFilter")
         kparams.addStringIfDefined("idIn", self.idIn)
+        kparams.addIntIfDefined("couponGroupIdEqual", self.couponGroupIdEqual)
         return kparams
 
     def getIdIn(self):
@@ -3937,6 +3994,12 @@ class KalturaPpvFilter(KalturaFilter):
 
     def setIdIn(self, newIdIn):
         self.idIn = newIdIn
+
+    def getCouponGroupIdEqual(self):
+        return self.couponGroupIdEqual
+
+    def setCouponGroupIdEqual(self, newCouponGroupIdEqual):
+        self.couponGroupIdEqual = newCouponGroupIdEqual
 
 
 # @package Kaltura
@@ -4118,7 +4181,8 @@ class KalturaSubscriptionFilter(KalturaFilter):
             orderBy=NotImplemented,
             subscriptionIdIn=NotImplemented,
             mediaFileIdEqual=NotImplemented,
-            externalIdIn=NotImplemented):
+            externalIdIn=NotImplemented,
+            couponGroupIdEqual=NotImplemented):
         KalturaFilter.__init__(self,
             orderBy)
 
@@ -4134,11 +4198,16 @@ class KalturaSubscriptionFilter(KalturaFilter):
         # @var string
         self.externalIdIn = externalIdIn
 
+        # couponGroupIdEqual
+        # @var int
+        self.couponGroupIdEqual = couponGroupIdEqual
+
 
     PROPERTY_LOADERS = {
         'subscriptionIdIn': getXmlNodeText, 
         'mediaFileIdEqual': getXmlNodeInt, 
         'externalIdIn': getXmlNodeText, 
+        'couponGroupIdEqual': getXmlNodeInt, 
     }
 
     def fromXml(self, node):
@@ -4151,6 +4220,7 @@ class KalturaSubscriptionFilter(KalturaFilter):
         kparams.addStringIfDefined("subscriptionIdIn", self.subscriptionIdIn)
         kparams.addIntIfDefined("mediaFileIdEqual", self.mediaFileIdEqual)
         kparams.addStringIfDefined("externalIdIn", self.externalIdIn)
+        kparams.addIntIfDefined("couponGroupIdEqual", self.couponGroupIdEqual)
         return kparams
 
     def getSubscriptionIdIn(self):
@@ -4170,6 +4240,12 @@ class KalturaSubscriptionFilter(KalturaFilter):
 
     def setExternalIdIn(self, newExternalIdIn):
         self.externalIdIn = newExternalIdIn
+
+    def getCouponGroupIdEqual(self):
+        return self.couponGroupIdEqual
+
+    def setCouponGroupIdEqual(self, newCouponGroupIdEqual):
+        self.couponGroupIdEqual = newCouponGroupIdEqual
 
 
 # @package Kaltura
@@ -6550,6 +6626,30 @@ class KalturaAssetHistoryFilter(KalturaFilter):
 
     def setDaysLessThanOrEqual(self, newDaysLessThanOrEqual):
         self.daysLessThanOrEqual = newDaysLessThanOrEqual
+
+
+# @package Kaltura
+# @subpackage Client
+class KalturaAssetImagePerRatioFilter(KalturaRelatedObjectFilter):
+    """Kaltura asset image per ratio filter"""
+
+    def __init__(self,
+            orderBy=NotImplemented):
+        KalturaRelatedObjectFilter.__init__(self,
+            orderBy)
+
+
+    PROPERTY_LOADERS = {
+    }
+
+    def fromXml(self, node):
+        KalturaRelatedObjectFilter.fromXml(self, node)
+        self.fromXmlImpl(node, KalturaAssetImagePerRatioFilter.PROPERTY_LOADERS)
+
+    def toParams(self):
+        kparams = KalturaRelatedObjectFilter.toParams(self)
+        kparams.put("objectType", "KalturaAssetImagePerRatioFilter")
+        return kparams
 
 
 # @package Kaltura
@@ -11598,6 +11698,28 @@ class KalturaBaseSegmentCondition(KalturaObjectBase):
 
 # @package Kaltura
 # @subpackage Client
+class KalturaBaseSegmentAction(KalturaObjectBase):
+    """Base class that defines segment action"""
+
+    def __init__(self):
+        KalturaObjectBase.__init__(self)
+
+
+    PROPERTY_LOADERS = {
+    }
+
+    def fromXml(self, node):
+        KalturaObjectBase.fromXml(self, node)
+        self.fromXmlImpl(node, KalturaBaseSegmentAction.PROPERTY_LOADERS)
+
+    def toParams(self):
+        kparams = KalturaObjectBase.toParams(self)
+        kparams.put("objectType", "KalturaBaseSegmentAction")
+        return kparams
+
+
+# @package Kaltura
+# @subpackage Client
 class KalturaBaseSegmentValue(KalturaObjectBase):
     """Base class that defines segment value"""
 
@@ -11628,6 +11750,7 @@ class KalturaSegmentationType(KalturaObjectBase):
             name=NotImplemented,
             description=NotImplemented,
             conditions=NotImplemented,
+            actions=NotImplemented,
             value=NotImplemented,
             createDate=NotImplemented,
             version=NotImplemented):
@@ -11650,6 +11773,10 @@ class KalturaSegmentationType(KalturaObjectBase):
         # @var array of KalturaBaseSegmentCondition
         self.conditions = conditions
 
+        # Segmentation conditions - can be empty
+        # @var array of KalturaBaseSegmentAction
+        self.actions = actions
+
         # Segmentation values - can be empty (so only one segment will be created)
         # @var KalturaBaseSegmentValue
         self.value = value
@@ -11670,6 +11797,7 @@ class KalturaSegmentationType(KalturaObjectBase):
         'name': getXmlNodeText, 
         'description': getXmlNodeText, 
         'conditions': (KalturaObjectFactory.createArray, 'KalturaBaseSegmentCondition'), 
+        'actions': (KalturaObjectFactory.createArray, 'KalturaBaseSegmentAction'), 
         'value': (KalturaObjectFactory.create, 'KalturaBaseSegmentValue'), 
         'createDate': getXmlNodeInt, 
         'version': getXmlNodeInt, 
@@ -11685,6 +11813,7 @@ class KalturaSegmentationType(KalturaObjectBase):
         kparams.addStringIfDefined("name", self.name)
         kparams.addStringIfDefined("description", self.description)
         kparams.addArrayIfDefined("conditions", self.conditions)
+        kparams.addArrayIfDefined("actions", self.actions)
         kparams.addObjectIfDefined("value", self.value)
         return kparams
 
@@ -11708,6 +11837,12 @@ class KalturaSegmentationType(KalturaObjectBase):
 
     def setConditions(self, newConditions):
         self.conditions = newConditions
+
+    def getActions(self):
+        return self.actions
+
+    def setActions(self, newActions):
+        self.actions = newActions
 
     def getValue(self):
         return self.value
@@ -12080,6 +12215,54 @@ class KalturaUserDataCondition(KalturaBaseSegmentCondition):
 
     def setValue(self, newValue):
         self.value = newValue
+
+
+# @package Kaltura
+# @subpackage Client
+class KalturaAssetOrderSegmentAction(KalturaBaseSegmentAction):
+    """Asset order segment action"""
+
+    def __init__(self,
+            name=NotImplemented,
+            values=NotImplemented):
+        KalturaBaseSegmentAction.__init__(self)
+
+        # Action name
+        # @var string
+        self.name = name
+
+        # Action values
+        # @var array of KalturaStringValue
+        self.values = values
+
+
+    PROPERTY_LOADERS = {
+        'name': getXmlNodeText, 
+        'values': (KalturaObjectFactory.createArray, 'KalturaStringValue'), 
+    }
+
+    def fromXml(self, node):
+        KalturaBaseSegmentAction.fromXml(self, node)
+        self.fromXmlImpl(node, KalturaAssetOrderSegmentAction.PROPERTY_LOADERS)
+
+    def toParams(self):
+        kparams = KalturaBaseSegmentAction.toParams(self)
+        kparams.put("objectType", "KalturaAssetOrderSegmentAction")
+        kparams.addStringIfDefined("name", self.name)
+        kparams.addArrayIfDefined("values", self.values)
+        return kparams
+
+    def getName(self):
+        return self.name
+
+    def setName(self, newName):
+        self.name = newName
+
+    def getValues(self):
+        return self.values
+
+    def setValues(self, newValues):
+        self.values = newValues
 
 
 # @package Kaltura
@@ -30654,6 +30837,181 @@ class KalturaEntitlementRenewal(KalturaObjectBase):
 
 # @package Kaltura
 # @subpackage Client
+class KalturaEventNotificationScope(KalturaObjectBase):
+    """Kaltura event notification scope"""
+
+    def __init__(self):
+        KalturaObjectBase.__init__(self)
+
+
+    PROPERTY_LOADERS = {
+    }
+
+    def fromXml(self, node):
+        KalturaObjectBase.fromXml(self, node)
+        self.fromXmlImpl(node, KalturaEventNotificationScope.PROPERTY_LOADERS)
+
+    def toParams(self):
+        kparams = KalturaObjectBase.toParams(self)
+        kparams.put("objectType", "KalturaEventNotificationScope")
+        return kparams
+
+
+# @package Kaltura
+# @subpackage Client
+class KalturaEventObject(KalturaObjectBase):
+    def __init__(self):
+        KalturaObjectBase.__init__(self)
+
+
+    PROPERTY_LOADERS = {
+    }
+
+    def fromXml(self, node):
+        KalturaObjectBase.fromXml(self, node)
+        self.fromXmlImpl(node, KalturaEventObject.PROPERTY_LOADERS)
+
+    def toParams(self):
+        kparams = KalturaObjectBase.toParams(self)
+        kparams.put("objectType", "KalturaEventObject")
+        return kparams
+
+
+# @package Kaltura
+# @subpackage Client
+class KalturaEventNotificationObjectScope(KalturaEventNotificationScope):
+    """Kaltura event notification object scope"""
+
+    def __init__(self,
+            eventObject=NotImplemented):
+        KalturaEventNotificationScope.__init__(self)
+
+        # Event object to fire
+        # @var KalturaEventObject
+        self.eventObject = eventObject
+
+
+    PROPERTY_LOADERS = {
+        'eventObject': (KalturaObjectFactory.create, 'KalturaEventObject'), 
+    }
+
+    def fromXml(self, node):
+        KalturaEventNotificationScope.fromXml(self, node)
+        self.fromXmlImpl(node, KalturaEventNotificationObjectScope.PROPERTY_LOADERS)
+
+    def toParams(self):
+        kparams = KalturaEventNotificationScope.toParams(self)
+        kparams.put("objectType", "KalturaEventNotificationObjectScope")
+        kparams.addObjectIfDefined("eventObject", self.eventObject)
+        return kparams
+
+    def getEventObject(self):
+        return self.eventObject
+
+    def setEventObject(self, newEventObject):
+        self.eventObject = newEventObject
+
+
+# @package Kaltura
+# @subpackage Client
+class KalturaConcurrencyViolation(KalturaEventObject):
+    def __init__(self,
+            timestamp=NotImplemented,
+            udid=NotImplemented,
+            assetId=NotImplemented,
+            violationRule=NotImplemented,
+            householdId=NotImplemented,
+            userId=NotImplemented):
+        KalturaEventObject.__init__(self)
+
+        # Timestamp
+        # @var int
+        self.timestamp = timestamp
+
+        # UDID
+        # @var string
+        self.udid = udid
+
+        # Asset Id
+        # @var string
+        self.assetId = assetId
+
+        # Violation Rule
+        # @var string
+        self.violationRule = violationRule
+
+        # Household Id
+        # @var string
+        self.householdId = householdId
+
+        # User Id
+        # @var string
+        self.userId = userId
+
+
+    PROPERTY_LOADERS = {
+        'timestamp': getXmlNodeInt, 
+        'udid': getXmlNodeText, 
+        'assetId': getXmlNodeText, 
+        'violationRule': getXmlNodeText, 
+        'householdId': getXmlNodeText, 
+        'userId': getXmlNodeText, 
+    }
+
+    def fromXml(self, node):
+        KalturaEventObject.fromXml(self, node)
+        self.fromXmlImpl(node, KalturaConcurrencyViolation.PROPERTY_LOADERS)
+
+    def toParams(self):
+        kparams = KalturaEventObject.toParams(self)
+        kparams.put("objectType", "KalturaConcurrencyViolation")
+        kparams.addIntIfDefined("timestamp", self.timestamp)
+        kparams.addStringIfDefined("udid", self.udid)
+        kparams.addStringIfDefined("assetId", self.assetId)
+        kparams.addStringIfDefined("violationRule", self.violationRule)
+        kparams.addStringIfDefined("householdId", self.householdId)
+        kparams.addStringIfDefined("userId", self.userId)
+        return kparams
+
+    def getTimestamp(self):
+        return self.timestamp
+
+    def setTimestamp(self, newTimestamp):
+        self.timestamp = newTimestamp
+
+    def getUdid(self):
+        return self.udid
+
+    def setUdid(self, newUdid):
+        self.udid = newUdid
+
+    def getAssetId(self):
+        return self.assetId
+
+    def setAssetId(self, newAssetId):
+        self.assetId = newAssetId
+
+    def getViolationRule(self):
+        return self.violationRule
+
+    def setViolationRule(self, newViolationRule):
+        self.violationRule = newViolationRule
+
+    def getHouseholdId(self):
+        return self.householdId
+
+    def setHouseholdId(self, newHouseholdId):
+        self.householdId = newHouseholdId
+
+    def getUserId(self):
+        return self.userId
+
+    def setUserId(self, newUserId):
+        self.userId = newUserId
+
+
+# @package Kaltura
+# @subpackage Client
 class KalturaCrudObject(KalturaObjectBase):
     def __init__(self):
         KalturaObjectBase.__init__(self)
@@ -30794,8 +31152,8 @@ class KalturaEventNotification(KalturaCrudObject):
 
 # @package Kaltura
 # @subpackage Client
-class KalturaRegex(KalturaObjectBase):
-    """KalturaRegex"""
+class KalturaRegexExpression(KalturaObjectBase):
+    """KalturaRegexExpression"""
 
     def __init__(self,
             expression=NotImplemented,
@@ -30818,11 +31176,11 @@ class KalturaRegex(KalturaObjectBase):
 
     def fromXml(self, node):
         KalturaObjectBase.fromXml(self, node)
-        self.fromXmlImpl(node, KalturaRegex.PROPERTY_LOADERS)
+        self.fromXmlImpl(node, KalturaRegexExpression.PROPERTY_LOADERS)
 
     def toParams(self):
         kparams = KalturaObjectBase.toParams(self)
-        kparams.put("objectType", "KalturaRegex")
+        kparams.put("objectType", "KalturaRegexExpression")
         kparams.addStringIfDefined("expression", self.expression)
         kparams.addStringIfDefined("description", self.description)
         return kparams
@@ -30877,7 +31235,7 @@ class KalturaPasswordPolicy(KalturaCrudObject):
         self.expiration = expiration
 
         # array of  KalturaRegex
-        # @var array of KalturaRegex
+        # @var array of KalturaRegexExpression
         self.complexities = complexities
 
         # the number of passwords failures before the account is locked.
@@ -30891,7 +31249,7 @@ class KalturaPasswordPolicy(KalturaCrudObject):
         'userRoleIds': getXmlNodeText, 
         'historyCount': getXmlNodeInt, 
         'expiration': getXmlNodeInt, 
-        'complexities': (KalturaObjectFactory.createArray, 'KalturaRegex'), 
+        'complexities': (KalturaObjectFactory.createArray, 'KalturaRegexExpression'), 
         'lockoutFailuresCount': getXmlNodeInt, 
     }
 
@@ -30956,16 +31314,22 @@ class KalturaHouseholdCoupon(KalturaCrudObject):
     """Household Coupon details"""
 
     def __init__(self,
-            code=NotImplemented):
+            code=NotImplemented,
+            lastUsageDate=NotImplemented):
         KalturaCrudObject.__init__(self)
 
         # Coupon code
         # @var string
         self.code = code
 
+        # Last Usage Date
+        # @var int
+        self.lastUsageDate = lastUsageDate
+
 
     PROPERTY_LOADERS = {
         'code': getXmlNodeText, 
+        'lastUsageDate': getXmlNodeInt, 
     }
 
     def fromXml(self, node):
@@ -30976,6 +31340,7 @@ class KalturaHouseholdCoupon(KalturaCrudObject):
         kparams = KalturaCrudObject.toParams(self)
         kparams.put("objectType", "KalturaHouseholdCoupon")
         kparams.addStringIfDefined("code", self.code)
+        kparams.addIntIfDefined("lastUsageDate", self.lastUsageDate)
         return kparams
 
     def getCode(self):
@@ -30983,6 +31348,12 @@ class KalturaHouseholdCoupon(KalturaCrudObject):
 
     def setCode(self, newCode):
         self.code = newCode
+
+    def getLastUsageDate(self):
+        return self.lastUsageDate
+
+    def setLastUsageDate(self, newLastUsageDate):
+        self.lastUsageDate = newLastUsageDate
 
 
 # @package Kaltura
@@ -35867,6 +36238,24 @@ class KalturaEntitlementService(KalturaServiceBase):
 
 # @package Kaltura
 # @subpackage Client
+class KalturaEventNotificationActionService(KalturaServiceBase):
+    def __init__(self, client = None):
+        KalturaServiceBase.__init__(self, client)
+
+    def dispatch(self, scope):
+        """Dispatches event notification"""
+
+        kparams = KalturaParams()
+        kparams.addObjectIfDefined("scope", scope)
+        self.client.queueServiceActionCall("eventnotificationaction", "dispatch", "None", kparams)
+        if self.client.isMultiRequest():
+            return self.client.getMultiRequestResult()
+        resultNode = self.client.doQueue()
+        return getXmlNodeBool(resultNode)
+
+
+# @package Kaltura
+# @subpackage Client
 class KalturaEventNotificationService(KalturaServiceBase):
     def __init__(self, client = None):
         KalturaServiceBase.__init__(self, client)
@@ -39874,6 +40263,7 @@ class KalturaCoreClient(KalturaClientPlugin):
             'engagementAdapter': KalturaEngagementAdapterService,
             'engagement': KalturaEngagementService,
             'entitlement': KalturaEntitlementService,
+            'eventNotificationAction': KalturaEventNotificationActionService,
             'eventNotification': KalturaEventNotificationService,
             'exportTask': KalturaExportTaskService,
             'externalChannelProfile': KalturaExternalChannelProfileService,
@@ -39971,6 +40361,7 @@ class KalturaCoreClient(KalturaClientPlugin):
             'KalturaAssetCommentOrderBy': KalturaAssetCommentOrderBy,
             'KalturaAssetFilePpvOrderBy': KalturaAssetFilePpvOrderBy,
             'KalturaAssetHistoryOrderBy': KalturaAssetHistoryOrderBy,
+            'KalturaAssetImagePerRatioOrderBy': KalturaAssetImagePerRatioOrderBy,
             'KalturaAssetIndexStatus': KalturaAssetIndexStatus,
             'KalturaAssetInheritancePolicy': KalturaAssetInheritancePolicy,
             'KalturaAssetLifeCycleRuleActionType': KalturaAssetLifeCycleRuleActionType,
@@ -40231,6 +40622,7 @@ class KalturaCoreClient(KalturaClientPlugin):
             'KalturaTransactionHistoryFilter': KalturaTransactionHistoryFilter,
             'KalturaAssetCommentFilter': KalturaAssetCommentFilter,
             'KalturaAssetHistoryFilter': KalturaAssetHistoryFilter,
+            'KalturaAssetImagePerRatioFilter': KalturaAssetImagePerRatioFilter,
             'KalturaAssetStructFilter': KalturaAssetStructFilter,
             'KalturaAssetStructMetaFilter': KalturaAssetStructMetaFilter,
             'KalturaSlimAsset': KalturaSlimAsset,
@@ -40310,6 +40702,7 @@ class KalturaCoreClient(KalturaClientPlugin):
             'KalturaSocialFriendActivity': KalturaSocialFriendActivity,
             'KalturaSocialFriendActivityListResponse': KalturaSocialFriendActivityListResponse,
             'KalturaBaseSegmentCondition': KalturaBaseSegmentCondition,
+            'KalturaBaseSegmentAction': KalturaBaseSegmentAction,
             'KalturaBaseSegmentValue': KalturaBaseSegmentValue,
             'KalturaSegmentationType': KalturaSegmentationType,
             'KalturaSegmentationTypeListResponse': KalturaSegmentationTypeListResponse,
@@ -40317,6 +40710,7 @@ class KalturaCoreClient(KalturaClientPlugin):
             'KalturaContentScoreCondition': KalturaContentScoreCondition,
             'KalturaMonetizationCondition': KalturaMonetizationCondition,
             'KalturaUserDataCondition': KalturaUserDataCondition,
+            'KalturaAssetOrderSegmentAction': KalturaAssetOrderSegmentAction,
             'KalturaSingleSegmentValue': KalturaSingleSegmentValue,
             'KalturaSegmentSource': KalturaSegmentSource,
             'KalturaSegmentValue': KalturaSegmentValue,
@@ -40612,9 +41006,13 @@ class KalturaCoreClient(KalturaClientPlugin):
             'KalturaKeyValue': KalturaKeyValue,
             'KalturaEmailMessage': KalturaEmailMessage,
             'KalturaEntitlementRenewal': KalturaEntitlementRenewal,
+            'KalturaEventNotificationScope': KalturaEventNotificationScope,
+            'KalturaEventObject': KalturaEventObject,
+            'KalturaEventNotificationObjectScope': KalturaEventNotificationObjectScope,
+            'KalturaConcurrencyViolation': KalturaConcurrencyViolation,
             'KalturaCrudObject': KalturaCrudObject,
             'KalturaEventNotification': KalturaEventNotification,
-            'KalturaRegex': KalturaRegex,
+            'KalturaRegexExpression': KalturaRegexExpression,
             'KalturaPasswordPolicy': KalturaPasswordPolicy,
             'KalturaHouseholdCoupon': KalturaHouseholdCoupon,
             'KalturaEventNotificationListResponse': KalturaEventNotificationListResponse,
