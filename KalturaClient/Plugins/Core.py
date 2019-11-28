@@ -42,7 +42,7 @@ from ..Base import (
     KalturaServiceBase,
 )
 
-API_VERSION = '5.2.8.14125'
+API_VERSION = '5.2.8.14128'
 
 ########## enums ##########
 # @package Kaltura
@@ -8554,7 +8554,8 @@ class KalturaRegionFilter(KalturaFilter):
             externalIdIn=NotImplemented,
             idIn=NotImplemented,
             parentIdEqual=NotImplemented,
-            liveAssetIdEqual=NotImplemented):
+            liveAssetIdEqual=NotImplemented,
+            parentOnly=NotImplemented):
         KalturaFilter.__init__(self,
             orderBy)
 
@@ -8574,12 +8575,17 @@ class KalturaRegionFilter(KalturaFilter):
         # @var int
         self.liveAssetIdEqual = liveAssetIdEqual
 
+        # Parent region to filter by
+        # @var bool
+        self.parentOnly = parentOnly
+
 
     PROPERTY_LOADERS = {
         'externalIdIn': getXmlNodeText, 
         'idIn': getXmlNodeText, 
         'parentIdEqual': getXmlNodeInt, 
         'liveAssetIdEqual': getXmlNodeInt, 
+        'parentOnly': getXmlNodeBool, 
     }
 
     def fromXml(self, node):
@@ -8593,6 +8599,7 @@ class KalturaRegionFilter(KalturaFilter):
         kparams.addStringIfDefined("idIn", self.idIn)
         kparams.addIntIfDefined("parentIdEqual", self.parentIdEqual)
         kparams.addIntIfDefined("liveAssetIdEqual", self.liveAssetIdEqual)
+        kparams.addBoolIfDefined("parentOnly", self.parentOnly)
         return kparams
 
     def getExternalIdIn(self):
@@ -8618,6 +8625,12 @@ class KalturaRegionFilter(KalturaFilter):
 
     def setLiveAssetIdEqual(self, newLiveAssetIdEqual):
         self.liveAssetIdEqual = newLiveAssetIdEqual
+
+    def getParentOnly(self):
+        return self.parentOnly
+
+    def setParentOnly(self, newParentOnly):
+        self.parentOnly = newParentOnly
 
 
 # @package Kaltura
@@ -38820,11 +38833,12 @@ class KalturaRegionService(KalturaServiceBase):
             return self.client.getMultiRequestResult()
         resultNode = self.client.doQueue()
 
-    def list(self, filter):
+    def list(self, filter, pager = NotImplemented):
         """Returns all regions for the partner"""
 
         kparams = KalturaParams()
         kparams.addObjectIfDefined("filter", filter)
+        kparams.addObjectIfDefined("pager", pager)
         self.client.queueServiceActionCall("region", "list", "KalturaRegionListResponse", kparams)
         if self.client.isMultiRequest():
             return self.client.getMultiRequestResult()
