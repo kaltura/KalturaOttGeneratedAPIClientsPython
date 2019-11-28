@@ -42,7 +42,7 @@ from ..Base import (
     KalturaServiceBase,
 )
 
-API_VERSION = '5.2.8.14123'
+API_VERSION = '5.2.8.13994'
 
 ########## enums ##########
 # @package Kaltura
@@ -1195,22 +1195,6 @@ class KalturaLinearChannelType(object):
     OTT = "OTT"
     DTT_AND_OTT = "DTT_AND_OTT"
     VRM_EXPORT = "VRM_EXPORT"
-
-    def __init__(self, value):
-        self.value = value
-
-    def getValue(self):
-        return self.value
-
-# @package Kaltura
-# @subpackage Client
-class KalturaLogLevel(object):
-    TRACE = "TRACE"
-    DEBUG = "DEBUG"
-    INFO = "INFO"
-    WARN = "WARN"
-    ERROR = "ERROR"
-    ALL = "ALL"
 
     def __init__(self, value):
         self.value = value
@@ -39513,28 +39497,6 @@ class KalturaSystemService(KalturaServiceBase):
     def __init__(self, client = None):
         KalturaServiceBase.__init__(self, client)
 
-    def clearLocalServerCache(self, action = NotImplemented, key = NotImplemented):
-        """Clear local server cache"""
-
-        kparams = KalturaParams()
-        kparams.addStringIfDefined("action", action)
-        kparams.addStringIfDefined("key", key)
-        self.client.queueServiceActionCall("system", "clearLocalServerCache", "None", kparams)
-        if self.client.isMultiRequest():
-            return self.client.getMultiRequestResult()
-        resultNode = self.client.doQueue()
-        return getXmlNodeBool(resultNode)
-
-    def getLogLevel(self):
-        """Gets the current level of the KLogger"""
-
-        kparams = KalturaParams()
-        self.client.queueServiceActionCall("system", "getLogLevel", "None", kparams)
-        if self.client.isMultiRequest():
-            return self.client.getMultiRequestResult()
-        resultNode = self.client.doQueue()
-        return getXmlNodeText(resultNode)
-
     def getTime(self):
         """Returns current server timestamp"""
 
@@ -39555,33 +39517,11 @@ class KalturaSystemService(KalturaServiceBase):
         resultNode = self.client.doQueue()
         return getXmlNodeText(resultNode)
 
-    def incrementLayeredCacheGroupConfigVersion(self, groupId = 0):
-        """Returns true if version has been incremented successfully or false otherwise. You need to send groupId only if you wish to increment for a specific groupId and not the one the KS belongs to."""
-
-        kparams = KalturaParams()
-        kparams.addIntIfDefined("groupId", groupId);
-        self.client.queueServiceActionCall("system", "incrementLayeredCacheGroupConfigVersion", "None", kparams)
-        if self.client.isMultiRequest():
-            return self.client.getMultiRequestResult()
-        resultNode = self.client.doQueue()
-        return getXmlNodeBool(resultNode)
-
     def ping(self):
         """Returns true"""
 
         kparams = KalturaParams()
         self.client.queueServiceActionCall("system", "ping", "None", kparams)
-        if self.client.isMultiRequest():
-            return self.client.getMultiRequestResult()
-        resultNode = self.client.doQueue()
-        return getXmlNodeBool(resultNode)
-
-    def setLogLevel(self, level):
-        """Sets the current level of the KLogger"""
-
-        kparams = KalturaParams()
-        kparams.addStringIfDefined("level", level)
-        self.client.queueServiceActionCall("system", "setLogLevel", "None", kparams)
         if self.client.isMultiRequest():
             return self.client.getMultiRequestResult()
         resultNode = self.client.doQueue()
@@ -40500,7 +40440,6 @@ class KalturaCoreClient(KalturaClientPlugin):
             'KalturaIngestProfileOverlapPolicy': KalturaIngestProfileOverlapPolicy,
             'KalturaLanguageOrderBy': KalturaLanguageOrderBy,
             'KalturaLinearChannelType': KalturaLinearChannelType,
-            'KalturaLogLevel': KalturaLogLevel,
             'KalturaMathemticalOperatorType': KalturaMathemticalOperatorType,
             'KalturaMediaFileOrderBy': KalturaMediaFileOrderBy,
             'KalturaMediaFileStreamerType': KalturaMediaFileStreamerType,
