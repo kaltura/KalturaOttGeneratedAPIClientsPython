@@ -42,7 +42,7 @@ from ..Base import (
     KalturaServiceBase,
 )
 
-API_VERSION = '5.2.8.14125'
+API_VERSION = '5.2.8.14095'
 
 ########## enums ##########
 # @package Kaltura
@@ -1363,6 +1363,18 @@ class KalturaNotificationType(object):
 
 # @package Kaltura
 # @subpackage Client
+class KalturaObjectVirtualAssetInfoType(object):
+    SUBSCRIPTION = "Subscription"
+    SEGMENT = "Segment"
+
+    def __init__(self, value):
+        self.value = value
+
+    def getValue(self):
+        return self.value
+
+# @package Kaltura
+# @subpackage Client
 class KalturaOTTUserOrderBy(object):
     NONE = "NONE"
 
@@ -1415,6 +1427,7 @@ class KalturaPartnerConfigurationType(object):
     OSSADAPTER = "OSSAdapter"
     CONCURRENCY = "Concurrency"
     GENERAL = "General"
+    OBJECTVIRTUALASSET = "ObjectVirtualAsset"
 
     def __init__(self, value):
         self.value = value
@@ -3718,7 +3731,8 @@ class KalturaSegmentationTypeFilter(KalturaFilter):
 
     def __init__(self,
             orderBy=NotImplemented,
-            idIn=NotImplemented):
+            idIn=NotImplemented,
+            kSql=NotImplemented):
         KalturaFilter.__init__(self,
             orderBy)
 
@@ -3726,9 +3740,14 @@ class KalturaSegmentationTypeFilter(KalturaFilter):
         # @var string
         self.idIn = idIn
 
+        # KSQL expression
+        # @var string
+        self.kSql = kSql
+
 
     PROPERTY_LOADERS = {
         'idIn': getXmlNodeText, 
+        'kSql': getXmlNodeText, 
     }
 
     def fromXml(self, node):
@@ -3739,6 +3758,7 @@ class KalturaSegmentationTypeFilter(KalturaFilter):
         kparams = KalturaFilter.toParams(self)
         kparams.put("objectType", "KalturaSegmentationTypeFilter")
         kparams.addStringIfDefined("idIn", self.idIn)
+        kparams.addStringIfDefined("kSql", self.kSql)
         return kparams
 
     def getIdIn(self):
@@ -3746,6 +3766,12 @@ class KalturaSegmentationTypeFilter(KalturaFilter):
 
     def setIdIn(self, newIdIn):
         self.idIn = newIdIn
+
+    def getKSql(self):
+        return self.kSql
+
+    def setKSql(self, newKSql):
+        self.kSql = newKSql
 
 
 # @package Kaltura
@@ -4198,7 +4224,8 @@ class KalturaSubscriptionFilter(KalturaFilter):
             subscriptionIdIn=NotImplemented,
             mediaFileIdEqual=NotImplemented,
             externalIdIn=NotImplemented,
-            couponGroupIdEqual=NotImplemented):
+            couponGroupIdEqual=NotImplemented,
+            kSql=NotImplemented):
         KalturaFilter.__init__(self,
             orderBy)
 
@@ -4218,12 +4245,17 @@ class KalturaSubscriptionFilter(KalturaFilter):
         # @var int
         self.couponGroupIdEqual = couponGroupIdEqual
 
+        # KSQL expression
+        # @var string
+        self.kSql = kSql
+
 
     PROPERTY_LOADERS = {
         'subscriptionIdIn': getXmlNodeText, 
         'mediaFileIdEqual': getXmlNodeInt, 
         'externalIdIn': getXmlNodeText, 
         'couponGroupIdEqual': getXmlNodeInt, 
+        'kSql': getXmlNodeText, 
     }
 
     def fromXml(self, node):
@@ -4237,6 +4269,7 @@ class KalturaSubscriptionFilter(KalturaFilter):
         kparams.addIntIfDefined("mediaFileIdEqual", self.mediaFileIdEqual)
         kparams.addStringIfDefined("externalIdIn", self.externalIdIn)
         kparams.addIntIfDefined("couponGroupIdEqual", self.couponGroupIdEqual)
+        kparams.addStringIfDefined("kSql", self.kSql)
         return kparams
 
     def getSubscriptionIdIn(self):
@@ -4262,6 +4295,12 @@ class KalturaSubscriptionFilter(KalturaFilter):
 
     def setCouponGroupIdEqual(self, newCouponGroupIdEqual):
         self.couponGroupIdEqual = newCouponGroupIdEqual
+
+    def getKSql(self):
+        return self.kSql
+
+    def setKSql(self, newKSql):
+        self.kSql = newKSql
 
 
 # @package Kaltura
@@ -18142,6 +18181,98 @@ class KalturaGeneralPartnerConfig(KalturaPartnerConfiguration):
 
     def setDefaultRegion(self, newDefaultRegion):
         self.defaultRegion = newDefaultRegion
+
+
+# @package Kaltura
+# @subpackage Client
+class KalturaObjectVirtualAssetInfo(KalturaObjectBase):
+    def __init__(self,
+            assetStructId=NotImplemented,
+            metaId=NotImplemented,
+            type=NotImplemented):
+        KalturaObjectBase.__init__(self)
+
+        # Asset struct identifier
+        # @var int
+        self.assetStructId = assetStructId
+
+        # Meta identifier
+        # @var int
+        self.metaId = metaId
+
+        # Object virtual asset info type
+        # @var KalturaObjectVirtualAssetInfoType
+        self.type = type
+
+
+    PROPERTY_LOADERS = {
+        'assetStructId': getXmlNodeInt, 
+        'metaId': getXmlNodeInt, 
+        'type': (KalturaEnumsFactory.createString, "KalturaObjectVirtualAssetInfoType"), 
+    }
+
+    def fromXml(self, node):
+        KalturaObjectBase.fromXml(self, node)
+        self.fromXmlImpl(node, KalturaObjectVirtualAssetInfo.PROPERTY_LOADERS)
+
+    def toParams(self):
+        kparams = KalturaObjectBase.toParams(self)
+        kparams.put("objectType", "KalturaObjectVirtualAssetInfo")
+        kparams.addIntIfDefined("assetStructId", self.assetStructId)
+        kparams.addIntIfDefined("metaId", self.metaId)
+        kparams.addStringEnumIfDefined("type", self.type)
+        return kparams
+
+    def getAssetStructId(self):
+        return self.assetStructId
+
+    def setAssetStructId(self, newAssetStructId):
+        self.assetStructId = newAssetStructId
+
+    def getMetaId(self):
+        return self.metaId
+
+    def setMetaId(self, newMetaId):
+        self.metaId = newMetaId
+
+    def getType(self):
+        return self.type
+
+    def setType(self, newType):
+        self.type = newType
+
+
+# @package Kaltura
+# @subpackage Client
+class KalturaObjectVirtualAssetPartnerConfig(KalturaPartnerConfiguration):
+    def __init__(self,
+            objectVirtualAssets=NotImplemented):
+        KalturaPartnerConfiguration.__init__(self)
+
+        # List of object virtual asset info
+        # @var array of KalturaObjectVirtualAssetInfo
+        self.objectVirtualAssets = objectVirtualAssets
+
+
+    PROPERTY_LOADERS = {
+        'objectVirtualAssets': (KalturaObjectFactory.createArray, 'KalturaObjectVirtualAssetInfo'), 
+    }
+
+    def fromXml(self, node):
+        KalturaPartnerConfiguration.fromXml(self, node)
+        self.fromXmlImpl(node, KalturaObjectVirtualAssetPartnerConfig.PROPERTY_LOADERS)
+
+    def toParams(self):
+        kparams = KalturaPartnerConfiguration.toParams(self)
+        kparams.put("objectType", "KalturaObjectVirtualAssetPartnerConfig")
+        kparams.addArrayIfDefined("objectVirtualAssets", self.objectVirtualAssets)
+        return kparams
+
+    def getObjectVirtualAssets(self):
+        return self.objectVirtualAssets
+
+    def setObjectVirtualAssets(self, newObjectVirtualAssets):
+        self.objectVirtualAssets = newObjectVirtualAssets
 
 
 # @package Kaltura
@@ -39513,18 +39644,6 @@ class KalturaSystemService(KalturaServiceBase):
     def __init__(self, client = None):
         KalturaServiceBase.__init__(self, client)
 
-    def clearLocalServerCache(self, action = NotImplemented, key = NotImplemented):
-        """Clear local server cache"""
-
-        kparams = KalturaParams()
-        kparams.addStringIfDefined("action", action)
-        kparams.addStringIfDefined("key", key)
-        self.client.queueServiceActionCall("system", "clearLocalServerCache", "None", kparams)
-        if self.client.isMultiRequest():
-            return self.client.getMultiRequestResult()
-        resultNode = self.client.doQueue()
-        return getXmlNodeBool(resultNode)
-
     def getLogLevel(self):
         """Gets the current level of the KLogger"""
 
@@ -39554,17 +39673,6 @@ class KalturaSystemService(KalturaServiceBase):
             return self.client.getMultiRequestResult()
         resultNode = self.client.doQueue()
         return getXmlNodeText(resultNode)
-
-    def incrementLayeredCacheGroupConfigVersion(self, groupId = 0):
-        """Returns true if version has been incremented successfully or false otherwise. You need to send groupId only if you wish to increment for a specific groupId and not the one the KS belongs to."""
-
-        kparams = KalturaParams()
-        kparams.addIntIfDefined("groupId", groupId);
-        self.client.queueServiceActionCall("system", "incrementLayeredCacheGroupConfigVersion", "None", kparams)
-        if self.client.isMultiRequest():
-            return self.client.getMultiRequestResult()
-        resultNode = self.client.doQueue()
-        return getXmlNodeBool(resultNode)
 
     def ping(self):
         """Returns true"""
@@ -40511,6 +40619,7 @@ class KalturaCoreClient(KalturaClientPlugin):
             'KalturaMetaTagOrderBy': KalturaMetaTagOrderBy,
             'KalturaMonetizationType': KalturaMonetizationType,
             'KalturaNotificationType': KalturaNotificationType,
+            'KalturaObjectVirtualAssetInfoType': KalturaObjectVirtualAssetInfoType,
             'KalturaOTTUserOrderBy': KalturaOTTUserOrderBy,
             'KalturaParentalRuleOrderBy': KalturaParentalRuleOrderBy,
             'KalturaParentalRuleType': KalturaParentalRuleType,
@@ -40872,6 +40981,8 @@ class KalturaCoreClient(KalturaClientPlugin):
             'KalturaBillingPartnerConfig': KalturaBillingPartnerConfig,
             'KalturaConcurrencyPartnerConfig': KalturaConcurrencyPartnerConfig,
             'KalturaGeneralPartnerConfig': KalturaGeneralPartnerConfig,
+            'KalturaObjectVirtualAssetInfo': KalturaObjectVirtualAssetInfo,
+            'KalturaObjectVirtualAssetPartnerConfig': KalturaObjectVirtualAssetPartnerConfig,
             'KalturaPersonalList': KalturaPersonalList,
             'KalturaPersonalListListResponse': KalturaPersonalListListResponse,
             'KalturaEngagementAdapterBase': KalturaEngagementAdapterBase,
