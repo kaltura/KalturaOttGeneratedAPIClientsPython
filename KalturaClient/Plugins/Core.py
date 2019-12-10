@@ -42,7 +42,7 @@ from ..Base import (
     KalturaServiceBase,
 )
 
-API_VERSION = '5.3.0.14228'
+API_VERSION = '5.3.0.14255'
 
 ########## enums ##########
 # @package Kaltura
@@ -11018,6 +11018,42 @@ class KalturaBulkUploadMediaAssetResult(KalturaBulkUploadAssetResult):
 
 # @package Kaltura
 # @subpackage Client
+class KalturaBulkUploadLiveAssetResult(KalturaBulkUploadMediaAssetResult):
+    def __init__(self,
+            objectId=NotImplemented,
+            index=NotImplemented,
+            bulkUploadId=NotImplemented,
+            status=NotImplemented,
+            errors=NotImplemented,
+            warnings=NotImplemented,
+            type=NotImplemented,
+            externalId=NotImplemented):
+        KalturaBulkUploadMediaAssetResult.__init__(self,
+            objectId,
+            index,
+            bulkUploadId,
+            status,
+            errors,
+            warnings,
+            type,
+            externalId)
+
+
+    PROPERTY_LOADERS = {
+    }
+
+    def fromXml(self, node):
+        KalturaBulkUploadMediaAssetResult.fromXml(self, node)
+        self.fromXmlImpl(node, KalturaBulkUploadLiveAssetResult.PROPERTY_LOADERS)
+
+    def toParams(self):
+        kparams = KalturaBulkUploadMediaAssetResult.toParams(self)
+        kparams.put("objectType", "KalturaBulkUploadLiveAssetResult")
+        return kparams
+
+
+# @package Kaltura
+# @subpackage Client
 class KalturaBulkUploadProgramAssetResult(KalturaBulkUploadResult):
     def __init__(self,
             objectId=NotImplemented,
@@ -11076,68 +11112,6 @@ class KalturaBulkUploadProgramAssetResult(KalturaBulkUploadResult):
 
     def getLiveAssetId(self):
         return self.liveAssetId
-
-
-# @package Kaltura
-# @subpackage Client
-class KalturaBulkUploadLiveAssetResult(KalturaBulkUploadResult):
-    def __init__(self,
-            objectId=NotImplemented,
-            index=NotImplemented,
-            bulkUploadId=NotImplemented,
-            status=NotImplemented,
-            errors=NotImplemented,
-            warnings=NotImplemented,
-            id=NotImplemented,
-            externalEpgIngestId=NotImplemented,
-            programs=NotImplemented):
-        KalturaBulkUploadResult.__init__(self,
-            objectId,
-            index,
-            bulkUploadId,
-            status,
-            errors,
-            warnings)
-
-        # The internal kaltura channel id
-        # @var int
-        # @readonly
-        self.id = id
-
-        # Indicates the epg asset object id in the bulk file
-        # @var string
-        # @readonly
-        self.externalEpgIngestId = externalEpgIngestId
-
-        # List of programs that were ingested to the channel
-        # @var array of KalturaBulkUploadProgramAssetResult
-        # @readonly
-        self.programs = programs
-
-
-    PROPERTY_LOADERS = {
-        'id': getXmlNodeInt, 
-        'externalEpgIngestId': getXmlNodeText, 
-        'programs': (KalturaObjectFactory.createArray, 'KalturaBulkUploadProgramAssetResult'), 
-    }
-
-    def fromXml(self, node):
-        KalturaBulkUploadResult.fromXml(self, node)
-        self.fromXmlImpl(node, KalturaBulkUploadLiveAssetResult.PROPERTY_LOADERS)
-
-    def toParams(self):
-        kparams = KalturaBulkUploadResult.toParams(self)
-        kparams.put("objectType", "KalturaBulkUploadLiveAssetResult")
-        return kparams
-
-    def getId(self):
-        return self.id
-
-    def getExternalEpgIngestId(self):
-        return self.externalEpgIngestId
-
-    def getPrograms(self):
-        return self.programs
 
 
 # @package Kaltura
@@ -30102,6 +30076,30 @@ class KalturaBulkUploadMediaAssetData(KalturaBulkUploadAssetData):
 
 # @package Kaltura
 # @subpackage Client
+class KalturaBulkUploadLiveAssetData(KalturaBulkUploadMediaAssetData):
+    """indicates the media asset object type in the bulk file"""
+
+    def __init__(self,
+            typeId=NotImplemented):
+        KalturaBulkUploadMediaAssetData.__init__(self,
+            typeId)
+
+
+    PROPERTY_LOADERS = {
+    }
+
+    def fromXml(self, node):
+        KalturaBulkUploadMediaAssetData.fromXml(self, node)
+        self.fromXmlImpl(node, KalturaBulkUploadLiveAssetData.PROPERTY_LOADERS)
+
+    def toParams(self):
+        kparams = KalturaBulkUploadMediaAssetData.toParams(self)
+        kparams.put("objectType", "KalturaBulkUploadLiveAssetData")
+        return kparams
+
+
+# @package Kaltura
+# @subpackage Client
 class KalturaBulkUploadProgramAssetData(KalturaBulkUploadAssetData):
     """indicates the epg asset object type in the bulk file"""
 
@@ -40896,8 +40894,8 @@ class KalturaCoreClient(KalturaClientPlugin):
             'KalturaBulkUploadListResponse': KalturaBulkUploadListResponse,
             'KalturaBulkUploadAssetResult': KalturaBulkUploadAssetResult,
             'KalturaBulkUploadMediaAssetResult': KalturaBulkUploadMediaAssetResult,
-            'KalturaBulkUploadProgramAssetResult': KalturaBulkUploadProgramAssetResult,
             'KalturaBulkUploadLiveAssetResult': KalturaBulkUploadLiveAssetResult,
+            'KalturaBulkUploadProgramAssetResult': KalturaBulkUploadProgramAssetResult,
             'KalturaSocialAction': KalturaSocialAction,
             'KalturaSocialActionListResponse': KalturaSocialActionListResponse,
             'KalturaSocialActionRate': KalturaSocialActionRate,
@@ -41202,6 +41200,7 @@ class KalturaCoreClient(KalturaClientPlugin):
             'KalturaBulkUploadObjectData': KalturaBulkUploadObjectData,
             'KalturaBulkUploadAssetData': KalturaBulkUploadAssetData,
             'KalturaBulkUploadMediaAssetData': KalturaBulkUploadMediaAssetData,
+            'KalturaBulkUploadLiveAssetData': KalturaBulkUploadLiveAssetData,
             'KalturaBulkUploadProgramAssetData': KalturaBulkUploadProgramAssetData,
             'KalturaAssetFileContext': KalturaAssetFileContext,
             'KalturaAssetStatisticsQuery': KalturaAssetStatisticsQuery,
