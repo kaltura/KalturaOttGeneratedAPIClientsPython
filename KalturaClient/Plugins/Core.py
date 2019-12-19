@@ -42,7 +42,7 @@ from ..Base import (
     KalturaServiceBase,
 )
 
-API_VERSION = '5.3.0.14268'
+API_VERSION = '5.3.0.14286'
 
 ########## enums ##########
 # @package Kaltura
@@ -3781,7 +3781,8 @@ class KalturaUserSegmentFilter(KalturaFilter):
 
     def __init__(self,
             orderBy=NotImplemented,
-            userIdEqual=NotImplemented):
+            userIdEqual=NotImplemented,
+            kSql=NotImplemented):
         KalturaFilter.__init__(self,
             orderBy)
 
@@ -3789,9 +3790,14 @@ class KalturaUserSegmentFilter(KalturaFilter):
         # @var string
         self.userIdEqual = userIdEqual
 
+        # KSQL expression
+        # @var string
+        self.kSql = kSql
+
 
     PROPERTY_LOADERS = {
         'userIdEqual': getXmlNodeText, 
+        'kSql': getXmlNodeText, 
     }
 
     def fromXml(self, node):
@@ -3802,6 +3808,7 @@ class KalturaUserSegmentFilter(KalturaFilter):
         kparams = KalturaFilter.toParams(self)
         kparams.put("objectType", "KalturaUserSegmentFilter")
         kparams.addStringIfDefined("userIdEqual", self.userIdEqual)
+        kparams.addStringIfDefined("kSql", self.kSql)
         return kparams
 
     def getUserIdEqual(self):
@@ -3809,6 +3816,12 @@ class KalturaUserSegmentFilter(KalturaFilter):
 
     def setUserIdEqual(self, newUserIdEqual):
         self.userIdEqual = newUserIdEqual
+
+    def getKSql(self):
+        return self.kSql
+
+    def setKSql(self, newKSql):
+        self.kSql = newKSql
 
 
 # @package Kaltura
@@ -11718,6 +11731,104 @@ class KalturaSocialFriendActivityListResponse(KalturaListResponse):
 
 # @package Kaltura
 # @subpackage Client
+class KalturaHouseholdSegment(KalturaObjectBase):
+    """Indicates a segment of a household"""
+
+    def __init__(self,
+            householdId=NotImplemented,
+            householdId=NotImplemented,
+            blockingSegmentIds=NotImplemented):
+        KalturaObjectBase.__init__(self)
+
+        # Household SegmentId
+        # @var int
+        self.householdId = householdId
+
+        # Segment Id
+        # @var int
+        self.householdId = householdId
+
+        # Blocking segment Ids
+        # @var string
+        self.blockingSegmentIds = blockingSegmentIds
+
+
+    PROPERTY_LOADERS = {
+        'householdId': getXmlNodeInt, 
+        'householdId': getXmlNodeInt, 
+        'blockingSegmentIds': getXmlNodeText, 
+    }
+
+    def fromXml(self, node):
+        KalturaObjectBase.fromXml(self, node)
+        self.fromXmlImpl(node, KalturaHouseholdSegment.PROPERTY_LOADERS)
+
+    def toParams(self):
+        kparams = KalturaObjectBase.toParams(self)
+        kparams.put("objectType", "KalturaHouseholdSegment")
+        kparams.addIntIfDefined("householdId", self.householdId)
+        kparams.addIntIfDefined("householdId", self.householdId)
+        kparams.addStringIfDefined("blockingSegmentIds", self.blockingSegmentIds)
+        return kparams
+
+    def getHouseholdId(self):
+        return self.householdId
+
+    def setHouseholdId(self, newHouseholdId):
+        self.householdId = newHouseholdId
+
+    def getHouseholdId(self):
+        return self.householdId
+
+    def setHouseholdId(self, newHouseholdId):
+        self.householdId = newHouseholdId
+
+    def getBlockingSegmentIds(self):
+        return self.blockingSegmentIds
+
+    def setBlockingSegmentIds(self, newBlockingSegmentIds):
+        self.blockingSegmentIds = newBlockingSegmentIds
+
+
+# @package Kaltura
+# @subpackage Client
+class KalturaHouseholdSegmentListResponse(KalturaListResponse):
+    """List of user segments"""
+
+    def __init__(self,
+            totalCount=NotImplemented,
+            objects=NotImplemented):
+        KalturaListResponse.__init__(self,
+            totalCount)
+
+        # Segmentation Types
+        # @var array of KalturaHouseholdSegment
+        self.objects = objects
+
+
+    PROPERTY_LOADERS = {
+        'objects': (KalturaObjectFactory.createArray, 'KalturaHouseholdSegment'), 
+    }
+
+    def fromXml(self, node):
+        KalturaListResponse.fromXml(self, node)
+        self.fromXmlImpl(node, KalturaHouseholdSegmentListResponse.PROPERTY_LOADERS)
+
+    def toParams(self):
+        kparams = KalturaListResponse.toParams(self)
+        kparams.put("objectType", "KalturaHouseholdSegmentListResponse")
+        kparams.addArrayIfDefined("objects", self.objects)
+        return kparams
+
+    def getObjects(self):
+        return self.objects
+
+    def setObjects(self, newObjects):
+        self.objects = newObjects
+
+
+# @package Kaltura
+# @subpackage Client
 class KalturaBaseSegmentCondition(KalturaObjectBase):
     """Base class that defines segment condition"""
 
@@ -12305,6 +12416,209 @@ class KalturaAssetOrderSegmentAction(KalturaBaseSegmentAction):
 
     def setValues(self, newValues):
         self.values = newValues
+
+
+# @package Kaltura
+# @subpackage Client
+class KalturaKsqlSegmentAction(KalturaBaseSegmentAction):
+    """Segment action with ksql"""
+
+    def __init__(self,
+            ksql=NotImplemented):
+        KalturaBaseSegmentAction.__init__(self)
+
+        # KSQL
+        # @var string
+        self.ksql = ksql
+
+
+    PROPERTY_LOADERS = {
+        'ksql': getXmlNodeText, 
+    }
+
+    def fromXml(self, node):
+        KalturaBaseSegmentAction.fromXml(self, node)
+        self.fromXmlImpl(node, KalturaKsqlSegmentAction.PROPERTY_LOADERS)
+
+    def toParams(self):
+        kparams = KalturaBaseSegmentAction.toParams(self)
+        kparams.put("objectType", "KalturaKsqlSegmentAction")
+        kparams.addStringIfDefined("ksql", self.ksql)
+        return kparams
+
+    def getKsql(self):
+        return self.ksql
+
+    def setKsql(self, newKsql):
+        self.ksql = newKsql
+
+
+# @package Kaltura
+# @subpackage Client
+class KalturaSegementAssetFilterAction(KalturaKsqlSegmentAction):
+    """Asset filter action"""
+
+    def __init__(self,
+            ksql=NotImplemented):
+        KalturaKsqlSegmentAction.__init__(self,
+            ksql)
+
+
+    PROPERTY_LOADERS = {
+    }
+
+    def fromXml(self, node):
+        KalturaKsqlSegmentAction.fromXml(self, node)
+        self.fromXmlImpl(node, KalturaSegementAssetFilterAction.PROPERTY_LOADERS)
+
+    def toParams(self):
+        kparams = KalturaKsqlSegmentAction.toParams(self)
+        kparams.put("objectType", "KalturaSegementAssetFilterAction")
+        return kparams
+
+
+# @package Kaltura
+# @subpackage Client
+class KalturaSegementAssetFilterSegmentAction(KalturaSegementAssetFilterAction):
+    """segment asset filter for segment action"""
+
+    def __init__(self,
+            ksql=NotImplemented):
+        KalturaSegementAssetFilterAction.__init__(self,
+            ksql)
+
+
+    PROPERTY_LOADERS = {
+    }
+
+    def fromXml(self, node):
+        KalturaSegementAssetFilterAction.fromXml(self, node)
+        self.fromXmlImpl(node, KalturaSegementAssetFilterSegmentAction.PROPERTY_LOADERS)
+
+    def toParams(self):
+        kparams = KalturaSegementAssetFilterAction.toParams(self)
+        kparams.put("objectType", "KalturaSegementAssetFilterSegmentAction")
+        return kparams
+
+
+# @package Kaltura
+# @subpackage Client
+class KalturaSegementAssetFilterSubscriptionAction(KalturaSegementAssetFilterAction):
+    """segment asset filter for subscription action"""
+
+    def __init__(self,
+            ksql=NotImplemented):
+        KalturaSegementAssetFilterAction.__init__(self,
+            ksql)
+
+
+    PROPERTY_LOADERS = {
+    }
+
+    def fromXml(self, node):
+        KalturaSegementAssetFilterAction.fromXml(self, node)
+        self.fromXmlImpl(node, KalturaSegementAssetFilterSubscriptionAction.PROPERTY_LOADERS)
+
+    def toParams(self):
+        kparams = KalturaSegementAssetFilterAction.toParams(self)
+        kparams.put("objectType", "KalturaSegementAssetFilterSubscriptionAction")
+        return kparams
+
+
+# @package Kaltura
+# @subpackage Client
+class KalturaBlockSubscriptionSegmentAction(KalturaKsqlSegmentAction):
+    """segment block subscription action"""
+
+    def __init__(self,
+            ksql=NotImplemented):
+        KalturaKsqlSegmentAction.__init__(self,
+            ksql)
+
+
+    PROPERTY_LOADERS = {
+    }
+
+    def fromXml(self, node):
+        KalturaKsqlSegmentAction.fromXml(self, node)
+        self.fromXmlImpl(node, KalturaBlockSubscriptionSegmentAction.PROPERTY_LOADERS)
+
+    def toParams(self):
+        kparams = KalturaKsqlSegmentAction.toParams(self)
+        kparams.put("objectType", "KalturaBlockSubscriptionSegmentAction")
+        return kparams
+
+
+# @package Kaltura
+# @subpackage Client
+class KalturaSegmentBlockPlaybackSubscriptionAction(KalturaBlockSubscriptionSegmentAction):
+    """segment block subscription for playback action"""
+
+    def __init__(self,
+            ksql=NotImplemented):
+        KalturaBlockSubscriptionSegmentAction.__init__(self,
+            ksql)
+
+
+    PROPERTY_LOADERS = {
+    }
+
+    def fromXml(self, node):
+        KalturaBlockSubscriptionSegmentAction.fromXml(self, node)
+        self.fromXmlImpl(node, KalturaSegmentBlockPlaybackSubscriptionAction.PROPERTY_LOADERS)
+
+    def toParams(self):
+        kparams = KalturaBlockSubscriptionSegmentAction.toParams(self)
+        kparams.put("objectType", "KalturaSegmentBlockPlaybackSubscriptionAction")
+        return kparams
+
+
+# @package Kaltura
+# @subpackage Client
+class KalturaSegmentBlockCancelSubscriptionAction(KalturaBlockSubscriptionSegmentAction):
+    """segment block subscription for cancel action"""
+
+    def __init__(self,
+            ksql=NotImplemented):
+        KalturaBlockSubscriptionSegmentAction.__init__(self,
+            ksql)
+
+
+    PROPERTY_LOADERS = {
+    }
+
+    def fromXml(self, node):
+        KalturaBlockSubscriptionSegmentAction.fromXml(self, node)
+        self.fromXmlImpl(node, KalturaSegmentBlockCancelSubscriptionAction.PROPERTY_LOADERS)
+
+    def toParams(self):
+        kparams = KalturaBlockSubscriptionSegmentAction.toParams(self)
+        kparams.put("objectType", "KalturaSegmentBlockCancelSubscriptionAction")
+        return kparams
+
+
+# @package Kaltura
+# @subpackage Client
+class KalturaSegmentBlockPurchaseSubscriptionAction(KalturaBlockSubscriptionSegmentAction):
+    """segment block subscription for purchase action"""
+
+    def __init__(self,
+            ksql=NotImplemented):
+        KalturaBlockSubscriptionSegmentAction.__init__(self,
+            ksql)
+
+
+    PROPERTY_LOADERS = {
+    }
+
+    def fromXml(self, node):
+        KalturaBlockSubscriptionSegmentAction.fromXml(self, node)
+        self.fromXmlImpl(node, KalturaSegmentBlockPurchaseSubscriptionAction.PROPERTY_LOADERS)
+
+    def toParams(self):
+        kparams = KalturaBlockSubscriptionSegmentAction.toParams(self)
+        kparams.put("objectType", "KalturaSegmentBlockPurchaseSubscriptionAction")
+        return kparams
 
 
 # @package Kaltura
@@ -37172,6 +37486,46 @@ class KalturaHouseholdQuotaService(KalturaServiceBase):
 
 # @package Kaltura
 # @subpackage Client
+class KalturaHouseholdSegmentService(KalturaServiceBase):
+    def __init__(self, client = None):
+        KalturaServiceBase.__init__(self, client)
+
+    def add(self, householdSegment):
+        """Adds a segment to a household"""
+
+        kparams = KalturaParams()
+        kparams.addObjectIfDefined("householdSegment", householdSegment)
+        self.client.queueServiceActionCall("householdsegment", "add", "KalturaHouseholdSegment", kparams)
+        if self.client.isMultiRequest():
+            return self.client.getMultiRequestResult()
+        resultNode = self.client.doQueue()
+        return KalturaObjectFactory.create(resultNode, 'KalturaHouseholdSegment')
+
+    def delete(self, householdId, segmentId):
+        """Deletes a segment from a household"""
+
+        kparams = KalturaParams()
+        kparams.addIntIfDefined("householdId", householdId);
+        kparams.addIntIfDefined("segmentId", segmentId);
+        self.client.queueServiceActionCall("householdsegment", "delete", "None", kparams)
+        if self.client.isMultiRequest():
+            return self.client.getMultiRequestResult()
+        resultNode = self.client.doQueue()
+        return getXmlNodeBool(resultNode)
+
+    def list(self):
+        """Retrieve all the segments that apply for given household"""
+
+        kparams = KalturaParams()
+        self.client.queueServiceActionCall("householdsegment", "list", "KalturaHouseholdSegmentListResponse", kparams)
+        if self.client.isMultiRequest():
+            return self.client.getMultiRequestResult()
+        resultNode = self.client.doQueue()
+        return KalturaObjectFactory.create(resultNode, 'KalturaHouseholdSegmentListResponse')
+
+
+# @package Kaltura
+# @subpackage Client
 class KalturaHouseholdUserService(KalturaServiceBase):
     def __init__(self, client = None):
         KalturaServiceBase.__init__(self, client)
@@ -40482,6 +40836,7 @@ class KalturaCoreClient(KalturaClientPlugin):
             'householdPaymentMethod': KalturaHouseholdPaymentMethodService,
             'householdPremiumService': KalturaHouseholdPremiumServiceService,
             'householdQuota': KalturaHouseholdQuotaService,
+            'householdSegment': KalturaHouseholdSegmentService,
             'householdUser': KalturaHouseholdUserService,
             'image': KalturaImageService,
             'imageType': KalturaImageTypeService,
@@ -40907,6 +41262,8 @@ class KalturaCoreClient(KalturaClientPlugin):
             'KalturaAssetComment': KalturaAssetComment,
             'KalturaSocialFriendActivity': KalturaSocialFriendActivity,
             'KalturaSocialFriendActivityListResponse': KalturaSocialFriendActivityListResponse,
+            'KalturaHouseholdSegment': KalturaHouseholdSegment,
+            'KalturaHouseholdSegmentListResponse': KalturaHouseholdSegmentListResponse,
             'KalturaBaseSegmentCondition': KalturaBaseSegmentCondition,
             'KalturaBaseSegmentAction': KalturaBaseSegmentAction,
             'KalturaBaseSegmentValue': KalturaBaseSegmentValue,
@@ -40917,6 +41274,14 @@ class KalturaCoreClient(KalturaClientPlugin):
             'KalturaMonetizationCondition': KalturaMonetizationCondition,
             'KalturaUserDataCondition': KalturaUserDataCondition,
             'KalturaAssetOrderSegmentAction': KalturaAssetOrderSegmentAction,
+            'KalturaKsqlSegmentAction': KalturaKsqlSegmentAction,
+            'KalturaSegementAssetFilterAction': KalturaSegementAssetFilterAction,
+            'KalturaSegementAssetFilterSegmentAction': KalturaSegementAssetFilterSegmentAction,
+            'KalturaSegementAssetFilterSubscriptionAction': KalturaSegementAssetFilterSubscriptionAction,
+            'KalturaBlockSubscriptionSegmentAction': KalturaBlockSubscriptionSegmentAction,
+            'KalturaSegmentBlockPlaybackSubscriptionAction': KalturaSegmentBlockPlaybackSubscriptionAction,
+            'KalturaSegmentBlockCancelSubscriptionAction': KalturaSegmentBlockCancelSubscriptionAction,
+            'KalturaSegmentBlockPurchaseSubscriptionAction': KalturaSegmentBlockPurchaseSubscriptionAction,
             'KalturaSingleSegmentValue': KalturaSingleSegmentValue,
             'KalturaSegmentSource': KalturaSegmentSource,
             'KalturaSegmentValue': KalturaSegmentValue,
