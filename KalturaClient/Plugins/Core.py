@@ -42,7 +42,7 @@ from ..Base import (
     KalturaServiceBase,
 )
 
-API_VERSION = '5.3.0.14289'
+API_VERSION = '5.3.0.14292'
 
 ########## enums ##########
 # @package Kaltura
@@ -12403,7 +12403,7 @@ class KalturaKsqlSegmentAction(KalturaBaseSegmentAction):
 
 # @package Kaltura
 # @subpackage Client
-class KalturaSegementAssetFilterAction(KalturaKsqlSegmentAction):
+class KalturaSegmentAssetFilterAction(KalturaKsqlSegmentAction):
     """Asset filter action"""
 
     def __init__(self,
@@ -12417,22 +12417,22 @@ class KalturaSegementAssetFilterAction(KalturaKsqlSegmentAction):
 
     def fromXml(self, node):
         KalturaKsqlSegmentAction.fromXml(self, node)
-        self.fromXmlImpl(node, KalturaSegementAssetFilterAction.PROPERTY_LOADERS)
+        self.fromXmlImpl(node, KalturaSegmentAssetFilterAction.PROPERTY_LOADERS)
 
     def toParams(self):
         kparams = KalturaKsqlSegmentAction.toParams(self)
-        kparams.put("objectType", "KalturaSegementAssetFilterAction")
+        kparams.put("objectType", "KalturaSegmentAssetFilterAction")
         return kparams
 
 
 # @package Kaltura
 # @subpackage Client
-class KalturaSegementAssetFilterSegmentAction(KalturaSegementAssetFilterAction):
+class KalturaSegmentAssetFilterSegmentAction(KalturaSegmentAssetFilterAction):
     """segment asset filter for segment action"""
 
     def __init__(self,
             ksql=NotImplemented):
-        KalturaSegementAssetFilterAction.__init__(self,
+        KalturaSegmentAssetFilterAction.__init__(self,
             ksql)
 
 
@@ -12440,23 +12440,23 @@ class KalturaSegementAssetFilterSegmentAction(KalturaSegementAssetFilterAction):
     }
 
     def fromXml(self, node):
-        KalturaSegementAssetFilterAction.fromXml(self, node)
-        self.fromXmlImpl(node, KalturaSegementAssetFilterSegmentAction.PROPERTY_LOADERS)
+        KalturaSegmentAssetFilterAction.fromXml(self, node)
+        self.fromXmlImpl(node, KalturaSegmentAssetFilterSegmentAction.PROPERTY_LOADERS)
 
     def toParams(self):
-        kparams = KalturaSegementAssetFilterAction.toParams(self)
-        kparams.put("objectType", "KalturaSegementAssetFilterSegmentAction")
+        kparams = KalturaSegmentAssetFilterAction.toParams(self)
+        kparams.put("objectType", "KalturaSegmentAssetFilterSegmentAction")
         return kparams
 
 
 # @package Kaltura
 # @subpackage Client
-class KalturaSegementAssetFilterSubscriptionAction(KalturaSegementAssetFilterAction):
+class KalturaSegementAssetFilterSubscriptionAction(KalturaSegmentAssetFilterAction):
     """segment asset filter for subscription action"""
 
     def __init__(self,
             ksql=NotImplemented):
-        KalturaSegementAssetFilterAction.__init__(self,
+        KalturaSegmentAssetFilterAction.__init__(self,
             ksql)
 
 
@@ -12464,11 +12464,11 @@ class KalturaSegementAssetFilterSubscriptionAction(KalturaSegementAssetFilterAct
     }
 
     def fromXml(self, node):
-        KalturaSegementAssetFilterAction.fromXml(self, node)
+        KalturaSegmentAssetFilterAction.fromXml(self, node)
         self.fromXmlImpl(node, KalturaSegementAssetFilterSubscriptionAction.PROPERTY_LOADERS)
 
     def toParams(self):
-        kparams = KalturaSegementAssetFilterAction.toParams(self)
+        kparams = KalturaSegmentAssetFilterAction.toParams(self)
         kparams.put("objectType", "KalturaSegementAssetFilterSubscriptionAction")
         return kparams
 
@@ -41305,8 +41305,8 @@ class KalturaCoreClient(KalturaClientPlugin):
             'KalturaUserDataCondition': KalturaUserDataCondition,
             'KalturaAssetOrderSegmentAction': KalturaAssetOrderSegmentAction,
             'KalturaKsqlSegmentAction': KalturaKsqlSegmentAction,
-            'KalturaSegementAssetFilterAction': KalturaSegementAssetFilterAction,
-            'KalturaSegementAssetFilterSegmentAction': KalturaSegementAssetFilterSegmentAction,
+            'KalturaSegmentAssetFilterAction': KalturaSegmentAssetFilterAction,
+            'KalturaSegmentAssetFilterSegmentAction': KalturaSegmentAssetFilterSegmentAction,
             'KalturaSegementAssetFilterSubscriptionAction': KalturaSegementAssetFilterSubscriptionAction,
             'KalturaBlockSubscriptionSegmentAction': KalturaBlockSubscriptionSegmentAction,
             'KalturaSegmentBlockPlaybackSubscriptionAction': KalturaSegmentBlockPlaybackSubscriptionAction,
