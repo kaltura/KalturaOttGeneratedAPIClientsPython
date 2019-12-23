@@ -42,7 +42,7 @@ from ..Base import (
     KalturaServiceBase,
 )
 
-API_VERSION = '5.3.0.14292'
+API_VERSION = '5.3.0.14294'
 
 ########## enums ##########
 # @package Kaltura
@@ -12451,7 +12451,7 @@ class KalturaSegmentAssetFilterSegmentAction(KalturaSegmentAssetFilterAction):
 
 # @package Kaltura
 # @subpackage Client
-class KalturaSegementAssetFilterSubscriptionAction(KalturaSegmentAssetFilterAction):
+class KalturaSegmentAssetFilterSubscriptionAction(KalturaSegmentAssetFilterAction):
     """segment asset filter for subscription action"""
 
     def __init__(self,
@@ -12465,11 +12465,11 @@ class KalturaSegementAssetFilterSubscriptionAction(KalturaSegmentAssetFilterActi
 
     def fromXml(self, node):
         KalturaSegmentAssetFilterAction.fromXml(self, node)
-        self.fromXmlImpl(node, KalturaSegementAssetFilterSubscriptionAction.PROPERTY_LOADERS)
+        self.fromXmlImpl(node, KalturaSegmentAssetFilterSubscriptionAction.PROPERTY_LOADERS)
 
     def toParams(self):
         kparams = KalturaSegmentAssetFilterAction.toParams(self)
-        kparams.put("objectType", "KalturaSegementAssetFilterSubscriptionAction")
+        kparams.put("objectType", "KalturaSegmentAssetFilterSubscriptionAction")
         return kparams
 
 
@@ -41307,7 +41307,7 @@ class KalturaCoreClient(KalturaClientPlugin):
             'KalturaKsqlSegmentAction': KalturaKsqlSegmentAction,
             'KalturaSegmentAssetFilterAction': KalturaSegmentAssetFilterAction,
             'KalturaSegmentAssetFilterSegmentAction': KalturaSegmentAssetFilterSegmentAction,
-            'KalturaSegementAssetFilterSubscriptionAction': KalturaSegementAssetFilterSubscriptionAction,
+            'KalturaSegmentAssetFilterSubscriptionAction': KalturaSegmentAssetFilterSubscriptionAction,
             'KalturaBlockSubscriptionSegmentAction': KalturaBlockSubscriptionSegmentAction,
             'KalturaSegmentBlockPlaybackSubscriptionAction': KalturaSegmentBlockPlaybackSubscriptionAction,
             'KalturaSegmentBlockCancelSubscriptionAction': KalturaSegmentBlockCancelSubscriptionAction,
