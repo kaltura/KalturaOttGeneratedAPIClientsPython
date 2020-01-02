@@ -42,7 +42,7 @@ from ..Base import (
     KalturaServiceBase,
 )
 
-API_VERSION = '5.3.0.14311'
+API_VERSION = '5.3.0.14324'
 
 ########## enums ##########
 # @package Kaltura
@@ -5907,7 +5907,8 @@ class KalturaHouseholdDeviceFilter(KalturaFilter):
     def __init__(self,
             orderBy=NotImplemented,
             householdIdEqual=NotImplemented,
-            deviceFamilyIdIn=NotImplemented):
+            deviceFamilyIdIn=NotImplemented,
+            externalIdEqual=NotImplemented):
         KalturaFilter.__init__(self,
             orderBy)
 
@@ -5919,10 +5920,15 @@ class KalturaHouseholdDeviceFilter(KalturaFilter):
         # @var string
         self.deviceFamilyIdIn = deviceFamilyIdIn
 
+        # External Id
+        # @var string
+        self.externalIdEqual = externalIdEqual
+
 
     PROPERTY_LOADERS = {
         'householdIdEqual': getXmlNodeInt, 
         'deviceFamilyIdIn': getXmlNodeText, 
+        'externalIdEqual': getXmlNodeText, 
     }
 
     def fromXml(self, node):
@@ -5934,6 +5940,7 @@ class KalturaHouseholdDeviceFilter(KalturaFilter):
         kparams.put("objectType", "KalturaHouseholdDeviceFilter")
         kparams.addIntIfDefined("householdIdEqual", self.householdIdEqual)
         kparams.addStringIfDefined("deviceFamilyIdIn", self.deviceFamilyIdIn)
+        kparams.addStringIfDefined("externalIdEqual", self.externalIdEqual)
         return kparams
 
     def getHouseholdIdEqual(self):
@@ -5947,6 +5954,12 @@ class KalturaHouseholdDeviceFilter(KalturaFilter):
 
     def setDeviceFamilyIdIn(self, newDeviceFamilyIdIn):
         self.deviceFamilyIdIn = newDeviceFamilyIdIn
+
+    def getExternalIdEqual(self):
+        return self.externalIdEqual
+
+    def setExternalIdEqual(self, newExternalIdEqual):
+        self.externalIdEqual = newExternalIdEqual
 
 
 # @package Kaltura
@@ -13043,6 +13056,137 @@ class KalturaAssetFilePpvListResponse(KalturaListResponse):
 
     def setObjects(self, newObjects):
         self.objects = newObjects
+
+
+# @package Kaltura
+# @subpackage Client
+class KalturaHouseholdDevice(KalturaOTTObjectSupportNullable):
+    """Device details"""
+
+    def __init__(self,
+            householdId=NotImplemented,
+            udid=NotImplemented,
+            name=NotImplemented,
+            brandId=NotImplemented,
+            activatedOn=NotImplemented,
+            status=NotImplemented,
+            deviceFamilyId=NotImplemented,
+            drm=NotImplemented,
+            externalId=NotImplemented):
+        KalturaOTTObjectSupportNullable.__init__(self)
+
+        # Household identifier
+        # @var int
+        self.householdId = householdId
+
+        # Device UDID
+        # @var string
+        # @insertonly
+        self.udid = udid
+
+        # Device name
+        # @var string
+        self.name = name
+
+        # Device brand identifier
+        # @var int
+        self.brandId = brandId
+
+        # Device activation date (epoch)
+        # @var int
+        self.activatedOn = activatedOn
+
+        # Device state
+        # @var KalturaDeviceStatus
+        # @readonly
+        self.status = status
+
+        # Device family id
+        # @var int
+        # @readonly
+        self.deviceFamilyId = deviceFamilyId
+
+        # Device DRM data
+        # @var KalturaCustomDrmPlaybackPluginData
+        # @readonly
+        self.drm = drm
+
+        # external Id
+        # @var string
+        self.externalId = externalId
+
+
+    PROPERTY_LOADERS = {
+        'householdId': getXmlNodeInt, 
+        'udid': getXmlNodeText, 
+        'name': getXmlNodeText, 
+        'brandId': getXmlNodeInt, 
+        'activatedOn': getXmlNodeInt, 
+        'status': (KalturaEnumsFactory.createString, "KalturaDeviceStatus"), 
+        'deviceFamilyId': getXmlNodeInt, 
+        'drm': (KalturaObjectFactory.create, 'KalturaCustomDrmPlaybackPluginData'), 
+        'externalId': getXmlNodeText, 
+    }
+
+    def fromXml(self, node):
+        KalturaOTTObjectSupportNullable.fromXml(self, node)
+        self.fromXmlImpl(node, KalturaHouseholdDevice.PROPERTY_LOADERS)
+
+    def toParams(self):
+        kparams = KalturaOTTObjectSupportNullable.toParams(self)
+        kparams.put("objectType", "KalturaHouseholdDevice")
+        kparams.addIntIfDefined("householdId", self.householdId)
+        kparams.addStringIfDefined("udid", self.udid)
+        kparams.addStringIfDefined("name", self.name)
+        kparams.addIntIfDefined("brandId", self.brandId)
+        kparams.addIntIfDefined("activatedOn", self.activatedOn)
+        kparams.addStringIfDefined("externalId", self.externalId)
+        return kparams
+
+    def getHouseholdId(self):
+        return self.householdId
+
+    def setHouseholdId(self, newHouseholdId):
+        self.householdId = newHouseholdId
+
+    def getUdid(self):
+        return self.udid
+
+    def setUdid(self, newUdid):
+        self.udid = newUdid
+
+    def getName(self):
+        return self.name
+
+    def setName(self, newName):
+        self.name = newName
+
+    def getBrandId(self):
+        return self.brandId
+
+    def setBrandId(self, newBrandId):
+        self.brandId = newBrandId
+
+    def getActivatedOn(self):
+        return self.activatedOn
+
+    def setActivatedOn(self, newActivatedOn):
+        self.activatedOn = newActivatedOn
+
+    def getStatus(self):
+        return self.status
+
+    def getDeviceFamilyId(self):
+        return self.deviceFamilyId
+
+    def getDrm(self):
+        return self.drm
+
+    def getExternalId(self):
+        return self.externalId
+
+    def setExternalId(self, newExternalId):
+        self.externalId = newExternalId
 
 
 # @package Kaltura
@@ -20309,124 +20453,6 @@ class KalturaHomeNetworkListResponse(KalturaListResponse):
 
     def setObjects(self, newObjects):
         self.objects = newObjects
-
-
-# @package Kaltura
-# @subpackage Client
-class KalturaHouseholdDevice(KalturaObjectBase):
-    """Device details"""
-
-    def __init__(self,
-            householdId=NotImplemented,
-            udid=NotImplemented,
-            name=NotImplemented,
-            brandId=NotImplemented,
-            activatedOn=NotImplemented,
-            status=NotImplemented,
-            deviceFamilyId=NotImplemented,
-            drm=NotImplemented):
-        KalturaObjectBase.__init__(self)
-
-        # Household identifier
-        # @var int
-        self.householdId = householdId
-
-        # Device UDID
-        # @var string
-        # @insertonly
-        self.udid = udid
-
-        # Device name
-        # @var string
-        self.name = name
-
-        # Device brand identifier
-        # @var int
-        self.brandId = brandId
-
-        # Device activation date (epoch)
-        # @var int
-        self.activatedOn = activatedOn
-
-        # Device state
-        # @var KalturaDeviceStatus
-        # @readonly
-        self.status = status
-
-        # Device family id
-        # @var int
-        # @readonly
-        self.deviceFamilyId = deviceFamilyId
-
-        # Device DRM data
-        # @var KalturaCustomDrmPlaybackPluginData
-        # @readonly
-        self.drm = drm
-
-
-    PROPERTY_LOADERS = {
-        'householdId': getXmlNodeInt, 
-        'udid': getXmlNodeText, 
-        'name': getXmlNodeText, 
-        'brandId': getXmlNodeInt, 
-        'activatedOn': getXmlNodeInt, 
-        'status': (KalturaEnumsFactory.createString, "KalturaDeviceStatus"), 
-        'deviceFamilyId': getXmlNodeInt, 
-        'drm': (KalturaObjectFactory.create, 'KalturaCustomDrmPlaybackPluginData'), 
-    }
-
-    def fromXml(self, node):
-        KalturaObjectBase.fromXml(self, node)
-        self.fromXmlImpl(node, KalturaHouseholdDevice.PROPERTY_LOADERS)
-
-    def toParams(self):
-        kparams = KalturaObjectBase.toParams(self)
-        kparams.put("objectType", "KalturaHouseholdDevice")
-        kparams.addIntIfDefined("householdId", self.householdId)
-        kparams.addStringIfDefined("udid", self.udid)
-        kparams.addStringIfDefined("name", self.name)
-        kparams.addIntIfDefined("brandId", self.brandId)
-        kparams.addIntIfDefined("activatedOn", self.activatedOn)
-        return kparams
-
-    def getHouseholdId(self):
-        return self.householdId
-
-    def setHouseholdId(self, newHouseholdId):
-        self.householdId = newHouseholdId
-
-    def getUdid(self):
-        return self.udid
-
-    def setUdid(self, newUdid):
-        self.udid = newUdid
-
-    def getName(self):
-        return self.name
-
-    def setName(self, newName):
-        self.name = newName
-
-    def getBrandId(self):
-        return self.brandId
-
-    def setBrandId(self, newBrandId):
-        self.brandId = newBrandId
-
-    def getActivatedOn(self):
-        return self.activatedOn
-
-    def setActivatedOn(self, newActivatedOn):
-        self.activatedOn = newActivatedOn
-
-    def getStatus(self):
-        return self.status
-
-    def getDeviceFamilyId(self):
-        return self.deviceFamilyId
-
-    def getDrm(self):
-        return self.drm
 
 
 # @package Kaltura
@@ -40932,6 +40958,7 @@ class KalturaCoreClient(KalturaClientPlugin):
             'KalturaOTTObjectSupportNullable': KalturaOTTObjectSupportNullable,
             'KalturaAssetFilePpv': KalturaAssetFilePpv,
             'KalturaAssetFilePpvListResponse': KalturaAssetFilePpvListResponse,
+            'KalturaHouseholdDevice': KalturaHouseholdDevice,
             'KalturaRule': KalturaRule,
             'KalturaAssetRuleBase': KalturaAssetRuleBase,
             'KalturaCondition': KalturaCondition,
@@ -41058,7 +41085,6 @@ class KalturaCoreClient(KalturaClientPlugin):
             'KalturaDeviceReport': KalturaDeviceReport,
             'KalturaHomeNetwork': KalturaHomeNetwork,
             'KalturaHomeNetworkListResponse': KalturaHomeNetworkListResponse,
-            'KalturaHouseholdDevice': KalturaHouseholdDevice,
             'KalturaHouseholdDeviceListResponse': KalturaHouseholdDeviceListResponse,
             'KalturaDeviceFamilyBase': KalturaDeviceFamilyBase,
             'KalturaHouseholdDeviceFamilyLimitations': KalturaHouseholdDeviceFamilyLimitations,
