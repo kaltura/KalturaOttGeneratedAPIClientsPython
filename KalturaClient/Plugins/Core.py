@@ -42,7 +42,7 @@ from ..Base import (
     KalturaServiceBase,
 )
 
-API_VERSION = '5.3.1.14544'
+API_VERSION = '5.3.1.14547'
 
 ########## enums ##########
 # @package Kaltura
@@ -40066,11 +40066,11 @@ class KalturaSystemService(KalturaServiceBase):
     def __init__(self, client = None):
         KalturaServiceBase.__init__(self, client)
 
-    def clearLocalServerCache(self, action = NotImplemented, key = NotImplemented):
+    def clearLocalServerCache(self, clearCacheAction = NotImplemented, key = NotImplemented):
         """Clear local server cache"""
 
         kparams = KalturaParams()
-        kparams.addStringIfDefined("action", action)
+        kparams.addStringIfDefined("clearCacheAction", clearCacheAction)
         kparams.addStringIfDefined("key", key)
         self.client.queueServiceActionCall("system", "clearLocalServerCache", "None", kparams)
         if self.client.isMultiRequest():
