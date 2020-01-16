@@ -42,7 +42,7 @@ from ..Base import (
     KalturaServiceBase,
 )
 
-API_VERSION = '5.3.1.14558'
+API_VERSION = '5.3.0.14532'
 
 ########## enums ##########
 # @package Kaltura
@@ -35250,6 +35250,20 @@ class KalturaAssetService(KalturaServiceBase):
         resultNode = self.client.doQueue()
         return KalturaObjectFactory.create(resultNode, 'KalturaPlaybackContext')
 
+    def getPlaybackManifest(self, assetId, assetType, contextDataParams, sourceType = NotImplemented):
+        """This action delivers all data relevant for player"""
+
+        kparams = KalturaParams()
+        kparams.addStringIfDefined("assetId", assetId)
+        kparams.addStringIfDefined("assetType", assetType)
+        kparams.addObjectIfDefined("contextDataParams", contextDataParams)
+        kparams.addStringIfDefined("sourceType", sourceType)
+        self.client.queueServiceActionCall("asset", "getPlaybackManifest", "KalturaPlaybackContext", kparams)
+        if self.client.isMultiRequest():
+            return self.client.getMultiRequestResult()
+        resultNode = self.client.doQueue()
+        return KalturaObjectFactory.create(resultNode, 'KalturaPlaybackContext')
+
     def list(self, filter = NotImplemented, pager = NotImplemented):
         """Returns media or EPG assets. Filters by media identifiers or by EPG internal or external identifier."""
 
@@ -40066,11 +40080,11 @@ class KalturaSystemService(KalturaServiceBase):
     def __init__(self, client = None):
         KalturaServiceBase.__init__(self, client)
 
-    def clearLocalServerCache(self, clearCacheAction = NotImplemented, key = NotImplemented):
+    def clearLocalServerCache(self, action = NotImplemented, key = NotImplemented):
         """Clear local server cache"""
 
         kparams = KalturaParams()
-        kparams.addStringIfDefined("clearCacheAction", clearCacheAction)
+        kparams.addStringIfDefined("action", action)
         kparams.addStringIfDefined("key", key)
         self.client.queueServiceActionCall("system", "clearLocalServerCache", "None", kparams)
         if self.client.isMultiRequest():
