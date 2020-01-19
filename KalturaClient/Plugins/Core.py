@@ -42,7 +42,7 @@ from ..Base import (
     KalturaServiceBase,
 )
 
-API_VERSION = '5.3.0.14535'
+API_VERSION = '5.3.0.14537'
 
 ########## enums ##########
 # @package Kaltura
@@ -31449,7 +31449,9 @@ class KalturaBookmarkEvent(KalturaEventObject):
             assetId=NotImplemented,
             fileId=NotImplemented,
             position=NotImplemented,
-            action=NotImplemented):
+            action=NotImplemented,
+            productType=NotImplemented,
+            productId=NotImplemented):
         KalturaEventObject.__init__(self)
 
         # User Id
@@ -31476,6 +31478,14 @@ class KalturaBookmarkEvent(KalturaEventObject):
         # @var KalturaBookmarkActionType
         self.action = action
 
+        # Product Type
+        # @var KalturaTransactionType
+        self.productType = productType
+
+        # Product Id
+        # @var int
+        self.productId = productId
+
 
     PROPERTY_LOADERS = {
         'userId': getXmlNodeInt, 
@@ -31484,6 +31494,8 @@ class KalturaBookmarkEvent(KalturaEventObject):
         'fileId': getXmlNodeInt, 
         'position': getXmlNodeInt, 
         'action': (KalturaEnumsFactory.createString, "KalturaBookmarkActionType"), 
+        'productType': (KalturaEnumsFactory.createString, "KalturaTransactionType"), 
+        'productId': getXmlNodeInt, 
     }
 
     def fromXml(self, node):
@@ -31499,6 +31511,8 @@ class KalturaBookmarkEvent(KalturaEventObject):
         kparams.addIntIfDefined("fileId", self.fileId)
         kparams.addIntIfDefined("position", self.position)
         kparams.addStringEnumIfDefined("action", self.action)
+        kparams.addStringEnumIfDefined("productType", self.productType)
+        kparams.addIntIfDefined("productId", self.productId)
         return kparams
 
     def getUserId(self):
@@ -31536,6 +31550,18 @@ class KalturaBookmarkEvent(KalturaEventObject):
 
     def setAction(self, newAction):
         self.action = newAction
+
+    def getProductType(self):
+        return self.productType
+
+    def setProductType(self, newProductType):
+        self.productType = newProductType
+
+    def getProductId(self):
+        return self.productId
+
+    def setProductId(self, newProductId):
+        self.productId = newProductId
 
 
 # @package Kaltura
