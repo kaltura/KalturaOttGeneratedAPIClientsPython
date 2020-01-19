@@ -42,7 +42,7 @@ from ..Base import (
     KalturaServiceBase,
 )
 
-API_VERSION = '5.2.6.6120'
+API_VERSION = '5.2.6.6121'
 
 ########## enums ##########
 # @package Kaltura
@@ -8467,14 +8467,36 @@ class KalturaPlaybackProfileFilter(KalturaFilter):
 
 # @package Kaltura
 # @subpackage Client
-class KalturaRegionFilter(KalturaFilter):
+class KalturaBaseRegionFilter(KalturaFilter):
+    def __init__(self,
+            orderBy=NotImplemented):
+        KalturaFilter.__init__(self,
+            orderBy)
+
+
+    PROPERTY_LOADERS = {
+    }
+
+    def fromXml(self, node):
+        KalturaFilter.fromXml(self, node)
+        self.fromXmlImpl(node, KalturaBaseRegionFilter.PROPERTY_LOADERS)
+
+    def toParams(self):
+        kparams = KalturaFilter.toParams(self)
+        kparams.put("objectType", "KalturaBaseRegionFilter")
+        return kparams
+
+
+# @package Kaltura
+# @subpackage Client
+class KalturaRegionFilter(KalturaBaseRegionFilter):
     def __init__(self,
             orderBy=NotImplemented,
             externalIdIn=NotImplemented,
             idIn=NotImplemented,
             parentIdEqual=NotImplemented,
             liveAssetIdEqual=NotImplemented):
-        KalturaFilter.__init__(self,
+        KalturaBaseRegionFilter.__init__(self,
             orderBy)
 
         # List of comma separated regions external IDs
@@ -8502,11 +8524,11 @@ class KalturaRegionFilter(KalturaFilter):
     }
 
     def fromXml(self, node):
-        KalturaFilter.fromXml(self, node)
+        KalturaBaseRegionFilter.fromXml(self, node)
         self.fromXmlImpl(node, KalturaRegionFilter.PROPERTY_LOADERS)
 
     def toParams(self):
-        kparams = KalturaFilter.toParams(self)
+        kparams = KalturaBaseRegionFilter.toParams(self)
         kparams.put("objectType", "KalturaRegionFilter")
         kparams.addStringIfDefined("externalIdIn", self.externalIdIn)
         kparams.addStringIfDefined("idIn", self.idIn)
@@ -8537,6 +8559,28 @@ class KalturaRegionFilter(KalturaFilter):
 
     def setLiveAssetIdEqual(self, newLiveAssetIdEqual):
         self.liveAssetIdEqual = newLiveAssetIdEqual
+
+
+# @package Kaltura
+# @subpackage Client
+class KalturaDefaultRegionFilter(KalturaBaseRegionFilter):
+    def __init__(self,
+            orderBy=NotImplemented):
+        KalturaBaseRegionFilter.__init__(self,
+            orderBy)
+
+
+    PROPERTY_LOADERS = {
+    }
+
+    def fromXml(self, node):
+        KalturaBaseRegionFilter.fromXml(self, node)
+        self.fromXmlImpl(node, KalturaDefaultRegionFilter.PROPERTY_LOADERS)
+
+    def toParams(self):
+        kparams = KalturaBaseRegionFilter.toParams(self)
+        kparams.put("objectType", "KalturaDefaultRegionFilter")
+        return kparams
 
 
 # @package Kaltura
@@ -40295,7 +40339,9 @@ class KalturaCoreClient(KalturaClientPlugin):
             'KalturaParentalRuleFilter': KalturaParentalRuleFilter,
             'KalturaPermissionFilter': KalturaPermissionFilter,
             'KalturaPlaybackProfileFilter': KalturaPlaybackProfileFilter,
+            'KalturaBaseRegionFilter': KalturaBaseRegionFilter,
             'KalturaRegionFilter': KalturaRegionFilter,
+            'KalturaDefaultRegionFilter': KalturaDefaultRegionFilter,
             'KalturaSearchHistoryFilter': KalturaSearchHistoryFilter,
             'KalturaTvmRuleFilter': KalturaTvmRuleFilter,
             'KalturaUserAssetRuleFilter': KalturaUserAssetRuleFilter,
