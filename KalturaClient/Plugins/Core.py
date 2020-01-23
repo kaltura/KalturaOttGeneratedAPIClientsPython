@@ -42,7 +42,7 @@ from ..Base import (
     KalturaServiceBase,
 )
 
-API_VERSION = '5.3.1.14579'
+API_VERSION = '5.3.1.14577'
 
 ########## enums ##########
 # @package Kaltura
@@ -3772,17 +3772,39 @@ class KalturaSocialFriendActivityFilter(KalturaFilter):
 
 # @package Kaltura
 # @subpackage Client
-class KalturaSegmentationTypeFilter(KalturaFilter):
+class KalturaBaseSegmentationTypeFilter(KalturaFilter):
+    def __init__(self,
+            orderBy=NotImplemented):
+        KalturaFilter.__init__(self,
+            orderBy)
+
+
+    PROPERTY_LOADERS = {
+    }
+
+    def fromXml(self, node):
+        KalturaFilter.fromXml(self, node)
+        self.fromXmlImpl(node, KalturaBaseSegmentationTypeFilter.PROPERTY_LOADERS)
+
+    def toParams(self):
+        kparams = KalturaFilter.toParams(self)
+        kparams.put("objectType", "KalturaBaseSegmentationTypeFilter")
+        return kparams
+
+
+# @package Kaltura
+# @subpackage Client
+class KalturaSegmentationTypeFilter(KalturaBaseSegmentationTypeFilter):
     """Filter for segmentation types"""
 
     def __init__(self,
             orderBy=NotImplemented,
             idIn=NotImplemented,
             kSql=NotImplemented):
-        KalturaFilter.__init__(self,
+        KalturaBaseSegmentationTypeFilter.__init__(self,
             orderBy)
 
-        # Comma separated segmentation types identifieridentifiers
+        # Comma separated segmentation types identifiers
         # @var string
         self.idIn = idIn
 
@@ -3797,11 +3819,11 @@ class KalturaSegmentationTypeFilter(KalturaFilter):
     }
 
     def fromXml(self, node):
-        KalturaFilter.fromXml(self, node)
+        KalturaBaseSegmentationTypeFilter.fromXml(self, node)
         self.fromXmlImpl(node, KalturaSegmentationTypeFilter.PROPERTY_LOADERS)
 
     def toParams(self):
-        kparams = KalturaFilter.toParams(self)
+        kparams = KalturaBaseSegmentationTypeFilter.toParams(self)
         kparams.put("objectType", "KalturaSegmentationTypeFilter")
         kparams.addStringIfDefined("idIn", self.idIn)
         kparams.addStringIfDefined("kSql", self.kSql)
@@ -3818,6 +3840,41 @@ class KalturaSegmentationTypeFilter(KalturaFilter):
 
     def setKSql(self, newKSql):
         self.kSql = newKSql
+
+
+# @package Kaltura
+# @subpackage Client
+class KalturaSegmentValueFilter(KalturaBaseSegmentationTypeFilter):
+    def __init__(self,
+            orderBy=NotImplemented,
+            idIn=NotImplemented):
+        KalturaBaseSegmentationTypeFilter.__init__(self,
+            orderBy)
+
+        # Comma separated segmentation identifiers
+        # @var string
+        self.idIn = idIn
+
+
+    PROPERTY_LOADERS = {
+        'idIn': getXmlNodeText, 
+    }
+
+    def fromXml(self, node):
+        KalturaBaseSegmentationTypeFilter.fromXml(self, node)
+        self.fromXmlImpl(node, KalturaSegmentValueFilter.PROPERTY_LOADERS)
+
+    def toParams(self):
+        kparams = KalturaBaseSegmentationTypeFilter.toParams(self)
+        kparams.put("objectType", "KalturaSegmentValueFilter")
+        kparams.addStringIfDefined("idIn", self.idIn)
+        return kparams
+
+    def getIdIn(self):
+        return self.idIn
+
+    def setIdIn(self, newIdIn):
+        self.idIn = newIdIn
 
 
 # @package Kaltura
@@ -41220,7 +41277,9 @@ class KalturaCoreClient(KalturaClientPlugin):
             'KalturaSocialActionFilter': KalturaSocialActionFilter,
             'KalturaSocialCommentFilter': KalturaSocialCommentFilter,
             'KalturaSocialFriendActivityFilter': KalturaSocialFriendActivityFilter,
+            'KalturaBaseSegmentationTypeFilter': KalturaBaseSegmentationTypeFilter,
             'KalturaSegmentationTypeFilter': KalturaSegmentationTypeFilter,
+            'KalturaSegmentValueFilter': KalturaSegmentValueFilter,
             'KalturaUserSegmentFilter': KalturaUserSegmentFilter,
             'KalturaAssetFilePpvFilter': KalturaAssetFilePpvFilter,
             'KalturaCollectionFilter': KalturaCollectionFilter,
