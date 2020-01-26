@@ -42,7 +42,7 @@ from ..Base import (
     KalturaServiceBase,
 )
 
-API_VERSION = '5.3.1.14596'
+API_VERSION = '5.3.1.14600'
 
 ########## enums ##########
 # @package Kaltura
@@ -35289,6 +35289,20 @@ class KalturaAssetService(KalturaServiceBase):
         kparams.addObjectIfDefined("contextDataParams", contextDataParams)
         kparams.addStringIfDefined("sourceType", sourceType)
         self.client.queueServiceActionCall("asset", "getPlaybackContext", "KalturaPlaybackContext", kparams)
+        if self.client.isMultiRequest():
+            return self.client.getMultiRequestResult()
+        resultNode = self.client.doQueue()
+        return KalturaObjectFactory.create(resultNode, 'KalturaPlaybackContext')
+
+    def getPlaybackManifest(self, assetId, assetType, contextDataParams, sourceType = NotImplemented):
+        """This action delivers all data relevant for player"""
+
+        kparams = KalturaParams()
+        kparams.addStringIfDefined("assetId", assetId)
+        kparams.addStringIfDefined("assetType", assetType)
+        kparams.addObjectIfDefined("contextDataParams", contextDataParams)
+        kparams.addStringIfDefined("sourceType", sourceType)
+        self.client.queueServiceActionCall("asset", "getPlaybackManifest", "KalturaPlaybackContext", kparams)
         if self.client.isMultiRequest():
             return self.client.getMultiRequestResult()
         resultNode = self.client.doQueue()
