@@ -42,7 +42,7 @@ from ..Base import (
     KalturaServiceBase,
 )
 
-API_VERSION = '5.3.1.14605'
+API_VERSION = '5.3.0.14533'
 
 ########## enums ##########
 # @package Kaltura
@@ -3772,39 +3772,17 @@ class KalturaSocialFriendActivityFilter(KalturaFilter):
 
 # @package Kaltura
 # @subpackage Client
-class KalturaBaseSegmentationTypeFilter(KalturaFilter):
-    def __init__(self,
-            orderBy=NotImplemented):
-        KalturaFilter.__init__(self,
-            orderBy)
-
-
-    PROPERTY_LOADERS = {
-    }
-
-    def fromXml(self, node):
-        KalturaFilter.fromXml(self, node)
-        self.fromXmlImpl(node, KalturaBaseSegmentationTypeFilter.PROPERTY_LOADERS)
-
-    def toParams(self):
-        kparams = KalturaFilter.toParams(self)
-        kparams.put("objectType", "KalturaBaseSegmentationTypeFilter")
-        return kparams
-
-
-# @package Kaltura
-# @subpackage Client
-class KalturaSegmentationTypeFilter(KalturaBaseSegmentationTypeFilter):
+class KalturaSegmentationTypeFilter(KalturaFilter):
     """Filter for segmentation types"""
 
     def __init__(self,
             orderBy=NotImplemented,
             idIn=NotImplemented,
             kSql=NotImplemented):
-        KalturaBaseSegmentationTypeFilter.__init__(self,
+        KalturaFilter.__init__(self,
             orderBy)
 
-        # Comma separated segmentation types identifiers
+        # Comma separated segmentation types identifieridentifiers
         # @var string
         self.idIn = idIn
 
@@ -3819,11 +3797,11 @@ class KalturaSegmentationTypeFilter(KalturaBaseSegmentationTypeFilter):
     }
 
     def fromXml(self, node):
-        KalturaBaseSegmentationTypeFilter.fromXml(self, node)
+        KalturaFilter.fromXml(self, node)
         self.fromXmlImpl(node, KalturaSegmentationTypeFilter.PROPERTY_LOADERS)
 
     def toParams(self):
-        kparams = KalturaBaseSegmentationTypeFilter.toParams(self)
+        kparams = KalturaFilter.toParams(self)
         kparams.put("objectType", "KalturaSegmentationTypeFilter")
         kparams.addStringIfDefined("idIn", self.idIn)
         kparams.addStringIfDefined("kSql", self.kSql)
@@ -3840,41 +3818,6 @@ class KalturaSegmentationTypeFilter(KalturaBaseSegmentationTypeFilter):
 
     def setKSql(self, newKSql):
         self.kSql = newKSql
-
-
-# @package Kaltura
-# @subpackage Client
-class KalturaSegmentValueFilter(KalturaBaseSegmentationTypeFilter):
-    def __init__(self,
-            orderBy=NotImplemented,
-            idIn=NotImplemented):
-        KalturaBaseSegmentationTypeFilter.__init__(self,
-            orderBy)
-
-        # Comma separated segmentation identifiers
-        # @var string
-        self.idIn = idIn
-
-
-    PROPERTY_LOADERS = {
-        'idIn': getXmlNodeText, 
-    }
-
-    def fromXml(self, node):
-        KalturaBaseSegmentationTypeFilter.fromXml(self, node)
-        self.fromXmlImpl(node, KalturaSegmentValueFilter.PROPERTY_LOADERS)
-
-    def toParams(self):
-        kparams = KalturaBaseSegmentationTypeFilter.toParams(self)
-        kparams.put("objectType", "KalturaSegmentValueFilter")
-        kparams.addStringIfDefined("idIn", self.idIn)
-        return kparams
-
-    def getIdIn(self):
-        return self.idIn
-
-    def setIdIn(self, newIdIn):
-        self.idIn = newIdIn
 
 
 # @package Kaltura
@@ -8716,29 +8659,7 @@ class KalturaPlaybackProfileFilter(KalturaFilter):
 
 # @package Kaltura
 # @subpackage Client
-class KalturaBaseRegionFilter(KalturaFilter):
-    def __init__(self,
-            orderBy=NotImplemented):
-        KalturaFilter.__init__(self,
-            orderBy)
-
-
-    PROPERTY_LOADERS = {
-    }
-
-    def fromXml(self, node):
-        KalturaFilter.fromXml(self, node)
-        self.fromXmlImpl(node, KalturaBaseRegionFilter.PROPERTY_LOADERS)
-
-    def toParams(self):
-        kparams = KalturaFilter.toParams(self)
-        kparams.put("objectType", "KalturaBaseRegionFilter")
-        return kparams
-
-
-# @package Kaltura
-# @subpackage Client
-class KalturaRegionFilter(KalturaBaseRegionFilter):
+class KalturaRegionFilter(KalturaFilter):
     def __init__(self,
             orderBy=NotImplemented,
             externalIdIn=NotImplemented,
@@ -8746,7 +8667,7 @@ class KalturaRegionFilter(KalturaBaseRegionFilter):
             parentIdEqual=NotImplemented,
             liveAssetIdEqual=NotImplemented,
             parentOnly=NotImplemented):
-        KalturaBaseRegionFilter.__init__(self,
+        KalturaFilter.__init__(self,
             orderBy)
 
         # List of comma separated regions external IDs
@@ -8779,11 +8700,11 @@ class KalturaRegionFilter(KalturaBaseRegionFilter):
     }
 
     def fromXml(self, node):
-        KalturaBaseRegionFilter.fromXml(self, node)
+        KalturaFilter.fromXml(self, node)
         self.fromXmlImpl(node, KalturaRegionFilter.PROPERTY_LOADERS)
 
     def toParams(self):
-        kparams = KalturaBaseRegionFilter.toParams(self)
+        kparams = KalturaFilter.toParams(self)
         kparams.put("objectType", "KalturaRegionFilter")
         kparams.addStringIfDefined("externalIdIn", self.externalIdIn)
         kparams.addStringIfDefined("idIn", self.idIn)
@@ -8821,28 +8742,6 @@ class KalturaRegionFilter(KalturaBaseRegionFilter):
 
     def setParentOnly(self, newParentOnly):
         self.parentOnly = newParentOnly
-
-
-# @package Kaltura
-# @subpackage Client
-class KalturaDefaultRegionFilter(KalturaBaseRegionFilter):
-    def __init__(self,
-            orderBy=NotImplemented):
-        KalturaBaseRegionFilter.__init__(self,
-            orderBy)
-
-
-    PROPERTY_LOADERS = {
-    }
-
-    def fromXml(self, node):
-        KalturaBaseRegionFilter.fromXml(self, node)
-        self.fromXmlImpl(node, KalturaDefaultRegionFilter.PROPERTY_LOADERS)
-
-    def toParams(self):
-        kparams = KalturaBaseRegionFilter.toParams(self)
-        kparams.put("objectType", "KalturaDefaultRegionFilter")
-        return kparams
 
 
 # @package Kaltura
@@ -35351,20 +35250,6 @@ class KalturaAssetService(KalturaServiceBase):
         resultNode = self.client.doQueue()
         return KalturaObjectFactory.create(resultNode, 'KalturaPlaybackContext')
 
-    def getPlaybackManifest(self, assetId, assetType, contextDataParams, sourceType = NotImplemented):
-        """This action delivers all data relevant for player"""
-
-        kparams = KalturaParams()
-        kparams.addStringIfDefined("assetId", assetId)
-        kparams.addStringIfDefined("assetType", assetType)
-        kparams.addObjectIfDefined("contextDataParams", contextDataParams)
-        kparams.addStringIfDefined("sourceType", sourceType)
-        self.client.queueServiceActionCall("asset", "getPlaybackManifest", "KalturaPlaybackContext", kparams)
-        if self.client.isMultiRequest():
-            return self.client.getMultiRequestResult()
-        resultNode = self.client.doQueue()
-        return KalturaObjectFactory.create(resultNode, 'KalturaPlaybackContext')
-
     def list(self, filter = NotImplemented, pager = NotImplemented):
         """Returns media or EPG assets. Filters by media identifiers or by EPG internal or external identifier."""
 
@@ -40181,11 +40066,11 @@ class KalturaSystemService(KalturaServiceBase):
     def __init__(self, client = None):
         KalturaServiceBase.__init__(self, client)
 
-    def clearLocalServerCache(self, clearCacheAction = NotImplemented, key = NotImplemented):
+    def clearLocalServerCache(self, action = NotImplemented, key = NotImplemented):
         """Clear local server cache"""
 
         kparams = KalturaParams()
-        kparams.addStringIfDefined("clearCacheAction", clearCacheAction)
+        kparams.addStringIfDefined("action", action)
         kparams.addStringIfDefined("key", key)
         self.client.queueServiceActionCall("system", "clearLocalServerCache", "None", kparams)
         if self.client.isMultiRequest():
@@ -41291,9 +41176,7 @@ class KalturaCoreClient(KalturaClientPlugin):
             'KalturaSocialActionFilter': KalturaSocialActionFilter,
             'KalturaSocialCommentFilter': KalturaSocialCommentFilter,
             'KalturaSocialFriendActivityFilter': KalturaSocialFriendActivityFilter,
-            'KalturaBaseSegmentationTypeFilter': KalturaBaseSegmentationTypeFilter,
             'KalturaSegmentationTypeFilter': KalturaSegmentationTypeFilter,
-            'KalturaSegmentValueFilter': KalturaSegmentValueFilter,
             'KalturaUserSegmentFilter': KalturaUserSegmentFilter,
             'KalturaAssetFilePpvFilter': KalturaAssetFilePpvFilter,
             'KalturaCollectionFilter': KalturaCollectionFilter,
@@ -41386,9 +41269,7 @@ class KalturaCoreClient(KalturaClientPlugin):
             'KalturaParentalRuleFilter': KalturaParentalRuleFilter,
             'KalturaPermissionFilter': KalturaPermissionFilter,
             'KalturaPlaybackProfileFilter': KalturaPlaybackProfileFilter,
-            'KalturaBaseRegionFilter': KalturaBaseRegionFilter,
             'KalturaRegionFilter': KalturaRegionFilter,
-            'KalturaDefaultRegionFilter': KalturaDefaultRegionFilter,
             'KalturaSearchHistoryFilter': KalturaSearchHistoryFilter,
             'KalturaTvmRuleFilter': KalturaTvmRuleFilter,
             'KalturaUserAssetRuleFilter': KalturaUserAssetRuleFilter,
