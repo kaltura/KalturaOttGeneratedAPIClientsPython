@@ -42,7 +42,7 @@ from ..Base import (
     KalturaServiceBase,
 )
 
-API_VERSION = '5.3.1.14623'
+API_VERSION = '5.3.1.14634'
 
 ########## enums ##########
 # @package Kaltura
@@ -1439,6 +1439,7 @@ class KalturaPartnerConfigurationType(object):
     CONCURRENCY = "Concurrency"
     GENERAL = "General"
     OBJECTVIRTUALASSET = "ObjectVirtualAsset"
+    COMMERCE = "Commerce"
 
     def __init__(self, value):
         self.value = value
@@ -18453,6 +18454,87 @@ class KalturaBillingPartnerConfig(KalturaPartnerConfiguration):
 
 # @package Kaltura
 # @subpackage Client
+class KalturaBookmarkEventThreshold(KalturaObjectBase):
+    def __init__(self,
+            transactionType=NotImplemented,
+            threshold=NotImplemented):
+        KalturaObjectBase.__init__(self)
+
+        # bookmark transaction type
+        # @var KalturaTransactionType
+        self.transactionType = transactionType
+
+        # event threshold in seconds
+        # @var int
+        self.threshold = threshold
+
+
+    PROPERTY_LOADERS = {
+        'transactionType': (KalturaEnumsFactory.createString, "KalturaTransactionType"), 
+        'threshold': getXmlNodeInt, 
+    }
+
+    def fromXml(self, node):
+        KalturaObjectBase.fromXml(self, node)
+        self.fromXmlImpl(node, KalturaBookmarkEventThreshold.PROPERTY_LOADERS)
+
+    def toParams(self):
+        kparams = KalturaObjectBase.toParams(self)
+        kparams.put("objectType", "KalturaBookmarkEventThreshold")
+        kparams.addStringEnumIfDefined("transactionType", self.transactionType)
+        kparams.addIntIfDefined("threshold", self.threshold)
+        return kparams
+
+    def getTransactionType(self):
+        return self.transactionType
+
+    def setTransactionType(self, newTransactionType):
+        self.transactionType = newTransactionType
+
+    def getThreshold(self):
+        return self.threshold
+
+    def setThreshold(self, newThreshold):
+        self.threshold = newThreshold
+
+
+# @package Kaltura
+# @subpackage Client
+class KalturaCommercePartnerConfig(KalturaPartnerConfiguration):
+    """partner configuration for commerce"""
+
+    def __init__(self,
+            bookmarkEventThresholds=NotImplemented):
+        KalturaPartnerConfiguration.__init__(self)
+
+        # configuration for bookmark event threshold (when to dispatch the event) in seconds.
+        # @var array of KalturaBookmarkEventThreshold
+        self.bookmarkEventThresholds = bookmarkEventThresholds
+
+
+    PROPERTY_LOADERS = {
+        'bookmarkEventThresholds': (KalturaObjectFactory.createArray, 'KalturaBookmarkEventThreshold'), 
+    }
+
+    def fromXml(self, node):
+        KalturaPartnerConfiguration.fromXml(self, node)
+        self.fromXmlImpl(node, KalturaCommercePartnerConfig.PROPERTY_LOADERS)
+
+    def toParams(self):
+        kparams = KalturaPartnerConfiguration.toParams(self)
+        kparams.put("objectType", "KalturaCommercePartnerConfig")
+        kparams.addArrayIfDefined("bookmarkEventThresholds", self.bookmarkEventThresholds)
+        return kparams
+
+    def getBookmarkEventThresholds(self):
+        return self.bookmarkEventThresholds
+
+    def setBookmarkEventThresholds(self, newBookmarkEventThresholds):
+        self.bookmarkEventThresholds = newBookmarkEventThresholds
+
+
+# @package Kaltura
+# @subpackage Client
 class KalturaConcurrencyPartnerConfig(KalturaPartnerConfiguration):
     """Partner concurrency configuration"""
 
@@ -31461,6 +31543,130 @@ class KalturaEventNotificationObjectScope(KalturaEventNotificationScope):
 
 # @package Kaltura
 # @subpackage Client
+class KalturaBookmarkEvent(KalturaEventObject):
+    def __init__(self,
+            userId=NotImplemented,
+            householdId=NotImplemented,
+            assetId=NotImplemented,
+            fileId=NotImplemented,
+            position=NotImplemented,
+            action=NotImplemented,
+            productType=NotImplemented,
+            productId=NotImplemented):
+        KalturaEventObject.__init__(self)
+
+        # User Id
+        # @var int
+        self.userId = userId
+
+        # Household Id
+        # @var int
+        self.householdId = householdId
+
+        # Asset Id
+        # @var int
+        self.assetId = assetId
+
+        # File Id
+        # @var int
+        self.fileId = fileId
+
+        # position
+        # @var int
+        self.position = position
+
+        # Bookmark Action Type
+        # @var KalturaBookmarkActionType
+        self.action = action
+
+        # Product Type
+        # @var KalturaTransactionType
+        self.productType = productType
+
+        # Product Id
+        # @var int
+        self.productId = productId
+
+
+    PROPERTY_LOADERS = {
+        'userId': getXmlNodeInt, 
+        'householdId': getXmlNodeInt, 
+        'assetId': getXmlNodeInt, 
+        'fileId': getXmlNodeInt, 
+        'position': getXmlNodeInt, 
+        'action': (KalturaEnumsFactory.createString, "KalturaBookmarkActionType"), 
+        'productType': (KalturaEnumsFactory.createString, "KalturaTransactionType"), 
+        'productId': getXmlNodeInt, 
+    }
+
+    def fromXml(self, node):
+        KalturaEventObject.fromXml(self, node)
+        self.fromXmlImpl(node, KalturaBookmarkEvent.PROPERTY_LOADERS)
+
+    def toParams(self):
+        kparams = KalturaEventObject.toParams(self)
+        kparams.put("objectType", "KalturaBookmarkEvent")
+        kparams.addIntIfDefined("userId", self.userId)
+        kparams.addIntIfDefined("householdId", self.householdId)
+        kparams.addIntIfDefined("assetId", self.assetId)
+        kparams.addIntIfDefined("fileId", self.fileId)
+        kparams.addIntIfDefined("position", self.position)
+        kparams.addStringEnumIfDefined("action", self.action)
+        kparams.addStringEnumIfDefined("productType", self.productType)
+        kparams.addIntIfDefined("productId", self.productId)
+        return kparams
+
+    def getUserId(self):
+        return self.userId
+
+    def setUserId(self, newUserId):
+        self.userId = newUserId
+
+    def getHouseholdId(self):
+        return self.householdId
+
+    def setHouseholdId(self, newHouseholdId):
+        self.householdId = newHouseholdId
+
+    def getAssetId(self):
+        return self.assetId
+
+    def setAssetId(self, newAssetId):
+        self.assetId = newAssetId
+
+    def getFileId(self):
+        return self.fileId
+
+    def setFileId(self, newFileId):
+        self.fileId = newFileId
+
+    def getPosition(self):
+        return self.position
+
+    def setPosition(self, newPosition):
+        self.position = newPosition
+
+    def getAction(self):
+        return self.action
+
+    def setAction(self, newAction):
+        self.action = newAction
+
+    def getProductType(self):
+        return self.productType
+
+    def setProductType(self, newProductType):
+        self.productType = newProductType
+
+    def getProductId(self):
+        return self.productId
+
+    def setProductId(self, newProductId):
+        self.productId = newProductId
+
+
+# @package Kaltura
+# @subpackage Client
 class KalturaConcurrencyViolation(KalturaEventObject):
     def __init__(self,
             timestamp=NotImplemented,
@@ -38721,7 +38927,7 @@ class KalturaPartnerConfigurationService(KalturaServiceBase):
         return KalturaObjectFactory.create(resultNode, 'KalturaPartnerConfigurationListResponse')
 
     def update(self, configuration):
-        """Update Partner Configuration"""
+        """Update/set Partner Configuration"""
 
         kparams = KalturaParams()
         kparams.addObjectIfDefined("configuration", configuration)
@@ -41555,6 +41761,8 @@ class KalturaCoreClient(KalturaClientPlugin):
             'KalturaPartnerConfiguration': KalturaPartnerConfiguration,
             'KalturaPartnerConfigurationListResponse': KalturaPartnerConfigurationListResponse,
             'KalturaBillingPartnerConfig': KalturaBillingPartnerConfig,
+            'KalturaBookmarkEventThreshold': KalturaBookmarkEventThreshold,
+            'KalturaCommercePartnerConfig': KalturaCommercePartnerConfig,
             'KalturaConcurrencyPartnerConfig': KalturaConcurrencyPartnerConfig,
             'KalturaGeneralPartnerConfig': KalturaGeneralPartnerConfig,
             'KalturaObjectVirtualAssetInfo': KalturaObjectVirtualAssetInfo,
@@ -41758,6 +41966,7 @@ class KalturaCoreClient(KalturaClientPlugin):
             'KalturaEventNotificationScope': KalturaEventNotificationScope,
             'KalturaEventObject': KalturaEventObject,
             'KalturaEventNotificationObjectScope': KalturaEventNotificationObjectScope,
+            'KalturaBookmarkEvent': KalturaBookmarkEvent,
             'KalturaConcurrencyViolation': KalturaConcurrencyViolation,
             'KalturaCrudObject': KalturaCrudObject,
             'KalturaEventNotification': KalturaEventNotification,
