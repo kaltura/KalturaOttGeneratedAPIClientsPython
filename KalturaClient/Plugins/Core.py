@@ -42,7 +42,7 @@ from ..Base import (
     KalturaServiceBase,
 )
 
-API_VERSION = '5.3.1.14662'
+API_VERSION = '5.3.0.14351'
 
 ########## enums ##########
 # @package Kaltura
@@ -1009,17 +1009,6 @@ class KalturaHouseholdRestriction(object):
 
 # @package Kaltura
 # @subpackage Client
-class KalturaHouseholdSegmentOrderBy(object):
-    NONE = "NONE"
-
-    def __init__(self, value):
-        self.value = value
-
-    def getValue(self):
-        return self.value
-
-# @package Kaltura
-# @subpackage Client
 class KalturaHouseholdState(object):
     OK = "ok"
     CREATED_WITHOUT_NPVR_ACCOUNT = "created_without_npvr_account"
@@ -1439,7 +1428,6 @@ class KalturaPartnerConfigurationType(object):
     CONCURRENCY = "Concurrency"
     GENERAL = "General"
     OBJECTVIRTUALASSET = "ObjectVirtualAsset"
-    COMMERCE = "Commerce"
 
     def __init__(self, value):
         self.value = value
@@ -3331,41 +3319,6 @@ class KalturaPasswordPolicyFilter(KalturaCrudFilter):
 
 # @package Kaltura
 # @subpackage Client
-class KalturaHouseholdSegmentFilter(KalturaCrudFilter):
-    def __init__(self,
-            orderBy=NotImplemented,
-            kSql=NotImplemented):
-        KalturaCrudFilter.__init__(self,
-            orderBy)
-
-        # KSQL expression
-        # @var string
-        self.kSql = kSql
-
-
-    PROPERTY_LOADERS = {
-        'kSql': getXmlNodeText, 
-    }
-
-    def fromXml(self, node):
-        KalturaCrudFilter.fromXml(self, node)
-        self.fromXmlImpl(node, KalturaHouseholdSegmentFilter.PROPERTY_LOADERS)
-
-    def toParams(self):
-        kparams = KalturaCrudFilter.toParams(self)
-        kparams.put("objectType", "KalturaHouseholdSegmentFilter")
-        kparams.addStringIfDefined("kSql", self.kSql)
-        return kparams
-
-    def getKSql(self):
-        return self.kSql
-
-    def setKSql(self, newKSql):
-        self.kSql = newKSql
-
-
-# @package Kaltura
-# @subpackage Client
 class KalturaHouseholdCouponFilter(KalturaCrudFilter):
     def __init__(self,
             orderBy=NotImplemented,
@@ -3773,39 +3726,17 @@ class KalturaSocialFriendActivityFilter(KalturaFilter):
 
 # @package Kaltura
 # @subpackage Client
-class KalturaBaseSegmentationTypeFilter(KalturaFilter):
-    def __init__(self,
-            orderBy=NotImplemented):
-        KalturaFilter.__init__(self,
-            orderBy)
-
-
-    PROPERTY_LOADERS = {
-    }
-
-    def fromXml(self, node):
-        KalturaFilter.fromXml(self, node)
-        self.fromXmlImpl(node, KalturaBaseSegmentationTypeFilter.PROPERTY_LOADERS)
-
-    def toParams(self):
-        kparams = KalturaFilter.toParams(self)
-        kparams.put("objectType", "KalturaBaseSegmentationTypeFilter")
-        return kparams
-
-
-# @package Kaltura
-# @subpackage Client
-class KalturaSegmentationTypeFilter(KalturaBaseSegmentationTypeFilter):
+class KalturaSegmentationTypeFilter(KalturaFilter):
     """Filter for segmentation types"""
 
     def __init__(self,
             orderBy=NotImplemented,
             idIn=NotImplemented,
             kSql=NotImplemented):
-        KalturaBaseSegmentationTypeFilter.__init__(self,
+        KalturaFilter.__init__(self,
             orderBy)
 
-        # Comma separated segmentation types identifiers
+        # Comma separated segmentation types identifieridentifiers
         # @var string
         self.idIn = idIn
 
@@ -3820,11 +3751,11 @@ class KalturaSegmentationTypeFilter(KalturaBaseSegmentationTypeFilter):
     }
 
     def fromXml(self, node):
-        KalturaBaseSegmentationTypeFilter.fromXml(self, node)
+        KalturaFilter.fromXml(self, node)
         self.fromXmlImpl(node, KalturaSegmentationTypeFilter.PROPERTY_LOADERS)
 
     def toParams(self):
-        kparams = KalturaBaseSegmentationTypeFilter.toParams(self)
+        kparams = KalturaFilter.toParams(self)
         kparams.put("objectType", "KalturaSegmentationTypeFilter")
         kparams.addStringIfDefined("idIn", self.idIn)
         kparams.addStringIfDefined("kSql", self.kSql)
@@ -3845,48 +3776,12 @@ class KalturaSegmentationTypeFilter(KalturaBaseSegmentationTypeFilter):
 
 # @package Kaltura
 # @subpackage Client
-class KalturaSegmentValueFilter(KalturaBaseSegmentationTypeFilter):
-    def __init__(self,
-            orderBy=NotImplemented,
-            idIn=NotImplemented):
-        KalturaBaseSegmentationTypeFilter.__init__(self,
-            orderBy)
-
-        # Comma separated segmentation identifiers
-        # @var string
-        self.idIn = idIn
-
-
-    PROPERTY_LOADERS = {
-        'idIn': getXmlNodeText, 
-    }
-
-    def fromXml(self, node):
-        KalturaBaseSegmentationTypeFilter.fromXml(self, node)
-        self.fromXmlImpl(node, KalturaSegmentValueFilter.PROPERTY_LOADERS)
-
-    def toParams(self):
-        kparams = KalturaBaseSegmentationTypeFilter.toParams(self)
-        kparams.put("objectType", "KalturaSegmentValueFilter")
-        kparams.addStringIfDefined("idIn", self.idIn)
-        return kparams
-
-    def getIdIn(self):
-        return self.idIn
-
-    def setIdIn(self, newIdIn):
-        self.idIn = newIdIn
-
-
-# @package Kaltura
-# @subpackage Client
 class KalturaUserSegmentFilter(KalturaFilter):
     """Filter for user segments"""
 
     def __init__(self,
             orderBy=NotImplemented,
-            userIdEqual=NotImplemented,
-            kSql=NotImplemented):
+            userIdEqual=NotImplemented):
         KalturaFilter.__init__(self,
             orderBy)
 
@@ -3894,14 +3789,9 @@ class KalturaUserSegmentFilter(KalturaFilter):
         # @var string
         self.userIdEqual = userIdEqual
 
-        # KSQL expression
-        # @var string
-        self.kSql = kSql
-
 
     PROPERTY_LOADERS = {
         'userIdEqual': getXmlNodeText, 
-        'kSql': getXmlNodeText, 
     }
 
     def fromXml(self, node):
@@ -3912,7 +3802,6 @@ class KalturaUserSegmentFilter(KalturaFilter):
         kparams = KalturaFilter.toParams(self)
         kparams.put("objectType", "KalturaUserSegmentFilter")
         kparams.addStringIfDefined("userIdEqual", self.userIdEqual)
-        kparams.addStringIfDefined("kSql", self.kSql)
         return kparams
 
     def getUserIdEqual(self):
@@ -3920,12 +3809,6 @@ class KalturaUserSegmentFilter(KalturaFilter):
 
     def setUserIdEqual(self, newUserIdEqual):
         self.userIdEqual = newUserIdEqual
-
-    def getKSql(self):
-        return self.kSql
-
-    def setKSql(self, newKSql):
-        self.kSql = newKSql
 
 
 # @package Kaltura
@@ -8717,29 +8600,7 @@ class KalturaPlaybackProfileFilter(KalturaFilter):
 
 # @package Kaltura
 # @subpackage Client
-class KalturaBaseRegionFilter(KalturaFilter):
-    def __init__(self,
-            orderBy=NotImplemented):
-        KalturaFilter.__init__(self,
-            orderBy)
-
-
-    PROPERTY_LOADERS = {
-    }
-
-    def fromXml(self, node):
-        KalturaFilter.fromXml(self, node)
-        self.fromXmlImpl(node, KalturaBaseRegionFilter.PROPERTY_LOADERS)
-
-    def toParams(self):
-        kparams = KalturaFilter.toParams(self)
-        kparams.put("objectType", "KalturaBaseRegionFilter")
-        return kparams
-
-
-# @package Kaltura
-# @subpackage Client
-class KalturaRegionFilter(KalturaBaseRegionFilter):
+class KalturaRegionFilter(KalturaFilter):
     def __init__(self,
             orderBy=NotImplemented,
             externalIdIn=NotImplemented,
@@ -8747,7 +8608,7 @@ class KalturaRegionFilter(KalturaBaseRegionFilter):
             parentIdEqual=NotImplemented,
             liveAssetIdEqual=NotImplemented,
             parentOnly=NotImplemented):
-        KalturaBaseRegionFilter.__init__(self,
+        KalturaFilter.__init__(self,
             orderBy)
 
         # List of comma separated regions external IDs
@@ -8780,11 +8641,11 @@ class KalturaRegionFilter(KalturaBaseRegionFilter):
     }
 
     def fromXml(self, node):
-        KalturaBaseRegionFilter.fromXml(self, node)
+        KalturaFilter.fromXml(self, node)
         self.fromXmlImpl(node, KalturaRegionFilter.PROPERTY_LOADERS)
 
     def toParams(self):
-        kparams = KalturaBaseRegionFilter.toParams(self)
+        kparams = KalturaFilter.toParams(self)
         kparams.put("objectType", "KalturaRegionFilter")
         kparams.addStringIfDefined("externalIdIn", self.externalIdIn)
         kparams.addStringIfDefined("idIn", self.idIn)
@@ -8822,28 +8683,6 @@ class KalturaRegionFilter(KalturaBaseRegionFilter):
 
     def setParentOnly(self, newParentOnly):
         self.parentOnly = newParentOnly
-
-
-# @package Kaltura
-# @subpackage Client
-class KalturaDefaultRegionFilter(KalturaBaseRegionFilter):
-    def __init__(self,
-            orderBy=NotImplemented):
-        KalturaBaseRegionFilter.__init__(self,
-            orderBy)
-
-
-    PROPERTY_LOADERS = {
-    }
-
-    def fromXml(self, node):
-        KalturaBaseRegionFilter.fromXml(self, node)
-        self.fromXmlImpl(node, KalturaDefaultRegionFilter.PROPERTY_LOADERS)
-
-    def toParams(self):
-        kparams = KalturaBaseRegionFilter.toParams(self)
-        kparams.put("objectType", "KalturaDefaultRegionFilter")
-        return kparams
 
 
 # @package Kaltura
@@ -12479,209 +12318,6 @@ class KalturaAssetOrderSegmentAction(KalturaBaseSegmentAction):
 
     def setValues(self, newValues):
         self.values = newValues
-
-
-# @package Kaltura
-# @subpackage Client
-class KalturaKsqlSegmentAction(KalturaBaseSegmentAction):
-    """Segment action with ksql"""
-
-    def __init__(self,
-            ksql=NotImplemented):
-        KalturaBaseSegmentAction.__init__(self)
-
-        # KSQL
-        # @var string
-        self.ksql = ksql
-
-
-    PROPERTY_LOADERS = {
-        'ksql': getXmlNodeText, 
-    }
-
-    def fromXml(self, node):
-        KalturaBaseSegmentAction.fromXml(self, node)
-        self.fromXmlImpl(node, KalturaKsqlSegmentAction.PROPERTY_LOADERS)
-
-    def toParams(self):
-        kparams = KalturaBaseSegmentAction.toParams(self)
-        kparams.put("objectType", "KalturaKsqlSegmentAction")
-        kparams.addStringIfDefined("ksql", self.ksql)
-        return kparams
-
-    def getKsql(self):
-        return self.ksql
-
-    def setKsql(self, newKsql):
-        self.ksql = newKsql
-
-
-# @package Kaltura
-# @subpackage Client
-class KalturaSegmentAssetFilterAction(KalturaKsqlSegmentAction):
-    """Asset filter action"""
-
-    def __init__(self,
-            ksql=NotImplemented):
-        KalturaKsqlSegmentAction.__init__(self,
-            ksql)
-
-
-    PROPERTY_LOADERS = {
-    }
-
-    def fromXml(self, node):
-        KalturaKsqlSegmentAction.fromXml(self, node)
-        self.fromXmlImpl(node, KalturaSegmentAssetFilterAction.PROPERTY_LOADERS)
-
-    def toParams(self):
-        kparams = KalturaKsqlSegmentAction.toParams(self)
-        kparams.put("objectType", "KalturaSegmentAssetFilterAction")
-        return kparams
-
-
-# @package Kaltura
-# @subpackage Client
-class KalturaSegmentAssetFilterSegmentAction(KalturaSegmentAssetFilterAction):
-    """segment asset filter for segment action"""
-
-    def __init__(self,
-            ksql=NotImplemented):
-        KalturaSegmentAssetFilterAction.__init__(self,
-            ksql)
-
-
-    PROPERTY_LOADERS = {
-    }
-
-    def fromXml(self, node):
-        KalturaSegmentAssetFilterAction.fromXml(self, node)
-        self.fromXmlImpl(node, KalturaSegmentAssetFilterSegmentAction.PROPERTY_LOADERS)
-
-    def toParams(self):
-        kparams = KalturaSegmentAssetFilterAction.toParams(self)
-        kparams.put("objectType", "KalturaSegmentAssetFilterSegmentAction")
-        return kparams
-
-
-# @package Kaltura
-# @subpackage Client
-class KalturaSegmentAssetFilterSubscriptionAction(KalturaSegmentAssetFilterAction):
-    """segment asset filter for subscription action"""
-
-    def __init__(self,
-            ksql=NotImplemented):
-        KalturaSegmentAssetFilterAction.__init__(self,
-            ksql)
-
-
-    PROPERTY_LOADERS = {
-    }
-
-    def fromXml(self, node):
-        KalturaSegmentAssetFilterAction.fromXml(self, node)
-        self.fromXmlImpl(node, KalturaSegmentAssetFilterSubscriptionAction.PROPERTY_LOADERS)
-
-    def toParams(self):
-        kparams = KalturaSegmentAssetFilterAction.toParams(self)
-        kparams.put("objectType", "KalturaSegmentAssetFilterSubscriptionAction")
-        return kparams
-
-
-# @package Kaltura
-# @subpackage Client
-class KalturaBlockSubscriptionSegmentAction(KalturaKsqlSegmentAction):
-    """segment block subscription action"""
-
-    def __init__(self,
-            ksql=NotImplemented):
-        KalturaKsqlSegmentAction.__init__(self,
-            ksql)
-
-
-    PROPERTY_LOADERS = {
-    }
-
-    def fromXml(self, node):
-        KalturaKsqlSegmentAction.fromXml(self, node)
-        self.fromXmlImpl(node, KalturaBlockSubscriptionSegmentAction.PROPERTY_LOADERS)
-
-    def toParams(self):
-        kparams = KalturaKsqlSegmentAction.toParams(self)
-        kparams.put("objectType", "KalturaBlockSubscriptionSegmentAction")
-        return kparams
-
-
-# @package Kaltura
-# @subpackage Client
-class KalturaSegmentBlockPlaybackSubscriptionAction(KalturaBlockSubscriptionSegmentAction):
-    """segment block subscription for playback action"""
-
-    def __init__(self,
-            ksql=NotImplemented):
-        KalturaBlockSubscriptionSegmentAction.__init__(self,
-            ksql)
-
-
-    PROPERTY_LOADERS = {
-    }
-
-    def fromXml(self, node):
-        KalturaBlockSubscriptionSegmentAction.fromXml(self, node)
-        self.fromXmlImpl(node, KalturaSegmentBlockPlaybackSubscriptionAction.PROPERTY_LOADERS)
-
-    def toParams(self):
-        kparams = KalturaBlockSubscriptionSegmentAction.toParams(self)
-        kparams.put("objectType", "KalturaSegmentBlockPlaybackSubscriptionAction")
-        return kparams
-
-
-# @package Kaltura
-# @subpackage Client
-class KalturaSegmentBlockCancelSubscriptionAction(KalturaBlockSubscriptionSegmentAction):
-    """segment block subscription for cancel action"""
-
-    def __init__(self,
-            ksql=NotImplemented):
-        KalturaBlockSubscriptionSegmentAction.__init__(self,
-            ksql)
-
-
-    PROPERTY_LOADERS = {
-    }
-
-    def fromXml(self, node):
-        KalturaBlockSubscriptionSegmentAction.fromXml(self, node)
-        self.fromXmlImpl(node, KalturaSegmentBlockCancelSubscriptionAction.PROPERTY_LOADERS)
-
-    def toParams(self):
-        kparams = KalturaBlockSubscriptionSegmentAction.toParams(self)
-        kparams.put("objectType", "KalturaSegmentBlockCancelSubscriptionAction")
-        return kparams
-
-
-# @package Kaltura
-# @subpackage Client
-class KalturaSegmentBlockPurchaseSubscriptionAction(KalturaBlockSubscriptionSegmentAction):
-    """segment block subscription for purchase action"""
-
-    def __init__(self,
-            ksql=NotImplemented):
-        KalturaBlockSubscriptionSegmentAction.__init__(self,
-            ksql)
-
-
-    PROPERTY_LOADERS = {
-    }
-
-    def fromXml(self, node):
-        KalturaBlockSubscriptionSegmentAction.fromXml(self, node)
-        self.fromXmlImpl(node, KalturaSegmentBlockPurchaseSubscriptionAction.PROPERTY_LOADERS)
-
-    def toParams(self):
-        kparams = KalturaBlockSubscriptionSegmentAction.toParams(self)
-        kparams.put("objectType", "KalturaSegmentBlockPurchaseSubscriptionAction")
-        return kparams
 
 
 # @package Kaltura
@@ -18450,87 +18086,6 @@ class KalturaBillingPartnerConfig(KalturaPartnerConfiguration):
 
     def setType(self, newType):
         self.type = newType
-
-
-# @package Kaltura
-# @subpackage Client
-class KalturaBookmarkEventThreshold(KalturaObjectBase):
-    def __init__(self,
-            transactionType=NotImplemented,
-            threshold=NotImplemented):
-        KalturaObjectBase.__init__(self)
-
-        # bookmark transaction type
-        # @var KalturaTransactionType
-        self.transactionType = transactionType
-
-        # event threshold in seconds
-        # @var int
-        self.threshold = threshold
-
-
-    PROPERTY_LOADERS = {
-        'transactionType': (KalturaEnumsFactory.createString, "KalturaTransactionType"), 
-        'threshold': getXmlNodeInt, 
-    }
-
-    def fromXml(self, node):
-        KalturaObjectBase.fromXml(self, node)
-        self.fromXmlImpl(node, KalturaBookmarkEventThreshold.PROPERTY_LOADERS)
-
-    def toParams(self):
-        kparams = KalturaObjectBase.toParams(self)
-        kparams.put("objectType", "KalturaBookmarkEventThreshold")
-        kparams.addStringEnumIfDefined("transactionType", self.transactionType)
-        kparams.addIntIfDefined("threshold", self.threshold)
-        return kparams
-
-    def getTransactionType(self):
-        return self.transactionType
-
-    def setTransactionType(self, newTransactionType):
-        self.transactionType = newTransactionType
-
-    def getThreshold(self):
-        return self.threshold
-
-    def setThreshold(self, newThreshold):
-        self.threshold = newThreshold
-
-
-# @package Kaltura
-# @subpackage Client
-class KalturaCommercePartnerConfig(KalturaPartnerConfiguration):
-    """partner configuration for commerce"""
-
-    def __init__(self,
-            bookmarkEventThresholds=NotImplemented):
-        KalturaPartnerConfiguration.__init__(self)
-
-        # configuration for bookmark event threshold (when to dispatch the event) in seconds.
-        # @var array of KalturaBookmarkEventThreshold
-        self.bookmarkEventThresholds = bookmarkEventThresholds
-
-
-    PROPERTY_LOADERS = {
-        'bookmarkEventThresholds': (KalturaObjectFactory.createArray, 'KalturaBookmarkEventThreshold'), 
-    }
-
-    def fromXml(self, node):
-        KalturaPartnerConfiguration.fromXml(self, node)
-        self.fromXmlImpl(node, KalturaCommercePartnerConfig.PROPERTY_LOADERS)
-
-    def toParams(self):
-        kparams = KalturaPartnerConfiguration.toParams(self)
-        kparams.put("objectType", "KalturaCommercePartnerConfig")
-        kparams.addArrayIfDefined("bookmarkEventThresholds", self.bookmarkEventThresholds)
-        return kparams
-
-    def getBookmarkEventThresholds(self):
-        return self.bookmarkEventThresholds
-
-    def setBookmarkEventThresholds(self, newBookmarkEventThresholds):
-        self.bookmarkEventThresholds = newBookmarkEventThresholds
 
 
 # @package Kaltura
@@ -31543,130 +31098,6 @@ class KalturaEventNotificationObjectScope(KalturaEventNotificationScope):
 
 # @package Kaltura
 # @subpackage Client
-class KalturaBookmarkEvent(KalturaEventObject):
-    def __init__(self,
-            userId=NotImplemented,
-            householdId=NotImplemented,
-            assetId=NotImplemented,
-            fileId=NotImplemented,
-            position=NotImplemented,
-            action=NotImplemented,
-            productType=NotImplemented,
-            productId=NotImplemented):
-        KalturaEventObject.__init__(self)
-
-        # User Id
-        # @var int
-        self.userId = userId
-
-        # Household Id
-        # @var int
-        self.householdId = householdId
-
-        # Asset Id
-        # @var int
-        self.assetId = assetId
-
-        # File Id
-        # @var int
-        self.fileId = fileId
-
-        # position
-        # @var int
-        self.position = position
-
-        # Bookmark Action Type
-        # @var KalturaBookmarkActionType
-        self.action = action
-
-        # Product Type
-        # @var KalturaTransactionType
-        self.productType = productType
-
-        # Product Id
-        # @var int
-        self.productId = productId
-
-
-    PROPERTY_LOADERS = {
-        'userId': getXmlNodeInt, 
-        'householdId': getXmlNodeInt, 
-        'assetId': getXmlNodeInt, 
-        'fileId': getXmlNodeInt, 
-        'position': getXmlNodeInt, 
-        'action': (KalturaEnumsFactory.createString, "KalturaBookmarkActionType"), 
-        'productType': (KalturaEnumsFactory.createString, "KalturaTransactionType"), 
-        'productId': getXmlNodeInt, 
-    }
-
-    def fromXml(self, node):
-        KalturaEventObject.fromXml(self, node)
-        self.fromXmlImpl(node, KalturaBookmarkEvent.PROPERTY_LOADERS)
-
-    def toParams(self):
-        kparams = KalturaEventObject.toParams(self)
-        kparams.put("objectType", "KalturaBookmarkEvent")
-        kparams.addIntIfDefined("userId", self.userId)
-        kparams.addIntIfDefined("householdId", self.householdId)
-        kparams.addIntIfDefined("assetId", self.assetId)
-        kparams.addIntIfDefined("fileId", self.fileId)
-        kparams.addIntIfDefined("position", self.position)
-        kparams.addStringEnumIfDefined("action", self.action)
-        kparams.addStringEnumIfDefined("productType", self.productType)
-        kparams.addIntIfDefined("productId", self.productId)
-        return kparams
-
-    def getUserId(self):
-        return self.userId
-
-    def setUserId(self, newUserId):
-        self.userId = newUserId
-
-    def getHouseholdId(self):
-        return self.householdId
-
-    def setHouseholdId(self, newHouseholdId):
-        self.householdId = newHouseholdId
-
-    def getAssetId(self):
-        return self.assetId
-
-    def setAssetId(self, newAssetId):
-        self.assetId = newAssetId
-
-    def getFileId(self):
-        return self.fileId
-
-    def setFileId(self, newFileId):
-        self.fileId = newFileId
-
-    def getPosition(self):
-        return self.position
-
-    def setPosition(self, newPosition):
-        self.position = newPosition
-
-    def getAction(self):
-        return self.action
-
-    def setAction(self, newAction):
-        self.action = newAction
-
-    def getProductType(self):
-        return self.productType
-
-    def setProductType(self, newProductType):
-        self.productType = newProductType
-
-    def getProductId(self):
-        return self.productId
-
-    def setProductId(self, newProductId):
-        self.productId = newProductId
-
-
-# @package Kaltura
-# @subpackage Client
 class KalturaConcurrencyViolation(KalturaEventObject):
     def __init__(self,
             timestamp=NotImplemented,
@@ -32059,54 +31490,6 @@ class KalturaPasswordPolicy(KalturaCrudObject):
 
     def setLockoutFailuresCount(self, newLockoutFailuresCount):
         self.lockoutFailuresCount = newLockoutFailuresCount
-
-
-# @package Kaltura
-# @subpackage Client
-class KalturaHouseholdSegment(KalturaCrudObject):
-    """Indicates a segment of a household"""
-
-    def __init__(self,
-            segmentId=NotImplemented,
-            householdId=NotImplemented):
-        KalturaCrudObject.__init__(self)
-
-        # Segment Id
-        # @var int
-        self.segmentId = segmentId
-
-        # Segment Id
-        # @var int
-        self.householdId = householdId
-
-
-    PROPERTY_LOADERS = {
-        'segmentId': getXmlNodeInt, 
-        'householdId': getXmlNodeInt, 
-    }
-
-    def fromXml(self, node):
-        KalturaCrudObject.fromXml(self, node)
-        self.fromXmlImpl(node, KalturaHouseholdSegment.PROPERTY_LOADERS)
-
-    def toParams(self):
-        kparams = KalturaCrudObject.toParams(self)
-        kparams.put("objectType", "KalturaHouseholdSegment")
-        kparams.addIntIfDefined("segmentId", self.segmentId)
-        kparams.addIntIfDefined("householdId", self.householdId)
-        return kparams
-
-    def getSegmentId(self):
-        return self.segmentId
-
-    def setSegmentId(self, newSegmentId):
-        self.segmentId = newSegmentId
-
-    def getHouseholdId(self):
-        return self.householdId
-
-    def setHouseholdId(self, newHouseholdId):
-        self.householdId = newHouseholdId
 
 
 # @package Kaltura
@@ -32621,41 +32004,6 @@ class KalturaHouseholdQuota(KalturaObjectBase):
 
     def getAvailableQuota(self):
         return self.availableQuota
-
-
-# @package Kaltura
-# @subpackage Client
-class KalturaHouseholdSegmentListResponse(KalturaListResponse):
-    def __init__(self,
-            totalCount=NotImplemented,
-            objects=NotImplemented):
-        KalturaListResponse.__init__(self,
-            totalCount)
-
-        # A list of objects
-        # @var array of KalturaHouseholdSegment
-        self.objects = objects
-
-
-    PROPERTY_LOADERS = {
-        'objects': (KalturaObjectFactory.createArray, 'KalturaHouseholdSegment'), 
-    }
-
-    def fromXml(self, node):
-        KalturaListResponse.fromXml(self, node)
-        self.fromXmlImpl(node, KalturaHouseholdSegmentListResponse.PROPERTY_LOADERS)
-
-    def toParams(self):
-        kparams = KalturaListResponse.toParams(self)
-        kparams.put("objectType", "KalturaHouseholdSegmentListResponse")
-        kparams.addArrayIfDefined("objects", self.objects)
-        return kparams
-
-    def getObjects(self):
-        return self.objects
-
-    def setObjects(self, newObjects):
-        self.objects = newObjects
 
 
 # @package Kaltura
@@ -35557,20 +34905,6 @@ class KalturaAssetService(KalturaServiceBase):
         resultNode = self.client.doQueue()
         return KalturaObjectFactory.create(resultNode, 'KalturaPlaybackContext')
 
-    def getPlaybackManifest(self, assetId, assetType, contextDataParams, sourceType = NotImplemented):
-        """This action delivers all data relevant for player"""
-
-        kparams = KalturaParams()
-        kparams.addStringIfDefined("assetId", assetId)
-        kparams.addStringIfDefined("assetType", assetType)
-        kparams.addObjectIfDefined("contextDataParams", contextDataParams)
-        kparams.addStringIfDefined("sourceType", sourceType)
-        self.client.queueServiceActionCall("asset", "getPlaybackManifest", "KalturaPlaybackContext", kparams)
-        if self.client.isMultiRequest():
-            return self.client.getMultiRequestResult()
-        resultNode = self.client.doQueue()
-        return KalturaObjectFactory.create(resultNode, 'KalturaPlaybackContext')
-
     def list(self, filter = NotImplemented, pager = NotImplemented):
         """Returns media or EPG assets. Filters by media identifiers or by EPG internal or external identifier."""
 
@@ -37864,45 +37198,6 @@ class KalturaHouseholdQuotaService(KalturaServiceBase):
 
 # @package Kaltura
 # @subpackage Client
-class KalturaHouseholdSegmentService(KalturaServiceBase):
-    def __init__(self, client = None):
-        KalturaServiceBase.__init__(self, client)
-
-    def add(self, objectToAdd):
-        """householdSegment add"""
-
-        kparams = KalturaParams()
-        kparams.addObjectIfDefined("objectToAdd", objectToAdd)
-        self.client.queueServiceActionCall("householdsegment", "add", "KalturaHouseholdSegment", kparams)
-        if self.client.isMultiRequest():
-            return self.client.getMultiRequestResult()
-        resultNode = self.client.doQueue()
-        return KalturaObjectFactory.create(resultNode, 'KalturaHouseholdSegment')
-
-    def delete(self, id):
-        """Remove segment from household"""
-
-        kparams = KalturaParams()
-        kparams.addIntIfDefined("id", id);
-        self.client.queueServiceActionCall("householdsegment", "delete", "None", kparams)
-        if self.client.isMultiRequest():
-            return self.client.getMultiRequestResult()
-        resultNode = self.client.doQueue()
-
-    def list(self, filter = NotImplemented):
-        """Gets all HouseholdSegment items for a household"""
-
-        kparams = KalturaParams()
-        kparams.addObjectIfDefined("filter", filter)
-        self.client.queueServiceActionCall("householdsegment", "list", "KalturaHouseholdSegmentListResponse", kparams)
-        if self.client.isMultiRequest():
-            return self.client.getMultiRequestResult()
-        resultNode = self.client.doQueue()
-        return KalturaObjectFactory.create(resultNode, 'KalturaHouseholdSegmentListResponse')
-
-
-# @package Kaltura
-# @subpackage Client
 class KalturaHouseholdUserService(KalturaServiceBase):
     def __init__(self, client = None):
         KalturaServiceBase.__init__(self, client)
@@ -38927,7 +38222,7 @@ class KalturaPartnerConfigurationService(KalturaServiceBase):
         return KalturaObjectFactory.create(resultNode, 'KalturaPartnerConfigurationListResponse')
 
     def update(self, configuration):
-        """Update/set Partner Configuration"""
+        """Update Partner Configuration"""
 
         kparams = KalturaParams()
         kparams.addObjectIfDefined("configuration", configuration)
@@ -40387,11 +39682,11 @@ class KalturaSystemService(KalturaServiceBase):
     def __init__(self, client = None):
         KalturaServiceBase.__init__(self, client)
 
-    def clearLocalServerCache(self, clearCacheAction = NotImplemented, key = NotImplemented):
+    def clearLocalServerCache(self, action = NotImplemented, key = NotImplemented):
         """Clear local server cache"""
 
         kparams = KalturaParams()
-        kparams.addStringIfDefined("clearCacheAction", clearCacheAction)
+        kparams.addStringIfDefined("action", action)
         kparams.addStringIfDefined("key", key)
         self.client.queueServiceActionCall("system", "clearLocalServerCache", "None", kparams)
         if self.client.isMultiRequest():
@@ -41213,7 +40508,6 @@ class KalturaCoreClient(KalturaClientPlugin):
             'householdPaymentMethod': KalturaHouseholdPaymentMethodService,
             'householdPremiumService': KalturaHouseholdPremiumServiceService,
             'householdQuota': KalturaHouseholdQuotaService,
-            'householdSegment': KalturaHouseholdSegmentService,
             'householdUser': KalturaHouseholdUserService,
             'image': KalturaImageService,
             'imageType': KalturaImageTypeService,
@@ -41360,7 +40654,6 @@ class KalturaCoreClient(KalturaClientPlugin):
             'KalturaHouseholdFrequencyType': KalturaHouseholdFrequencyType,
             'KalturaHouseholdPaymentGatewaySelectedBy': KalturaHouseholdPaymentGatewaySelectedBy,
             'KalturaHouseholdRestriction': KalturaHouseholdRestriction,
-            'KalturaHouseholdSegmentOrderBy': KalturaHouseholdSegmentOrderBy,
             'KalturaHouseholdState': KalturaHouseholdState,
             'KalturaHouseholdSuspensionState': KalturaHouseholdSuspensionState,
             'KalturaHouseholdUserOrderBy': KalturaHouseholdUserOrderBy,
@@ -41490,16 +40783,13 @@ class KalturaCoreClient(KalturaClientPlugin):
             'KalturaOTTUserFilter': KalturaOTTUserFilter,
             'KalturaCrudFilter': KalturaCrudFilter,
             'KalturaPasswordPolicyFilter': KalturaPasswordPolicyFilter,
-            'KalturaHouseholdSegmentFilter': KalturaHouseholdSegmentFilter,
             'KalturaHouseholdCouponFilter': KalturaHouseholdCouponFilter,
             'KalturaEventNotificationFilter': KalturaEventNotificationFilter,
             'KalturaBulkUploadFilter': KalturaBulkUploadFilter,
             'KalturaSocialActionFilter': KalturaSocialActionFilter,
             'KalturaSocialCommentFilter': KalturaSocialCommentFilter,
             'KalturaSocialFriendActivityFilter': KalturaSocialFriendActivityFilter,
-            'KalturaBaseSegmentationTypeFilter': KalturaBaseSegmentationTypeFilter,
             'KalturaSegmentationTypeFilter': KalturaSegmentationTypeFilter,
-            'KalturaSegmentValueFilter': KalturaSegmentValueFilter,
             'KalturaUserSegmentFilter': KalturaUserSegmentFilter,
             'KalturaAssetFilePpvFilter': KalturaAssetFilePpvFilter,
             'KalturaCollectionFilter': KalturaCollectionFilter,
@@ -41592,9 +40882,7 @@ class KalturaCoreClient(KalturaClientPlugin):
             'KalturaParentalRuleFilter': KalturaParentalRuleFilter,
             'KalturaPermissionFilter': KalturaPermissionFilter,
             'KalturaPlaybackProfileFilter': KalturaPlaybackProfileFilter,
-            'KalturaBaseRegionFilter': KalturaBaseRegionFilter,
             'KalturaRegionFilter': KalturaRegionFilter,
-            'KalturaDefaultRegionFilter': KalturaDefaultRegionFilter,
             'KalturaSearchHistoryFilter': KalturaSearchHistoryFilter,
             'KalturaTvmRuleFilter': KalturaTvmRuleFilter,
             'KalturaUserAssetRuleFilter': KalturaUserAssetRuleFilter,
@@ -41655,14 +40943,6 @@ class KalturaCoreClient(KalturaClientPlugin):
             'KalturaMonetizationCondition': KalturaMonetizationCondition,
             'KalturaUserDataCondition': KalturaUserDataCondition,
             'KalturaAssetOrderSegmentAction': KalturaAssetOrderSegmentAction,
-            'KalturaKsqlSegmentAction': KalturaKsqlSegmentAction,
-            'KalturaSegmentAssetFilterAction': KalturaSegmentAssetFilterAction,
-            'KalturaSegmentAssetFilterSegmentAction': KalturaSegmentAssetFilterSegmentAction,
-            'KalturaSegmentAssetFilterSubscriptionAction': KalturaSegmentAssetFilterSubscriptionAction,
-            'KalturaBlockSubscriptionSegmentAction': KalturaBlockSubscriptionSegmentAction,
-            'KalturaSegmentBlockPlaybackSubscriptionAction': KalturaSegmentBlockPlaybackSubscriptionAction,
-            'KalturaSegmentBlockCancelSubscriptionAction': KalturaSegmentBlockCancelSubscriptionAction,
-            'KalturaSegmentBlockPurchaseSubscriptionAction': KalturaSegmentBlockPurchaseSubscriptionAction,
             'KalturaSingleSegmentValue': KalturaSingleSegmentValue,
             'KalturaSegmentSource': KalturaSegmentSource,
             'KalturaSegmentValue': KalturaSegmentValue,
@@ -41761,8 +41041,6 @@ class KalturaCoreClient(KalturaClientPlugin):
             'KalturaPartnerConfiguration': KalturaPartnerConfiguration,
             'KalturaPartnerConfigurationListResponse': KalturaPartnerConfigurationListResponse,
             'KalturaBillingPartnerConfig': KalturaBillingPartnerConfig,
-            'KalturaBookmarkEventThreshold': KalturaBookmarkEventThreshold,
-            'KalturaCommercePartnerConfig': KalturaCommercePartnerConfig,
             'KalturaConcurrencyPartnerConfig': KalturaConcurrencyPartnerConfig,
             'KalturaGeneralPartnerConfig': KalturaGeneralPartnerConfig,
             'KalturaObjectVirtualAssetInfo': KalturaObjectVirtualAssetInfo,
@@ -41966,13 +41244,11 @@ class KalturaCoreClient(KalturaClientPlugin):
             'KalturaEventNotificationScope': KalturaEventNotificationScope,
             'KalturaEventObject': KalturaEventObject,
             'KalturaEventNotificationObjectScope': KalturaEventNotificationObjectScope,
-            'KalturaBookmarkEvent': KalturaBookmarkEvent,
             'KalturaConcurrencyViolation': KalturaConcurrencyViolation,
             'KalturaCrudObject': KalturaCrudObject,
             'KalturaEventNotification': KalturaEventNotification,
             'KalturaRegexExpression': KalturaRegexExpression,
             'KalturaPasswordPolicy': KalturaPasswordPolicy,
-            'KalturaHouseholdSegment': KalturaHouseholdSegment,
             'KalturaHouseholdCoupon': KalturaHouseholdCoupon,
             'KalturaEventNotificationListResponse': KalturaEventNotificationListResponse,
             'KalturaHousehold': KalturaHousehold,
@@ -41982,7 +41258,6 @@ class KalturaCoreClient(KalturaClientPlugin):
             'KalturaLoginResponse': KalturaLoginResponse,
             'KalturaPaymentGatewayConfiguration': KalturaPaymentGatewayConfiguration,
             'KalturaHouseholdQuota': KalturaHouseholdQuota,
-            'KalturaHouseholdSegmentListResponse': KalturaHouseholdSegmentListResponse,
             'KalturaContentResource': KalturaContentResource,
             'KalturaUploadedFileTokenResource': KalturaUploadedFileTokenResource,
             'KalturaUrlResource': KalturaUrlResource,
