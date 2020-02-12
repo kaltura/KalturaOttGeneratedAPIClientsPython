@@ -42,7 +42,7 @@ from ..Base import (
     KalturaServiceBase,
 )
 
-API_VERSION = '5.3.2.14680'
+API_VERSION = '5.3.2.14681'
 
 ########## enums ##########
 # @package Kaltura
@@ -35341,6 +35341,17 @@ class KalturaAnnouncementService(KalturaServiceBase):
             return self.client.getMultiRequestResult()
         resultNode = self.client.doQueue()
         return getXmlNodeBool(resultNode)
+
+    def get(self, id):
+        """Get announcement by Id"""
+
+        kparams = KalturaParams()
+        kparams.addIntIfDefined("id", id);
+        self.client.queueServiceActionCall("announcement", "get", "KalturaAnnouncement", kparams)
+        if self.client.isMultiRequest():
+            return self.client.getMultiRequestResult()
+        resultNode = self.client.doQueue()
+        return KalturaObjectFactory.create(resultNode, 'KalturaAnnouncement')
 
     def list(self, filter, pager = NotImplemented):
         """Lists all announcements in the system."""
