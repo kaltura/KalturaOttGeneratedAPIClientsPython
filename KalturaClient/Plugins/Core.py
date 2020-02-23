@@ -42,7 +42,7 @@ from ..Base import (
     KalturaServiceBase,
 )
 
-API_VERSION = '5.3.1.14686'
+API_VERSION = '5.3.2.14726'
 
 ########## enums ##########
 # @package Kaltura
@@ -510,7 +510,10 @@ class KalturaBundleType(object):
 # @package Kaltura
 # @subpackage Client
 class KalturaCategoryItemOrderBy(object):
-    NONE = "NONE"
+    NAME_ASC = "NAME_ASC"
+    NAME_DESC = "NAME_DESC"
+    CREATE_DATE_ASC = "CREATE_DATE_ASC"
+    CREATE_DATE_DESC = "CREATE_DATE_DESC"
 
     def __init__(self, value):
         self.value = value
@@ -3521,10 +3524,11 @@ class KalturaCategoryItemByIdInFilter(KalturaCategoryItemFilter):
 
 # @package Kaltura
 # @subpackage Client
-class KalturaCategoryItemByKsqlFilter(KalturaCategoryItemFilter):
+class KalturaCategoryItemSearchFilter(KalturaCategoryItemFilter):
     def __init__(self,
             orderBy=NotImplemented,
-            kSql=NotImplemented):
+            kSql=NotImplemented,
+            rootOnly=NotImplemented):
         KalturaCategoryItemFilter.__init__(self,
             orderBy)
 
@@ -3532,19 +3536,25 @@ class KalturaCategoryItemByKsqlFilter(KalturaCategoryItemFilter):
         # @var string
         self.kSql = kSql
 
+        # Root only
+        # @var bool
+        self.rootOnly = rootOnly
+
 
     PROPERTY_LOADERS = {
         'kSql': getXmlNodeText, 
+        'rootOnly': getXmlNodeBool, 
     }
 
     def fromXml(self, node):
         KalturaCategoryItemFilter.fromXml(self, node)
-        self.fromXmlImpl(node, KalturaCategoryItemByKsqlFilter.PROPERTY_LOADERS)
+        self.fromXmlImpl(node, KalturaCategoryItemSearchFilter.PROPERTY_LOADERS)
 
     def toParams(self):
         kparams = KalturaCategoryItemFilter.toParams(self)
-        kparams.put("objectType", "KalturaCategoryItemByKsqlFilter")
+        kparams.put("objectType", "KalturaCategoryItemSearchFilter")
         kparams.addStringIfDefined("kSql", self.kSql)
+        kparams.addBoolIfDefined("rootOnly", self.rootOnly)
         return kparams
 
     def getKSql(self):
@@ -3553,27 +3563,11 @@ class KalturaCategoryItemByKsqlFilter(KalturaCategoryItemFilter):
     def setKSql(self, newKSql):
         self.kSql = newKSql
 
+    def getRootOnly(self):
+        return self.rootOnly
 
-# @package Kaltura
-# @subpackage Client
-class KalturaCategoryItemByRootFilter(KalturaCategoryItemFilter):
-    def __init__(self,
-            orderBy=NotImplemented):
-        KalturaCategoryItemFilter.__init__(self,
-            orderBy)
-
-
-    PROPERTY_LOADERS = {
-    }
-
-    def fromXml(self, node):
-        KalturaCategoryItemFilter.fromXml(self, node)
-        self.fromXmlImpl(node, KalturaCategoryItemByRootFilter.PROPERTY_LOADERS)
-
-    def toParams(self):
-        kparams = KalturaCategoryItemFilter.toParams(self)
-        kparams.put("objectType", "KalturaCategoryItemByRootFilter")
-        return kparams
+    def setRootOnly(self, newRootOnly):
+        self.rootOnly = newRootOnly
 
 
 # @package Kaltura
@@ -31041,11 +31035,11 @@ class KalturaCategoryItem(KalturaCrudObject):
 
         # Category parent identifier
         # @var int
+        # @readonly
         self.parentCategoryId = parentCategoryId
 
         # Comma separated list of child categories&#39; Ids.
         # @var string
-        # @readonly
         self.childCategoriesIds = childCategoriesIds
 
         # List of unified Channels.
@@ -31074,7 +31068,7 @@ class KalturaCategoryItem(KalturaCrudObject):
         kparams = KalturaCrudObject.toParams(self)
         kparams.put("objectType", "KalturaCategoryItem")
         kparams.addStringIfDefined("name", self.name)
-        kparams.addIntIfDefined("parentCategoryId", self.parentCategoryId)
+        kparams.addStringIfDefined("childCategoriesIds", self.childCategoriesIds)
         kparams.addArrayIfDefined("unifiedChannels", self.unifiedChannels)
         kparams.addMapIfDefined("dynamicData", self.dynamicData)
         return kparams
@@ -31091,11 +31085,11 @@ class KalturaCategoryItem(KalturaCrudObject):
     def getParentCategoryId(self):
         return self.parentCategoryId
 
-    def setParentCategoryId(self, newParentCategoryId):
-        self.parentCategoryId = newParentCategoryId
-
     def getChildCategoriesIds(self):
         return self.childCategoriesIds
+
+    def setChildCategoriesIds(self, newChildCategoriesIds):
+        self.childCategoriesIds = newChildCategoriesIds
 
     def getUnifiedChannels(self):
         return self.unifiedChannels
@@ -42023,8 +42017,7 @@ class KalturaCoreClient(KalturaClientPlugin):
             'KalturaHouseholdCouponFilter': KalturaHouseholdCouponFilter,
             'KalturaCategoryItemFilter': KalturaCategoryItemFilter,
             'KalturaCategoryItemByIdInFilter': KalturaCategoryItemByIdInFilter,
-            'KalturaCategoryItemByKsqlFilter': KalturaCategoryItemByKsqlFilter,
-            'KalturaCategoryItemByRootFilter': KalturaCategoryItemByRootFilter,
+            'KalturaCategoryItemSearchFilter': KalturaCategoryItemSearchFilter,
             'KalturaEventNotificationFilter': KalturaEventNotificationFilter,
             'KalturaBulkUploadFilter': KalturaBulkUploadFilter,
             'KalturaSocialActionFilter': KalturaSocialActionFilter,
