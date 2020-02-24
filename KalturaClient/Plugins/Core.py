@@ -42,7 +42,7 @@ from ..Base import (
     KalturaServiceBase,
 )
 
-API_VERSION = '5.3.2.14681'
+API_VERSION = '5.3.2.14684'
 
 ########## enums ##########
 # @package Kaltura
@@ -4630,12 +4630,18 @@ class KalturaAnnouncementFilter(KalturaFilter):
     """order announcements"""
 
     def __init__(self,
-            orderBy=NotImplemented):
+            orderBy=NotImplemented,
+            idIn=NotImplemented):
         KalturaFilter.__init__(self,
             orderBy)
 
+        # A list of comma separated announcement ids.
+        # @var string
+        self.idIn = idIn
+
 
     PROPERTY_LOADERS = {
+        'idIn': getXmlNodeText, 
     }
 
     def fromXml(self, node):
@@ -4645,7 +4651,14 @@ class KalturaAnnouncementFilter(KalturaFilter):
     def toParams(self):
         kparams = KalturaFilter.toParams(self)
         kparams.put("objectType", "KalturaAnnouncementFilter")
+        kparams.addStringIfDefined("idIn", self.idIn)
         return kparams
+
+    def getIdIn(self):
+        return self.idIn
+
+    def setIdIn(self, newIdIn):
+        self.idIn = newIdIn
 
 
 # @package Kaltura
@@ -35341,17 +35354,6 @@ class KalturaAnnouncementService(KalturaServiceBase):
             return self.client.getMultiRequestResult()
         resultNode = self.client.doQueue()
         return getXmlNodeBool(resultNode)
-
-    def get(self, id):
-        """Get announcement by Id"""
-
-        kparams = KalturaParams()
-        kparams.addIntIfDefined("id", id);
-        self.client.queueServiceActionCall("announcement", "get", "KalturaAnnouncement", kparams)
-        if self.client.isMultiRequest():
-            return self.client.getMultiRequestResult()
-        resultNode = self.client.doQueue()
-        return KalturaObjectFactory.create(resultNode, 'KalturaAnnouncement')
 
     def list(self, filter, pager = NotImplemented):
         """Lists all announcements in the system."""
