@@ -42,7 +42,7 @@ from ..Base import (
     KalturaServiceBase,
 )
 
-API_VERSION = '5.3.2.14726'
+API_VERSION = '5.3.2.14772'
 
 ########## enums ##########
 # @package Kaltura
@@ -31587,7 +31587,7 @@ class KalturaCategoryTree(KalturaObjectBase):
         self.dynamicData = dynamicData
 
         # Category images
-        # @var array of KalturaMediaImage
+        # @var array of KalturaImage
         self.images = images
 
 
@@ -31597,7 +31597,7 @@ class KalturaCategoryTree(KalturaObjectBase):
         'children': (KalturaObjectFactory.createArray, 'KalturaObjectBase'), 
         'unifiedChannels': (KalturaObjectFactory.createArray, 'KalturaUnifiedChannelInfo'), 
         'dynamicData': (KalturaObjectFactory.createMap, 'KalturaStringValue'), 
-        'images': (KalturaObjectFactory.createArray, 'KalturaMediaImage'), 
+        'images': (KalturaObjectFactory.createArray, 'KalturaImage'), 
     }
 
     def fromXml(self, node):
@@ -36564,7 +36564,7 @@ class KalturaCategoryItemService(KalturaServiceBase):
             return self.client.getMultiRequestResult()
         resultNode = self.client.doQueue()
 
-    def list(self, filter = NotImplemented, pager):
+    def list(self, filter = NotImplemented, pager = NotImplemented):
         """Gets all categoryItem items"""
 
         kparams = KalturaParams()
@@ -36583,11 +36583,12 @@ class KalturaCategoryTreeService(KalturaServiceBase):
     def __init__(self, client = None):
         KalturaServiceBase.__init__(self, client)
 
-    def duplicate(self, categoryItemId):
+    def duplicate(self, categoryItemId, name):
         """Duplicate category Item"""
 
         kparams = KalturaParams()
         kparams.addIntIfDefined("categoryItemId", categoryItemId);
+        kparams.addStringIfDefined("name", name)
         self.client.queueServiceActionCall("categorytree", "duplicate", "KalturaCategoryTree", kparams)
         if self.client.isMultiRequest():
             return self.client.getMultiRequestResult()
