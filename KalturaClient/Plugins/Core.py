@@ -42,7 +42,7 @@ from ..Base import (
     KalturaServiceBase,
 )
 
-API_VERSION = '5.3.2.14772'
+API_VERSION = '5.3.2.14777'
 
 ########## enums ##########
 # @package Kaltura
@@ -3568,6 +3568,41 @@ class KalturaCategoryItemSearchFilter(KalturaCategoryItemFilter):
 
     def setRootOnly(self, newRootOnly):
         self.rootOnly = newRootOnly
+
+
+# @package Kaltura
+# @subpackage Client
+class KalturaCategoryItemAncestorsFilter(KalturaCategoryItemFilter):
+    def __init__(self,
+            orderBy=NotImplemented,
+            id=NotImplemented):
+        KalturaCategoryItemFilter.__init__(self,
+            orderBy)
+
+        # KSQL expression
+        # @var int
+        self.id = id
+
+
+    PROPERTY_LOADERS = {
+        'id': getXmlNodeInt, 
+    }
+
+    def fromXml(self, node):
+        KalturaCategoryItemFilter.fromXml(self, node)
+        self.fromXmlImpl(node, KalturaCategoryItemAncestorsFilter.PROPERTY_LOADERS)
+
+    def toParams(self):
+        kparams = KalturaCategoryItemFilter.toParams(self)
+        kparams.put("objectType", "KalturaCategoryItemAncestorsFilter")
+        kparams.addIntIfDefined("id", self.id)
+        return kparams
+
+    def getId(self):
+        return self.id
+
+    def setId(self, newId):
+        self.id = newId
 
 
 # @package Kaltura
@@ -31018,8 +31053,8 @@ class KalturaCategoryItem(KalturaCrudObject):
     def __init__(self,
             id=NotImplemented,
             name=NotImplemented,
-            parentCategoryId=NotImplemented,
-            childCategoriesIds=NotImplemented,
+            parentId=NotImplemented,
+            childrenIds=NotImplemented,
             unifiedChannels=NotImplemented,
             dynamicData=NotImplemented):
         KalturaCrudObject.__init__(self)
@@ -31036,11 +31071,11 @@ class KalturaCategoryItem(KalturaCrudObject):
         # Category parent identifier
         # @var int
         # @readonly
-        self.parentCategoryId = parentCategoryId
+        self.parentId = parentId
 
         # Comma separated list of child categories&#39; Ids.
         # @var string
-        self.childCategoriesIds = childCategoriesIds
+        self.childrenIds = childrenIds
 
         # List of unified Channels.
         # @var array of KalturaUnifiedChannel
@@ -31054,8 +31089,8 @@ class KalturaCategoryItem(KalturaCrudObject):
     PROPERTY_LOADERS = {
         'id': getXmlNodeInt, 
         'name': getXmlNodeText, 
-        'parentCategoryId': getXmlNodeInt, 
-        'childCategoriesIds': getXmlNodeText, 
+        'parentId': getXmlNodeInt, 
+        'childrenIds': getXmlNodeText, 
         'unifiedChannels': (KalturaObjectFactory.createArray, 'KalturaUnifiedChannel'), 
         'dynamicData': (KalturaObjectFactory.createMap, 'KalturaStringValue'), 
     }
@@ -31068,7 +31103,7 @@ class KalturaCategoryItem(KalturaCrudObject):
         kparams = KalturaCrudObject.toParams(self)
         kparams.put("objectType", "KalturaCategoryItem")
         kparams.addStringIfDefined("name", self.name)
-        kparams.addStringIfDefined("childCategoriesIds", self.childCategoriesIds)
+        kparams.addStringIfDefined("childrenIds", self.childrenIds)
         kparams.addArrayIfDefined("unifiedChannels", self.unifiedChannels)
         kparams.addMapIfDefined("dynamicData", self.dynamicData)
         return kparams
@@ -31082,14 +31117,14 @@ class KalturaCategoryItem(KalturaCrudObject):
     def setName(self, newName):
         self.name = newName
 
-    def getParentCategoryId(self):
-        return self.parentCategoryId
+    def getParentId(self):
+        return self.parentId
 
-    def getChildCategoriesIds(self):
-        return self.childCategoriesIds
+    def getChildrenIds(self):
+        return self.childrenIds
 
-    def setChildCategoriesIds(self, newChildCategoriesIds):
-        self.childCategoriesIds = newChildCategoriesIds
+    def setChildrenIds(self, newChildrenIds):
+        self.childrenIds = newChildrenIds
 
     def getUnifiedChannels(self):
         return self.unifiedChannels
@@ -42019,6 +42054,7 @@ class KalturaCoreClient(KalturaClientPlugin):
             'KalturaCategoryItemFilter': KalturaCategoryItemFilter,
             'KalturaCategoryItemByIdInFilter': KalturaCategoryItemByIdInFilter,
             'KalturaCategoryItemSearchFilter': KalturaCategoryItemSearchFilter,
+            'KalturaCategoryItemAncestorsFilter': KalturaCategoryItemAncestorsFilter,
             'KalturaEventNotificationFilter': KalturaEventNotificationFilter,
             'KalturaBulkUploadFilter': KalturaBulkUploadFilter,
             'KalturaSocialActionFilter': KalturaSocialActionFilter,
