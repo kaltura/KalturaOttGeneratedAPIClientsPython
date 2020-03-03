@@ -42,7 +42,7 @@ from ..Base import (
     KalturaServiceBase,
 )
 
-API_VERSION = '5.3.2.14777'
+API_VERSION = '5.3.2.14782'
 
 ########## enums ##########
 # @package Kaltura
@@ -31053,6 +31053,7 @@ class KalturaCategoryItem(KalturaCrudObject):
     def __init__(self,
             id=NotImplemented,
             name=NotImplemented,
+            multilingualName=NotImplemented,
             parentId=NotImplemented,
             childrenIds=NotImplemented,
             unifiedChannels=NotImplemented,
@@ -31066,7 +31067,12 @@ class KalturaCategoryItem(KalturaCrudObject):
 
         # Category name
         # @var string
+        # @readonly
         self.name = name
+
+        # Category name
+        # @var array of KalturaTranslationToken
+        self.multilingualName = multilingualName
 
         # Category parent identifier
         # @var int
@@ -31089,6 +31095,7 @@ class KalturaCategoryItem(KalturaCrudObject):
     PROPERTY_LOADERS = {
         'id': getXmlNodeInt, 
         'name': getXmlNodeText, 
+        'multilingualName': (KalturaObjectFactory.createArray, 'KalturaTranslationToken'), 
         'parentId': getXmlNodeInt, 
         'childrenIds': getXmlNodeText, 
         'unifiedChannels': (KalturaObjectFactory.createArray, 'KalturaUnifiedChannel'), 
@@ -31102,7 +31109,7 @@ class KalturaCategoryItem(KalturaCrudObject):
     def toParams(self):
         kparams = KalturaCrudObject.toParams(self)
         kparams.put("objectType", "KalturaCategoryItem")
-        kparams.addStringIfDefined("name", self.name)
+        kparams.addArrayIfDefined("multilingualName", self.multilingualName)
         kparams.addStringIfDefined("childrenIds", self.childrenIds)
         kparams.addArrayIfDefined("unifiedChannels", self.unifiedChannels)
         kparams.addMapIfDefined("dynamicData", self.dynamicData)
@@ -31114,8 +31121,11 @@ class KalturaCategoryItem(KalturaCrudObject):
     def getName(self):
         return self.name
 
-    def setName(self, newName):
-        self.name = newName
+    def getMultilingualName(self):
+        return self.multilingualName
+
+    def setMultilingualName(self, newMultilingualName):
+        self.multilingualName = newMultilingualName
 
     def getParentId(self):
         return self.parentId
@@ -31593,6 +31603,7 @@ class KalturaCategoryTree(KalturaObjectBase):
     def __init__(self,
             id=NotImplemented,
             name=NotImplemented,
+            multilingualName=NotImplemented,
             children=NotImplemented,
             unifiedChannels=NotImplemented,
             dynamicData=NotImplemented,
@@ -31606,7 +31617,12 @@ class KalturaCategoryTree(KalturaObjectBase):
 
         # Category name
         # @var string
+        # @readonly
         self.name = name
+
+        # Category name
+        # @var array of KalturaTranslationToken
+        self.multilingualName = multilingualName
 
         # List of category tree
         # @var array of KalturaCategoryTree
@@ -31629,6 +31645,7 @@ class KalturaCategoryTree(KalturaObjectBase):
     PROPERTY_LOADERS = {
         'id': getXmlNodeInt, 
         'name': getXmlNodeText, 
+        'multilingualName': (KalturaObjectFactory.createArray, 'KalturaTranslationToken'), 
         'children': (KalturaObjectFactory.createArray, 'KalturaObjectBase'), 
         'unifiedChannels': (KalturaObjectFactory.createArray, 'KalturaUnifiedChannelInfo'), 
         'dynamicData': (KalturaObjectFactory.createMap, 'KalturaStringValue'), 
@@ -31642,7 +31659,7 @@ class KalturaCategoryTree(KalturaObjectBase):
     def toParams(self):
         kparams = KalturaObjectBase.toParams(self)
         kparams.put("objectType", "KalturaCategoryTree")
-        kparams.addStringIfDefined("name", self.name)
+        kparams.addArrayIfDefined("multilingualName", self.multilingualName)
         kparams.addArrayIfDefined("unifiedChannels", self.unifiedChannels)
         kparams.addMapIfDefined("dynamicData", self.dynamicData)
         kparams.addArrayIfDefined("images", self.images)
@@ -31654,8 +31671,11 @@ class KalturaCategoryTree(KalturaObjectBase):
     def getName(self):
         return self.name
 
-    def setName(self, newName):
-        self.name = newName
+    def getMultilingualName(self):
+        return self.multilingualName
+
+    def setMultilingualName(self, newMultilingualName):
+        self.multilingualName = newMultilingualName
 
     def getChildren(self):
         return self.children
