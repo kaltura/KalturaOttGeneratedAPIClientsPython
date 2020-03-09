@@ -42,7 +42,7 @@ from ..Base import (
     KalturaServiceBase,
 )
 
-API_VERSION = '5.3.2.14782'
+API_VERSION = '5.3.2.14805'
 
 ########## enums ##########
 # @package Kaltura
@@ -514,6 +514,7 @@ class KalturaCategoryItemOrderBy(object):
     NAME_DESC = "NAME_DESC"
     CREATE_DATE_ASC = "CREATE_DATE_ASC"
     CREATE_DATE_DESC = "CREATE_DATE_DESC"
+    NONE = "NONE"
 
     def __init__(self, value):
         self.value = value
@@ -4797,12 +4798,18 @@ class KalturaAnnouncementFilter(KalturaFilter):
     """order announcements"""
 
     def __init__(self,
-            orderBy=NotImplemented):
+            orderBy=NotImplemented,
+            idIn=NotImplemented):
         KalturaFilter.__init__(self,
             orderBy)
 
+        # A list of comma separated announcement ids.
+        # @var string
+        self.idIn = idIn
+
 
     PROPERTY_LOADERS = {
+        'idIn': getXmlNodeText, 
     }
 
     def fromXml(self, node):
@@ -4812,7 +4819,14 @@ class KalturaAnnouncementFilter(KalturaFilter):
     def toParams(self):
         kparams = KalturaFilter.toParams(self)
         kparams.put("objectType", "KalturaAnnouncementFilter")
+        kparams.addStringIfDefined("idIn", self.idIn)
         return kparams
+
+    def getIdIn(self):
+        return self.idIn
+
+    def setIdIn(self, newIdIn):
+        self.idIn = newIdIn
 
 
 # @package Kaltura
@@ -31057,7 +31071,8 @@ class KalturaCategoryItem(KalturaCrudObject):
             parentId=NotImplemented,
             childrenIds=NotImplemented,
             unifiedChannels=NotImplemented,
-            dynamicData=NotImplemented):
+            dynamicData=NotImplemented,
+            updateDate=NotImplemented):
         KalturaCrudObject.__init__(self)
 
         # Unique identifier for the category
@@ -31091,6 +31106,11 @@ class KalturaCategoryItem(KalturaCrudObject):
         # @var map
         self.dynamicData = dynamicData
 
+        # Specifies when was the Category last updated. Date and time represented as epoch.
+        # @var int
+        # @readonly
+        self.updateDate = updateDate
+
 
     PROPERTY_LOADERS = {
         'id': getXmlNodeInt, 
@@ -31100,6 +31120,7 @@ class KalturaCategoryItem(KalturaCrudObject):
         'childrenIds': getXmlNodeText, 
         'unifiedChannels': (KalturaObjectFactory.createArray, 'KalturaUnifiedChannel'), 
         'dynamicData': (KalturaObjectFactory.createMap, 'KalturaStringValue'), 
+        'updateDate': getXmlNodeInt, 
     }
 
     def fromXml(self, node):
@@ -31147,6 +31168,9 @@ class KalturaCategoryItem(KalturaCrudObject):
 
     def setDynamicData(self, newDynamicData):
         self.dynamicData = newDynamicData
+
+    def getUpdateDate(self):
+        return self.updateDate
 
 
 # @package Kaltura
