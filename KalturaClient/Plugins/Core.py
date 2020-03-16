@@ -42,7 +42,7 @@ from ..Base import (
     KalturaServiceBase,
 )
 
-API_VERSION = '5.3.2.27651'
+API_VERSION = '5.3.2.27654'
 
 ########## enums ##########
 # @package Kaltura
@@ -18721,7 +18721,8 @@ class KalturaConcurrencyPartnerConfig(KalturaPartnerConfiguration):
 
     def __init__(self,
             deviceFamilyIds=NotImplemented,
-            evictionPolicy=NotImplemented):
+            evictionPolicy=NotImplemented,
+            devicePlayDataExpirationTTL=NotImplemented):
         KalturaPartnerConfiguration.__init__(self)
 
         # Comma separated list of device Family Ids order by their priority.
@@ -18732,10 +18733,15 @@ class KalturaConcurrencyPartnerConfig(KalturaPartnerConfiguration):
         # @var KalturaEvictionPolicyType
         self.evictionPolicy = evictionPolicy
 
+        # Device play data expiration TTL
+        # @var int
+        self.devicePlayDataExpirationTTL = devicePlayDataExpirationTTL
+
 
     PROPERTY_LOADERS = {
         'deviceFamilyIds': getXmlNodeText, 
         'evictionPolicy': (KalturaEnumsFactory.createString, "KalturaEvictionPolicyType"), 
+        'devicePlayDataExpirationTTL': getXmlNodeInt, 
     }
 
     def fromXml(self, node):
@@ -18747,6 +18753,7 @@ class KalturaConcurrencyPartnerConfig(KalturaPartnerConfiguration):
         kparams.put("objectType", "KalturaConcurrencyPartnerConfig")
         kparams.addStringIfDefined("deviceFamilyIds", self.deviceFamilyIds)
         kparams.addStringEnumIfDefined("evictionPolicy", self.evictionPolicy)
+        kparams.addIntIfDefined("devicePlayDataExpirationTTL", self.devicePlayDataExpirationTTL)
         return kparams
 
     def getDeviceFamilyIds(self):
@@ -18760,6 +18767,12 @@ class KalturaConcurrencyPartnerConfig(KalturaPartnerConfiguration):
 
     def setEvictionPolicy(self, newEvictionPolicy):
         self.evictionPolicy = newEvictionPolicy
+
+    def getDevicePlayDataExpirationTTL(self):
+        return self.devicePlayDataExpirationTTL
+
+    def setDevicePlayDataExpirationTTL(self, newDevicePlayDataExpirationTTL):
+        self.devicePlayDataExpirationTTL = newDevicePlayDataExpirationTTL
 
 
 # @package Kaltura
