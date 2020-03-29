@@ -42,7 +42,7 @@ from ..Base import (
     KalturaServiceBase,
 )
 
-API_VERSION = '5.3.3.27668'
+API_VERSION = '5.3.3.27749'
 
 ########## enums ##########
 # @package Kaltura
@@ -1861,6 +1861,20 @@ class KalturaResponseType(object):
     JSONP = 9
     ASSET_XML = 30
     EXCEL = 31
+
+    def __init__(self, value):
+        self.value = value
+
+    def getValue(self):
+        return self.value
+
+# @package Kaltura
+# @subpackage Client
+class KalturaRollingDevicePolicy(object):
+    NONE = "NONE"
+    LIFO = "LIFO"
+    FIFO = "FIFO"
+    ACTIVE_DEVICE_ASCENDING = "ACTIVE_DEVICE_ASCENDING"
 
     def __init__(self, value):
         self.value = value
@@ -18777,6 +18791,52 @@ class KalturaConcurrencyPartnerConfig(KalturaPartnerConfiguration):
 
 # @package Kaltura
 # @subpackage Client
+class KalturaRollingDeviceRemovalData(KalturaObjectBase):
+    def __init__(self,
+            rollingDeviceRemovalPolicy=NotImplemented,
+            rollingDeviceRemovalFamilyIds=NotImplemented):
+        KalturaObjectBase.__init__(self)
+
+        # Rolling Device Policy
+        # @var KalturaRollingDevicePolicy
+        self.rollingDeviceRemovalPolicy = rollingDeviceRemovalPolicy
+
+        # Rolling Device Policy in a CSV style
+        # @var string
+        self.rollingDeviceRemovalFamilyIds = rollingDeviceRemovalFamilyIds
+
+
+    PROPERTY_LOADERS = {
+        'rollingDeviceRemovalPolicy': (KalturaEnumsFactory.createString, "KalturaRollingDevicePolicy"), 
+        'rollingDeviceRemovalFamilyIds': getXmlNodeText, 
+    }
+
+    def fromXml(self, node):
+        KalturaObjectBase.fromXml(self, node)
+        self.fromXmlImpl(node, KalturaRollingDeviceRemovalData.PROPERTY_LOADERS)
+
+    def toParams(self):
+        kparams = KalturaObjectBase.toParams(self)
+        kparams.put("objectType", "KalturaRollingDeviceRemovalData")
+        kparams.addStringEnumIfDefined("rollingDeviceRemovalPolicy", self.rollingDeviceRemovalPolicy)
+        kparams.addStringIfDefined("rollingDeviceRemovalFamilyIds", self.rollingDeviceRemovalFamilyIds)
+        return kparams
+
+    def getRollingDeviceRemovalPolicy(self):
+        return self.rollingDeviceRemovalPolicy
+
+    def setRollingDeviceRemovalPolicy(self, newRollingDeviceRemovalPolicy):
+        self.rollingDeviceRemovalPolicy = newRollingDeviceRemovalPolicy
+
+    def getRollingDeviceRemovalFamilyIds(self):
+        return self.rollingDeviceRemovalFamilyIds
+
+    def setRollingDeviceRemovalFamilyIds(self, newRollingDeviceRemovalFamilyIds):
+        self.rollingDeviceRemovalFamilyIds = newRollingDeviceRemovalFamilyIds
+
+
+# @package Kaltura
+# @subpackage Client
 class KalturaGeneralPartnerConfig(KalturaPartnerConfiguration):
     """Partner General configuration"""
 
@@ -18792,7 +18852,8 @@ class KalturaGeneralPartnerConfig(KalturaPartnerConfiguration):
             dateFormat=NotImplemented,
             householdLimitationModule=NotImplemented,
             enableRegionFiltering=NotImplemented,
-            defaultRegion=NotImplemented):
+            defaultRegion=NotImplemented,
+            rollingDeviceData=NotImplemented):
         KalturaPartnerConfiguration.__init__(self)
 
         # Partner name
@@ -18843,6 +18904,10 @@ class KalturaGeneralPartnerConfig(KalturaPartnerConfiguration):
         # @var int
         self.defaultRegion = defaultRegion
 
+        # Rolling Device Policy
+        # @var KalturaRollingDeviceRemovalData
+        self.rollingDeviceData = rollingDeviceData
+
 
     PROPERTY_LOADERS = {
         'partnerName': getXmlNodeText, 
@@ -18857,6 +18922,7 @@ class KalturaGeneralPartnerConfig(KalturaPartnerConfiguration):
         'householdLimitationModule': getXmlNodeInt, 
         'enableRegionFiltering': getXmlNodeBool, 
         'defaultRegion': getXmlNodeInt, 
+        'rollingDeviceData': (KalturaObjectFactory.create, 'KalturaRollingDeviceRemovalData'), 
     }
 
     def fromXml(self, node):
@@ -18878,6 +18944,7 @@ class KalturaGeneralPartnerConfig(KalturaPartnerConfiguration):
         kparams.addIntIfDefined("householdLimitationModule", self.householdLimitationModule)
         kparams.addBoolIfDefined("enableRegionFiltering", self.enableRegionFiltering)
         kparams.addIntIfDefined("defaultRegion", self.defaultRegion)
+        kparams.addObjectIfDefined("rollingDeviceData", self.rollingDeviceData)
         return kparams
 
     def getPartnerName(self):
@@ -18951,6 +19018,12 @@ class KalturaGeneralPartnerConfig(KalturaPartnerConfiguration):
 
     def setDefaultRegion(self, newDefaultRegion):
         self.defaultRegion = newDefaultRegion
+
+    def getRollingDeviceData(self):
+        return self.rollingDeviceData
+
+    def setRollingDeviceData(self, newRollingDeviceData):
+        self.rollingDeviceData = newRollingDeviceData
 
 
 # @package Kaltura
@@ -42038,6 +42111,7 @@ class KalturaCoreClient(KalturaClientPlugin):
             'KalturaReminderType': KalturaReminderType,
             'KalturaReportOrderBy': KalturaReportOrderBy,
             'KalturaResponseType': KalturaResponseType,
+            'KalturaRollingDevicePolicy': KalturaRollingDevicePolicy,
             'KalturaRuleActionType': KalturaRuleActionType,
             'KalturaRuleConditionType': KalturaRuleConditionType,
             'KalturaRuleLevel': KalturaRuleLevel,
@@ -42384,6 +42458,7 @@ class KalturaCoreClient(KalturaClientPlugin):
             'KalturaBookmarkEventThreshold': KalturaBookmarkEventThreshold,
             'KalturaCommercePartnerConfig': KalturaCommercePartnerConfig,
             'KalturaConcurrencyPartnerConfig': KalturaConcurrencyPartnerConfig,
+            'KalturaRollingDeviceRemovalData': KalturaRollingDeviceRemovalData,
             'KalturaGeneralPartnerConfig': KalturaGeneralPartnerConfig,
             'KalturaObjectVirtualAssetInfo': KalturaObjectVirtualAssetInfo,
             'KalturaObjectVirtualAssetPartnerConfig': KalturaObjectVirtualAssetPartnerConfig,
