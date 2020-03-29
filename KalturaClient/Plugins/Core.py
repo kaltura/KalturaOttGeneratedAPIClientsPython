@@ -42,7 +42,7 @@ from ..Base import (
     KalturaServiceBase,
 )
 
-API_VERSION = '5.3.3.27780'
+API_VERSION = '5.3.3.27781'
 
 ########## enums ##########
 # @package Kaltura
@@ -31834,7 +31834,6 @@ class KalturaIotProfileAws(KalturaCrudObject):
             brokerPort=NotImplemented,
             accessKeyId=NotImplemented,
             secretAccessKey=NotImplemented,
-            tTL=NotImplemented,
             iotPolicyName=NotImplemented,
             userPoolId=NotImplemented,
             clientId=NotImplemented,
@@ -31871,10 +31870,6 @@ class KalturaIotProfileAws(KalturaCrudObject):
         # @var string
         self.secretAccessKey = secretAccessKey
 
-        # tTL
-        # @var string
-        self.tTL = tTL
-
         # iotPolicyName
         # @var string
         self.iotPolicyName = iotPolicyName
@@ -31908,7 +31903,6 @@ class KalturaIotProfileAws(KalturaCrudObject):
         'brokerPort': getXmlNodeInt, 
         'accessKeyId': getXmlNodeText, 
         'secretAccessKey': getXmlNodeText, 
-        'tTL': getXmlNodeText, 
         'iotPolicyName': getXmlNodeText, 
         'userPoolId': getXmlNodeText, 
         'clientId': getXmlNodeText, 
@@ -31931,7 +31925,6 @@ class KalturaIotProfileAws(KalturaCrudObject):
         kparams.addIntIfDefined("brokerPort", self.brokerPort)
         kparams.addStringIfDefined("accessKeyId", self.accessKeyId)
         kparams.addStringIfDefined("secretAccessKey", self.secretAccessKey)
-        kparams.addStringIfDefined("tTL", self.tTL)
         kparams.addStringIfDefined("iotPolicyName", self.iotPolicyName)
         kparams.addStringIfDefined("userPoolId", self.userPoolId)
         kparams.addStringIfDefined("clientId", self.clientId)
@@ -31981,12 +31974,6 @@ class KalturaIotProfileAws(KalturaCrudObject):
 
     def setSecretAccessKey(self, newSecretAccessKey):
         self.secretAccessKey = newSecretAccessKey
-
-    def getTTL(self):
-        return self.tTL
-
-    def setTTL(self, newTTL):
-        self.tTL = newTTL
 
     def getIotPolicyName(self):
         return self.iotPolicyName
