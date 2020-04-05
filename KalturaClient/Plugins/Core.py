@@ -42,7 +42,7 @@ from ..Base import (
     KalturaServiceBase,
 )
 
-API_VERSION = '5.3.3.27668'
+API_VERSION = '5.3.3.27828'
 
 ########## enums ##########
 # @package Kaltura
@@ -1213,6 +1213,28 @@ class KalturaIngestProfileOverlapPolicy(object):
 
 # @package Kaltura
 # @subpackage Client
+class KalturaIotOrderBy(object):
+    NONE = "NONE"
+
+    def __init__(self, value):
+        self.value = value
+
+    def getValue(self):
+        return self.value
+
+# @package Kaltura
+# @subpackage Client
+class KalturaIotProfileOrderBy(object):
+    NONE = "NONE"
+
+    def __init__(self, value):
+        self.value = value
+
+    def getValue(self):
+        return self.value
+
+# @package Kaltura
+# @subpackage Client
 class KalturaLanguageOrderBy(object):
     SYSTEM_NAME_ASC = "SYSTEM_NAME_ASC"
     SYSTEM_NAME_DESC = "SYSTEM_NAME_DESC"
@@ -1468,6 +1490,7 @@ class KalturaPartnerConfigurationType(object):
     GENERAL = "General"
     OBJECTVIRTUALASSET = "ObjectVirtualAsset"
     COMMERCE = "Commerce"
+    PLAYBACK = "Playback"
 
     def __init__(self, value):
         self.value = value
@@ -1861,6 +1884,20 @@ class KalturaResponseType(object):
     JSONP = 9
     ASSET_XML = 30
     EXCEL = 31
+
+    def __init__(self, value):
+        self.value = value
+
+    def getValue(self):
+        return self.value
+
+# @package Kaltura
+# @subpackage Client
+class KalturaRollingDevicePolicy(object):
+    NONE = "NONE"
+    LIFO = "LIFO"
+    FIFO = "FIFO"
+    ACTIVE_DEVICE_ASCENDING = "ACTIVE_DEVICE_ASCENDING"
 
     def __init__(self, value):
         self.value = value
@@ -3665,6 +3702,54 @@ class KalturaEventNotificationFilter(KalturaCrudFilter):
 
     def setEventObjectTypeEqual(self, newEventObjectTypeEqual):
         self.eventObjectTypeEqual = newEventObjectTypeEqual
+
+
+# @package Kaltura
+# @subpackage Client
+class KalturaIotFilter(KalturaCrudFilter):
+    """Iot settings filter"""
+
+    def __init__(self,
+            orderBy=NotImplemented):
+        KalturaCrudFilter.__init__(self,
+            orderBy)
+
+
+    PROPERTY_LOADERS = {
+    }
+
+    def fromXml(self, node):
+        KalturaCrudFilter.fromXml(self, node)
+        self.fromXmlImpl(node, KalturaIotFilter.PROPERTY_LOADERS)
+
+    def toParams(self):
+        kparams = KalturaCrudFilter.toParams(self)
+        kparams.put("objectType", "KalturaIotFilter")
+        return kparams
+
+
+# @package Kaltura
+# @subpackage Client
+class KalturaIotProfileFilter(KalturaCrudFilter):
+    """Iot settings filter"""
+
+    def __init__(self,
+            orderBy=NotImplemented):
+        KalturaCrudFilter.__init__(self,
+            orderBy)
+
+
+    PROPERTY_LOADERS = {
+    }
+
+    def fromXml(self, node):
+        KalturaCrudFilter.fromXml(self, node)
+        self.fromXmlImpl(node, KalturaIotProfileFilter.PROPERTY_LOADERS)
+
+    def toParams(self):
+        kparams = KalturaCrudFilter.toParams(self)
+        kparams.put("objectType", "KalturaIotProfileFilter")
+        return kparams
 
 
 # @package Kaltura
@@ -9352,7 +9437,8 @@ class KalturaAnnouncement(KalturaObjectBase):
             includeMail=NotImplemented,
             mailTemplate=NotImplemented,
             mailSubject=NotImplemented,
-            includeSms=NotImplemented):
+            includeSms=NotImplemented,
+            includeIot=NotImplemented):
         KalturaObjectBase.__init__(self)
 
         # Announcement name
@@ -9409,6 +9495,10 @@ class KalturaAnnouncement(KalturaObjectBase):
         # @var bool
         self.includeSms = includeSms
 
+        # Include IOT
+        # @var bool
+        self.includeIot = includeIot
+
 
     PROPERTY_LOADERS = {
         'name': getXmlNodeText, 
@@ -9424,6 +9514,7 @@ class KalturaAnnouncement(KalturaObjectBase):
         'mailTemplate': getXmlNodeText, 
         'mailSubject': getXmlNodeText, 
         'includeSms': getXmlNodeBool, 
+        'includeIot': getXmlNodeBool, 
     }
 
     def fromXml(self, node):
@@ -9444,6 +9535,7 @@ class KalturaAnnouncement(KalturaObjectBase):
         kparams.addStringIfDefined("mailTemplate", self.mailTemplate)
         kparams.addStringIfDefined("mailSubject", self.mailSubject)
         kparams.addBoolIfDefined("includeSms", self.includeSms)
+        kparams.addBoolIfDefined("includeIot", self.includeIot)
         return kparams
 
     def getName(self):
@@ -9517,6 +9609,12 @@ class KalturaAnnouncement(KalturaObjectBase):
 
     def setIncludeSms(self, newIncludeSms):
         self.includeSms = newIncludeSms
+
+    def getIncludeIot(self):
+        return self.includeIot
+
+    def setIncludeIot(self, newIncludeIot):
+        self.includeIot = newIncludeIot
 
 
 # @package Kaltura
@@ -18777,6 +18875,52 @@ class KalturaConcurrencyPartnerConfig(KalturaPartnerConfiguration):
 
 # @package Kaltura
 # @subpackage Client
+class KalturaRollingDeviceRemovalData(KalturaObjectBase):
+    def __init__(self,
+            rollingDeviceRemovalPolicy=NotImplemented,
+            rollingDeviceRemovalFamilyIds=NotImplemented):
+        KalturaObjectBase.__init__(self)
+
+        # Rolling Device Policy
+        # @var KalturaRollingDevicePolicy
+        self.rollingDeviceRemovalPolicy = rollingDeviceRemovalPolicy
+
+        # Rolling Device Policy in a CSV style
+        # @var string
+        self.rollingDeviceRemovalFamilyIds = rollingDeviceRemovalFamilyIds
+
+
+    PROPERTY_LOADERS = {
+        'rollingDeviceRemovalPolicy': (KalturaEnumsFactory.createString, "KalturaRollingDevicePolicy"), 
+        'rollingDeviceRemovalFamilyIds': getXmlNodeText, 
+    }
+
+    def fromXml(self, node):
+        KalturaObjectBase.fromXml(self, node)
+        self.fromXmlImpl(node, KalturaRollingDeviceRemovalData.PROPERTY_LOADERS)
+
+    def toParams(self):
+        kparams = KalturaObjectBase.toParams(self)
+        kparams.put("objectType", "KalturaRollingDeviceRemovalData")
+        kparams.addStringEnumIfDefined("rollingDeviceRemovalPolicy", self.rollingDeviceRemovalPolicy)
+        kparams.addStringIfDefined("rollingDeviceRemovalFamilyIds", self.rollingDeviceRemovalFamilyIds)
+        return kparams
+
+    def getRollingDeviceRemovalPolicy(self):
+        return self.rollingDeviceRemovalPolicy
+
+    def setRollingDeviceRemovalPolicy(self, newRollingDeviceRemovalPolicy):
+        self.rollingDeviceRemovalPolicy = newRollingDeviceRemovalPolicy
+
+    def getRollingDeviceRemovalFamilyIds(self):
+        return self.rollingDeviceRemovalFamilyIds
+
+    def setRollingDeviceRemovalFamilyIds(self, newRollingDeviceRemovalFamilyIds):
+        self.rollingDeviceRemovalFamilyIds = newRollingDeviceRemovalFamilyIds
+
+
+# @package Kaltura
+# @subpackage Client
 class KalturaGeneralPartnerConfig(KalturaPartnerConfiguration):
     """Partner General configuration"""
 
@@ -18792,7 +18936,8 @@ class KalturaGeneralPartnerConfig(KalturaPartnerConfiguration):
             dateFormat=NotImplemented,
             householdLimitationModule=NotImplemented,
             enableRegionFiltering=NotImplemented,
-            defaultRegion=NotImplemented):
+            defaultRegion=NotImplemented,
+            rollingDeviceData=NotImplemented):
         KalturaPartnerConfiguration.__init__(self)
 
         # Partner name
@@ -18843,6 +18988,10 @@ class KalturaGeneralPartnerConfig(KalturaPartnerConfiguration):
         # @var int
         self.defaultRegion = defaultRegion
 
+        # Rolling Device Policy
+        # @var KalturaRollingDeviceRemovalData
+        self.rollingDeviceData = rollingDeviceData
+
 
     PROPERTY_LOADERS = {
         'partnerName': getXmlNodeText, 
@@ -18857,6 +19006,7 @@ class KalturaGeneralPartnerConfig(KalturaPartnerConfiguration):
         'householdLimitationModule': getXmlNodeInt, 
         'enableRegionFiltering': getXmlNodeBool, 
         'defaultRegion': getXmlNodeInt, 
+        'rollingDeviceData': (KalturaObjectFactory.create, 'KalturaRollingDeviceRemovalData'), 
     }
 
     def fromXml(self, node):
@@ -18878,6 +19028,7 @@ class KalturaGeneralPartnerConfig(KalturaPartnerConfiguration):
         kparams.addIntIfDefined("householdLimitationModule", self.householdLimitationModule)
         kparams.addBoolIfDefined("enableRegionFiltering", self.enableRegionFiltering)
         kparams.addIntIfDefined("defaultRegion", self.defaultRegion)
+        kparams.addObjectIfDefined("rollingDeviceData", self.rollingDeviceData)
         return kparams
 
     def getPartnerName(self):
@@ -18951,6 +19102,12 @@ class KalturaGeneralPartnerConfig(KalturaPartnerConfiguration):
 
     def setDefaultRegion(self, newDefaultRegion):
         self.defaultRegion = newDefaultRegion
+
+    def getRollingDeviceData(self):
+        return self.rollingDeviceData
+
+    def setRollingDeviceData(self, newRollingDeviceData):
+        self.rollingDeviceData = newRollingDeviceData
 
 
 # @package Kaltura
@@ -19043,6 +19200,100 @@ class KalturaObjectVirtualAssetPartnerConfig(KalturaPartnerConfiguration):
 
     def setObjectVirtualAssets(self, newObjectVirtualAssets):
         self.objectVirtualAssets = newObjectVirtualAssets
+
+
+# @package Kaltura
+# @subpackage Client
+class KalturaDefaultPlaybackAdapters(KalturaObjectBase):
+    def __init__(self,
+            mediaAdapterId=NotImplemented,
+            epgAdapterId=NotImplemented,
+            recordingAdapterId=NotImplemented):
+        KalturaObjectBase.__init__(self)
+
+        # Default adapter identifier for media
+        # @var int
+        self.mediaAdapterId = mediaAdapterId
+
+        # Default adapter identifier for epg
+        # @var int
+        self.epgAdapterId = epgAdapterId
+
+        # Default adapter identifier for recording
+        # @var int
+        self.recordingAdapterId = recordingAdapterId
+
+
+    PROPERTY_LOADERS = {
+        'mediaAdapterId': getXmlNodeInt, 
+        'epgAdapterId': getXmlNodeInt, 
+        'recordingAdapterId': getXmlNodeInt, 
+    }
+
+    def fromXml(self, node):
+        KalturaObjectBase.fromXml(self, node)
+        self.fromXmlImpl(node, KalturaDefaultPlaybackAdapters.PROPERTY_LOADERS)
+
+    def toParams(self):
+        kparams = KalturaObjectBase.toParams(self)
+        kparams.put("objectType", "KalturaDefaultPlaybackAdapters")
+        kparams.addIntIfDefined("mediaAdapterId", self.mediaAdapterId)
+        kparams.addIntIfDefined("epgAdapterId", self.epgAdapterId)
+        kparams.addIntIfDefined("recordingAdapterId", self.recordingAdapterId)
+        return kparams
+
+    def getMediaAdapterId(self):
+        return self.mediaAdapterId
+
+    def setMediaAdapterId(self, newMediaAdapterId):
+        self.mediaAdapterId = newMediaAdapterId
+
+    def getEpgAdapterId(self):
+        return self.epgAdapterId
+
+    def setEpgAdapterId(self, newEpgAdapterId):
+        self.epgAdapterId = newEpgAdapterId
+
+    def getRecordingAdapterId(self):
+        return self.recordingAdapterId
+
+    def setRecordingAdapterId(self, newRecordingAdapterId):
+        self.recordingAdapterId = newRecordingAdapterId
+
+
+# @package Kaltura
+# @subpackage Client
+class KalturaPlaybackPartnerConfig(KalturaPartnerConfiguration):
+    """Playback adapter partner configuration"""
+
+    def __init__(self,
+            defaultAdapters=NotImplemented):
+        KalturaPartnerConfiguration.__init__(self)
+
+        # default adapter configuration for: media, epg,recording.
+        # @var KalturaDefaultPlaybackAdapters
+        self.defaultAdapters = defaultAdapters
+
+
+    PROPERTY_LOADERS = {
+        'defaultAdapters': (KalturaObjectFactory.create, 'KalturaDefaultPlaybackAdapters'), 
+    }
+
+    def fromXml(self, node):
+        KalturaPartnerConfiguration.fromXml(self, node)
+        self.fromXmlImpl(node, KalturaPlaybackPartnerConfig.PROPERTY_LOADERS)
+
+    def toParams(self):
+        kparams = KalturaPartnerConfiguration.toParams(self)
+        kparams.put("objectType", "KalturaPlaybackPartnerConfig")
+        kparams.addObjectIfDefined("defaultAdapters", self.defaultAdapters)
+        return kparams
+
+    def getDefaultAdapters(self):
+        return self.defaultAdapters
+
+    def setDefaultAdapters(self, newDefaultAdapters):
+        self.defaultAdapters = newDefaultAdapters
 
 
 # @package Kaltura
@@ -31562,6 +31813,423 @@ class KalturaEventNotification(KalturaCrudObject):
 
 # @package Kaltura
 # @subpackage Client
+class KalturaIot(KalturaCrudObject):
+    """IOT DEVICE"""
+
+    def __init__(self,
+            udid=NotImplemented,
+            accessKey=NotImplemented,
+            accessSecretKey=NotImplemented,
+            username=NotImplemented,
+            userPassword=NotImplemented,
+            identityId=NotImplemented,
+            thingArn=NotImplemented,
+            thingId=NotImplemented,
+            principal=NotImplemented,
+            endPoint=NotImplemented,
+            extendedEndPoint=NotImplemented,
+            identityPoolId=NotImplemented):
+        KalturaCrudObject.__init__(self)
+
+        # id
+        # @var string
+        self.udid = udid
+
+        # accessKey
+        # @var string
+        self.accessKey = accessKey
+
+        # accessSecretKey
+        # @var string
+        self.accessSecretKey = accessSecretKey
+
+        # Username
+        # @var string
+        self.username = username
+
+        # UserPassword
+        # @var string
+        self.userPassword = userPassword
+
+        # IdentityId
+        # @var string
+        self.identityId = identityId
+
+        # ThingArn
+        # @var string
+        self.thingArn = thingArn
+
+        # ThingId
+        # @var string
+        self.thingId = thingId
+
+        # Principal
+        # @var string
+        self.principal = principal
+
+        # EndPoint
+        # @var string
+        self.endPoint = endPoint
+
+        # ExtendedEndPoint
+        # @var string
+        self.extendedEndPoint = extendedEndPoint
+
+        # IdentityPoolId
+        # @var string
+        self.identityPoolId = identityPoolId
+
+
+    PROPERTY_LOADERS = {
+        'udid': getXmlNodeText, 
+        'accessKey': getXmlNodeText, 
+        'accessSecretKey': getXmlNodeText, 
+        'username': getXmlNodeText, 
+        'userPassword': getXmlNodeText, 
+        'identityId': getXmlNodeText, 
+        'thingArn': getXmlNodeText, 
+        'thingId': getXmlNodeText, 
+        'principal': getXmlNodeText, 
+        'endPoint': getXmlNodeText, 
+        'extendedEndPoint': getXmlNodeText, 
+        'identityPoolId': getXmlNodeText, 
+    }
+
+    def fromXml(self, node):
+        KalturaCrudObject.fromXml(self, node)
+        self.fromXmlImpl(node, KalturaIot.PROPERTY_LOADERS)
+
+    def toParams(self):
+        kparams = KalturaCrudObject.toParams(self)
+        kparams.put("objectType", "KalturaIot")
+        kparams.addStringIfDefined("udid", self.udid)
+        kparams.addStringIfDefined("accessKey", self.accessKey)
+        kparams.addStringIfDefined("accessSecretKey", self.accessSecretKey)
+        kparams.addStringIfDefined("username", self.username)
+        kparams.addStringIfDefined("userPassword", self.userPassword)
+        kparams.addStringIfDefined("identityId", self.identityId)
+        kparams.addStringIfDefined("thingArn", self.thingArn)
+        kparams.addStringIfDefined("thingId", self.thingId)
+        kparams.addStringIfDefined("principal", self.principal)
+        kparams.addStringIfDefined("endPoint", self.endPoint)
+        kparams.addStringIfDefined("extendedEndPoint", self.extendedEndPoint)
+        kparams.addStringIfDefined("identityPoolId", self.identityPoolId)
+        return kparams
+
+    def getUdid(self):
+        return self.udid
+
+    def setUdid(self, newUdid):
+        self.udid = newUdid
+
+    def getAccessKey(self):
+        return self.accessKey
+
+    def setAccessKey(self, newAccessKey):
+        self.accessKey = newAccessKey
+
+    def getAccessSecretKey(self):
+        return self.accessSecretKey
+
+    def setAccessSecretKey(self, newAccessSecretKey):
+        self.accessSecretKey = newAccessSecretKey
+
+    def getUsername(self):
+        return self.username
+
+    def setUsername(self, newUsername):
+        self.username = newUsername
+
+    def getUserPassword(self):
+        return self.userPassword
+
+    def setUserPassword(self, newUserPassword):
+        self.userPassword = newUserPassword
+
+    def getIdentityId(self):
+        return self.identityId
+
+    def setIdentityId(self, newIdentityId):
+        self.identityId = newIdentityId
+
+    def getThingArn(self):
+        return self.thingArn
+
+    def setThingArn(self, newThingArn):
+        self.thingArn = newThingArn
+
+    def getThingId(self):
+        return self.thingId
+
+    def setThingId(self, newThingId):
+        self.thingId = newThingId
+
+    def getPrincipal(self):
+        return self.principal
+
+    def setPrincipal(self, newPrincipal):
+        self.principal = newPrincipal
+
+    def getEndPoint(self):
+        return self.endPoint
+
+    def setEndPoint(self, newEndPoint):
+        self.endPoint = newEndPoint
+
+    def getExtendedEndPoint(self):
+        return self.extendedEndPoint
+
+    def setExtendedEndPoint(self, newExtendedEndPoint):
+        self.extendedEndPoint = newExtendedEndPoint
+
+    def getIdentityPoolId(self):
+        return self.identityPoolId
+
+    def setIdentityPoolId(self, newIdentityPoolId):
+        self.identityPoolId = newIdentityPoolId
+
+
+# @package Kaltura
+# @subpackage Client
+class KalturaIotProfileAws(KalturaCrudObject):
+    """kalturaIotProfileAws"""
+
+    def __init__(self,
+            iotEndPoint=NotImplemented,
+            pfxPath=NotImplemented,
+            pfxPassword=NotImplemented,
+            certificatePath=NotImplemented,
+            brokerPort=NotImplemented,
+            accessKeyId=NotImplemented,
+            secretAccessKey=NotImplemented,
+            iotPolicyName=NotImplemented,
+            userPoolId=NotImplemented,
+            clientId=NotImplemented,
+            identityPoolId=NotImplemented,
+            region=NotImplemented,
+            updateDate=NotImplemented):
+        KalturaCrudObject.__init__(self)
+
+        # iotEndPoint
+        # @var string
+        self.iotEndPoint = iotEndPoint
+
+        # pfxPath
+        # @var string
+        self.pfxPath = pfxPath
+
+        # pfxPassword
+        # @var string
+        self.pfxPassword = pfxPassword
+
+        # certificatePath
+        # @var string
+        self.certificatePath = certificatePath
+
+        # brokerPort
+        # @var int
+        self.brokerPort = brokerPort
+
+        # accessKeyId
+        # @var string
+        self.accessKeyId = accessKeyId
+
+        # secretAccessKey
+        # @var string
+        self.secretAccessKey = secretAccessKey
+
+        # iotPolicyName
+        # @var string
+        self.iotPolicyName = iotPolicyName
+
+        # userPoolId
+        # @var string
+        self.userPoolId = userPoolId
+
+        # clientId
+        # @var string
+        self.clientId = clientId
+
+        # identityPoolId
+        # @var string
+        self.identityPoolId = identityPoolId
+
+        # region
+        # @var string
+        self.region = region
+
+        # updateDate
+        # @var int
+        self.updateDate = updateDate
+
+
+    PROPERTY_LOADERS = {
+        'iotEndPoint': getXmlNodeText, 
+        'pfxPath': getXmlNodeText, 
+        'pfxPassword': getXmlNodeText, 
+        'certificatePath': getXmlNodeText, 
+        'brokerPort': getXmlNodeInt, 
+        'accessKeyId': getXmlNodeText, 
+        'secretAccessKey': getXmlNodeText, 
+        'iotPolicyName': getXmlNodeText, 
+        'userPoolId': getXmlNodeText, 
+        'clientId': getXmlNodeText, 
+        'identityPoolId': getXmlNodeText, 
+        'region': getXmlNodeText, 
+        'updateDate': getXmlNodeInt, 
+    }
+
+    def fromXml(self, node):
+        KalturaCrudObject.fromXml(self, node)
+        self.fromXmlImpl(node, KalturaIotProfileAws.PROPERTY_LOADERS)
+
+    def toParams(self):
+        kparams = KalturaCrudObject.toParams(self)
+        kparams.put("objectType", "KalturaIotProfileAws")
+        kparams.addStringIfDefined("iotEndPoint", self.iotEndPoint)
+        kparams.addStringIfDefined("pfxPath", self.pfxPath)
+        kparams.addStringIfDefined("pfxPassword", self.pfxPassword)
+        kparams.addStringIfDefined("certificatePath", self.certificatePath)
+        kparams.addIntIfDefined("brokerPort", self.brokerPort)
+        kparams.addStringIfDefined("accessKeyId", self.accessKeyId)
+        kparams.addStringIfDefined("secretAccessKey", self.secretAccessKey)
+        kparams.addStringIfDefined("iotPolicyName", self.iotPolicyName)
+        kparams.addStringIfDefined("userPoolId", self.userPoolId)
+        kparams.addStringIfDefined("clientId", self.clientId)
+        kparams.addStringIfDefined("identityPoolId", self.identityPoolId)
+        kparams.addStringIfDefined("region", self.region)
+        kparams.addIntIfDefined("updateDate", self.updateDate)
+        return kparams
+
+    def getIotEndPoint(self):
+        return self.iotEndPoint
+
+    def setIotEndPoint(self, newIotEndPoint):
+        self.iotEndPoint = newIotEndPoint
+
+    def getPfxPath(self):
+        return self.pfxPath
+
+    def setPfxPath(self, newPfxPath):
+        self.pfxPath = newPfxPath
+
+    def getPfxPassword(self):
+        return self.pfxPassword
+
+    def setPfxPassword(self, newPfxPassword):
+        self.pfxPassword = newPfxPassword
+
+    def getCertificatePath(self):
+        return self.certificatePath
+
+    def setCertificatePath(self, newCertificatePath):
+        self.certificatePath = newCertificatePath
+
+    def getBrokerPort(self):
+        return self.brokerPort
+
+    def setBrokerPort(self, newBrokerPort):
+        self.brokerPort = newBrokerPort
+
+    def getAccessKeyId(self):
+        return self.accessKeyId
+
+    def setAccessKeyId(self, newAccessKeyId):
+        self.accessKeyId = newAccessKeyId
+
+    def getSecretAccessKey(self):
+        return self.secretAccessKey
+
+    def setSecretAccessKey(self, newSecretAccessKey):
+        self.secretAccessKey = newSecretAccessKey
+
+    def getIotPolicyName(self):
+        return self.iotPolicyName
+
+    def setIotPolicyName(self, newIotPolicyName):
+        self.iotPolicyName = newIotPolicyName
+
+    def getUserPoolId(self):
+        return self.userPoolId
+
+    def setUserPoolId(self, newUserPoolId):
+        self.userPoolId = newUserPoolId
+
+    def getClientId(self):
+        return self.clientId
+
+    def setClientId(self, newClientId):
+        self.clientId = newClientId
+
+    def getIdentityPoolId(self):
+        return self.identityPoolId
+
+    def setIdentityPoolId(self, newIdentityPoolId):
+        self.identityPoolId = newIdentityPoolId
+
+    def getRegion(self):
+        return self.region
+
+    def setRegion(self, newRegion):
+        self.region = newRegion
+
+    def getUpdateDate(self):
+        return self.updateDate
+
+    def setUpdateDate(self, newUpdateDate):
+        self.updateDate = newUpdateDate
+
+
+# @package Kaltura
+# @subpackage Client
+class KalturaIotProfile(KalturaCrudObject):
+    """IOT PROFILE"""
+
+    def __init__(self,
+            adapterUrl=NotImplemented,
+            iotProfileAws=NotImplemented):
+        KalturaCrudObject.__init__(self)
+
+        # adapterUrl
+        # @var string
+        self.adapterUrl = adapterUrl
+
+        # kalturaIotProfileAws
+        # @var KalturaIotProfileAws
+        self.iotProfileAws = iotProfileAws
+
+
+    PROPERTY_LOADERS = {
+        'adapterUrl': getXmlNodeText, 
+        'iotProfileAws': (KalturaObjectFactory.create, 'KalturaIotProfileAws'), 
+    }
+
+    def fromXml(self, node):
+        KalturaCrudObject.fromXml(self, node)
+        self.fromXmlImpl(node, KalturaIotProfile.PROPERTY_LOADERS)
+
+    def toParams(self):
+        kparams = KalturaCrudObject.toParams(self)
+        kparams.put("objectType", "KalturaIotProfile")
+        kparams.addStringIfDefined("adapterUrl", self.adapterUrl)
+        kparams.addObjectIfDefined("iotProfileAws", self.iotProfileAws)
+        return kparams
+
+    def getAdapterUrl(self):
+        return self.adapterUrl
+
+    def setAdapterUrl(self, newAdapterUrl):
+        self.adapterUrl = newAdapterUrl
+
+    def getIotProfileAws(self):
+        return self.iotProfileAws
+
+    def setIotProfileAws(self, newIotProfileAws):
+        self.iotProfileAws = newIotProfileAws
+
+
+# @package Kaltura
+# @subpackage Client
 class KalturaUnifiedChannelInfo(KalturaUnifiedChannel):
     def __init__(self,
             id=NotImplemented,
@@ -33276,6 +33944,238 @@ class KalturaUrlResource(KalturaContentResource):
 
 # @package Kaltura
 # @subpackage Client
+class KalturaDefault(KalturaObjectBase):
+    def __init__(self,
+            poolId=NotImplemented,
+            region=NotImplemented,
+            appClientId=NotImplemented):
+        KalturaObjectBase.__init__(self)
+
+        # PoolId
+        # @var string
+        self.poolId = poolId
+
+        # Region
+        # @var string
+        self.region = region
+
+        # AppClientId
+        # @var string
+        self.appClientId = appClientId
+
+
+    PROPERTY_LOADERS = {
+        'poolId': getXmlNodeText, 
+        'region': getXmlNodeText, 
+        'appClientId': getXmlNodeText, 
+    }
+
+    def fromXml(self, node):
+        KalturaObjectBase.fromXml(self, node)
+        self.fromXmlImpl(node, KalturaDefault.PROPERTY_LOADERS)
+
+    def toParams(self):
+        kparams = KalturaObjectBase.toParams(self)
+        kparams.put("objectType", "KalturaDefault")
+        kparams.addStringIfDefined("poolId", self.poolId)
+        kparams.addStringIfDefined("region", self.region)
+        kparams.addStringIfDefined("appClientId", self.appClientId)
+        return kparams
+
+    def getPoolId(self):
+        return self.poolId
+
+    def setPoolId(self, newPoolId):
+        self.poolId = newPoolId
+
+    def getRegion(self):
+        return self.region
+
+    def setRegion(self, newRegion):
+        self.region = newRegion
+
+    def getAppClientId(self):
+        return self.appClientId
+
+    def setAppClientId(self, newAppClientId):
+        self.appClientId = newAppClientId
+
+
+# @package Kaltura
+# @subpackage Client
+class KalturaCognitoIdentity(KalturaObjectBase):
+    def __init__(self,
+            default=NotImplemented):
+        KalturaObjectBase.__init__(self)
+
+        # Default
+        # @var KalturaDefault
+        self.default = default
+
+
+    PROPERTY_LOADERS = {
+        'default': (KalturaObjectFactory.create, 'KalturaDefault'), 
+    }
+
+    def fromXml(self, node):
+        KalturaObjectBase.fromXml(self, node)
+        self.fromXmlImpl(node, KalturaCognitoIdentity.PROPERTY_LOADERS)
+
+    def toParams(self):
+        kparams = KalturaObjectBase.toParams(self)
+        kparams.put("objectType", "KalturaCognitoIdentity")
+        kparams.addObjectIfDefined("default", self.default)
+        return kparams
+
+    def getDefault(self):
+        return self.default
+
+    def setDefault(self, newDefault):
+        self.default = newDefault
+
+
+# @package Kaltura
+# @subpackage Client
+class KalturaCredentialsProvider(KalturaObjectBase):
+    def __init__(self,
+            cognitoIdentity=NotImplemented):
+        KalturaObjectBase.__init__(self)
+
+        # KalturaCognitoIdentity
+        # @var KalturaCognitoIdentity
+        self.cognitoIdentity = cognitoIdentity
+
+
+    PROPERTY_LOADERS = {
+        'cognitoIdentity': (KalturaObjectFactory.create, 'KalturaCognitoIdentity'), 
+    }
+
+    def fromXml(self, node):
+        KalturaObjectBase.fromXml(self, node)
+        self.fromXmlImpl(node, KalturaCredentialsProvider.PROPERTY_LOADERS)
+
+    def toParams(self):
+        kparams = KalturaObjectBase.toParams(self)
+        kparams.put("objectType", "KalturaCredentialsProvider")
+        kparams.addObjectIfDefined("cognitoIdentity", self.cognitoIdentity)
+        return kparams
+
+    def getCognitoIdentity(self):
+        return self.cognitoIdentity
+
+    def setCognitoIdentity(self, newCognitoIdentity):
+        self.cognitoIdentity = newCognitoIdentity
+
+
+# @package Kaltura
+# @subpackage Client
+class KalturaCognitoUserPool(KalturaObjectBase):
+    def __init__(self,
+            default=NotImplemented):
+        KalturaObjectBase.__init__(self)
+
+        # Default
+        # @var KalturaDefault
+        self.default = default
+
+
+    PROPERTY_LOADERS = {
+        'default': (KalturaObjectFactory.create, 'KalturaDefault'), 
+    }
+
+    def fromXml(self, node):
+        KalturaObjectBase.fromXml(self, node)
+        self.fromXmlImpl(node, KalturaCognitoUserPool.PROPERTY_LOADERS)
+
+    def toParams(self):
+        kparams = KalturaObjectBase.toParams(self)
+        kparams.put("objectType", "KalturaCognitoUserPool")
+        kparams.addObjectIfDefined("default", self.default)
+        return kparams
+
+    def getDefault(self):
+        return self.default
+
+    def setDefault(self, newDefault):
+        self.default = newDefault
+
+
+# @package Kaltura
+# @subpackage Client
+class KalturaIotClientConfiguration(KalturaObjectBase):
+    """Iot client Configuration"""
+
+    def __init__(self,
+            announcementTopic=NotImplemented,
+            credentialsProvider=NotImplemented,
+            cognitoUserPool=NotImplemented,
+            json=NotImplemented):
+        KalturaObjectBase.__init__(self)
+
+        # announcementTopic
+        # @var string
+        self.announcementTopic = announcementTopic
+
+        # KalturaCredentialsProvider
+        # @var KalturaCredentialsProvider
+        self.credentialsProvider = credentialsProvider
+
+        # CognitoUserPool
+        # @var KalturaCognitoUserPool
+        self.cognitoUserPool = cognitoUserPool
+
+        # json
+        # @var string
+        self.json = json
+
+
+    PROPERTY_LOADERS = {
+        'announcementTopic': getXmlNodeText, 
+        'credentialsProvider': (KalturaObjectFactory.create, 'KalturaCredentialsProvider'), 
+        'cognitoUserPool': (KalturaObjectFactory.create, 'KalturaCognitoUserPool'), 
+        'json': getXmlNodeText, 
+    }
+
+    def fromXml(self, node):
+        KalturaObjectBase.fromXml(self, node)
+        self.fromXmlImpl(node, KalturaIotClientConfiguration.PROPERTY_LOADERS)
+
+    def toParams(self):
+        kparams = KalturaObjectBase.toParams(self)
+        kparams.put("objectType", "KalturaIotClientConfiguration")
+        kparams.addStringIfDefined("announcementTopic", self.announcementTopic)
+        kparams.addObjectIfDefined("credentialsProvider", self.credentialsProvider)
+        kparams.addObjectIfDefined("cognitoUserPool", self.cognitoUserPool)
+        kparams.addStringIfDefined("json", self.json)
+        return kparams
+
+    def getAnnouncementTopic(self):
+        return self.announcementTopic
+
+    def setAnnouncementTopic(self, newAnnouncementTopic):
+        self.announcementTopic = newAnnouncementTopic
+
+    def getCredentialsProvider(self):
+        return self.credentialsProvider
+
+    def setCredentialsProvider(self, newCredentialsProvider):
+        self.credentialsProvider = newCredentialsProvider
+
+    def getCognitoUserPool(self):
+        return self.cognitoUserPool
+
+    def setCognitoUserPool(self, newCognitoUserPool):
+        self.cognitoUserPool = newCognitoUserPool
+
+    def getJson(self):
+        return self.json
+
+    def setJson(self, newJson):
+        self.json = newJson
+
+
+# @package Kaltura
+# @subpackage Client
 class KalturaLicensedUrl(KalturaObjectBase):
     def __init__(self,
             mainUrl=NotImplemented,
@@ -33691,7 +34591,9 @@ class KalturaPushMessage(KalturaObjectBase):
             message=NotImplemented,
             sound=NotImplemented,
             action=NotImplemented,
-            url=NotImplemented):
+            url=NotImplemented,
+            udid=NotImplemented,
+            pushChannels=NotImplemented):
         KalturaObjectBase.__init__(self)
 
         # The message that will be presented to the user.
@@ -33710,12 +34612,22 @@ class KalturaPushMessage(KalturaObjectBase):
         # @var string
         self.url = url
 
+        # Device unique identifier
+        # @var string
+        self.udid = udid
+
+        # PushChannels - separated with comma
+        # @var string
+        self.pushChannels = pushChannels
+
 
     PROPERTY_LOADERS = {
         'message': getXmlNodeText, 
         'sound': getXmlNodeText, 
         'action': getXmlNodeText, 
         'url': getXmlNodeText, 
+        'udid': getXmlNodeText, 
+        'pushChannels': getXmlNodeText, 
     }
 
     def fromXml(self, node):
@@ -33729,6 +34641,8 @@ class KalturaPushMessage(KalturaObjectBase):
         kparams.addStringIfDefined("sound", self.sound)
         kparams.addStringIfDefined("action", self.action)
         kparams.addStringIfDefined("url", self.url)
+        kparams.addStringIfDefined("udid", self.udid)
+        kparams.addStringIfDefined("pushChannels", self.pushChannels)
         return kparams
 
     def getMessage(self):
@@ -33755,6 +34669,18 @@ class KalturaPushMessage(KalturaObjectBase):
     def setUrl(self, newUrl):
         self.url = newUrl
 
+    def getUdid(self):
+        return self.udid
+
+    def setUdid(self, newUdid):
+        self.udid = newUdid
+
+    def getPushChannels(self):
+        return self.pushChannels
+
+    def setPushChannels(self, newPushChannels):
+        self.pushChannels = newPushChannels
+
 
 # @package Kaltura
 # @subpackage Client
@@ -33776,7 +34702,8 @@ class KalturaNotificationsPartnerSettings(KalturaObjectBase):
             senderEmail=NotImplemented,
             mailSenderName=NotImplemented,
             mailNotificationAdapterId=NotImplemented,
-            smsEnabled=NotImplemented):
+            smsEnabled=NotImplemented,
+            iotEnabled=NotImplemented):
         KalturaObjectBase.__init__(self)
 
         # Push notification capability is enabled for the account
@@ -33847,6 +34774,10 @@ class KalturaNotificationsPartnerSettings(KalturaObjectBase):
         # @var bool
         self.smsEnabled = smsEnabled
 
+        # IOT capability is enabled for the account
+        # @var bool
+        self.iotEnabled = iotEnabled
+
 
     PROPERTY_LOADERS = {
         'pushNotificationEnabled': getXmlNodeBool, 
@@ -33866,6 +34797,7 @@ class KalturaNotificationsPartnerSettings(KalturaObjectBase):
         'mailSenderName': getXmlNodeText, 
         'mailNotificationAdapterId': getXmlNodeInt, 
         'smsEnabled': getXmlNodeBool, 
+        'iotEnabled': getXmlNodeBool, 
     }
 
     def fromXml(self, node):
@@ -33892,6 +34824,7 @@ class KalturaNotificationsPartnerSettings(KalturaObjectBase):
         kparams.addStringIfDefined("mailSenderName", self.mailSenderName)
         kparams.addIntIfDefined("mailNotificationAdapterId", self.mailNotificationAdapterId)
         kparams.addBoolIfDefined("smsEnabled", self.smsEnabled)
+        kparams.addBoolIfDefined("iotEnabled", self.iotEnabled)
         return kparams
 
     def getPushNotificationEnabled(self):
@@ -33995,6 +34928,12 @@ class KalturaNotificationsPartnerSettings(KalturaObjectBase):
 
     def setSmsEnabled(self, newSmsEnabled):
         self.smsEnabled = newSmsEnabled
+
+    def getIotEnabled(self):
+        return self.iotEnabled
+
+    def setIotEnabled(self, newIotEnabled):
+        self.iotEnabled = newIotEnabled
 
 
 # @package Kaltura
@@ -38751,6 +39690,74 @@ class KalturaIngestProfileService(KalturaServiceBase):
 
 # @package Kaltura
 # @subpackage Client
+class KalturaIotService(KalturaServiceBase):
+    def __init__(self, client = None):
+        KalturaServiceBase.__init__(self, client)
+
+    def getClientConfiguration(self):
+        """Get iot Client Configuration"""
+
+        kparams = KalturaParams()
+        self.client.queueServiceActionCall("iot", "getClientConfiguration", "KalturaIotClientConfiguration", kparams)
+        if self.client.isMultiRequest():
+            return self.client.getMultiRequestResult()
+        resultNode = self.client.doQueue()
+        return KalturaObjectFactory.create(resultNode, 'KalturaIotClientConfiguration')
+
+    def register(self):
+        """Register IOT device"""
+
+        kparams = KalturaParams()
+        self.client.queueServiceActionCall("iot", "register", "KalturaIot", kparams)
+        if self.client.isMultiRequest():
+            return self.client.getMultiRequestResult()
+        resultNode = self.client.doQueue()
+        return KalturaObjectFactory.create(resultNode, 'KalturaIot')
+
+
+# @package Kaltura
+# @subpackage Client
+class KalturaIotProfileService(KalturaServiceBase):
+    def __init__(self, client = None):
+        KalturaServiceBase.__init__(self, client)
+
+    def add(self, objectToAdd):
+        """Add an object"""
+
+        kparams = KalturaParams()
+        kparams.addObjectIfDefined("objectToAdd", objectToAdd)
+        self.client.queueServiceActionCall("iotprofile", "add", "KalturaIotProfile", kparams)
+        if self.client.isMultiRequest():
+            return self.client.getMultiRequestResult()
+        resultNode = self.client.doQueue()
+        return KalturaObjectFactory.create(resultNode, 'KalturaIotProfile')
+
+    def update(self, id, objectToUpdate):
+        """Update an object"""
+
+        kparams = KalturaParams()
+        kparams.addIntIfDefined("id", id);
+        kparams.addObjectIfDefined("objectToUpdate", objectToUpdate)
+        self.client.queueServiceActionCall("iotprofile", "update", "KalturaIotProfile", kparams)
+        if self.client.isMultiRequest():
+            return self.client.getMultiRequestResult()
+        resultNode = self.client.doQueue()
+        return KalturaObjectFactory.create(resultNode, 'KalturaIotProfile')
+
+    def get(self, id):
+        """Get an object"""
+
+        kparams = KalturaParams()
+        kparams.addIntIfDefined("id", id);
+        self.client.queueServiceActionCall("iotprofile", "get", "KalturaIotProfile", kparams)
+        if self.client.isMultiRequest():
+            return self.client.getMultiRequestResult()
+        resultNode = self.client.doQueue()
+        return KalturaObjectFactory.create(resultNode, 'KalturaIotProfile')
+
+
+# @package Kaltura
+# @subpackage Client
 class KalturaLanguageService(KalturaServiceBase):
     def __init__(self, client = None):
         KalturaServiceBase.__init__(self, client)
@@ -41833,6 +42840,8 @@ class KalturaCoreClient(KalturaClientPlugin):
             'imageType': KalturaImageTypeService,
             'inboxMessage': KalturaInboxMessageService,
             'IngestProfile': KalturaIngestProfileService,
+            'iot': KalturaIotService,
+            'iotProfile': KalturaIotProfileService,
             'language': KalturaLanguageService,
             'licensedUrl': KalturaLicensedUrlService,
             'mediaConcurrencyRule': KalturaMediaConcurrencyRuleService,
@@ -41990,6 +42999,8 @@ class KalturaCoreClient(KalturaClientPlugin):
             'KalturaInboxMessageType': KalturaInboxMessageType,
             'KalturaIngestProfileAutofillPolicy': KalturaIngestProfileAutofillPolicy,
             'KalturaIngestProfileOverlapPolicy': KalturaIngestProfileOverlapPolicy,
+            'KalturaIotOrderBy': KalturaIotOrderBy,
+            'KalturaIotProfileOrderBy': KalturaIotProfileOrderBy,
             'KalturaLanguageOrderBy': KalturaLanguageOrderBy,
             'KalturaLinearChannelType': KalturaLinearChannelType,
             'KalturaLogLevel': KalturaLogLevel,
@@ -42038,6 +43049,7 @@ class KalturaCoreClient(KalturaClientPlugin):
             'KalturaReminderType': KalturaReminderType,
             'KalturaReportOrderBy': KalturaReportOrderBy,
             'KalturaResponseType': KalturaResponseType,
+            'KalturaRollingDevicePolicy': KalturaRollingDevicePolicy,
             'KalturaRuleActionType': KalturaRuleActionType,
             'KalturaRuleConditionType': KalturaRuleConditionType,
             'KalturaRuleLevel': KalturaRuleLevel,
@@ -42113,6 +43125,8 @@ class KalturaCoreClient(KalturaClientPlugin):
             'KalturaCategoryItemSearchFilter': KalturaCategoryItemSearchFilter,
             'KalturaCategoryItemAncestorsFilter': KalturaCategoryItemAncestorsFilter,
             'KalturaEventNotificationFilter': KalturaEventNotificationFilter,
+            'KalturaIotFilter': KalturaIotFilter,
+            'KalturaIotProfileFilter': KalturaIotProfileFilter,
             'KalturaBulkUploadFilter': KalturaBulkUploadFilter,
             'KalturaSocialActionFilter': KalturaSocialActionFilter,
             'KalturaSocialCommentFilter': KalturaSocialCommentFilter,
@@ -42384,9 +43398,12 @@ class KalturaCoreClient(KalturaClientPlugin):
             'KalturaBookmarkEventThreshold': KalturaBookmarkEventThreshold,
             'KalturaCommercePartnerConfig': KalturaCommercePartnerConfig,
             'KalturaConcurrencyPartnerConfig': KalturaConcurrencyPartnerConfig,
+            'KalturaRollingDeviceRemovalData': KalturaRollingDeviceRemovalData,
             'KalturaGeneralPartnerConfig': KalturaGeneralPartnerConfig,
             'KalturaObjectVirtualAssetInfo': KalturaObjectVirtualAssetInfo,
             'KalturaObjectVirtualAssetPartnerConfig': KalturaObjectVirtualAssetPartnerConfig,
+            'KalturaDefaultPlaybackAdapters': KalturaDefaultPlaybackAdapters,
+            'KalturaPlaybackPartnerConfig': KalturaPlaybackPartnerConfig,
             'KalturaPersonalList': KalturaPersonalList,
             'KalturaPersonalListListResponse': KalturaPersonalListListResponse,
             'KalturaEngagementAdapterBase': KalturaEngagementAdapterBase,
@@ -42581,6 +43598,9 @@ class KalturaCoreClient(KalturaClientPlugin):
             'KalturaHouseholdSegment': KalturaHouseholdSegment,
             'KalturaHouseholdCoupon': KalturaHouseholdCoupon,
             'KalturaEventNotification': KalturaEventNotification,
+            'KalturaIot': KalturaIot,
+            'KalturaIotProfileAws': KalturaIotProfileAws,
+            'KalturaIotProfile': KalturaIotProfile,
             'KalturaUnifiedChannelInfo': KalturaUnifiedChannelInfo,
             'KalturaCategoryItemListResponse': KalturaCategoryItemListResponse,
             'KalturaCategoryTree': KalturaCategoryTree,
@@ -42611,6 +43631,11 @@ class KalturaCoreClient(KalturaClientPlugin):
             'KalturaContentResource': KalturaContentResource,
             'KalturaUploadedFileTokenResource': KalturaUploadedFileTokenResource,
             'KalturaUrlResource': KalturaUrlResource,
+            'KalturaDefault': KalturaDefault,
+            'KalturaCognitoIdentity': KalturaCognitoIdentity,
+            'KalturaCredentialsProvider': KalturaCredentialsProvider,
+            'KalturaCognitoUserPool': KalturaCognitoUserPool,
+            'KalturaIotClientConfiguration': KalturaIotClientConfiguration,
             'KalturaLicensedUrl': KalturaLicensedUrl,
             'KalturaLicensedUrlBaseRequest': KalturaLicensedUrlBaseRequest,
             'KalturaLicensedUrlMediaRequest': KalturaLicensedUrlMediaRequest,
