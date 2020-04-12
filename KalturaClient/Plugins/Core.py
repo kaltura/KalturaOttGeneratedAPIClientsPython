@@ -42,7 +42,7 @@ from ..Base import (
     KalturaServiceBase,
 )
 
-API_VERSION = '5.3.3.27828'
+API_VERSION = '5.3.4.27845'
 
 ########## enums ##########
 # @package Kaltura
@@ -33944,7 +33944,7 @@ class KalturaUrlResource(KalturaContentResource):
 
 # @package Kaltura
 # @subpackage Client
-class KalturaDefault(KalturaObjectBase):
+class KalturaIotDefault(KalturaObjectBase):
     def __init__(self,
             poolId=NotImplemented,
             region=NotImplemented,
@@ -33972,11 +33972,11 @@ class KalturaDefault(KalturaObjectBase):
 
     def fromXml(self, node):
         KalturaObjectBase.fromXml(self, node)
-        self.fromXmlImpl(node, KalturaDefault.PROPERTY_LOADERS)
+        self.fromXmlImpl(node, KalturaIotDefault.PROPERTY_LOADERS)
 
     def toParams(self):
         kparams = KalturaObjectBase.toParams(self)
-        kparams.put("objectType", "KalturaDefault")
+        kparams.put("objectType", "KalturaIotDefault")
         kparams.addStringIfDefined("poolId", self.poolId)
         kparams.addStringIfDefined("region", self.region)
         kparams.addStringIfDefined("appClientId", self.appClientId)
@@ -34005,16 +34005,16 @@ class KalturaDefault(KalturaObjectBase):
 # @subpackage Client
 class KalturaCognitoIdentity(KalturaObjectBase):
     def __init__(self,
-            default=NotImplemented):
+            iotDefault=NotImplemented):
         KalturaObjectBase.__init__(self)
 
         # Default
-        # @var KalturaDefault
-        self.default = default
+        # @var KalturaIotDefault
+        self.iotDefault = iotDefault
 
 
     PROPERTY_LOADERS = {
-        'default': (KalturaObjectFactory.create, 'KalturaDefault'), 
+        'iotDefault': (KalturaObjectFactory.create, 'KalturaIotDefault'), 
     }
 
     def fromXml(self, node):
@@ -34024,14 +34024,14 @@ class KalturaCognitoIdentity(KalturaObjectBase):
     def toParams(self):
         kparams = KalturaObjectBase.toParams(self)
         kparams.put("objectType", "KalturaCognitoIdentity")
-        kparams.addObjectIfDefined("default", self.default)
+        kparams.addObjectIfDefined("iotDefault", self.iotDefault)
         return kparams
 
-    def getDefault(self):
-        return self.default
+    def getIotDefault(self):
+        return self.iotDefault
 
-    def setDefault(self, newDefault):
-        self.default = newDefault
+    def setIotDefault(self, newIotDefault):
+        self.iotDefault = newIotDefault
 
 
 # @package Kaltura
@@ -34071,16 +34071,16 @@ class KalturaCredentialsProvider(KalturaObjectBase):
 # @subpackage Client
 class KalturaCognitoUserPool(KalturaObjectBase):
     def __init__(self,
-            default=NotImplemented):
+            iotDefault=NotImplemented):
         KalturaObjectBase.__init__(self)
 
         # Default
-        # @var KalturaDefault
-        self.default = default
+        # @var KalturaIotDefault
+        self.iotDefault = iotDefault
 
 
     PROPERTY_LOADERS = {
-        'default': (KalturaObjectFactory.create, 'KalturaDefault'), 
+        'iotDefault': (KalturaObjectFactory.create, 'KalturaIotDefault'), 
     }
 
     def fromXml(self, node):
@@ -34090,14 +34090,14 @@ class KalturaCognitoUserPool(KalturaObjectBase):
     def toParams(self):
         kparams = KalturaObjectBase.toParams(self)
         kparams.put("objectType", "KalturaCognitoUserPool")
-        kparams.addObjectIfDefined("default", self.default)
+        kparams.addObjectIfDefined("iotDefault", self.iotDefault)
         return kparams
 
-    def getDefault(self):
-        return self.default
+    def getIotDefault(self):
+        return self.iotDefault
 
-    def setDefault(self, newDefault):
-        self.default = newDefault
+    def setIotDefault(self, newIotDefault):
+        self.iotDefault = newIotDefault
 
 
 # @package Kaltura
@@ -43631,7 +43631,7 @@ class KalturaCoreClient(KalturaClientPlugin):
             'KalturaContentResource': KalturaContentResource,
             'KalturaUploadedFileTokenResource': KalturaUploadedFileTokenResource,
             'KalturaUrlResource': KalturaUrlResource,
-            'KalturaDefault': KalturaDefault,
+            'KalturaIotDefault': KalturaIotDefault,
             'KalturaCognitoIdentity': KalturaCognitoIdentity,
             'KalturaCredentialsProvider': KalturaCredentialsProvider,
             'KalturaCognitoUserPool': KalturaCognitoUserPool,
