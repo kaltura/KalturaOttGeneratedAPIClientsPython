@@ -42,7 +42,7 @@ from ..Base import (
     KalturaServiceBase,
 )
 
-API_VERSION = '5.3.4.27845'
+API_VERSION = '5.3.4.27868'
 
 ########## enums ##########
 # @package Kaltura
@@ -1820,6 +1820,7 @@ class KalturaRecordingType(object):
     SINGLE = "SINGLE"
     SEASON = "SEASON"
     SERIES = "SERIES"
+    ORIGINALBROADCAST = "OriginalBroadcast"
 
     def __init__(self, value):
         self.value = value
