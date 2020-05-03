@@ -42,7 +42,7 @@ from ..Base import (
     KalturaServiceBase,
 )
 
-API_VERSION = '5.3.4.27908'
+API_VERSION = '5.3.4.27915'
 
 ########## enums ##########
 # @package Kaltura
@@ -31996,13 +31996,8 @@ class KalturaIotProfileAws(KalturaCrudObject):
 
     def __init__(self,
             iotEndPoint=NotImplemented,
-            pfxPath=NotImplemented,
-            pfxPassword=NotImplemented,
-            certificatePath=NotImplemented,
-            brokerPort=NotImplemented,
             accessKeyId=NotImplemented,
             secretAccessKey=NotImplemented,
-            iotPolicyName=NotImplemented,
             userPoolId=NotImplemented,
             clientId=NotImplemented,
             identityPoolId=NotImplemented,
@@ -32014,22 +32009,6 @@ class KalturaIotProfileAws(KalturaCrudObject):
         # @var string
         self.iotEndPoint = iotEndPoint
 
-        # pfxPath
-        # @var string
-        self.pfxPath = pfxPath
-
-        # pfxPassword
-        # @var string
-        self.pfxPassword = pfxPassword
-
-        # certificatePath
-        # @var string
-        self.certificatePath = certificatePath
-
-        # brokerPort
-        # @var int
-        self.brokerPort = brokerPort
-
         # accessKeyId
         # @var string
         self.accessKeyId = accessKeyId
@@ -32037,10 +32016,6 @@ class KalturaIotProfileAws(KalturaCrudObject):
         # secretAccessKey
         # @var string
         self.secretAccessKey = secretAccessKey
-
-        # iotPolicyName
-        # @var string
-        self.iotPolicyName = iotPolicyName
 
         # userPoolId
         # @var string
@@ -32065,13 +32040,8 @@ class KalturaIotProfileAws(KalturaCrudObject):
 
     PROPERTY_LOADERS = {
         'iotEndPoint': getXmlNodeText, 
-        'pfxPath': getXmlNodeText, 
-        'pfxPassword': getXmlNodeText, 
-        'certificatePath': getXmlNodeText, 
-        'brokerPort': getXmlNodeInt, 
         'accessKeyId': getXmlNodeText, 
         'secretAccessKey': getXmlNodeText, 
-        'iotPolicyName': getXmlNodeText, 
         'userPoolId': getXmlNodeText, 
         'clientId': getXmlNodeText, 
         'identityPoolId': getXmlNodeText, 
@@ -32087,13 +32057,8 @@ class KalturaIotProfileAws(KalturaCrudObject):
         kparams = KalturaCrudObject.toParams(self)
         kparams.put("objectType", "KalturaIotProfileAws")
         kparams.addStringIfDefined("iotEndPoint", self.iotEndPoint)
-        kparams.addStringIfDefined("pfxPath", self.pfxPath)
-        kparams.addStringIfDefined("pfxPassword", self.pfxPassword)
-        kparams.addStringIfDefined("certificatePath", self.certificatePath)
-        kparams.addIntIfDefined("brokerPort", self.brokerPort)
         kparams.addStringIfDefined("accessKeyId", self.accessKeyId)
         kparams.addStringIfDefined("secretAccessKey", self.secretAccessKey)
-        kparams.addStringIfDefined("iotPolicyName", self.iotPolicyName)
         kparams.addStringIfDefined("userPoolId", self.userPoolId)
         kparams.addStringIfDefined("clientId", self.clientId)
         kparams.addStringIfDefined("identityPoolId", self.identityPoolId)
@@ -32107,30 +32072,6 @@ class KalturaIotProfileAws(KalturaCrudObject):
     def setIotEndPoint(self, newIotEndPoint):
         self.iotEndPoint = newIotEndPoint
 
-    def getPfxPath(self):
-        return self.pfxPath
-
-    def setPfxPath(self, newPfxPath):
-        self.pfxPath = newPfxPath
-
-    def getPfxPassword(self):
-        return self.pfxPassword
-
-    def setPfxPassword(self, newPfxPassword):
-        self.pfxPassword = newPfxPassword
-
-    def getCertificatePath(self):
-        return self.certificatePath
-
-    def setCertificatePath(self, newCertificatePath):
-        self.certificatePath = newCertificatePath
-
-    def getBrokerPort(self):
-        return self.brokerPort
-
-    def setBrokerPort(self, newBrokerPort):
-        self.brokerPort = newBrokerPort
-
     def getAccessKeyId(self):
         return self.accessKeyId
 
@@ -32142,12 +32083,6 @@ class KalturaIotProfileAws(KalturaCrudObject):
 
     def setSecretAccessKey(self, newSecretAccessKey):
         self.secretAccessKey = newSecretAccessKey
-
-    def getIotPolicyName(self):
-        return self.iotPolicyName
-
-    def setIotPolicyName(self, newIotPolicyName):
-        self.iotPolicyName = newIotPolicyName
 
     def getUserPoolId(self):
         return self.userPoolId
