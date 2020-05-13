@@ -42,7 +42,7 @@ from ..Base import (
     KalturaServiceBase,
 )
 
-API_VERSION = '5.3.4.27908'
+API_VERSION = '5.3.4.27916'
 
 ########## enums ##########
 # @package Kaltura
@@ -916,6 +916,17 @@ class KalturaExportTaskOrderBy(object):
 class KalturaExportType(object):
     FULL = "full"
     INCREMENTAL = "incremental"
+
+    def __init__(self, value):
+        self.value = value
+
+    def getValue(self):
+        return self.value
+
+# @package Kaltura
+# @subpackage Client
+class KalturaExternalRecordingResponseProfileOrderBy(object):
+    NONE = "NONE"
 
     def __init__(self, value):
         self.value = value
@@ -6764,6 +6775,30 @@ class KalturaEntitlementFilter(KalturaFilter):
 
     def setIsExpiredEqual(self, newIsExpiredEqual):
         self.isExpiredEqual = newIsExpiredEqual
+
+
+# @package Kaltura
+# @subpackage Client
+class KalturaExternalRecordingResponseProfileFilter(KalturaRelatedObjectFilter):
+    """Kaltura External Recording ResponseProfile Filter"""
+
+    def __init__(self,
+            orderBy=NotImplemented):
+        KalturaRelatedObjectFilter.__init__(self,
+            orderBy)
+
+
+    PROPERTY_LOADERS = {
+    }
+
+    def fromXml(self, node):
+        KalturaRelatedObjectFilter.fromXml(self, node)
+        self.fromXmlImpl(node, KalturaExternalRecordingResponseProfileFilter.PROPERTY_LOADERS)
+
+    def toParams(self):
+        kparams = KalturaRelatedObjectFilter.toParams(self)
+        kparams.put("objectType", "KalturaExternalRecordingResponseProfileFilter")
+        return kparams
 
 
 # @package Kaltura
@@ -42976,6 +43011,7 @@ class KalturaCoreClient(KalturaClientPlugin):
             'KalturaExportDataType': KalturaExportDataType,
             'KalturaExportTaskOrderBy': KalturaExportTaskOrderBy,
             'KalturaExportType': KalturaExportType,
+            'KalturaExternalRecordingResponseProfileOrderBy': KalturaExternalRecordingResponseProfileOrderBy,
             'KalturaFavoriteOrderBy': KalturaFavoriteOrderBy,
             'KalturaFollowTvSeriesOrderBy': KalturaFollowTvSeriesOrderBy,
             'KalturaGroupByField': KalturaGroupByField,
@@ -43193,6 +43229,7 @@ class KalturaCoreClient(KalturaClientPlugin):
             'KalturaSeriesRecordingFilter': KalturaSeriesRecordingFilter,
             'KalturaCloudSeriesRecordingFilter': KalturaCloudSeriesRecordingFilter,
             'KalturaEntitlementFilter': KalturaEntitlementFilter,
+            'KalturaExternalRecordingResponseProfileFilter': KalturaExternalRecordingResponseProfileFilter,
             'KalturaProductPriceFilter': KalturaProductPriceFilter,
             'KalturaRecordingContextFilter': KalturaRecordingContextFilter,
             'KalturaTransactionHistoryFilter': KalturaTransactionHistoryFilter,
