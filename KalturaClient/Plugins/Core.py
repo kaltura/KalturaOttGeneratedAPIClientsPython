@@ -42,7 +42,7 @@ from ..Base import (
     KalturaServiceBase,
 )
 
-API_VERSION = '5.3.4.27908'
+API_VERSION = '5.3.5.27995'
 
 ########## enums ##########
 # @package Kaltura
@@ -1820,6 +1820,7 @@ class KalturaRecordingType(object):
     SINGLE = "SINGLE"
     SEASON = "SEASON"
     SERIES = "SERIES"
+    ORIGINALBROADCAST = "OriginalBroadcast"
 
     def __init__(self, value):
         self.value = value
@@ -35654,6 +35655,65 @@ class KalturaSocialUserConfig(KalturaSocialConfig):
 
 # @package Kaltura
 # @subpackage Client
+class KalturaSSOAdapterProfileInvoke(KalturaObjectBase):
+    def __init__(self,
+            adapterData=NotImplemented,
+            code=NotImplemented,
+            message=NotImplemented):
+        KalturaObjectBase.__init__(self)
+
+        # key/value map field for adapter data
+        # @var map
+        self.adapterData = adapterData
+
+        # code
+        # @var string
+        self.code = code
+
+        # message
+        # @var string
+        self.message = message
+
+
+    PROPERTY_LOADERS = {
+        'adapterData': (KalturaObjectFactory.createMap, 'KalturaStringValue'), 
+        'code': getXmlNodeText, 
+        'message': getXmlNodeText, 
+    }
+
+    def fromXml(self, node):
+        KalturaObjectBase.fromXml(self, node)
+        self.fromXmlImpl(node, KalturaSSOAdapterProfileInvoke.PROPERTY_LOADERS)
+
+    def toParams(self):
+        kparams = KalturaObjectBase.toParams(self)
+        kparams.put("objectType", "KalturaSSOAdapterProfileInvoke")
+        kparams.addMapIfDefined("adapterData", self.adapterData)
+        kparams.addStringIfDefined("code", self.code)
+        kparams.addStringIfDefined("message", self.message)
+        return kparams
+
+    def getAdapterData(self):
+        return self.adapterData
+
+    def setAdapterData(self, newAdapterData):
+        self.adapterData = newAdapterData
+
+    def getCode(self):
+        return self.code
+
+    def setCode(self, newCode):
+        self.code = newCode
+
+    def getMessage(self):
+        return self.message
+
+    def setMessage(self, newMessage):
+        self.message = newMessage
+
+
+# @package Kaltura
+# @subpackage Client
 class KalturaTimeShiftedTvPartnerSettings(KalturaObjectBase):
     def __init__(self,
             catchUpEnabled=NotImplemented,
@@ -41883,6 +41943,18 @@ class KalturaSsoAdapterProfileService(KalturaServiceBase):
         resultNode = self.client.doQueue()
         return KalturaObjectFactory.create(resultNode, 'KalturaSSOAdapterProfile')
 
+    def invoke(self, intent, adapterData):
+        """Request validation against 3rd party"""
+
+        kparams = KalturaParams()
+        kparams.addStringIfDefined("intent", intent)
+        kparams.addArrayIfDefined("adapterData", adapterData)
+        self.client.queueServiceActionCall("ssoadapterprofile", "invoke", "KalturaSSOAdapterProfileInvoke", kparams)
+        if self.client.isMultiRequest():
+            return self.client.getMultiRequestResult()
+        resultNode = self.client.doQueue()
+        return KalturaObjectFactory.create(resultNode, 'KalturaSSOAdapterProfileInvoke')
+
     def list(self):
         """Returns all sso adapters for partner : id + name"""
 
@@ -43658,6 +43730,7 @@ class KalturaCoreClient(KalturaClientPlugin):
             'KalturaSocialFacebookConfig': KalturaSocialFacebookConfig,
             'KalturaActionPermissionItem': KalturaActionPermissionItem,
             'KalturaSocialUserConfig': KalturaSocialUserConfig,
+            'KalturaSSOAdapterProfileInvoke': KalturaSSOAdapterProfileInvoke,
             'KalturaTimeShiftedTvPartnerSettings': KalturaTimeShiftedTvPartnerSettings,
             'KalturaPurchaseBase': KalturaPurchaseBase,
             'KalturaPurchase': KalturaPurchase,
