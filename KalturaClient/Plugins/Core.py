@@ -42,7 +42,7 @@ from ..Base import (
     KalturaServiceBase,
 )
 
-API_VERSION = '5.3.5.27997'
+API_VERSION = '5.3.5.28010'
 
 ########## enums ##########
 # @package Kaltura
@@ -31337,7 +31337,10 @@ class KalturaCategoryItem(KalturaCrudObject):
             childrenIds=NotImplemented,
             unifiedChannels=NotImplemented,
             dynamicData=NotImplemented,
-            updateDate=NotImplemented):
+            updateDate=NotImplemented,
+            isActive=NotImplemented,
+            startDateInSeconds=NotImplemented,
+            endDateInSeconds=NotImplemented):
         KalturaCrudObject.__init__(self)
 
         # Unique identifier for the category
@@ -31376,6 +31379,18 @@ class KalturaCategoryItem(KalturaCrudObject):
         # @readonly
         self.updateDate = updateDate
 
+        # Category active status
+        # @var bool
+        self.isActive = isActive
+
+        # Start date in seconds
+        # @var int
+        self.startDateInSeconds = startDateInSeconds
+
+        # End date in seconds
+        # @var int
+        self.endDateInSeconds = endDateInSeconds
+
 
     PROPERTY_LOADERS = {
         'id': getXmlNodeInt, 
@@ -31386,6 +31401,9 @@ class KalturaCategoryItem(KalturaCrudObject):
         'unifiedChannels': (KalturaObjectFactory.createArray, 'KalturaUnifiedChannel'), 
         'dynamicData': (KalturaObjectFactory.createMap, 'KalturaStringValue'), 
         'updateDate': getXmlNodeInt, 
+        'isActive': getXmlNodeBool, 
+        'startDateInSeconds': getXmlNodeInt, 
+        'endDateInSeconds': getXmlNodeInt, 
     }
 
     def fromXml(self, node):
@@ -31399,6 +31417,9 @@ class KalturaCategoryItem(KalturaCrudObject):
         kparams.addStringIfDefined("childrenIds", self.childrenIds)
         kparams.addArrayIfDefined("unifiedChannels", self.unifiedChannels)
         kparams.addMapIfDefined("dynamicData", self.dynamicData)
+        kparams.addBoolIfDefined("isActive", self.isActive)
+        kparams.addIntIfDefined("startDateInSeconds", self.startDateInSeconds)
+        kparams.addIntIfDefined("endDateInSeconds", self.endDateInSeconds)
         return kparams
 
     def getId(self):
@@ -31436,6 +31457,24 @@ class KalturaCategoryItem(KalturaCrudObject):
 
     def getUpdateDate(self):
         return self.updateDate
+
+    def getIsActive(self):
+        return self.isActive
+
+    def setIsActive(self, newIsActive):
+        self.isActive = newIsActive
+
+    def getStartDateInSeconds(self):
+        return self.startDateInSeconds
+
+    def setStartDateInSeconds(self, newStartDateInSeconds):
+        self.startDateInSeconds = newStartDateInSeconds
+
+    def getEndDateInSeconds(self):
+        return self.endDateInSeconds
+
+    def setEndDateInSeconds(self, newEndDateInSeconds):
+        self.endDateInSeconds = newEndDateInSeconds
 
 
 # @package Kaltura
@@ -32235,7 +32274,9 @@ class KalturaUnifiedChannelInfo(KalturaUnifiedChannel):
     def __init__(self,
             id=NotImplemented,
             type=NotImplemented,
-            name=NotImplemented):
+            name=NotImplemented,
+            startDateInSeconds=NotImplemented,
+            endDateInSeconds=NotImplemented):
         KalturaUnifiedChannel.__init__(self,
             id,
             type)
@@ -32244,9 +32285,19 @@ class KalturaUnifiedChannelInfo(KalturaUnifiedChannel):
         # @var string
         self.name = name
 
+        # Start date in seconds
+        # @var int
+        self.startDateInSeconds = startDateInSeconds
+
+        # End date in seconds
+        # @var int
+        self.endDateInSeconds = endDateInSeconds
+
 
     PROPERTY_LOADERS = {
         'name': getXmlNodeText, 
+        'startDateInSeconds': getXmlNodeInt, 
+        'endDateInSeconds': getXmlNodeInt, 
     }
 
     def fromXml(self, node):
@@ -32257,6 +32308,8 @@ class KalturaUnifiedChannelInfo(KalturaUnifiedChannel):
         kparams = KalturaUnifiedChannel.toParams(self)
         kparams.put("objectType", "KalturaUnifiedChannelInfo")
         kparams.addStringIfDefined("name", self.name)
+        kparams.addIntIfDefined("startDateInSeconds", self.startDateInSeconds)
+        kparams.addIntIfDefined("endDateInSeconds", self.endDateInSeconds)
         return kparams
 
     def getName(self):
@@ -32264,6 +32317,18 @@ class KalturaUnifiedChannelInfo(KalturaUnifiedChannel):
 
     def setName(self, newName):
         self.name = newName
+
+    def getStartDateInSeconds(self):
+        return self.startDateInSeconds
+
+    def setStartDateInSeconds(self, newStartDateInSeconds):
+        self.startDateInSeconds = newStartDateInSeconds
+
+    def getEndDateInSeconds(self):
+        return self.endDateInSeconds
+
+    def setEndDateInSeconds(self, newEndDateInSeconds):
+        self.endDateInSeconds = newEndDateInSeconds
 
 
 # @package Kaltura
@@ -32313,7 +32378,10 @@ class KalturaCategoryTree(KalturaObjectBase):
             children=NotImplemented,
             unifiedChannels=NotImplemented,
             dynamicData=NotImplemented,
-            images=NotImplemented):
+            images=NotImplemented,
+            isActive=NotImplemented,
+            startDateInSeconds=NotImplemented,
+            endDateInSeconds=NotImplemented):
         KalturaObjectBase.__init__(self)
 
         # Unique identifier for the category item
@@ -32347,6 +32415,18 @@ class KalturaCategoryTree(KalturaObjectBase):
         # @var array of KalturaImage
         self.images = images
 
+        # Category active status
+        # @var bool
+        self.isActive = isActive
+
+        # Start date in seconds
+        # @var int
+        self.startDateInSeconds = startDateInSeconds
+
+        # End date in seconds
+        # @var int
+        self.endDateInSeconds = endDateInSeconds
+
 
     PROPERTY_LOADERS = {
         'id': getXmlNodeInt, 
@@ -32356,6 +32436,9 @@ class KalturaCategoryTree(KalturaObjectBase):
         'unifiedChannels': (KalturaObjectFactory.createArray, 'KalturaUnifiedChannelInfo'), 
         'dynamicData': (KalturaObjectFactory.createMap, 'KalturaStringValue'), 
         'images': (KalturaObjectFactory.createArray, 'KalturaImage'), 
+        'isActive': getXmlNodeBool, 
+        'startDateInSeconds': getXmlNodeInt, 
+        'endDateInSeconds': getXmlNodeInt, 
     }
 
     def fromXml(self, node):
@@ -32369,6 +32452,9 @@ class KalturaCategoryTree(KalturaObjectBase):
         kparams.addArrayIfDefined("unifiedChannels", self.unifiedChannels)
         kparams.addMapIfDefined("dynamicData", self.dynamicData)
         kparams.addArrayIfDefined("images", self.images)
+        kparams.addBoolIfDefined("isActive", self.isActive)
+        kparams.addIntIfDefined("startDateInSeconds", self.startDateInSeconds)
+        kparams.addIntIfDefined("endDateInSeconds", self.endDateInSeconds)
         return kparams
 
     def getId(self):
@@ -32403,6 +32489,24 @@ class KalturaCategoryTree(KalturaObjectBase):
 
     def setImages(self, newImages):
         self.images = newImages
+
+    def getIsActive(self):
+        return self.isActive
+
+    def setIsActive(self, newIsActive):
+        self.isActive = newIsActive
+
+    def getStartDateInSeconds(self):
+        return self.startDateInSeconds
+
+    def setStartDateInSeconds(self, newStartDateInSeconds):
+        self.startDateInSeconds = newStartDateInSeconds
+
+    def getEndDateInSeconds(self):
+        return self.endDateInSeconds
+
+    def setEndDateInSeconds(self, newEndDateInSeconds):
+        self.endDateInSeconds = newEndDateInSeconds
 
 
 # @package Kaltura
