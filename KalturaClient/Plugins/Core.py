@@ -42,7 +42,7 @@ from ..Base import (
     KalturaServiceBase,
 )
 
-API_VERSION = '5.3.5.27997'
+API_VERSION = '5.3.5.28005'
 
 ########## enums ##########
 # @package Kaltura
@@ -805,6 +805,21 @@ class KalturaDrmSchemeName(object):
 
 # @package Kaltura
 # @subpackage Client
+class KalturaDurationUnit(object):
+    MINUTES = "Minutes"
+    HOURS = "Hours"
+    DAYS = "Days"
+    MONTHS = "Months"
+    YEARS = "Years"
+
+    def __init__(self, value):
+        self.value = value
+
+    def getValue(self):
+        return self.value
+
+# @package Kaltura
+# @subpackage Client
 class KalturaEngagementOrderBy(object):
     NONE = "NONE"
 
@@ -1491,6 +1506,7 @@ class KalturaPartnerConfigurationType(object):
     OBJECTVIRTUALASSET = "ObjectVirtualAsset"
     COMMERCE = "Commerce"
     PLAYBACK = "Playback"
+    PAYMENT = "Payment"
 
     def __init__(self, value):
         self.value = value
@@ -19201,6 +19217,148 @@ class KalturaObjectVirtualAssetPartnerConfig(KalturaPartnerConfiguration):
 
     def setObjectVirtualAssets(self, newObjectVirtualAssets):
         self.objectVirtualAssets = newObjectVirtualAssets
+
+
+# @package Kaltura
+# @subpackage Client
+class KalturaDuration(KalturaObjectBase):
+    """representation of duration time unit and value"""
+
+    def __init__(self,
+            unit=NotImplemented,
+            value=NotImplemented):
+        KalturaObjectBase.__init__(self)
+
+        # duration unit
+        # @var KalturaDurationUnit
+        self.unit = unit
+
+        # duration value
+        # @var int
+        self.value = value
+
+
+    PROPERTY_LOADERS = {
+        'unit': (KalturaEnumsFactory.createString, "KalturaDurationUnit"), 
+        'value': getXmlNodeInt, 
+    }
+
+    def fromXml(self, node):
+        KalturaObjectBase.fromXml(self, node)
+        self.fromXmlImpl(node, KalturaDuration.PROPERTY_LOADERS)
+
+    def toParams(self):
+        kparams = KalturaObjectBase.toParams(self)
+        kparams.put("objectType", "KalturaDuration")
+        kparams.addStringEnumIfDefined("unit", self.unit)
+        kparams.addIntIfDefined("value", self.value)
+        return kparams
+
+    def getUnit(self):
+        return self.unit
+
+    def setUnit(self, newUnit):
+        self.unit = newUnit
+
+    def getValue(self):
+        return self.value
+
+    def setValue(self, newValue):
+        self.value = newValue
+
+
+# @package Kaltura
+# @subpackage Client
+class KalturaUnifiedBillingCycle(KalturaObjectBase):
+    def __init__(self,
+            name=NotImplemented,
+            duration=NotImplemented,
+            paymentGatewayId=NotImplemented):
+        KalturaObjectBase.__init__(self)
+
+        # UnifiedBillingCycle name
+        # @var string
+        self.name = name
+
+        # cycle duration
+        # @var KalturaDuration
+        self.duration = duration
+
+        # paymentGateway Id
+        # @var int
+        self.paymentGatewayId = paymentGatewayId
+
+
+    PROPERTY_LOADERS = {
+        'name': getXmlNodeText, 
+        'duration': (KalturaObjectFactory.create, 'KalturaDuration'), 
+        'paymentGatewayId': getXmlNodeInt, 
+    }
+
+    def fromXml(self, node):
+        KalturaObjectBase.fromXml(self, node)
+        self.fromXmlImpl(node, KalturaUnifiedBillingCycle.PROPERTY_LOADERS)
+
+    def toParams(self):
+        kparams = KalturaObjectBase.toParams(self)
+        kparams.put("objectType", "KalturaUnifiedBillingCycle")
+        kparams.addStringIfDefined("name", self.name)
+        kparams.addObjectIfDefined("duration", self.duration)
+        kparams.addIntIfDefined("paymentGatewayId", self.paymentGatewayId)
+        return kparams
+
+    def getName(self):
+        return self.name
+
+    def setName(self, newName):
+        self.name = newName
+
+    def getDuration(self):
+        return self.duration
+
+    def setDuration(self, newDuration):
+        self.duration = newDuration
+
+    def getPaymentGatewayId(self):
+        return self.paymentGatewayId
+
+    def setPaymentGatewayId(self, newPaymentGatewayId):
+        self.paymentGatewayId = newPaymentGatewayId
+
+
+# @package Kaltura
+# @subpackage Client
+class KalturaPaymentPartnerConfig(KalturaPartnerConfiguration):
+    """Partner billing configuration"""
+
+    def __init__(self,
+            unifiedBillingCycles=NotImplemented):
+        KalturaPartnerConfiguration.__init__(self)
+
+        # configuration for unified billing cycles.
+        # @var array of KalturaUnifiedBillingCycle
+        self.unifiedBillingCycles = unifiedBillingCycles
+
+
+    PROPERTY_LOADERS = {
+        'unifiedBillingCycles': (KalturaObjectFactory.createArray, 'KalturaUnifiedBillingCycle'), 
+    }
+
+    def fromXml(self, node):
+        KalturaPartnerConfiguration.fromXml(self, node)
+        self.fromXmlImpl(node, KalturaPaymentPartnerConfig.PROPERTY_LOADERS)
+
+    def toParams(self):
+        kparams = KalturaPartnerConfiguration.toParams(self)
+        kparams.put("objectType", "KalturaPaymentPartnerConfig")
+        kparams.addArrayIfDefined("unifiedBillingCycles", self.unifiedBillingCycles)
+        return kparams
+
+    def getUnifiedBillingCycles(self):
+        return self.unifiedBillingCycles
+
+    def setUnifiedBillingCycles(self, newUnifiedBillingCycles):
+        self.unifiedBillingCycles = newUnifiedBillingCycles
 
 
 # @package Kaltura
@@ -43038,6 +43196,7 @@ class KalturaCoreClient(KalturaClientPlugin):
             'KalturaDeviceStatus': KalturaDeviceStatus,
             'KalturaDowngradePolicy': KalturaDowngradePolicy,
             'KalturaDrmSchemeName': KalturaDrmSchemeName,
+            'KalturaDurationUnit': KalturaDurationUnit,
             'KalturaEngagementOrderBy': KalturaEngagementOrderBy,
             'KalturaEngagementType': KalturaEngagementType,
             'KalturaEntitlementOrderBy': KalturaEntitlementOrderBy,
@@ -43474,6 +43633,9 @@ class KalturaCoreClient(KalturaClientPlugin):
             'KalturaGeneralPartnerConfig': KalturaGeneralPartnerConfig,
             'KalturaObjectVirtualAssetInfo': KalturaObjectVirtualAssetInfo,
             'KalturaObjectVirtualAssetPartnerConfig': KalturaObjectVirtualAssetPartnerConfig,
+            'KalturaDuration': KalturaDuration,
+            'KalturaUnifiedBillingCycle': KalturaUnifiedBillingCycle,
+            'KalturaPaymentPartnerConfig': KalturaPaymentPartnerConfig,
             'KalturaDefaultPlaybackAdapters': KalturaDefaultPlaybackAdapters,
             'KalturaPlaybackPartnerConfig': KalturaPlaybackPartnerConfig,
             'KalturaPersonalList': KalturaPersonalList,
