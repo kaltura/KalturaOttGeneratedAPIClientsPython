@@ -42,7 +42,7 @@ from ..Base import (
     KalturaServiceBase,
 )
 
-API_VERSION = '5.3.5.27997'
+API_VERSION = '5.3.5.28047'
 
 ########## enums ##########
 # @package Kaltura
@@ -515,6 +515,8 @@ class KalturaCategoryItemOrderBy(object):
     CREATE_DATE_ASC = "CREATE_DATE_ASC"
     CREATE_DATE_DESC = "CREATE_DATE_DESC"
     NONE = "NONE"
+    UPDATE_DATE_ASC = "UPDATE_DATE_ASC"
+    UPDATE_DATE_DESC = "UPDATE_DATE_DESC"
 
     def __init__(self, value):
         self.value = value
@@ -916,6 +918,28 @@ class KalturaExportTaskOrderBy(object):
 class KalturaExportType(object):
     FULL = "full"
     INCREMENTAL = "incremental"
+
+    def __init__(self, value):
+        self.value = value
+
+    def getValue(self):
+        return self.value
+
+# @package Kaltura
+# @subpackage Client
+class KalturaExternalChannelProfileOrderBy(object):
+    NONE = "NONE"
+
+    def __init__(self, value):
+        self.value = value
+
+    def getValue(self):
+        return self.value
+
+# @package Kaltura
+# @subpackage Client
+class KalturaExternalRecordingResponseProfileOrderBy(object):
+    NONE = "NONE"
 
     def __init__(self, value):
         self.value = value
@@ -6769,6 +6793,30 @@ class KalturaEntitlementFilter(KalturaFilter):
 
 # @package Kaltura
 # @subpackage Client
+class KalturaExternalRecordingResponseProfileFilter(KalturaRelatedObjectFilter):
+    """Kaltura External Recording ResponseProfile Filter"""
+
+    def __init__(self,
+            orderBy=NotImplemented):
+        KalturaRelatedObjectFilter.__init__(self,
+            orderBy)
+
+
+    PROPERTY_LOADERS = {
+    }
+
+    def fromXml(self, node):
+        KalturaRelatedObjectFilter.fromXml(self, node)
+        self.fromXmlImpl(node, KalturaExternalRecordingResponseProfileFilter.PROPERTY_LOADERS)
+
+    def toParams(self):
+        kparams = KalturaRelatedObjectFilter.toParams(self)
+        kparams.put("objectType", "KalturaExternalRecordingResponseProfileFilter")
+        return kparams
+
+
+# @package Kaltura
+# @subpackage Client
 class KalturaProductPriceFilter(KalturaFilter):
     def __init__(self,
             orderBy=NotImplemented,
@@ -8023,7 +8071,8 @@ class KalturaChannelsFilter(KalturaFilter):
             idEqual=NotImplemented,
             mediaIdEqual=NotImplemented,
             nameEqual=NotImplemented,
-            nameStartsWith=NotImplemented):
+            nameStartsWith=NotImplemented,
+            idIn=NotImplemented):
         KalturaFilter.__init__(self,
             orderBy)
 
@@ -8043,12 +8092,17 @@ class KalturaChannelsFilter(KalturaFilter):
         # @var string
         self.nameStartsWith = nameStartsWith
 
+        # Comma separated channel ids
+        # @var string
+        self.idIn = idIn
+
 
     PROPERTY_LOADERS = {
         'idEqual': getXmlNodeInt, 
         'mediaIdEqual': getXmlNodeInt, 
         'nameEqual': getXmlNodeText, 
         'nameStartsWith': getXmlNodeText, 
+        'idIn': getXmlNodeText, 
     }
 
     def fromXml(self, node):
@@ -8062,6 +8116,7 @@ class KalturaChannelsFilter(KalturaFilter):
         kparams.addIntIfDefined("mediaIdEqual", self.mediaIdEqual)
         kparams.addStringIfDefined("nameEqual", self.nameEqual)
         kparams.addStringIfDefined("nameStartsWith", self.nameStartsWith)
+        kparams.addStringIfDefined("idIn", self.idIn)
         return kparams
 
     def getIdEqual(self):
@@ -8088,6 +8143,12 @@ class KalturaChannelsFilter(KalturaFilter):
     def setNameStartsWith(self, newNameStartsWith):
         self.nameStartsWith = newNameStartsWith
 
+    def getIdIn(self):
+        return self.idIn
+
+    def setIdIn(self, newIdIn):
+        self.idIn = newIdIn
+
 
 # @package Kaltura
 # @subpackage Client
@@ -8097,7 +8158,8 @@ class KalturaImageFilter(KalturaFilter):
             idIn=NotImplemented,
             imageObjectIdEqual=NotImplemented,
             imageObjectTypeEqual=NotImplemented,
-            isDefaultEqual=NotImplemented):
+            isDefaultEqual=NotImplemented,
+            imageObjectIdIn=NotImplemented):
         KalturaFilter.__init__(self,
             orderBy)
 
@@ -8117,12 +8179,17 @@ class KalturaImageFilter(KalturaFilter):
         # @var bool
         self.isDefaultEqual = isDefaultEqual
 
+        # Comma separated imageObject ids list
+        # @var string
+        self.imageObjectIdIn = imageObjectIdIn
+
 
     PROPERTY_LOADERS = {
         'idIn': getXmlNodeText, 
         'imageObjectIdEqual': getXmlNodeInt, 
         'imageObjectTypeEqual': (KalturaEnumsFactory.createString, "KalturaImageObjectType"), 
         'isDefaultEqual': getXmlNodeBool, 
+        'imageObjectIdIn': getXmlNodeText, 
     }
 
     def fromXml(self, node):
@@ -8136,6 +8203,7 @@ class KalturaImageFilter(KalturaFilter):
         kparams.addIntIfDefined("imageObjectIdEqual", self.imageObjectIdEqual)
         kparams.addStringEnumIfDefined("imageObjectTypeEqual", self.imageObjectTypeEqual)
         kparams.addBoolIfDefined("isDefaultEqual", self.isDefaultEqual)
+        kparams.addStringIfDefined("imageObjectIdIn", self.imageObjectIdIn)
         return kparams
 
     def getIdIn(self):
@@ -8161,6 +8229,12 @@ class KalturaImageFilter(KalturaFilter):
 
     def setIsDefaultEqual(self, newIsDefaultEqual):
         self.isDefaultEqual = newIsDefaultEqual
+
+    def getImageObjectIdIn(self):
+        return self.imageObjectIdIn
+
+    def setImageObjectIdIn(self, newImageObjectIdIn):
+        self.imageObjectIdIn = newImageObjectIdIn
 
 
 # @package Kaltura
@@ -8724,6 +8798,65 @@ class KalturaExportTaskFilter(KalturaFilter):
     def toParams(self):
         kparams = KalturaFilter.toParams(self)
         kparams.put("objectType", "KalturaExportTaskFilter")
+        kparams.addStringIfDefined("idIn", self.idIn)
+        return kparams
+
+    def getIdIn(self):
+        return self.idIn
+
+    def setIdIn(self, newIdIn):
+        self.idIn = newIdIn
+
+
+# @package Kaltura
+# @subpackage Client
+class KalturaExternalChannelProfileFilter(KalturaFilter):
+    """External channel profile filter"""
+
+    def __init__(self,
+            orderBy=NotImplemented):
+        KalturaFilter.__init__(self,
+            orderBy)
+
+
+    PROPERTY_LOADERS = {
+    }
+
+    def fromXml(self, node):
+        KalturaFilter.fromXml(self, node)
+        self.fromXmlImpl(node, KalturaExternalChannelProfileFilter.PROPERTY_LOADERS)
+
+    def toParams(self):
+        kparams = KalturaFilter.toParams(self)
+        kparams.put("objectType", "KalturaExternalChannelProfileFilter")
+        return kparams
+
+
+# @package Kaltura
+# @subpackage Client
+class KalturaExternalChannelProfileByIdInFilter(KalturaExternalChannelProfileFilter):
+    def __init__(self,
+            orderBy=NotImplemented,
+            idIn=NotImplemented):
+        KalturaExternalChannelProfileFilter.__init__(self,
+            orderBy)
+
+        # Comma separated external channel profile ids
+        # @var string
+        self.idIn = idIn
+
+
+    PROPERTY_LOADERS = {
+        'idIn': getXmlNodeText, 
+    }
+
+    def fromXml(self, node):
+        KalturaExternalChannelProfileFilter.fromXml(self, node)
+        self.fromXmlImpl(node, KalturaExternalChannelProfileByIdInFilter.PROPERTY_LOADERS)
+
+    def toParams(self):
+        kparams = KalturaExternalChannelProfileFilter.toParams(self)
+        kparams.put("objectType", "KalturaExternalChannelProfileByIdInFilter")
         kparams.addStringIfDefined("idIn", self.idIn)
         return kparams
 
@@ -31997,13 +32130,8 @@ class KalturaIotProfileAws(KalturaCrudObject):
 
     def __init__(self,
             iotEndPoint=NotImplemented,
-            pfxPath=NotImplemented,
-            pfxPassword=NotImplemented,
-            certificatePath=NotImplemented,
-            brokerPort=NotImplemented,
             accessKeyId=NotImplemented,
             secretAccessKey=NotImplemented,
-            iotPolicyName=NotImplemented,
             userPoolId=NotImplemented,
             clientId=NotImplemented,
             identityPoolId=NotImplemented,
@@ -32015,22 +32143,6 @@ class KalturaIotProfileAws(KalturaCrudObject):
         # @var string
         self.iotEndPoint = iotEndPoint
 
-        # pfxPath
-        # @var string
-        self.pfxPath = pfxPath
-
-        # pfxPassword
-        # @var string
-        self.pfxPassword = pfxPassword
-
-        # certificatePath
-        # @var string
-        self.certificatePath = certificatePath
-
-        # brokerPort
-        # @var int
-        self.brokerPort = brokerPort
-
         # accessKeyId
         # @var string
         self.accessKeyId = accessKeyId
@@ -32038,10 +32150,6 @@ class KalturaIotProfileAws(KalturaCrudObject):
         # secretAccessKey
         # @var string
         self.secretAccessKey = secretAccessKey
-
-        # iotPolicyName
-        # @var string
-        self.iotPolicyName = iotPolicyName
 
         # userPoolId
         # @var string
@@ -32066,13 +32174,8 @@ class KalturaIotProfileAws(KalturaCrudObject):
 
     PROPERTY_LOADERS = {
         'iotEndPoint': getXmlNodeText, 
-        'pfxPath': getXmlNodeText, 
-        'pfxPassword': getXmlNodeText, 
-        'certificatePath': getXmlNodeText, 
-        'brokerPort': getXmlNodeInt, 
         'accessKeyId': getXmlNodeText, 
         'secretAccessKey': getXmlNodeText, 
-        'iotPolicyName': getXmlNodeText, 
         'userPoolId': getXmlNodeText, 
         'clientId': getXmlNodeText, 
         'identityPoolId': getXmlNodeText, 
@@ -32088,13 +32191,8 @@ class KalturaIotProfileAws(KalturaCrudObject):
         kparams = KalturaCrudObject.toParams(self)
         kparams.put("objectType", "KalturaIotProfileAws")
         kparams.addStringIfDefined("iotEndPoint", self.iotEndPoint)
-        kparams.addStringIfDefined("pfxPath", self.pfxPath)
-        kparams.addStringIfDefined("pfxPassword", self.pfxPassword)
-        kparams.addStringIfDefined("certificatePath", self.certificatePath)
-        kparams.addIntIfDefined("brokerPort", self.brokerPort)
         kparams.addStringIfDefined("accessKeyId", self.accessKeyId)
         kparams.addStringIfDefined("secretAccessKey", self.secretAccessKey)
-        kparams.addStringIfDefined("iotPolicyName", self.iotPolicyName)
         kparams.addStringIfDefined("userPoolId", self.userPoolId)
         kparams.addStringIfDefined("clientId", self.clientId)
         kparams.addStringIfDefined("identityPoolId", self.identityPoolId)
@@ -32108,30 +32206,6 @@ class KalturaIotProfileAws(KalturaCrudObject):
     def setIotEndPoint(self, newIotEndPoint):
         self.iotEndPoint = newIotEndPoint
 
-    def getPfxPath(self):
-        return self.pfxPath
-
-    def setPfxPath(self, newPfxPath):
-        self.pfxPath = newPfxPath
-
-    def getPfxPassword(self):
-        return self.pfxPassword
-
-    def setPfxPassword(self, newPfxPassword):
-        self.pfxPassword = newPfxPassword
-
-    def getCertificatePath(self):
-        return self.certificatePath
-
-    def setCertificatePath(self, newCertificatePath):
-        self.certificatePath = newCertificatePath
-
-    def getBrokerPort(self):
-        return self.brokerPort
-
-    def setBrokerPort(self, newBrokerPort):
-        self.brokerPort = newBrokerPort
-
     def getAccessKeyId(self):
         return self.accessKeyId
 
@@ -32143,12 +32217,6 @@ class KalturaIotProfileAws(KalturaCrudObject):
 
     def setSecretAccessKey(self, newSecretAccessKey):
         self.secretAccessKey = newSecretAccessKey
-
-    def getIotPolicyName(self):
-        return self.iotPolicyName
-
-    def setIotPolicyName(self, newIotPolicyName):
-        self.iotPolicyName = newIotPolicyName
 
     def getUserPoolId(self):
         return self.userPoolId
@@ -38837,10 +38905,11 @@ class KalturaExternalChannelProfileService(KalturaServiceBase):
         resultNode = self.client.doQueue()
         return getXmlNodeBool(resultNode)
 
-    def list(self):
+    def list(self, filter = NotImplemented):
         """Returns all External channels for partner"""
 
         kparams = KalturaParams()
+        kparams.addObjectIfDefined("filter", filter)
         self.client.queueServiceActionCall("externalchannelprofile", "list", "KalturaExternalChannelProfileListResponse", kparams)
         if self.client.isMultiRequest():
             return self.client.getMultiRequestResult()
@@ -43048,6 +43117,8 @@ class KalturaCoreClient(KalturaClientPlugin):
             'KalturaExportDataType': KalturaExportDataType,
             'KalturaExportTaskOrderBy': KalturaExportTaskOrderBy,
             'KalturaExportType': KalturaExportType,
+            'KalturaExternalChannelProfileOrderBy': KalturaExternalChannelProfileOrderBy,
+            'KalturaExternalRecordingResponseProfileOrderBy': KalturaExternalRecordingResponseProfileOrderBy,
             'KalturaFavoriteOrderBy': KalturaFavoriteOrderBy,
             'KalturaFollowTvSeriesOrderBy': KalturaFollowTvSeriesOrderBy,
             'KalturaGroupByField': KalturaGroupByField,
@@ -43265,6 +43336,7 @@ class KalturaCoreClient(KalturaClientPlugin):
             'KalturaSeriesRecordingFilter': KalturaSeriesRecordingFilter,
             'KalturaCloudSeriesRecordingFilter': KalturaCloudSeriesRecordingFilter,
             'KalturaEntitlementFilter': KalturaEntitlementFilter,
+            'KalturaExternalRecordingResponseProfileFilter': KalturaExternalRecordingResponseProfileFilter,
             'KalturaProductPriceFilter': KalturaProductPriceFilter,
             'KalturaRecordingContextFilter': KalturaRecordingContextFilter,
             'KalturaTransactionHistoryFilter': KalturaTransactionHistoryFilter,
@@ -43293,6 +43365,8 @@ class KalturaCoreClient(KalturaClientPlugin):
             'KalturaCountryFilter': KalturaCountryFilter,
             'KalturaCurrencyFilter': KalturaCurrencyFilter,
             'KalturaExportTaskFilter': KalturaExportTaskFilter,
+            'KalturaExternalChannelProfileFilter': KalturaExternalChannelProfileFilter,
+            'KalturaExternalChannelProfileByIdInFilter': KalturaExternalChannelProfileByIdInFilter,
             'KalturaLanguageFilter': KalturaLanguageFilter,
             'KalturaMetaFilter': KalturaMetaFilter,
             'KalturaParentalRuleFilter': KalturaParentalRuleFilter,
