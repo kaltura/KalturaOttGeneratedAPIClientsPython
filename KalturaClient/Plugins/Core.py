@@ -42,7 +42,7 @@ from ..Base import (
     KalturaServiceBase,
 )
 
-API_VERSION = '5.3.5.28005'
+API_VERSION = '5.3.5.28021'
 
 ########## enums ##########
 # @package Kaltura
@@ -19284,7 +19284,7 @@ class KalturaUnifiedBillingCycle(KalturaObjectBase):
         # @var KalturaDuration
         self.duration = duration
 
-        # paymentGateway Id
+        # Payment Gateway Id
         # @var int
         self.paymentGatewayId = paymentGatewayId
 
@@ -26385,6 +26385,170 @@ class KalturaAssetHistoryListResponse(KalturaListResponse):
 
 # @package Kaltura
 # @subpackage Client
+class KalturaSuspendSettings(KalturaObjectBase):
+    """Suspend Settings"""
+
+    def __init__(self,
+            revokeEntitlements=NotImplemented,
+            stopRenew=NotImplemented):
+        KalturaObjectBase.__init__(self)
+
+        # revoke entitlements
+        # @var bool
+        self.revokeEntitlements = revokeEntitlements
+
+        # stop renew
+        # @var bool
+        self.stopRenew = stopRenew
+
+
+    PROPERTY_LOADERS = {
+        'revokeEntitlements': getXmlNodeBool, 
+        'stopRenew': getXmlNodeBool, 
+    }
+
+    def fromXml(self, node):
+        KalturaObjectBase.fromXml(self, node)
+        self.fromXmlImpl(node, KalturaSuspendSettings.PROPERTY_LOADERS)
+
+    def toParams(self):
+        kparams = KalturaObjectBase.toParams(self)
+        kparams.put("objectType", "KalturaSuspendSettings")
+        kparams.addBoolIfDefined("revokeEntitlements", self.revokeEntitlements)
+        kparams.addBoolIfDefined("stopRenew", self.stopRenew)
+        return kparams
+
+    def getRevokeEntitlements(self):
+        return self.revokeEntitlements
+
+    def setRevokeEntitlements(self, newRevokeEntitlements):
+        self.revokeEntitlements = newRevokeEntitlements
+
+    def getStopRenew(self):
+        return self.stopRenew
+
+    def setStopRenew(self, newStopRenew):
+        self.stopRenew = newStopRenew
+
+
+# @package Kaltura
+# @subpackage Client
+class KalturaHouseholdPaymentGateway(KalturaObjectBase):
+    def __init__(self,
+            id=NotImplemented,
+            name=NotImplemented,
+            isDefault=NotImplemented,
+            selectedBy=NotImplemented,
+            suspendSettings=NotImplemented):
+        KalturaObjectBase.__init__(self)
+
+        # payment gateway id
+        # @var int
+        # @readonly
+        self.id = id
+
+        # payment gateway name
+        # @var string
+        self.name = name
+
+        # Payment gateway default (true/false)
+        # @var bool
+        self.isDefault = isDefault
+
+        # distinction payment gateway selected by account or household
+        # @var KalturaHouseholdPaymentGatewaySelectedBy
+        self.selectedBy = selectedBy
+
+        # suspend settings
+        # @var KalturaSuspendSettings
+        # @readonly
+        self.suspendSettings = suspendSettings
+
+
+    PROPERTY_LOADERS = {
+        'id': getXmlNodeInt, 
+        'name': getXmlNodeText, 
+        'isDefault': getXmlNodeBool, 
+        'selectedBy': (KalturaEnumsFactory.createString, "KalturaHouseholdPaymentGatewaySelectedBy"), 
+        'suspendSettings': (KalturaObjectFactory.create, 'KalturaSuspendSettings'), 
+    }
+
+    def fromXml(self, node):
+        KalturaObjectBase.fromXml(self, node)
+        self.fromXmlImpl(node, KalturaHouseholdPaymentGateway.PROPERTY_LOADERS)
+
+    def toParams(self):
+        kparams = KalturaObjectBase.toParams(self)
+        kparams.put("objectType", "KalturaHouseholdPaymentGateway")
+        kparams.addStringIfDefined("name", self.name)
+        kparams.addBoolIfDefined("isDefault", self.isDefault)
+        kparams.addStringEnumIfDefined("selectedBy", self.selectedBy)
+        return kparams
+
+    def getId(self):
+        return self.id
+
+    def getName(self):
+        return self.name
+
+    def setName(self, newName):
+        self.name = newName
+
+    def getIsDefault(self):
+        return self.isDefault
+
+    def setIsDefault(self, newIsDefault):
+        self.isDefault = newIsDefault
+
+    def getSelectedBy(self):
+        return self.selectedBy
+
+    def setSelectedBy(self, newSelectedBy):
+        self.selectedBy = newSelectedBy
+
+    def getSuspendSettings(self):
+        return self.suspendSettings
+
+
+# @package Kaltura
+# @subpackage Client
+class KalturaHouseholdPaymentGatewayListResponse(KalturaListResponse):
+    """List of household payment gateways."""
+
+    def __init__(self,
+            totalCount=NotImplemented,
+            objects=NotImplemented):
+        KalturaListResponse.__init__(self,
+            totalCount)
+
+        # Follow data list
+        # @var array of KalturaHouseholdPaymentGateway
+        self.objects = objects
+
+
+    PROPERTY_LOADERS = {
+        'objects': (KalturaObjectFactory.createArray, 'KalturaHouseholdPaymentGateway'), 
+    }
+
+    def fromXml(self, node):
+        KalturaListResponse.fromXml(self, node)
+        self.fromXmlImpl(node, KalturaHouseholdPaymentGatewayListResponse.PROPERTY_LOADERS)
+
+    def toParams(self):
+        kparams = KalturaListResponse.toParams(self)
+        kparams.put("objectType", "KalturaHouseholdPaymentGatewayListResponse")
+        kparams.addArrayIfDefined("objects", self.objects)
+        return kparams
+
+    def getObjects(self):
+        return self.objects
+
+    def setObjects(self, newObjects):
+        self.objects = newObjects
+
+
+# @package Kaltura
+# @subpackage Client
 class KalturaHouseholdPaymentMethod(KalturaObjectBase):
     def __init__(self,
             id=NotImplemented,
@@ -26503,112 +26667,6 @@ class KalturaHouseholdPaymentMethodListResponse(KalturaListResponse):
     def toParams(self):
         kparams = KalturaListResponse.toParams(self)
         kparams.put("objectType", "KalturaHouseholdPaymentMethodListResponse")
-        kparams.addArrayIfDefined("objects", self.objects)
-        return kparams
-
-    def getObjects(self):
-        return self.objects
-
-    def setObjects(self, newObjects):
-        self.objects = newObjects
-
-
-# @package Kaltura
-# @subpackage Client
-class KalturaHouseholdPaymentGateway(KalturaObjectBase):
-    def __init__(self,
-            id=NotImplemented,
-            name=NotImplemented,
-            isDefault=NotImplemented,
-            selectedBy=NotImplemented):
-        KalturaObjectBase.__init__(self)
-
-        # payment gateway id
-        # @var int
-        # @readonly
-        self.id = id
-
-        # payment gateway name
-        # @var string
-        self.name = name
-
-        # Payment gateway default (true/false)
-        # @var bool
-        self.isDefault = isDefault
-
-        # distinction payment gateway selected by account or household
-        # @var KalturaHouseholdPaymentGatewaySelectedBy
-        self.selectedBy = selectedBy
-
-
-    PROPERTY_LOADERS = {
-        'id': getXmlNodeInt, 
-        'name': getXmlNodeText, 
-        'isDefault': getXmlNodeBool, 
-        'selectedBy': (KalturaEnumsFactory.createString, "KalturaHouseholdPaymentGatewaySelectedBy"), 
-    }
-
-    def fromXml(self, node):
-        KalturaObjectBase.fromXml(self, node)
-        self.fromXmlImpl(node, KalturaHouseholdPaymentGateway.PROPERTY_LOADERS)
-
-    def toParams(self):
-        kparams = KalturaObjectBase.toParams(self)
-        kparams.put("objectType", "KalturaHouseholdPaymentGateway")
-        kparams.addStringIfDefined("name", self.name)
-        kparams.addBoolIfDefined("isDefault", self.isDefault)
-        kparams.addStringEnumIfDefined("selectedBy", self.selectedBy)
-        return kparams
-
-    def getId(self):
-        return self.id
-
-    def getName(self):
-        return self.name
-
-    def setName(self, newName):
-        self.name = newName
-
-    def getIsDefault(self):
-        return self.isDefault
-
-    def setIsDefault(self, newIsDefault):
-        self.isDefault = newIsDefault
-
-    def getSelectedBy(self):
-        return self.selectedBy
-
-    def setSelectedBy(self, newSelectedBy):
-        self.selectedBy = newSelectedBy
-
-
-# @package Kaltura
-# @subpackage Client
-class KalturaHouseholdPaymentGatewayListResponse(KalturaListResponse):
-    """List of household payment gateways."""
-
-    def __init__(self,
-            totalCount=NotImplemented,
-            objects=NotImplemented):
-        KalturaListResponse.__init__(self,
-            totalCount)
-
-        # Follow data list
-        # @var array of KalturaHouseholdPaymentGateway
-        self.objects = objects
-
-
-    PROPERTY_LOADERS = {
-        'objects': (KalturaObjectFactory.createArray, 'KalturaHouseholdPaymentGateway'), 
-    }
-
-    def fromXml(self, node):
-        KalturaListResponse.fromXml(self, node)
-        self.fromXmlImpl(node, KalturaHouseholdPaymentGatewayListResponse.PROPERTY_LOADERS)
-
-    def toParams(self):
-        kparams = KalturaListResponse.toParams(self)
-        kparams.put("objectType", "KalturaHouseholdPaymentGatewayListResponse")
         kparams.addArrayIfDefined("objects", self.objects)
         return kparams
 
@@ -39500,11 +39558,12 @@ class KalturaHouseholdPaymentGatewayService(KalturaServiceBase):
         resultNode = self.client.doQueue()
         return KalturaObjectFactory.create(resultNode, 'KalturaHouseholdPaymentGatewayListResponse')
 
-    def resume(self, paymentGatewayId):
+    def resume(self, paymentGatewayId, adapterData = NotImplemented):
         """Resumes all the entitlements of the given payment gateway"""
 
         kparams = KalturaParams()
         kparams.addIntIfDefined("paymentGatewayId", paymentGatewayId);
+        kparams.addArrayIfDefined("adapterData", adapterData)
         self.client.queueServiceActionCall("householdpaymentgateway", "resume", "None", kparams)
         if self.client.isMultiRequest():
             return self.client.getMultiRequestResult()
@@ -39522,11 +39581,12 @@ class KalturaHouseholdPaymentGatewayService(KalturaServiceBase):
         resultNode = self.client.doQueue()
         return getXmlNodeBool(resultNode)
 
-    def suspend(self, paymentGatewayId):
+    def suspend(self, paymentGatewayId, suspendSettings = NotImplemented):
         """Suspends all the entitlements of the given payment gateway"""
 
         kparams = KalturaParams()
         kparams.addIntIfDefined("paymentGatewayId", paymentGatewayId);
+        kparams.addObjectIfDefined("suspendSettings", suspendSettings)
         self.client.queueServiceActionCall("householdpaymentgateway", "suspend", "None", kparams)
         if self.client.isMultiRequest():
             return self.client.getMultiRequestResult()
@@ -43743,10 +43803,11 @@ class KalturaCoreClient(KalturaClientPlugin):
             'KalturaTagListResponse': KalturaTagListResponse,
             'KalturaAssetHistory': KalturaAssetHistory,
             'KalturaAssetHistoryListResponse': KalturaAssetHistoryListResponse,
-            'KalturaHouseholdPaymentMethod': KalturaHouseholdPaymentMethod,
-            'KalturaHouseholdPaymentMethodListResponse': KalturaHouseholdPaymentMethodListResponse,
+            'KalturaSuspendSettings': KalturaSuspendSettings,
             'KalturaHouseholdPaymentGateway': KalturaHouseholdPaymentGateway,
             'KalturaHouseholdPaymentGatewayListResponse': KalturaHouseholdPaymentGatewayListResponse,
+            'KalturaHouseholdPaymentMethod': KalturaHouseholdPaymentMethod,
+            'KalturaHouseholdPaymentMethodListResponse': KalturaHouseholdPaymentMethodListResponse,
             'KalturaPaymentGatewayBaseProfile': KalturaPaymentGatewayBaseProfile,
             'KalturaPaymentGatewayProfile': KalturaPaymentGatewayProfile,
             'KalturaPaymentGatewayProfileListResponse': KalturaPaymentGatewayProfileListResponse,
