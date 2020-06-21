@@ -42,7 +42,7 @@ from ..Base import (
     KalturaServiceBase,
 )
 
-API_VERSION = '5.3.6.28126'
+API_VERSION = '5.3.6.28134'
 
 ########## enums ##########
 # @package Kaltura
@@ -20079,7 +20079,8 @@ class KalturaGeneralPartnerConfig(KalturaPartnerConfiguration):
             householdLimitationModule=NotImplemented,
             enableRegionFiltering=NotImplemented,
             defaultRegion=NotImplemented,
-            rollingDeviceData=NotImplemented):
+            rollingDeviceData=NotImplemented,
+            finishedPercentThreshold=NotImplemented):
         KalturaPartnerConfiguration.__init__(self)
 
         # Partner name
@@ -20134,6 +20135,10 @@ class KalturaGeneralPartnerConfig(KalturaPartnerConfiguration):
         # @var KalturaRollingDeviceRemovalData
         self.rollingDeviceData = rollingDeviceData
 
+        # Finished PercentThreshold
+        # @var int
+        self.finishedPercentThreshold = finishedPercentThreshold
+
 
     PROPERTY_LOADERS = {
         'partnerName': getXmlNodeText, 
@@ -20149,6 +20154,7 @@ class KalturaGeneralPartnerConfig(KalturaPartnerConfiguration):
         'enableRegionFiltering': getXmlNodeBool, 
         'defaultRegion': getXmlNodeInt, 
         'rollingDeviceData': (KalturaObjectFactory.create, 'KalturaRollingDeviceRemovalData'), 
+        'finishedPercentThreshold': getXmlNodeInt, 
     }
 
     def fromXml(self, node):
@@ -20171,6 +20177,7 @@ class KalturaGeneralPartnerConfig(KalturaPartnerConfiguration):
         kparams.addBoolIfDefined("enableRegionFiltering", self.enableRegionFiltering)
         kparams.addIntIfDefined("defaultRegion", self.defaultRegion)
         kparams.addObjectIfDefined("rollingDeviceData", self.rollingDeviceData)
+        kparams.addIntIfDefined("finishedPercentThreshold", self.finishedPercentThreshold)
         return kparams
 
     def getPartnerName(self):
@@ -20250,6 +20257,12 @@ class KalturaGeneralPartnerConfig(KalturaPartnerConfiguration):
 
     def setRollingDeviceData(self, newRollingDeviceData):
         self.rollingDeviceData = newRollingDeviceData
+
+    def getFinishedPercentThreshold(self):
+        return self.finishedPercentThreshold
+
+    def setFinishedPercentThreshold(self, newFinishedPercentThreshold):
+        self.finishedPercentThreshold = newFinishedPercentThreshold
 
 
 # @package Kaltura
@@ -26283,7 +26296,8 @@ class KalturaAssetStructMeta(KalturaObjectBase):
             defaultIngestValue=NotImplemented,
             createDate=NotImplemented,
             updateDate=NotImplemented,
-            isInherited=NotImplemented):
+            isInherited=NotImplemented,
+            isLocationTag=NotImplemented):
         KalturaObjectBase.__init__(self)
 
         # Asset Struct id (template_id)
@@ -26322,6 +26336,10 @@ class KalturaAssetStructMeta(KalturaObjectBase):
         # @var bool
         self.isInherited = isInherited
 
+        # Is Location Tag
+        # @var bool
+        self.isLocationTag = isLocationTag
+
 
     PROPERTY_LOADERS = {
         'assetStructId': getXmlNodeInt, 
@@ -26332,6 +26350,7 @@ class KalturaAssetStructMeta(KalturaObjectBase):
         'createDate': getXmlNodeInt, 
         'updateDate': getXmlNodeInt, 
         'isInherited': getXmlNodeBool, 
+        'isLocationTag': getXmlNodeBool, 
     }
 
     def fromXml(self, node):
@@ -26345,6 +26364,7 @@ class KalturaAssetStructMeta(KalturaObjectBase):
         kparams.addBoolIfDefined("protectFromIngest", self.protectFromIngest)
         kparams.addStringIfDefined("defaultIngestValue", self.defaultIngestValue)
         kparams.addBoolIfDefined("isInherited", self.isInherited)
+        kparams.addBoolIfDefined("isLocationTag", self.isLocationTag)
         return kparams
 
     def getAssetStructId(self):
@@ -26382,6 +26402,12 @@ class KalturaAssetStructMeta(KalturaObjectBase):
 
     def setIsInherited(self, newIsInherited):
         self.isInherited = newIsInherited
+
+    def getIsLocationTag(self):
+        return self.isLocationTag
+
+    def setIsLocationTag(self, newIsLocationTag):
+        self.isLocationTag = newIsLocationTag
 
 
 # @package Kaltura
