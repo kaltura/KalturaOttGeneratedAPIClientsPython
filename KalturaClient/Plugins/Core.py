@@ -42,7 +42,7 @@ from ..Base import (
     KalturaServiceBase,
 )
 
-API_VERSION = '5.3.7.28130'
+API_VERSION = '5.3.7.28132'
 
 ########## enums ##########
 # @package Kaltura
@@ -37858,7 +37858,7 @@ class KalturaCategoryTreeService(KalturaServiceBase):
         resultNode = self.client.doQueue()
         return KalturaObjectFactory.create(resultNode, 'KalturaCategoryTree')
 
-    def get(self, categoryItemId, filter):
+    def get(self, categoryItemId, filter = False):
         """Retrive category tree."""
 
         kparams = KalturaParams()
