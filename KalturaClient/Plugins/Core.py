@@ -42,7 +42,7 @@ from ..Base import (
     KalturaServiceBase,
 )
 
-API_VERSION = '5.3.6.28134'
+API_VERSION = '5.3.7.28139'
 
 ########## enums ##########
 # @package Kaltura
@@ -7126,6 +7126,30 @@ class KalturaAssetHistoryFilter(KalturaFilter):
 
     def setDaysLessThanOrEqual(self, newDaysLessThanOrEqual):
         self.daysLessThanOrEqual = newDaysLessThanOrEqual
+
+
+# @package Kaltura
+# @subpackage Client
+class KalturaAssetHistorySuppressFilter(KalturaRelatedObjectFilter):
+    """Kaltura asset image per ratio filter"""
+
+    def __init__(self,
+            orderBy=NotImplemented):
+        KalturaRelatedObjectFilter.__init__(self,
+            orderBy)
+
+
+    PROPERTY_LOADERS = {
+    }
+
+    def fromXml(self, node):
+        KalturaRelatedObjectFilter.fromXml(self, node)
+        self.fromXmlImpl(node, KalturaAssetHistorySuppressFilter.PROPERTY_LOADERS)
+
+    def toParams(self):
+        kparams = KalturaRelatedObjectFilter.toParams(self)
+        kparams.put("objectType", "KalturaAssetHistorySuppressFilter")
+        return kparams
 
 
 # @package Kaltura
@@ -37443,6 +37467,17 @@ class KalturaAssetHistoryService(KalturaServiceBase):
             return self.client.getMultiRequestResult()
         resultNode = self.client.doQueue()
 
+    def getNextEpisode(self, seriesId):
+        """Get next episode by last watch asset in given seriesId"""
+
+        kparams = KalturaParams()
+        kparams.addStringIfDefined("seriesId", seriesId)
+        self.client.queueServiceActionCall("assethistory", "getNextEpisode", "KalturaAssetHistory", kparams)
+        if self.client.isMultiRequest():
+            return self.client.getMultiRequestResult()
+        resultNode = self.client.doQueue()
+        return KalturaObjectFactory.create(resultNode, 'KalturaAssetHistory')
+
     def list(self, filter = NotImplemented, pager = NotImplemented):
         """Get recently watched media for user, ordered by recently watched first."""
 
@@ -43473,6 +43508,7 @@ class KalturaCoreClient(KalturaClientPlugin):
             'KalturaTransactionHistoryFilter': KalturaTransactionHistoryFilter,
             'KalturaAssetCommentFilter': KalturaAssetCommentFilter,
             'KalturaAssetHistoryFilter': KalturaAssetHistoryFilter,
+            'KalturaAssetHistorySuppressFilter': KalturaAssetHistorySuppressFilter,
             'KalturaAssetImagePerRatioFilter': KalturaAssetImagePerRatioFilter,
             'KalturaAssetStructFilter': KalturaAssetStructFilter,
             'KalturaAssetStructMetaFilter': KalturaAssetStructMetaFilter,
