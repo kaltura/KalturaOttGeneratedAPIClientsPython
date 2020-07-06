@@ -42,7 +42,7 @@ from ..Base import (
     KalturaServiceBase,
 )
 
-API_VERSION = '5.3.7.28139'
+API_VERSION = '5.3.7.28145'
 
 ########## enums ##########
 # @package Kaltura
@@ -37467,11 +37467,11 @@ class KalturaAssetHistoryService(KalturaServiceBase):
             return self.client.getMultiRequestResult()
         resultNode = self.client.doQueue()
 
-    def getNextEpisode(self, seriesId):
-        """Get next episode by last watch asset in given seriesId"""
+    def getNextEpisode(self, assetId):
+        """Get next episode by last watch asset in given assetId"""
 
         kparams = KalturaParams()
-        kparams.addStringIfDefined("seriesId", seriesId)
+        kparams.addIntIfDefined("assetId", assetId);
         self.client.queueServiceActionCall("assethistory", "getNextEpisode", "KalturaAssetHistory", kparams)
         if self.client.isMultiRequest():
             return self.client.getMultiRequestResult()
