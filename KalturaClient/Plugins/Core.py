@@ -42,7 +42,7 @@ from ..Base import (
     KalturaServiceBase,
 )
 
-API_VERSION = '5.3.7.28150'
+API_VERSION = '5.3.7.28160'
 
 ########## enums ##########
 # @package Kaltura
@@ -5505,6 +5505,64 @@ class KalturaBaseSearchAssetFilter(KalturaAssetFilter):
 
 # @package Kaltura
 # @subpackage Client
+class KalturaChannelFilter(KalturaBaseSearchAssetFilter):
+    def __init__(self,
+            orderBy=NotImplemented,
+            name=NotImplemented,
+            dynamicOrderBy=NotImplemented,
+            kSql=NotImplemented,
+            groupBy=NotImplemented,
+            groupOrderBy=NotImplemented,
+            idEqual=NotImplemented,
+            excludeWatched=NotImplemented):
+        KalturaBaseSearchAssetFilter.__init__(self,
+            orderBy,
+            name,
+            dynamicOrderBy,
+            kSql,
+            groupBy,
+            groupOrderBy)
+
+        # Channel Id
+        # @var int
+        self.idEqual = idEqual
+
+        # Exclude watched asset.
+        # @var bool
+        self.excludeWatched = excludeWatched
+
+
+    PROPERTY_LOADERS = {
+        'idEqual': getXmlNodeInt, 
+        'excludeWatched': getXmlNodeBool, 
+    }
+
+    def fromXml(self, node):
+        KalturaBaseSearchAssetFilter.fromXml(self, node)
+        self.fromXmlImpl(node, KalturaChannelFilter.PROPERTY_LOADERS)
+
+    def toParams(self):
+        kparams = KalturaBaseSearchAssetFilter.toParams(self)
+        kparams.put("objectType", "KalturaChannelFilter")
+        kparams.addIntIfDefined("idEqual", self.idEqual)
+        kparams.addBoolIfDefined("excludeWatched", self.excludeWatched)
+        return kparams
+
+    def getIdEqual(self):
+        return self.idEqual
+
+    def setIdEqual(self, newIdEqual):
+        self.idEqual = newIdEqual
+
+    def getExcludeWatched(self):
+        return self.excludeWatched
+
+    def setExcludeWatched(self, newExcludeWatched):
+        self.excludeWatched = newExcludeWatched
+
+
+# @package Kaltura
+# @subpackage Client
 class KalturaPersonalListSearchFilter(KalturaBaseSearchAssetFilter):
     def __init__(self,
             orderBy=NotImplemented,
@@ -5921,63 +5979,57 @@ class KalturaChannelExternalFilter(KalturaAssetFilter):
 
 # @package Kaltura
 # @subpackage Client
-class KalturaChannelFilter(KalturaAssetFilter):
+class KalturaRelatedExternalFilter(KalturaAssetFilter):
     def __init__(self,
             orderBy=NotImplemented,
             name=NotImplemented,
             dynamicOrderBy=NotImplemented,
             idEqual=NotImplemented,
-            kSql=NotImplemented,
-            excludeWatched=NotImplemented):
+            typeIn=NotImplemented,
+            utcOffsetEqual=NotImplemented,
+            freeText=NotImplemented):
         KalturaAssetFilter.__init__(self,
             orderBy,
             name,
             dynamicOrderBy)
 
-        # Channel Id
+        # the External ID of the asset for which to return related assets
         # @var int
         self.idEqual = idEqual
 
-        # /// 
-        #             Search assets using dynamic criteria. Provided collection of nested expressions with key, comparison operators, value, and logical conjunction.
-        #             Possible keys: any Tag or Meta defined in the system and the following reserved keys: start_date, end_date. 
-        #             epg_id, media_id - for specific asset IDs.
-        #             geo_block - only valid value is &quot;true&quot;: When enabled, only assets that are not restricted to the user by geo-block rules will return.
-        #             parental_rules - only valid value is &quot;true&quot;: When enabled, only assets that the user doesn&#39;t need to provide PIN code will return.
-        #             user_interests - only valid value is &quot;true&quot;. When enabled, only assets that the user defined as his interests (by tags and metas) will return.
-        #             epg_channel_id - the channel identifier of the EPG program. *****Deprecated, please use linear_media_id instead*****
-        #             linear_media_id - the linear media identifier of the EPG program.
-        #             entitled_assets - valid values: &quot;free&quot;, &quot;entitled&quot;, &quot;not_entitled&quot;, &quot;both&quot;. free - gets only free to watch assets. entitled - only those that the user is implicitly entitled to watch.
-        #             asset_type - valid values: &quot;media&quot;, &quot;epg&quot;, &quot;recording&quot; or any number that represents media type in group.
-        #             Comparison operators: for numerical fields =, &gt;, &gt;=, &lt;, &lt;=, : (in). 
-        #             For alpha-numerical fields =, != (not), ~ (like), !~, ^ (any word starts with), ^= (phrase starts with), + (exists), !+ (not exists).
-        #             Logical conjunction: and, or. 
-        #             Search values are limited to 20 characters each for the next operators: ~, !~, ^, ^=
-        #             (maximum length of entire filter is 4096 characters)
+        # Comma separated list of asset types to search within. 
+        #             Possible values: 0 - EPG linear programs entries, any media type ID (according to media type IDs defined dynamically in the system).
+        #             If omitted - all types should be included.
         # @var string
-        self.kSql = kSql
+        self.typeIn = typeIn
 
-        # Exclude watched asset.
-        # @var bool
-        self.excludeWatched = excludeWatched
+        # UtcOffsetEqual
+        # @var int
+        self.utcOffsetEqual = utcOffsetEqual
+
+        # FreeText
+        # @var string
+        self.freeText = freeText
 
 
     PROPERTY_LOADERS = {
         'idEqual': getXmlNodeInt, 
-        'kSql': getXmlNodeText, 
-        'excludeWatched': getXmlNodeBool, 
+        'typeIn': getXmlNodeText, 
+        'utcOffsetEqual': getXmlNodeInt, 
+        'freeText': getXmlNodeText, 
     }
 
     def fromXml(self, node):
         KalturaAssetFilter.fromXml(self, node)
-        self.fromXmlImpl(node, KalturaChannelFilter.PROPERTY_LOADERS)
+        self.fromXmlImpl(node, KalturaRelatedExternalFilter.PROPERTY_LOADERS)
 
     def toParams(self):
         kparams = KalturaAssetFilter.toParams(self)
-        kparams.put("objectType", "KalturaChannelFilter")
+        kparams.put("objectType", "KalturaRelatedExternalFilter")
         kparams.addIntIfDefined("idEqual", self.idEqual)
-        kparams.addStringIfDefined("kSql", self.kSql)
-        kparams.addBoolIfDefined("excludeWatched", self.excludeWatched)
+        kparams.addStringIfDefined("typeIn", self.typeIn)
+        kparams.addIntIfDefined("utcOffsetEqual", self.utcOffsetEqual)
+        kparams.addStringIfDefined("freeText", self.freeText)
         return kparams
 
     def getIdEqual(self):
@@ -5986,17 +6038,23 @@ class KalturaChannelFilter(KalturaAssetFilter):
     def setIdEqual(self, newIdEqual):
         self.idEqual = newIdEqual
 
-    def getKSql(self):
-        return self.kSql
+    def getTypeIn(self):
+        return self.typeIn
 
-    def setKSql(self, newKSql):
-        self.kSql = newKSql
+    def setTypeIn(self, newTypeIn):
+        self.typeIn = newTypeIn
 
-    def getExcludeWatched(self):
-        return self.excludeWatched
+    def getUtcOffsetEqual(self):
+        return self.utcOffsetEqual
 
-    def setExcludeWatched(self, newExcludeWatched):
-        self.excludeWatched = newExcludeWatched
+    def setUtcOffsetEqual(self, newUtcOffsetEqual):
+        self.utcOffsetEqual = newUtcOffsetEqual
+
+    def getFreeText(self):
+        return self.freeText
+
+    def setFreeText(self, newFreeText):
+        self.freeText = newFreeText
 
 
 # @package Kaltura
@@ -6075,86 +6133,6 @@ class KalturaScheduledRecordingProgramFilter(KalturaAssetFilter):
 
     def setEndDateLessThanOrNull(self, newEndDateLessThanOrNull):
         self.endDateLessThanOrNull = newEndDateLessThanOrNull
-
-
-# @package Kaltura
-# @subpackage Client
-class KalturaRelatedExternalFilter(KalturaAssetFilter):
-    def __init__(self,
-            orderBy=NotImplemented,
-            name=NotImplemented,
-            dynamicOrderBy=NotImplemented,
-            idEqual=NotImplemented,
-            typeIn=NotImplemented,
-            utcOffsetEqual=NotImplemented,
-            freeText=NotImplemented):
-        KalturaAssetFilter.__init__(self,
-            orderBy,
-            name,
-            dynamicOrderBy)
-
-        # the External ID of the asset for which to return related assets
-        # @var int
-        self.idEqual = idEqual
-
-        # Comma separated list of asset types to search within. 
-        #             Possible values: 0 - EPG linear programs entries, any media type ID (according to media type IDs defined dynamically in the system).
-        #             If omitted - all types should be included.
-        # @var string
-        self.typeIn = typeIn
-
-        # UtcOffsetEqual
-        # @var int
-        self.utcOffsetEqual = utcOffsetEqual
-
-        # FreeText
-        # @var string
-        self.freeText = freeText
-
-
-    PROPERTY_LOADERS = {
-        'idEqual': getXmlNodeInt, 
-        'typeIn': getXmlNodeText, 
-        'utcOffsetEqual': getXmlNodeInt, 
-        'freeText': getXmlNodeText, 
-    }
-
-    def fromXml(self, node):
-        KalturaAssetFilter.fromXml(self, node)
-        self.fromXmlImpl(node, KalturaRelatedExternalFilter.PROPERTY_LOADERS)
-
-    def toParams(self):
-        kparams = KalturaAssetFilter.toParams(self)
-        kparams.put("objectType", "KalturaRelatedExternalFilter")
-        kparams.addIntIfDefined("idEqual", self.idEqual)
-        kparams.addStringIfDefined("typeIn", self.typeIn)
-        kparams.addIntIfDefined("utcOffsetEqual", self.utcOffsetEqual)
-        kparams.addStringIfDefined("freeText", self.freeText)
-        return kparams
-
-    def getIdEqual(self):
-        return self.idEqual
-
-    def setIdEqual(self, newIdEqual):
-        self.idEqual = newIdEqual
-
-    def getTypeIn(self):
-        return self.typeIn
-
-    def setTypeIn(self, newTypeIn):
-        self.typeIn = newTypeIn
-
-    def getUtcOffsetEqual(self):
-        return self.utcOffsetEqual
-
-    def setUtcOffsetEqual(self, newUtcOffsetEqual):
-        self.utcOffsetEqual = newUtcOffsetEqual
-
-    def getFreeText(self):
-        return self.freeText
-
-    def setFreeText(self, newFreeText):
-        self.freeText = newFreeText
 
 
 # @package Kaltura
@@ -43415,6 +43393,7 @@ class KalturaCoreClient(KalturaClientPlugin):
             'KalturaAssetFilter': KalturaAssetFilter,
             'KalturaAssetGroupBy': KalturaAssetGroupBy,
             'KalturaBaseSearchAssetFilter': KalturaBaseSearchAssetFilter,
+            'KalturaChannelFilter': KalturaChannelFilter,
             'KalturaPersonalListSearchFilter': KalturaPersonalListSearchFilter,
             'KalturaRelatedFilter': KalturaRelatedFilter,
             'KalturaSearchAssetFilter': KalturaSearchAssetFilter,
@@ -43423,9 +43402,8 @@ class KalturaCoreClient(KalturaClientPlugin):
             'KalturaAssetFieldGroupBy': KalturaAssetFieldGroupBy,
             'KalturaBundleFilter': KalturaBundleFilter,
             'KalturaChannelExternalFilter': KalturaChannelExternalFilter,
-            'KalturaChannelFilter': KalturaChannelFilter,
-            'KalturaScheduledRecordingProgramFilter': KalturaScheduledRecordingProgramFilter,
             'KalturaRelatedExternalFilter': KalturaRelatedExternalFilter,
+            'KalturaScheduledRecordingProgramFilter': KalturaScheduledRecordingProgramFilter,
             'KalturaSearchExternalFilter': KalturaSearchExternalFilter,
             'KalturaReportFilter': KalturaReportFilter,
             'KalturaDeviceReportFilter': KalturaDeviceReportFilter,
