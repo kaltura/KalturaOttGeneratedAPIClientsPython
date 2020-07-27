@@ -42,7 +42,7 @@ from ..Base import (
     KalturaServiceBase,
 )
 
-API_VERSION = '5.3.7.28193'
+API_VERSION = '5.4.0.28204'
 
 ########## enums ##########
 # @package Kaltura
@@ -2896,6 +2896,47 @@ class KalturaDetachedResponseProfile(KalturaBaseResponseProfile):
 
     def setRelatedProfiles(self, newRelatedProfiles):
         self.relatedProfiles = newRelatedProfiles
+
+
+# @package Kaltura
+# @subpackage Client
+class KalturaOnDemandResponseProfile(KalturaDetachedResponseProfile):
+    """Define on demand response"""
+
+    def __init__(self,
+            name=NotImplemented,
+            filter=NotImplemented,
+            relatedProfiles=NotImplemented,
+            retrievedProperties=NotImplemented):
+        KalturaDetachedResponseProfile.__init__(self,
+            name,
+            filter,
+            relatedProfiles)
+
+        # Comma seperated properties names
+        # @var string
+        self.retrievedProperties = retrievedProperties
+
+
+    PROPERTY_LOADERS = {
+        'retrievedProperties': getXmlNodeText, 
+    }
+
+    def fromXml(self, node):
+        KalturaDetachedResponseProfile.fromXml(self, node)
+        self.fromXmlImpl(node, KalturaOnDemandResponseProfile.PROPERTY_LOADERS)
+
+    def toParams(self):
+        kparams = KalturaDetachedResponseProfile.toParams(self)
+        kparams.put("objectType", "KalturaOnDemandResponseProfile")
+        kparams.addStringIfDefined("retrievedProperties", self.retrievedProperties)
+        return kparams
+
+    def getRetrievedProperties(self):
+        return self.retrievedProperties
+
+    def setRetrievedProperties(self, newRetrievedProperties):
+        self.retrievedProperties = newRetrievedProperties
 
 
 # @package Kaltura
@@ -43624,6 +43665,7 @@ class KalturaCoreClient(KalturaClientPlugin):
             'KalturaRequestConfiguration': KalturaRequestConfiguration,
             'KalturaFilter': KalturaFilter,
             'KalturaDetachedResponseProfile': KalturaDetachedResponseProfile,
+            'KalturaOnDemandResponseProfile': KalturaOnDemandResponseProfile,
             'KalturaRelatedObjectFilter': KalturaRelatedObjectFilter,
             'KalturaValue': KalturaValue,
             'KalturaIntegerValue': KalturaIntegerValue,
