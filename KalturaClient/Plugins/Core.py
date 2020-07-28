@@ -42,7 +42,7 @@ from ..Base import (
     KalturaServiceBase,
 )
 
-API_VERSION = '5.3.7.28173'
+API_VERSION = '5.3.7.28174'
 
 ########## enums ##########
 # @package Kaltura
@@ -32502,7 +32502,8 @@ class KalturaCategoryTree(KalturaObjectBase):
             images=NotImplemented,
             isActive=NotImplemented,
             startDateInSeconds=NotImplemented,
-            endDateInSeconds=NotImplemented):
+            endDateInSeconds=NotImplemented,
+            type=NotImplemented):
         KalturaObjectBase.__init__(self)
 
         # Unique identifier for the category item
@@ -32548,6 +32549,11 @@ class KalturaCategoryTree(KalturaObjectBase):
         # @var int
         self.endDateInSeconds = endDateInSeconds
 
+        # Category type
+        # @var string
+        # @insertonly
+        self.type = type
+
 
     PROPERTY_LOADERS = {
         'id': getXmlNodeInt, 
@@ -32560,6 +32566,7 @@ class KalturaCategoryTree(KalturaObjectBase):
         'isActive': getXmlNodeBool, 
         'startDateInSeconds': getXmlNodeInt, 
         'endDateInSeconds': getXmlNodeInt, 
+        'type': getXmlNodeText, 
     }
 
     def fromXml(self, node):
@@ -32576,6 +32583,7 @@ class KalturaCategoryTree(KalturaObjectBase):
         kparams.addBoolIfDefined("isActive", self.isActive)
         kparams.addIntIfDefined("startDateInSeconds", self.startDateInSeconds)
         kparams.addIntIfDefined("endDateInSeconds", self.endDateInSeconds)
+        kparams.addStringIfDefined("type", self.type)
         return kparams
 
     def getId(self):
@@ -32628,6 +32636,12 @@ class KalturaCategoryTree(KalturaObjectBase):
 
     def setEndDateInSeconds(self, newEndDateInSeconds):
         self.endDateInSeconds = newEndDateInSeconds
+
+    def getType(self):
+        return self.type
+
+    def setType(self, newType):
+        self.type = newType
 
 
 # @package Kaltura
