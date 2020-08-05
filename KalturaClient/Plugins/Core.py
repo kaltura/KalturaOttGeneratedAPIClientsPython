@@ -42,7 +42,7 @@ from ..Base import (
     KalturaServiceBase,
 )
 
-API_VERSION = '5.4.0.28257'
+API_VERSION = '5.4.0.28245'
 
 ########## enums ##########
 # @package Kaltura
@@ -3607,8 +3607,7 @@ class KalturaCategoryItemSearchFilter(KalturaCategoryItemFilter):
     def __init__(self,
             orderBy=NotImplemented,
             kSql=NotImplemented,
-            rootOnly=NotImplemented,
-            typeEqual=NotImplemented):
+            rootOnly=NotImplemented):
         KalturaCategoryItemFilter.__init__(self,
             orderBy)
 
@@ -3620,15 +3619,10 @@ class KalturaCategoryItemSearchFilter(KalturaCategoryItemFilter):
         # @var bool
         self.rootOnly = rootOnly
 
-        # Indicates which category to return by their type.
-        # @var string
-        self.typeEqual = typeEqual
-
 
     PROPERTY_LOADERS = {
         'kSql': getXmlNodeText, 
         'rootOnly': getXmlNodeBool, 
-        'typeEqual': getXmlNodeText, 
     }
 
     def fromXml(self, node):
@@ -3640,7 +3634,6 @@ class KalturaCategoryItemSearchFilter(KalturaCategoryItemFilter):
         kparams.put("objectType", "KalturaCategoryItemSearchFilter")
         kparams.addStringIfDefined("kSql", self.kSql)
         kparams.addBoolIfDefined("rootOnly", self.rootOnly)
-        kparams.addStringIfDefined("typeEqual", self.typeEqual)
         return kparams
 
     def getKSql(self):
@@ -3654,12 +3647,6 @@ class KalturaCategoryItemSearchFilter(KalturaCategoryItemFilter):
 
     def setRootOnly(self, newRootOnly):
         self.rootOnly = newRootOnly
-
-    def getTypeEqual(self):
-        return self.typeEqual
-
-    def setTypeEqual(self, newTypeEqual):
-        self.typeEqual = newTypeEqual
 
 
 # @package Kaltura
@@ -10105,8 +10092,7 @@ class KalturaMediaFile(KalturaAssetFile):
             outputProtecationLevel=NotImplemented,
             cdnAdapaterProfileId=NotImplemented,
             status=NotImplemented,
-            catalogEndDate=NotImplemented,
-            opl=NotImplemented):
+            catalogEndDate=NotImplemented):
         KalturaAssetFile.__init__(self,
             url)
 
@@ -10196,10 +10182,6 @@ class KalturaMediaFile(KalturaAssetFile):
         # @var int
         self.catalogEndDate = catalogEndDate
 
-        # OPL
-        # @var string
-        self.opl = opl
-
 
     PROPERTY_LOADERS = {
         'assetId': getXmlNodeInt, 
@@ -10223,7 +10205,6 @@ class KalturaMediaFile(KalturaAssetFile):
         'cdnAdapaterProfileId': getXmlNodeInt, 
         'status': getXmlNodeBool, 
         'catalogEndDate': getXmlNodeInt, 
-        'opl': getXmlNodeText, 
     }
 
     def fromXml(self, node):
@@ -10252,7 +10233,6 @@ class KalturaMediaFile(KalturaAssetFile):
         kparams.addIntIfDefined("cdnAdapaterProfileId", self.cdnAdapaterProfileId)
         kparams.addBoolIfDefined("status", self.status)
         kparams.addIntIfDefined("catalogEndDate", self.catalogEndDate)
-        kparams.addStringIfDefined("opl", self.opl)
         return kparams
 
     def getAssetId(self):
@@ -10374,12 +10354,6 @@ class KalturaMediaFile(KalturaAssetFile):
 
     def setCatalogEndDate(self, newCatalogEndDate):
         self.catalogEndDate = newCatalogEndDate
-
-    def getOpl(self):
-        return self.opl
-
-    def setOpl(self, newOpl):
-        self.opl = newOpl
 
 
 # @package Kaltura
@@ -10765,7 +10739,6 @@ class KalturaPlaybackSource(KalturaMediaFile):
             cdnAdapaterProfileId=NotImplemented,
             status=NotImplemented,
             catalogEndDate=NotImplemented,
-            opl=NotImplemented,
             format=NotImplemented,
             protocols=NotImplemented,
             drm=NotImplemented,
@@ -10792,8 +10765,7 @@ class KalturaPlaybackSource(KalturaMediaFile):
             outputProtecationLevel,
             cdnAdapaterProfileId,
             status,
-            catalogEndDate,
-            opl)
+            catalogEndDate)
 
         # Source format according to delivery profile streamer type (applehttp, mpegdash etc.)
         # @var string
@@ -14217,8 +14189,7 @@ class KalturaCategoryItem(KalturaCrudObject):
             updateDate=NotImplemented,
             isActive=NotImplemented,
             startDateInSeconds=NotImplemented,
-            endDateInSeconds=NotImplemented,
-            type=NotImplemented):
+            endDateInSeconds=NotImplemented):
         KalturaCrudObject.__init__(self)
 
         # Unique identifier for the category
@@ -14269,11 +14240,6 @@ class KalturaCategoryItem(KalturaCrudObject):
         # @var int
         self.endDateInSeconds = endDateInSeconds
 
-        # Category type
-        # @var string
-        # @insertonly
-        self.type = type
-
 
     PROPERTY_LOADERS = {
         'id': getXmlNodeInt, 
@@ -14287,7 +14253,6 @@ class KalturaCategoryItem(KalturaCrudObject):
         'isActive': getXmlNodeBool, 
         'startDateInSeconds': getXmlNodeInt, 
         'endDateInSeconds': getXmlNodeInt, 
-        'type': getXmlNodeText, 
     }
 
     def fromXml(self, node):
@@ -14304,7 +14269,6 @@ class KalturaCategoryItem(KalturaCrudObject):
         kparams.addBoolIfDefined("isActive", self.isActive)
         kparams.addIntIfDefined("startDateInSeconds", self.startDateInSeconds)
         kparams.addIntIfDefined("endDateInSeconds", self.endDateInSeconds)
-        kparams.addStringIfDefined("type", self.type)
         return kparams
 
     def getId(self):
@@ -14360,12 +14324,6 @@ class KalturaCategoryItem(KalturaCrudObject):
 
     def setEndDateInSeconds(self, newEndDateInSeconds):
         self.endDateInSeconds = newEndDateInSeconds
-
-    def getType(self):
-        return self.type
-
-    def setType(self, newType):
-        self.type = newType
 
 
 # @package Kaltura
@@ -20344,8 +20302,7 @@ class KalturaObjectVirtualAssetInfo(KalturaObjectBase):
     def __init__(self,
             assetStructId=NotImplemented,
             metaId=NotImplemented,
-            type=NotImplemented,
-            extendedTypes=NotImplemented):
+            type=NotImplemented):
         KalturaObjectBase.__init__(self)
 
         # Asset struct identifier
@@ -20360,16 +20317,11 @@ class KalturaObjectVirtualAssetInfo(KalturaObjectBase):
         # @var KalturaObjectVirtualAssetInfoType
         self.type = type
 
-        # Extended types mapping
-        # @var map
-        self.extendedTypes = extendedTypes
-
 
     PROPERTY_LOADERS = {
         'assetStructId': getXmlNodeInt, 
         'metaId': getXmlNodeInt, 
         'type': (KalturaEnumsFactory.createString, "KalturaObjectVirtualAssetInfoType"), 
-        'extendedTypes': (KalturaObjectFactory.createMap, 'KalturaLongValue'), 
     }
 
     def fromXml(self, node):
@@ -20382,7 +20334,6 @@ class KalturaObjectVirtualAssetInfo(KalturaObjectBase):
         kparams.addIntIfDefined("assetStructId", self.assetStructId)
         kparams.addIntIfDefined("metaId", self.metaId)
         kparams.addStringEnumIfDefined("type", self.type)
-        kparams.addMapIfDefined("extendedTypes", self.extendedTypes)
         return kparams
 
     def getAssetStructId(self):
@@ -20402,12 +20353,6 @@ class KalturaObjectVirtualAssetInfo(KalturaObjectBase):
 
     def setType(self, newType):
         self.type = newType
-
-    def getExtendedTypes(self):
-        return self.extendedTypes
-
-    def setExtendedTypes(self, newExtendedTypes):
-        self.extendedTypes = newExtendedTypes
 
 
 # @package Kaltura
@@ -20497,7 +20442,8 @@ class KalturaUnifiedBillingCycle(KalturaObjectBase):
     def __init__(self,
             name=NotImplemented,
             duration=NotImplemented,
-            paymentGatewayId=NotImplemented):
+            paymentGatewayId=NotImplemented,
+            ignorePartialBilling=NotImplemented):
         KalturaObjectBase.__init__(self)
 
         # UnifiedBillingCycle name
@@ -20512,11 +20458,16 @@ class KalturaUnifiedBillingCycle(KalturaObjectBase):
         # @var int
         self.paymentGatewayId = paymentGatewayId
 
+        # Define if partial billing shall be calculated or not
+        # @var bool
+        self.ignorePartialBilling = ignorePartialBilling
+
 
     PROPERTY_LOADERS = {
         'name': getXmlNodeText, 
         'duration': (KalturaObjectFactory.create, 'KalturaDuration'), 
         'paymentGatewayId': getXmlNodeInt, 
+        'ignorePartialBilling': getXmlNodeBool, 
     }
 
     def fromXml(self, node):
@@ -20529,6 +20480,7 @@ class KalturaUnifiedBillingCycle(KalturaObjectBase):
         kparams.addStringIfDefined("name", self.name)
         kparams.addObjectIfDefined("duration", self.duration)
         kparams.addIntIfDefined("paymentGatewayId", self.paymentGatewayId)
+        kparams.addBoolIfDefined("ignorePartialBilling", self.ignorePartialBilling)
         return kparams
 
     def getName(self):
@@ -20548,6 +20500,12 @@ class KalturaUnifiedBillingCycle(KalturaObjectBase):
 
     def setPaymentGatewayId(self, newPaymentGatewayId):
         self.paymentGatewayId = newPaymentGatewayId
+
+    def getIgnorePartialBilling(self):
+        return self.ignorePartialBilling
+
+    def setIgnorePartialBilling(self, newIgnorePartialBilling):
+        self.ignorePartialBilling = newIgnorePartialBilling
 
 
 # @package Kaltura
@@ -32761,8 +32719,7 @@ class KalturaCategoryTree(KalturaObjectBase):
             images=NotImplemented,
             isActive=NotImplemented,
             startDateInSeconds=NotImplemented,
-            endDateInSeconds=NotImplemented,
-            type=NotImplemented):
+            endDateInSeconds=NotImplemented):
         KalturaObjectBase.__init__(self)
 
         # Unique identifier for the category item
@@ -32808,11 +32765,6 @@ class KalturaCategoryTree(KalturaObjectBase):
         # @var int
         self.endDateInSeconds = endDateInSeconds
 
-        # Category type
-        # @var string
-        # @insertonly
-        self.type = type
-
 
     PROPERTY_LOADERS = {
         'id': getXmlNodeInt, 
@@ -32825,7 +32777,6 @@ class KalturaCategoryTree(KalturaObjectBase):
         'isActive': getXmlNodeBool, 
         'startDateInSeconds': getXmlNodeInt, 
         'endDateInSeconds': getXmlNodeInt, 
-        'type': getXmlNodeText, 
     }
 
     def fromXml(self, node):
@@ -32842,7 +32793,6 @@ class KalturaCategoryTree(KalturaObjectBase):
         kparams.addBoolIfDefined("isActive", self.isActive)
         kparams.addIntIfDefined("startDateInSeconds", self.startDateInSeconds)
         kparams.addIntIfDefined("endDateInSeconds", self.endDateInSeconds)
-        kparams.addStringIfDefined("type", self.type)
         return kparams
 
     def getId(self):
@@ -32895,12 +32845,6 @@ class KalturaCategoryTree(KalturaObjectBase):
 
     def setEndDateInSeconds(self, newEndDateInSeconds):
         self.endDateInSeconds = newEndDateInSeconds
-
-    def getType(self):
-        return self.type
-
-    def setType(self, newType):
-        self.type = newType
 
 
 # @package Kaltura
