@@ -42,7 +42,7 @@ from ..Base import (
     KalturaServiceBase,
 )
 
-API_VERSION = '5.4.0.28257'
+API_VERSION = '5.4.0.28265'
 
 ########## enums ##########
 # @package Kaltura
@@ -113,6 +113,21 @@ class KalturaAnnouncementStatus(object):
     SENDING = "Sending"
     SENT = "Sent"
     ABORTED = "Aborted"
+
+    def __init__(self, value):
+        self.value = value
+
+    def getValue(self):
+        return self.value
+
+# @package Kaltura
+# @subpackage Client
+class KalturaApiParameterPermissionItemAction(object):
+    READ = "READ"
+    INSERT = "INSERT"
+    UPDATE = "UPDATE"
+    WRITE = "WRITE"
+    ALL = "ALL"
 
     def __init__(self, value):
         self.value = value
@@ -1586,6 +1601,17 @@ class KalturaPaymentMethodType(object):
 
 # @package Kaltura
 # @subpackage Client
+class KalturaPermissionItemOrderBy(object):
+    NONE = "NONE"
+
+    def __init__(self, value):
+        self.value = value
+
+    def getValue(self):
+        return self.value
+
+# @package Kaltura
+# @subpackage Client
 class KalturaPermissionOrderBy(object):
     NONE = "NONE"
 
@@ -2492,6 +2518,32 @@ class KalturaUserAssetsListType(object):
 # @subpackage Client
 class KalturaUserRoleOrderBy(object):
     NONE = "NONE"
+
+    def __init__(self, value):
+        self.value = value
+
+    def getValue(self):
+        return self.value
+
+# @package Kaltura
+# @subpackage Client
+class KalturaUserRoleProfile(object):
+    USER = "USER"
+    PARTNER = "PARTNER"
+    PROFILE = "PROFILE"
+    SYSTEM = "SYSTEM"
+
+    def __init__(self, value):
+        self.value = value
+
+    def getValue(self):
+        return self.value
+
+# @package Kaltura
+# @subpackage Client
+class KalturaUserRoleType(object):
+    SYSTEM = "SYSTEM"
+    CUSTOM = "CUSTOM"
 
     def __init__(self, value):
         self.value = value
@@ -9111,6 +9163,204 @@ class KalturaPermissionFilter(KalturaFilter):
 
 # @package Kaltura
 # @subpackage Client
+class KalturaPermissionItemFilter(KalturaFilter):
+    def __init__(self,
+            orderBy=NotImplemented):
+        KalturaFilter.__init__(self,
+            orderBy)
+
+
+    PROPERTY_LOADERS = {
+    }
+
+    def fromXml(self, node):
+        KalturaFilter.fromXml(self, node)
+        self.fromXmlImpl(node, KalturaPermissionItemFilter.PROPERTY_LOADERS)
+
+    def toParams(self):
+        kparams = KalturaFilter.toParams(self)
+        kparams.put("objectType", "KalturaPermissionItemFilter")
+        return kparams
+
+
+# @package Kaltura
+# @subpackage Client
+class KalturaPermissionItemByIdInFilter(KalturaPermissionItemFilter):
+    def __init__(self,
+            orderBy=NotImplemented,
+            idIn=NotImplemented):
+        KalturaPermissionItemFilter.__init__(self,
+            orderBy)
+
+        # Permission item identifiers
+        # @var string
+        self.idIn = idIn
+
+
+    PROPERTY_LOADERS = {
+        'idIn': getXmlNodeText, 
+    }
+
+    def fromXml(self, node):
+        KalturaPermissionItemFilter.fromXml(self, node)
+        self.fromXmlImpl(node, KalturaPermissionItemByIdInFilter.PROPERTY_LOADERS)
+
+    def toParams(self):
+        kparams = KalturaPermissionItemFilter.toParams(self)
+        kparams.put("objectType", "KalturaPermissionItemByIdInFilter")
+        kparams.addStringIfDefined("idIn", self.idIn)
+        return kparams
+
+    def getIdIn(self):
+        return self.idIn
+
+    def setIdIn(self, newIdIn):
+        self.idIn = newIdIn
+
+
+# @package Kaltura
+# @subpackage Client
+class KalturaPermissionItemByApiActionFilter(KalturaPermissionItemFilter):
+    """If filter properties are empty will return all API action type permission items"""
+
+    def __init__(self,
+            orderBy=NotImplemented,
+            serviceEqual=NotImplemented,
+            actionEqual=NotImplemented):
+        KalturaPermissionItemFilter.__init__(self,
+            orderBy)
+
+        # API service name
+        # @var string
+        self.serviceEqual = serviceEqual
+
+        # API action name
+        # @var string
+        self.actionEqual = actionEqual
+
+
+    PROPERTY_LOADERS = {
+        'serviceEqual': getXmlNodeText, 
+        'actionEqual': getXmlNodeText, 
+    }
+
+    def fromXml(self, node):
+        KalturaPermissionItemFilter.fromXml(self, node)
+        self.fromXmlImpl(node, KalturaPermissionItemByApiActionFilter.PROPERTY_LOADERS)
+
+    def toParams(self):
+        kparams = KalturaPermissionItemFilter.toParams(self)
+        kparams.put("objectType", "KalturaPermissionItemByApiActionFilter")
+        kparams.addStringIfDefined("serviceEqual", self.serviceEqual)
+        kparams.addStringIfDefined("actionEqual", self.actionEqual)
+        return kparams
+
+    def getServiceEqual(self):
+        return self.serviceEqual
+
+    def setServiceEqual(self, newServiceEqual):
+        self.serviceEqual = newServiceEqual
+
+    def getActionEqual(self):
+        return self.actionEqual
+
+    def setActionEqual(self, newActionEqual):
+        self.actionEqual = newActionEqual
+
+
+# @package Kaltura
+# @subpackage Client
+class KalturaPermissionItemByArgumentFilter(KalturaPermissionItemByApiActionFilter):
+    """If filter properties are empty will return all API argument type permission items"""
+
+    def __init__(self,
+            orderBy=NotImplemented,
+            serviceEqual=NotImplemented,
+            actionEqual=NotImplemented,
+            parameterEqual=NotImplemented):
+        KalturaPermissionItemByApiActionFilter.__init__(self,
+            orderBy,
+            serviceEqual,
+            actionEqual)
+
+        # Parameter name
+        # @var string
+        self.parameterEqual = parameterEqual
+
+
+    PROPERTY_LOADERS = {
+        'parameterEqual': getXmlNodeText, 
+    }
+
+    def fromXml(self, node):
+        KalturaPermissionItemByApiActionFilter.fromXml(self, node)
+        self.fromXmlImpl(node, KalturaPermissionItemByArgumentFilter.PROPERTY_LOADERS)
+
+    def toParams(self):
+        kparams = KalturaPermissionItemByApiActionFilter.toParams(self)
+        kparams.put("objectType", "KalturaPermissionItemByArgumentFilter")
+        kparams.addStringIfDefined("parameterEqual", self.parameterEqual)
+        return kparams
+
+    def getParameterEqual(self):
+        return self.parameterEqual
+
+    def setParameterEqual(self, newParameterEqual):
+        self.parameterEqual = newParameterEqual
+
+
+# @package Kaltura
+# @subpackage Client
+class KalturaPermissionItemByParameterFilter(KalturaPermissionItemFilter):
+    """If filter properties are empty will return all parameter type permission items"""
+
+    def __init__(self,
+            orderBy=NotImplemented,
+            parameterEqual=NotImplemented,
+            objectEqual=NotImplemented):
+        KalturaPermissionItemFilter.__init__(self,
+            orderBy)
+
+        # Parameter name
+        # @var string
+        self.parameterEqual = parameterEqual
+
+        # Parameter name
+        # @var string
+        self.objectEqual = objectEqual
+
+
+    PROPERTY_LOADERS = {
+        'parameterEqual': getXmlNodeText, 
+        'objectEqual': getXmlNodeText, 
+    }
+
+    def fromXml(self, node):
+        KalturaPermissionItemFilter.fromXml(self, node)
+        self.fromXmlImpl(node, KalturaPermissionItemByParameterFilter.PROPERTY_LOADERS)
+
+    def toParams(self):
+        kparams = KalturaPermissionItemFilter.toParams(self)
+        kparams.put("objectType", "KalturaPermissionItemByParameterFilter")
+        kparams.addStringIfDefined("parameterEqual", self.parameterEqual)
+        kparams.addStringIfDefined("objectEqual", self.objectEqual)
+        return kparams
+
+    def getParameterEqual(self):
+        return self.parameterEqual
+
+    def setParameterEqual(self, newParameterEqual):
+        self.parameterEqual = newParameterEqual
+
+    def getObjectEqual(self):
+        return self.objectEqual
+
+    def setObjectEqual(self, newObjectEqual):
+        self.objectEqual = newObjectEqual
+
+
+# @package Kaltura
+# @subpackage Client
 class KalturaPlaybackProfileFilter(KalturaFilter):
     """User asset rule filter"""
 
@@ -9407,7 +9657,9 @@ class KalturaUserRoleFilter(KalturaFilter):
     def __init__(self,
             orderBy=NotImplemented,
             idIn=NotImplemented,
-            currentUserRoleIdsContains=NotImplemented):
+            currentUserRoleIdsContains=NotImplemented,
+            typeEqual=NotImplemented,
+            profileEqual=NotImplemented):
         KalturaFilter.__init__(self,
             orderBy)
 
@@ -9419,10 +9671,20 @@ class KalturaUserRoleFilter(KalturaFilter):
         # @var bool
         self.currentUserRoleIdsContains = currentUserRoleIdsContains
 
+        # User role type
+        # @var KalturaUserRoleType
+        self.typeEqual = typeEqual
+
+        # User role profile
+        # @var KalturaUserRoleProfile
+        self.profileEqual = profileEqual
+
 
     PROPERTY_LOADERS = {
         'idIn': getXmlNodeText, 
         'currentUserRoleIdsContains': getXmlNodeBool, 
+        'typeEqual': (KalturaEnumsFactory.createString, "KalturaUserRoleType"), 
+        'profileEqual': (KalturaEnumsFactory.createString, "KalturaUserRoleProfile"), 
     }
 
     def fromXml(self, node):
@@ -9434,6 +9696,8 @@ class KalturaUserRoleFilter(KalturaFilter):
         kparams.put("objectType", "KalturaUserRoleFilter")
         kparams.addStringIfDefined("idIn", self.idIn)
         kparams.addBoolIfDefined("currentUserRoleIdsContains", self.currentUserRoleIdsContains)
+        kparams.addStringEnumIfDefined("typeEqual", self.typeEqual)
+        kparams.addStringEnumIfDefined("profileEqual", self.profileEqual)
         return kparams
 
     def getIdIn(self):
@@ -9447,6 +9711,18 @@ class KalturaUserRoleFilter(KalturaFilter):
 
     def setCurrentUserRoleIdsContains(self, newCurrentUserRoleIdsContains):
         self.currentUserRoleIdsContains = newCurrentUserRoleIdsContains
+
+    def getTypeEqual(self):
+        return self.typeEqual
+
+    def setTypeEqual(self, newTypeEqual):
+        self.typeEqual = newTypeEqual
+
+    def getProfileEqual(self):
+        return self.profileEqual
+
+    def setProfileEqual(self, newProfileEqual):
+        self.profileEqual = newProfileEqual
 
 
 # @package Kaltura
@@ -30444,7 +30720,8 @@ class KalturaPermission(KalturaObjectBase):
             name=NotImplemented,
             friendlyName=NotImplemented,
             dependsOnPermissionNames=NotImplemented,
-            type=NotImplemented):
+            type=NotImplemented,
+            permissionItemsIds=NotImplemented):
         KalturaObjectBase.__init__(self)
 
         # Permission identifier
@@ -30469,6 +30746,11 @@ class KalturaPermission(KalturaObjectBase):
         # @var KalturaPermissionType
         self.type = type
 
+        # Comma separated assosiated permission items IDs
+        # @var string
+        # @readonly
+        self.permissionItemsIds = permissionItemsIds
+
 
     PROPERTY_LOADERS = {
         'id': getXmlNodeInt, 
@@ -30476,6 +30758,7 @@ class KalturaPermission(KalturaObjectBase):
         'friendlyName': getXmlNodeText, 
         'dependsOnPermissionNames': getXmlNodeText, 
         'type': (KalturaEnumsFactory.createString, "KalturaPermissionType"), 
+        'permissionItemsIds': getXmlNodeText, 
     }
 
     def fromXml(self, node):
@@ -30513,6 +30796,9 @@ class KalturaPermission(KalturaObjectBase):
 
     def setType(self, newType):
         self.type = newType
+
+    def getPermissionItemsIds(self):
+        return self.permissionItemsIds
 
 
 # @package Kaltura
@@ -30561,13 +30847,15 @@ class KalturaGroupPermission(KalturaPermission):
             friendlyName=NotImplemented,
             dependsOnPermissionNames=NotImplemented,
             type=NotImplemented,
+            permissionItemsIds=NotImplemented,
             group=NotImplemented):
         KalturaPermission.__init__(self,
             id,
             name,
             friendlyName,
             dependsOnPermissionNames,
-            type)
+            type,
+            permissionItemsIds)
 
         # Permission identifier
         # @var string
@@ -31428,7 +31716,9 @@ class KalturaUserRole(KalturaObjectBase):
             id=NotImplemented,
             name=NotImplemented,
             permissionNames=NotImplemented,
-            excludedPermissionNames=NotImplemented):
+            excludedPermissionNames=NotImplemented,
+            type=NotImplemented,
+            profile=NotImplemented):
         KalturaObjectBase.__init__(self)
 
         # User role identifier
@@ -31448,12 +31738,23 @@ class KalturaUserRole(KalturaObjectBase):
         # @var string
         self.excludedPermissionNames = excludedPermissionNames
 
+        # Role type
+        # @var KalturaUserRoleType
+        # @readonly
+        self.type = type
+
+        # Role profile
+        # @var KalturaUserRoleProfile
+        self.profile = profile
+
 
     PROPERTY_LOADERS = {
         'id': getXmlNodeInt, 
         'name': getXmlNodeText, 
         'permissionNames': getXmlNodeText, 
         'excludedPermissionNames': getXmlNodeText, 
+        'type': (KalturaEnumsFactory.createString, "KalturaUserRoleType"), 
+        'profile': (KalturaEnumsFactory.createString, "KalturaUserRoleProfile"), 
     }
 
     def fromXml(self, node):
@@ -31466,6 +31767,7 @@ class KalturaUserRole(KalturaObjectBase):
         kparams.addStringIfDefined("name", self.name)
         kparams.addStringIfDefined("permissionNames", self.permissionNames)
         kparams.addStringIfDefined("excludedPermissionNames", self.excludedPermissionNames)
+        kparams.addStringEnumIfDefined("profile", self.profile)
         return kparams
 
     def getId(self):
@@ -31488,6 +31790,15 @@ class KalturaUserRole(KalturaObjectBase):
 
     def setExcludedPermissionNames(self, newExcludedPermissionNames):
         self.excludedPermissionNames = newExcludedPermissionNames
+
+    def getType(self):
+        return self.type
+
+    def getProfile(self):
+        return self.profile
+
+    def setProfile(self, newProfile):
+        self.profile = newProfile
 
 
 # @package Kaltura
@@ -35598,6 +35909,331 @@ class KalturaPasswordPolicyListResponse(KalturaListResponse):
 
     def setObjects(self, newObjects):
         self.objects = newObjects
+
+
+# @package Kaltura
+# @subpackage Client
+class KalturaPermissionItem(KalturaObjectBase):
+    def __init__(self,
+            id=NotImplemented,
+            name=NotImplemented,
+            isExcluded=NotImplemented):
+        KalturaObjectBase.__init__(self)
+
+        # Permission item identifier
+        # @var int
+        # @readonly
+        self.id = id
+
+        # Permission item name
+        # @var string
+        self.name = name
+
+        # Permission isExcluded
+        # @var bool
+        self.isExcluded = isExcluded
+
+
+    PROPERTY_LOADERS = {
+        'id': getXmlNodeInt, 
+        'name': getXmlNodeText, 
+        'isExcluded': getXmlNodeBool, 
+    }
+
+    def fromXml(self, node):
+        KalturaObjectBase.fromXml(self, node)
+        self.fromXmlImpl(node, KalturaPermissionItem.PROPERTY_LOADERS)
+
+    def toParams(self):
+        kparams = KalturaObjectBase.toParams(self)
+        kparams.put("objectType", "KalturaPermissionItem")
+        kparams.addStringIfDefined("name", self.name)
+        kparams.addBoolIfDefined("isExcluded", self.isExcluded)
+        return kparams
+
+    def getId(self):
+        return self.id
+
+    def getName(self):
+        return self.name
+
+    def setName(self, newName):
+        self.name = newName
+
+    def getIsExcluded(self):
+        return self.isExcluded
+
+    def setIsExcluded(self, newIsExcluded):
+        self.isExcluded = newIsExcluded
+
+
+# @package Kaltura
+# @subpackage Client
+class KalturaPermissionItemListResponse(KalturaListResponse):
+    def __init__(self,
+            totalCount=NotImplemented,
+            objects=NotImplemented):
+        KalturaListResponse.__init__(self,
+            totalCount)
+
+        # A list of objects
+        # @var array of KalturaPermissionItem
+        self.objects = objects
+
+
+    PROPERTY_LOADERS = {
+        'objects': (KalturaObjectFactory.createArray, 'KalturaPermissionItem'), 
+    }
+
+    def fromXml(self, node):
+        KalturaListResponse.fromXml(self, node)
+        self.fromXmlImpl(node, KalturaPermissionItemListResponse.PROPERTY_LOADERS)
+
+    def toParams(self):
+        kparams = KalturaListResponse.toParams(self)
+        kparams.put("objectType", "KalturaPermissionItemListResponse")
+        kparams.addArrayIfDefined("objects", self.objects)
+        return kparams
+
+    def getObjects(self):
+        return self.objects
+
+    def setObjects(self, newObjects):
+        self.objects = newObjects
+
+
+# @package Kaltura
+# @subpackage Client
+class KalturaApiActionPermissionItem(KalturaPermissionItem):
+    def __init__(self,
+            id=NotImplemented,
+            name=NotImplemented,
+            isExcluded=NotImplemented,
+            service=NotImplemented,
+            action=NotImplemented):
+        KalturaPermissionItem.__init__(self,
+            id,
+            name,
+            isExcluded)
+
+        # API service name
+        # @var string
+        self.service = service
+
+        # API action name
+        # @var string
+        self.action = action
+
+
+    PROPERTY_LOADERS = {
+        'service': getXmlNodeText, 
+        'action': getXmlNodeText, 
+    }
+
+    def fromXml(self, node):
+        KalturaPermissionItem.fromXml(self, node)
+        self.fromXmlImpl(node, KalturaApiActionPermissionItem.PROPERTY_LOADERS)
+
+    def toParams(self):
+        kparams = KalturaPermissionItem.toParams(self)
+        kparams.put("objectType", "KalturaApiActionPermissionItem")
+        kparams.addStringIfDefined("service", self.service)
+        kparams.addStringIfDefined("action", self.action)
+        return kparams
+
+    def getService(self):
+        return self.service
+
+    def setService(self, newService):
+        self.service = newService
+
+    def getAction(self):
+        return self.action
+
+    def setAction(self, newAction):
+        self.action = newAction
+
+
+# @package Kaltura
+# @subpackage Client
+class KalturaApiArgumentPermissionItem(KalturaPermissionItem):
+    def __init__(self,
+            id=NotImplemented,
+            name=NotImplemented,
+            isExcluded=NotImplemented,
+            service=NotImplemented,
+            action=NotImplemented,
+            parameter=NotImplemented):
+        KalturaPermissionItem.__init__(self,
+            id,
+            name,
+            isExcluded)
+
+        # API service name
+        # @var string
+        self.service = service
+
+        # API action name
+        # @var string
+        self.action = action
+
+        # API parameter name
+        # @var string
+        self.parameter = parameter
+
+
+    PROPERTY_LOADERS = {
+        'service': getXmlNodeText, 
+        'action': getXmlNodeText, 
+        'parameter': getXmlNodeText, 
+    }
+
+    def fromXml(self, node):
+        KalturaPermissionItem.fromXml(self, node)
+        self.fromXmlImpl(node, KalturaApiArgumentPermissionItem.PROPERTY_LOADERS)
+
+    def toParams(self):
+        kparams = KalturaPermissionItem.toParams(self)
+        kparams.put("objectType", "KalturaApiArgumentPermissionItem")
+        kparams.addStringIfDefined("service", self.service)
+        kparams.addStringIfDefined("action", self.action)
+        kparams.addStringIfDefined("parameter", self.parameter)
+        return kparams
+
+    def getService(self):
+        return self.service
+
+    def setService(self, newService):
+        self.service = newService
+
+    def getAction(self):
+        return self.action
+
+    def setAction(self, newAction):
+        self.action = newAction
+
+    def getParameter(self):
+        return self.parameter
+
+    def setParameter(self, newParameter):
+        self.parameter = newParameter
+
+
+# @package Kaltura
+# @subpackage Client
+class KalturaApiParameterPermissionItem(KalturaPermissionItem):
+    def __init__(self,
+            id=NotImplemented,
+            name=NotImplemented,
+            isExcluded=NotImplemented,
+            object=NotImplemented,
+            parameter=NotImplemented,
+            action=NotImplemented):
+        KalturaPermissionItem.__init__(self,
+            id,
+            name,
+            isExcluded)
+
+        # API object name
+        # @var string
+        self.object = object
+
+        # API parameter name
+        # @var string
+        self.parameter = parameter
+
+        # API action type
+        # @var KalturaApiParameterPermissionItemAction
+        self.action = action
+
+
+    PROPERTY_LOADERS = {
+        'object': getXmlNodeText, 
+        'parameter': getXmlNodeText, 
+        'action': (KalturaEnumsFactory.createString, "KalturaApiParameterPermissionItemAction"), 
+    }
+
+    def fromXml(self, node):
+        KalturaPermissionItem.fromXml(self, node)
+        self.fromXmlImpl(node, KalturaApiParameterPermissionItem.PROPERTY_LOADERS)
+
+    def toParams(self):
+        kparams = KalturaPermissionItem.toParams(self)
+        kparams.put("objectType", "KalturaApiParameterPermissionItem")
+        kparams.addStringIfDefined("object", self.object)
+        kparams.addStringIfDefined("parameter", self.parameter)
+        kparams.addStringEnumIfDefined("action", self.action)
+        return kparams
+
+    def getObject(self):
+        return self.object
+
+    def setObject(self, newObject):
+        self.object = newObject
+
+    def getParameter(self):
+        return self.parameter
+
+    def setParameter(self, newParameter):
+        self.parameter = newParameter
+
+    def getAction(self):
+        return self.action
+
+    def setAction(self, newAction):
+        self.action = newAction
+
+
+# @package Kaltura
+# @subpackage Client
+class KalturaApiPriviligesPermissionItem(KalturaPermissionItem):
+    def __init__(self,
+            id=NotImplemented,
+            name=NotImplemented,
+            isExcluded=NotImplemented,
+            object=NotImplemented,
+            parameter=NotImplemented):
+        KalturaPermissionItem.__init__(self,
+            id,
+            name,
+            isExcluded)
+
+        # API object name
+        # @var string
+        self.object = object
+
+        # API parameter name
+        # @var string
+        self.parameter = parameter
+
+
+    PROPERTY_LOADERS = {
+        'object': getXmlNodeText, 
+        'parameter': getXmlNodeText, 
+    }
+
+    def fromXml(self, node):
+        KalturaPermissionItem.fromXml(self, node)
+        self.fromXmlImpl(node, KalturaApiPriviligesPermissionItem.PROPERTY_LOADERS)
+
+    def toParams(self):
+        kparams = KalturaPermissionItem.toParams(self)
+        kparams.put("objectType", "KalturaApiPriviligesPermissionItem")
+        kparams.addStringIfDefined("object", self.object)
+        kparams.addStringIfDefined("parameter", self.parameter)
+        return kparams
+
+    def getObject(self):
+        return self.object
+
+    def setObject(self, newObject):
+        self.object = newObject
+
+    def getParameter(self):
+        return self.parameter
+
+    def setParameter(self, newParameter):
+        self.parameter = newParameter
 
 
 # @package Kaltura
@@ -41341,6 +41977,17 @@ class KalturaPermissionService(KalturaServiceBase):
         resultNode = self.client.doQueue()
         return KalturaObjectFactory.create(resultNode, 'KalturaPermission')
 
+    def addPermissionItem(self, permissionId, permissionItemId):
+        """Adds permission item to permission"""
+
+        kparams = KalturaParams()
+        kparams.addIntIfDefined("permissionId", permissionId);
+        kparams.addIntIfDefined("permissionItemId", permissionItemId);
+        self.client.queueServiceActionCall("permission", "addPermissionItem", "None", kparams)
+        if self.client.isMultiRequest():
+            return self.client.getMultiRequestResult()
+        resultNode = self.client.doQueue()
+
     def delete(self, id):
         """Deletes an existing permission"""
 
@@ -41371,6 +42018,36 @@ class KalturaPermissionService(KalturaServiceBase):
             return self.client.getMultiRequestResult()
         resultNode = self.client.doQueue()
         return KalturaObjectFactory.create(resultNode, 'KalturaPermissionListResponse')
+
+    def removePermissionItem(self, permissionId, permissionItemId):
+        """Removes permission item from permission"""
+
+        kparams = KalturaParams()
+        kparams.addIntIfDefined("permissionId", permissionId);
+        kparams.addIntIfDefined("permissionItemId", permissionItemId);
+        self.client.queueServiceActionCall("permission", "removePermissionItem", "None", kparams)
+        if self.client.isMultiRequest():
+            return self.client.getMultiRequestResult()
+        resultNode = self.client.doQueue()
+
+
+# @package Kaltura
+# @subpackage Client
+class KalturaPermissionItemService(KalturaServiceBase):
+    def __init__(self, client = None):
+        KalturaServiceBase.__init__(self, client)
+
+    def list(self, filter = NotImplemented, pager = NotImplemented):
+        """Return a list of permission items with filtering options"""
+
+        kparams = KalturaParams()
+        kparams.addObjectIfDefined("filter", filter)
+        kparams.addObjectIfDefined("pager", pager)
+        self.client.queueServiceActionCall("permissionitem", "list", "KalturaPermissionItemListResponse", kparams)
+        if self.client.isMultiRequest():
+            return self.client.getMultiRequestResult()
+        resultNode = self.client.doQueue()
+        return KalturaObjectFactory.create(resultNode, 'KalturaPermissionItemListResponse')
 
 
 # @package Kaltura
@@ -43453,6 +44130,7 @@ class KalturaCoreClient(KalturaClientPlugin):
             'paymentGatewayProfile': KalturaPaymentGatewayProfileService,
             'paymentMethodProfile': KalturaPaymentMethodProfileService,
             'permission': KalturaPermissionService,
+            'permissionItem': KalturaPermissionItemService,
             'personalFeed': KalturaPersonalFeedService,
             'personalList': KalturaPersonalListService,
             'pin': KalturaPinService,
@@ -43507,6 +44185,7 @@ class KalturaCoreClient(KalturaClientPlugin):
             'KalturaAnnouncementOrderBy': KalturaAnnouncementOrderBy,
             'KalturaAnnouncementRecipientsType': KalturaAnnouncementRecipientsType,
             'KalturaAnnouncementStatus': KalturaAnnouncementStatus,
+            'KalturaApiParameterPermissionItemAction': KalturaApiParameterPermissionItemAction,
             'KalturaAppTokenHashType': KalturaAppTokenHashType,
             'KalturaAssetCommentOrderBy': KalturaAssetCommentOrderBy,
             'KalturaAssetFilePpvOrderBy': KalturaAssetFilePpvOrderBy,
@@ -43617,6 +44296,7 @@ class KalturaCoreClient(KalturaClientPlugin):
             'KalturaPasswordPolicyOrderBy': KalturaPasswordPolicyOrderBy,
             'KalturaPaymentMethodProfileOrderBy': KalturaPaymentMethodProfileOrderBy,
             'KalturaPaymentMethodType': KalturaPaymentMethodType,
+            'KalturaPermissionItemOrderBy': KalturaPermissionItemOrderBy,
             'KalturaPermissionOrderBy': KalturaPermissionOrderBy,
             'KalturaPermissionType': KalturaPermissionType,
             'KalturaPersonalFeedOrderBy': KalturaPersonalFeedOrderBy,
@@ -43686,6 +44366,8 @@ class KalturaCoreClient(KalturaClientPlugin):
             'KalturaUserAssetsListItemType': KalturaUserAssetsListItemType,
             'KalturaUserAssetsListType': KalturaUserAssetsListType,
             'KalturaUserRoleOrderBy': KalturaUserRoleOrderBy,
+            'KalturaUserRoleProfile': KalturaUserRoleProfile,
+            'KalturaUserRoleType': KalturaUserRoleType,
             'KalturaUserState': KalturaUserState,
             'KalturaWatchStatus': KalturaWatchStatus,
         }
@@ -43823,6 +44505,11 @@ class KalturaCoreClient(KalturaClientPlugin):
             'KalturaMetaFilter': KalturaMetaFilter,
             'KalturaParentalRuleFilter': KalturaParentalRuleFilter,
             'KalturaPermissionFilter': KalturaPermissionFilter,
+            'KalturaPermissionItemFilter': KalturaPermissionItemFilter,
+            'KalturaPermissionItemByIdInFilter': KalturaPermissionItemByIdInFilter,
+            'KalturaPermissionItemByApiActionFilter': KalturaPermissionItemByApiActionFilter,
+            'KalturaPermissionItemByArgumentFilter': KalturaPermissionItemByArgumentFilter,
+            'KalturaPermissionItemByParameterFilter': KalturaPermissionItemByParameterFilter,
             'KalturaPlaybackProfileFilter': KalturaPlaybackProfileFilter,
             'KalturaBaseRegionFilter': KalturaBaseRegionFilter,
             'KalturaRegionFilter': KalturaRegionFilter,
@@ -44250,6 +44937,12 @@ class KalturaCoreClient(KalturaClientPlugin):
             'KalturaNotificationsSettings': KalturaNotificationsSettings,
             'KalturaOTTUserDynamicData': KalturaOTTUserDynamicData,
             'KalturaPasswordPolicyListResponse': KalturaPasswordPolicyListResponse,
+            'KalturaPermissionItem': KalturaPermissionItem,
+            'KalturaPermissionItemListResponse': KalturaPermissionItemListResponse,
+            'KalturaApiActionPermissionItem': KalturaApiActionPermissionItem,
+            'KalturaApiArgumentPermissionItem': KalturaApiArgumentPermissionItem,
+            'KalturaApiParameterPermissionItem': KalturaApiParameterPermissionItem,
+            'KalturaApiPriviligesPermissionItem': KalturaApiPriviligesPermissionItem,
             'KalturaPin': KalturaPin,
             'KalturaPurchaseSettings': KalturaPurchaseSettings,
             'KalturaNetworkActionStatus': KalturaNetworkActionStatus,
