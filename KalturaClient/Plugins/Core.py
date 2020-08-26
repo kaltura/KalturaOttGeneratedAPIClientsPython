@@ -42,7 +42,7 @@ from ..Base import (
     KalturaServiceBase,
 )
 
-API_VERSION = '5.4.0.28265'
+API_VERSION = '5.5.0.28283'
 
 ########## enums ##########
 # @package Kaltura
@@ -2948,6 +2948,47 @@ class KalturaDetachedResponseProfile(KalturaBaseResponseProfile):
 
     def setRelatedProfiles(self, newRelatedProfiles):
         self.relatedProfiles = newRelatedProfiles
+
+
+# @package Kaltura
+# @subpackage Client
+class KalturaOnDemandResponseProfile(KalturaDetachedResponseProfile):
+    """Define on demand response"""
+
+    def __init__(self,
+            name=NotImplemented,
+            filter=NotImplemented,
+            relatedProfiles=NotImplemented,
+            retrievedProperties=NotImplemented):
+        KalturaDetachedResponseProfile.__init__(self,
+            name,
+            filter,
+            relatedProfiles)
+
+        # Comma seperated properties names
+        # @var string
+        self.retrievedProperties = retrievedProperties
+
+
+    PROPERTY_LOADERS = {
+        'retrievedProperties': getXmlNodeText, 
+    }
+
+    def fromXml(self, node):
+        KalturaDetachedResponseProfile.fromXml(self, node)
+        self.fromXmlImpl(node, KalturaOnDemandResponseProfile.PROPERTY_LOADERS)
+
+    def toParams(self):
+        kparams = KalturaDetachedResponseProfile.toParams(self)
+        kparams.put("objectType", "KalturaOnDemandResponseProfile")
+        kparams.addStringIfDefined("retrievedProperties", self.retrievedProperties)
+        return kparams
+
+    def getRetrievedProperties(self):
+        return self.retrievedProperties
+
+    def setRetrievedProperties(self, newRetrievedProperties):
+        self.retrievedProperties = newRetrievedProperties
 
 
 # @package Kaltura
@@ -20773,7 +20814,8 @@ class KalturaUnifiedBillingCycle(KalturaObjectBase):
     def __init__(self,
             name=NotImplemented,
             duration=NotImplemented,
-            paymentGatewayId=NotImplemented):
+            paymentGatewayId=NotImplemented,
+            ignorePartialBilling=NotImplemented):
         KalturaObjectBase.__init__(self)
 
         # UnifiedBillingCycle name
@@ -20788,11 +20830,16 @@ class KalturaUnifiedBillingCycle(KalturaObjectBase):
         # @var int
         self.paymentGatewayId = paymentGatewayId
 
+        # Define if partial billing shall be calculated or not
+        # @var bool
+        self.ignorePartialBilling = ignorePartialBilling
+
 
     PROPERTY_LOADERS = {
         'name': getXmlNodeText, 
         'duration': (KalturaObjectFactory.create, 'KalturaDuration'), 
         'paymentGatewayId': getXmlNodeInt, 
+        'ignorePartialBilling': getXmlNodeBool, 
     }
 
     def fromXml(self, node):
@@ -20805,6 +20852,7 @@ class KalturaUnifiedBillingCycle(KalturaObjectBase):
         kparams.addStringIfDefined("name", self.name)
         kparams.addObjectIfDefined("duration", self.duration)
         kparams.addIntIfDefined("paymentGatewayId", self.paymentGatewayId)
+        kparams.addBoolIfDefined("ignorePartialBilling", self.ignorePartialBilling)
         return kparams
 
     def getName(self):
@@ -20824,6 +20872,12 @@ class KalturaUnifiedBillingCycle(KalturaObjectBase):
 
     def setPaymentGatewayId(self, newPaymentGatewayId):
         self.paymentGatewayId = newPaymentGatewayId
+
+    def getIgnorePartialBilling(self):
+        return self.ignorePartialBilling
+
+    def setIgnorePartialBilling(self, newIgnorePartialBilling):
+        self.ignorePartialBilling = newIgnorePartialBilling
 
 
 # @package Kaltura
@@ -44381,6 +44435,7 @@ class KalturaCoreClient(KalturaClientPlugin):
             'KalturaRequestConfiguration': KalturaRequestConfiguration,
             'KalturaFilter': KalturaFilter,
             'KalturaDetachedResponseProfile': KalturaDetachedResponseProfile,
+            'KalturaOnDemandResponseProfile': KalturaOnDemandResponseProfile,
             'KalturaRelatedObjectFilter': KalturaRelatedObjectFilter,
             'KalturaValue': KalturaValue,
             'KalturaIntegerValue': KalturaIntegerValue,
