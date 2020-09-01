@@ -42,7 +42,7 @@ from ..Base import (
     KalturaServiceBase,
 )
 
-API_VERSION = '5.5.0.28283'
+API_VERSION = '5.5.0.28291'
 
 ########## enums ##########
 # @package Kaltura
@@ -2125,6 +2125,17 @@ class KalturaSkipOptions(object):
 
 # @package Kaltura
 # @subpackage Client
+class KalturaSmsAdapterProfileOrderBy(object):
+    NONE = "NONE"
+
+    def __init__(self, value):
+        self.value = value
+
+    def getValue(self):
+        return self.value
+
+# @package Kaltura
+# @subpackage Client
 class KalturaSocialActionOrderBy(object):
     NONE = "NONE"
 
@@ -2952,47 +2963,6 @@ class KalturaDetachedResponseProfile(KalturaBaseResponseProfile):
 
 # @package Kaltura
 # @subpackage Client
-class KalturaOnDemandResponseProfile(KalturaDetachedResponseProfile):
-    """Define on demand response"""
-
-    def __init__(self,
-            name=NotImplemented,
-            filter=NotImplemented,
-            relatedProfiles=NotImplemented,
-            retrievedProperties=NotImplemented):
-        KalturaDetachedResponseProfile.__init__(self,
-            name,
-            filter,
-            relatedProfiles)
-
-        # Comma seperated properties names
-        # @var string
-        self.retrievedProperties = retrievedProperties
-
-
-    PROPERTY_LOADERS = {
-        'retrievedProperties': getXmlNodeText, 
-    }
-
-    def fromXml(self, node):
-        KalturaDetachedResponseProfile.fromXml(self, node)
-        self.fromXmlImpl(node, KalturaOnDemandResponseProfile.PROPERTY_LOADERS)
-
-    def toParams(self):
-        kparams = KalturaDetachedResponseProfile.toParams(self)
-        kparams.put("objectType", "KalturaOnDemandResponseProfile")
-        kparams.addStringIfDefined("retrievedProperties", self.retrievedProperties)
-        return kparams
-
-    def getRetrievedProperties(self):
-        return self.retrievedProperties
-
-    def setRetrievedProperties(self, newRetrievedProperties):
-        self.retrievedProperties = newRetrievedProperties
-
-
-# @package Kaltura
-# @subpackage Client
 class KalturaRelatedObjectFilter(KalturaFilter):
     """Define KalturaRelatedObjectFilter"""
 
@@ -3561,6 +3531,28 @@ class KalturaHouseholdSegmentFilter(KalturaCrudFilter):
 
     def setKSql(self, newKSql):
         self.kSql = newKSql
+
+
+# @package Kaltura
+# @subpackage Client
+class KalturaSmsAdapterProfileFilter(KalturaCrudFilter):
+    def __init__(self,
+            orderBy=NotImplemented):
+        KalturaCrudFilter.__init__(self,
+            orderBy)
+
+
+    PROPERTY_LOADERS = {
+    }
+
+    def fromXml(self, node):
+        KalturaCrudFilter.fromXml(self, node)
+        self.fromXmlImpl(node, KalturaSmsAdapterProfileFilter.PROPERTY_LOADERS)
+
+    def toParams(self):
+        kparams = KalturaCrudFilter.toParams(self)
+        kparams.put("objectType", "KalturaSmsAdapterProfileFilter")
+        return kparams
 
 
 # @package Kaltura
@@ -14426,6 +14418,116 @@ class KalturaHouseholdSegment(KalturaCrudObject):
 
 # @package Kaltura
 # @subpackage Client
+class KalturaSmsAdapterProfile(KalturaCrudObject):
+    """Sms adapter profile"""
+
+    def __init__(self,
+            id=NotImplemented,
+            adapterUrl=NotImplemented,
+            sharedSecret=NotImplemented,
+            isActive=NotImplemented,
+            settings=NotImplemented,
+            externalIdentifier=NotImplemented,
+            name=NotImplemented):
+        KalturaCrudObject.__init__(self)
+
+        # id
+        # @var int
+        # @readonly
+        self.id = id
+
+        # adapter url
+        # @var string
+        self.adapterUrl = adapterUrl
+
+        # Shared Secret
+        # @var string
+        self.sharedSecret = sharedSecret
+
+        # SSO Adapter is active status
+        # @var int
+        self.isActive = isActive
+
+        # SSO Adapter extra parameters
+        # @var map
+        self.settings = settings
+
+        # SSO Adapter external identifier
+        # @var string
+        self.externalIdentifier = externalIdentifier
+
+        # Name
+        # @var string
+        self.name = name
+
+
+    PROPERTY_LOADERS = {
+        'id': getXmlNodeInt, 
+        'adapterUrl': getXmlNodeText, 
+        'sharedSecret': getXmlNodeText, 
+        'isActive': getXmlNodeInt, 
+        'settings': (KalturaObjectFactory.createMap, 'KalturaStringValue'), 
+        'externalIdentifier': getXmlNodeText, 
+        'name': getXmlNodeText, 
+    }
+
+    def fromXml(self, node):
+        KalturaCrudObject.fromXml(self, node)
+        self.fromXmlImpl(node, KalturaSmsAdapterProfile.PROPERTY_LOADERS)
+
+    def toParams(self):
+        kparams = KalturaCrudObject.toParams(self)
+        kparams.put("objectType", "KalturaSmsAdapterProfile")
+        kparams.addStringIfDefined("adapterUrl", self.adapterUrl)
+        kparams.addStringIfDefined("sharedSecret", self.sharedSecret)
+        kparams.addIntIfDefined("isActive", self.isActive)
+        kparams.addMapIfDefined("settings", self.settings)
+        kparams.addStringIfDefined("externalIdentifier", self.externalIdentifier)
+        kparams.addStringIfDefined("name", self.name)
+        return kparams
+
+    def getId(self):
+        return self.id
+
+    def getAdapterUrl(self):
+        return self.adapterUrl
+
+    def setAdapterUrl(self, newAdapterUrl):
+        self.adapterUrl = newAdapterUrl
+
+    def getSharedSecret(self):
+        return self.sharedSecret
+
+    def setSharedSecret(self, newSharedSecret):
+        self.sharedSecret = newSharedSecret
+
+    def getIsActive(self):
+        return self.isActive
+
+    def setIsActive(self, newIsActive):
+        self.isActive = newIsActive
+
+    def getSettings(self):
+        return self.settings
+
+    def setSettings(self, newSettings):
+        self.settings = newSettings
+
+    def getExternalIdentifier(self):
+        return self.externalIdentifier
+
+    def setExternalIdentifier(self, newExternalIdentifier):
+        self.externalIdentifier = newExternalIdentifier
+
+    def getName(self):
+        return self.name
+
+    def setName(self, newName):
+        self.name = newName
+
+
+# @package Kaltura
+# @subpackage Client
 class KalturaHouseholdCoupon(KalturaCrudObject):
     """Household Coupon details"""
 
@@ -20814,8 +20916,7 @@ class KalturaUnifiedBillingCycle(KalturaObjectBase):
     def __init__(self,
             name=NotImplemented,
             duration=NotImplemented,
-            paymentGatewayId=NotImplemented,
-            ignorePartialBilling=NotImplemented):
+            paymentGatewayId=NotImplemented):
         KalturaObjectBase.__init__(self)
 
         # UnifiedBillingCycle name
@@ -20830,16 +20931,11 @@ class KalturaUnifiedBillingCycle(KalturaObjectBase):
         # @var int
         self.paymentGatewayId = paymentGatewayId
 
-        # Define if partial billing shall be calculated or not
-        # @var bool
-        self.ignorePartialBilling = ignorePartialBilling
-
 
     PROPERTY_LOADERS = {
         'name': getXmlNodeText, 
         'duration': (KalturaObjectFactory.create, 'KalturaDuration'), 
         'paymentGatewayId': getXmlNodeInt, 
-        'ignorePartialBilling': getXmlNodeBool, 
     }
 
     def fromXml(self, node):
@@ -20852,7 +20948,6 @@ class KalturaUnifiedBillingCycle(KalturaObjectBase):
         kparams.addStringIfDefined("name", self.name)
         kparams.addObjectIfDefined("duration", self.duration)
         kparams.addIntIfDefined("paymentGatewayId", self.paymentGatewayId)
-        kparams.addBoolIfDefined("ignorePartialBilling", self.ignorePartialBilling)
         return kparams
 
     def getName(self):
@@ -20872,12 +20967,6 @@ class KalturaUnifiedBillingCycle(KalturaObjectBase):
 
     def setPaymentGatewayId(self, newPaymentGatewayId):
         self.paymentGatewayId = newPaymentGatewayId
-
-    def getIgnorePartialBilling(self):
-        return self.ignorePartialBilling
-
-    def setIgnorePartialBilling(self, newIgnorePartialBilling):
-        self.ignorePartialBilling = newIgnorePartialBilling
 
 
 # @package Kaltura
@@ -36394,6 +36483,41 @@ class KalturaPurchaseSettings(KalturaPin):
 
 # @package Kaltura
 # @subpackage Client
+class KalturaSmsAdapterProfileListResponse(KalturaListResponse):
+    def __init__(self,
+            totalCount=NotImplemented,
+            objects=NotImplemented):
+        KalturaListResponse.__init__(self,
+            totalCount)
+
+        # A list of objects
+        # @var array of KalturaSmsAdapterProfile
+        self.objects = objects
+
+
+    PROPERTY_LOADERS = {
+        'objects': (KalturaObjectFactory.createArray, 'KalturaSmsAdapterProfile'), 
+    }
+
+    def fromXml(self, node):
+        KalturaListResponse.fromXml(self, node)
+        self.fromXmlImpl(node, KalturaSmsAdapterProfileListResponse.PROPERTY_LOADERS)
+
+    def toParams(self):
+        kparams = KalturaListResponse.toParams(self)
+        kparams.put("objectType", "KalturaSmsAdapterProfileListResponse")
+        kparams.addArrayIfDefined("objects", self.objects)
+        return kparams
+
+    def getObjects(self):
+        return self.objects
+
+    def setObjects(self, newObjects):
+        self.objects = newObjects
+
+
+# @package Kaltura
+# @subpackage Client
 class KalturaNetworkActionStatus(KalturaObjectBase):
     def __init__(self,
             status=NotImplemented,
@@ -41287,11 +41411,13 @@ class KalturaNotificationService(KalturaServiceBase):
         resultNode = self.client.doQueue()
         return getXmlNodeBool(resultNode)
 
-    def sendSms(self, message):
+    def sendSms(self, message, phoneNumber = NotImplemented, adapterData = NotImplemented):
         """Sends SMS notification to user"""
 
         kparams = KalturaParams()
         kparams.addStringIfDefined("message", message)
+        kparams.addStringIfDefined("phoneNumber", phoneNumber)
+        kparams.addMapIfDefined("adapterData", adapterData)
         self.client.queueServiceActionCall("notification", "sendSms", "None", kparams)
         if self.client.isMultiRequest():
             return self.client.getMultiRequestResult()
@@ -42967,6 +43093,77 @@ class KalturaSessionService(KalturaServiceBase):
 
 # @package Kaltura
 # @subpackage Client
+class KalturaSmsAdapterProfileService(KalturaServiceBase):
+    def __init__(self, client = None):
+        KalturaServiceBase.__init__(self, client)
+
+    def add(self, objectToAdd):
+        """Add an object"""
+
+        kparams = KalturaParams()
+        kparams.addObjectIfDefined("objectToAdd", objectToAdd)
+        self.client.queueServiceActionCall("smsadapterprofile", "add", "KalturaSmsAdapterProfile", kparams)
+        if self.client.isMultiRequest():
+            return self.client.getMultiRequestResult()
+        resultNode = self.client.doQueue()
+        return KalturaObjectFactory.create(resultNode, 'KalturaSmsAdapterProfile')
+
+    def update(self, id, objectToUpdate):
+        """Update an object"""
+
+        kparams = KalturaParams()
+        kparams.addIntIfDefined("id", id);
+        kparams.addObjectIfDefined("objectToUpdate", objectToUpdate)
+        self.client.queueServiceActionCall("smsadapterprofile", "update", "KalturaSmsAdapterProfile", kparams)
+        if self.client.isMultiRequest():
+            return self.client.getMultiRequestResult()
+        resultNode = self.client.doQueue()
+        return KalturaObjectFactory.create(resultNode, 'KalturaSmsAdapterProfile')
+
+    def get(self, id):
+        """Get an object"""
+
+        kparams = KalturaParams()
+        kparams.addIntIfDefined("id", id);
+        self.client.queueServiceActionCall("smsadapterprofile", "get", "KalturaSmsAdapterProfile", kparams)
+        if self.client.isMultiRequest():
+            return self.client.getMultiRequestResult()
+        resultNode = self.client.doQueue()
+        return KalturaObjectFactory.create(resultNode, 'KalturaSmsAdapterProfile')
+
+    def list(self, filter):
+        kparams = KalturaParams()
+        kparams.addObjectIfDefined("filter", filter)
+        self.client.queueServiceActionCall("smsadapterprofile", "list", "KalturaSmsAdapterProfileListResponse", kparams)
+        if self.client.isMultiRequest():
+            return self.client.getMultiRequestResult()
+        resultNode = self.client.doQueue()
+        return KalturaObjectFactory.create(resultNode, 'KalturaSmsAdapterProfileListResponse')
+
+    def delete(self, id):
+        """Delete an object"""
+
+        kparams = KalturaParams()
+        kparams.addIntIfDefined("id", id);
+        self.client.queueServiceActionCall("smsadapterprofile", "delete", "None", kparams)
+        if self.client.isMultiRequest():
+            return self.client.getMultiRequestResult()
+        resultNode = self.client.doQueue()
+
+    def generateSharedSecret(self, smsAdapterId):
+        """Generate Sms Adapter shared secret"""
+
+        kparams = KalturaParams()
+        kparams.addIntIfDefined("smsAdapterId", smsAdapterId);
+        self.client.queueServiceActionCall("smsadapterprofile", "generateSharedSecret", "KalturaSmsAdapterProfile", kparams)
+        if self.client.isMultiRequest():
+            return self.client.getMultiRequestResult()
+        resultNode = self.client.doQueue()
+        return KalturaObjectFactory.create(resultNode, 'KalturaSmsAdapterProfile')
+
+
+# @package Kaltura
+# @subpackage Client
 class KalturaSocialActionService(KalturaServiceBase):
     def __init__(self, client = None):
         KalturaServiceBase.__init__(self, client)
@@ -44205,6 +44402,7 @@ class KalturaCoreClient(KalturaClientPlugin):
             'segmentationType': KalturaSegmentationTypeService,
             'seriesRecording': KalturaSeriesRecordingService,
             'session': KalturaSessionService,
+            'smsAdapterProfile': KalturaSmsAdapterProfileService,
             'socialAction': KalturaSocialActionService,
             'socialComment': KalturaSocialCommentService,
             'social': KalturaSocialService,
@@ -44388,6 +44586,7 @@ class KalturaCoreClient(KalturaClientPlugin):
             'KalturaSeriesReminderOrderBy': KalturaSeriesReminderOrderBy,
             'KalturaSkipOperators': KalturaSkipOperators,
             'KalturaSkipOptions': KalturaSkipOptions,
+            'KalturaSmsAdapterProfileOrderBy': KalturaSmsAdapterProfileOrderBy,
             'KalturaSocialActionOrderBy': KalturaSocialActionOrderBy,
             'KalturaSocialActionPrivacy': KalturaSocialActionPrivacy,
             'KalturaSocialActionType': KalturaSocialActionType,
@@ -44435,7 +44634,6 @@ class KalturaCoreClient(KalturaClientPlugin):
             'KalturaRequestConfiguration': KalturaRequestConfiguration,
             'KalturaFilter': KalturaFilter,
             'KalturaDetachedResponseProfile': KalturaDetachedResponseProfile,
-            'KalturaOnDemandResponseProfile': KalturaOnDemandResponseProfile,
             'KalturaRelatedObjectFilter': KalturaRelatedObjectFilter,
             'KalturaValue': KalturaValue,
             'KalturaIntegerValue': KalturaIntegerValue,
@@ -44450,6 +44648,7 @@ class KalturaCoreClient(KalturaClientPlugin):
             'KalturaCrudFilter': KalturaCrudFilter,
             'KalturaPasswordPolicyFilter': KalturaPasswordPolicyFilter,
             'KalturaHouseholdSegmentFilter': KalturaHouseholdSegmentFilter,
+            'KalturaSmsAdapterProfileFilter': KalturaSmsAdapterProfileFilter,
             'KalturaHouseholdCouponFilter': KalturaHouseholdCouponFilter,
             'KalturaCategoryItemFilter': KalturaCategoryItemFilter,
             'KalturaCategoryItemByIdInFilter': KalturaCategoryItemByIdInFilter,
@@ -44656,6 +44855,7 @@ class KalturaCoreClient(KalturaClientPlugin):
             'KalturaRegexExpression': KalturaRegexExpression,
             'KalturaPasswordPolicy': KalturaPasswordPolicy,
             'KalturaHouseholdSegment': KalturaHouseholdSegment,
+            'KalturaSmsAdapterProfile': KalturaSmsAdapterProfile,
             'KalturaHouseholdCoupon': KalturaHouseholdCoupon,
             'KalturaUnifiedChannel': KalturaUnifiedChannel,
             'KalturaCategoryItem': KalturaCategoryItem,
@@ -45000,6 +45200,7 @@ class KalturaCoreClient(KalturaClientPlugin):
             'KalturaApiPriviligesPermissionItem': KalturaApiPriviligesPermissionItem,
             'KalturaPin': KalturaPin,
             'KalturaPurchaseSettings': KalturaPurchaseSettings,
+            'KalturaSmsAdapterProfileListResponse': KalturaSmsAdapterProfileListResponse,
             'KalturaNetworkActionStatus': KalturaNetworkActionStatus,
             'KalturaUserSocialActionResponse': KalturaUserSocialActionResponse,
             'KalturaSocial': KalturaSocial,
