@@ -42,7 +42,7 @@ from ..Base import (
     KalturaServiceBase,
 )
 
-API_VERSION = '5.5.0.28283'
+API_VERSION = '5.5.0.28298'
 
 ########## enums ##########
 # @package Kaltura
@@ -1042,6 +1042,8 @@ class KalturaHouseholdCouponOrderBy(object):
 # @subpackage Client
 class KalturaHouseholdDeviceOrderBy(object):
     NONE = "NONE"
+    CREATED_DATE_ASC = "CREATED_DATE_ASC"
+    CREATED_DATE_DESC = "CREATED_DATE_DESC"
 
     def __init__(self, value):
         self.value = value
@@ -1054,6 +1056,17 @@ class KalturaHouseholdDeviceOrderBy(object):
 class KalturaHouseholdFrequencyType(object):
     DEVICES = "devices"
     USERS = "users"
+
+    def __init__(self, value):
+        self.value = value
+
+    def getValue(self):
+        return self.value
+
+# @package Kaltura
+# @subpackage Client
+class KalturaHouseholdOrderBy(object):
+    CREATE_DATE_DESC = "CREATE_DATE_DESC"
 
     def __init__(self, value):
         self.value = value
@@ -6472,6 +6485,43 @@ class KalturaHouseholdDeviceFilter(KalturaFilter):
 
 # @package Kaltura
 # @subpackage Client
+class KalturaHouseholdFilter(KalturaFilter):
+    """Household details"""
+
+    def __init__(self,
+            orderBy=NotImplemented,
+            externalIdEqual=NotImplemented):
+        KalturaFilter.__init__(self,
+            orderBy)
+
+        # Household external identifier to search by
+        # @var string
+        self.externalIdEqual = externalIdEqual
+
+
+    PROPERTY_LOADERS = {
+        'externalIdEqual': getXmlNodeText, 
+    }
+
+    def fromXml(self, node):
+        KalturaFilter.fromXml(self, node)
+        self.fromXmlImpl(node, KalturaHouseholdFilter.PROPERTY_LOADERS)
+
+    def toParams(self):
+        kparams = KalturaFilter.toParams(self)
+        kparams.put("objectType", "KalturaHouseholdFilter")
+        kparams.addStringIfDefined("externalIdEqual", self.externalIdEqual)
+        return kparams
+
+    def getExternalIdEqual(self):
+        return self.externalIdEqual
+
+    def setExternalIdEqual(self, newExternalIdEqual):
+        self.externalIdEqual = newExternalIdEqual
+
+
+# @package Kaltura
+# @subpackage Client
 class KalturaHouseholdUserFilter(KalturaFilter):
     def __init__(self,
             orderBy=NotImplemented,
@@ -7048,7 +7098,11 @@ class KalturaTransactionHistoryFilter(KalturaFilter):
             orderBy=NotImplemented,
             entityReferenceEqual=NotImplemented,
             startDateGreaterThanOrEqual=NotImplemented,
-            endDateLessThanOrEqual=NotImplemented):
+            endDateLessThanOrEqual=NotImplemented,
+            entitlementIdEqual=NotImplemented,
+            externalIdEqual=NotImplemented,
+            billingItemsTypeEqual=NotImplemented,
+            billingActionEqual=NotImplemented):
         KalturaFilter.__init__(self,
             orderBy)
 
@@ -7064,11 +7118,31 @@ class KalturaTransactionHistoryFilter(KalturaFilter):
         # @var int
         self.endDateLessThanOrEqual = endDateLessThanOrEqual
 
+        # Filter transaction by entitlement id
+        # @var int
+        self.entitlementIdEqual = entitlementIdEqual
+
+        # Filter transaction by external Id
+        # @var string
+        self.externalIdEqual = externalIdEqual
+
+        # Filter transaction by billing item type
+        # @var KalturaBillingItemsType
+        self.billingItemsTypeEqual = billingItemsTypeEqual
+
+        # Filter transaction by billing action
+        # @var KalturaBillingAction
+        self.billingActionEqual = billingActionEqual
+
 
     PROPERTY_LOADERS = {
         'entityReferenceEqual': (KalturaEnumsFactory.createString, "KalturaEntityReferenceBy"), 
         'startDateGreaterThanOrEqual': getXmlNodeInt, 
         'endDateLessThanOrEqual': getXmlNodeInt, 
+        'entitlementIdEqual': getXmlNodeInt, 
+        'externalIdEqual': getXmlNodeText, 
+        'billingItemsTypeEqual': (KalturaEnumsFactory.createString, "KalturaBillingItemsType"), 
+        'billingActionEqual': (KalturaEnumsFactory.createString, "KalturaBillingAction"), 
     }
 
     def fromXml(self, node):
@@ -7081,6 +7155,10 @@ class KalturaTransactionHistoryFilter(KalturaFilter):
         kparams.addStringEnumIfDefined("entityReferenceEqual", self.entityReferenceEqual)
         kparams.addIntIfDefined("startDateGreaterThanOrEqual", self.startDateGreaterThanOrEqual)
         kparams.addIntIfDefined("endDateLessThanOrEqual", self.endDateLessThanOrEqual)
+        kparams.addIntIfDefined("entitlementIdEqual", self.entitlementIdEqual)
+        kparams.addStringIfDefined("externalIdEqual", self.externalIdEqual)
+        kparams.addStringEnumIfDefined("billingItemsTypeEqual", self.billingItemsTypeEqual)
+        kparams.addStringEnumIfDefined("billingActionEqual", self.billingActionEqual)
         return kparams
 
     def getEntityReferenceEqual(self):
@@ -7100,6 +7178,30 @@ class KalturaTransactionHistoryFilter(KalturaFilter):
 
     def setEndDateLessThanOrEqual(self, newEndDateLessThanOrEqual):
         self.endDateLessThanOrEqual = newEndDateLessThanOrEqual
+
+    def getEntitlementIdEqual(self):
+        return self.entitlementIdEqual
+
+    def setEntitlementIdEqual(self, newEntitlementIdEqual):
+        self.entitlementIdEqual = newEntitlementIdEqual
+
+    def getExternalIdEqual(self):
+        return self.externalIdEqual
+
+    def setExternalIdEqual(self, newExternalIdEqual):
+        self.externalIdEqual = newExternalIdEqual
+
+    def getBillingItemsTypeEqual(self):
+        return self.billingItemsTypeEqual
+
+    def setBillingItemsTypeEqual(self, newBillingItemsTypeEqual):
+        self.billingItemsTypeEqual = newBillingItemsTypeEqual
+
+    def getBillingActionEqual(self):
+        return self.billingActionEqual
+
+    def setBillingActionEqual(self, newBillingActionEqual):
+        self.billingActionEqual = newBillingActionEqual
 
 
 # @package Kaltura
@@ -24489,7 +24591,6 @@ class KalturaEntitlement(KalturaObjectBase):
 
         # The end date of the entitlement
         # @var int
-        # @readonly
         self.endDate = endDate
 
         # Current date
@@ -24567,6 +24668,7 @@ class KalturaEntitlement(KalturaObjectBase):
     def toParams(self):
         kparams = KalturaObjectBase.toParams(self)
         kparams.put("objectType", "KalturaEntitlement")
+        kparams.addIntIfDefined("endDate", self.endDate)
         return kparams
 
     def getId(self):
@@ -24580,6 +24682,9 @@ class KalturaEntitlement(KalturaObjectBase):
 
     def getEndDate(self):
         return self.endDate
+
+    def setEndDate(self, newEndDate):
+        self.endDate = newEndDate
 
     def getCurrentDate(self):
         return self.currentDate
@@ -34274,7 +34379,9 @@ class KalturaHousehold(KalturaObjectBase):
             frequencyNextDeviceAction=NotImplemented,
             frequencyNextUserAction=NotImplemented,
             restriction=NotImplemented,
-            roleId=NotImplemented):
+            roleId=NotImplemented,
+            createDate=NotImplemented,
+            updateDate=NotImplemented):
         KalturaObjectBase.__init__(self)
 
         # Household identifier
@@ -34348,6 +34455,16 @@ class KalturaHousehold(KalturaObjectBase):
         # @readonly
         self.roleId = roleId
 
+        # create date
+        # @var int
+        # @readonly
+        self.createDate = createDate
+
+        # update date
+        # @var int
+        # @readonly
+        self.updateDate = updateDate
+
 
     PROPERTY_LOADERS = {
         'id': getXmlNodeInt, 
@@ -34365,6 +34482,8 @@ class KalturaHousehold(KalturaObjectBase):
         'frequencyNextUserAction': getXmlNodeInt, 
         'restriction': (KalturaEnumsFactory.createString, "KalturaHouseholdRestriction"), 
         'roleId': getXmlNodeInt, 
+        'createDate': getXmlNodeInt, 
+        'updateDate': getXmlNodeInt, 
     }
 
     def fromXml(self, node):
@@ -34436,6 +34555,47 @@ class KalturaHousehold(KalturaObjectBase):
 
     def getRoleId(self):
         return self.roleId
+
+    def getCreateDate(self):
+        return self.createDate
+
+    def getUpdateDate(self):
+        return self.updateDate
+
+
+# @package Kaltura
+# @subpackage Client
+class KalturaHouseholdListResponse(KalturaListResponse):
+    def __init__(self,
+            totalCount=NotImplemented,
+            objects=NotImplemented):
+        KalturaListResponse.__init__(self,
+            totalCount)
+
+        # A list of objects
+        # @var array of KalturaHousehold
+        self.objects = objects
+
+
+    PROPERTY_LOADERS = {
+        'objects': (KalturaObjectFactory.createArray, 'KalturaHousehold'), 
+    }
+
+    def fromXml(self, node):
+        KalturaListResponse.fromXml(self, node)
+        self.fromXmlImpl(node, KalturaHouseholdListResponse.PROPERTY_LOADERS)
+
+    def toParams(self):
+        kparams = KalturaListResponse.toParams(self)
+        kparams.put("objectType", "KalturaHouseholdListResponse")
+        kparams.addArrayIfDefined("objects", self.objects)
+        return kparams
+
+    def getObjects(self):
+        return self.objects
+
+    def setObjects(self, newObjects):
+        self.objects = newObjects
 
 
 # @package Kaltura
@@ -40247,6 +40407,18 @@ class KalturaHouseholdService(KalturaServiceBase):
         resultNode = self.client.doQueue()
         return KalturaObjectFactory.create(resultNode, 'KalturaHousehold')
 
+    def list(self, filter, pager = NotImplemented):
+        """Get recently watched media for user, ordered by recently watched first."""
+
+        kparams = KalturaParams()
+        kparams.addObjectIfDefined("filter", filter)
+        kparams.addObjectIfDefined("pager", pager)
+        self.client.queueServiceActionCall("household", "list", "KalturaHouseholdListResponse", kparams)
+        if self.client.isMultiRequest():
+            return self.client.getMultiRequestResult()
+        resultNode = self.client.doQueue()
+        return KalturaObjectFactory.create(resultNode, 'KalturaHouseholdListResponse')
+
     def purge(self, id):
         """Purge a household. Delete all of the household information, including users, devices, entitlements, payment methods and notification date."""
 
@@ -44310,6 +44482,7 @@ class KalturaCoreClient(KalturaClientPlugin):
             'KalturaHouseholdCouponOrderBy': KalturaHouseholdCouponOrderBy,
             'KalturaHouseholdDeviceOrderBy': KalturaHouseholdDeviceOrderBy,
             'KalturaHouseholdFrequencyType': KalturaHouseholdFrequencyType,
+            'KalturaHouseholdOrderBy': KalturaHouseholdOrderBy,
             'KalturaHouseholdPaymentGatewaySelectedBy': KalturaHouseholdPaymentGatewaySelectedBy,
             'KalturaHouseholdRestriction': KalturaHouseholdRestriction,
             'KalturaHouseholdSegmentOrderBy': KalturaHouseholdSegmentOrderBy,
@@ -44514,6 +44687,7 @@ class KalturaCoreClient(KalturaClientPlugin):
             'KalturaDeviceReportFilter': KalturaDeviceReportFilter,
             'KalturaHouseholdCouponCodeFilter': KalturaHouseholdCouponCodeFilter,
             'KalturaHouseholdDeviceFilter': KalturaHouseholdDeviceFilter,
+            'KalturaHouseholdFilter': KalturaHouseholdFilter,
             'KalturaHouseholdUserFilter': KalturaHouseholdUserFilter,
             'KalturaConfigurationGroupDeviceFilter': KalturaConfigurationGroupDeviceFilter,
             'KalturaConfigurationGroupTagFilter': KalturaConfigurationGroupTagFilter,
@@ -44965,6 +45139,7 @@ class KalturaCoreClient(KalturaClientPlugin):
             'KalturaConcurrencyViolation': KalturaConcurrencyViolation,
             'KalturaEventNotificationListResponse': KalturaEventNotificationListResponse,
             'KalturaHousehold': KalturaHousehold,
+            'KalturaHouseholdListResponse': KalturaHouseholdListResponse,
             'KalturaHouseholdCouponListResponse': KalturaHouseholdCouponListResponse,
             'KalturaDevicePin': KalturaDevicePin,
             'KalturaLoginSession': KalturaLoginSession,
