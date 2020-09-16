@@ -42,7 +42,7 @@ from ..Base import (
     KalturaServiceBase,
 )
 
-API_VERSION = '5.6.0.28472'
+API_VERSION = '5.6.0.28480'
 
 ########## enums ##########
 # @package Kaltura
@@ -123,8 +123,7 @@ class KalturaAnnouncementStatus(object):
 # @package Kaltura
 # @subpackage Client
 class KalturaApiAction(object):
-    INSERT = "INSERT"
-    UPDATE = "UPDATE"
+    ADD = "ADD"
 
     def __init__(self, value):
         self.value = value
@@ -41499,6 +41498,19 @@ class KalturaDynamicListService(KalturaServiceBase):
             return self.client.getMultiRequestResult()
         resultNode = self.client.doQueue()
         return KalturaObjectFactory.create(resultNode, 'KalturaDynamicListListResponse')
+
+    def addFromBulkUpload(self, fileData, jobData, bulkUploadAssetData):
+        """Add new bulk upload batch job Conversion profile id can be specified in the API."""
+
+        kparams = KalturaParams()
+        kfiles = {"fileData": fileData}
+        kparams.addObjectIfDefined("jobData", jobData)
+        kparams.addObjectIfDefined("bulkUploadAssetData", bulkUploadAssetData)
+        self.client.queueServiceActionCall("dynamiclist", "addFromBulkUpload", "KalturaBulkUpload", kparams, kfiles)
+        if self.client.isMultiRequest():
+            return self.client.getMultiRequestResult()
+        resultNode = self.client.doQueue()
+        return KalturaObjectFactory.create(resultNode, 'KalturaBulkUpload')
 
 
 # @package Kaltura
