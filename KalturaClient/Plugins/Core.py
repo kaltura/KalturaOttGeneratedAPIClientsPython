@@ -42,7 +42,7 @@ from ..Base import (
     KalturaServiceBase,
 )
 
-API_VERSION = '5.6.0.28480'
+API_VERSION = '5.6.0.28513'
 
 ########## enums ##########
 # @package Kaltura
@@ -547,7 +547,7 @@ class KalturaBundleType(object):
 # @package Kaltura
 # @subpackage Client
 class KalturaCampaignOrderBy(object):
-    NONE = "NONE"
+    START_DATE_DESC = "START_DATE_DESC"
 
     def __init__(self, value):
         self.value = value
@@ -2094,7 +2094,7 @@ class KalturaRuleConditionType(object):
     DEVICE_FAMILY = "DEVICE_FAMILY"
     DEVICE_MANUFACTURER = "DEVICE_MANUFACTURER"
     DEVICE_MODEL = "DEVICE_MODEL"
-    DEVICE_UDID = "DEVICE_UDID"
+    DEVICE_UDID_DYNAMIC_LIST = "DEVICE_UDID_DYNAMIC_LIST"
 
     def __init__(self, value):
         self.value = value
@@ -3358,17 +3358,23 @@ class KalturaDynamicListSearchFilter(KalturaDynamicListFilter):
 
     def __init__(self,
             orderBy=NotImplemented,
-            valueIn=NotImplemented):
+            idEqual=NotImplemented,
+            valueEqual=NotImplemented):
         KalturaDynamicListFilter.__init__(self,
             orderBy)
 
-        # Comma-separated String which represent List of objects that is in the dynamicList.
+        # DynamicList id to search by
+        # @var int
+        self.idEqual = idEqual
+
+        # udid value that should be in the DynamicList
         # @var string
-        self.valueIn = valueIn
+        self.valueEqual = valueEqual
 
 
     PROPERTY_LOADERS = {
-        'valueIn': getXmlNodeText, 
+        'idEqual': getXmlNodeInt, 
+        'valueEqual': getXmlNodeText, 
     }
 
     def fromXml(self, node):
@@ -3378,36 +3384,47 @@ class KalturaDynamicListSearchFilter(KalturaDynamicListFilter):
     def toParams(self):
         kparams = KalturaDynamicListFilter.toParams(self)
         kparams.put("objectType", "KalturaDynamicListSearchFilter")
-        kparams.addStringIfDefined("valueIn", self.valueIn)
+        kparams.addIntIfDefined("idEqual", self.idEqual)
+        kparams.addStringIfDefined("valueEqual", self.valueEqual)
         return kparams
 
-    def getValueIn(self):
-        return self.valueIn
+    def getIdEqual(self):
+        return self.idEqual
 
-    def setValueIn(self, newValueIn):
-        self.valueIn = newValueIn
+    def setIdEqual(self, newIdEqual):
+        self.idEqual = newIdEqual
+
+    def getValueEqual(self):
+        return self.valueEqual
+
+    def setValueEqual(self, newValueEqual):
+        self.valueEqual = newValueEqual
 
 
 # @package Kaltura
 # @subpackage Client
-class KalturaUdidDynamicListSearchFilter(KalturaDynamicListFilter):
+class KalturaUdidDynamicListSearchFilter(KalturaDynamicListSearchFilter):
     """UdidDynamicListSearchFilter"""
 
     def __init__(self,
-            orderBy=NotImplemented):
-        KalturaDynamicListFilter.__init__(self,
-            orderBy)
+            orderBy=NotImplemented,
+            idEqual=NotImplemented,
+            valueEqual=NotImplemented):
+        KalturaDynamicListSearchFilter.__init__(self,
+            orderBy,
+            idEqual,
+            valueEqual)
 
 
     PROPERTY_LOADERS = {
     }
 
     def fromXml(self, node):
-        KalturaDynamicListFilter.fromXml(self, node)
+        KalturaDynamicListSearchFilter.fromXml(self, node)
         self.fromXmlImpl(node, KalturaUdidDynamicListSearchFilter.PROPERTY_LOADERS)
 
     def toParams(self):
-        kparams = KalturaDynamicListFilter.toParams(self)
+        kparams = KalturaDynamicListSearchFilter.toParams(self)
         kparams.put("objectType", "KalturaUdidDynamicListSearchFilter")
         return kparams
 
@@ -12651,6 +12668,80 @@ class KalturaBulkUploadProgramAssetResult(KalturaBulkUploadResult):
 
 # @package Kaltura
 # @subpackage Client
+class KalturaBulkUploadDynamicListResult(KalturaBulkUploadResult):
+    def __init__(self,
+            objectId=NotImplemented,
+            index=NotImplemented,
+            bulkUploadId=NotImplemented,
+            status=NotImplemented,
+            errors=NotImplemented,
+            warnings=NotImplemented):
+        KalturaBulkUploadResult.__init__(self,
+            objectId,
+            index,
+            bulkUploadId,
+            status,
+            errors,
+            warnings)
+
+
+    PROPERTY_LOADERS = {
+    }
+
+    def fromXml(self, node):
+        KalturaBulkUploadResult.fromXml(self, node)
+        self.fromXmlImpl(node, KalturaBulkUploadDynamicListResult.PROPERTY_LOADERS)
+
+    def toParams(self):
+        kparams = KalturaBulkUploadResult.toParams(self)
+        kparams.put("objectType", "KalturaBulkUploadDynamicListResult")
+        return kparams
+
+
+# @package Kaltura
+# @subpackage Client
+class KalturaBulkUploadUdidDynamicListResult(KalturaBulkUploadDynamicListResult):
+    def __init__(self,
+            objectId=NotImplemented,
+            index=NotImplemented,
+            bulkUploadId=NotImplemented,
+            status=NotImplemented,
+            errors=NotImplemented,
+            warnings=NotImplemented,
+            udid=NotImplemented):
+        KalturaBulkUploadDynamicListResult.__init__(self,
+            objectId,
+            index,
+            bulkUploadId,
+            status,
+            errors,
+            warnings)
+
+        # The udid from the excel to add to DynamicLis values
+        # @var string
+        # @readonly
+        self.udid = udid
+
+
+    PROPERTY_LOADERS = {
+        'udid': getXmlNodeText, 
+    }
+
+    def fromXml(self, node):
+        KalturaBulkUploadDynamicListResult.fromXml(self, node)
+        self.fromXmlImpl(node, KalturaBulkUploadUdidDynamicListResult.PROPERTY_LOADERS)
+
+    def toParams(self):
+        kparams = KalturaBulkUploadDynamicListResult.toParams(self)
+        kparams.put("objectType", "KalturaBulkUploadUdidDynamicListResult")
+        return kparams
+
+    def getUdid(self):
+        return self.udid
+
+
+# @package Kaltura
+# @subpackage Client
 class KalturaSocialAction(KalturaObjectBase):
     def __init__(self,
             id=NotImplemented,
@@ -16781,39 +16872,39 @@ class KalturaDeviceModelCondition(KalturaCondition):
 
 # @package Kaltura
 # @subpackage Client
-class KalturaDeviceUdidCondition(KalturaCondition):
+class KalturaUdidDynamicListCondition(KalturaCondition):
     def __init__(self,
             type=NotImplemented,
             description=NotImplemented,
-            udidIn=NotImplemented):
+            id=NotImplemented):
         KalturaCondition.__init__(self,
             type,
             description)
 
-        # Comma separated Device Udid IDs list
-        # @var string
-        self.udidIn = udidIn
+        # KalturaUdidDynamicList.id
+        # @var int
+        self.id = id
 
 
     PROPERTY_LOADERS = {
-        'udidIn': getXmlNodeText, 
+        'id': getXmlNodeInt, 
     }
 
     def fromXml(self, node):
         KalturaCondition.fromXml(self, node)
-        self.fromXmlImpl(node, KalturaDeviceUdidCondition.PROPERTY_LOADERS)
+        self.fromXmlImpl(node, KalturaUdidDynamicListCondition.PROPERTY_LOADERS)
 
     def toParams(self):
         kparams = KalturaCondition.toParams(self)
-        kparams.put("objectType", "KalturaDeviceUdidCondition")
-        kparams.addStringIfDefined("udidIn", self.udidIn)
+        kparams.put("objectType", "KalturaUdidDynamicListCondition")
+        kparams.addIntIfDefined("id", self.id)
         return kparams
 
-    def getUdidIn(self):
-        return self.udidIn
+    def getId(self):
+        return self.id
 
-    def setUdidIn(self, newUdidIn):
-        self.udidIn = newUdidIn
+    def setId(self, newId):
+        self.id = newId
 
 
 # @package Kaltura
@@ -34384,6 +34475,65 @@ class KalturaBulkUploadProgramAssetData(KalturaBulkUploadAssetData):
 
 # @package Kaltura
 # @subpackage Client
+class KalturaBulkUploadDynamicListData(KalturaBulkUploadObjectData):
+    """indicates the DynamicList object type in the bulk file"""
+
+    def __init__(self,
+            dynamicListId=NotImplemented):
+        KalturaBulkUploadObjectData.__init__(self)
+
+        # Identifies the dynamicList Id
+        # @var int
+        self.dynamicListId = dynamicListId
+
+
+    PROPERTY_LOADERS = {
+        'dynamicListId': getXmlNodeInt, 
+    }
+
+    def fromXml(self, node):
+        KalturaBulkUploadObjectData.fromXml(self, node)
+        self.fromXmlImpl(node, KalturaBulkUploadDynamicListData.PROPERTY_LOADERS)
+
+    def toParams(self):
+        kparams = KalturaBulkUploadObjectData.toParams(self)
+        kparams.put("objectType", "KalturaBulkUploadDynamicListData")
+        kparams.addIntIfDefined("dynamicListId", self.dynamicListId)
+        return kparams
+
+    def getDynamicListId(self):
+        return self.dynamicListId
+
+    def setDynamicListId(self, newDynamicListId):
+        self.dynamicListId = newDynamicListId
+
+
+# @package Kaltura
+# @subpackage Client
+class KalturaBulkUploadUdidDynamicListData(KalturaBulkUploadDynamicListData):
+    """indicates the UDID DynamicList object type in the bulk file"""
+
+    def __init__(self,
+            dynamicListId=NotImplemented):
+        KalturaBulkUploadDynamicListData.__init__(self,
+            dynamicListId)
+
+
+    PROPERTY_LOADERS = {
+    }
+
+    def fromXml(self, node):
+        KalturaBulkUploadDynamicListData.fromXml(self, node)
+        self.fromXmlImpl(node, KalturaBulkUploadUdidDynamicListData.PROPERTY_LOADERS)
+
+    def toParams(self):
+        kparams = KalturaBulkUploadDynamicListData.toParams(self)
+        kparams.put("objectType", "KalturaBulkUploadUdidDynamicListData")
+        return kparams
+
+
+# @package Kaltura
+# @subpackage Client
 class KalturaAssetFileContext(KalturaObjectBase):
     def __init__(self,
             viewLifeCycle=NotImplemented,
@@ -41499,13 +41649,13 @@ class KalturaDynamicListService(KalturaServiceBase):
         resultNode = self.client.doQueue()
         return KalturaObjectFactory.create(resultNode, 'KalturaDynamicListListResponse')
 
-    def addFromBulkUpload(self, fileData, jobData, bulkUploadAssetData):
+    def addFromBulkUpload(self, fileData, jobData, bulkUploadData):
         """Add new bulk upload batch job Conversion profile id can be specified in the API."""
 
         kparams = KalturaParams()
         kfiles = {"fileData": fileData}
         kparams.addObjectIfDefined("jobData", jobData)
-        kparams.addObjectIfDefined("bulkUploadAssetData", bulkUploadAssetData)
+        kparams.addObjectIfDefined("bulkUploadData", bulkUploadData)
         self.client.queueServiceActionCall("dynamiclist", "addFromBulkUpload", "KalturaBulkUpload", kparams, kfiles)
         if self.client.isMultiRequest():
             return self.client.getMultiRequestResult()
@@ -46610,6 +46760,8 @@ class KalturaCoreClient(KalturaClientPlugin):
             'KalturaBulkUploadMediaAssetResult': KalturaBulkUploadMediaAssetResult,
             'KalturaBulkUploadLiveAssetResult': KalturaBulkUploadLiveAssetResult,
             'KalturaBulkUploadProgramAssetResult': KalturaBulkUploadProgramAssetResult,
+            'KalturaBulkUploadDynamicListResult': KalturaBulkUploadDynamicListResult,
+            'KalturaBulkUploadUdidDynamicListResult': KalturaBulkUploadUdidDynamicListResult,
             'KalturaSocialAction': KalturaSocialAction,
             'KalturaSocialActionListResponse': KalturaSocialActionListResponse,
             'KalturaSocialActionRate': KalturaSocialActionRate,
@@ -46690,7 +46842,7 @@ class KalturaCoreClient(KalturaClientPlugin):
             'KalturaDeviceFamilyCondition': KalturaDeviceFamilyCondition,
             'KalturaDeviceManufacturerCondition': KalturaDeviceManufacturerCondition,
             'KalturaDeviceModelCondition': KalturaDeviceModelCondition,
-            'KalturaDeviceUdidCondition': KalturaDeviceUdidCondition,
+            'KalturaUdidDynamicListCondition': KalturaUdidDynamicListCondition,
             'KalturaEventNotification': KalturaEventNotification,
             'KalturaIot': KalturaIot,
             'KalturaIotProfileAws': KalturaIotProfileAws,
@@ -46960,6 +47112,8 @@ class KalturaCoreClient(KalturaClientPlugin):
             'KalturaBulkUploadMediaAssetData': KalturaBulkUploadMediaAssetData,
             'KalturaBulkUploadLiveAssetData': KalturaBulkUploadLiveAssetData,
             'KalturaBulkUploadProgramAssetData': KalturaBulkUploadProgramAssetData,
+            'KalturaBulkUploadDynamicListData': KalturaBulkUploadDynamicListData,
+            'KalturaBulkUploadUdidDynamicListData': KalturaBulkUploadUdidDynamicListData,
             'KalturaAssetFileContext': KalturaAssetFileContext,
             'KalturaAssetStatisticsQuery': KalturaAssetStatisticsQuery,
             'KalturaCampaignListResponse': KalturaCampaignListResponse,
