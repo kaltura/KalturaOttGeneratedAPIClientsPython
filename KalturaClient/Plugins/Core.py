@@ -42,7 +42,7 @@ from ..Base import (
     KalturaServiceBase,
 )
 
-API_VERSION = '5.6.0.28362'
+API_VERSION = '5.6.0.28409'
 
 ########## enums ##########
 # @package Kaltura
@@ -381,6 +381,7 @@ class KalturaBillingAction(object):
     RENEW_CANCELED_SUBSCRIPTION = "renew_canceled_subscription"
     CANCEL_SUBSCRIPTION_ORDER = "cancel_subscription_order"
     SUBSCRIPTION_DATE_CHANGED = "subscription_date_changed"
+    PENDING = "pending"
 
     def __init__(self, value):
         self.value = value
@@ -1833,6 +1834,7 @@ class KalturaPurchaseStatus(object):
     NOT_FOR_PURCHASE = "not_for_purchase"
     INVALID_CURRENCY = "invalid_currency"
     CURRENCY_NOT_DEFINED_ON_PRICE_CODE = "currency_not_defined_on_price_code"
+    PENDING_ENTITLEMENT = "pending_entitlement"
 
     def __init__(self, value):
         self.value = value
@@ -9603,7 +9605,8 @@ class KalturaRegionFilter(KalturaBaseRegionFilter):
             idIn=NotImplemented,
             parentIdEqual=NotImplemented,
             liveAssetIdEqual=NotImplemented,
-            parentOnly=NotImplemented):
+            parentOnly=NotImplemented,
+            exclusiveLcn=NotImplemented):
         KalturaBaseRegionFilter.__init__(self,
             orderBy)
 
@@ -9627,6 +9630,10 @@ class KalturaRegionFilter(KalturaBaseRegionFilter):
         # @var bool
         self.parentOnly = parentOnly
 
+        # Retrieves only the channels belonging specifically to the child region
+        # @var bool
+        self.exclusiveLcn = exclusiveLcn
+
 
     PROPERTY_LOADERS = {
         'externalIdIn': getXmlNodeText, 
@@ -9634,6 +9641,7 @@ class KalturaRegionFilter(KalturaBaseRegionFilter):
         'parentIdEqual': getXmlNodeInt, 
         'liveAssetIdEqual': getXmlNodeInt, 
         'parentOnly': getXmlNodeBool, 
+        'exclusiveLcn': getXmlNodeBool, 
     }
 
     def fromXml(self, node):
@@ -9648,6 +9656,7 @@ class KalturaRegionFilter(KalturaBaseRegionFilter):
         kparams.addIntIfDefined("parentIdEqual", self.parentIdEqual)
         kparams.addIntIfDefined("liveAssetIdEqual", self.liveAssetIdEqual)
         kparams.addBoolIfDefined("parentOnly", self.parentOnly)
+        kparams.addBoolIfDefined("exclusiveLcn", self.exclusiveLcn)
         return kparams
 
     def getExternalIdIn(self):
@@ -9679,6 +9688,12 @@ class KalturaRegionFilter(KalturaBaseRegionFilter):
 
     def setParentOnly(self, newParentOnly):
         self.parentOnly = newParentOnly
+
+    def getExclusiveLcn(self):
+        return self.exclusiveLcn
+
+    def setExclusiveLcn(self, newExclusiveLcn):
+        self.exclusiveLcn = newExclusiveLcn
 
 
 # @package Kaltura
@@ -24714,7 +24729,8 @@ class KalturaEntitlement(KalturaObjectBase):
             isCancelationWindowEnabled=NotImplemented,
             maxUses=NotImplemented,
             userId=NotImplemented,
-            householdId=NotImplemented):
+            householdId=NotImplemented,
+            isPending=NotImplemented):
         KalturaObjectBase.__init__(self)
 
         # Purchase identifier (for subscriptions and collections only)
@@ -24786,6 +24802,10 @@ class KalturaEntitlement(KalturaObjectBase):
         # @readonly
         self.householdId = householdId
 
+        # Indicates whether the asynchronous purchase is pending
+        # @var bool
+        self.isPending = isPending
+
 
     PROPERTY_LOADERS = {
         'id': getXmlNodeInt, 
@@ -24802,6 +24822,7 @@ class KalturaEntitlement(KalturaObjectBase):
         'maxUses': getXmlNodeInt, 
         'userId': getXmlNodeText, 
         'householdId': getXmlNodeInt, 
+        'isPending': getXmlNodeBool, 
     }
 
     def fromXml(self, node):
@@ -24812,6 +24833,7 @@ class KalturaEntitlement(KalturaObjectBase):
         kparams = KalturaObjectBase.toParams(self)
         kparams.put("objectType", "KalturaEntitlement")
         kparams.addIntIfDefined("endDate", self.endDate)
+        kparams.addBoolIfDefined("isPending", self.isPending)
         return kparams
 
     def getId(self):
@@ -24858,6 +24880,12 @@ class KalturaEntitlement(KalturaObjectBase):
 
     def getHouseholdId(self):
         return self.householdId
+
+    def getIsPending(self):
+        return self.isPending
+
+    def setIsPending(self, newIsPending):
+        self.isPending = newIsPending
 
 
 # @package Kaltura
@@ -24914,7 +24942,8 @@ class KalturaCollectionEntitlement(KalturaEntitlement):
             isCancelationWindowEnabled=NotImplemented,
             maxUses=NotImplemented,
             userId=NotImplemented,
-            householdId=NotImplemented):
+            householdId=NotImplemented,
+            isPending=NotImplemented):
         KalturaEntitlement.__init__(self,
             id,
             productId,
@@ -24929,7 +24958,8 @@ class KalturaCollectionEntitlement(KalturaEntitlement):
             isCancelationWindowEnabled,
             maxUses,
             userId,
-            householdId)
+            householdId,
+            isPending)
 
 
     PROPERTY_LOADERS = {
@@ -24965,6 +24995,7 @@ class KalturaPpvEntitlement(KalturaEntitlement):
             maxUses=NotImplemented,
             userId=NotImplemented,
             householdId=NotImplemented,
+            isPending=NotImplemented,
             mediaFileId=NotImplemented,
             mediaId=NotImplemented):
         KalturaEntitlement.__init__(self,
@@ -24981,7 +25012,8 @@ class KalturaPpvEntitlement(KalturaEntitlement):
             isCancelationWindowEnabled,
             maxUses,
             userId,
-            householdId)
+            householdId,
+            isPending)
 
         # Media file identifier
         # @var int
@@ -25035,6 +25067,7 @@ class KalturaSubscriptionEntitlement(KalturaEntitlement):
             maxUses=NotImplemented,
             userId=NotImplemented,
             householdId=NotImplemented,
+            isPending=NotImplemented,
             nextRenewalDate=NotImplemented,
             isRenewableForPurchase=NotImplemented,
             isRenewable=NotImplemented,
@@ -25058,7 +25091,8 @@ class KalturaSubscriptionEntitlement(KalturaEntitlement):
             isCancelationWindowEnabled,
             maxUses,
             userId,
-            householdId)
+            householdId,
+            isPending)
 
         # The date of the next renewal (only for subscription)
         # @var int
@@ -28585,7 +28619,8 @@ class KalturaPaymentGatewayProfile(KalturaPaymentGatewayBaseProfile):
             sharedSecret=NotImplemented,
             renewIntervalMinutes=NotImplemented,
             renewStartMinutes=NotImplemented,
-            externalVerification=NotImplemented):
+            externalVerification=NotImplemented,
+            isAsyncPolicy=NotImplemented):
         KalturaPaymentGatewayBaseProfile.__init__(self,
             id,
             name,
@@ -28644,6 +28679,10 @@ class KalturaPaymentGatewayProfile(KalturaPaymentGatewayBaseProfile):
         # @var bool
         self.externalVerification = externalVerification
 
+        # Payment gateway - Support asynchronous purchase
+        # @var bool
+        self.isAsyncPolicy = isAsyncPolicy
+
 
     PROPERTY_LOADERS = {
         'isActive': getXmlNodeInt, 
@@ -28659,6 +28698,7 @@ class KalturaPaymentGatewayProfile(KalturaPaymentGatewayBaseProfile):
         'renewIntervalMinutes': getXmlNodeInt, 
         'renewStartMinutes': getXmlNodeInt, 
         'externalVerification': getXmlNodeBool, 
+        'isAsyncPolicy': getXmlNodeBool, 
     }
 
     def fromXml(self, node):
@@ -28681,6 +28721,7 @@ class KalturaPaymentGatewayProfile(KalturaPaymentGatewayBaseProfile):
         kparams.addIntIfDefined("renewIntervalMinutes", self.renewIntervalMinutes)
         kparams.addIntIfDefined("renewStartMinutes", self.renewStartMinutes)
         kparams.addBoolIfDefined("externalVerification", self.externalVerification)
+        kparams.addBoolIfDefined("isAsyncPolicy", self.isAsyncPolicy)
         return kparams
 
     def getIsActive(self):
@@ -28760,6 +28801,12 @@ class KalturaPaymentGatewayProfile(KalturaPaymentGatewayBaseProfile):
 
     def setExternalVerification(self, newExternalVerification):
         self.externalVerification = newExternalVerification
+
+    def getIsAsyncPolicy(self):
+        return self.isAsyncPolicy
+
+    def setIsAsyncPolicy(self, newIsAsyncPolicy):
+        self.isAsyncPolicy = newIsAsyncPolicy
 
 
 # @package Kaltura
