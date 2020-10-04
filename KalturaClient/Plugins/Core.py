@@ -42,7 +42,7 @@ from ..Base import (
     KalturaServiceBase,
 )
 
-API_VERSION = '5.6.0.28513'
+API_VERSION = '5.6.0.28591'
 
 ########## enums ##########
 # @package Kaltura
@@ -1628,6 +1628,7 @@ class KalturaPartnerConfigurationType(object):
     COMMERCE = "Commerce"
     PLAYBACK = "Playback"
     PAYMENT = "Payment"
+    CATALOG = "Catalog"
 
     def __init__(self, value):
         self.value = value
@@ -3177,13 +3178,19 @@ class KalturaDeviceReferenceDataFilter(KalturaCrudFilter):
 class KalturaDeviceManufacturersReferenceDataFilter(KalturaDeviceReferenceDataFilter):
     def __init__(self,
             orderBy=NotImplemented,
-            idIn=NotImplemented):
+            idIn=NotImplemented,
+            nameEqual=NotImplemented):
         KalturaDeviceReferenceDataFilter.__init__(self,
             orderBy,
             idIn)
 
+        # name equal
+        # @var string
+        self.nameEqual = nameEqual
+
 
     PROPERTY_LOADERS = {
+        'nameEqual': getXmlNodeText, 
     }
 
     def fromXml(self, node):
@@ -3193,7 +3200,14 @@ class KalturaDeviceManufacturersReferenceDataFilter(KalturaDeviceReferenceDataFi
     def toParams(self):
         kparams = KalturaDeviceReferenceDataFilter.toParams(self)
         kparams.put("objectType", "KalturaDeviceManufacturersReferenceDataFilter")
+        kparams.addStringIfDefined("nameEqual", self.nameEqual)
         return kparams
+
+    def getNameEqual(self):
+        return self.nameEqual
+
+    def setNameEqual(self, newNameEqual):
+        self.nameEqual = newNameEqual
 
 
 # @package Kaltura
@@ -10070,7 +10084,8 @@ class KalturaRegionFilter(KalturaBaseRegionFilter):
             idIn=NotImplemented,
             parentIdEqual=NotImplemented,
             liveAssetIdEqual=NotImplemented,
-            parentOnly=NotImplemented):
+            parentOnly=NotImplemented,
+            exclusiveLcn=NotImplemented):
         KalturaBaseRegionFilter.__init__(self,
             orderBy)
 
@@ -10094,6 +10109,10 @@ class KalturaRegionFilter(KalturaBaseRegionFilter):
         # @var bool
         self.parentOnly = parentOnly
 
+        # Retrieves only the channels belonging specifically to the child region
+        # @var bool
+        self.exclusiveLcn = exclusiveLcn
+
 
     PROPERTY_LOADERS = {
         'externalIdIn': getXmlNodeText, 
@@ -10101,6 +10120,7 @@ class KalturaRegionFilter(KalturaBaseRegionFilter):
         'parentIdEqual': getXmlNodeInt, 
         'liveAssetIdEqual': getXmlNodeInt, 
         'parentOnly': getXmlNodeBool, 
+        'exclusiveLcn': getXmlNodeBool, 
     }
 
     def fromXml(self, node):
@@ -10115,6 +10135,7 @@ class KalturaRegionFilter(KalturaBaseRegionFilter):
         kparams.addIntIfDefined("parentIdEqual", self.parentIdEqual)
         kparams.addIntIfDefined("liveAssetIdEqual", self.liveAssetIdEqual)
         kparams.addBoolIfDefined("parentOnly", self.parentOnly)
+        kparams.addBoolIfDefined("exclusiveLcn", self.exclusiveLcn)
         return kparams
 
     def getExternalIdIn(self):
@@ -10146,6 +10167,12 @@ class KalturaRegionFilter(KalturaBaseRegionFilter):
 
     def setParentOnly(self, newParentOnly):
         self.parentOnly = newParentOnly
+
+    def getExclusiveLcn(self):
+        return self.exclusiveLcn
+
+    def setExclusiveLcn(self, newExclusiveLcn):
+        self.exclusiveLcn = newExclusiveLcn
 
 
 # @package Kaltura
@@ -17396,6 +17423,7 @@ class KalturaHouseholdDevice(KalturaOTTObjectSupportNullable):
             externalId=NotImplemented,
             macAddress=NotImplemented,
             model=NotImplemented,
+            manufacturer=NotImplemented,
             manufacturerId=NotImplemented):
         KalturaOTTObjectSupportNullable.__init__(self)
 
@@ -17448,7 +17476,12 @@ class KalturaHouseholdDevice(KalturaOTTObjectSupportNullable):
         self.model = model
 
         # manufacturer
+        # @var string
+        self.manufacturer = manufacturer
+
+        # manufacturer Id, read only
         # @var int
+        # @readonly
         self.manufacturerId = manufacturerId
 
 
@@ -17464,6 +17497,7 @@ class KalturaHouseholdDevice(KalturaOTTObjectSupportNullable):
         'externalId': getXmlNodeText, 
         'macAddress': getXmlNodeText, 
         'model': getXmlNodeText, 
+        'manufacturer': getXmlNodeText, 
         'manufacturerId': getXmlNodeInt, 
     }
 
@@ -17482,7 +17516,7 @@ class KalturaHouseholdDevice(KalturaOTTObjectSupportNullable):
         kparams.addStringIfDefined("externalId", self.externalId)
         kparams.addStringIfDefined("macAddress", self.macAddress)
         kparams.addStringIfDefined("model", self.model)
-        kparams.addIntIfDefined("manufacturerId", self.manufacturerId)
+        kparams.addStringIfDefined("manufacturer", self.manufacturer)
         return kparams
 
     def getHouseholdId(self):
@@ -17542,11 +17576,14 @@ class KalturaHouseholdDevice(KalturaOTTObjectSupportNullable):
     def setModel(self, newModel):
         self.model = newModel
 
+    def getManufacturer(self):
+        return self.manufacturer
+
+    def setManufacturer(self, newManufacturer):
+        self.manufacturer = newManufacturer
+
     def getManufacturerId(self):
         return self.manufacturerId
-
-    def setManufacturerId(self, newManufacturerId):
-        self.manufacturerId = newManufacturerId
 
 
 # @package Kaltura
@@ -21864,6 +21901,41 @@ class KalturaBillingPartnerConfig(KalturaPartnerConfiguration):
 
     def setType(self, newType):
         self.type = newType
+
+
+# @package Kaltura
+# @subpackage Client
+class KalturaCatalogPartnerConfig(KalturaPartnerConfiguration):
+    """Partner catalog configuration"""
+
+    def __init__(self,
+            singleMultilingualMode=NotImplemented):
+        KalturaPartnerConfiguration.__init__(self)
+
+        # Single multilingual mode
+        # @var bool
+        self.singleMultilingualMode = singleMultilingualMode
+
+
+    PROPERTY_LOADERS = {
+        'singleMultilingualMode': getXmlNodeBool, 
+    }
+
+    def fromXml(self, node):
+        KalturaPartnerConfiguration.fromXml(self, node)
+        self.fromXmlImpl(node, KalturaCatalogPartnerConfig.PROPERTY_LOADERS)
+
+    def toParams(self):
+        kparams = KalturaPartnerConfiguration.toParams(self)
+        kparams.put("objectType", "KalturaCatalogPartnerConfig")
+        kparams.addBoolIfDefined("singleMultilingualMode", self.singleMultilingualMode)
+        return kparams
+
+    def getSingleMultilingualMode(self):
+        return self.singleMultilingualMode
+
+    def setSingleMultilingualMode(self, newSingleMultilingualMode):
+        self.singleMultilingualMode = newSingleMultilingualMode
 
 
 # @package Kaltura
@@ -40724,9 +40796,10 @@ class KalturaCampaignService(KalturaServiceBase):
             return self.client.getMultiRequestResult()
         resultNode = self.client.doQueue()
 
-    def list(self, filter):
+    def list(self, filter, pager = NotImplemented):
         kparams = KalturaParams()
         kparams.addObjectIfDefined("filter", filter)
+        kparams.addObjectIfDefined("pager", pager)
         self.client.queueServiceActionCall("campaign", "list", "KalturaCampaignListResponse", kparams)
         if self.client.isMultiRequest():
             return self.client.getMultiRequestResult()
@@ -41555,9 +41628,10 @@ class KalturaDeviceReferenceDataService(KalturaServiceBase):
             return self.client.getMultiRequestResult()
         resultNode = self.client.doQueue()
 
-    def list(self, filter = NotImplemented):
+    def list(self, filter, pager = NotImplemented):
         kparams = KalturaParams()
         kparams.addObjectIfDefined("filter", filter)
+        kparams.addObjectIfDefined("pager", pager)
         self.client.queueServiceActionCall("devicereferencedata", "list", "KalturaDeviceReferenceDataListResponse", kparams)
         if self.client.isMultiRequest():
             return self.client.getMultiRequestResult()
@@ -46916,6 +46990,7 @@ class KalturaCoreClient(KalturaClientPlugin):
             'KalturaPartnerConfiguration': KalturaPartnerConfiguration,
             'KalturaPartnerConfigurationListResponse': KalturaPartnerConfigurationListResponse,
             'KalturaBillingPartnerConfig': KalturaBillingPartnerConfig,
+            'KalturaCatalogPartnerConfig': KalturaCatalogPartnerConfig,
             'KalturaBookmarkEventThreshold': KalturaBookmarkEventThreshold,
             'KalturaCommercePartnerConfig': KalturaCommercePartnerConfig,
             'KalturaConcurrencyPartnerConfig': KalturaConcurrencyPartnerConfig,
