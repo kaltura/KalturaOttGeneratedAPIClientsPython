@@ -42,7 +42,7 @@ from ..Base import (
     KalturaServiceBase,
 )
 
-API_VERSION = '5.7.0.28654'
+API_VERSION = '5.7.0.28670'
 
 ########## enums ##########
 # @package Kaltura
@@ -35902,6 +35902,105 @@ class KalturaEventNotificationObjectScope(KalturaEventNotificationScope):
 
 # @package Kaltura
 # @subpackage Client
+class KalturaAssetEvent(KalturaEventObject):
+    def __init__(self,
+            userId=NotImplemented,
+            assetId=NotImplemented,
+            type=NotImplemented,
+            externalId=NotImplemented):
+        KalturaEventObject.__init__(self)
+
+        # User Id
+        # @var int
+        # @readonly
+        self.userId = userId
+
+        # Asset Id
+        # @var int
+        # @readonly
+        self.assetId = assetId
+
+        # Identifies the asset type (EPG, Recording, Movie, TV Series, etc). 
+        #             Possible values: 0 - EPG linear programs, 1 - Recording; or any asset type ID according to the asset types IDs defined in the system.
+        # @var int
+        # @readonly
+        self.type = type
+
+        # External identifier for the asset
+        # @var string
+        # @readonly
+        self.externalId = externalId
+
+
+    PROPERTY_LOADERS = {
+        'userId': getXmlNodeInt, 
+        'assetId': getXmlNodeInt, 
+        'type': getXmlNodeInt, 
+        'externalId': getXmlNodeText, 
+    }
+
+    def fromXml(self, node):
+        KalturaEventObject.fromXml(self, node)
+        self.fromXmlImpl(node, KalturaAssetEvent.PROPERTY_LOADERS)
+
+    def toParams(self):
+        kparams = KalturaEventObject.toParams(self)
+        kparams.put("objectType", "KalturaAssetEvent")
+        return kparams
+
+    def getUserId(self):
+        return self.userId
+
+    def getAssetId(self):
+        return self.assetId
+
+    def getType(self):
+        return self.type
+
+    def getExternalId(self):
+        return self.externalId
+
+
+# @package Kaltura
+# @subpackage Client
+class KalturaProgramAssetEvent(KalturaAssetEvent):
+    def __init__(self,
+            userId=NotImplemented,
+            assetId=NotImplemented,
+            type=NotImplemented,
+            externalId=NotImplemented,
+            liveAssetId=NotImplemented):
+        KalturaAssetEvent.__init__(self,
+            userId,
+            assetId,
+            type,
+            externalId)
+
+        # The  live asset Id that was identified according liveAssetExternalId
+        # @var int
+        # @readonly
+        self.liveAssetId = liveAssetId
+
+
+    PROPERTY_LOADERS = {
+        'liveAssetId': getXmlNodeInt, 
+    }
+
+    def fromXml(self, node):
+        KalturaAssetEvent.fromXml(self, node)
+        self.fromXmlImpl(node, KalturaProgramAssetEvent.PROPERTY_LOADERS)
+
+    def toParams(self):
+        kparams = KalturaAssetEvent.toParams(self)
+        kparams.put("objectType", "KalturaProgramAssetEvent")
+        return kparams
+
+    def getLiveAssetId(self):
+        return self.liveAssetId
+
+
+# @package Kaltura
+# @subpackage Client
 class KalturaBookmarkEvent(KalturaEventObject):
     def __init__(self,
             userId=NotImplemented,
@@ -47261,6 +47360,8 @@ class KalturaCoreClient(KalturaClientPlugin):
             'KalturaEventNotificationScope': KalturaEventNotificationScope,
             'KalturaEventObject': KalturaEventObject,
             'KalturaEventNotificationObjectScope': KalturaEventNotificationObjectScope,
+            'KalturaAssetEvent': KalturaAssetEvent,
+            'KalturaProgramAssetEvent': KalturaProgramAssetEvent,
             'KalturaBookmarkEvent': KalturaBookmarkEvent,
             'KalturaConcurrencyViolation': KalturaConcurrencyViolation,
             'KalturaEventNotificationListResponse': KalturaEventNotificationListResponse,
