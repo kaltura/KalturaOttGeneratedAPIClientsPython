@@ -42,7 +42,7 @@ from ..Base import (
     KalturaServiceBase,
 )
 
-API_VERSION = '5.7.0.28670'
+API_VERSION = '5.7.0.28672'
 
 ########## enums ##########
 # @package Kaltura
@@ -11028,6 +11028,52 @@ class KalturaStringValueArray(KalturaObjectBase):
 
 # @package Kaltura
 # @subpackage Client
+class KalturaBusinessModuleDetails(KalturaObjectBase):
+    def __init__(self,
+            businessModuleId=NotImplemented,
+            businessModuleType=NotImplemented):
+        KalturaObjectBase.__init__(self)
+
+        # BusinessModuleId
+        # @var int
+        self.businessModuleId = businessModuleId
+
+        # BusinessModuleType
+        # @var KalturaTransactionType
+        self.businessModuleType = businessModuleType
+
+
+    PROPERTY_LOADERS = {
+        'businessModuleId': getXmlNodeInt, 
+        'businessModuleType': (KalturaEnumsFactory.createString, "KalturaTransactionType"), 
+    }
+
+    def fromXml(self, node):
+        KalturaObjectBase.fromXml(self, node)
+        self.fromXmlImpl(node, KalturaBusinessModuleDetails.PROPERTY_LOADERS)
+
+    def toParams(self):
+        kparams = KalturaObjectBase.toParams(self)
+        kparams.put("objectType", "KalturaBusinessModuleDetails")
+        kparams.addIntIfDefined("businessModuleId", self.businessModuleId)
+        kparams.addStringEnumIfDefined("businessModuleType", self.businessModuleType)
+        return kparams
+
+    def getBusinessModuleId(self):
+        return self.businessModuleId
+
+    def setBusinessModuleId(self, newBusinessModuleId):
+        self.businessModuleId = newBusinessModuleId
+
+    def getBusinessModuleType(self):
+        return self.businessModuleType
+
+    def setBusinessModuleType(self, newBusinessModuleType):
+        self.businessModuleType = newBusinessModuleType
+
+
+# @package Kaltura
+# @subpackage Client
 class KalturaMediaFile(KalturaAssetFile):
     """Media file details"""
 
@@ -11054,7 +11100,8 @@ class KalturaMediaFile(KalturaAssetFile):
             cdnAdapaterProfileId=NotImplemented,
             status=NotImplemented,
             catalogEndDate=NotImplemented,
-            opl=NotImplemented):
+            opl=NotImplemented,
+            businessModuleDetails=NotImplemented):
         KalturaAssetFile.__init__(self,
             url)
 
@@ -11148,6 +11195,10 @@ class KalturaMediaFile(KalturaAssetFile):
         # @var string
         self.opl = opl
 
+        # businessModuleDetails
+        # @var KalturaBusinessModuleDetails
+        self.businessModuleDetails = businessModuleDetails
+
 
     PROPERTY_LOADERS = {
         'assetId': getXmlNodeInt, 
@@ -11172,6 +11223,7 @@ class KalturaMediaFile(KalturaAssetFile):
         'status': getXmlNodeBool, 
         'catalogEndDate': getXmlNodeInt, 
         'opl': getXmlNodeText, 
+        'businessModuleDetails': (KalturaObjectFactory.create, 'KalturaBusinessModuleDetails'), 
     }
 
     def fromXml(self, node):
@@ -11201,6 +11253,7 @@ class KalturaMediaFile(KalturaAssetFile):
         kparams.addBoolIfDefined("status", self.status)
         kparams.addIntIfDefined("catalogEndDate", self.catalogEndDate)
         kparams.addStringIfDefined("opl", self.opl)
+        kparams.addObjectIfDefined("businessModuleDetails", self.businessModuleDetails)
         return kparams
 
     def getAssetId(self):
@@ -11328,6 +11381,12 @@ class KalturaMediaFile(KalturaAssetFile):
 
     def setOpl(self, newOpl):
         self.opl = newOpl
+
+    def getBusinessModuleDetails(self):
+        return self.businessModuleDetails
+
+    def setBusinessModuleDetails(self, newBusinessModuleDetails):
+        self.businessModuleDetails = newBusinessModuleDetails
 
 
 # @package Kaltura
@@ -11727,10 +11786,13 @@ class KalturaPlaybackSource(KalturaMediaFile):
             status=NotImplemented,
             catalogEndDate=NotImplemented,
             opl=NotImplemented,
+            businessModuleDetails=NotImplemented,
             format=NotImplemented,
             protocols=NotImplemented,
             drm=NotImplemented,
-            isTokenized=NotImplemented):
+            isTokenized=NotImplemented,
+            businessModuleId=NotImplemented,
+            businessModuleType=NotImplemented):
         KalturaMediaFile.__init__(self,
             url,
             assetId,
@@ -11754,7 +11816,8 @@ class KalturaPlaybackSource(KalturaMediaFile):
             cdnAdapaterProfileId,
             status,
             catalogEndDate,
-            opl)
+            opl,
+            businessModuleDetails)
 
         # Source format according to delivery profile streamer type (applehttp, mpegdash etc.)
         # @var string
@@ -11772,12 +11835,24 @@ class KalturaPlaybackSource(KalturaMediaFile):
         # @var bool
         self.isTokenized = isTokenized
 
+        # Business Module Id
+        # @var int
+        # @readonly
+        self.businessModuleId = businessModuleId
+
+        # Business Module Type
+        # @var KalturaTransactionType
+        # @readonly
+        self.businessModuleType = businessModuleType
+
 
     PROPERTY_LOADERS = {
         'format': getXmlNodeText, 
         'protocols': getXmlNodeText, 
         'drm': (KalturaObjectFactory.createArray, 'KalturaDrmPlaybackPluginData'), 
         'isTokenized': getXmlNodeBool, 
+        'businessModuleId': getXmlNodeInt, 
+        'businessModuleType': (KalturaEnumsFactory.createString, "KalturaTransactionType"), 
     }
 
     def fromXml(self, node):
@@ -11816,6 +11891,12 @@ class KalturaPlaybackSource(KalturaMediaFile):
 
     def setIsTokenized(self, newIsTokenized):
         self.isTokenized = newIsTokenized
+
+    def getBusinessModuleId(self):
+        return self.businessModuleId
+
+    def getBusinessModuleType(self):
+        return self.businessModuleType
 
 
 # @package Kaltura
@@ -46959,6 +47040,7 @@ class KalturaCoreClient(KalturaClientPlugin):
             'KalturaMediaImage': KalturaMediaImage,
             'KalturaAssetFile': KalturaAssetFile,
             'KalturaStringValueArray': KalturaStringValueArray,
+            'KalturaBusinessModuleDetails': KalturaBusinessModuleDetails,
             'KalturaMediaFile': KalturaMediaFile,
             'KalturaBuzzScore': KalturaBuzzScore,
             'KalturaAssetStatistics': KalturaAssetStatistics,
