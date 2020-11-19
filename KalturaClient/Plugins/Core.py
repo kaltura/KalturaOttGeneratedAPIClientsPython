@@ -42,7 +42,7 @@ from ..Base import (
     KalturaServiceBase,
 )
 
-API_VERSION = '5.8.0.28720'
+API_VERSION = '5.8.0.28728'
 
 ########## enums ##########
 # @package Kaltura
@@ -17524,7 +17524,8 @@ class KalturaHouseholdDevice(KalturaOTTObjectSupportNullable):
             macAddress=NotImplemented,
             model=NotImplemented,
             manufacturer=NotImplemented,
-            manufacturerId=NotImplemented):
+            manufacturerId=NotImplemented,
+            lastActivityTime=NotImplemented):
         KalturaOTTObjectSupportNullable.__init__(self)
 
         # Household identifier
@@ -17584,6 +17585,11 @@ class KalturaHouseholdDevice(KalturaOTTObjectSupportNullable):
         # @readonly
         self.manufacturerId = manufacturerId
 
+        # Last Activity Time, read only
+        # @var int
+        # @readonly
+        self.lastActivityTime = lastActivityTime
+
 
     PROPERTY_LOADERS = {
         'householdId': getXmlNodeInt, 
@@ -17599,6 +17605,7 @@ class KalturaHouseholdDevice(KalturaOTTObjectSupportNullable):
         'model': getXmlNodeText, 
         'manufacturer': getXmlNodeText, 
         'manufacturerId': getXmlNodeInt, 
+        'lastActivityTime': getXmlNodeInt, 
     }
 
     def fromXml(self, node):
@@ -17684,6 +17691,9 @@ class KalturaHouseholdDevice(KalturaOTTObjectSupportNullable):
 
     def getManufacturerId(self):
         return self.manufacturerId
+
+    def getLastActivityTime(self):
+        return self.lastActivityTime
 
 
 # @package Kaltura
