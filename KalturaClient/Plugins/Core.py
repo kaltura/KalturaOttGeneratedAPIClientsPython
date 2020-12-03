@@ -42,7 +42,7 @@ from ..Base import (
     KalturaServiceBase,
 )
 
-API_VERSION = '5.8.0.28736'
+API_VERSION = '5.8.0.28740'
 
 ########## enums ##########
 # @package Kaltura
@@ -893,17 +893,6 @@ class KalturaDynamicListOrderBy(object):
 
 # @package Kaltura
 # @subpackage Client
-class KalturaEncryptionType(object):
-    AES256 = "AES256"
-
-    def __init__(self, value):
-        self.value = value
-
-    def getValue(self):
-        return self.value
-
-# @package Kaltura
-# @subpackage Client
 class KalturaEngagementOrderBy(object):
     NONE = "NONE"
 
@@ -1641,7 +1630,6 @@ class KalturaPartnerConfigurationType(object):
     PLAYBACK = "Playback"
     PAYMENT = "Payment"
     CATALOG = "Catalog"
-    SECURITY = "Security"
 
     def __init__(self, value):
         self.value = value
@@ -22852,105 +22840,6 @@ class KalturaPlaybackPartnerConfig(KalturaPartnerConfiguration):
 
     def setDefaultAdapters(self, newDefaultAdapters):
         self.defaultAdapters = newDefaultAdapters
-
-
-# @package Kaltura
-# @subpackage Client
-class KalturaEncryption(KalturaObjectBase):
-    def __init__(self,
-            encryptionType=NotImplemented):
-        KalturaObjectBase.__init__(self)
-
-        # Encryption type
-        # @var KalturaEncryptionType
-        self.encryptionType = encryptionType
-
-
-    PROPERTY_LOADERS = {
-        'encryptionType': (KalturaEnumsFactory.createString, "KalturaEncryptionType"), 
-    }
-
-    def fromXml(self, node):
-        KalturaObjectBase.fromXml(self, node)
-        self.fromXmlImpl(node, KalturaEncryption.PROPERTY_LOADERS)
-
-    def toParams(self):
-        kparams = KalturaObjectBase.toParams(self)
-        kparams.put("objectType", "KalturaEncryption")
-        kparams.addStringEnumIfDefined("encryptionType", self.encryptionType)
-        return kparams
-
-    def getEncryptionType(self):
-        return self.encryptionType
-
-    def setEncryptionType(self, newEncryptionType):
-        self.encryptionType = newEncryptionType
-
-
-# @package Kaltura
-# @subpackage Client
-class KalturaDataEncryption(KalturaObjectBase):
-    def __init__(self,
-            username=NotImplemented):
-        KalturaObjectBase.__init__(self)
-
-        # Username encryption config
-        # @var KalturaEncryption
-        self.username = username
-
-
-    PROPERTY_LOADERS = {
-        'username': (KalturaObjectFactory.create, 'KalturaEncryption'), 
-    }
-
-    def fromXml(self, node):
-        KalturaObjectBase.fromXml(self, node)
-        self.fromXmlImpl(node, KalturaDataEncryption.PROPERTY_LOADERS)
-
-    def toParams(self):
-        kparams = KalturaObjectBase.toParams(self)
-        kparams.put("objectType", "KalturaDataEncryption")
-        kparams.addObjectIfDefined("username", self.username)
-        return kparams
-
-    def getUsername(self):
-        return self.username
-
-    def setUsername(self, newUsername):
-        self.username = newUsername
-
-
-# @package Kaltura
-# @subpackage Client
-class KalturaSecurityPartnerConfig(KalturaPartnerConfiguration):
-    def __init__(self,
-            encryption=NotImplemented):
-        KalturaPartnerConfiguration.__init__(self)
-
-        # Encryption config
-        # @var KalturaDataEncryption
-        self.encryption = encryption
-
-
-    PROPERTY_LOADERS = {
-        'encryption': (KalturaObjectFactory.create, 'KalturaDataEncryption'), 
-    }
-
-    def fromXml(self, node):
-        KalturaPartnerConfiguration.fromXml(self, node)
-        self.fromXmlImpl(node, KalturaSecurityPartnerConfig.PROPERTY_LOADERS)
-
-    def toParams(self):
-        kparams = KalturaPartnerConfiguration.toParams(self)
-        kparams.put("objectType", "KalturaSecurityPartnerConfig")
-        kparams.addObjectIfDefined("encryption", self.encryption)
-        return kparams
-
-    def getEncryption(self):
-        return self.encryption
-
-    def setEncryption(self, newEncryption):
-        self.encryption = newEncryption
 
 
 # @package Kaltura
@@ -47321,7 +47210,6 @@ class KalturaCoreClient(KalturaClientPlugin):
             'KalturaDrmSchemeName': KalturaDrmSchemeName,
             'KalturaDurationUnit': KalturaDurationUnit,
             'KalturaDynamicListOrderBy': KalturaDynamicListOrderBy,
-            'KalturaEncryptionType': KalturaEncryptionType,
             'KalturaEngagementOrderBy': KalturaEngagementOrderBy,
             'KalturaEngagementType': KalturaEngagementType,
             'KalturaEntitlementOrderBy': KalturaEntitlementOrderBy,
@@ -47827,9 +47715,6 @@ class KalturaCoreClient(KalturaClientPlugin):
             'KalturaPaymentPartnerConfig': KalturaPaymentPartnerConfig,
             'KalturaDefaultPlaybackAdapters': KalturaDefaultPlaybackAdapters,
             'KalturaPlaybackPartnerConfig': KalturaPlaybackPartnerConfig,
-            'KalturaEncryption': KalturaEncryption,
-            'KalturaDataEncryption': KalturaDataEncryption,
-            'KalturaSecurityPartnerConfig': KalturaSecurityPartnerConfig,
             'KalturaPersonalList': KalturaPersonalList,
             'KalturaPersonalListListResponse': KalturaPersonalListListResponse,
             'KalturaEngagementAdapterBase': KalturaEngagementAdapterBase,
