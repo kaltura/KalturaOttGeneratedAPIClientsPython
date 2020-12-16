@@ -42,7 +42,7 @@ from ..Base import (
     KalturaServiceBase,
 )
 
-API_VERSION = '5.8.0.28736'
+API_VERSION = '5.9.0.28776'
 
 ########## enums ##########
 # @package Kaltura
@@ -35087,7 +35087,8 @@ class KalturaBulkUploadIngestJobData(KalturaBulkUploadJobData):
     """instructions for upload data type with xml"""
 
     def __init__(self,
-            ingestProfileId=NotImplemented):
+            ingestProfileId=NotImplemented,
+            disableEpgNotification=NotImplemented):
         KalturaBulkUploadJobData.__init__(self)
 
         # Identifies the ingest profile that will handle the ingest of programs
@@ -35095,9 +35096,15 @@ class KalturaBulkUploadIngestJobData(KalturaBulkUploadJobData):
         # @var int
         self.ingestProfileId = ingestProfileId
 
+        # By default, after the successful ingest, devices will be notified about changes in epg channels.
+        #             This parameter disables this notification.
+        # @var bool
+        self.disableEpgNotification = disableEpgNotification
+
 
     PROPERTY_LOADERS = {
         'ingestProfileId': getXmlNodeInt, 
+        'disableEpgNotification': getXmlNodeBool, 
     }
 
     def fromXml(self, node):
@@ -35108,6 +35115,7 @@ class KalturaBulkUploadIngestJobData(KalturaBulkUploadJobData):
         kparams = KalturaBulkUploadJobData.toParams(self)
         kparams.put("objectType", "KalturaBulkUploadIngestJobData")
         kparams.addIntIfDefined("ingestProfileId", self.ingestProfileId)
+        kparams.addBoolIfDefined("disableEpgNotification", self.disableEpgNotification)
         return kparams
 
     def getIngestProfileId(self):
@@ -35115,6 +35123,12 @@ class KalturaBulkUploadIngestJobData(KalturaBulkUploadJobData):
 
     def setIngestProfileId(self, newIngestProfileId):
         self.ingestProfileId = newIngestProfileId
+
+    def getDisableEpgNotification(self):
+        return self.disableEpgNotification
+
+    def setDisableEpgNotification(self, newDisableEpgNotification):
+        self.disableEpgNotification = newDisableEpgNotification
 
 
 # @package Kaltura
@@ -37681,7 +37695,8 @@ class KalturaIotClientConfiguration(KalturaObjectBase):
             announcementTopic=NotImplemented,
             credentialsProvider=NotImplemented,
             cognitoUserPool=NotImplemented,
-            json=NotImplemented):
+            json=NotImplemented,
+            topics=NotImplemented):
         KalturaObjectBase.__init__(self)
 
         # announcementTopic
@@ -37700,12 +37715,17 @@ class KalturaIotClientConfiguration(KalturaObjectBase):
         # @var string
         self.json = json
 
+        # topics
+        # @var string
+        self.topics = topics
+
 
     PROPERTY_LOADERS = {
         'announcementTopic': getXmlNodeText, 
         'credentialsProvider': (KalturaObjectFactory.create, 'KalturaCredentialsProvider'), 
         'cognitoUserPool': (KalturaObjectFactory.create, 'KalturaCognitoUserPool'), 
         'json': getXmlNodeText, 
+        'topics': getXmlNodeText, 
     }
 
     def fromXml(self, node):
@@ -37719,6 +37739,7 @@ class KalturaIotClientConfiguration(KalturaObjectBase):
         kparams.addObjectIfDefined("credentialsProvider", self.credentialsProvider)
         kparams.addObjectIfDefined("cognitoUserPool", self.cognitoUserPool)
         kparams.addStringIfDefined("json", self.json)
+        kparams.addStringIfDefined("topics", self.topics)
         return kparams
 
     def getAnnouncementTopic(self):
@@ -37744,6 +37765,12 @@ class KalturaIotClientConfiguration(KalturaObjectBase):
 
     def setJson(self, newJson):
         self.json = newJson
+
+    def getTopics(self):
+        return self.topics
+
+    def setTopics(self, newTopics):
+        self.topics = newTopics
 
 
 # @package Kaltura
@@ -38256,6 +38283,79 @@ class KalturaPushMessage(KalturaObjectBase):
 
 # @package Kaltura
 # @subpackage Client
+class KalturaEpgNotificationSettings(KalturaObjectBase):
+    def __init__(self,
+            enabled=NotImplemented,
+            deviceFamilyIds=NotImplemented,
+            liveAssetIds=NotImplemented,
+            timeRange=NotImplemented):
+        KalturaObjectBase.__init__(self)
+
+        # EPG notification capability is enabled for the account
+        # @var bool
+        self.enabled = enabled
+
+        # Specify which devices should receive notifications
+        # @var string
+        self.deviceFamilyIds = deviceFamilyIds
+
+        # Specify which live assets should fire notifications
+        # @var string
+        self.liveAssetIds = liveAssetIds
+
+        # The range (in hours), in which, EPG updates triggers a notification,
+        #             every program that is updated and it's starts time falls within this range shall trigger a notification
+        # @var int
+        self.timeRange = timeRange
+
+
+    PROPERTY_LOADERS = {
+        'enabled': getXmlNodeBool, 
+        'deviceFamilyIds': getXmlNodeText, 
+        'liveAssetIds': getXmlNodeText, 
+        'timeRange': getXmlNodeInt, 
+    }
+
+    def fromXml(self, node):
+        KalturaObjectBase.fromXml(self, node)
+        self.fromXmlImpl(node, KalturaEpgNotificationSettings.PROPERTY_LOADERS)
+
+    def toParams(self):
+        kparams = KalturaObjectBase.toParams(self)
+        kparams.put("objectType", "KalturaEpgNotificationSettings")
+        kparams.addBoolIfDefined("enabled", self.enabled)
+        kparams.addStringIfDefined("deviceFamilyIds", self.deviceFamilyIds)
+        kparams.addStringIfDefined("liveAssetIds", self.liveAssetIds)
+        kparams.addIntIfDefined("timeRange", self.timeRange)
+        return kparams
+
+    def getEnabled(self):
+        return self.enabled
+
+    def setEnabled(self, newEnabled):
+        self.enabled = newEnabled
+
+    def getDeviceFamilyIds(self):
+        return self.deviceFamilyIds
+
+    def setDeviceFamilyIds(self, newDeviceFamilyIds):
+        self.deviceFamilyIds = newDeviceFamilyIds
+
+    def getLiveAssetIds(self):
+        return self.liveAssetIds
+
+    def setLiveAssetIds(self, newLiveAssetIds):
+        self.liveAssetIds = newLiveAssetIds
+
+    def getTimeRange(self):
+        return self.timeRange
+
+    def setTimeRange(self, newTimeRange):
+        self.timeRange = newTimeRange
+
+
+# @package Kaltura
+# @subpackage Client
 class KalturaNotificationsPartnerSettings(KalturaObjectBase):
     def __init__(self,
             pushNotificationEnabled=NotImplemented,
@@ -38275,7 +38375,8 @@ class KalturaNotificationsPartnerSettings(KalturaObjectBase):
             mailSenderName=NotImplemented,
             mailNotificationAdapterId=NotImplemented,
             smsEnabled=NotImplemented,
-            iotEnabled=NotImplemented):
+            iotEnabled=NotImplemented,
+            epgNotification=NotImplemented):
         KalturaObjectBase.__init__(self)
 
         # Push notification capability is enabled for the account
@@ -38350,6 +38451,10 @@ class KalturaNotificationsPartnerSettings(KalturaObjectBase):
         # @var bool
         self.iotEnabled = iotEnabled
 
+        # Settings for epg notifications
+        # @var KalturaEpgNotificationSettings
+        self.epgNotification = epgNotification
+
 
     PROPERTY_LOADERS = {
         'pushNotificationEnabled': getXmlNodeBool, 
@@ -38370,6 +38475,7 @@ class KalturaNotificationsPartnerSettings(KalturaObjectBase):
         'mailNotificationAdapterId': getXmlNodeInt, 
         'smsEnabled': getXmlNodeBool, 
         'iotEnabled': getXmlNodeBool, 
+        'epgNotification': (KalturaObjectFactory.create, 'KalturaEpgNotificationSettings'), 
     }
 
     def fromXml(self, node):
@@ -38397,6 +38503,7 @@ class KalturaNotificationsPartnerSettings(KalturaObjectBase):
         kparams.addIntIfDefined("mailNotificationAdapterId", self.mailNotificationAdapterId)
         kparams.addBoolIfDefined("smsEnabled", self.smsEnabled)
         kparams.addBoolIfDefined("iotEnabled", self.iotEnabled)
+        kparams.addObjectIfDefined("epgNotification", self.epgNotification)
         return kparams
 
     def getPushNotificationEnabled(self):
@@ -38506,6 +38613,12 @@ class KalturaNotificationsPartnerSettings(KalturaObjectBase):
 
     def setIotEnabled(self, newIotEnabled):
         self.iotEnabled = newIotEnabled
+
+    def getEpgNotification(self):
+        return self.epgNotification
+
+    def setEpgNotification(self, newEpgNotification):
+        self.epgNotification = newEpgNotification
 
 
 # @package Kaltura
@@ -48077,6 +48190,7 @@ class KalturaCoreClient(KalturaClientPlugin):
             'KalturaMessageTemplate': KalturaMessageTemplate,
             'KalturaRegistryResponse': KalturaRegistryResponse,
             'KalturaPushMessage': KalturaPushMessage,
+            'KalturaEpgNotificationSettings': KalturaEpgNotificationSettings,
             'KalturaNotificationsPartnerSettings': KalturaNotificationsPartnerSettings,
             'KalturaNotificationsSettings': KalturaNotificationsSettings,
             'KalturaOTTUserDynamicData': KalturaOTTUserDynamicData,
