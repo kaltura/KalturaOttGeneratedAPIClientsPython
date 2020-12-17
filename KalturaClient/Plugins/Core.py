@@ -42,7 +42,7 @@ from ..Base import (
     KalturaServiceBase,
 )
 
-API_VERSION = '5.8.0.28736'
+API_VERSION = '5.9.0.28737'
 
 ########## enums ##########
 # @package Kaltura
@@ -10920,7 +10920,8 @@ class KalturaMediaImage(KalturaObjectBase):
             url=NotImplemented,
             version=NotImplemented,
             id=NotImplemented,
-            isDefault=NotImplemented):
+            isDefault=NotImplemented,
+            imageTypeId=NotImplemented):
         KalturaObjectBase.__init__(self)
 
         # Image aspect ratio
@@ -10952,6 +10953,10 @@ class KalturaMediaImage(KalturaObjectBase):
         # @var bool
         self.isDefault = isDefault
 
+        # Image type identifier
+        # @var int
+        self.imageTypeId = imageTypeId
+
 
     PROPERTY_LOADERS = {
         'ratio': getXmlNodeText, 
@@ -10961,6 +10966,7 @@ class KalturaMediaImage(KalturaObjectBase):
         'version': getXmlNodeInt, 
         'id': getXmlNodeText, 
         'isDefault': getXmlNodeBool, 
+        'imageTypeId': getXmlNodeInt, 
     }
 
     def fromXml(self, node):
@@ -10976,6 +10982,7 @@ class KalturaMediaImage(KalturaObjectBase):
         kparams.addStringIfDefined("url", self.url)
         kparams.addIntIfDefined("version", self.version)
         kparams.addBoolIfDefined("isDefault", self.isDefault)
+        kparams.addIntIfDefined("imageTypeId", self.imageTypeId)
         return kparams
 
     def getRatio(self):
@@ -11016,6 +11023,12 @@ class KalturaMediaImage(KalturaObjectBase):
 
     def setIsDefault(self, newIsDefault):
         self.isDefault = newIsDefault
+
+    def getImageTypeId(self):
+        return self.imageTypeId
+
+    def setImageTypeId(self, newImageTypeId):
+        self.imageTypeId = newImageTypeId
 
 
 # @package Kaltura
