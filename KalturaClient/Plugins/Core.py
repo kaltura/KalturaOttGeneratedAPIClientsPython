@@ -42,7 +42,7 @@ from ..Base import (
     KalturaServiceBase,
 )
 
-API_VERSION = '5.9.0.28791'
+API_VERSION = '5.9.0.28773'
 
 ########## enums ##########
 # @package Kaltura
@@ -566,6 +566,31 @@ class KalturaCategoryItemOrderBy(object):
     NONE = "NONE"
     UPDATE_DATE_ASC = "UPDATE_DATE_ASC"
     UPDATE_DATE_DESC = "UPDATE_DATE_DESC"
+
+    def __init__(self, value):
+        self.value = value
+
+    def getValue(self):
+        return self.value
+
+# @package Kaltura
+# @subpackage Client
+class KalturaCategoryVersionOrderBy(object):
+    UPDATE_DATE_DESC = "UPDATE_DATE_DESC"
+    NONE = "NONE"
+
+    def __init__(self, value):
+        self.value = value
+
+    def getValue(self):
+        return self.value
+
+# @package Kaltura
+# @subpackage Client
+class KalturaCategoryVersionState(object):
+    DRAFT = "DRAFT"
+    DEFAULT = "DEFAULT"
+    RELEASED = "RELEASED"
 
     def __init__(self, value):
         self.value = value
@@ -3693,6 +3718,76 @@ class KalturaCategoryItemAncestorsFilter(KalturaCategoryItemFilter):
 
     def setId(self, newId):
         self.id = newId
+
+
+# @package Kaltura
+# @subpackage Client
+class KalturaCategoryVersionFilter(KalturaCrudFilter):
+    def __init__(self,
+            orderBy=NotImplemented):
+        KalturaCrudFilter.__init__(self,
+            orderBy)
+
+
+    PROPERTY_LOADERS = {
+    }
+
+    def fromXml(self, node):
+        KalturaCrudFilter.fromXml(self, node)
+        self.fromXmlImpl(node, KalturaCategoryVersionFilter.PROPERTY_LOADERS)
+
+    def toParams(self):
+        kparams = KalturaCrudFilter.toParams(self)
+        kparams.put("objectType", "KalturaCategoryVersionFilter")
+        return kparams
+
+
+# @package Kaltura
+# @subpackage Client
+class KalturaCategoryVersionFilterByTree(KalturaCategoryVersionFilter):
+    def __init__(self,
+            orderBy=NotImplemented,
+            treeIdEqual=NotImplemented,
+            stateEqual=NotImplemented):
+        KalturaCategoryVersionFilter.__init__(self,
+            orderBy)
+
+        # Category version tree identifier
+        # @var int
+        self.treeIdEqual = treeIdEqual
+
+        # Category version state
+        # @var KalturaCategoryVersionState
+        self.stateEqual = stateEqual
+
+
+    PROPERTY_LOADERS = {
+        'treeIdEqual': getXmlNodeInt, 
+        'stateEqual': (KalturaEnumsFactory.createString, "KalturaCategoryVersionState"), 
+    }
+
+    def fromXml(self, node):
+        KalturaCategoryVersionFilter.fromXml(self, node)
+        self.fromXmlImpl(node, KalturaCategoryVersionFilterByTree.PROPERTY_LOADERS)
+
+    def toParams(self):
+        kparams = KalturaCategoryVersionFilter.toParams(self)
+        kparams.put("objectType", "KalturaCategoryVersionFilterByTree")
+        kparams.addIntIfDefined("treeIdEqual", self.treeIdEqual)
+        kparams.addStringEnumIfDefined("stateEqual", self.stateEqual)
+        return kparams
+
+    def getTreeIdEqual(self):
+        return self.treeIdEqual
+
+    def setTreeIdEqual(self, newTreeIdEqual):
+        self.treeIdEqual = newTreeIdEqual
+
+    def getStateEqual(self):
+        return self.stateEqual
+
+    def setStateEqual(self, newStateEqual):
+        self.stateEqual = newStateEqual
 
 
 # @package Kaltura
@@ -15698,7 +15793,8 @@ class KalturaCategoryItem(KalturaCrudObject):
             isActive=NotImplemented,
             startDateInSeconds=NotImplemented,
             endDateInSeconds=NotImplemented,
-            type=NotImplemented):
+            type=NotImplemented,
+            versionId=NotImplemented):
         KalturaCrudObject.__init__(self)
 
         # Unique identifier for the category
@@ -15754,6 +15850,11 @@ class KalturaCategoryItem(KalturaCrudObject):
         # @insertonly
         self.type = type
 
+        # Unique identifier for the category version
+        # @var int
+        # @readonly
+        self.versionId = versionId
+
 
     PROPERTY_LOADERS = {
         'id': getXmlNodeInt, 
@@ -15768,6 +15869,7 @@ class KalturaCategoryItem(KalturaCrudObject):
         'startDateInSeconds': getXmlNodeInt, 
         'endDateInSeconds': getXmlNodeInt, 
         'type': getXmlNodeText, 
+        'versionId': getXmlNodeInt, 
     }
 
     def fromXml(self, node):
@@ -15847,6 +15949,9 @@ class KalturaCategoryItem(KalturaCrudObject):
     def setType(self, newType):
         self.type = newType
 
+    def getVersionId(self):
+        return self.versionId
+
 
 # @package Kaltura
 # @subpackage Client
@@ -15909,6 +16014,148 @@ class KalturaUnifiedChannelInfo(KalturaUnifiedChannel):
 
     def setEndDateInSeconds(self, newEndDateInSeconds):
         self.endDateInSeconds = newEndDateInSeconds
+
+
+# @package Kaltura
+# @subpackage Client
+class KalturaCategoryVersion(KalturaCrudObject):
+    """Category details"""
+
+    def __init__(self,
+            id=NotImplemented,
+            name=NotImplemented,
+            treeId=NotImplemented,
+            state=NotImplemented,
+            baseVersionId=NotImplemented,
+            categoryRootId=NotImplemented,
+            defaultDate=NotImplemented,
+            updaterId=NotImplemented,
+            comment=NotImplemented,
+            createDate=NotImplemented,
+            updateDate=NotImplemented):
+        KalturaCrudObject.__init__(self)
+
+        # Unique identifier for the category version
+        # @var int
+        # @readonly
+        self.id = id
+
+        # Category version name
+        # @var string
+        self.name = name
+
+        # Category tree identifier
+        # @var int
+        # @readonly
+        self.treeId = treeId
+
+        # The category version state
+        # @var KalturaCategoryVersionState
+        # @readonly
+        self.state = state
+
+        # The version id that this version was created from
+        # @var int
+        # @insertonly
+        self.baseVersionId = baseVersionId
+
+        # The root of category item id that was created for this version
+        # @var int
+        # @readonly
+        self.categoryRootId = categoryRootId
+
+        # The date that this version became default represented as epoch.
+        # @var int
+        # @readonly
+        self.defaultDate = defaultDate
+
+        # Last updater user id.
+        # @var int
+        # @readonly
+        self.updaterId = updaterId
+
+        # Comment.
+        # @var string
+        self.comment = comment
+
+        # The date that this version was created represented as epoch.
+        # @var int
+        # @readonly
+        self.createDate = createDate
+
+        # The date that this version was last updated represented as epoch.
+        # @var int
+        # @readonly
+        self.updateDate = updateDate
+
+
+    PROPERTY_LOADERS = {
+        'id': getXmlNodeInt, 
+        'name': getXmlNodeText, 
+        'treeId': getXmlNodeInt, 
+        'state': (KalturaEnumsFactory.createString, "KalturaCategoryVersionState"), 
+        'baseVersionId': getXmlNodeInt, 
+        'categoryRootId': getXmlNodeInt, 
+        'defaultDate': getXmlNodeInt, 
+        'updaterId': getXmlNodeInt, 
+        'comment': getXmlNodeText, 
+        'createDate': getXmlNodeInt, 
+        'updateDate': getXmlNodeInt, 
+    }
+
+    def fromXml(self, node):
+        KalturaCrudObject.fromXml(self, node)
+        self.fromXmlImpl(node, KalturaCategoryVersion.PROPERTY_LOADERS)
+
+    def toParams(self):
+        kparams = KalturaCrudObject.toParams(self)
+        kparams.put("objectType", "KalturaCategoryVersion")
+        kparams.addStringIfDefined("name", self.name)
+        kparams.addIntIfDefined("baseVersionId", self.baseVersionId)
+        kparams.addStringIfDefined("comment", self.comment)
+        return kparams
+
+    def getId(self):
+        return self.id
+
+    def getName(self):
+        return self.name
+
+    def setName(self, newName):
+        self.name = newName
+
+    def getTreeId(self):
+        return self.treeId
+
+    def getState(self):
+        return self.state
+
+    def getBaseVersionId(self):
+        return self.baseVersionId
+
+    def setBaseVersionId(self, newBaseVersionId):
+        self.baseVersionId = newBaseVersionId
+
+    def getCategoryRootId(self):
+        return self.categoryRootId
+
+    def getDefaultDate(self):
+        return self.defaultDate
+
+    def getUpdaterId(self):
+        return self.updaterId
+
+    def getComment(self):
+        return self.comment
+
+    def setComment(self, newComment):
+        self.comment = newComment
+
+    def getCreateDate(self):
+        return self.createDate
+
+    def getUpdateDate(self):
+        return self.updateDate
 
 
 # @package Kaltura
@@ -22088,20 +22335,74 @@ class KalturaBillingPartnerConfig(KalturaPartnerConfiguration):
 
 # @package Kaltura
 # @subpackage Client
+class KalturaCategoryManagement(KalturaObjectBase):
+    """Category management"""
+
+    def __init__(self,
+            defaultTreeId=NotImplemented,
+            deviceFamilyToCategoryTree=NotImplemented):
+        KalturaObjectBase.__init__(self)
+
+        # Default CategoryVersion tree id
+        # @var int
+        self.defaultTreeId = defaultTreeId
+
+        # Device family to Category TreeId mapping
+        # @var map
+        self.deviceFamilyToCategoryTree = deviceFamilyToCategoryTree
+
+
+    PROPERTY_LOADERS = {
+        'defaultTreeId': getXmlNodeInt, 
+        'deviceFamilyToCategoryTree': (KalturaObjectFactory.createMap, 'KalturaLongValue'), 
+    }
+
+    def fromXml(self, node):
+        KalturaObjectBase.fromXml(self, node)
+        self.fromXmlImpl(node, KalturaCategoryManagement.PROPERTY_LOADERS)
+
+    def toParams(self):
+        kparams = KalturaObjectBase.toParams(self)
+        kparams.put("objectType", "KalturaCategoryManagement")
+        kparams.addIntIfDefined("defaultTreeId", self.defaultTreeId)
+        kparams.addMapIfDefined("deviceFamilyToCategoryTree", self.deviceFamilyToCategoryTree)
+        return kparams
+
+    def getDefaultTreeId(self):
+        return self.defaultTreeId
+
+    def setDefaultTreeId(self, newDefaultTreeId):
+        self.defaultTreeId = newDefaultTreeId
+
+    def getDeviceFamilyToCategoryTree(self):
+        return self.deviceFamilyToCategoryTree
+
+    def setDeviceFamilyToCategoryTree(self, newDeviceFamilyToCategoryTree):
+        self.deviceFamilyToCategoryTree = newDeviceFamilyToCategoryTree
+
+
+# @package Kaltura
+# @subpackage Client
 class KalturaCatalogPartnerConfig(KalturaPartnerConfiguration):
     """Partner catalog configuration"""
 
     def __init__(self,
-            singleMultilingualMode=NotImplemented):
+            singleMultilingualMode=NotImplemented,
+            categoryManagement=NotImplemented):
         KalturaPartnerConfiguration.__init__(self)
 
         # Single multilingual mode
         # @var bool
         self.singleMultilingualMode = singleMultilingualMode
 
+        # Category management
+        # @var KalturaCategoryManagement
+        self.categoryManagement = categoryManagement
+
 
     PROPERTY_LOADERS = {
         'singleMultilingualMode': getXmlNodeBool, 
+        'categoryManagement': (KalturaObjectFactory.create, 'KalturaCategoryManagement'), 
     }
 
     def fromXml(self, node):
@@ -22112,6 +22413,7 @@ class KalturaCatalogPartnerConfig(KalturaPartnerConfiguration):
         kparams = KalturaPartnerConfiguration.toParams(self)
         kparams.put("objectType", "KalturaCatalogPartnerConfig")
         kparams.addBoolIfDefined("singleMultilingualMode", self.singleMultilingualMode)
+        kparams.addObjectIfDefined("categoryManagement", self.categoryManagement)
         return kparams
 
     def getSingleMultilingualMode(self):
@@ -22119,6 +22421,12 @@ class KalturaCatalogPartnerConfig(KalturaPartnerConfiguration):
 
     def setSingleMultilingualMode(self, newSingleMultilingualMode):
         self.singleMultilingualMode = newSingleMultilingualMode
+
+    def getCategoryManagement(self):
+        return self.categoryManagement
+
+    def setCategoryManagement(self, newCategoryManagement):
+        self.categoryManagement = newCategoryManagement
 
 
 # @package Kaltura
@@ -35113,8 +35421,7 @@ class KalturaBulkUploadIngestJobData(KalturaBulkUploadJobData):
     """instructions for upload data type with xml"""
 
     def __init__(self,
-            ingestProfileId=NotImplemented,
-            disableEpgNotification=NotImplemented):
+            ingestProfileId=NotImplemented):
         KalturaBulkUploadJobData.__init__(self)
 
         # Identifies the ingest profile that will handle the ingest of programs
@@ -35122,15 +35429,9 @@ class KalturaBulkUploadIngestJobData(KalturaBulkUploadJobData):
         # @var int
         self.ingestProfileId = ingestProfileId
 
-        # By default, after the successful ingest, devices will be notified about changes in epg channels.
-        #             This parameter disables this notification.
-        # @var bool
-        self.disableEpgNotification = disableEpgNotification
-
 
     PROPERTY_LOADERS = {
         'ingestProfileId': getXmlNodeInt, 
-        'disableEpgNotification': getXmlNodeBool, 
     }
 
     def fromXml(self, node):
@@ -35141,7 +35442,6 @@ class KalturaBulkUploadIngestJobData(KalturaBulkUploadJobData):
         kparams = KalturaBulkUploadJobData.toParams(self)
         kparams.put("objectType", "KalturaBulkUploadIngestJobData")
         kparams.addIntIfDefined("ingestProfileId", self.ingestProfileId)
-        kparams.addBoolIfDefined("disableEpgNotification", self.disableEpgNotification)
         return kparams
 
     def getIngestProfileId(self):
@@ -35149,12 +35449,6 @@ class KalturaBulkUploadIngestJobData(KalturaBulkUploadJobData):
 
     def setIngestProfileId(self, newIngestProfileId):
         self.ingestProfileId = newIngestProfileId
-
-    def getDisableEpgNotification(self):
-        return self.disableEpgNotification
-
-    def setDisableEpgNotification(self, newDisableEpgNotification):
-        self.disableEpgNotification = newDisableEpgNotification
 
 
 # @package Kaltura
@@ -35651,7 +35945,8 @@ class KalturaCategoryTree(KalturaObjectBase):
             isActive=NotImplemented,
             startDateInSeconds=NotImplemented,
             endDateInSeconds=NotImplemented,
-            type=NotImplemented):
+            type=NotImplemented,
+            versionId=NotImplemented):
         KalturaObjectBase.__init__(self)
 
         # Unique identifier for the category item
@@ -35702,6 +35997,11 @@ class KalturaCategoryTree(KalturaObjectBase):
         # @insertonly
         self.type = type
 
+        # Unique identifier for the category version
+        # @var int
+        # @readonly
+        self.versionId = versionId
+
 
     PROPERTY_LOADERS = {
         'id': getXmlNodeInt, 
@@ -35715,6 +36015,7 @@ class KalturaCategoryTree(KalturaObjectBase):
         'startDateInSeconds': getXmlNodeInt, 
         'endDateInSeconds': getXmlNodeInt, 
         'type': getXmlNodeText, 
+        'versionId': getXmlNodeInt, 
     }
 
     def fromXml(self, node):
@@ -35790,6 +36091,44 @@ class KalturaCategoryTree(KalturaObjectBase):
 
     def setType(self, newType):
         self.type = newType
+
+    def getVersionId(self):
+        return self.versionId
+
+
+# @package Kaltura
+# @subpackage Client
+class KalturaCategoryVersionListResponse(KalturaListResponse):
+    def __init__(self,
+            totalCount=NotImplemented,
+            objects=NotImplemented):
+        KalturaListResponse.__init__(self,
+            totalCount)
+
+        # A list of objects
+        # @var array of KalturaCategoryVersion
+        self.objects = objects
+
+
+    PROPERTY_LOADERS = {
+        'objects': (KalturaObjectFactory.createArray, 'KalturaCategoryVersion'), 
+    }
+
+    def fromXml(self, node):
+        KalturaListResponse.fromXml(self, node)
+        self.fromXmlImpl(node, KalturaCategoryVersionListResponse.PROPERTY_LOADERS)
+
+    def toParams(self):
+        kparams = KalturaListResponse.toParams(self)
+        kparams.put("objectType", "KalturaCategoryVersionListResponse")
+        kparams.addArrayIfDefined("objects", self.objects)
+        return kparams
+
+    def getObjects(self):
+        return self.objects
+
+    def setObjects(self, newObjects):
+        self.objects = newObjects
 
 
 # @package Kaltura
@@ -37721,8 +38060,7 @@ class KalturaIotClientConfiguration(KalturaObjectBase):
             announcementTopic=NotImplemented,
             credentialsProvider=NotImplemented,
             cognitoUserPool=NotImplemented,
-            json=NotImplemented,
-            topics=NotImplemented):
+            json=NotImplemented):
         KalturaObjectBase.__init__(self)
 
         # announcementTopic
@@ -37741,17 +38079,12 @@ class KalturaIotClientConfiguration(KalturaObjectBase):
         # @var string
         self.json = json
 
-        # topics
-        # @var string
-        self.topics = topics
-
 
     PROPERTY_LOADERS = {
         'announcementTopic': getXmlNodeText, 
         'credentialsProvider': (KalturaObjectFactory.create, 'KalturaCredentialsProvider'), 
         'cognitoUserPool': (KalturaObjectFactory.create, 'KalturaCognitoUserPool'), 
         'json': getXmlNodeText, 
-        'topics': getXmlNodeText, 
     }
 
     def fromXml(self, node):
@@ -37765,7 +38098,6 @@ class KalturaIotClientConfiguration(KalturaObjectBase):
         kparams.addObjectIfDefined("credentialsProvider", self.credentialsProvider)
         kparams.addObjectIfDefined("cognitoUserPool", self.cognitoUserPool)
         kparams.addStringIfDefined("json", self.json)
-        kparams.addStringIfDefined("topics", self.topics)
         return kparams
 
     def getAnnouncementTopic(self):
@@ -37791,12 +38123,6 @@ class KalturaIotClientConfiguration(KalturaObjectBase):
 
     def setJson(self, newJson):
         self.json = newJson
-
-    def getTopics(self):
-        return self.topics
-
-    def setTopics(self, newTopics):
-        self.topics = newTopics
 
 
 # @package Kaltura
@@ -38309,79 +38635,6 @@ class KalturaPushMessage(KalturaObjectBase):
 
 # @package Kaltura
 # @subpackage Client
-class KalturaEpgNotificationSettings(KalturaObjectBase):
-    def __init__(self,
-            enabled=NotImplemented,
-            deviceFamilyIds=NotImplemented,
-            liveAssetIds=NotImplemented,
-            timeRange=NotImplemented):
-        KalturaObjectBase.__init__(self)
-
-        # EPG notification capability is enabled for the account
-        # @var bool
-        self.enabled = enabled
-
-        # Specify which devices should receive notifications
-        # @var string
-        self.deviceFamilyIds = deviceFamilyIds
-
-        # Specify which live assets should fire notifications
-        # @var string
-        self.liveAssetIds = liveAssetIds
-
-        # The range (in hours), in which, EPG updates triggers a notification,
-        #             every program that is updated and it's starts time falls within this range shall trigger a notification
-        # @var int
-        self.timeRange = timeRange
-
-
-    PROPERTY_LOADERS = {
-        'enabled': getXmlNodeBool, 
-        'deviceFamilyIds': getXmlNodeText, 
-        'liveAssetIds': getXmlNodeText, 
-        'timeRange': getXmlNodeInt, 
-    }
-
-    def fromXml(self, node):
-        KalturaObjectBase.fromXml(self, node)
-        self.fromXmlImpl(node, KalturaEpgNotificationSettings.PROPERTY_LOADERS)
-
-    def toParams(self):
-        kparams = KalturaObjectBase.toParams(self)
-        kparams.put("objectType", "KalturaEpgNotificationSettings")
-        kparams.addBoolIfDefined("enabled", self.enabled)
-        kparams.addStringIfDefined("deviceFamilyIds", self.deviceFamilyIds)
-        kparams.addStringIfDefined("liveAssetIds", self.liveAssetIds)
-        kparams.addIntIfDefined("timeRange", self.timeRange)
-        return kparams
-
-    def getEnabled(self):
-        return self.enabled
-
-    def setEnabled(self, newEnabled):
-        self.enabled = newEnabled
-
-    def getDeviceFamilyIds(self):
-        return self.deviceFamilyIds
-
-    def setDeviceFamilyIds(self, newDeviceFamilyIds):
-        self.deviceFamilyIds = newDeviceFamilyIds
-
-    def getLiveAssetIds(self):
-        return self.liveAssetIds
-
-    def setLiveAssetIds(self, newLiveAssetIds):
-        self.liveAssetIds = newLiveAssetIds
-
-    def getTimeRange(self):
-        return self.timeRange
-
-    def setTimeRange(self, newTimeRange):
-        self.timeRange = newTimeRange
-
-
-# @package Kaltura
-# @subpackage Client
 class KalturaNotificationsPartnerSettings(KalturaObjectBase):
     def __init__(self,
             pushNotificationEnabled=NotImplemented,
@@ -38401,8 +38654,7 @@ class KalturaNotificationsPartnerSettings(KalturaObjectBase):
             mailSenderName=NotImplemented,
             mailNotificationAdapterId=NotImplemented,
             smsEnabled=NotImplemented,
-            iotEnabled=NotImplemented,
-            epgNotification=NotImplemented):
+            iotEnabled=NotImplemented):
         KalturaObjectBase.__init__(self)
 
         # Push notification capability is enabled for the account
@@ -38477,10 +38729,6 @@ class KalturaNotificationsPartnerSettings(KalturaObjectBase):
         # @var bool
         self.iotEnabled = iotEnabled
 
-        # Settings for epg notifications
-        # @var KalturaEpgNotificationSettings
-        self.epgNotification = epgNotification
-
 
     PROPERTY_LOADERS = {
         'pushNotificationEnabled': getXmlNodeBool, 
@@ -38501,7 +38749,6 @@ class KalturaNotificationsPartnerSettings(KalturaObjectBase):
         'mailNotificationAdapterId': getXmlNodeInt, 
         'smsEnabled': getXmlNodeBool, 
         'iotEnabled': getXmlNodeBool, 
-        'epgNotification': (KalturaObjectFactory.create, 'KalturaEpgNotificationSettings'), 
     }
 
     def fromXml(self, node):
@@ -38529,7 +38776,6 @@ class KalturaNotificationsPartnerSettings(KalturaObjectBase):
         kparams.addIntIfDefined("mailNotificationAdapterId", self.mailNotificationAdapterId)
         kparams.addBoolIfDefined("smsEnabled", self.smsEnabled)
         kparams.addBoolIfDefined("iotEnabled", self.iotEnabled)
-        kparams.addObjectIfDefined("epgNotification", self.epgNotification)
         return kparams
 
     def getPushNotificationEnabled(self):
@@ -38639,12 +38885,6 @@ class KalturaNotificationsPartnerSettings(KalturaObjectBase):
 
     def setIotEnabled(self, newIotEnabled):
         self.iotEnabled = newIotEnabled
-
-    def getEpgNotification(self):
-        return self.epgNotification
-
-    def setEpgNotification(self, newEpgNotification):
-        self.epgNotification = newEpgNotification
 
 
 # @package Kaltura
@@ -41839,6 +42079,93 @@ class KalturaCategoryTreeService(KalturaServiceBase):
             return self.client.getMultiRequestResult()
         resultNode = self.client.doQueue()
         return KalturaObjectFactory.create(resultNode, 'KalturaCategoryTree')
+
+    def getByVersion (self, versionId = NotImplemented):
+        """Retrieve default category tree of deviceFamilyId by KS or specific one if versionId is set."""
+
+        kparams = KalturaParams()
+        kparams.addIntIfDefined("versionId", versionId);
+        self.client.queueServiceActionCall("categorytree", "getByVersion ", "KalturaCategoryTree", kparams)
+        if self.client.isMultiRequest():
+            return self.client.getMultiRequestResult()
+        resultNode = self.client.doQueue()
+        return KalturaObjectFactory.create(resultNode, 'KalturaCategoryTree')
+
+
+# @package Kaltura
+# @subpackage Client
+class KalturaCategoryVersionService(KalturaServiceBase):
+    def __init__(self, client = None):
+        KalturaServiceBase.__init__(self, client)
+
+    def add(self, objectToAdd):
+        """categoryVersion add"""
+
+        kparams = KalturaParams()
+        kparams.addObjectIfDefined("objectToAdd", objectToAdd)
+        self.client.queueServiceActionCall("categoryversion", "add", "KalturaCategoryVersion", kparams)
+        if self.client.isMultiRequest():
+            return self.client.getMultiRequestResult()
+        resultNode = self.client.doQueue()
+        return KalturaObjectFactory.create(resultNode, 'KalturaCategoryVersion')
+
+    def update(self, id, objectToUpdate):
+        """categoryVersion update"""
+
+        kparams = KalturaParams()
+        kparams.addIntIfDefined("id", id);
+        kparams.addObjectIfDefined("objectToUpdate", objectToUpdate)
+        self.client.queueServiceActionCall("categoryversion", "update", "KalturaCategoryVersion", kparams)
+        if self.client.isMultiRequest():
+            return self.client.getMultiRequestResult()
+        resultNode = self.client.doQueue()
+        return KalturaObjectFactory.create(resultNode, 'KalturaCategoryVersion')
+
+    def delete(self, id):
+        """Remove category version"""
+
+        kparams = KalturaParams()
+        kparams.addIntIfDefined("id", id);
+        self.client.queueServiceActionCall("categoryversion", "delete", "None", kparams)
+        if self.client.isMultiRequest():
+            return self.client.getMultiRequestResult()
+        resultNode = self.client.doQueue()
+
+    def list(self, filter, pager = NotImplemented):
+        """Gets all category versions"""
+
+        kparams = KalturaParams()
+        kparams.addObjectIfDefined("filter", filter)
+        kparams.addObjectIfDefined("pager", pager)
+        self.client.queueServiceActionCall("categoryversion", "list", "KalturaCategoryVersionListResponse", kparams)
+        if self.client.isMultiRequest():
+            return self.client.getMultiRequestResult()
+        resultNode = self.client.doQueue()
+        return KalturaObjectFactory.create(resultNode, 'KalturaCategoryVersionListResponse')
+
+    def createTree(self, categoryItemId, name, comment):
+        """Acreate new tree for this categoryItem"""
+
+        kparams = KalturaParams()
+        kparams.addIntIfDefined("categoryItemId", categoryItemId);
+        kparams.addStringIfDefined("name", name)
+        kparams.addStringIfDefined("comment", comment)
+        self.client.queueServiceActionCall("categoryversion", "createTree", "KalturaCategoryVersion", kparams)
+        if self.client.isMultiRequest():
+            return self.client.getMultiRequestResult()
+        resultNode = self.client.doQueue()
+        return KalturaObjectFactory.create(resultNode, 'KalturaCategoryVersion')
+
+    def setDefault(self, id, force = False):
+        """Set new default category version"""
+
+        kparams = KalturaParams()
+        kparams.addIntIfDefined("id", id);
+        kparams.addBoolIfDefined("force", force);
+        self.client.queueServiceActionCall("categoryversion", "setDefault", "None", kparams)
+        if self.client.isMultiRequest():
+            return self.client.getMultiRequestResult()
+        resultNode = self.client.doQueue()
 
 
 # @package Kaltura
@@ -47279,6 +47606,7 @@ class KalturaCoreClient(KalturaClientPlugin):
             'campaign': KalturaCampaignService,
             'categoryItem': KalturaCategoryItemService,
             'categoryTree': KalturaCategoryTreeService,
+            'categoryVersion': KalturaCategoryVersionService,
             'cdnAdapterProfile': KalturaCdnAdapterProfileService,
             'cdnPartnerSettings': KalturaCdnPartnerSettingsService,
             'cDVRAdapterProfile': KalturaCDVRAdapterProfileService,
@@ -47436,6 +47764,8 @@ class KalturaCoreClient(KalturaClientPlugin):
             'KalturaBundleType': KalturaBundleType,
             'KalturaCampaignOrderBy': KalturaCampaignOrderBy,
             'KalturaCategoryItemOrderBy': KalturaCategoryItemOrderBy,
+            'KalturaCategoryVersionOrderBy': KalturaCategoryVersionOrderBy,
+            'KalturaCategoryVersionState': KalturaCategoryVersionState,
             'KalturaChannelEnrichment': KalturaChannelEnrichment,
             'KalturaChannelOrderBy': KalturaChannelOrderBy,
             'KalturaChannelsOrderBy': KalturaChannelsOrderBy,
@@ -47626,6 +47956,8 @@ class KalturaCoreClient(KalturaClientPlugin):
             'KalturaCategoryItemByIdInFilter': KalturaCategoryItemByIdInFilter,
             'KalturaCategoryItemSearchFilter': KalturaCategoryItemSearchFilter,
             'KalturaCategoryItemAncestorsFilter': KalturaCategoryItemAncestorsFilter,
+            'KalturaCategoryVersionFilter': KalturaCategoryVersionFilter,
+            'KalturaCategoryVersionFilterByTree': KalturaCategoryVersionFilterByTree,
             'KalturaCampaignFilter': KalturaCampaignFilter,
             'KalturaCampaignIdInFilter': KalturaCampaignIdInFilter,
             'KalturaCampaignSearchFilter': KalturaCampaignSearchFilter,
@@ -47856,6 +48188,7 @@ class KalturaCoreClient(KalturaClientPlugin):
             'KalturaUnifiedChannel': KalturaUnifiedChannel,
             'KalturaCategoryItem': KalturaCategoryItem,
             'KalturaUnifiedChannelInfo': KalturaUnifiedChannelInfo,
+            'KalturaCategoryVersion': KalturaCategoryVersion,
             'KalturaCondition': KalturaCondition,
             'KalturaPromotion': KalturaPromotion,
             'KalturaCampaign': KalturaCampaign,
@@ -47953,6 +48286,7 @@ class KalturaCoreClient(KalturaClientPlugin):
             'KalturaPartnerConfiguration': KalturaPartnerConfiguration,
             'KalturaPartnerConfigurationListResponse': KalturaPartnerConfigurationListResponse,
             'KalturaBillingPartnerConfig': KalturaBillingPartnerConfig,
+            'KalturaCategoryManagement': KalturaCategoryManagement,
             'KalturaCatalogPartnerConfig': KalturaCatalogPartnerConfig,
             'KalturaBookmarkEventThreshold': KalturaBookmarkEventThreshold,
             'KalturaCommercePartnerConfig': KalturaCommercePartnerConfig,
@@ -48171,6 +48505,7 @@ class KalturaCoreClient(KalturaClientPlugin):
             'KalturaOTTCategory': KalturaOTTCategory,
             'KalturaCategoryItemListResponse': KalturaCategoryItemListResponse,
             'KalturaCategoryTree': KalturaCategoryTree,
+            'KalturaCategoryVersionListResponse': KalturaCategoryVersionListResponse,
             'KalturaCDNPartnerSettings': KalturaCDNPartnerSettings,
             'KalturaCompensation': KalturaCompensation,
             'KalturaCoupon': KalturaCoupon,
@@ -48216,7 +48551,6 @@ class KalturaCoreClient(KalturaClientPlugin):
             'KalturaMessageTemplate': KalturaMessageTemplate,
             'KalturaRegistryResponse': KalturaRegistryResponse,
             'KalturaPushMessage': KalturaPushMessage,
-            'KalturaEpgNotificationSettings': KalturaEpgNotificationSettings,
             'KalturaNotificationsPartnerSettings': KalturaNotificationsPartnerSettings,
             'KalturaNotificationsSettings': KalturaNotificationsSettings,
             'KalturaOTTUserDynamicData': KalturaOTTUserDynamicData,
