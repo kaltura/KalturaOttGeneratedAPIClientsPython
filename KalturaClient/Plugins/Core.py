@@ -8,7 +8,7 @@
 # to do with audio, video, and animation what Wiki platfroms allow them to do with
 # text.
 #
-# Copyright (C) 2006-2020  Kaltura Inc.
+# Copyright (C) 2006-2021  Kaltura Inc.
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU Affero General Public License as
@@ -42,7 +42,7 @@ from ..Base import (
     KalturaServiceBase,
 )
 
-API_VERSION = '5.9.0.28776'
+API_VERSION = '5.9.0.28791'
 
 ########## enums ##########
 # @package Kaltura
@@ -10920,7 +10920,8 @@ class KalturaMediaImage(KalturaObjectBase):
             url=NotImplemented,
             version=NotImplemented,
             id=NotImplemented,
-            isDefault=NotImplemented):
+            isDefault=NotImplemented,
+            imageTypeId=NotImplemented):
         KalturaObjectBase.__init__(self)
 
         # Image aspect ratio
@@ -10952,6 +10953,10 @@ class KalturaMediaImage(KalturaObjectBase):
         # @var bool
         self.isDefault = isDefault
 
+        # Image type identifier
+        # @var int
+        self.imageTypeId = imageTypeId
+
 
     PROPERTY_LOADERS = {
         'ratio': getXmlNodeText, 
@@ -10961,6 +10966,7 @@ class KalturaMediaImage(KalturaObjectBase):
         'version': getXmlNodeInt, 
         'id': getXmlNodeText, 
         'isDefault': getXmlNodeBool, 
+        'imageTypeId': getXmlNodeInt, 
     }
 
     def fromXml(self, node):
@@ -10976,6 +10982,7 @@ class KalturaMediaImage(KalturaObjectBase):
         kparams.addStringIfDefined("url", self.url)
         kparams.addIntIfDefined("version", self.version)
         kparams.addBoolIfDefined("isDefault", self.isDefault)
+        kparams.addIntIfDefined("imageTypeId", self.imageTypeId)
         return kparams
 
     def getRatio(self):
@@ -11016,6 +11023,12 @@ class KalturaMediaImage(KalturaObjectBase):
 
     def setIsDefault(self, newIsDefault):
         self.isDefault = newIsDefault
+
+    def getImageTypeId(self):
+        return self.imageTypeId
+
+    def setImageTypeId(self, newImageTypeId):
+        self.imageTypeId = newImageTypeId
 
 
 # @package Kaltura
@@ -22197,7 +22210,8 @@ class KalturaConcurrencyPartnerConfig(KalturaPartnerConfiguration):
     def __init__(self,
             deviceFamilyIds=NotImplemented,
             evictionPolicy=NotImplemented,
-            concurrencyThresholdInSeconds=NotImplemented):
+            concurrencyThresholdInSeconds=NotImplemented,
+            revokeOnDeviceDelete=NotImplemented):
         KalturaPartnerConfiguration.__init__(self)
 
         # Comma separated list of device Family Ids order by their priority.
@@ -22212,11 +22226,16 @@ class KalturaConcurrencyPartnerConfig(KalturaPartnerConfiguration):
         # @var int
         self.concurrencyThresholdInSeconds = concurrencyThresholdInSeconds
 
+        # Revoke on device delete
+        # @var bool
+        self.revokeOnDeviceDelete = revokeOnDeviceDelete
+
 
     PROPERTY_LOADERS = {
         'deviceFamilyIds': getXmlNodeText, 
         'evictionPolicy': (KalturaEnumsFactory.createString, "KalturaEvictionPolicyType"), 
         'concurrencyThresholdInSeconds': getXmlNodeInt, 
+        'revokeOnDeviceDelete': getXmlNodeBool, 
     }
 
     def fromXml(self, node):
@@ -22229,6 +22248,7 @@ class KalturaConcurrencyPartnerConfig(KalturaPartnerConfiguration):
         kparams.addStringIfDefined("deviceFamilyIds", self.deviceFamilyIds)
         kparams.addStringEnumIfDefined("evictionPolicy", self.evictionPolicy)
         kparams.addIntIfDefined("concurrencyThresholdInSeconds", self.concurrencyThresholdInSeconds)
+        kparams.addBoolIfDefined("revokeOnDeviceDelete", self.revokeOnDeviceDelete)
         return kparams
 
     def getDeviceFamilyIds(self):
@@ -22248,6 +22268,12 @@ class KalturaConcurrencyPartnerConfig(KalturaPartnerConfiguration):
 
     def setConcurrencyThresholdInSeconds(self, newConcurrencyThresholdInSeconds):
         self.concurrencyThresholdInSeconds = newConcurrencyThresholdInSeconds
+
+    def getRevokeOnDeviceDelete(self):
+        return self.revokeOnDeviceDelete
+
+    def setRevokeOnDeviceDelete(self, newRevokeOnDeviceDelete):
+        self.revokeOnDeviceDelete = newRevokeOnDeviceDelete
 
 
 # @package Kaltura
