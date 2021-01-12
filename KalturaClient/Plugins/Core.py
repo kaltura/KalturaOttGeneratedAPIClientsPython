@@ -42,7 +42,7 @@ from ..Base import (
     KalturaServiceBase,
 )
 
-API_VERSION = '6.0.0.28792'
+API_VERSION = '6.0.0.28794'
 
 ########## enums ##########
 # @package Kaltura
@@ -15698,7 +15698,8 @@ class KalturaCategoryItem(KalturaCrudObject):
             isActive=NotImplemented,
             startDateInSeconds=NotImplemented,
             endDateInSeconds=NotImplemented,
-            type=NotImplemented):
+            type=NotImplemented,
+            virtualAssetId=NotImplemented):
         KalturaCrudObject.__init__(self)
 
         # Unique identifier for the category
@@ -15754,6 +15755,11 @@ class KalturaCategoryItem(KalturaCrudObject):
         # @insertonly
         self.type = type
 
+        # Virtual asset id
+        # @var int
+        # @readonly
+        self.virtualAssetId = virtualAssetId
+
 
     PROPERTY_LOADERS = {
         'id': getXmlNodeInt, 
@@ -15768,6 +15774,7 @@ class KalturaCategoryItem(KalturaCrudObject):
         'startDateInSeconds': getXmlNodeInt, 
         'endDateInSeconds': getXmlNodeInt, 
         'type': getXmlNodeText, 
+        'virtualAssetId': getXmlNodeInt, 
     }
 
     def fromXml(self, node):
@@ -15846,6 +15853,9 @@ class KalturaCategoryItem(KalturaCrudObject):
 
     def setType(self, newType):
         self.type = newType
+
+    def getVirtualAssetId(self):
+        return self.virtualAssetId
 
 
 # @package Kaltura
