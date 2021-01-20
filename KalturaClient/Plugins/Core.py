@@ -42,7 +42,7 @@ from ..Base import (
     KalturaServiceBase,
 )
 
-API_VERSION = '6.0.0.28794'
+API_VERSION = '6.0.0.28805'
 
 ########## enums ##########
 # @package Kaltura
@@ -15698,7 +15698,8 @@ class KalturaCategoryItem(KalturaCrudObject):
             isActive=NotImplemented,
             startDateInSeconds=NotImplemented,
             endDateInSeconds=NotImplemented,
-            type=NotImplemented):
+            type=NotImplemented,
+            virtualAssetId=NotImplemented):
         KalturaCrudObject.__init__(self)
 
         # Unique identifier for the category
@@ -15754,6 +15755,11 @@ class KalturaCategoryItem(KalturaCrudObject):
         # @insertonly
         self.type = type
 
+        # Virtual asset id
+        # @var int
+        # @readonly
+        self.virtualAssetId = virtualAssetId
+
 
     PROPERTY_LOADERS = {
         'id': getXmlNodeInt, 
@@ -15768,6 +15774,7 @@ class KalturaCategoryItem(KalturaCrudObject):
         'startDateInSeconds': getXmlNodeInt, 
         'endDateInSeconds': getXmlNodeInt, 
         'type': getXmlNodeText, 
+        'virtualAssetId': getXmlNodeInt, 
     }
 
     def fromXml(self, node):
@@ -15846,6 +15853,9 @@ class KalturaCategoryItem(KalturaCrudObject):
 
     def setType(self, newType):
         self.type = newType
+
+    def getVirtualAssetId(self):
+        return self.virtualAssetId
 
 
 # @package Kaltura
@@ -28472,16 +28482,22 @@ class KalturaLiveAsset(KalturaMediaAsset):
         self.externalCdvrId = externalCdvrId
 
         # Is CDVR enabled for this asset
+        #             Please, note that value of this property is strictly connected with CDV-R setting on Partner level.
+        #             In order to enable CDV-R for KalturaLiveAsset, Partner CDV-R setting should be enabled.
         # @var bool
         # @readonly
         self.enableCdvr = enableCdvr
 
         # Is catch-up enabled for this asset
+        #             Please, note that value of this property is strictly connected with Catch Up setting on Partner level.
+        #             In order to enable Catch Up for KalturaLiveAsset, Partner Catch Up setting should be enabled.
         # @var bool
         # @readonly
         self.enableCatchUp = enableCatchUp
 
         # Is start over enabled for this asset
+        #             Please, note that value of this property is strictly connected with Start Over setting on Partner level.
+        #             In order to enable Start Over for KalturaLiveAsset, Partner Start Over setting should be enabled.
         # @var bool
         # @readonly
         self.enableStartOver = enableStartOver
@@ -28502,6 +28518,8 @@ class KalturaLiveAsset(KalturaMediaAsset):
         self.enableRecordingPlaybackNonEntitledChannel = enableRecordingPlaybackNonEntitledChannel
 
         # Is trick-play enabled for this asset
+        #             Please, note that value of this property is strictly connected with Trick Play setting on Partner level.
+        #             In order to enable Trick Play for KalturaLiveAsset, Partner Trick Play setting should be enabled.
         # @var bool
         # @readonly
         self.enableTrickPlay = enableTrickPlay
@@ -28707,18 +28725,26 @@ class KalturaProgramAsset(KalturaAsset):
         self.linearAssetId = linearAssetId
 
         # Is CDVR enabled for this asset
+        #             Please, note that value of this property is strictly connected with CDV-R setting on Partner and KalturaLiveAsset levels.
+        #             In order to enable CDV-R for KalturaProgramAsset, Partner and KalturaLiveAsset CDV-R settings should be enabled.
         # @var bool
         self.enableCdvr = enableCdvr
 
         # Is catch-up enabled for this asset
+        #             Please, note that value of this property is strictly connected with Catch Up setting on Partner and KalturaLiveAsset levels.
+        #             In order to enable Catch Up for KalturaProgramAsset, Partner and KalturaLiveAsset Catch Up settings should be enabled.
         # @var bool
         self.enableCatchUp = enableCatchUp
 
         # Is start over enabled for this asset
+        #             Please, note that value of this property is strictly connected with Start Over setting on Partner and KalturaLiveAsset levels.
+        #             In order to enable Start Over for KalturaProgramAsset, Partner and KalturaLiveAsset Start Over settings should be enabled.
         # @var bool
         self.enableStartOver = enableStartOver
 
         # Is trick-play enabled for this asset
+        #             Please, note that value of this property is strictly connected with Trick Play setting on Partner and KalturaLiveAsset levels.
+        #             In order to enable Trick Play for KalturaProgramAsset, Partner and KalturaLiveAsset Trick Play settings should be enabled.
         # @var bool
         self.enableTrickPlay = enableTrickPlay
 
@@ -36016,41 +36042,6 @@ class KalturaCoupon(KalturaObjectBase):
 
 # @package Kaltura
 # @subpackage Client
-class KalturaCouponListResponse(KalturaListResponse):
-    def __init__(self,
-            totalCount=NotImplemented,
-            objects=NotImplemented):
-        KalturaListResponse.__init__(self,
-            totalCount)
-
-        # Coupons
-        # @var array of KalturaCoupon
-        self.objects = objects
-
-
-    PROPERTY_LOADERS = {
-        'objects': (KalturaObjectFactory.createArray, 'KalturaCoupon'), 
-    }
-
-    def fromXml(self, node):
-        KalturaListResponse.fromXml(self, node)
-        self.fromXmlImpl(node, KalturaCouponListResponse.PROPERTY_LOADERS)
-
-    def toParams(self):
-        kparams = KalturaListResponse.toParams(self)
-        kparams.put("objectType", "KalturaCouponListResponse")
-        kparams.addArrayIfDefined("objects", self.objects)
-        return kparams
-
-    def getObjects(self):
-        return self.objects
-
-    def setObjects(self, newObjects):
-        self.objects = newObjects
-
-
-# @package Kaltura
-# @subpackage Client
 class KalturaCouponGenerationOptions(KalturaObjectBase):
     """Coupon generation options"""
 
@@ -42391,17 +42382,6 @@ class KalturaCouponService(KalturaServiceBase):
         resultNode = self.client.doQueue()
         return KalturaObjectFactory.create(resultNode, 'KalturaCoupon')
 
-    def list(self, filter):
-        """Lists coupon codes."""
-
-        kparams = KalturaParams()
-        kparams.addObjectIfDefined("filter", filter)
-        self.client.queueServiceActionCall("coupon", "list", "KalturaCouponListResponse", kparams)
-        if self.client.isMultiRequest():
-            return self.client.getMultiRequestResult()
-        resultNode = self.client.doQueue()
-        return KalturaObjectFactory.create(resultNode, 'KalturaCouponListResponse')
-
 
 # @package Kaltura
 # @subpackage Client
@@ -48174,7 +48154,6 @@ class KalturaCoreClient(KalturaClientPlugin):
             'KalturaCDNPartnerSettings': KalturaCDNPartnerSettings,
             'KalturaCompensation': KalturaCompensation,
             'KalturaCoupon': KalturaCoupon,
-            'KalturaCouponListResponse': KalturaCouponListResponse,
             'KalturaCouponGenerationOptions': KalturaCouponGenerationOptions,
             'KalturaPublicCouponGenerationOptions': KalturaPublicCouponGenerationOptions,
             'KalturaRandomCouponGenerationOptions': KalturaRandomCouponGenerationOptions,
