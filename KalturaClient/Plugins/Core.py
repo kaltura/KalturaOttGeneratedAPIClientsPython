@@ -42,7 +42,7 @@ from ..Base import (
     KalturaServiceBase,
 )
 
-API_VERSION = '6.0.0.28794'
+API_VERSION = '6.0.0.28813'
 
 ########## enums ##########
 # @package Kaltura
@@ -1642,6 +1642,7 @@ class KalturaPartnerConfigurationType(object):
     PAYMENT = "Payment"
     CATALOG = "Catalog"
     SECURITY = "Security"
+    OPC = "Opc"
 
     def __init__(self, value):
         self.value = value
@@ -15698,7 +15699,8 @@ class KalturaCategoryItem(KalturaCrudObject):
             isActive=NotImplemented,
             startDateInSeconds=NotImplemented,
             endDateInSeconds=NotImplemented,
-            type=NotImplemented):
+            type=NotImplemented,
+            virtualAssetId=NotImplemented):
         KalturaCrudObject.__init__(self)
 
         # Unique identifier for the category
@@ -15754,6 +15756,11 @@ class KalturaCategoryItem(KalturaCrudObject):
         # @insertonly
         self.type = type
 
+        # Virtual asset id
+        # @var int
+        # @readonly
+        self.virtualAssetId = virtualAssetId
+
 
     PROPERTY_LOADERS = {
         'id': getXmlNodeInt, 
@@ -15768,6 +15775,7 @@ class KalturaCategoryItem(KalturaCrudObject):
         'startDateInSeconds': getXmlNodeInt, 
         'endDateInSeconds': getXmlNodeInt, 
         'type': getXmlNodeText, 
+        'virtualAssetId': getXmlNodeInt, 
     }
 
     def fromXml(self, node):
@@ -15846,6 +15854,9 @@ class KalturaCategoryItem(KalturaCrudObject):
 
     def setType(self, newType):
         self.type = newType
+
+    def getVirtualAssetId(self):
+        return self.virtualAssetId
 
 
 # @package Kaltura
@@ -22633,6 +22644,144 @@ class KalturaObjectVirtualAssetPartnerConfig(KalturaPartnerConfiguration):
 
 # @package Kaltura
 # @subpackage Client
+class KalturaResetPasswordPartnerConfigTemplate(KalturaObjectBase):
+    def __init__(self,
+            id=NotImplemented,
+            label=NotImplemented,
+            isDefault=NotImplemented):
+        KalturaObjectBase.__init__(self)
+
+        # id
+        # @var string
+        self.id = id
+
+        # label
+        # @var string
+        self.label = label
+
+        # is Default
+        # @var bool
+        self.isDefault = isDefault
+
+
+    PROPERTY_LOADERS = {
+        'id': getXmlNodeText, 
+        'label': getXmlNodeText, 
+        'isDefault': getXmlNodeBool, 
+    }
+
+    def fromXml(self, node):
+        KalturaObjectBase.fromXml(self, node)
+        self.fromXmlImpl(node, KalturaResetPasswordPartnerConfigTemplate.PROPERTY_LOADERS)
+
+    def toParams(self):
+        kparams = KalturaObjectBase.toParams(self)
+        kparams.put("objectType", "KalturaResetPasswordPartnerConfigTemplate")
+        kparams.addStringIfDefined("id", self.id)
+        kparams.addStringIfDefined("label", self.label)
+        kparams.addBoolIfDefined("isDefault", self.isDefault)
+        return kparams
+
+    def getId(self):
+        return self.id
+
+    def setId(self, newId):
+        self.id = newId
+
+    def getLabel(self):
+        return self.label
+
+    def setLabel(self, newLabel):
+        self.label = newLabel
+
+    def getIsDefault(self):
+        return self.isDefault
+
+    def setIsDefault(self, newIsDefault):
+        self.isDefault = newIsDefault
+
+
+# @package Kaltura
+# @subpackage Client
+class KalturaResetPasswordPartnerConfig(KalturaObjectBase):
+    def __init__(self,
+            templateListLabel=NotImplemented,
+            templates=NotImplemented):
+        KalturaObjectBase.__init__(self)
+
+        # template List Label
+        # @var string
+        self.templateListLabel = templateListLabel
+
+        # templates
+        # @var array of KalturaResetPasswordPartnerConfigTemplate
+        self.templates = templates
+
+
+    PROPERTY_LOADERS = {
+        'templateListLabel': getXmlNodeText, 
+        'templates': (KalturaObjectFactory.createArray, 'KalturaResetPasswordPartnerConfigTemplate'), 
+    }
+
+    def fromXml(self, node):
+        KalturaObjectBase.fromXml(self, node)
+        self.fromXmlImpl(node, KalturaResetPasswordPartnerConfig.PROPERTY_LOADERS)
+
+    def toParams(self):
+        kparams = KalturaObjectBase.toParams(self)
+        kparams.put("objectType", "KalturaResetPasswordPartnerConfig")
+        kparams.addStringIfDefined("templateListLabel", self.templateListLabel)
+        kparams.addArrayIfDefined("templates", self.templates)
+        return kparams
+
+    def getTemplateListLabel(self):
+        return self.templateListLabel
+
+    def setTemplateListLabel(self, newTemplateListLabel):
+        self.templateListLabel = newTemplateListLabel
+
+    def getTemplates(self):
+        return self.templates
+
+    def setTemplates(self, newTemplates):
+        self.templates = newTemplates
+
+
+# @package Kaltura
+# @subpackage Client
+class KalturaOpcPartnerConfiguration(KalturaPartnerConfiguration):
+    def __init__(self,
+            resetPassword=NotImplemented):
+        KalturaPartnerConfiguration.__init__(self)
+
+        # Reset Password
+        # @var KalturaResetPasswordPartnerConfig
+        self.resetPassword = resetPassword
+
+
+    PROPERTY_LOADERS = {
+        'resetPassword': (KalturaObjectFactory.create, 'KalturaResetPasswordPartnerConfig'), 
+    }
+
+    def fromXml(self, node):
+        KalturaPartnerConfiguration.fromXml(self, node)
+        self.fromXmlImpl(node, KalturaOpcPartnerConfiguration.PROPERTY_LOADERS)
+
+    def toParams(self):
+        kparams = KalturaPartnerConfiguration.toParams(self)
+        kparams.put("objectType", "KalturaOpcPartnerConfiguration")
+        kparams.addObjectIfDefined("resetPassword", self.resetPassword)
+        return kparams
+
+    def getResetPassword(self):
+        return self.resetPassword
+
+    def setResetPassword(self, newResetPassword):
+        self.resetPassword = newResetPassword
+
+
+# @package Kaltura
+# @subpackage Client
 class KalturaDuration(KalturaObjectBase):
     """representation of duration time unit and value"""
 
@@ -28472,16 +28621,22 @@ class KalturaLiveAsset(KalturaMediaAsset):
         self.externalCdvrId = externalCdvrId
 
         # Is CDVR enabled for this asset
+        #             Please, note that value of this property is strictly connected with CDV-R setting on Partner level.
+        #             In order to enable CDV-R for KalturaLiveAsset, Partner CDV-R setting should be enabled.
         # @var bool
         # @readonly
         self.enableCdvr = enableCdvr
 
         # Is catch-up enabled for this asset
+        #             Please, note that value of this property is strictly connected with Catch Up setting on Partner level.
+        #             In order to enable Catch Up for KalturaLiveAsset, Partner Catch Up setting should be enabled.
         # @var bool
         # @readonly
         self.enableCatchUp = enableCatchUp
 
         # Is start over enabled for this asset
+        #             Please, note that value of this property is strictly connected with Start Over setting on Partner level.
+        #             In order to enable Start Over for KalturaLiveAsset, Partner Start Over setting should be enabled.
         # @var bool
         # @readonly
         self.enableStartOver = enableStartOver
@@ -28502,6 +28657,8 @@ class KalturaLiveAsset(KalturaMediaAsset):
         self.enableRecordingPlaybackNonEntitledChannel = enableRecordingPlaybackNonEntitledChannel
 
         # Is trick-play enabled for this asset
+        #             Please, note that value of this property is strictly connected with Trick Play setting on Partner level.
+        #             In order to enable Trick Play for KalturaLiveAsset, Partner Trick Play setting should be enabled.
         # @var bool
         # @readonly
         self.enableTrickPlay = enableTrickPlay
@@ -28707,18 +28864,26 @@ class KalturaProgramAsset(KalturaAsset):
         self.linearAssetId = linearAssetId
 
         # Is CDVR enabled for this asset
+        #             Please, note that value of this property is strictly connected with CDV-R setting on Partner and KalturaLiveAsset levels.
+        #             In order to enable CDV-R for KalturaProgramAsset, Partner and KalturaLiveAsset CDV-R settings should be enabled.
         # @var bool
         self.enableCdvr = enableCdvr
 
         # Is catch-up enabled for this asset
+        #             Please, note that value of this property is strictly connected with Catch Up setting on Partner and KalturaLiveAsset levels.
+        #             In order to enable Catch Up for KalturaProgramAsset, Partner and KalturaLiveAsset Catch Up settings should be enabled.
         # @var bool
         self.enableCatchUp = enableCatchUp
 
         # Is start over enabled for this asset
+        #             Please, note that value of this property is strictly connected with Start Over setting on Partner and KalturaLiveAsset levels.
+        #             In order to enable Start Over for KalturaProgramAsset, Partner and KalturaLiveAsset Start Over settings should be enabled.
         # @var bool
         self.enableStartOver = enableStartOver
 
         # Is trick-play enabled for this asset
+        #             Please, note that value of this property is strictly connected with Trick Play setting on Partner and KalturaLiveAsset levels.
+        #             In order to enable Trick Play for KalturaProgramAsset, Partner and KalturaLiveAsset Trick Play settings should be enabled.
         # @var bool
         self.enableTrickPlay = enableTrickPlay
 
@@ -47961,6 +48126,9 @@ class KalturaCoreClient(KalturaClientPlugin):
             'KalturaGeneralPartnerConfig': KalturaGeneralPartnerConfig,
             'KalturaObjectVirtualAssetInfo': KalturaObjectVirtualAssetInfo,
             'KalturaObjectVirtualAssetPartnerConfig': KalturaObjectVirtualAssetPartnerConfig,
+            'KalturaResetPasswordPartnerConfigTemplate': KalturaResetPasswordPartnerConfigTemplate,
+            'KalturaResetPasswordPartnerConfig': KalturaResetPasswordPartnerConfig,
+            'KalturaOpcPartnerConfiguration': KalturaOpcPartnerConfiguration,
             'KalturaDuration': KalturaDuration,
             'KalturaUnifiedBillingCycle': KalturaUnifiedBillingCycle,
             'KalturaPaymentPartnerConfig': KalturaPaymentPartnerConfig,
