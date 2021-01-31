@@ -42,7 +42,7 @@ from ..Base import (
     KalturaServiceBase,
 )
 
-API_VERSION = '6.0.0.28794'
+API_VERSION = '6.0.0.28795'
 
 ########## enums ##########
 # @package Kaltura
@@ -4385,7 +4385,8 @@ class KalturaOTTUserFilter(KalturaFilter):
             usernameEqual=NotImplemented,
             externalIdEqual=NotImplemented,
             idIn=NotImplemented,
-            roleIdsIn=NotImplemented):
+            roleIdsIn=NotImplemented,
+            emailEqual=NotImplemented):
         KalturaFilter.__init__(self,
             orderBy)
 
@@ -4405,12 +4406,17 @@ class KalturaOTTUserFilter(KalturaFilter):
         # @var string
         self.roleIdsIn = roleIdsIn
 
+        # User email
+        # @var string
+        self.emailEqual = emailEqual
+
 
     PROPERTY_LOADERS = {
         'usernameEqual': getXmlNodeText, 
         'externalIdEqual': getXmlNodeText, 
         'idIn': getXmlNodeText, 
         'roleIdsIn': getXmlNodeText, 
+        'emailEqual': getXmlNodeText, 
     }
 
     def fromXml(self, node):
@@ -4424,6 +4430,7 @@ class KalturaOTTUserFilter(KalturaFilter):
         kparams.addStringIfDefined("externalIdEqual", self.externalIdEqual)
         kparams.addStringIfDefined("idIn", self.idIn)
         kparams.addStringIfDefined("roleIdsIn", self.roleIdsIn)
+        kparams.addStringIfDefined("emailEqual", self.emailEqual)
         return kparams
 
     def getUsernameEqual(self):
@@ -4449,6 +4456,12 @@ class KalturaOTTUserFilter(KalturaFilter):
 
     def setRoleIdsIn(self, newRoleIdsIn):
         self.roleIdsIn = newRoleIdsIn
+
+    def getEmailEqual(self):
+        return self.emailEqual
+
+    def setEmailEqual(self, newEmailEqual):
+        self.emailEqual = newEmailEqual
 
 
 # @package Kaltura
