@@ -42,7 +42,7 @@ from ..Base import (
     KalturaServiceBase,
 )
 
-API_VERSION = '6.1.0.28832'
+API_VERSION = '6.1.0.28856'
 
 ########## enums ##########
 # @package Kaltura
@@ -1415,22 +1415,6 @@ class KalturaLinearChannelType(object):
     OTT = "OTT"
     DTT_AND_OTT = "DTT_AND_OTT"
     VRM_EXPORT = "VRM_EXPORT"
-
-    def __init__(self, value):
-        self.value = value
-
-    def getValue(self):
-        return self.value
-
-# @package Kaltura
-# @subpackage Client
-class KalturaLogLevel(object):
-    TRACE = "TRACE"
-    DEBUG = "DEBUG"
-    INFO = "INFO"
-    WARN = "WARN"
-    ERROR = "ERROR"
-    ALL = "ALL"
 
     def __init__(self, value):
         self.value = value
@@ -47122,16 +47106,6 @@ class KalturaSystemService(KalturaServiceBase):
         resultNode = self.client.doQueue()
         return getXmlNodeBool(resultNode)
 
-    def getLogLevel(self):
-        """Gets the current level of the KLogger"""
-
-        kparams = KalturaParams()
-        self.client.queueServiceActionCall("system", "getLogLevel", "None", kparams)
-        if self.client.isMultiRequest():
-            return self.client.getMultiRequestResult()
-        resultNode = self.client.doQueue()
-        return getXmlNodeText(resultNode)
-
     def getTime(self):
         """Returns current server timestamp"""
 
@@ -47168,17 +47142,6 @@ class KalturaSystemService(KalturaServiceBase):
 
         kparams = KalturaParams()
         self.client.queueServiceActionCall("system", "ping", "None", kparams)
-        if self.client.isMultiRequest():
-            return self.client.getMultiRequestResult()
-        resultNode = self.client.doQueue()
-        return getXmlNodeBool(resultNode)
-
-    def setLogLevel(self, level):
-        """Sets the current level of the KLogger"""
-
-        kparams = KalturaParams()
-        kparams.addStringIfDefined("level", level)
-        self.client.queueServiceActionCall("system", "setLogLevel", "None", kparams)
         if self.client.isMultiRequest():
             return self.client.getMultiRequestResult()
         resultNode = self.client.doQueue()
@@ -48132,7 +48095,6 @@ class KalturaCoreClient(KalturaClientPlugin):
             'KalturaIotProfileOrderBy': KalturaIotProfileOrderBy,
             'KalturaLanguageOrderBy': KalturaLanguageOrderBy,
             'KalturaLinearChannelType': KalturaLinearChannelType,
-            'KalturaLogLevel': KalturaLogLevel,
             'KalturaMathemticalOperatorType': KalturaMathemticalOperatorType,
             'KalturaMediaFileOrderBy': KalturaMediaFileOrderBy,
             'KalturaMediaFileStreamerType': KalturaMediaFileStreamerType,
