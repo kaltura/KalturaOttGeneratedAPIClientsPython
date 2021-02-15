@@ -42,7 +42,7 @@ from ..Base import (
     KalturaServiceBase,
 )
 
-API_VERSION = '6.1.0.28846'
+API_VERSION = '6.1.0.28847'
 
 ########## enums ##########
 # @package Kaltura
@@ -966,6 +966,16 @@ class KalturaEntitlementOrderBy(object):
 class KalturaEntityReferenceBy(object):
     USER = "user"
     HOUSEHOLD = "household"
+
+    def __init__(self, value):
+        self.value = value
+
+    def getValue(self):
+        return self.value
+
+# @package Kaltura
+# @subpackage Client
+class KalturaEpgOrderBy(object):
 
     def __init__(self, value):
         self.value = value
@@ -10605,6 +10615,54 @@ class KalturaUserRoleFilter(KalturaFilter):
 
     def setProfileEqual(self, newProfileEqual):
         self.profileEqual = newProfileEqual
+
+
+# @package Kaltura
+# @subpackage Client
+class KalturaEpgFilter(KalturaFilter):
+    def __init__(self,
+            orderBy=NotImplemented,
+            dateEqual=NotImplemented,
+            liveAssetIdEqual=NotImplemented):
+        KalturaFilter.__init__(self,
+            orderBy)
+
+        # date in unix timestamp, e.g. 1610928000(January 18, 2021 0:00:00), 1611014400(January 19, 2021 0:00:00)
+        # @var int
+        self.dateEqual = dateEqual
+
+        # EPG live asset identifier
+        # @var int
+        self.liveAssetIdEqual = liveAssetIdEqual
+
+
+    PROPERTY_LOADERS = {
+        'dateEqual': getXmlNodeInt, 
+        'liveAssetIdEqual': getXmlNodeInt, 
+    }
+
+    def fromXml(self, node):
+        KalturaFilter.fromXml(self, node)
+        self.fromXmlImpl(node, KalturaEpgFilter.PROPERTY_LOADERS)
+
+    def toParams(self):
+        kparams = KalturaFilter.toParams(self)
+        kparams.put("objectType", "KalturaEpgFilter")
+        kparams.addIntIfDefined("dateEqual", self.dateEqual)
+        kparams.addIntIfDefined("liveAssetIdEqual", self.liveAssetIdEqual)
+        return kparams
+
+    def getDateEqual(self):
+        return self.dateEqual
+
+    def setDateEqual(self, newDateEqual):
+        self.dateEqual = newDateEqual
+
+    def getLiveAssetIdEqual(self):
+        return self.liveAssetIdEqual
+
+    def setLiveAssetIdEqual(self, newLiveAssetIdEqual):
+        self.liveAssetIdEqual = newLiveAssetIdEqual
 
 
 # @package Kaltura
@@ -29429,6 +29487,60 @@ class KalturaRecordingAsset(KalturaProgramAsset):
 
 # @package Kaltura
 # @subpackage Client
+class KalturaEpg(KalturaAsset):
+    def __init__(self,
+            id=NotImplemented,
+            type=NotImplemented,
+            name=NotImplemented,
+            multilingualName=NotImplemented,
+            description=NotImplemented,
+            multilingualDescription=NotImplemented,
+            images=NotImplemented,
+            mediaFiles=NotImplemented,
+            metas=NotImplemented,
+            tags=NotImplemented,
+            relatedEntities=NotImplemented,
+            startDate=NotImplemented,
+            endDate=NotImplemented,
+            createDate=NotImplemented,
+            updateDate=NotImplemented,
+            externalId=NotImplemented,
+            indexStatus=NotImplemented):
+        KalturaAsset.__init__(self,
+            id,
+            type,
+            name,
+            multilingualName,
+            description,
+            multilingualDescription,
+            images,
+            mediaFiles,
+            metas,
+            tags,
+            relatedEntities,
+            startDate,
+            endDate,
+            createDate,
+            updateDate,
+            externalId,
+            indexStatus)
+
+
+    PROPERTY_LOADERS = {
+    }
+
+    def fromXml(self, node):
+        KalturaAsset.fromXml(self, node)
+        self.fromXmlImpl(node, KalturaEpg.PROPERTY_LOADERS)
+
+    def toParams(self):
+        kparams = KalturaAsset.toParams(self)
+        kparams.put("objectType", "KalturaEpg")
+        return kparams
+
+
+# @package Kaltura
+# @subpackage Client
 class KalturaAssetStatisticsListResponse(KalturaListResponse):
     """List of assets statistics"""
 
@@ -34829,6 +34941,43 @@ class KalturaUserRoleListResponse(KalturaListResponse):
     def toParams(self):
         kparams = KalturaListResponse.toParams(self)
         kparams.put("objectType", "KalturaUserRoleListResponse")
+        kparams.addArrayIfDefined("objects", self.objects)
+        return kparams
+
+    def getObjects(self):
+        return self.objects
+
+    def setObjects(self, newObjects):
+        self.objects = newObjects
+
+
+# @package Kaltura
+# @subpackage Client
+class KalturaEpgListResponse(KalturaListResponse):
+    """EPG wrapper"""
+
+    def __init__(self,
+            totalCount=NotImplemented,
+            objects=NotImplemented):
+        KalturaListResponse.__init__(self,
+            totalCount)
+
+        # Assets
+        # @var array of KalturaEpg
+        self.objects = objects
+
+
+    PROPERTY_LOADERS = {
+        'objects': (KalturaObjectFactory.createArray, 'KalturaEpg'), 
+    }
+
+    def fromXml(self, node):
+        KalturaListResponse.fromXml(self, node)
+        self.fromXmlImpl(node, KalturaEpgListResponse.PROPERTY_LOADERS)
+
+    def toParams(self):
+        kparams = KalturaListResponse.toParams(self)
+        kparams.put("objectType", "KalturaEpgListResponse")
         kparams.addArrayIfDefined("objects", self.objects)
         return kparams
 
@@ -43629,6 +43778,24 @@ class KalturaEntitlementService(KalturaServiceBase):
 
 # @package Kaltura
 # @subpackage Client
+class KalturaEpgService(KalturaServiceBase):
+    def __init__(self, client = None):
+        KalturaServiceBase.__init__(self, client)
+
+    def list(self, filter = NotImplemented):
+        """Returns EPG assets."""
+
+        kparams = KalturaParams()
+        kparams.addObjectIfDefined("filter", filter)
+        self.client.queueServiceActionCall("epg", "list", "KalturaEpgListResponse", kparams)
+        if self.client.isMultiRequest():
+            return self.client.getMultiRequestResult()
+        resultNode = self.client.doQueue()
+        return KalturaObjectFactory.create(resultNode, 'KalturaEpgListResponse')
+
+
+# @package Kaltura
+# @subpackage Client
 class KalturaEventNotificationActionService(KalturaServiceBase):
     def __init__(self, client = None):
         KalturaServiceBase.__init__(self, client)
@@ -47968,6 +48135,7 @@ class KalturaCoreClient(KalturaClientPlugin):
             'engagementAdapter': KalturaEngagementAdapterService,
             'engagement': KalturaEngagementService,
             'entitlement': KalturaEntitlementService,
+            'epg': KalturaEpgService,
             'eventNotificationAction': KalturaEventNotificationActionService,
             'eventNotification': KalturaEventNotificationService,
             'exportTask': KalturaExportTaskService,
@@ -48132,6 +48300,7 @@ class KalturaCoreClient(KalturaClientPlugin):
             'KalturaEngagementType': KalturaEngagementType,
             'KalturaEntitlementOrderBy': KalturaEntitlementOrderBy,
             'KalturaEntityReferenceBy': KalturaEntityReferenceBy,
+            'KalturaEpgOrderBy': KalturaEpgOrderBy,
             'KalturaEventNotificationOrderBy': KalturaEventNotificationOrderBy,
             'KalturaEventNotificationStatus': KalturaEventNotificationStatus,
             'KalturaEvictionPolicyType': KalturaEvictionPolicyType,
@@ -48431,6 +48600,7 @@ class KalturaCoreClient(KalturaClientPlugin):
             'KalturaTvmRuleFilter': KalturaTvmRuleFilter,
             'KalturaUserAssetRuleFilter': KalturaUserAssetRuleFilter,
             'KalturaUserRoleFilter': KalturaUserRoleFilter,
+            'KalturaEpgFilter': KalturaEpgFilter,
             'KalturaSkipOnErrorCondition': KalturaSkipOnErrorCondition,
             'KalturaPropertySkipCondition': KalturaPropertySkipCondition,
             'KalturaAggregatedPropertySkipCondition': KalturaAggregatedPropertySkipCondition,
@@ -48737,6 +48907,7 @@ class KalturaCoreClient(KalturaClientPlugin):
             'KalturaLiveAsset': KalturaLiveAsset,
             'KalturaProgramAsset': KalturaProgramAsset,
             'KalturaRecordingAsset': KalturaRecordingAsset,
+            'KalturaEpg': KalturaEpg,
             'KalturaAssetStatisticsListResponse': KalturaAssetStatisticsListResponse,
             'KalturaAssetStruct': KalturaAssetStruct,
             'KalturaAssetStructListResponse': KalturaAssetStructListResponse,
@@ -48819,6 +48990,7 @@ class KalturaCoreClient(KalturaClientPlugin):
             'KalturaUserAssetRuleListResponse': KalturaUserAssetRuleListResponse,
             'KalturaUserRole': KalturaUserRole,
             'KalturaUserRoleListResponse': KalturaUserRoleListResponse,
+            'KalturaEpgListResponse': KalturaEpgListResponse,
             'KalturaAppToken': KalturaAppToken,
             'KalturaSession': KalturaSession,
             'KalturaSessionInfo': KalturaSessionInfo,
