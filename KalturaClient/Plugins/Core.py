@@ -42,7 +42,7 @@ from ..Base import (
     KalturaServiceBase,
 )
 
-API_VERSION = '6.1.0.28847'
+API_VERSION = '6.1.0.28923'
 
 ########## enums ##########
 # @package Kaltura
@@ -29487,7 +29487,7 @@ class KalturaRecordingAsset(KalturaProgramAsset):
 
 # @package Kaltura
 # @subpackage Client
-class KalturaEpg(KalturaAsset):
+class KalturaEpg(KalturaProgramAsset):
     def __init__(self,
             id=NotImplemented,
             type=NotImplemented,
@@ -29505,8 +29505,17 @@ class KalturaEpg(KalturaAsset):
             createDate=NotImplemented,
             updateDate=NotImplemented,
             externalId=NotImplemented,
-            indexStatus=NotImplemented):
-        KalturaAsset.__init__(self,
+            indexStatus=NotImplemented,
+            epgChannelId=NotImplemented,
+            epgId=NotImplemented,
+            relatedMediaId=NotImplemented,
+            crid=NotImplemented,
+            linearAssetId=NotImplemented,
+            enableCdvr=NotImplemented,
+            enableCatchUp=NotImplemented,
+            enableStartOver=NotImplemented,
+            enableTrickPlay=NotImplemented):
+        KalturaProgramAsset.__init__(self,
             id,
             type,
             name,
@@ -29523,18 +29532,27 @@ class KalturaEpg(KalturaAsset):
             createDate,
             updateDate,
             externalId,
-            indexStatus)
+            indexStatus,
+            epgChannelId,
+            epgId,
+            relatedMediaId,
+            crid,
+            linearAssetId,
+            enableCdvr,
+            enableCatchUp,
+            enableStartOver,
+            enableTrickPlay)
 
 
     PROPERTY_LOADERS = {
     }
 
     def fromXml(self, node):
-        KalturaAsset.fromXml(self, node)
+        KalturaProgramAsset.fromXml(self, node)
         self.fromXmlImpl(node, KalturaEpg.PROPERTY_LOADERS)
 
     def toParams(self):
-        kparams = KalturaAsset.toParams(self)
+        kparams = KalturaProgramAsset.toParams(self)
         kparams.put("objectType", "KalturaEpg")
         return kparams
 
@@ -36751,41 +36769,6 @@ class KalturaCoupon(KalturaObjectBase):
 
 # @package Kaltura
 # @subpackage Client
-class KalturaCouponListResponse(KalturaListResponse):
-    def __init__(self,
-            totalCount=NotImplemented,
-            objects=NotImplemented):
-        KalturaListResponse.__init__(self,
-            totalCount)
-
-        # Coupons
-        # @var array of KalturaCoupon
-        self.objects = objects
-
-
-    PROPERTY_LOADERS = {
-        'objects': (KalturaObjectFactory.createArray, 'KalturaCoupon'), 
-    }
-
-    def fromXml(self, node):
-        KalturaListResponse.fromXml(self, node)
-        self.fromXmlImpl(node, KalturaCouponListResponse.PROPERTY_LOADERS)
-
-    def toParams(self):
-        kparams = KalturaListResponse.toParams(self)
-        kparams.put("objectType", "KalturaCouponListResponse")
-        kparams.addArrayIfDefined("objects", self.objects)
-        return kparams
-
-    def getObjects(self):
-        return self.objects
-
-    def setObjects(self, newObjects):
-        self.objects = newObjects
-
-
-# @package Kaltura
-# @subpackage Client
 class KalturaCouponGenerationOptions(KalturaObjectBase):
     """Coupon generation options"""
 
@@ -43213,17 +43196,6 @@ class KalturaCouponService(KalturaServiceBase):
         resultNode = self.client.doQueue()
         return KalturaObjectFactory.create(resultNode, 'KalturaCoupon')
 
-    def list(self, filter):
-        """Lists coupon codes."""
-
-        kparams = KalturaParams()
-        kparams.addObjectIfDefined("filter", filter)
-        self.client.queueServiceActionCall("coupon", "list", "KalturaCouponListResponse", kparams)
-        if self.client.isMultiRequest():
-            return self.client.getMultiRequestResult()
-        resultNode = self.client.doQueue()
-        return KalturaObjectFactory.create(resultNode, 'KalturaCouponListResponse')
-
 
 # @package Kaltura
 # @subpackage Client
@@ -49022,7 +48994,6 @@ class KalturaCoreClient(KalturaClientPlugin):
             'KalturaCDNPartnerSettings': KalturaCDNPartnerSettings,
             'KalturaCompensation': KalturaCompensation,
             'KalturaCoupon': KalturaCoupon,
-            'KalturaCouponListResponse': KalturaCouponListResponse,
             'KalturaCouponGenerationOptions': KalturaCouponGenerationOptions,
             'KalturaPublicCouponGenerationOptions': KalturaPublicCouponGenerationOptions,
             'KalturaRandomCouponGenerationOptions': KalturaRandomCouponGenerationOptions,
