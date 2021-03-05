@@ -42,7 +42,7 @@ from ..Base import (
     KalturaServiceBase,
 )
 
-API_VERSION = '6.1.0.28909'
+API_VERSION = '6.2.0.28961'
 
 ########## enums ##########
 # @package Kaltura
@@ -966,6 +966,16 @@ class KalturaEntitlementOrderBy(object):
 class KalturaEntityReferenceBy(object):
     USER = "user"
     HOUSEHOLD = "household"
+
+    def __init__(self, value):
+        self.value = value
+
+    def getValue(self):
+        return self.value
+
+# @package Kaltura
+# @subpackage Client
+class KalturaEpgOrderBy(object):
 
     def __init__(self, value):
         self.value = value
@@ -10609,6 +10619,54 @@ class KalturaUserRoleFilter(KalturaFilter):
 
 # @package Kaltura
 # @subpackage Client
+class KalturaEpgFilter(KalturaFilter):
+    def __init__(self,
+            orderBy=NotImplemented,
+            dateEqual=NotImplemented,
+            liveAssetIdEqual=NotImplemented):
+        KalturaFilter.__init__(self,
+            orderBy)
+
+        # date in unix timestamp, e.g. 1610928000(January 18, 2021 0:00:00), 1611014400(January 19, 2021 0:00:00)
+        # @var int
+        self.dateEqual = dateEqual
+
+        # EPG live asset identifier
+        # @var int
+        self.liveAssetIdEqual = liveAssetIdEqual
+
+
+    PROPERTY_LOADERS = {
+        'dateEqual': getXmlNodeInt, 
+        'liveAssetIdEqual': getXmlNodeInt, 
+    }
+
+    def fromXml(self, node):
+        KalturaFilter.fromXml(self, node)
+        self.fromXmlImpl(node, KalturaEpgFilter.PROPERTY_LOADERS)
+
+    def toParams(self):
+        kparams = KalturaFilter.toParams(self)
+        kparams.put("objectType", "KalturaEpgFilter")
+        kparams.addIntIfDefined("dateEqual", self.dateEqual)
+        kparams.addIntIfDefined("liveAssetIdEqual", self.liveAssetIdEqual)
+        return kparams
+
+    def getDateEqual(self):
+        return self.dateEqual
+
+    def setDateEqual(self, newDateEqual):
+        self.dateEqual = newDateEqual
+
+    def getLiveAssetIdEqual(self):
+        return self.liveAssetIdEqual
+
+    def setLiveAssetIdEqual(self, newLiveAssetIdEqual):
+        self.liveAssetIdEqual = newLiveAssetIdEqual
+
+
+# @package Kaltura
+# @subpackage Client
 class KalturaSkipOnErrorCondition(KalturaSkipCondition):
     """Skips current request if an error occurs according to the selected skip option"""
 
@@ -17907,6 +17965,7 @@ class KalturaHouseholdDevice(KalturaOTTObjectSupportNullable):
             drm=NotImplemented,
             externalId=NotImplemented,
             macAddress=NotImplemented,
+            dynamicData=NotImplemented,
             model=NotImplemented,
             manufacturer=NotImplemented,
             manufacturerId=NotImplemented,
@@ -17957,6 +18016,10 @@ class KalturaHouseholdDevice(KalturaOTTObjectSupportNullable):
         # @var string
         self.macAddress = macAddress
 
+        # Dynamic data
+        # @var map
+        self.dynamicData = dynamicData
+
         # model
         # @var string
         self.model = model
@@ -17987,6 +18050,7 @@ class KalturaHouseholdDevice(KalturaOTTObjectSupportNullable):
         'drm': (KalturaObjectFactory.create, 'KalturaCustomDrmPlaybackPluginData'), 
         'externalId': getXmlNodeText, 
         'macAddress': getXmlNodeText, 
+        'dynamicData': (KalturaObjectFactory.createMap, 'KalturaStringValue'), 
         'model': getXmlNodeText, 
         'manufacturer': getXmlNodeText, 
         'manufacturerId': getXmlNodeInt, 
@@ -18007,6 +18071,7 @@ class KalturaHouseholdDevice(KalturaOTTObjectSupportNullable):
         kparams.addIntIfDefined("activatedOn", self.activatedOn)
         kparams.addStringIfDefined("externalId", self.externalId)
         kparams.addStringIfDefined("macAddress", self.macAddress)
+        kparams.addMapIfDefined("dynamicData", self.dynamicData)
         kparams.addStringIfDefined("model", self.model)
         kparams.addStringIfDefined("manufacturer", self.manufacturer)
         return kparams
@@ -18061,6 +18126,12 @@ class KalturaHouseholdDevice(KalturaOTTObjectSupportNullable):
 
     def setMacAddress(self, newMacAddress):
         self.macAddress = newMacAddress
+
+    def getDynamicData(self):
+        return self.dynamicData
+
+    def setDynamicData(self, newDynamicData):
+        self.dynamicData = newDynamicData
 
     def getModel(self):
         return self.model
@@ -22453,7 +22524,8 @@ class KalturaCatalogPartnerConfig(KalturaPartnerConfiguration):
 
     def __init__(self,
             singleMultilingualMode=NotImplemented,
-            categoryManagement=NotImplemented):
+            categoryManagement=NotImplemented,
+            epgMultilingualFallbackSupport=NotImplemented):
         KalturaPartnerConfiguration.__init__(self)
 
         # Single multilingual mode
@@ -22464,10 +22536,15 @@ class KalturaCatalogPartnerConfig(KalturaPartnerConfiguration):
         # @var KalturaCategoryManagement
         self.categoryManagement = categoryManagement
 
+        # EPG Multilingual Fallback Support
+        # @var bool
+        self.epgMultilingualFallbackSupport = epgMultilingualFallbackSupport
+
 
     PROPERTY_LOADERS = {
         'singleMultilingualMode': getXmlNodeBool, 
         'categoryManagement': (KalturaObjectFactory.create, 'KalturaCategoryManagement'), 
+        'epgMultilingualFallbackSupport': getXmlNodeBool, 
     }
 
     def fromXml(self, node):
@@ -22479,6 +22556,7 @@ class KalturaCatalogPartnerConfig(KalturaPartnerConfiguration):
         kparams.put("objectType", "KalturaCatalogPartnerConfig")
         kparams.addBoolIfDefined("singleMultilingualMode", self.singleMultilingualMode)
         kparams.addObjectIfDefined("categoryManagement", self.categoryManagement)
+        kparams.addBoolIfDefined("epgMultilingualFallbackSupport", self.epgMultilingualFallbackSupport)
         return kparams
 
     def getSingleMultilingualMode(self):
@@ -22492,6 +22570,12 @@ class KalturaCatalogPartnerConfig(KalturaPartnerConfiguration):
 
     def setCategoryManagement(self, newCategoryManagement):
         self.categoryManagement = newCategoryManagement
+
+    def getEpgMultilingualFallbackSupport(self):
+        return self.epgMultilingualFallbackSupport
+
+    def setEpgMultilingualFallbackSupport(self, newEpgMultilingualFallbackSupport):
+        self.epgMultilingualFallbackSupport = newEpgMultilingualFallbackSupport
 
 
 # @package Kaltura
@@ -29429,6 +29513,78 @@ class KalturaRecordingAsset(KalturaProgramAsset):
 
 # @package Kaltura
 # @subpackage Client
+class KalturaEpg(KalturaProgramAsset):
+    def __init__(self,
+            id=NotImplemented,
+            type=NotImplemented,
+            name=NotImplemented,
+            multilingualName=NotImplemented,
+            description=NotImplemented,
+            multilingualDescription=NotImplemented,
+            images=NotImplemented,
+            mediaFiles=NotImplemented,
+            metas=NotImplemented,
+            tags=NotImplemented,
+            relatedEntities=NotImplemented,
+            startDate=NotImplemented,
+            endDate=NotImplemented,
+            createDate=NotImplemented,
+            updateDate=NotImplemented,
+            externalId=NotImplemented,
+            indexStatus=NotImplemented,
+            epgChannelId=NotImplemented,
+            epgId=NotImplemented,
+            relatedMediaId=NotImplemented,
+            crid=NotImplemented,
+            linearAssetId=NotImplemented,
+            enableCdvr=NotImplemented,
+            enableCatchUp=NotImplemented,
+            enableStartOver=NotImplemented,
+            enableTrickPlay=NotImplemented):
+        KalturaProgramAsset.__init__(self,
+            id,
+            type,
+            name,
+            multilingualName,
+            description,
+            multilingualDescription,
+            images,
+            mediaFiles,
+            metas,
+            tags,
+            relatedEntities,
+            startDate,
+            endDate,
+            createDate,
+            updateDate,
+            externalId,
+            indexStatus,
+            epgChannelId,
+            epgId,
+            relatedMediaId,
+            crid,
+            linearAssetId,
+            enableCdvr,
+            enableCatchUp,
+            enableStartOver,
+            enableTrickPlay)
+
+
+    PROPERTY_LOADERS = {
+    }
+
+    def fromXml(self, node):
+        KalturaProgramAsset.fromXml(self, node)
+        self.fromXmlImpl(node, KalturaEpg.PROPERTY_LOADERS)
+
+    def toParams(self):
+        kparams = KalturaProgramAsset.toParams(self)
+        kparams.put("objectType", "KalturaEpg")
+        return kparams
+
+
+# @package Kaltura
+# @subpackage Client
 class KalturaAssetStatisticsListResponse(KalturaListResponse):
     """List of assets statistics"""
 
@@ -33111,7 +33267,8 @@ class KalturaMeta(KalturaObjectBase):
             features=NotImplemented,
             parentId=NotImplemented,
             createDate=NotImplemented,
-            updateDate=NotImplemented):
+            updateDate=NotImplemented,
+            dynamicData=NotImplemented):
         KalturaObjectBase.__init__(self)
 
         # Meta id
@@ -33169,6 +33326,10 @@ class KalturaMeta(KalturaObjectBase):
         # @readonly
         self.updateDate = updateDate
 
+        # Dynamic data
+        # @var map
+        self.dynamicData = dynamicData
+
 
     PROPERTY_LOADERS = {
         'id': getXmlNodeText, 
@@ -33183,6 +33344,7 @@ class KalturaMeta(KalturaObjectBase):
         'parentId': getXmlNodeText, 
         'createDate': getXmlNodeInt, 
         'updateDate': getXmlNodeInt, 
+        'dynamicData': (KalturaObjectFactory.createMap, 'KalturaStringValue'), 
     }
 
     def fromXml(self, node):
@@ -33200,6 +33362,7 @@ class KalturaMeta(KalturaObjectBase):
         kparams.addStringIfDefined("helpText", self.helpText)
         kparams.addStringIfDefined("features", self.features)
         kparams.addStringIfDefined("parentId", self.parentId)
+        kparams.addMapIfDefined("dynamicData", self.dynamicData)
         return kparams
 
     def getId(self):
@@ -33261,6 +33424,12 @@ class KalturaMeta(KalturaObjectBase):
 
     def getUpdateDate(self):
         return self.updateDate
+
+    def getDynamicData(self):
+        return self.dynamicData
+
+    def setDynamicData(self, newDynamicData):
+        self.dynamicData = newDynamicData
 
 
 # @package Kaltura
@@ -33739,9 +33908,8 @@ class KalturaPermission(KalturaObjectBase):
         # @readonly
         self.dependsOnPermissionNames = dependsOnPermissionNames
 
-        # Comma separated permissions names from type SPECIAL_FEATURE
+        # Permission type
         # @var KalturaPermissionType
-        # @insertonly
         self.type = type
 
         # Comma separated associated permission items IDs
@@ -34829,6 +34997,43 @@ class KalturaUserRoleListResponse(KalturaListResponse):
     def toParams(self):
         kparams = KalturaListResponse.toParams(self)
         kparams.put("objectType", "KalturaUserRoleListResponse")
+        kparams.addArrayIfDefined("objects", self.objects)
+        return kparams
+
+    def getObjects(self):
+        return self.objects
+
+    def setObjects(self, newObjects):
+        self.objects = newObjects
+
+
+# @package Kaltura
+# @subpackage Client
+class KalturaEpgListResponse(KalturaListResponse):
+    """EPG wrapper"""
+
+    def __init__(self,
+            totalCount=NotImplemented,
+            objects=NotImplemented):
+        KalturaListResponse.__init__(self,
+            totalCount)
+
+        # Assets
+        # @var array of KalturaEpg
+        self.objects = objects
+
+
+    PROPERTY_LOADERS = {
+        'objects': (KalturaObjectFactory.createArray, 'KalturaEpg'), 
+    }
+
+    def fromXml(self, node):
+        KalturaListResponse.fromXml(self, node)
+        self.fromXmlImpl(node, KalturaEpgListResponse.PROPERTY_LOADERS)
+
+    def toParams(self):
+        kparams = KalturaListResponse.toParams(self)
+        kparams.put("objectType", "KalturaEpgListResponse")
         kparams.addArrayIfDefined("objects", self.objects)
         return kparams
 
@@ -43583,6 +43788,24 @@ class KalturaEntitlementService(KalturaServiceBase):
 
 # @package Kaltura
 # @subpackage Client
+class KalturaEpgService(KalturaServiceBase):
+    def __init__(self, client = None):
+        KalturaServiceBase.__init__(self, client)
+
+    def list(self, filter = NotImplemented):
+        """Returns EPG assets."""
+
+        kparams = KalturaParams()
+        kparams.addObjectIfDefined("filter", filter)
+        self.client.queueServiceActionCall("epg", "list", "KalturaEpgListResponse", kparams)
+        if self.client.isMultiRequest():
+            return self.client.getMultiRequestResult()
+        resultNode = self.client.doQueue()
+        return KalturaObjectFactory.create(resultNode, 'KalturaEpgListResponse')
+
+
+# @package Kaltura
+# @subpackage Client
 class KalturaEventNotificationActionService(KalturaServiceBase):
     def __init__(self, client = None):
         KalturaServiceBase.__init__(self, client)
@@ -47922,6 +48145,7 @@ class KalturaCoreClient(KalturaClientPlugin):
             'engagementAdapter': KalturaEngagementAdapterService,
             'engagement': KalturaEngagementService,
             'entitlement': KalturaEntitlementService,
+            'epg': KalturaEpgService,
             'eventNotificationAction': KalturaEventNotificationActionService,
             'eventNotification': KalturaEventNotificationService,
             'exportTask': KalturaExportTaskService,
@@ -48086,6 +48310,7 @@ class KalturaCoreClient(KalturaClientPlugin):
             'KalturaEngagementType': KalturaEngagementType,
             'KalturaEntitlementOrderBy': KalturaEntitlementOrderBy,
             'KalturaEntityReferenceBy': KalturaEntityReferenceBy,
+            'KalturaEpgOrderBy': KalturaEpgOrderBy,
             'KalturaEventNotificationOrderBy': KalturaEventNotificationOrderBy,
             'KalturaEventNotificationStatus': KalturaEventNotificationStatus,
             'KalturaEvictionPolicyType': KalturaEvictionPolicyType,
@@ -48385,6 +48610,7 @@ class KalturaCoreClient(KalturaClientPlugin):
             'KalturaTvmRuleFilter': KalturaTvmRuleFilter,
             'KalturaUserAssetRuleFilter': KalturaUserAssetRuleFilter,
             'KalturaUserRoleFilter': KalturaUserRoleFilter,
+            'KalturaEpgFilter': KalturaEpgFilter,
             'KalturaSkipOnErrorCondition': KalturaSkipOnErrorCondition,
             'KalturaPropertySkipCondition': KalturaPropertySkipCondition,
             'KalturaAggregatedPropertySkipCondition': KalturaAggregatedPropertySkipCondition,
@@ -48691,6 +48917,7 @@ class KalturaCoreClient(KalturaClientPlugin):
             'KalturaLiveAsset': KalturaLiveAsset,
             'KalturaProgramAsset': KalturaProgramAsset,
             'KalturaRecordingAsset': KalturaRecordingAsset,
+            'KalturaEpg': KalturaEpg,
             'KalturaAssetStatisticsListResponse': KalturaAssetStatisticsListResponse,
             'KalturaAssetStruct': KalturaAssetStruct,
             'KalturaAssetStructListResponse': KalturaAssetStructListResponse,
@@ -48773,6 +49000,7 @@ class KalturaCoreClient(KalturaClientPlugin):
             'KalturaUserAssetRuleListResponse': KalturaUserAssetRuleListResponse,
             'KalturaUserRole': KalturaUserRole,
             'KalturaUserRoleListResponse': KalturaUserRoleListResponse,
+            'KalturaEpgListResponse': KalturaEpgListResponse,
             'KalturaAppToken': KalturaAppToken,
             'KalturaSession': KalturaSession,
             'KalturaSessionInfo': KalturaSessionInfo,
