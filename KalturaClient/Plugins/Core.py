@@ -42,7 +42,7 @@ from ..Base import (
     KalturaServiceBase,
 )
 
-API_VERSION = '6.1.0.28909'
+API_VERSION = '5.7.0.28417'
 
 ########## enums ##########
 # @package Kaltura
@@ -122,34 +122,12 @@ class KalturaAnnouncementStatus(object):
 
 # @package Kaltura
 # @subpackage Client
-class KalturaApiAction(object):
-    ADD = "ADD"
-
-    def __init__(self, value):
-        self.value = value
-
-    def getValue(self):
-        return self.value
-
-# @package Kaltura
-# @subpackage Client
 class KalturaApiParameterPermissionItemAction(object):
     READ = "READ"
     INSERT = "INSERT"
     UPDATE = "UPDATE"
     WRITE = "WRITE"
     ALL = "ALL"
-
-    def __init__(self, value):
-        self.value = value
-
-    def getValue(self):
-        return self.value
-
-# @package Kaltura
-# @subpackage Client
-class KalturaApiService(object):
-    HOUSEHOLD_DEVICE = "HOUSEHOLD_DEVICE"
 
     def __init__(self, value):
         self.value = value
@@ -547,17 +525,6 @@ class KalturaBundleType(object):
 
 # @package Kaltura
 # @subpackage Client
-class KalturaCampaignOrderBy(object):
-    START_DATE_DESC = "START_DATE_DESC"
-
-    def __init__(self, value):
-        self.value = value
-
-    def getValue(self):
-        return self.value
-
-# @package Kaltura
-# @subpackage Client
 class KalturaCategoryItemOrderBy(object):
     NAME_ASC = "NAME_ASC"
     NAME_DESC = "NAME_DESC"
@@ -566,31 +533,6 @@ class KalturaCategoryItemOrderBy(object):
     NONE = "NONE"
     UPDATE_DATE_ASC = "UPDATE_DATE_ASC"
     UPDATE_DATE_DESC = "UPDATE_DATE_DESC"
-
-    def __init__(self, value):
-        self.value = value
-
-    def getValue(self):
-        return self.value
-
-# @package Kaltura
-# @subpackage Client
-class KalturaCategoryVersionOrderBy(object):
-    UPDATE_DATE_DESC = "UPDATE_DATE_DESC"
-    NONE = "NONE"
-
-    def __init__(self, value):
-        self.value = value
-
-    def getValue(self):
-        return self.value
-
-# @package Kaltura
-# @subpackage Client
-class KalturaCategoryVersionState(object):
-    DRAFT = "DRAFT"
-    DEFAULT = "DEFAULT"
-    RELEASED = "RELEASED"
 
     def __init__(self, value):
         self.value = value
@@ -840,17 +782,6 @@ class KalturaDeleteMediaPolicy(object):
 
 # @package Kaltura
 # @subpackage Client
-class KalturaDeviceReferenceDataOrderBy(object):
-    NONE = "NONE"
-
-    def __init__(self, value):
-        self.value = value
-
-    def getValue(self):
-        return self.value
-
-# @package Kaltura
-# @subpackage Client
 class KalturaDeviceStatus(object):
     PENDING = "PENDING"
     ACTIVATED = "ACTIVATED"
@@ -898,28 +829,6 @@ class KalturaDurationUnit(object):
     DAYS = "Days"
     MONTHS = "Months"
     YEARS = "Years"
-
-    def __init__(self, value):
-        self.value = value
-
-    def getValue(self):
-        return self.value
-
-# @package Kaltura
-# @subpackage Client
-class KalturaDynamicListOrderBy(object):
-    NONE = "NONE"
-
-    def __init__(self, value):
-        self.value = value
-
-    def getValue(self):
-        return self.value
-
-# @package Kaltura
-# @subpackage Client
-class KalturaEncryptionType(object):
-    AES256 = "AES256"
 
     def __init__(self, value):
         self.value = value
@@ -1337,7 +1246,6 @@ class KalturaInboxMessageType(object):
     FOLLOWED = "Followed"
     ENGAGEMENT = "Engagement"
     INTEREST = "Interest"
-    CAMPAIGN = "Campaign"
 
     def __init__(self, value):
         self.value = value
@@ -1415,6 +1323,22 @@ class KalturaLinearChannelType(object):
     OTT = "OTT"
     DTT_AND_OTT = "DTT_AND_OTT"
     VRM_EXPORT = "VRM_EXPORT"
+
+    def __init__(self, value):
+        self.value = value
+
+    def getValue(self):
+        return self.value
+
+# @package Kaltura
+# @subpackage Client
+class KalturaLogLevel(object):
+    TRACE = "TRACE"
+    DEBUG = "DEBUG"
+    INFO = "INFO"
+    WARN = "WARN"
+    ERROR = "ERROR"
+    ALL = "ALL"
 
     def __init__(self, value):
         self.value = value
@@ -1567,19 +1491,6 @@ class KalturaNotificationType(object):
 
 # @package Kaltura
 # @subpackage Client
-class KalturaObjectState(object):
-    INACTIVE = "INACTIVE"
-    ACTIVE = "ACTIVE"
-    ARCHIVE = "ARCHIVE"
-
-    def __init__(self, value):
-        self.value = value
-
-    def getValue(self):
-        return self.value
-
-# @package Kaltura
-# @subpackage Client
 class KalturaObjectVirtualAssetInfoType(object):
     SUBSCRIPTION = "Subscription"
     SEGMENT = "Segment"
@@ -1650,8 +1561,6 @@ class KalturaPartnerConfigurationType(object):
     PLAYBACK = "Playback"
     PAYMENT = "Payment"
     CATALOG = "Catalog"
-    SECURITY = "Security"
-    OPC = "Opc"
 
     def __init__(self, value):
         self.value = value
@@ -2115,11 +2024,6 @@ class KalturaRuleConditionType(object):
     USER_SUBSCRIPTION = "USER_SUBSCRIPTION"
     ASSET_SUBSCRIPTION = "ASSET_SUBSCRIPTION"
     USER_ROLE = "USER_ROLE"
-    DEVICE_BRAND = "DEVICE_BRAND"
-    DEVICE_FAMILY = "DEVICE_FAMILY"
-    DEVICE_MANUFACTURER = "DEVICE_MANUFACTURER"
-    DEVICE_MODEL = "DEVICE_MODEL"
-    DEVICE_UDID_DYNAMIC_LIST = "DEVICE_UDID_DYNAMIC_LIST"
 
     def __init__(self, value):
         self.value = value
@@ -2362,17 +2266,6 @@ class KalturaSocialStatus(object):
     ASSET_DOSE_NOT_EXISTS = "asset_dose_not_exists"
     INVALID_PLATFORM_REQUEST = "invalid_platform_request"
     INVALID_ACCESS_TOKEN = "invalid_access_token"
-
-    def __init__(self, value):
-        self.value = value
-
-    def getValue(self):
-        return self.value
-
-# @package Kaltura
-# @subpackage Client
-class KalturaStreamingDeviceOrderBy(object):
-    NONE = "NONE"
 
     def __init__(self, value):
         self.value = value
@@ -3151,934 +3044,6 @@ class KalturaRelatedObjectFilter(KalturaFilter):
 
 # @package Kaltura
 # @subpackage Client
-class KalturaCrudFilter(KalturaFilter):
-    def __init__(self,
-            orderBy=NotImplemented):
-        KalturaFilter.__init__(self,
-            orderBy)
-
-
-    PROPERTY_LOADERS = {
-    }
-
-    def fromXml(self, node):
-        KalturaFilter.fromXml(self, node)
-        self.fromXmlImpl(node, KalturaCrudFilter.PROPERTY_LOADERS)
-
-    def toParams(self):
-        kparams = KalturaFilter.toParams(self)
-        kparams.put("objectType", "KalturaCrudFilter")
-        return kparams
-
-
-# @package Kaltura
-# @subpackage Client
-class KalturaDeviceReferenceDataFilter(KalturaCrudFilter):
-    """Device Reference Data Filter"""
-
-    def __init__(self,
-            orderBy=NotImplemented,
-            idIn=NotImplemented):
-        KalturaCrudFilter.__init__(self,
-            orderBy)
-
-        # IdIn
-        # @var string
-        self.idIn = idIn
-
-
-    PROPERTY_LOADERS = {
-        'idIn': getXmlNodeText, 
-    }
-
-    def fromXml(self, node):
-        KalturaCrudFilter.fromXml(self, node)
-        self.fromXmlImpl(node, KalturaDeviceReferenceDataFilter.PROPERTY_LOADERS)
-
-    def toParams(self):
-        kparams = KalturaCrudFilter.toParams(self)
-        kparams.put("objectType", "KalturaDeviceReferenceDataFilter")
-        kparams.addStringIfDefined("idIn", self.idIn)
-        return kparams
-
-    def getIdIn(self):
-        return self.idIn
-
-    def setIdIn(self, newIdIn):
-        self.idIn = newIdIn
-
-
-# @package Kaltura
-# @subpackage Client
-class KalturaDeviceManufacturersReferenceDataFilter(KalturaDeviceReferenceDataFilter):
-    def __init__(self,
-            orderBy=NotImplemented,
-            idIn=NotImplemented,
-            nameEqual=NotImplemented):
-        KalturaDeviceReferenceDataFilter.__init__(self,
-            orderBy,
-            idIn)
-
-        # name equal
-        # @var string
-        self.nameEqual = nameEqual
-
-
-    PROPERTY_LOADERS = {
-        'nameEqual': getXmlNodeText, 
-    }
-
-    def fromXml(self, node):
-        KalturaDeviceReferenceDataFilter.fromXml(self, node)
-        self.fromXmlImpl(node, KalturaDeviceManufacturersReferenceDataFilter.PROPERTY_LOADERS)
-
-    def toParams(self):
-        kparams = KalturaDeviceReferenceDataFilter.toParams(self)
-        kparams.put("objectType", "KalturaDeviceManufacturersReferenceDataFilter")
-        kparams.addStringIfDefined("nameEqual", self.nameEqual)
-        return kparams
-
-    def getNameEqual(self):
-        return self.nameEqual
-
-    def setNameEqual(self, newNameEqual):
-        self.nameEqual = newNameEqual
-
-
-# @package Kaltura
-# @subpackage Client
-class KalturaPasswordPolicyFilter(KalturaCrudFilter):
-    """Password policy settings filter"""
-
-    def __init__(self,
-            orderBy=NotImplemented,
-            userRoleIdIn=NotImplemented):
-        KalturaCrudFilter.__init__(self,
-            orderBy)
-
-        # Comma separated list of role Ids.
-        # @var string
-        self.userRoleIdIn = userRoleIdIn
-
-
-    PROPERTY_LOADERS = {
-        'userRoleIdIn': getXmlNodeText, 
-    }
-
-    def fromXml(self, node):
-        KalturaCrudFilter.fromXml(self, node)
-        self.fromXmlImpl(node, KalturaPasswordPolicyFilter.PROPERTY_LOADERS)
-
-    def toParams(self):
-        kparams = KalturaCrudFilter.toParams(self)
-        kparams.put("objectType", "KalturaPasswordPolicyFilter")
-        kparams.addStringIfDefined("userRoleIdIn", self.userRoleIdIn)
-        return kparams
-
-    def getUserRoleIdIn(self):
-        return self.userRoleIdIn
-
-    def setUserRoleIdIn(self, newUserRoleIdIn):
-        self.userRoleIdIn = newUserRoleIdIn
-
-
-# @package Kaltura
-# @subpackage Client
-class KalturaHouseholdSegmentFilter(KalturaCrudFilter):
-    def __init__(self,
-            orderBy=NotImplemented,
-            kSql=NotImplemented):
-        KalturaCrudFilter.__init__(self,
-            orderBy)
-
-        # KSQL expression
-        # @var string
-        self.kSql = kSql
-
-
-    PROPERTY_LOADERS = {
-        'kSql': getXmlNodeText, 
-    }
-
-    def fromXml(self, node):
-        KalturaCrudFilter.fromXml(self, node)
-        self.fromXmlImpl(node, KalturaHouseholdSegmentFilter.PROPERTY_LOADERS)
-
-    def toParams(self):
-        kparams = KalturaCrudFilter.toParams(self)
-        kparams.put("objectType", "KalturaHouseholdSegmentFilter")
-        kparams.addStringIfDefined("kSql", self.kSql)
-        return kparams
-
-    def getKSql(self):
-        return self.kSql
-
-    def setKSql(self, newKSql):
-        self.kSql = newKSql
-
-
-# @package Kaltura
-# @subpackage Client
-class KalturaSmsAdapterProfileFilter(KalturaCrudFilter):
-    def __init__(self,
-            orderBy=NotImplemented):
-        KalturaCrudFilter.__init__(self,
-            orderBy)
-
-
-    PROPERTY_LOADERS = {
-    }
-
-    def fromXml(self, node):
-        KalturaCrudFilter.fromXml(self, node)
-        self.fromXmlImpl(node, KalturaSmsAdapterProfileFilter.PROPERTY_LOADERS)
-
-    def toParams(self):
-        kparams = KalturaCrudFilter.toParams(self)
-        kparams.put("objectType", "KalturaSmsAdapterProfileFilter")
-        return kparams
-
-
-# @package Kaltura
-# @subpackage Client
-class KalturaDynamicListFilter(KalturaCrudFilter):
-    """DynamicListFilter"""
-
-    def __init__(self,
-            orderBy=NotImplemented):
-        KalturaCrudFilter.__init__(self,
-            orderBy)
-
-
-    PROPERTY_LOADERS = {
-    }
-
-    def fromXml(self, node):
-        KalturaCrudFilter.fromXml(self, node)
-        self.fromXmlImpl(node, KalturaDynamicListFilter.PROPERTY_LOADERS)
-
-    def toParams(self):
-        kparams = KalturaCrudFilter.toParams(self)
-        kparams.put("objectType", "KalturaDynamicListFilter")
-        return kparams
-
-
-# @package Kaltura
-# @subpackage Client
-class KalturaDynamicListIdInFilter(KalturaDynamicListFilter):
-    """DynamicListIdInFilter"""
-
-    def __init__(self,
-            orderBy=NotImplemented,
-            idIn=NotImplemented):
-        KalturaDynamicListFilter.__init__(self,
-            orderBy)
-
-        # DynamicList identifiers
-        # @var string
-        self.idIn = idIn
-
-
-    PROPERTY_LOADERS = {
-        'idIn': getXmlNodeText, 
-    }
-
-    def fromXml(self, node):
-        KalturaDynamicListFilter.fromXml(self, node)
-        self.fromXmlImpl(node, KalturaDynamicListIdInFilter.PROPERTY_LOADERS)
-
-    def toParams(self):
-        kparams = KalturaDynamicListFilter.toParams(self)
-        kparams.put("objectType", "KalturaDynamicListIdInFilter")
-        kparams.addStringIfDefined("idIn", self.idIn)
-        return kparams
-
-    def getIdIn(self):
-        return self.idIn
-
-    def setIdIn(self, newIdIn):
-        self.idIn = newIdIn
-
-
-# @package Kaltura
-# @subpackage Client
-class KalturaDynamicListSearchFilter(KalturaDynamicListFilter):
-    """DynamicListSearchFilter"""
-
-    def __init__(self,
-            orderBy=NotImplemented,
-            idEqual=NotImplemented,
-            valueEqual=NotImplemented):
-        KalturaDynamicListFilter.__init__(self,
-            orderBy)
-
-        # DynamicList id to search by
-        # @var int
-        self.idEqual = idEqual
-
-        # udid value that should be in the DynamicList
-        # @var string
-        self.valueEqual = valueEqual
-
-
-    PROPERTY_LOADERS = {
-        'idEqual': getXmlNodeInt, 
-        'valueEqual': getXmlNodeText, 
-    }
-
-    def fromXml(self, node):
-        KalturaDynamicListFilter.fromXml(self, node)
-        self.fromXmlImpl(node, KalturaDynamicListSearchFilter.PROPERTY_LOADERS)
-
-    def toParams(self):
-        kparams = KalturaDynamicListFilter.toParams(self)
-        kparams.put("objectType", "KalturaDynamicListSearchFilter")
-        kparams.addIntIfDefined("idEqual", self.idEqual)
-        kparams.addStringIfDefined("valueEqual", self.valueEqual)
-        return kparams
-
-    def getIdEqual(self):
-        return self.idEqual
-
-    def setIdEqual(self, newIdEqual):
-        self.idEqual = newIdEqual
-
-    def getValueEqual(self):
-        return self.valueEqual
-
-    def setValueEqual(self, newValueEqual):
-        self.valueEqual = newValueEqual
-
-
-# @package Kaltura
-# @subpackage Client
-class KalturaUdidDynamicListSearchFilter(KalturaDynamicListSearchFilter):
-    """UdidDynamicListSearchFilter"""
-
-    def __init__(self,
-            orderBy=NotImplemented,
-            idEqual=NotImplemented,
-            valueEqual=NotImplemented):
-        KalturaDynamicListSearchFilter.__init__(self,
-            orderBy,
-            idEqual,
-            valueEqual)
-
-
-    PROPERTY_LOADERS = {
-    }
-
-    def fromXml(self, node):
-        KalturaDynamicListSearchFilter.fromXml(self, node)
-        self.fromXmlImpl(node, KalturaUdidDynamicListSearchFilter.PROPERTY_LOADERS)
-
-    def toParams(self):
-        kparams = KalturaDynamicListSearchFilter.toParams(self)
-        kparams.put("objectType", "KalturaUdidDynamicListSearchFilter")
-        return kparams
-
-
-# @package Kaltura
-# @subpackage Client
-class KalturaHouseholdCouponFilter(KalturaCrudFilter):
-    def __init__(self,
-            orderBy=NotImplemented,
-            businessModuleTypeEqual=NotImplemented,
-            businessModuleIdEqual=NotImplemented,
-            couponCode=NotImplemented,
-            status=NotImplemented):
-        KalturaCrudFilter.__init__(self,
-            orderBy)
-
-        # Indicates which household coupons list to return by their business module type.
-        # @var KalturaTransactionType
-        self.businessModuleTypeEqual = businessModuleTypeEqual
-
-        # Indicates which household coupons list to return by their business module ID.
-        # @var int
-        self.businessModuleIdEqual = businessModuleIdEqual
-
-        # Allow clients to inquiry if a specific coupon is part of an HH's wallet or not
-        # @var string
-        self.couponCode = couponCode
-
-        # Allow clients to filter out coupons which are valid/invalid
-        # @var KalturaCouponStatus
-        self.status = status
-
-
-    PROPERTY_LOADERS = {
-        'businessModuleTypeEqual': (KalturaEnumsFactory.createString, "KalturaTransactionType"), 
-        'businessModuleIdEqual': getXmlNodeInt, 
-        'couponCode': getXmlNodeText, 
-        'status': (KalturaEnumsFactory.createString, "KalturaCouponStatus"), 
-    }
-
-    def fromXml(self, node):
-        KalturaCrudFilter.fromXml(self, node)
-        self.fromXmlImpl(node, KalturaHouseholdCouponFilter.PROPERTY_LOADERS)
-
-    def toParams(self):
-        kparams = KalturaCrudFilter.toParams(self)
-        kparams.put("objectType", "KalturaHouseholdCouponFilter")
-        kparams.addStringEnumIfDefined("businessModuleTypeEqual", self.businessModuleTypeEqual)
-        kparams.addIntIfDefined("businessModuleIdEqual", self.businessModuleIdEqual)
-        kparams.addStringIfDefined("couponCode", self.couponCode)
-        kparams.addStringEnumIfDefined("status", self.status)
-        return kparams
-
-    def getBusinessModuleTypeEqual(self):
-        return self.businessModuleTypeEqual
-
-    def setBusinessModuleTypeEqual(self, newBusinessModuleTypeEqual):
-        self.businessModuleTypeEqual = newBusinessModuleTypeEqual
-
-    def getBusinessModuleIdEqual(self):
-        return self.businessModuleIdEqual
-
-    def setBusinessModuleIdEqual(self, newBusinessModuleIdEqual):
-        self.businessModuleIdEqual = newBusinessModuleIdEqual
-
-    def getCouponCode(self):
-        return self.couponCode
-
-    def setCouponCode(self, newCouponCode):
-        self.couponCode = newCouponCode
-
-    def getStatus(self):
-        return self.status
-
-    def setStatus(self, newStatus):
-        self.status = newStatus
-
-
-# @package Kaltura
-# @subpackage Client
-class KalturaCategoryItemFilter(KalturaCrudFilter):
-    def __init__(self,
-            orderBy=NotImplemented):
-        KalturaCrudFilter.__init__(self,
-            orderBy)
-
-
-    PROPERTY_LOADERS = {
-    }
-
-    def fromXml(self, node):
-        KalturaCrudFilter.fromXml(self, node)
-        self.fromXmlImpl(node, KalturaCategoryItemFilter.PROPERTY_LOADERS)
-
-    def toParams(self):
-        kparams = KalturaCrudFilter.toParams(self)
-        kparams.put("objectType", "KalturaCategoryItemFilter")
-        return kparams
-
-
-# @package Kaltura
-# @subpackage Client
-class KalturaCategoryItemByIdInFilter(KalturaCategoryItemFilter):
-    def __init__(self,
-            orderBy=NotImplemented,
-            idIn=NotImplemented):
-        KalturaCategoryItemFilter.__init__(self,
-            orderBy)
-
-        # Category item identifiers
-        # @var string
-        self.idIn = idIn
-
-
-    PROPERTY_LOADERS = {
-        'idIn': getXmlNodeText, 
-    }
-
-    def fromXml(self, node):
-        KalturaCategoryItemFilter.fromXml(self, node)
-        self.fromXmlImpl(node, KalturaCategoryItemByIdInFilter.PROPERTY_LOADERS)
-
-    def toParams(self):
-        kparams = KalturaCategoryItemFilter.toParams(self)
-        kparams.put("objectType", "KalturaCategoryItemByIdInFilter")
-        kparams.addStringIfDefined("idIn", self.idIn)
-        return kparams
-
-    def getIdIn(self):
-        return self.idIn
-
-    def setIdIn(self, newIdIn):
-        self.idIn = newIdIn
-
-
-# @package Kaltura
-# @subpackage Client
-class KalturaCategoryItemSearchFilter(KalturaCategoryItemFilter):
-    def __init__(self,
-            orderBy=NotImplemented,
-            kSql=NotImplemented,
-            rootOnly=NotImplemented,
-            typeEqual=NotImplemented):
-        KalturaCategoryItemFilter.__init__(self,
-            orderBy)
-
-        # KSQL expression
-        # @var string
-        self.kSql = kSql
-
-        # Root only
-        # @var bool
-        self.rootOnly = rootOnly
-
-        # Indicates which category to return by their type.
-        # @var string
-        self.typeEqual = typeEqual
-
-
-    PROPERTY_LOADERS = {
-        'kSql': getXmlNodeText, 
-        'rootOnly': getXmlNodeBool, 
-        'typeEqual': getXmlNodeText, 
-    }
-
-    def fromXml(self, node):
-        KalturaCategoryItemFilter.fromXml(self, node)
-        self.fromXmlImpl(node, KalturaCategoryItemSearchFilter.PROPERTY_LOADERS)
-
-    def toParams(self):
-        kparams = KalturaCategoryItemFilter.toParams(self)
-        kparams.put("objectType", "KalturaCategoryItemSearchFilter")
-        kparams.addStringIfDefined("kSql", self.kSql)
-        kparams.addBoolIfDefined("rootOnly", self.rootOnly)
-        kparams.addStringIfDefined("typeEqual", self.typeEqual)
-        return kparams
-
-    def getKSql(self):
-        return self.kSql
-
-    def setKSql(self, newKSql):
-        self.kSql = newKSql
-
-    def getRootOnly(self):
-        return self.rootOnly
-
-    def setRootOnly(self, newRootOnly):
-        self.rootOnly = newRootOnly
-
-    def getTypeEqual(self):
-        return self.typeEqual
-
-    def setTypeEqual(self, newTypeEqual):
-        self.typeEqual = newTypeEqual
-
-
-# @package Kaltura
-# @subpackage Client
-class KalturaCategoryItemAncestorsFilter(KalturaCategoryItemFilter):
-    def __init__(self,
-            orderBy=NotImplemented,
-            id=NotImplemented):
-        KalturaCategoryItemFilter.__init__(self,
-            orderBy)
-
-        # KSQL expression
-        # @var int
-        self.id = id
-
-
-    PROPERTY_LOADERS = {
-        'id': getXmlNodeInt, 
-    }
-
-    def fromXml(self, node):
-        KalturaCategoryItemFilter.fromXml(self, node)
-        self.fromXmlImpl(node, KalturaCategoryItemAncestorsFilter.PROPERTY_LOADERS)
-
-    def toParams(self):
-        kparams = KalturaCategoryItemFilter.toParams(self)
-        kparams.put("objectType", "KalturaCategoryItemAncestorsFilter")
-        kparams.addIntIfDefined("id", self.id)
-        return kparams
-
-    def getId(self):
-        return self.id
-
-    def setId(self, newId):
-        self.id = newId
-
-
-# @package Kaltura
-# @subpackage Client
-class KalturaCategoryVersionFilter(KalturaCrudFilter):
-    def __init__(self,
-            orderBy=NotImplemented):
-        KalturaCrudFilter.__init__(self,
-            orderBy)
-
-
-    PROPERTY_LOADERS = {
-    }
-
-    def fromXml(self, node):
-        KalturaCrudFilter.fromXml(self, node)
-        self.fromXmlImpl(node, KalturaCategoryVersionFilter.PROPERTY_LOADERS)
-
-    def toParams(self):
-        kparams = KalturaCrudFilter.toParams(self)
-        kparams.put("objectType", "KalturaCategoryVersionFilter")
-        return kparams
-
-
-# @package Kaltura
-# @subpackage Client
-class KalturaCategoryVersionFilterByTree(KalturaCategoryVersionFilter):
-    def __init__(self,
-            orderBy=NotImplemented,
-            treeIdEqual=NotImplemented,
-            stateEqual=NotImplemented):
-        KalturaCategoryVersionFilter.__init__(self,
-            orderBy)
-
-        # Category version tree identifier
-        # @var int
-        self.treeIdEqual = treeIdEqual
-
-        # Category version state
-        # @var KalturaCategoryVersionState
-        self.stateEqual = stateEqual
-
-
-    PROPERTY_LOADERS = {
-        'treeIdEqual': getXmlNodeInt, 
-        'stateEqual': (KalturaEnumsFactory.createString, "KalturaCategoryVersionState"), 
-    }
-
-    def fromXml(self, node):
-        KalturaCategoryVersionFilter.fromXml(self, node)
-        self.fromXmlImpl(node, KalturaCategoryVersionFilterByTree.PROPERTY_LOADERS)
-
-    def toParams(self):
-        kparams = KalturaCategoryVersionFilter.toParams(self)
-        kparams.put("objectType", "KalturaCategoryVersionFilterByTree")
-        kparams.addIntIfDefined("treeIdEqual", self.treeIdEqual)
-        kparams.addStringEnumIfDefined("stateEqual", self.stateEqual)
-        return kparams
-
-    def getTreeIdEqual(self):
-        return self.treeIdEqual
-
-    def setTreeIdEqual(self, newTreeIdEqual):
-        self.treeIdEqual = newTreeIdEqual
-
-    def getStateEqual(self):
-        return self.stateEqual
-
-    def setStateEqual(self, newStateEqual):
-        self.stateEqual = newStateEqual
-
-
-# @package Kaltura
-# @subpackage Client
-class KalturaCampaignFilter(KalturaCrudFilter):
-    """Campaign filter (same as KalturaCampaignSearchFilter with no parameters)"""
-
-    def __init__(self,
-            orderBy=NotImplemented):
-        KalturaCrudFilter.__init__(self,
-            orderBy)
-
-
-    PROPERTY_LOADERS = {
-    }
-
-    def fromXml(self, node):
-        KalturaCrudFilter.fromXml(self, node)
-        self.fromXmlImpl(node, KalturaCampaignFilter.PROPERTY_LOADERS)
-
-    def toParams(self):
-        kparams = KalturaCrudFilter.toParams(self)
-        kparams.put("objectType", "KalturaCampaignFilter")
-        return kparams
-
-
-# @package Kaltura
-# @subpackage Client
-class KalturaCampaignIdInFilter(KalturaCampaignFilter):
-    def __init__(self,
-            orderBy=NotImplemented,
-            idIn=NotImplemented):
-        KalturaCampaignFilter.__init__(self,
-            orderBy)
-
-        # campaign identifiers
-        # @var string
-        self.idIn = idIn
-
-
-    PROPERTY_LOADERS = {
-        'idIn': getXmlNodeText, 
-    }
-
-    def fromXml(self, node):
-        KalturaCampaignFilter.fromXml(self, node)
-        self.fromXmlImpl(node, KalturaCampaignIdInFilter.PROPERTY_LOADERS)
-
-    def toParams(self):
-        kparams = KalturaCampaignFilter.toParams(self)
-        kparams.put("objectType", "KalturaCampaignIdInFilter")
-        kparams.addStringIfDefined("idIn", self.idIn)
-        return kparams
-
-    def getIdIn(self):
-        return self.idIn
-
-    def setIdIn(self, newIdIn):
-        self.idIn = newIdIn
-
-
-# @package Kaltura
-# @subpackage Client
-class KalturaCampaignSearchFilter(KalturaCampaignFilter):
-    def __init__(self,
-            orderBy=NotImplemented,
-            startDateGreaterThanOrEqual=NotImplemented,
-            endDateLessThanOrEqual=NotImplemented,
-            stateEqual=NotImplemented,
-            hasPromotion=NotImplemented):
-        KalturaCampaignFilter.__init__(self,
-            orderBy)
-
-        # start Date Greater Than Or Equal
-        # @var int
-        self.startDateGreaterThanOrEqual = startDateGreaterThanOrEqual
-
-        # end Date Greater Than Or Equal
-        # @var int
-        self.endDateLessThanOrEqual = endDateLessThanOrEqual
-
-        # state Equal
-        # @var KalturaObjectState
-        self.stateEqual = stateEqual
-
-        # has Promotion
-        # @var bool
-        self.hasPromotion = hasPromotion
-
-
-    PROPERTY_LOADERS = {
-        'startDateGreaterThanOrEqual': getXmlNodeInt, 
-        'endDateLessThanOrEqual': getXmlNodeInt, 
-        'stateEqual': (KalturaEnumsFactory.createString, "KalturaObjectState"), 
-        'hasPromotion': getXmlNodeBool, 
-    }
-
-    def fromXml(self, node):
-        KalturaCampaignFilter.fromXml(self, node)
-        self.fromXmlImpl(node, KalturaCampaignSearchFilter.PROPERTY_LOADERS)
-
-    def toParams(self):
-        kparams = KalturaCampaignFilter.toParams(self)
-        kparams.put("objectType", "KalturaCampaignSearchFilter")
-        kparams.addIntIfDefined("startDateGreaterThanOrEqual", self.startDateGreaterThanOrEqual)
-        kparams.addIntIfDefined("endDateLessThanOrEqual", self.endDateLessThanOrEqual)
-        kparams.addStringEnumIfDefined("stateEqual", self.stateEqual)
-        kparams.addBoolIfDefined("hasPromotion", self.hasPromotion)
-        return kparams
-
-    def getStartDateGreaterThanOrEqual(self):
-        return self.startDateGreaterThanOrEqual
-
-    def setStartDateGreaterThanOrEqual(self, newStartDateGreaterThanOrEqual):
-        self.startDateGreaterThanOrEqual = newStartDateGreaterThanOrEqual
-
-    def getEndDateLessThanOrEqual(self):
-        return self.endDateLessThanOrEqual
-
-    def setEndDateLessThanOrEqual(self, newEndDateLessThanOrEqual):
-        self.endDateLessThanOrEqual = newEndDateLessThanOrEqual
-
-    def getStateEqual(self):
-        return self.stateEqual
-
-    def setStateEqual(self, newStateEqual):
-        self.stateEqual = newStateEqual
-
-    def getHasPromotion(self):
-        return self.hasPromotion
-
-    def setHasPromotion(self, newHasPromotion):
-        self.hasPromotion = newHasPromotion
-
-
-# @package Kaltura
-# @subpackage Client
-class KalturaTriggerCampaignSearchFilter(KalturaCampaignSearchFilter):
-    def __init__(self,
-            orderBy=NotImplemented,
-            startDateGreaterThanOrEqual=NotImplemented,
-            endDateLessThanOrEqual=NotImplemented,
-            stateEqual=NotImplemented,
-            hasPromotion=NotImplemented):
-        KalturaCampaignSearchFilter.__init__(self,
-            orderBy,
-            startDateGreaterThanOrEqual,
-            endDateLessThanOrEqual,
-            stateEqual,
-            hasPromotion)
-
-
-    PROPERTY_LOADERS = {
-    }
-
-    def fromXml(self, node):
-        KalturaCampaignSearchFilter.fromXml(self, node)
-        self.fromXmlImpl(node, KalturaTriggerCampaignSearchFilter.PROPERTY_LOADERS)
-
-    def toParams(self):
-        kparams = KalturaCampaignSearchFilter.toParams(self)
-        kparams.put("objectType", "KalturaTriggerCampaignSearchFilter")
-        return kparams
-
-
-# @package Kaltura
-# @subpackage Client
-class KalturaBatchCampaignSearchFilter(KalturaCampaignSearchFilter):
-    def __init__(self,
-            orderBy=NotImplemented,
-            startDateGreaterThanOrEqual=NotImplemented,
-            endDateLessThanOrEqual=NotImplemented,
-            stateEqual=NotImplemented,
-            hasPromotion=NotImplemented):
-        KalturaCampaignSearchFilter.__init__(self,
-            orderBy,
-            startDateGreaterThanOrEqual,
-            endDateLessThanOrEqual,
-            stateEqual,
-            hasPromotion)
-
-
-    PROPERTY_LOADERS = {
-    }
-
-    def fromXml(self, node):
-        KalturaCampaignSearchFilter.fromXml(self, node)
-        self.fromXmlImpl(node, KalturaBatchCampaignSearchFilter.PROPERTY_LOADERS)
-
-    def toParams(self):
-        kparams = KalturaCampaignSearchFilter.toParams(self)
-        kparams.put("objectType", "KalturaBatchCampaignSearchFilter")
-        return kparams
-
-
-# @package Kaltura
-# @subpackage Client
-class KalturaEventNotificationFilter(KalturaCrudFilter):
-    def __init__(self,
-            orderBy=NotImplemented,
-            idEqual=NotImplemented,
-            objectIdEqual=NotImplemented,
-            eventObjectTypeEqual=NotImplemented):
-        KalturaCrudFilter.__init__(self,
-            orderBy)
-
-        # Indicates which event notification to return by their event notifications Id.
-        # @var string
-        self.idEqual = idEqual
-
-        # Indicates which objectId to return by their event notifications.
-        # @var int
-        self.objectIdEqual = objectIdEqual
-
-        # Indicates which objectType to return by their event notifications.
-        # @var string
-        self.eventObjectTypeEqual = eventObjectTypeEqual
-
-
-    PROPERTY_LOADERS = {
-        'idEqual': getXmlNodeText, 
-        'objectIdEqual': getXmlNodeInt, 
-        'eventObjectTypeEqual': getXmlNodeText, 
-    }
-
-    def fromXml(self, node):
-        KalturaCrudFilter.fromXml(self, node)
-        self.fromXmlImpl(node, KalturaEventNotificationFilter.PROPERTY_LOADERS)
-
-    def toParams(self):
-        kparams = KalturaCrudFilter.toParams(self)
-        kparams.put("objectType", "KalturaEventNotificationFilter")
-        kparams.addStringIfDefined("idEqual", self.idEqual)
-        kparams.addIntIfDefined("objectIdEqual", self.objectIdEqual)
-        kparams.addStringIfDefined("eventObjectTypeEqual", self.eventObjectTypeEqual)
-        return kparams
-
-    def getIdEqual(self):
-        return self.idEqual
-
-    def setIdEqual(self, newIdEqual):
-        self.idEqual = newIdEqual
-
-    def getObjectIdEqual(self):
-        return self.objectIdEqual
-
-    def setObjectIdEqual(self, newObjectIdEqual):
-        self.objectIdEqual = newObjectIdEqual
-
-    def getEventObjectTypeEqual(self):
-        return self.eventObjectTypeEqual
-
-    def setEventObjectTypeEqual(self, newEventObjectTypeEqual):
-        self.eventObjectTypeEqual = newEventObjectTypeEqual
-
-
-# @package Kaltura
-# @subpackage Client
-class KalturaIotFilter(KalturaCrudFilter):
-    """Iot settings filter"""
-
-    def __init__(self,
-            orderBy=NotImplemented):
-        KalturaCrudFilter.__init__(self,
-            orderBy)
-
-
-    PROPERTY_LOADERS = {
-    }
-
-    def fromXml(self, node):
-        KalturaCrudFilter.fromXml(self, node)
-        self.fromXmlImpl(node, KalturaIotFilter.PROPERTY_LOADERS)
-
-    def toParams(self):
-        kparams = KalturaCrudFilter.toParams(self)
-        kparams.put("objectType", "KalturaIotFilter")
-        return kparams
-
-
-# @package Kaltura
-# @subpackage Client
-class KalturaIotProfileFilter(KalturaCrudFilter):
-    """Iot settings filter"""
-
-    def __init__(self,
-            orderBy=NotImplemented):
-        KalturaCrudFilter.__init__(self,
-            orderBy)
-
-
-    PROPERTY_LOADERS = {
-    }
-
-    def fromXml(self, node):
-        KalturaCrudFilter.fromXml(self, node)
-        self.fromXmlImpl(node, KalturaIotProfileFilter.PROPERTY_LOADERS)
-
-    def toParams(self):
-        kparams = KalturaCrudFilter.toParams(self)
-        kparams.put("objectType", "KalturaIotProfileFilter")
-        return kparams
-
-
-# @package Kaltura
-# @subpackage Client
 class KalturaValue(KalturaObjectBase):
     """A representation to return an array of values"""
 
@@ -4465,8 +3430,7 @@ class KalturaOTTUserFilter(KalturaFilter):
             usernameEqual=NotImplemented,
             externalIdEqual=NotImplemented,
             idIn=NotImplemented,
-            roleIdsIn=NotImplemented,
-            emailEqual=NotImplemented):
+            roleIdsIn=NotImplemented):
         KalturaFilter.__init__(self,
             orderBy)
 
@@ -4486,17 +3450,12 @@ class KalturaOTTUserFilter(KalturaFilter):
         # @var string
         self.roleIdsIn = roleIdsIn
 
-        # User email
-        # @var string
-        self.emailEqual = emailEqual
-
 
     PROPERTY_LOADERS = {
         'usernameEqual': getXmlNodeText, 
         'externalIdEqual': getXmlNodeText, 
         'idIn': getXmlNodeText, 
         'roleIdsIn': getXmlNodeText, 
-        'emailEqual': getXmlNodeText, 
     }
 
     def fromXml(self, node):
@@ -4510,7 +3469,6 @@ class KalturaOTTUserFilter(KalturaFilter):
         kparams.addStringIfDefined("externalIdEqual", self.externalIdEqual)
         kparams.addStringIfDefined("idIn", self.idIn)
         kparams.addStringIfDefined("roleIdsIn", self.roleIdsIn)
-        kparams.addStringIfDefined("emailEqual", self.emailEqual)
         return kparams
 
     def getUsernameEqual(self):
@@ -4537,11 +3495,457 @@ class KalturaOTTUserFilter(KalturaFilter):
     def setRoleIdsIn(self, newRoleIdsIn):
         self.roleIdsIn = newRoleIdsIn
 
-    def getEmailEqual(self):
-        return self.emailEqual
 
-    def setEmailEqual(self, newEmailEqual):
-        self.emailEqual = newEmailEqual
+# @package Kaltura
+# @subpackage Client
+class KalturaCrudFilter(KalturaFilter):
+    def __init__(self,
+            orderBy=NotImplemented):
+        KalturaFilter.__init__(self,
+            orderBy)
+
+
+    PROPERTY_LOADERS = {
+    }
+
+    def fromXml(self, node):
+        KalturaFilter.fromXml(self, node)
+        self.fromXmlImpl(node, KalturaCrudFilter.PROPERTY_LOADERS)
+
+    def toParams(self):
+        kparams = KalturaFilter.toParams(self)
+        kparams.put("objectType", "KalturaCrudFilter")
+        return kparams
+
+
+# @package Kaltura
+# @subpackage Client
+class KalturaPasswordPolicyFilter(KalturaCrudFilter):
+    """Password policy settings filter"""
+
+    def __init__(self,
+            orderBy=NotImplemented,
+            userRoleIdIn=NotImplemented):
+        KalturaCrudFilter.__init__(self,
+            orderBy)
+
+        # Comma separated list of role Ids.
+        # @var string
+        self.userRoleIdIn = userRoleIdIn
+
+
+    PROPERTY_LOADERS = {
+        'userRoleIdIn': getXmlNodeText, 
+    }
+
+    def fromXml(self, node):
+        KalturaCrudFilter.fromXml(self, node)
+        self.fromXmlImpl(node, KalturaPasswordPolicyFilter.PROPERTY_LOADERS)
+
+    def toParams(self):
+        kparams = KalturaCrudFilter.toParams(self)
+        kparams.put("objectType", "KalturaPasswordPolicyFilter")
+        kparams.addStringIfDefined("userRoleIdIn", self.userRoleIdIn)
+        return kparams
+
+    def getUserRoleIdIn(self):
+        return self.userRoleIdIn
+
+    def setUserRoleIdIn(self, newUserRoleIdIn):
+        self.userRoleIdIn = newUserRoleIdIn
+
+
+# @package Kaltura
+# @subpackage Client
+class KalturaHouseholdSegmentFilter(KalturaCrudFilter):
+    def __init__(self,
+            orderBy=NotImplemented,
+            kSql=NotImplemented):
+        KalturaCrudFilter.__init__(self,
+            orderBy)
+
+        # KSQL expression
+        # @var string
+        self.kSql = kSql
+
+
+    PROPERTY_LOADERS = {
+        'kSql': getXmlNodeText, 
+    }
+
+    def fromXml(self, node):
+        KalturaCrudFilter.fromXml(self, node)
+        self.fromXmlImpl(node, KalturaHouseholdSegmentFilter.PROPERTY_LOADERS)
+
+    def toParams(self):
+        kparams = KalturaCrudFilter.toParams(self)
+        kparams.put("objectType", "KalturaHouseholdSegmentFilter")
+        kparams.addStringIfDefined("kSql", self.kSql)
+        return kparams
+
+    def getKSql(self):
+        return self.kSql
+
+    def setKSql(self, newKSql):
+        self.kSql = newKSql
+
+
+# @package Kaltura
+# @subpackage Client
+class KalturaSmsAdapterProfileFilter(KalturaCrudFilter):
+    def __init__(self,
+            orderBy=NotImplemented):
+        KalturaCrudFilter.__init__(self,
+            orderBy)
+
+
+    PROPERTY_LOADERS = {
+    }
+
+    def fromXml(self, node):
+        KalturaCrudFilter.fromXml(self, node)
+        self.fromXmlImpl(node, KalturaSmsAdapterProfileFilter.PROPERTY_LOADERS)
+
+    def toParams(self):
+        kparams = KalturaCrudFilter.toParams(self)
+        kparams.put("objectType", "KalturaSmsAdapterProfileFilter")
+        return kparams
+
+
+# @package Kaltura
+# @subpackage Client
+class KalturaHouseholdCouponFilter(KalturaCrudFilter):
+    def __init__(self,
+            orderBy=NotImplemented,
+            businessModuleTypeEqual=NotImplemented,
+            businessModuleIdEqual=NotImplemented,
+            couponCode=NotImplemented,
+            status=NotImplemented):
+        KalturaCrudFilter.__init__(self,
+            orderBy)
+
+        # Indicates which household coupons list to return by their business module type.
+        # @var KalturaTransactionType
+        self.businessModuleTypeEqual = businessModuleTypeEqual
+
+        # Indicates which household coupons list to return by their business module ID.
+        # @var int
+        self.businessModuleIdEqual = businessModuleIdEqual
+
+        # Allow clients to inquiry if a specific coupon is part of an HH's wallet or not
+        # @var string
+        self.couponCode = couponCode
+
+        # Allow clients to filter out coupons which are valid/invalid
+        # @var KalturaCouponStatus
+        self.status = status
+
+
+    PROPERTY_LOADERS = {
+        'businessModuleTypeEqual': (KalturaEnumsFactory.createString, "KalturaTransactionType"), 
+        'businessModuleIdEqual': getXmlNodeInt, 
+        'couponCode': getXmlNodeText, 
+        'status': (KalturaEnumsFactory.createString, "KalturaCouponStatus"), 
+    }
+
+    def fromXml(self, node):
+        KalturaCrudFilter.fromXml(self, node)
+        self.fromXmlImpl(node, KalturaHouseholdCouponFilter.PROPERTY_LOADERS)
+
+    def toParams(self):
+        kparams = KalturaCrudFilter.toParams(self)
+        kparams.put("objectType", "KalturaHouseholdCouponFilter")
+        kparams.addStringEnumIfDefined("businessModuleTypeEqual", self.businessModuleTypeEqual)
+        kparams.addIntIfDefined("businessModuleIdEqual", self.businessModuleIdEqual)
+        kparams.addStringIfDefined("couponCode", self.couponCode)
+        kparams.addStringEnumIfDefined("status", self.status)
+        return kparams
+
+    def getBusinessModuleTypeEqual(self):
+        return self.businessModuleTypeEqual
+
+    def setBusinessModuleTypeEqual(self, newBusinessModuleTypeEqual):
+        self.businessModuleTypeEqual = newBusinessModuleTypeEqual
+
+    def getBusinessModuleIdEqual(self):
+        return self.businessModuleIdEqual
+
+    def setBusinessModuleIdEqual(self, newBusinessModuleIdEqual):
+        self.businessModuleIdEqual = newBusinessModuleIdEqual
+
+    def getCouponCode(self):
+        return self.couponCode
+
+    def setCouponCode(self, newCouponCode):
+        self.couponCode = newCouponCode
+
+    def getStatus(self):
+        return self.status
+
+    def setStatus(self, newStatus):
+        self.status = newStatus
+
+
+# @package Kaltura
+# @subpackage Client
+class KalturaCategoryItemFilter(KalturaCrudFilter):
+    def __init__(self,
+            orderBy=NotImplemented):
+        KalturaCrudFilter.__init__(self,
+            orderBy)
+
+
+    PROPERTY_LOADERS = {
+    }
+
+    def fromXml(self, node):
+        KalturaCrudFilter.fromXml(self, node)
+        self.fromXmlImpl(node, KalturaCategoryItemFilter.PROPERTY_LOADERS)
+
+    def toParams(self):
+        kparams = KalturaCrudFilter.toParams(self)
+        kparams.put("objectType", "KalturaCategoryItemFilter")
+        return kparams
+
+
+# @package Kaltura
+# @subpackage Client
+class KalturaCategoryItemByIdInFilter(KalturaCategoryItemFilter):
+    def __init__(self,
+            orderBy=NotImplemented,
+            idIn=NotImplemented):
+        KalturaCategoryItemFilter.__init__(self,
+            orderBy)
+
+        # Category item identifiers
+        # @var string
+        self.idIn = idIn
+
+
+    PROPERTY_LOADERS = {
+        'idIn': getXmlNodeText, 
+    }
+
+    def fromXml(self, node):
+        KalturaCategoryItemFilter.fromXml(self, node)
+        self.fromXmlImpl(node, KalturaCategoryItemByIdInFilter.PROPERTY_LOADERS)
+
+    def toParams(self):
+        kparams = KalturaCategoryItemFilter.toParams(self)
+        kparams.put("objectType", "KalturaCategoryItemByIdInFilter")
+        kparams.addStringIfDefined("idIn", self.idIn)
+        return kparams
+
+    def getIdIn(self):
+        return self.idIn
+
+    def setIdIn(self, newIdIn):
+        self.idIn = newIdIn
+
+
+# @package Kaltura
+# @subpackage Client
+class KalturaCategoryItemSearchFilter(KalturaCategoryItemFilter):
+    def __init__(self,
+            orderBy=NotImplemented,
+            kSql=NotImplemented,
+            rootOnly=NotImplemented,
+            typeEqual=NotImplemented):
+        KalturaCategoryItemFilter.__init__(self,
+            orderBy)
+
+        # KSQL expression
+        # @var string
+        self.kSql = kSql
+
+        # Root only
+        # @var bool
+        self.rootOnly = rootOnly
+
+        # Indicates which category to return by their type.
+        # @var string
+        self.typeEqual = typeEqual
+
+
+    PROPERTY_LOADERS = {
+        'kSql': getXmlNodeText, 
+        'rootOnly': getXmlNodeBool, 
+        'typeEqual': getXmlNodeText, 
+    }
+
+    def fromXml(self, node):
+        KalturaCategoryItemFilter.fromXml(self, node)
+        self.fromXmlImpl(node, KalturaCategoryItemSearchFilter.PROPERTY_LOADERS)
+
+    def toParams(self):
+        kparams = KalturaCategoryItemFilter.toParams(self)
+        kparams.put("objectType", "KalturaCategoryItemSearchFilter")
+        kparams.addStringIfDefined("kSql", self.kSql)
+        kparams.addBoolIfDefined("rootOnly", self.rootOnly)
+        kparams.addStringIfDefined("typeEqual", self.typeEqual)
+        return kparams
+
+    def getKSql(self):
+        return self.kSql
+
+    def setKSql(self, newKSql):
+        self.kSql = newKSql
+
+    def getRootOnly(self):
+        return self.rootOnly
+
+    def setRootOnly(self, newRootOnly):
+        self.rootOnly = newRootOnly
+
+    def getTypeEqual(self):
+        return self.typeEqual
+
+    def setTypeEqual(self, newTypeEqual):
+        self.typeEqual = newTypeEqual
+
+
+# @package Kaltura
+# @subpackage Client
+class KalturaCategoryItemAncestorsFilter(KalturaCategoryItemFilter):
+    def __init__(self,
+            orderBy=NotImplemented,
+            id=NotImplemented):
+        KalturaCategoryItemFilter.__init__(self,
+            orderBy)
+
+        # KSQL expression
+        # @var int
+        self.id = id
+
+
+    PROPERTY_LOADERS = {
+        'id': getXmlNodeInt, 
+    }
+
+    def fromXml(self, node):
+        KalturaCategoryItemFilter.fromXml(self, node)
+        self.fromXmlImpl(node, KalturaCategoryItemAncestorsFilter.PROPERTY_LOADERS)
+
+    def toParams(self):
+        kparams = KalturaCategoryItemFilter.toParams(self)
+        kparams.put("objectType", "KalturaCategoryItemAncestorsFilter")
+        kparams.addIntIfDefined("id", self.id)
+        return kparams
+
+    def getId(self):
+        return self.id
+
+    def setId(self, newId):
+        self.id = newId
+
+
+# @package Kaltura
+# @subpackage Client
+class KalturaEventNotificationFilter(KalturaCrudFilter):
+    def __init__(self,
+            orderBy=NotImplemented,
+            idEqual=NotImplemented,
+            objectIdEqual=NotImplemented,
+            eventObjectTypeEqual=NotImplemented):
+        KalturaCrudFilter.__init__(self,
+            orderBy)
+
+        # Indicates which event notification to return by their event notifications Id.
+        # @var string
+        self.idEqual = idEqual
+
+        # Indicates which objectId to return by their event notifications.
+        # @var int
+        self.objectIdEqual = objectIdEqual
+
+        # Indicates which objectType to return by their event notifications.
+        # @var string
+        self.eventObjectTypeEqual = eventObjectTypeEqual
+
+
+    PROPERTY_LOADERS = {
+        'idEqual': getXmlNodeText, 
+        'objectIdEqual': getXmlNodeInt, 
+        'eventObjectTypeEqual': getXmlNodeText, 
+    }
+
+    def fromXml(self, node):
+        KalturaCrudFilter.fromXml(self, node)
+        self.fromXmlImpl(node, KalturaEventNotificationFilter.PROPERTY_LOADERS)
+
+    def toParams(self):
+        kparams = KalturaCrudFilter.toParams(self)
+        kparams.put("objectType", "KalturaEventNotificationFilter")
+        kparams.addStringIfDefined("idEqual", self.idEqual)
+        kparams.addIntIfDefined("objectIdEqual", self.objectIdEqual)
+        kparams.addStringIfDefined("eventObjectTypeEqual", self.eventObjectTypeEqual)
+        return kparams
+
+    def getIdEqual(self):
+        return self.idEqual
+
+    def setIdEqual(self, newIdEqual):
+        self.idEqual = newIdEqual
+
+    def getObjectIdEqual(self):
+        return self.objectIdEqual
+
+    def setObjectIdEqual(self, newObjectIdEqual):
+        self.objectIdEqual = newObjectIdEqual
+
+    def getEventObjectTypeEqual(self):
+        return self.eventObjectTypeEqual
+
+    def setEventObjectTypeEqual(self, newEventObjectTypeEqual):
+        self.eventObjectTypeEqual = newEventObjectTypeEqual
+
+
+# @package Kaltura
+# @subpackage Client
+class KalturaIotFilter(KalturaCrudFilter):
+    """Iot settings filter"""
+
+    def __init__(self,
+            orderBy=NotImplemented):
+        KalturaCrudFilter.__init__(self,
+            orderBy)
+
+
+    PROPERTY_LOADERS = {
+    }
+
+    def fromXml(self, node):
+        KalturaCrudFilter.fromXml(self, node)
+        self.fromXmlImpl(node, KalturaIotFilter.PROPERTY_LOADERS)
+
+    def toParams(self):
+        kparams = KalturaCrudFilter.toParams(self)
+        kparams.put("objectType", "KalturaIotFilter")
+        return kparams
+
+
+# @package Kaltura
+# @subpackage Client
+class KalturaIotProfileFilter(KalturaCrudFilter):
+    """Iot settings filter"""
+
+    def __init__(self,
+            orderBy=NotImplemented):
+        KalturaCrudFilter.__init__(self,
+            orderBy)
+
+
+    PROPERTY_LOADERS = {
+    }
+
+    def fromXml(self, node):
+        KalturaCrudFilter.fromXml(self, node)
+        self.fromXmlImpl(node, KalturaIotProfileFilter.PROPERTY_LOADERS)
+
+    def toParams(self):
+        kparams = KalturaCrudFilter.toParams(self)
+        kparams.put("objectType", "KalturaIotProfileFilter")
+        return kparams
 
 
 # @package Kaltura
@@ -9193,43 +8597,6 @@ class KalturaMediaFileFilter(KalturaFilter):
 
 # @package Kaltura
 # @subpackage Client
-class KalturaStreamingDeviceFilter(KalturaFilter):
-    """Filtering streaming devices"""
-
-    def __init__(self,
-            orderBy=NotImplemented,
-            assetTypeEqual=NotImplemented):
-        KalturaFilter.__init__(self,
-            orderBy)
-
-        # filter by asset type
-        # @var KalturaAssetType
-        self.assetTypeEqual = assetTypeEqual
-
-
-    PROPERTY_LOADERS = {
-        'assetTypeEqual': (KalturaEnumsFactory.createString, "KalturaAssetType"), 
-    }
-
-    def fromXml(self, node):
-        KalturaFilter.fromXml(self, node)
-        self.fromXmlImpl(node, KalturaStreamingDeviceFilter.PROPERTY_LOADERS)
-
-    def toParams(self):
-        kparams = KalturaFilter.toParams(self)
-        kparams.put("objectType", "KalturaStreamingDeviceFilter")
-        kparams.addStringEnumIfDefined("assetTypeEqual", self.assetTypeEqual)
-        return kparams
-
-    def getAssetTypeEqual(self):
-        return self.assetTypeEqual
-
-    def setAssetTypeEqual(self, newAssetTypeEqual):
-        self.assetTypeEqual = newAssetTypeEqual
-
-
-# @package Kaltura
-# @subpackage Client
 class KalturaTagFilter(KalturaFilter):
     def __init__(self,
             orderBy=NotImplemented,
@@ -9925,36 +9292,14 @@ class KalturaParentalRuleFilter(KalturaFilter):
 
 # @package Kaltura
 # @subpackage Client
-class KalturaBasePermissionFilter(KalturaFilter):
-    def __init__(self,
-            orderBy=NotImplemented):
-        KalturaFilter.__init__(self,
-            orderBy)
-
-
-    PROPERTY_LOADERS = {
-    }
-
-    def fromXml(self, node):
-        KalturaFilter.fromXml(self, node)
-        self.fromXmlImpl(node, KalturaBasePermissionFilter.PROPERTY_LOADERS)
-
-    def toParams(self):
-        kparams = KalturaFilter.toParams(self)
-        kparams.put("objectType", "KalturaBasePermissionFilter")
-        return kparams
-
-
-# @package Kaltura
-# @subpackage Client
-class KalturaPermissionFilter(KalturaBasePermissionFilter):
+class KalturaPermissionFilter(KalturaFilter):
     """Permissions filter"""
 
     def __init__(self,
             orderBy=NotImplemented,
             currentUserPermissionsContains=NotImplemented,
             roleIdIn=NotImplemented):
-        KalturaBasePermissionFilter.__init__(self,
+        KalturaFilter.__init__(self,
             orderBy)
 
         # Indicates whether the results should be filtered by userId using the current
@@ -9972,11 +9317,11 @@ class KalturaPermissionFilter(KalturaBasePermissionFilter):
     }
 
     def fromXml(self, node):
-        KalturaBasePermissionFilter.fromXml(self, node)
+        KalturaFilter.fromXml(self, node)
         self.fromXmlImpl(node, KalturaPermissionFilter.PROPERTY_LOADERS)
 
     def toParams(self):
-        kparams = KalturaBasePermissionFilter.toParams(self)
+        kparams = KalturaFilter.toParams(self)
         kparams.put("objectType", "KalturaPermissionFilter")
         kparams.addBoolIfDefined("currentUserPermissionsContains", self.currentUserPermissionsContains)
         kparams.addIntIfDefined("roleIdIn", self.roleIdIn)
@@ -9993,41 +9338,6 @@ class KalturaPermissionFilter(KalturaBasePermissionFilter):
 
     def setRoleIdIn(self, newRoleIdIn):
         self.roleIdIn = newRoleIdIn
-
-
-# @package Kaltura
-# @subpackage Client
-class KalturaPermissionByIdInFilter(KalturaBasePermissionFilter):
-    def __init__(self,
-            orderBy=NotImplemented,
-            idIn=NotImplemented):
-        KalturaBasePermissionFilter.__init__(self,
-            orderBy)
-
-        # Category item identifiers
-        # @var string
-        self.idIn = idIn
-
-
-    PROPERTY_LOADERS = {
-        'idIn': getXmlNodeText, 
-    }
-
-    def fromXml(self, node):
-        KalturaBasePermissionFilter.fromXml(self, node)
-        self.fromXmlImpl(node, KalturaPermissionByIdInFilter.PROPERTY_LOADERS)
-
-    def toParams(self):
-        kparams = KalturaBasePermissionFilter.toParams(self)
-        kparams.put("objectType", "KalturaPermissionByIdInFilter")
-        kparams.addStringIfDefined("idIn", self.idIn)
-        return kparams
-
-    def getIdIn(self):
-        return self.idIn
-
-    def setIdIn(self, newIdIn):
-        self.idIn = newIdIn
 
 
 # @package Kaltura
@@ -11070,8 +10380,7 @@ class KalturaMediaImage(KalturaObjectBase):
             url=NotImplemented,
             version=NotImplemented,
             id=NotImplemented,
-            isDefault=NotImplemented,
-            imageTypeId=NotImplemented):
+            isDefault=NotImplemented):
         KalturaObjectBase.__init__(self)
 
         # Image aspect ratio
@@ -11103,10 +10412,6 @@ class KalturaMediaImage(KalturaObjectBase):
         # @var bool
         self.isDefault = isDefault
 
-        # Image type identifier
-        # @var int
-        self.imageTypeId = imageTypeId
-
 
     PROPERTY_LOADERS = {
         'ratio': getXmlNodeText, 
@@ -11116,7 +10421,6 @@ class KalturaMediaImage(KalturaObjectBase):
         'version': getXmlNodeInt, 
         'id': getXmlNodeText, 
         'isDefault': getXmlNodeBool, 
-        'imageTypeId': getXmlNodeInt, 
     }
 
     def fromXml(self, node):
@@ -11132,7 +10436,6 @@ class KalturaMediaImage(KalturaObjectBase):
         kparams.addStringIfDefined("url", self.url)
         kparams.addIntIfDefined("version", self.version)
         kparams.addBoolIfDefined("isDefault", self.isDefault)
-        kparams.addIntIfDefined("imageTypeId", self.imageTypeId)
         return kparams
 
     def getRatio(self):
@@ -11173,12 +10476,6 @@ class KalturaMediaImage(KalturaObjectBase):
 
     def setIsDefault(self, newIsDefault):
         self.isDefault = newIsDefault
-
-    def getImageTypeId(self):
-        return self.imageTypeId
-
-    def setImageTypeId(self, newImageTypeId):
-        self.imageTypeId = newImageTypeId
 
 
 # @package Kaltura
@@ -11251,52 +10548,6 @@ class KalturaStringValueArray(KalturaObjectBase):
 
 # @package Kaltura
 # @subpackage Client
-class KalturaBusinessModuleDetails(KalturaObjectBase):
-    def __init__(self,
-            businessModuleId=NotImplemented,
-            businessModuleType=NotImplemented):
-        KalturaObjectBase.__init__(self)
-
-        # BusinessModuleId
-        # @var int
-        self.businessModuleId = businessModuleId
-
-        # BusinessModuleType
-        # @var KalturaTransactionType
-        self.businessModuleType = businessModuleType
-
-
-    PROPERTY_LOADERS = {
-        'businessModuleId': getXmlNodeInt, 
-        'businessModuleType': (KalturaEnumsFactory.createString, "KalturaTransactionType"), 
-    }
-
-    def fromXml(self, node):
-        KalturaObjectBase.fromXml(self, node)
-        self.fromXmlImpl(node, KalturaBusinessModuleDetails.PROPERTY_LOADERS)
-
-    def toParams(self):
-        kparams = KalturaObjectBase.toParams(self)
-        kparams.put("objectType", "KalturaBusinessModuleDetails")
-        kparams.addIntIfDefined("businessModuleId", self.businessModuleId)
-        kparams.addStringEnumIfDefined("businessModuleType", self.businessModuleType)
-        return kparams
-
-    def getBusinessModuleId(self):
-        return self.businessModuleId
-
-    def setBusinessModuleId(self, newBusinessModuleId):
-        self.businessModuleId = newBusinessModuleId
-
-    def getBusinessModuleType(self):
-        return self.businessModuleType
-
-    def setBusinessModuleType(self, newBusinessModuleType):
-        self.businessModuleType = newBusinessModuleType
-
-
-# @package Kaltura
-# @subpackage Client
 class KalturaMediaFile(KalturaAssetFile):
     """Media file details"""
 
@@ -11323,8 +10574,7 @@ class KalturaMediaFile(KalturaAssetFile):
             cdnAdapaterProfileId=NotImplemented,
             status=NotImplemented,
             catalogEndDate=NotImplemented,
-            opl=NotImplemented,
-            businessModuleDetails=NotImplemented):
+            opl=NotImplemented):
         KalturaAssetFile.__init__(self,
             url)
 
@@ -11418,10 +10668,6 @@ class KalturaMediaFile(KalturaAssetFile):
         # @var string
         self.opl = opl
 
-        # businessModuleDetails
-        # @var KalturaBusinessModuleDetails
-        self.businessModuleDetails = businessModuleDetails
-
 
     PROPERTY_LOADERS = {
         'assetId': getXmlNodeInt, 
@@ -11446,7 +10692,6 @@ class KalturaMediaFile(KalturaAssetFile):
         'status': getXmlNodeBool, 
         'catalogEndDate': getXmlNodeInt, 
         'opl': getXmlNodeText, 
-        'businessModuleDetails': (KalturaObjectFactory.create, 'KalturaBusinessModuleDetails'), 
     }
 
     def fromXml(self, node):
@@ -11476,7 +10721,6 @@ class KalturaMediaFile(KalturaAssetFile):
         kparams.addBoolIfDefined("status", self.status)
         kparams.addIntIfDefined("catalogEndDate", self.catalogEndDate)
         kparams.addStringIfDefined("opl", self.opl)
-        kparams.addObjectIfDefined("businessModuleDetails", self.businessModuleDetails)
         return kparams
 
     def getAssetId(self):
@@ -11604,12 +10848,6 @@ class KalturaMediaFile(KalturaAssetFile):
 
     def setOpl(self, newOpl):
         self.opl = newOpl
-
-    def getBusinessModuleDetails(self):
-        return self.businessModuleDetails
-
-    def setBusinessModuleDetails(self, newBusinessModuleDetails):
-        self.businessModuleDetails = newBusinessModuleDetails
 
 
 # @package Kaltura
@@ -12009,13 +11247,10 @@ class KalturaPlaybackSource(KalturaMediaFile):
             status=NotImplemented,
             catalogEndDate=NotImplemented,
             opl=NotImplemented,
-            businessModuleDetails=NotImplemented,
             format=NotImplemented,
             protocols=NotImplemented,
             drm=NotImplemented,
-            isTokenized=NotImplemented,
-            businessModuleId=NotImplemented,
-            businessModuleType=NotImplemented):
+            isTokenized=NotImplemented):
         KalturaMediaFile.__init__(self,
             url,
             assetId,
@@ -12039,8 +11274,7 @@ class KalturaPlaybackSource(KalturaMediaFile):
             cdnAdapaterProfileId,
             status,
             catalogEndDate,
-            opl,
-            businessModuleDetails)
+            opl)
 
         # Source format according to delivery profile streamer type (applehttp, mpegdash etc.)
         # @var string
@@ -12058,24 +11292,12 @@ class KalturaPlaybackSource(KalturaMediaFile):
         # @var bool
         self.isTokenized = isTokenized
 
-        # Business Module Id
-        # @var int
-        # @readonly
-        self.businessModuleId = businessModuleId
-
-        # Business Module Type
-        # @var KalturaTransactionType
-        # @readonly
-        self.businessModuleType = businessModuleType
-
 
     PROPERTY_LOADERS = {
         'format': getXmlNodeText, 
         'protocols': getXmlNodeText, 
         'drm': (KalturaObjectFactory.createArray, 'KalturaDrmPlaybackPluginData'), 
         'isTokenized': getXmlNodeBool, 
-        'businessModuleId': getXmlNodeInt, 
-        'businessModuleType': (KalturaEnumsFactory.createString, "KalturaTransactionType"), 
     }
 
     def fromXml(self, node):
@@ -12114,12 +11336,6 @@ class KalturaPlaybackSource(KalturaMediaFile):
 
     def setIsTokenized(self, newIsTokenized):
         self.isTokenized = newIsTokenized
-
-    def getBusinessModuleId(self):
-        return self.businessModuleId
-
-    def getBusinessModuleType(self):
-        return self.businessModuleType
 
 
 # @package Kaltura
@@ -13014,80 +12230,6 @@ class KalturaBulkUploadProgramAssetResult(KalturaBulkUploadResult):
 
     def getLiveAssetId(self):
         return self.liveAssetId
-
-
-# @package Kaltura
-# @subpackage Client
-class KalturaBulkUploadDynamicListResult(KalturaBulkUploadResult):
-    def __init__(self,
-            objectId=NotImplemented,
-            index=NotImplemented,
-            bulkUploadId=NotImplemented,
-            status=NotImplemented,
-            errors=NotImplemented,
-            warnings=NotImplemented):
-        KalturaBulkUploadResult.__init__(self,
-            objectId,
-            index,
-            bulkUploadId,
-            status,
-            errors,
-            warnings)
-
-
-    PROPERTY_LOADERS = {
-    }
-
-    def fromXml(self, node):
-        KalturaBulkUploadResult.fromXml(self, node)
-        self.fromXmlImpl(node, KalturaBulkUploadDynamicListResult.PROPERTY_LOADERS)
-
-    def toParams(self):
-        kparams = KalturaBulkUploadResult.toParams(self)
-        kparams.put("objectType", "KalturaBulkUploadDynamicListResult")
-        return kparams
-
-
-# @package Kaltura
-# @subpackage Client
-class KalturaBulkUploadUdidDynamicListResult(KalturaBulkUploadDynamicListResult):
-    def __init__(self,
-            objectId=NotImplemented,
-            index=NotImplemented,
-            bulkUploadId=NotImplemented,
-            status=NotImplemented,
-            errors=NotImplemented,
-            warnings=NotImplemented,
-            udid=NotImplemented):
-        KalturaBulkUploadDynamicListResult.__init__(self,
-            objectId,
-            index,
-            bulkUploadId,
-            status,
-            errors,
-            warnings)
-
-        # The udid from the excel to add to DynamicLis values
-        # @var string
-        # @readonly
-        self.udid = udid
-
-
-    PROPERTY_LOADERS = {
-        'udid': getXmlNodeText, 
-    }
-
-    def fromXml(self, node):
-        KalturaBulkUploadDynamicListResult.fromXml(self, node)
-        self.fromXmlImpl(node, KalturaBulkUploadUdidDynamicListResult.PROPERTY_LOADERS)
-
-    def toParams(self):
-        kparams = KalturaBulkUploadDynamicListResult.toParams(self)
-        kparams.put("objectType", "KalturaBulkUploadUdidDynamicListResult")
-        return kparams
-
-    def getUdid(self):
-        return self.udid
 
 
 # @package Kaltura
@@ -15246,92 +14388,6 @@ class KalturaCrudObject(KalturaOTTObjectSupportNullable):
 
 # @package Kaltura
 # @subpackage Client
-class KalturaDeviceReferenceData(KalturaCrudObject):
-    """Device Information"""
-
-    def __init__(self,
-            id=NotImplemented,
-            name=NotImplemented,
-            status=NotImplemented):
-        KalturaCrudObject.__init__(self)
-
-        # id
-        # @var int
-        # @readonly
-        self.id = id
-
-        # Name
-        # @var string
-        self.name = name
-
-        # Status
-        # @var bool
-        self.status = status
-
-
-    PROPERTY_LOADERS = {
-        'id': getXmlNodeInt, 
-        'name': getXmlNodeText, 
-        'status': getXmlNodeBool, 
-    }
-
-    def fromXml(self, node):
-        KalturaCrudObject.fromXml(self, node)
-        self.fromXmlImpl(node, KalturaDeviceReferenceData.PROPERTY_LOADERS)
-
-    def toParams(self):
-        kparams = KalturaCrudObject.toParams(self)
-        kparams.put("objectType", "KalturaDeviceReferenceData")
-        kparams.addStringIfDefined("name", self.name)
-        kparams.addBoolIfDefined("status", self.status)
-        return kparams
-
-    def getId(self):
-        return self.id
-
-    def getName(self):
-        return self.name
-
-    def setName(self, newName):
-        self.name = newName
-
-    def getStatus(self):
-        return self.status
-
-    def setStatus(self, newStatus):
-        self.status = newStatus
-
-
-# @package Kaltura
-# @subpackage Client
-class KalturaDeviceManufacturerInformation(KalturaDeviceReferenceData):
-    """Device Manufacturer Information"""
-
-    def __init__(self,
-            id=NotImplemented,
-            name=NotImplemented,
-            status=NotImplemented):
-        KalturaDeviceReferenceData.__init__(self,
-            id,
-            name,
-            status)
-
-
-    PROPERTY_LOADERS = {
-    }
-
-    def fromXml(self, node):
-        KalturaDeviceReferenceData.fromXml(self, node)
-        self.fromXmlImpl(node, KalturaDeviceManufacturerInformation.PROPERTY_LOADERS)
-
-    def toParams(self):
-        kparams = KalturaDeviceReferenceData.toParams(self)
-        kparams.put("objectType", "KalturaDeviceManufacturerInformation")
-        return kparams
-
-
-# @package Kaltura
-# @subpackage Client
 class KalturaRegexExpression(KalturaObjectBase):
     """KalturaRegexExpression"""
 
@@ -15648,97 +14704,6 @@ class KalturaSmsAdapterProfile(KalturaCrudObject):
 
 # @package Kaltura
 # @subpackage Client
-class KalturaDynamicList(KalturaCrudObject):
-    def __init__(self,
-            id=NotImplemented,
-            createDate=NotImplemented,
-            updateDate=NotImplemented,
-            name=NotImplemented):
-        KalturaCrudObject.__init__(self)
-
-        # ID
-        # @var int
-        # @readonly
-        self.id = id
-
-        # Create date of the DynamicList
-        # @var int
-        # @readonly
-        self.createDate = createDate
-
-        # Update date of the DynamicList
-        # @var int
-        # @readonly
-        self.updateDate = updateDate
-
-        # Name
-        # @var string
-        self.name = name
-
-
-    PROPERTY_LOADERS = {
-        'id': getXmlNodeInt, 
-        'createDate': getXmlNodeInt, 
-        'updateDate': getXmlNodeInt, 
-        'name': getXmlNodeText, 
-    }
-
-    def fromXml(self, node):
-        KalturaCrudObject.fromXml(self, node)
-        self.fromXmlImpl(node, KalturaDynamicList.PROPERTY_LOADERS)
-
-    def toParams(self):
-        kparams = KalturaCrudObject.toParams(self)
-        kparams.put("objectType", "KalturaDynamicList")
-        kparams.addStringIfDefined("name", self.name)
-        return kparams
-
-    def getId(self):
-        return self.id
-
-    def getCreateDate(self):
-        return self.createDate
-
-    def getUpdateDate(self):
-        return self.updateDate
-
-    def getName(self):
-        return self.name
-
-    def setName(self, newName):
-        self.name = newName
-
-
-# @package Kaltura
-# @subpackage Client
-class KalturaUdidDynamicList(KalturaDynamicList):
-    def __init__(self,
-            id=NotImplemented,
-            createDate=NotImplemented,
-            updateDate=NotImplemented,
-            name=NotImplemented):
-        KalturaDynamicList.__init__(self,
-            id,
-            createDate,
-            updateDate,
-            name)
-
-
-    PROPERTY_LOADERS = {
-    }
-
-    def fromXml(self, node):
-        KalturaDynamicList.fromXml(self, node)
-        self.fromXmlImpl(node, KalturaUdidDynamicList.PROPERTY_LOADERS)
-
-    def toParams(self):
-        kparams = KalturaDynamicList.toParams(self)
-        kparams.put("objectType", "KalturaUdidDynamicList")
-        return kparams
-
-
-# @package Kaltura
-# @subpackage Client
 class KalturaHouseholdCoupon(KalturaCrudObject):
     """Household Coupon details"""
 
@@ -15848,9 +14813,7 @@ class KalturaCategoryItem(KalturaCrudObject):
             isActive=NotImplemented,
             startDateInSeconds=NotImplemented,
             endDateInSeconds=NotImplemented,
-            type=NotImplemented,
-            versionId=NotImplemented,
-            virtualAssetId=NotImplemented):
+            type=NotImplemented):
         KalturaCrudObject.__init__(self)
 
         # Unique identifier for the category
@@ -15906,16 +14869,6 @@ class KalturaCategoryItem(KalturaCrudObject):
         # @insertonly
         self.type = type
 
-        # Unique identifier for the category version
-        # @var int
-        # @readonly
-        self.versionId = versionId
-
-        # Virtual asset id
-        # @var int
-        # @readonly
-        self.virtualAssetId = virtualAssetId
-
 
     PROPERTY_LOADERS = {
         'id': getXmlNodeInt, 
@@ -15930,8 +14883,6 @@ class KalturaCategoryItem(KalturaCrudObject):
         'startDateInSeconds': getXmlNodeInt, 
         'endDateInSeconds': getXmlNodeInt, 
         'type': getXmlNodeText, 
-        'versionId': getXmlNodeInt, 
-        'virtualAssetId': getXmlNodeInt, 
     }
 
     def fromXml(self, node):
@@ -16011,12 +14962,6 @@ class KalturaCategoryItem(KalturaCrudObject):
     def setType(self, newType):
         self.type = newType
 
-    def getVersionId(self):
-        return self.versionId
-
-    def getVirtualAssetId(self):
-        return self.virtualAssetId
-
 
 # @package Kaltura
 # @subpackage Client
@@ -16079,1344 +15024,6 @@ class KalturaUnifiedChannelInfo(KalturaUnifiedChannel):
 
     def setEndDateInSeconds(self, newEndDateInSeconds):
         self.endDateInSeconds = newEndDateInSeconds
-
-
-# @package Kaltura
-# @subpackage Client
-class KalturaCategoryVersion(KalturaCrudObject):
-    """Category details"""
-
-    def __init__(self,
-            id=NotImplemented,
-            name=NotImplemented,
-            treeId=NotImplemented,
-            state=NotImplemented,
-            baseVersionId=NotImplemented,
-            categoryRootId=NotImplemented,
-            defaultDate=NotImplemented,
-            updaterId=NotImplemented,
-            comment=NotImplemented,
-            createDate=NotImplemented,
-            updateDate=NotImplemented):
-        KalturaCrudObject.__init__(self)
-
-        # Unique identifier for the category version
-        # @var int
-        # @readonly
-        self.id = id
-
-        # Category version name
-        # @var string
-        self.name = name
-
-        # Category tree identifier
-        # @var int
-        # @readonly
-        self.treeId = treeId
-
-        # The category version state
-        # @var KalturaCategoryVersionState
-        # @readonly
-        self.state = state
-
-        # The version id that this version was created from
-        # @var int
-        # @insertonly
-        self.baseVersionId = baseVersionId
-
-        # The root of category item id that was created for this version
-        # @var int
-        # @readonly
-        self.categoryRootId = categoryRootId
-
-        # The date that this version became default represented as epoch.
-        # @var int
-        # @readonly
-        self.defaultDate = defaultDate
-
-        # Last updater user id.
-        # @var int
-        # @readonly
-        self.updaterId = updaterId
-
-        # Comment.
-        # @var string
-        self.comment = comment
-
-        # The date that this version was created represented as epoch.
-        # @var int
-        # @readonly
-        self.createDate = createDate
-
-        # The date that this version was last updated represented as epoch.
-        # @var int
-        # @readonly
-        self.updateDate = updateDate
-
-
-    PROPERTY_LOADERS = {
-        'id': getXmlNodeInt, 
-        'name': getXmlNodeText, 
-        'treeId': getXmlNodeInt, 
-        'state': (KalturaEnumsFactory.createString, "KalturaCategoryVersionState"), 
-        'baseVersionId': getXmlNodeInt, 
-        'categoryRootId': getXmlNodeInt, 
-        'defaultDate': getXmlNodeInt, 
-        'updaterId': getXmlNodeInt, 
-        'comment': getXmlNodeText, 
-        'createDate': getXmlNodeInt, 
-        'updateDate': getXmlNodeInt, 
-    }
-
-    def fromXml(self, node):
-        KalturaCrudObject.fromXml(self, node)
-        self.fromXmlImpl(node, KalturaCategoryVersion.PROPERTY_LOADERS)
-
-    def toParams(self):
-        kparams = KalturaCrudObject.toParams(self)
-        kparams.put("objectType", "KalturaCategoryVersion")
-        kparams.addStringIfDefined("name", self.name)
-        kparams.addIntIfDefined("baseVersionId", self.baseVersionId)
-        kparams.addStringIfDefined("comment", self.comment)
-        return kparams
-
-    def getId(self):
-        return self.id
-
-    def getName(self):
-        return self.name
-
-    def setName(self, newName):
-        self.name = newName
-
-    def getTreeId(self):
-        return self.treeId
-
-    def getState(self):
-        return self.state
-
-    def getBaseVersionId(self):
-        return self.baseVersionId
-
-    def setBaseVersionId(self, newBaseVersionId):
-        self.baseVersionId = newBaseVersionId
-
-    def getCategoryRootId(self):
-        return self.categoryRootId
-
-    def getDefaultDate(self):
-        return self.defaultDate
-
-    def getUpdaterId(self):
-        return self.updaterId
-
-    def getComment(self):
-        return self.comment
-
-    def setComment(self, newComment):
-        self.comment = newComment
-
-    def getCreateDate(self):
-        return self.createDate
-
-    def getUpdateDate(self):
-        return self.updateDate
-
-
-# @package Kaltura
-# @subpackage Client
-class KalturaCondition(KalturaObjectBase):
-    """Condition"""
-
-    def __init__(self,
-            type=NotImplemented,
-            description=NotImplemented):
-        KalturaObjectBase.__init__(self)
-
-        # The type of the condition
-        # @var KalturaRuleConditionType
-        # @readonly
-        self.type = type
-
-        # Description
-        # @var string
-        self.description = description
-
-
-    PROPERTY_LOADERS = {
-        'type': (KalturaEnumsFactory.createString, "KalturaRuleConditionType"), 
-        'description': getXmlNodeText, 
-    }
-
-    def fromXml(self, node):
-        KalturaObjectBase.fromXml(self, node)
-        self.fromXmlImpl(node, KalturaCondition.PROPERTY_LOADERS)
-
-    def toParams(self):
-        kparams = KalturaObjectBase.toParams(self)
-        kparams.put("objectType", "KalturaCondition")
-        kparams.addStringIfDefined("description", self.description)
-        return kparams
-
-    def getType(self):
-        return self.type
-
-    def getDescription(self):
-        return self.description
-
-    def setDescription(self, newDescription):
-        self.description = newDescription
-
-
-# @package Kaltura
-# @subpackage Client
-class KalturaPromotion(KalturaObjectBase):
-    """Promotion"""
-
-    def __init__(self,
-            discountModuleId=NotImplemented,
-            conditions=NotImplemented,
-            numberOfRecurring=NotImplemented):
-        KalturaObjectBase.__init__(self)
-
-        # The discount module id that is promoted to the user
-        # @var int
-        self.discountModuleId = discountModuleId
-
-        # These conditions define the Promotion that applies on
-        # @var array of KalturaCondition
-        self.conditions = conditions
-
-        # the numer of recurring for this promotion
-        # @var int
-        self.numberOfRecurring = numberOfRecurring
-
-
-    PROPERTY_LOADERS = {
-        'discountModuleId': getXmlNodeInt, 
-        'conditions': (KalturaObjectFactory.createArray, 'KalturaCondition'), 
-        'numberOfRecurring': getXmlNodeInt, 
-    }
-
-    def fromXml(self, node):
-        KalturaObjectBase.fromXml(self, node)
-        self.fromXmlImpl(node, KalturaPromotion.PROPERTY_LOADERS)
-
-    def toParams(self):
-        kparams = KalturaObjectBase.toParams(self)
-        kparams.put("objectType", "KalturaPromotion")
-        kparams.addIntIfDefined("discountModuleId", self.discountModuleId)
-        kparams.addArrayIfDefined("conditions", self.conditions)
-        kparams.addIntIfDefined("numberOfRecurring", self.numberOfRecurring)
-        return kparams
-
-    def getDiscountModuleId(self):
-        return self.discountModuleId
-
-    def setDiscountModuleId(self, newDiscountModuleId):
-        self.discountModuleId = newDiscountModuleId
-
-    def getConditions(self):
-        return self.conditions
-
-    def setConditions(self, newConditions):
-        self.conditions = newConditions
-
-    def getNumberOfRecurring(self):
-        return self.numberOfRecurring
-
-    def setNumberOfRecurring(self, newNumberOfRecurring):
-        self.numberOfRecurring = newNumberOfRecurring
-
-
-# @package Kaltura
-# @subpackage Client
-class KalturaCampaign(KalturaCrudObject):
-    """Campaign"""
-
-    def __init__(self,
-            id=NotImplemented,
-            createDate=NotImplemented,
-            updateDate=NotImplemented,
-            startDate=NotImplemented,
-            endDate=NotImplemented,
-            name=NotImplemented,
-            systemName=NotImplemented,
-            description=NotImplemented,
-            state=NotImplemented,
-            promotion=NotImplemented,
-            message=NotImplemented,
-            collectionIdIn=NotImplemented):
-        KalturaCrudObject.__init__(self)
-
-        # ID
-        # @var int
-        # @readonly
-        self.id = id
-
-        # Create date of the rule
-        # @var int
-        # @readonly
-        self.createDate = createDate
-
-        # Update date of the rule
-        # @var int
-        # @readonly
-        self.updateDate = updateDate
-
-        # Start date of the rule
-        # @var int
-        self.startDate = startDate
-
-        # End date of the rule
-        # @var int
-        self.endDate = endDate
-
-        # Name
-        # @var string
-        self.name = name
-
-        # systemName
-        # @var string
-        self.systemName = systemName
-
-        # Description
-        # @var string
-        self.description = description
-
-        # state
-        # @var KalturaObjectState
-        # @readonly
-        self.state = state
-
-        # The Promotion that is promoted to the user
-        # @var KalturaPromotion
-        self.promotion = promotion
-
-        # Free text message to the user that gives information about the campaign.
-        # @var string
-        self.message = message
-
-        # Comma separated collection IDs list
-        # @var string
-        self.collectionIdIn = collectionIdIn
-
-
-    PROPERTY_LOADERS = {
-        'id': getXmlNodeInt, 
-        'createDate': getXmlNodeInt, 
-        'updateDate': getXmlNodeInt, 
-        'startDate': getXmlNodeInt, 
-        'endDate': getXmlNodeInt, 
-        'name': getXmlNodeText, 
-        'systemName': getXmlNodeText, 
-        'description': getXmlNodeText, 
-        'state': (KalturaEnumsFactory.createString, "KalturaObjectState"), 
-        'promotion': (KalturaObjectFactory.create, 'KalturaPromotion'), 
-        'message': getXmlNodeText, 
-        'collectionIdIn': getXmlNodeText, 
-    }
-
-    def fromXml(self, node):
-        KalturaCrudObject.fromXml(self, node)
-        self.fromXmlImpl(node, KalturaCampaign.PROPERTY_LOADERS)
-
-    def toParams(self):
-        kparams = KalturaCrudObject.toParams(self)
-        kparams.put("objectType", "KalturaCampaign")
-        kparams.addIntIfDefined("startDate", self.startDate)
-        kparams.addIntIfDefined("endDate", self.endDate)
-        kparams.addStringIfDefined("name", self.name)
-        kparams.addStringIfDefined("systemName", self.systemName)
-        kparams.addStringIfDefined("description", self.description)
-        kparams.addObjectIfDefined("promotion", self.promotion)
-        kparams.addStringIfDefined("message", self.message)
-        kparams.addStringIfDefined("collectionIdIn", self.collectionIdIn)
-        return kparams
-
-    def getId(self):
-        return self.id
-
-    def getCreateDate(self):
-        return self.createDate
-
-    def getUpdateDate(self):
-        return self.updateDate
-
-    def getStartDate(self):
-        return self.startDate
-
-    def setStartDate(self, newStartDate):
-        self.startDate = newStartDate
-
-    def getEndDate(self):
-        return self.endDate
-
-    def setEndDate(self, newEndDate):
-        self.endDate = newEndDate
-
-    def getName(self):
-        return self.name
-
-    def setName(self, newName):
-        self.name = newName
-
-    def getSystemName(self):
-        return self.systemName
-
-    def setSystemName(self, newSystemName):
-        self.systemName = newSystemName
-
-    def getDescription(self):
-        return self.description
-
-    def setDescription(self, newDescription):
-        self.description = newDescription
-
-    def getState(self):
-        return self.state
-
-    def getPromotion(self):
-        return self.promotion
-
-    def setPromotion(self, newPromotion):
-        self.promotion = newPromotion
-
-    def getMessage(self):
-        return self.message
-
-    def setMessage(self, newMessage):
-        self.message = newMessage
-
-    def getCollectionIdIn(self):
-        return self.collectionIdIn
-
-    def setCollectionIdIn(self, newCollectionIdIn):
-        self.collectionIdIn = newCollectionIdIn
-
-
-# @package Kaltura
-# @subpackage Client
-class KalturaBatchCampaign(KalturaCampaign):
-    """Campaign"""
-
-    def __init__(self,
-            id=NotImplemented,
-            createDate=NotImplemented,
-            updateDate=NotImplemented,
-            startDate=NotImplemented,
-            endDate=NotImplemented,
-            name=NotImplemented,
-            systemName=NotImplemented,
-            description=NotImplemented,
-            state=NotImplemented,
-            promotion=NotImplemented,
-            message=NotImplemented,
-            collectionIdIn=NotImplemented,
-            populationConditions=NotImplemented):
-        KalturaCampaign.__init__(self,
-            id,
-            createDate,
-            updateDate,
-            startDate,
-            endDate,
-            name,
-            systemName,
-            description,
-            state,
-            promotion,
-            message,
-            collectionIdIn)
-
-        # These conditions define the population that apply one the campaign
-        # @var array of KalturaCondition
-        self.populationConditions = populationConditions
-
-
-    PROPERTY_LOADERS = {
-        'populationConditions': (KalturaObjectFactory.createArray, 'KalturaCondition'), 
-    }
-
-    def fromXml(self, node):
-        KalturaCampaign.fromXml(self, node)
-        self.fromXmlImpl(node, KalturaBatchCampaign.PROPERTY_LOADERS)
-
-    def toParams(self):
-        kparams = KalturaCampaign.toParams(self)
-        kparams.put("objectType", "KalturaBatchCampaign")
-        kparams.addArrayIfDefined("populationConditions", self.populationConditions)
-        return kparams
-
-    def getPopulationConditions(self):
-        return self.populationConditions
-
-    def setPopulationConditions(self, newPopulationConditions):
-        self.populationConditions = newPopulationConditions
-
-
-# @package Kaltura
-# @subpackage Client
-class KalturaTriggerCampaign(KalturaCampaign):
-    """Campaign"""
-
-    def __init__(self,
-            id=NotImplemented,
-            createDate=NotImplemented,
-            updateDate=NotImplemented,
-            startDate=NotImplemented,
-            endDate=NotImplemented,
-            name=NotImplemented,
-            systemName=NotImplemented,
-            description=NotImplemented,
-            state=NotImplemented,
-            promotion=NotImplemented,
-            message=NotImplemented,
-            collectionIdIn=NotImplemented,
-            service=NotImplemented,
-            action=NotImplemented,
-            triggerConditions=NotImplemented):
-        KalturaCampaign.__init__(self,
-            id,
-            createDate,
-            updateDate,
-            startDate,
-            endDate,
-            name,
-            systemName,
-            description,
-            state,
-            promotion,
-            message,
-            collectionIdIn)
-
-        # service
-        # @var KalturaApiService
-        self.service = service
-
-        # action
-        # @var KalturaApiAction
-        self.action = action
-
-        # List of conditions for the trigger (conditions on the object)
-        # @var array of KalturaCondition
-        self.triggerConditions = triggerConditions
-
-
-    PROPERTY_LOADERS = {
-        'service': (KalturaEnumsFactory.createString, "KalturaApiService"), 
-        'action': (KalturaEnumsFactory.createString, "KalturaApiAction"), 
-        'triggerConditions': (KalturaObjectFactory.createArray, 'KalturaCondition'), 
-    }
-
-    def fromXml(self, node):
-        KalturaCampaign.fromXml(self, node)
-        self.fromXmlImpl(node, KalturaTriggerCampaign.PROPERTY_LOADERS)
-
-    def toParams(self):
-        kparams = KalturaCampaign.toParams(self)
-        kparams.put("objectType", "KalturaTriggerCampaign")
-        kparams.addStringEnumIfDefined("service", self.service)
-        kparams.addStringEnumIfDefined("action", self.action)
-        kparams.addArrayIfDefined("triggerConditions", self.triggerConditions)
-        return kparams
-
-    def getService(self):
-        return self.service
-
-    def setService(self, newService):
-        self.service = newService
-
-    def getAction(self):
-        return self.action
-
-    def setAction(self, newAction):
-        self.action = newAction
-
-    def getTriggerConditions(self):
-        return self.triggerConditions
-
-    def setTriggerConditions(self, newTriggerConditions):
-        self.triggerConditions = newTriggerConditions
-
-
-# @package Kaltura
-# @subpackage Client
-class KalturaNotCondition(KalturaCondition):
-    """Not condition"""
-
-    def __init__(self,
-            type=NotImplemented,
-            description=NotImplemented,
-            not_=NotImplemented):
-        KalturaCondition.__init__(self,
-            type,
-            description)
-
-        # Indicates whether to apply not on the other properties in the condition
-        # @var bool
-        self.not_ = not_
-
-
-    PROPERTY_LOADERS = {
-        'not_': getXmlNodeBool, 
-    }
-
-    def fromXml(self, node):
-        KalturaCondition.fromXml(self, node)
-        self.fromXmlImpl(node, KalturaNotCondition.PROPERTY_LOADERS)
-
-    def toParams(self):
-        kparams = KalturaCondition.toParams(self)
-        kparams.put("objectType", "KalturaNotCondition")
-        kparams.addBoolIfDefined("not", self.not_)
-        return kparams
-
-    def getNot_(self):
-        return self.not_
-
-    def setNot_(self, newNot_):
-        self.not_ = newNot_
-
-
-# @package Kaltura
-# @subpackage Client
-class KalturaOrCondition(KalturaNotCondition):
-    def __init__(self,
-            type=NotImplemented,
-            description=NotImplemented,
-            not_=NotImplemented,
-            conditions=NotImplemented):
-        KalturaNotCondition.__init__(self,
-            type,
-            description,
-            not_)
-
-        # List of conditions with or between them
-        # @var array of KalturaCondition
-        self.conditions = conditions
-
-
-    PROPERTY_LOADERS = {
-        'conditions': (KalturaObjectFactory.createArray, 'KalturaCondition'), 
-    }
-
-    def fromXml(self, node):
-        KalturaNotCondition.fromXml(self, node)
-        self.fromXmlImpl(node, KalturaOrCondition.PROPERTY_LOADERS)
-
-    def toParams(self):
-        kparams = KalturaNotCondition.toParams(self)
-        kparams.put("objectType", "KalturaOrCondition")
-        kparams.addArrayIfDefined("conditions", self.conditions)
-        return kparams
-
-    def getConditions(self):
-        return self.conditions
-
-    def setConditions(self, newConditions):
-        self.conditions = newConditions
-
-
-# @package Kaltura
-# @subpackage Client
-class KalturaCountryCondition(KalturaNotCondition):
-    """Country condition"""
-
-    def __init__(self,
-            type=NotImplemented,
-            description=NotImplemented,
-            not_=NotImplemented,
-            countries=NotImplemented):
-        KalturaNotCondition.__init__(self,
-            type,
-            description,
-            not_)
-
-        # Comma separated countries IDs list
-        # @var string
-        self.countries = countries
-
-
-    PROPERTY_LOADERS = {
-        'countries': getXmlNodeText, 
-    }
-
-    def fromXml(self, node):
-        KalturaNotCondition.fromXml(self, node)
-        self.fromXmlImpl(node, KalturaCountryCondition.PROPERTY_LOADERS)
-
-    def toParams(self):
-        kparams = KalturaNotCondition.toParams(self)
-        kparams.put("objectType", "KalturaCountryCondition")
-        kparams.addStringIfDefined("countries", self.countries)
-        return kparams
-
-    def getCountries(self):
-        return self.countries
-
-    def setCountries(self, newCountries):
-        self.countries = newCountries
-
-
-# @package Kaltura
-# @subpackage Client
-class KalturaDateCondition(KalturaNotCondition):
-    """Date condition"""
-
-    def __init__(self,
-            type=NotImplemented,
-            description=NotImplemented,
-            not_=NotImplemented,
-            startDate=NotImplemented,
-            endDate=NotImplemented):
-        KalturaNotCondition.__init__(self,
-            type,
-            description,
-            not_)
-
-        # Start date
-        # @var int
-        self.startDate = startDate
-
-        # End date
-        # @var int
-        self.endDate = endDate
-
-
-    PROPERTY_LOADERS = {
-        'startDate': getXmlNodeInt, 
-        'endDate': getXmlNodeInt, 
-    }
-
-    def fromXml(self, node):
-        KalturaNotCondition.fromXml(self, node)
-        self.fromXmlImpl(node, KalturaDateCondition.PROPERTY_LOADERS)
-
-    def toParams(self):
-        kparams = KalturaNotCondition.toParams(self)
-        kparams.put("objectType", "KalturaDateCondition")
-        kparams.addIntIfDefined("startDate", self.startDate)
-        kparams.addIntIfDefined("endDate", self.endDate)
-        return kparams
-
-    def getStartDate(self):
-        return self.startDate
-
-    def setStartDate(self, newStartDate):
-        self.startDate = newStartDate
-
-    def getEndDate(self):
-        return self.endDate
-
-    def setEndDate(self, newEndDate):
-        self.endDate = newEndDate
-
-
-# @package Kaltura
-# @subpackage Client
-class KalturaHeaderCondition(KalturaNotCondition):
-    """Header condition"""
-
-    def __init__(self,
-            type=NotImplemented,
-            description=NotImplemented,
-            not_=NotImplemented,
-            key=NotImplemented,
-            value=NotImplemented):
-        KalturaNotCondition.__init__(self,
-            type,
-            description,
-            not_)
-
-        # Header key
-        # @var string
-        self.key = key
-
-        # Header value
-        # @var string
-        self.value = value
-
-
-    PROPERTY_LOADERS = {
-        'key': getXmlNodeText, 
-        'value': getXmlNodeText, 
-    }
-
-    def fromXml(self, node):
-        KalturaNotCondition.fromXml(self, node)
-        self.fromXmlImpl(node, KalturaHeaderCondition.PROPERTY_LOADERS)
-
-    def toParams(self):
-        kparams = KalturaNotCondition.toParams(self)
-        kparams.put("objectType", "KalturaHeaderCondition")
-        kparams.addStringIfDefined("key", self.key)
-        kparams.addStringIfDefined("value", self.value)
-        return kparams
-
-    def getKey(self):
-        return self.key
-
-    def setKey(self, newKey):
-        self.key = newKey
-
-    def getValue(self):
-        return self.value
-
-    def setValue(self, newValue):
-        self.value = newValue
-
-
-# @package Kaltura
-# @subpackage Client
-class KalturaAssetCondition(KalturaCondition):
-    """Asset Condition"""
-
-    def __init__(self,
-            type=NotImplemented,
-            description=NotImplemented,
-            ksql=NotImplemented):
-        KalturaCondition.__init__(self,
-            type,
-            description)
-
-        # KSQL
-        # @var string
-        self.ksql = ksql
-
-
-    PROPERTY_LOADERS = {
-        'ksql': getXmlNodeText, 
-    }
-
-    def fromXml(self, node):
-        KalturaCondition.fromXml(self, node)
-        self.fromXmlImpl(node, KalturaAssetCondition.PROPERTY_LOADERS)
-
-    def toParams(self):
-        kparams = KalturaCondition.toParams(self)
-        kparams.put("objectType", "KalturaAssetCondition")
-        kparams.addStringIfDefined("ksql", self.ksql)
-        return kparams
-
-    def getKsql(self):
-        return self.ksql
-
-    def setKsql(self, newKsql):
-        self.ksql = newKsql
-
-
-# @package Kaltura
-# @subpackage Client
-class KalturaConcurrencyCondition(KalturaAssetCondition):
-    """Asset Condition"""
-
-    def __init__(self,
-            type=NotImplemented,
-            description=NotImplemented,
-            ksql=NotImplemented,
-            limit=NotImplemented,
-            concurrencyLimitationType=NotImplemented):
-        KalturaAssetCondition.__init__(self,
-            type,
-            description,
-            ksql)
-
-        # Concurrency limitation
-        # @var int
-        self.limit = limit
-
-        # Concurrency limitation type
-        # @var KalturaConcurrencyLimitationType
-        self.concurrencyLimitationType = concurrencyLimitationType
-
-
-    PROPERTY_LOADERS = {
-        'limit': getXmlNodeInt, 
-        'concurrencyLimitationType': (KalturaEnumsFactory.createString, "KalturaConcurrencyLimitationType"), 
-    }
-
-    def fromXml(self, node):
-        KalturaAssetCondition.fromXml(self, node)
-        self.fromXmlImpl(node, KalturaConcurrencyCondition.PROPERTY_LOADERS)
-
-    def toParams(self):
-        kparams = KalturaAssetCondition.toParams(self)
-        kparams.put("objectType", "KalturaConcurrencyCondition")
-        kparams.addIntIfDefined("limit", self.limit)
-        kparams.addStringEnumIfDefined("concurrencyLimitationType", self.concurrencyLimitationType)
-        return kparams
-
-    def getLimit(self):
-        return self.limit
-
-    def setLimit(self, newLimit):
-        self.limit = newLimit
-
-    def getConcurrencyLimitationType(self):
-        return self.concurrencyLimitationType
-
-    def setConcurrencyLimitationType(self, newConcurrencyLimitationType):
-        self.concurrencyLimitationType = newConcurrencyLimitationType
-
-
-# @package Kaltura
-# @subpackage Client
-class KalturaIpRangeCondition(KalturaCondition):
-    """IP range condition"""
-
-    def __init__(self,
-            type=NotImplemented,
-            description=NotImplemented,
-            fromIP=NotImplemented,
-            toIP=NotImplemented):
-        KalturaCondition.__init__(self,
-            type,
-            description)
-
-        # From IP address range
-        # @var string
-        self.fromIP = fromIP
-
-        # TO IP address range
-        # @var string
-        self.toIP = toIP
-
-
-    PROPERTY_LOADERS = {
-        'fromIP': getXmlNodeText, 
-        'toIP': getXmlNodeText, 
-    }
-
-    def fromXml(self, node):
-        KalturaCondition.fromXml(self, node)
-        self.fromXmlImpl(node, KalturaIpRangeCondition.PROPERTY_LOADERS)
-
-    def toParams(self):
-        kparams = KalturaCondition.toParams(self)
-        kparams.put("objectType", "KalturaIpRangeCondition")
-        kparams.addStringIfDefined("fromIP", self.fromIP)
-        kparams.addStringIfDefined("toIP", self.toIP)
-        return kparams
-
-    def getFromIP(self):
-        return self.fromIP
-
-    def setFromIP(self, newFromIP):
-        self.fromIP = newFromIP
-
-    def getToIP(self):
-        return self.toIP
-
-    def setToIP(self, newToIP):
-        self.toIP = newToIP
-
-
-# @package Kaltura
-# @subpackage Client
-class KalturaBusinessModuleCondition(KalturaCondition):
-    """Business module condition"""
-
-    def __init__(self,
-            type=NotImplemented,
-            description=NotImplemented,
-            businessModuleType=NotImplemented,
-            businessModuleId=NotImplemented):
-        KalturaCondition.__init__(self,
-            type,
-            description)
-
-        # Business module type
-        # @var KalturaTransactionType
-        self.businessModuleType = businessModuleType
-
-        # Business module ID
-        # @var int
-        self.businessModuleId = businessModuleId
-
-
-    PROPERTY_LOADERS = {
-        'businessModuleType': (KalturaEnumsFactory.createString, "KalturaTransactionType"), 
-        'businessModuleId': getXmlNodeInt, 
-    }
-
-    def fromXml(self, node):
-        KalturaCondition.fromXml(self, node)
-        self.fromXmlImpl(node, KalturaBusinessModuleCondition.PROPERTY_LOADERS)
-
-    def toParams(self):
-        kparams = KalturaCondition.toParams(self)
-        kparams.put("objectType", "KalturaBusinessModuleCondition")
-        kparams.addStringEnumIfDefined("businessModuleType", self.businessModuleType)
-        kparams.addIntIfDefined("businessModuleId", self.businessModuleId)
-        return kparams
-
-    def getBusinessModuleType(self):
-        return self.businessModuleType
-
-    def setBusinessModuleType(self, newBusinessModuleType):
-        self.businessModuleType = newBusinessModuleType
-
-    def getBusinessModuleId(self):
-        return self.businessModuleId
-
-    def setBusinessModuleId(self, newBusinessModuleId):
-        self.businessModuleId = newBusinessModuleId
-
-
-# @package Kaltura
-# @subpackage Client
-class KalturaSegmentsCondition(KalturaCondition):
-    """Segments condition"""
-
-    def __init__(self,
-            type=NotImplemented,
-            description=NotImplemented,
-            segmentsIds=NotImplemented):
-        KalturaCondition.__init__(self,
-            type,
-            description)
-
-        # Comma separated segments IDs list
-        # @var string
-        self.segmentsIds = segmentsIds
-
-
-    PROPERTY_LOADERS = {
-        'segmentsIds': getXmlNodeText, 
-    }
-
-    def fromXml(self, node):
-        KalturaCondition.fromXml(self, node)
-        self.fromXmlImpl(node, KalturaSegmentsCondition.PROPERTY_LOADERS)
-
-    def toParams(self):
-        kparams = KalturaCondition.toParams(self)
-        kparams.put("objectType", "KalturaSegmentsCondition")
-        kparams.addStringIfDefined("segmentsIds", self.segmentsIds)
-        return kparams
-
-    def getSegmentsIds(self):
-        return self.segmentsIds
-
-    def setSegmentsIds(self, newSegmentsIds):
-        self.segmentsIds = newSegmentsIds
-
-
-# @package Kaltura
-# @subpackage Client
-class KalturaSubscriptionCondition(KalturaCondition):
-    def __init__(self,
-            type=NotImplemented,
-            description=NotImplemented,
-            idIn=NotImplemented):
-        KalturaCondition.__init__(self,
-            type,
-            description)
-
-        # Comma separated subscription IDs list
-        # @var string
-        self.idIn = idIn
-
-
-    PROPERTY_LOADERS = {
-        'idIn': getXmlNodeText, 
-    }
-
-    def fromXml(self, node):
-        KalturaCondition.fromXml(self, node)
-        self.fromXmlImpl(node, KalturaSubscriptionCondition.PROPERTY_LOADERS)
-
-    def toParams(self):
-        kparams = KalturaCondition.toParams(self)
-        kparams.put("objectType", "KalturaSubscriptionCondition")
-        kparams.addStringIfDefined("idIn", self.idIn)
-        return kparams
-
-    def getIdIn(self):
-        return self.idIn
-
-    def setIdIn(self, newIdIn):
-        self.idIn = newIdIn
-
-
-# @package Kaltura
-# @subpackage Client
-class KalturaUserSubscriptionCondition(KalturaSubscriptionCondition):
-    """UserSubscription Condition - indicates which users this rule is applied on by their subscriptions"""
-
-    def __init__(self,
-            type=NotImplemented,
-            description=NotImplemented,
-            idIn=NotImplemented):
-        KalturaSubscriptionCondition.__init__(self,
-            type,
-            description,
-            idIn)
-
-
-    PROPERTY_LOADERS = {
-    }
-
-    def fromXml(self, node):
-        KalturaSubscriptionCondition.fromXml(self, node)
-        self.fromXmlImpl(node, KalturaUserSubscriptionCondition.PROPERTY_LOADERS)
-
-    def toParams(self):
-        kparams = KalturaSubscriptionCondition.toParams(self)
-        kparams.put("objectType", "KalturaUserSubscriptionCondition")
-        return kparams
-
-
-# @package Kaltura
-# @subpackage Client
-class KalturaAssetSubscriptionCondition(KalturaSubscriptionCondition):
-    """AssetSubscription Condition - indicates which assets this rule is applied on by their subscriptions"""
-
-    def __init__(self,
-            type=NotImplemented,
-            description=NotImplemented,
-            idIn=NotImplemented):
-        KalturaSubscriptionCondition.__init__(self,
-            type,
-            description,
-            idIn)
-
-
-    PROPERTY_LOADERS = {
-    }
-
-    def fromXml(self, node):
-        KalturaSubscriptionCondition.fromXml(self, node)
-        self.fromXmlImpl(node, KalturaAssetSubscriptionCondition.PROPERTY_LOADERS)
-
-    def toParams(self):
-        kparams = KalturaSubscriptionCondition.toParams(self)
-        kparams.put("objectType", "KalturaAssetSubscriptionCondition")
-        return kparams
-
-
-# @package Kaltura
-# @subpackage Client
-class KalturaUserRoleCondition(KalturaCondition):
-    """UserRole Condition - indicates which users this rule is applied on by their roles"""
-
-    def __init__(self,
-            type=NotImplemented,
-            description=NotImplemented,
-            idIn=NotImplemented):
-        KalturaCondition.__init__(self,
-            type,
-            description)
-
-        # Comma separated user role IDs list
-        # @var string
-        self.idIn = idIn
-
-
-    PROPERTY_LOADERS = {
-        'idIn': getXmlNodeText, 
-    }
-
-    def fromXml(self, node):
-        KalturaCondition.fromXml(self, node)
-        self.fromXmlImpl(node, KalturaUserRoleCondition.PROPERTY_LOADERS)
-
-    def toParams(self):
-        kparams = KalturaCondition.toParams(self)
-        kparams.put("objectType", "KalturaUserRoleCondition")
-        kparams.addStringIfDefined("idIn", self.idIn)
-        return kparams
-
-    def getIdIn(self):
-        return self.idIn
-
-    def setIdIn(self, newIdIn):
-        self.idIn = newIdIn
-
-
-# @package Kaltura
-# @subpackage Client
-class KalturaDeviceBrandCondition(KalturaCondition):
-    def __init__(self,
-            type=NotImplemented,
-            description=NotImplemented,
-            idIn=NotImplemented):
-        KalturaCondition.__init__(self,
-            type,
-            description)
-
-        # Comma separated Device Brand IDs list
-        # @var string
-        self.idIn = idIn
-
-
-    PROPERTY_LOADERS = {
-        'idIn': getXmlNodeText, 
-    }
-
-    def fromXml(self, node):
-        KalturaCondition.fromXml(self, node)
-        self.fromXmlImpl(node, KalturaDeviceBrandCondition.PROPERTY_LOADERS)
-
-    def toParams(self):
-        kparams = KalturaCondition.toParams(self)
-        kparams.put("objectType", "KalturaDeviceBrandCondition")
-        kparams.addStringIfDefined("idIn", self.idIn)
-        return kparams
-
-    def getIdIn(self):
-        return self.idIn
-
-    def setIdIn(self, newIdIn):
-        self.idIn = newIdIn
-
-
-# @package Kaltura
-# @subpackage Client
-class KalturaDeviceFamilyCondition(KalturaCondition):
-    def __init__(self,
-            type=NotImplemented,
-            description=NotImplemented,
-            idIn=NotImplemented):
-        KalturaCondition.__init__(self,
-            type,
-            description)
-
-        # Comma separated Device Family IDs list
-        # @var string
-        self.idIn = idIn
-
-
-    PROPERTY_LOADERS = {
-        'idIn': getXmlNodeText, 
-    }
-
-    def fromXml(self, node):
-        KalturaCondition.fromXml(self, node)
-        self.fromXmlImpl(node, KalturaDeviceFamilyCondition.PROPERTY_LOADERS)
-
-    def toParams(self):
-        kparams = KalturaCondition.toParams(self)
-        kparams.put("objectType", "KalturaDeviceFamilyCondition")
-        kparams.addStringIfDefined("idIn", self.idIn)
-        return kparams
-
-    def getIdIn(self):
-        return self.idIn
-
-    def setIdIn(self, newIdIn):
-        self.idIn = newIdIn
-
-
-# @package Kaltura
-# @subpackage Client
-class KalturaDeviceManufacturerCondition(KalturaCondition):
-    def __init__(self,
-            type=NotImplemented,
-            description=NotImplemented,
-            idIn=NotImplemented):
-        KalturaCondition.__init__(self,
-            type,
-            description)
-
-        # Comma separated Device Manufacturer IDs list
-        # @var string
-        self.idIn = idIn
-
-
-    PROPERTY_LOADERS = {
-        'idIn': getXmlNodeText, 
-    }
-
-    def fromXml(self, node):
-        KalturaCondition.fromXml(self, node)
-        self.fromXmlImpl(node, KalturaDeviceManufacturerCondition.PROPERTY_LOADERS)
-
-    def toParams(self):
-        kparams = KalturaCondition.toParams(self)
-        kparams.put("objectType", "KalturaDeviceManufacturerCondition")
-        kparams.addStringIfDefined("idIn", self.idIn)
-        return kparams
-
-    def getIdIn(self):
-        return self.idIn
-
-    def setIdIn(self, newIdIn):
-        self.idIn = newIdIn
-
-
-# @package Kaltura
-# @subpackage Client
-class KalturaDeviceModelCondition(KalturaCondition):
-    def __init__(self,
-            type=NotImplemented,
-            description=NotImplemented,
-            regexEqual=NotImplemented):
-        KalturaCondition.__init__(self,
-            type,
-            description)
-
-        # regex of device model that is compared to
-        # @var string
-        self.regexEqual = regexEqual
-
-
-    PROPERTY_LOADERS = {
-        'regexEqual': getXmlNodeText, 
-    }
-
-    def fromXml(self, node):
-        KalturaCondition.fromXml(self, node)
-        self.fromXmlImpl(node, KalturaDeviceModelCondition.PROPERTY_LOADERS)
-
-    def toParams(self):
-        kparams = KalturaCondition.toParams(self)
-        kparams.put("objectType", "KalturaDeviceModelCondition")
-        kparams.addStringIfDefined("regexEqual", self.regexEqual)
-        return kparams
-
-    def getRegexEqual(self):
-        return self.regexEqual
-
-    def setRegexEqual(self, newRegexEqual):
-        self.regexEqual = newRegexEqual
-
-
-# @package Kaltura
-# @subpackage Client
-class KalturaUdidDynamicListCondition(KalturaCondition):
-    def __init__(self,
-            type=NotImplemented,
-            description=NotImplemented,
-            id=NotImplemented):
-        KalturaCondition.__init__(self,
-            type,
-            description)
-
-        # KalturaUdidDynamicList.id
-        # @var int
-        self.id = id
-
-
-    PROPERTY_LOADERS = {
-        'id': getXmlNodeInt, 
-    }
-
-    def fromXml(self, node):
-        KalturaCondition.fromXml(self, node)
-        self.fromXmlImpl(node, KalturaUdidDynamicListCondition.PROPERTY_LOADERS)
-
-    def toParams(self):
-        kparams = KalturaCondition.toParams(self)
-        kparams.put("objectType", "KalturaUdidDynamicListCondition")
-        kparams.addIntIfDefined("id", self.id)
-        return kparams
-
-    def getId(self):
-        return self.id
-
-    def setId(self, newId):
-        self.id = newId
 
 
 # @package Kaltura
@@ -17906,11 +15513,7 @@ class KalturaHouseholdDevice(KalturaOTTObjectSupportNullable):
             deviceFamilyId=NotImplemented,
             drm=NotImplemented,
             externalId=NotImplemented,
-            macAddress=NotImplemented,
-            model=NotImplemented,
-            manufacturer=NotImplemented,
-            manufacturerId=NotImplemented,
-            lastActivityTime=NotImplemented):
+            macAddress=NotImplemented):
         KalturaOTTObjectSupportNullable.__init__(self)
 
         # Household identifier
@@ -17957,24 +15560,6 @@ class KalturaHouseholdDevice(KalturaOTTObjectSupportNullable):
         # @var string
         self.macAddress = macAddress
 
-        # model
-        # @var string
-        self.model = model
-
-        # manufacturer
-        # @var string
-        self.manufacturer = manufacturer
-
-        # manufacturer Id, read only
-        # @var int
-        # @readonly
-        self.manufacturerId = manufacturerId
-
-        # Last Activity Time, read only
-        # @var int
-        # @readonly
-        self.lastActivityTime = lastActivityTime
-
 
     PROPERTY_LOADERS = {
         'householdId': getXmlNodeInt, 
@@ -17987,10 +15572,6 @@ class KalturaHouseholdDevice(KalturaOTTObjectSupportNullable):
         'drm': (KalturaObjectFactory.create, 'KalturaCustomDrmPlaybackPluginData'), 
         'externalId': getXmlNodeText, 
         'macAddress': getXmlNodeText, 
-        'model': getXmlNodeText, 
-        'manufacturer': getXmlNodeText, 
-        'manufacturerId': getXmlNodeInt, 
-        'lastActivityTime': getXmlNodeInt, 
     }
 
     def fromXml(self, node):
@@ -18007,8 +15588,6 @@ class KalturaHouseholdDevice(KalturaOTTObjectSupportNullable):
         kparams.addIntIfDefined("activatedOn", self.activatedOn)
         kparams.addStringIfDefined("externalId", self.externalId)
         kparams.addStringIfDefined("macAddress", self.macAddress)
-        kparams.addStringIfDefined("model", self.model)
-        kparams.addStringIfDefined("manufacturer", self.manufacturer)
         return kparams
 
     def getHouseholdId(self):
@@ -18061,24 +15640,6 @@ class KalturaHouseholdDevice(KalturaOTTObjectSupportNullable):
 
     def setMacAddress(self, newMacAddress):
         self.macAddress = newMacAddress
-
-    def getModel(self):
-        return self.model
-
-    def setModel(self, newModel):
-        self.model = newModel
-
-    def getManufacturer(self):
-        return self.manufacturer
-
-    def setManufacturer(self, newManufacturer):
-        self.manufacturer = newManufacturer
-
-    def getManufacturerId(self):
-        return self.manufacturerId
-
-    def getLastActivityTime(self):
-        return self.lastActivityTime
 
 
 # @package Kaltura
@@ -18637,6 +16198,51 @@ class KalturaAssetRuleBase(KalturaRule):
 
 # @package Kaltura
 # @subpackage Client
+class KalturaCondition(KalturaObjectBase):
+    """Condition"""
+
+    def __init__(self,
+            type=NotImplemented,
+            description=NotImplemented):
+        KalturaObjectBase.__init__(self)
+
+        # The type of the condition
+        # @var KalturaRuleConditionType
+        # @readonly
+        self.type = type
+
+        # Description
+        # @var string
+        self.description = description
+
+
+    PROPERTY_LOADERS = {
+        'type': (KalturaEnumsFactory.createString, "KalturaRuleConditionType"), 
+        'description': getXmlNodeText, 
+    }
+
+    def fromXml(self, node):
+        KalturaObjectBase.fromXml(self, node)
+        self.fromXmlImpl(node, KalturaCondition.PROPERTY_LOADERS)
+
+    def toParams(self):
+        kparams = KalturaObjectBase.toParams(self)
+        kparams.put("objectType", "KalturaCondition")
+        kparams.addStringIfDefined("description", self.description)
+        return kparams
+
+    def getType(self):
+        return self.type
+
+    def getDescription(self):
+        return self.description
+
+    def setDescription(self, newDescription):
+        self.description = newDescription
+
+
+# @package Kaltura
+# @subpackage Client
 class KalturaRuleAction(KalturaObjectBase):
     def __init__(self,
             type=NotImplemented,
@@ -18770,6 +16376,45 @@ class KalturaAssetRule(KalturaAssetRuleBase):
 
 # @package Kaltura
 # @subpackage Client
+class KalturaAssetCondition(KalturaCondition):
+    """Asset Condition"""
+
+    def __init__(self,
+            type=NotImplemented,
+            description=NotImplemented,
+            ksql=NotImplemented):
+        KalturaCondition.__init__(self,
+            type,
+            description)
+
+        # KSQL
+        # @var string
+        self.ksql = ksql
+
+
+    PROPERTY_LOADERS = {
+        'ksql': getXmlNodeText, 
+    }
+
+    def fromXml(self, node):
+        KalturaCondition.fromXml(self, node)
+        self.fromXmlImpl(node, KalturaAssetCondition.PROPERTY_LOADERS)
+
+    def toParams(self):
+        kparams = KalturaCondition.toParams(self)
+        kparams.put("objectType", "KalturaAssetCondition")
+        kparams.addStringIfDefined("ksql", self.ksql)
+        return kparams
+
+    def getKsql(self):
+        return self.ksql
+
+    def setKsql(self, newKsql):
+        self.ksql = newKsql
+
+
+# @package Kaltura
+# @subpackage Client
 class KalturaAssetUserRuleAction(KalturaRuleAction):
     def __init__(self,
             type=NotImplemented,
@@ -18846,6 +16491,562 @@ class KalturaAssetUserRule(KalturaAssetRuleBase):
 
     def setActions(self, newActions):
         self.actions = newActions
+
+
+# @package Kaltura
+# @subpackage Client
+class KalturaNotCondition(KalturaCondition):
+    """Not condition"""
+
+    def __init__(self,
+            type=NotImplemented,
+            description=NotImplemented,
+            not_=NotImplemented):
+        KalturaCondition.__init__(self,
+            type,
+            description)
+
+        # Indicates whether to apply not on the other properties in the condition
+        # @var bool
+        self.not_ = not_
+
+
+    PROPERTY_LOADERS = {
+        'not_': getXmlNodeBool, 
+    }
+
+    def fromXml(self, node):
+        KalturaCondition.fromXml(self, node)
+        self.fromXmlImpl(node, KalturaNotCondition.PROPERTY_LOADERS)
+
+    def toParams(self):
+        kparams = KalturaCondition.toParams(self)
+        kparams.put("objectType", "KalturaNotCondition")
+        kparams.addBoolIfDefined("not", self.not_)
+        return kparams
+
+    def getNot_(self):
+        return self.not_
+
+    def setNot_(self, newNot_):
+        self.not_ = newNot_
+
+
+# @package Kaltura
+# @subpackage Client
+class KalturaOrCondition(KalturaNotCondition):
+    def __init__(self,
+            type=NotImplemented,
+            description=NotImplemented,
+            not_=NotImplemented,
+            conditions=NotImplemented):
+        KalturaNotCondition.__init__(self,
+            type,
+            description,
+            not_)
+
+        # List of conditions with or between them
+        # @var array of KalturaCondition
+        self.conditions = conditions
+
+
+    PROPERTY_LOADERS = {
+        'conditions': (KalturaObjectFactory.createArray, 'KalturaCondition'), 
+    }
+
+    def fromXml(self, node):
+        KalturaNotCondition.fromXml(self, node)
+        self.fromXmlImpl(node, KalturaOrCondition.PROPERTY_LOADERS)
+
+    def toParams(self):
+        kparams = KalturaNotCondition.toParams(self)
+        kparams.put("objectType", "KalturaOrCondition")
+        kparams.addArrayIfDefined("conditions", self.conditions)
+        return kparams
+
+    def getConditions(self):
+        return self.conditions
+
+    def setConditions(self, newConditions):
+        self.conditions = newConditions
+
+
+# @package Kaltura
+# @subpackage Client
+class KalturaCountryCondition(KalturaNotCondition):
+    """Country condition"""
+
+    def __init__(self,
+            type=NotImplemented,
+            description=NotImplemented,
+            not_=NotImplemented,
+            countries=NotImplemented):
+        KalturaNotCondition.__init__(self,
+            type,
+            description,
+            not_)
+
+        # Comma separated countries IDs list
+        # @var string
+        self.countries = countries
+
+
+    PROPERTY_LOADERS = {
+        'countries': getXmlNodeText, 
+    }
+
+    def fromXml(self, node):
+        KalturaNotCondition.fromXml(self, node)
+        self.fromXmlImpl(node, KalturaCountryCondition.PROPERTY_LOADERS)
+
+    def toParams(self):
+        kparams = KalturaNotCondition.toParams(self)
+        kparams.put("objectType", "KalturaCountryCondition")
+        kparams.addStringIfDefined("countries", self.countries)
+        return kparams
+
+    def getCountries(self):
+        return self.countries
+
+    def setCountries(self, newCountries):
+        self.countries = newCountries
+
+
+# @package Kaltura
+# @subpackage Client
+class KalturaDateCondition(KalturaNotCondition):
+    """Date condition"""
+
+    def __init__(self,
+            type=NotImplemented,
+            description=NotImplemented,
+            not_=NotImplemented,
+            startDate=NotImplemented,
+            endDate=NotImplemented):
+        KalturaNotCondition.__init__(self,
+            type,
+            description,
+            not_)
+
+        # Start date
+        # @var int
+        self.startDate = startDate
+
+        # End date
+        # @var int
+        self.endDate = endDate
+
+
+    PROPERTY_LOADERS = {
+        'startDate': getXmlNodeInt, 
+        'endDate': getXmlNodeInt, 
+    }
+
+    def fromXml(self, node):
+        KalturaNotCondition.fromXml(self, node)
+        self.fromXmlImpl(node, KalturaDateCondition.PROPERTY_LOADERS)
+
+    def toParams(self):
+        kparams = KalturaNotCondition.toParams(self)
+        kparams.put("objectType", "KalturaDateCondition")
+        kparams.addIntIfDefined("startDate", self.startDate)
+        kparams.addIntIfDefined("endDate", self.endDate)
+        return kparams
+
+    def getStartDate(self):
+        return self.startDate
+
+    def setStartDate(self, newStartDate):
+        self.startDate = newStartDate
+
+    def getEndDate(self):
+        return self.endDate
+
+    def setEndDate(self, newEndDate):
+        self.endDate = newEndDate
+
+
+# @package Kaltura
+# @subpackage Client
+class KalturaHeaderCondition(KalturaNotCondition):
+    """Header condition"""
+
+    def __init__(self,
+            type=NotImplemented,
+            description=NotImplemented,
+            not_=NotImplemented,
+            key=NotImplemented,
+            value=NotImplemented):
+        KalturaNotCondition.__init__(self,
+            type,
+            description,
+            not_)
+
+        # Header key
+        # @var string
+        self.key = key
+
+        # Header value
+        # @var string
+        self.value = value
+
+
+    PROPERTY_LOADERS = {
+        'key': getXmlNodeText, 
+        'value': getXmlNodeText, 
+    }
+
+    def fromXml(self, node):
+        KalturaNotCondition.fromXml(self, node)
+        self.fromXmlImpl(node, KalturaHeaderCondition.PROPERTY_LOADERS)
+
+    def toParams(self):
+        kparams = KalturaNotCondition.toParams(self)
+        kparams.put("objectType", "KalturaHeaderCondition")
+        kparams.addStringIfDefined("key", self.key)
+        kparams.addStringIfDefined("value", self.value)
+        return kparams
+
+    def getKey(self):
+        return self.key
+
+    def setKey(self, newKey):
+        self.key = newKey
+
+    def getValue(self):
+        return self.value
+
+    def setValue(self, newValue):
+        self.value = newValue
+
+
+# @package Kaltura
+# @subpackage Client
+class KalturaConcurrencyCondition(KalturaAssetCondition):
+    """Asset Condition"""
+
+    def __init__(self,
+            type=NotImplemented,
+            description=NotImplemented,
+            ksql=NotImplemented,
+            limit=NotImplemented,
+            concurrencyLimitationType=NotImplemented):
+        KalturaAssetCondition.__init__(self,
+            type,
+            description,
+            ksql)
+
+        # Concurrency limitation
+        # @var int
+        self.limit = limit
+
+        # Concurrency limitation type
+        # @var KalturaConcurrencyLimitationType
+        self.concurrencyLimitationType = concurrencyLimitationType
+
+
+    PROPERTY_LOADERS = {
+        'limit': getXmlNodeInt, 
+        'concurrencyLimitationType': (KalturaEnumsFactory.createString, "KalturaConcurrencyLimitationType"), 
+    }
+
+    def fromXml(self, node):
+        KalturaAssetCondition.fromXml(self, node)
+        self.fromXmlImpl(node, KalturaConcurrencyCondition.PROPERTY_LOADERS)
+
+    def toParams(self):
+        kparams = KalturaAssetCondition.toParams(self)
+        kparams.put("objectType", "KalturaConcurrencyCondition")
+        kparams.addIntIfDefined("limit", self.limit)
+        kparams.addStringEnumIfDefined("concurrencyLimitationType", self.concurrencyLimitationType)
+        return kparams
+
+    def getLimit(self):
+        return self.limit
+
+    def setLimit(self, newLimit):
+        self.limit = newLimit
+
+    def getConcurrencyLimitationType(self):
+        return self.concurrencyLimitationType
+
+    def setConcurrencyLimitationType(self, newConcurrencyLimitationType):
+        self.concurrencyLimitationType = newConcurrencyLimitationType
+
+
+# @package Kaltura
+# @subpackage Client
+class KalturaIpRangeCondition(KalturaCondition):
+    """IP range condition"""
+
+    def __init__(self,
+            type=NotImplemented,
+            description=NotImplemented,
+            fromIP=NotImplemented,
+            toIP=NotImplemented):
+        KalturaCondition.__init__(self,
+            type,
+            description)
+
+        # From IP address range
+        # @var string
+        self.fromIP = fromIP
+
+        # TO IP address range
+        # @var string
+        self.toIP = toIP
+
+
+    PROPERTY_LOADERS = {
+        'fromIP': getXmlNodeText, 
+        'toIP': getXmlNodeText, 
+    }
+
+    def fromXml(self, node):
+        KalturaCondition.fromXml(self, node)
+        self.fromXmlImpl(node, KalturaIpRangeCondition.PROPERTY_LOADERS)
+
+    def toParams(self):
+        kparams = KalturaCondition.toParams(self)
+        kparams.put("objectType", "KalturaIpRangeCondition")
+        kparams.addStringIfDefined("fromIP", self.fromIP)
+        kparams.addStringIfDefined("toIP", self.toIP)
+        return kparams
+
+    def getFromIP(self):
+        return self.fromIP
+
+    def setFromIP(self, newFromIP):
+        self.fromIP = newFromIP
+
+    def getToIP(self):
+        return self.toIP
+
+    def setToIP(self, newToIP):
+        self.toIP = newToIP
+
+
+# @package Kaltura
+# @subpackage Client
+class KalturaBusinessModuleCondition(KalturaCondition):
+    """Business module condition"""
+
+    def __init__(self,
+            type=NotImplemented,
+            description=NotImplemented,
+            businessModuleType=NotImplemented,
+            businessModuleId=NotImplemented):
+        KalturaCondition.__init__(self,
+            type,
+            description)
+
+        # Business module type
+        # @var KalturaTransactionType
+        self.businessModuleType = businessModuleType
+
+        # Business module ID
+        # @var int
+        self.businessModuleId = businessModuleId
+
+
+    PROPERTY_LOADERS = {
+        'businessModuleType': (KalturaEnumsFactory.createString, "KalturaTransactionType"), 
+        'businessModuleId': getXmlNodeInt, 
+    }
+
+    def fromXml(self, node):
+        KalturaCondition.fromXml(self, node)
+        self.fromXmlImpl(node, KalturaBusinessModuleCondition.PROPERTY_LOADERS)
+
+    def toParams(self):
+        kparams = KalturaCondition.toParams(self)
+        kparams.put("objectType", "KalturaBusinessModuleCondition")
+        kparams.addStringEnumIfDefined("businessModuleType", self.businessModuleType)
+        kparams.addIntIfDefined("businessModuleId", self.businessModuleId)
+        return kparams
+
+    def getBusinessModuleType(self):
+        return self.businessModuleType
+
+    def setBusinessModuleType(self, newBusinessModuleType):
+        self.businessModuleType = newBusinessModuleType
+
+    def getBusinessModuleId(self):
+        return self.businessModuleId
+
+    def setBusinessModuleId(self, newBusinessModuleId):
+        self.businessModuleId = newBusinessModuleId
+
+
+# @package Kaltura
+# @subpackage Client
+class KalturaSegmentsCondition(KalturaCondition):
+    """Segments condition"""
+
+    def __init__(self,
+            type=NotImplemented,
+            description=NotImplemented,
+            segmentsIds=NotImplemented):
+        KalturaCondition.__init__(self,
+            type,
+            description)
+
+        # Comma separated segments IDs list
+        # @var string
+        self.segmentsIds = segmentsIds
+
+
+    PROPERTY_LOADERS = {
+        'segmentsIds': getXmlNodeText, 
+    }
+
+    def fromXml(self, node):
+        KalturaCondition.fromXml(self, node)
+        self.fromXmlImpl(node, KalturaSegmentsCondition.PROPERTY_LOADERS)
+
+    def toParams(self):
+        kparams = KalturaCondition.toParams(self)
+        kparams.put("objectType", "KalturaSegmentsCondition")
+        kparams.addStringIfDefined("segmentsIds", self.segmentsIds)
+        return kparams
+
+    def getSegmentsIds(self):
+        return self.segmentsIds
+
+    def setSegmentsIds(self, newSegmentsIds):
+        self.segmentsIds = newSegmentsIds
+
+
+# @package Kaltura
+# @subpackage Client
+class KalturaSubscriptionCondition(KalturaCondition):
+    def __init__(self,
+            type=NotImplemented,
+            description=NotImplemented,
+            idIn=NotImplemented):
+        KalturaCondition.__init__(self,
+            type,
+            description)
+
+        # Comma separated subscription IDs list
+        # @var string
+        self.idIn = idIn
+
+
+    PROPERTY_LOADERS = {
+        'idIn': getXmlNodeText, 
+    }
+
+    def fromXml(self, node):
+        KalturaCondition.fromXml(self, node)
+        self.fromXmlImpl(node, KalturaSubscriptionCondition.PROPERTY_LOADERS)
+
+    def toParams(self):
+        kparams = KalturaCondition.toParams(self)
+        kparams.put("objectType", "KalturaSubscriptionCondition")
+        kparams.addStringIfDefined("idIn", self.idIn)
+        return kparams
+
+    def getIdIn(self):
+        return self.idIn
+
+    def setIdIn(self, newIdIn):
+        self.idIn = newIdIn
+
+
+# @package Kaltura
+# @subpackage Client
+class KalturaUserSubscriptionCondition(KalturaSubscriptionCondition):
+    """UserSubscription Condition - indicates which users this rule is applied on by their subscriptions"""
+
+    def __init__(self,
+            type=NotImplemented,
+            description=NotImplemented,
+            idIn=NotImplemented):
+        KalturaSubscriptionCondition.__init__(self,
+            type,
+            description,
+            idIn)
+
+
+    PROPERTY_LOADERS = {
+    }
+
+    def fromXml(self, node):
+        KalturaSubscriptionCondition.fromXml(self, node)
+        self.fromXmlImpl(node, KalturaUserSubscriptionCondition.PROPERTY_LOADERS)
+
+    def toParams(self):
+        kparams = KalturaSubscriptionCondition.toParams(self)
+        kparams.put("objectType", "KalturaUserSubscriptionCondition")
+        return kparams
+
+
+# @package Kaltura
+# @subpackage Client
+class KalturaAssetSubscriptionCondition(KalturaSubscriptionCondition):
+    """AssetSubscription Condition - indicates which assets this rule is applied on by their subscriptions"""
+
+    def __init__(self,
+            type=NotImplemented,
+            description=NotImplemented,
+            idIn=NotImplemented):
+        KalturaSubscriptionCondition.__init__(self,
+            type,
+            description,
+            idIn)
+
+
+    PROPERTY_LOADERS = {
+    }
+
+    def fromXml(self, node):
+        KalturaSubscriptionCondition.fromXml(self, node)
+        self.fromXmlImpl(node, KalturaAssetSubscriptionCondition.PROPERTY_LOADERS)
+
+    def toParams(self):
+        kparams = KalturaSubscriptionCondition.toParams(self)
+        kparams.put("objectType", "KalturaAssetSubscriptionCondition")
+        return kparams
+
+
+# @package Kaltura
+# @subpackage Client
+class KalturaUserRoleCondition(KalturaCondition):
+    """UserRole Condition - indicates which users this rule is applied on by their roles"""
+
+    def __init__(self,
+            type=NotImplemented,
+            description=NotImplemented,
+            idIn=NotImplemented):
+        KalturaCondition.__init__(self,
+            type,
+            description)
+
+        # Comma separated user role IDs list
+        # @var string
+        self.idIn = idIn
+
+
+    PROPERTY_LOADERS = {
+        'idIn': getXmlNodeText, 
+    }
+
+    def fromXml(self, node):
+        KalturaCondition.fromXml(self, node)
+        self.fromXmlImpl(node, KalturaUserRoleCondition.PROPERTY_LOADERS)
+
+    def toParams(self):
+        kparams = KalturaCondition.toParams(self)
+        kparams.put("objectType", "KalturaUserRoleCondition")
+        kparams.addStringIfDefined("idIn", self.idIn)
+        return kparams
+
+    def getIdIn(self):
+        return self.idIn
+
+    def setIdIn(self, newIdIn):
+        self.idIn = newIdIn
 
 
 # @package Kaltura
@@ -20589,47 +18790,12 @@ class KalturaDiscountDetailsListResponse(KalturaListResponse):
 
 # @package Kaltura
 # @subpackage Client
-class KalturaPromotionInfo(KalturaObjectBase):
-    def __init__(self,
-            campaignId=NotImplemented):
-        KalturaObjectBase.__init__(self)
-
-        # Campaign Id
-        # @var int
-        self.campaignId = campaignId
-
-
-    PROPERTY_LOADERS = {
-        'campaignId': getXmlNodeInt, 
-    }
-
-    def fromXml(self, node):
-        KalturaObjectBase.fromXml(self, node)
-        self.fromXmlImpl(node, KalturaPromotionInfo.PROPERTY_LOADERS)
-
-    def toParams(self):
-        kparams = KalturaObjectBase.toParams(self)
-        kparams.put("objectType", "KalturaPromotionInfo")
-        kparams.addIntIfDefined("campaignId", self.campaignId)
-        return kparams
-
-    def getCampaignId(self):
-        return self.campaignId
-
-    def setCampaignId(self, newCampaignId):
-        self.campaignId = newCampaignId
-
-
-# @package Kaltura
-# @subpackage Client
 class KalturaProductPrice(KalturaObjectBase):
     def __init__(self,
             productId=NotImplemented,
             productType=NotImplemented,
             price=NotImplemented,
-            fullPrice=NotImplemented,
-            purchaseStatus=NotImplemented,
-            promotionInfo=NotImplemented):
+            purchaseStatus=NotImplemented):
         KalturaObjectBase.__init__(self)
 
         # Product identifier
@@ -20644,26 +18810,16 @@ class KalturaProductPrice(KalturaObjectBase):
         # @var KalturaPrice
         self.price = price
 
-        # The full price of the item (with no discounts)
-        # @var KalturaPrice
-        self.fullPrice = fullPrice
-
         # Product purchase status
         # @var KalturaPurchaseStatus
         self.purchaseStatus = purchaseStatus
-
-        # Promotion Info
-        # @var KalturaPromotionInfo
-        self.promotionInfo = promotionInfo
 
 
     PROPERTY_LOADERS = {
         'productId': getXmlNodeText, 
         'productType': (KalturaEnumsFactory.createString, "KalturaTransactionType"), 
         'price': (KalturaObjectFactory.create, 'KalturaPrice'), 
-        'fullPrice': (KalturaObjectFactory.create, 'KalturaPrice'), 
         'purchaseStatus': (KalturaEnumsFactory.createString, "KalturaPurchaseStatus"), 
-        'promotionInfo': (KalturaObjectFactory.create, 'KalturaPromotionInfo'), 
     }
 
     def fromXml(self, node):
@@ -20676,9 +18832,7 @@ class KalturaProductPrice(KalturaObjectBase):
         kparams.addStringIfDefined("productId", self.productId)
         kparams.addStringEnumIfDefined("productType", self.productType)
         kparams.addObjectIfDefined("price", self.price)
-        kparams.addObjectIfDefined("fullPrice", self.fullPrice)
         kparams.addStringEnumIfDefined("purchaseStatus", self.purchaseStatus)
-        kparams.addObjectIfDefined("promotionInfo", self.promotionInfo)
         return kparams
 
     def getProductId(self):
@@ -20699,23 +18853,11 @@ class KalturaProductPrice(KalturaObjectBase):
     def setPrice(self, newPrice):
         self.price = newPrice
 
-    def getFullPrice(self):
-        return self.fullPrice
-
-    def setFullPrice(self, newFullPrice):
-        self.fullPrice = newFullPrice
-
     def getPurchaseStatus(self):
         return self.purchaseStatus
 
     def setPurchaseStatus(self, newPurchaseStatus):
         self.purchaseStatus = newPurchaseStatus
-
-    def getPromotionInfo(self):
-        return self.promotionInfo
-
-    def setPromotionInfo(self, newPromotionInfo):
-        self.promotionInfo = newPromotionInfo
 
 
 # @package Kaltura
@@ -20727,16 +18869,12 @@ class KalturaCollectionPrice(KalturaProductPrice):
             productId=NotImplemented,
             productType=NotImplemented,
             price=NotImplemented,
-            fullPrice=NotImplemented,
-            purchaseStatus=NotImplemented,
-            promotionInfo=NotImplemented):
+            purchaseStatus=NotImplemented):
         KalturaProductPrice.__init__(self,
             productId,
             productType,
             price,
-            fullPrice,
-            purchaseStatus,
-            promotionInfo)
+            purchaseStatus)
 
 
     PROPERTY_LOADERS = {
@@ -20761,12 +18899,11 @@ class KalturaPpvPrice(KalturaProductPrice):
             productId=NotImplemented,
             productType=NotImplemented,
             price=NotImplemented,
-            fullPrice=NotImplemented,
             purchaseStatus=NotImplemented,
-            promotionInfo=NotImplemented,
             fileId=NotImplemented,
             ppvModuleId=NotImplemented,
             isSubscriptionOnly=NotImplemented,
+            fullPrice=NotImplemented,
             subscriptionId=NotImplemented,
             collectionId=NotImplemented,
             prePaidId=NotImplemented,
@@ -20784,9 +18921,7 @@ class KalturaPpvPrice(KalturaProductPrice):
             productId,
             productType,
             price,
-            fullPrice,
-            purchaseStatus,
-            promotionInfo)
+            purchaseStatus)
 
         # Media file identifier
         # @var int
@@ -20799,6 +18934,10 @@ class KalturaPpvPrice(KalturaProductPrice):
         # Denotes whether this object is available only as part of a subscription or can be sold separately
         # @var bool
         self.isSubscriptionOnly = isSubscriptionOnly
+
+        # The full price of the item (with no discounts)
+        # @var KalturaPrice
+        self.fullPrice = fullPrice
 
         # The identifier of the relevant subscription
         # @var string
@@ -20857,6 +18996,7 @@ class KalturaPpvPrice(KalturaProductPrice):
         'fileId': getXmlNodeInt, 
         'ppvModuleId': getXmlNodeText, 
         'isSubscriptionOnly': getXmlNodeBool, 
+        'fullPrice': (KalturaObjectFactory.create, 'KalturaPrice'), 
         'subscriptionId': getXmlNodeText, 
         'collectionId': getXmlNodeText, 
         'prePaidId': getXmlNodeText, 
@@ -20882,6 +19022,7 @@ class KalturaPpvPrice(KalturaProductPrice):
         kparams.addIntIfDefined("fileId", self.fileId)
         kparams.addStringIfDefined("ppvModuleId", self.ppvModuleId)
         kparams.addBoolIfDefined("isSubscriptionOnly", self.isSubscriptionOnly)
+        kparams.addObjectIfDefined("fullPrice", self.fullPrice)
         kparams.addStringIfDefined("subscriptionId", self.subscriptionId)
         kparams.addStringIfDefined("collectionId", self.collectionId)
         kparams.addStringIfDefined("prePaidId", self.prePaidId)
@@ -20914,6 +19055,12 @@ class KalturaPpvPrice(KalturaProductPrice):
 
     def setIsSubscriptionOnly(self, newIsSubscriptionOnly):
         self.isSubscriptionOnly = newIsSubscriptionOnly
+
+    def getFullPrice(self):
+        return self.fullPrice
+
+    def setFullPrice(self, newFullPrice):
+        self.fullPrice = newFullPrice
 
     def getSubscriptionId(self):
         return self.subscriptionId
@@ -21003,17 +19150,13 @@ class KalturaSubscriptionPrice(KalturaProductPrice):
             productId=NotImplemented,
             productType=NotImplemented,
             price=NotImplemented,
-            fullPrice=NotImplemented,
             purchaseStatus=NotImplemented,
-            promotionInfo=NotImplemented,
             endDate=NotImplemented):
         KalturaProductPrice.__init__(self,
             productId,
             productType,
             price,
-            fullPrice,
-            purchaseStatus,
-            promotionInfo)
+            purchaseStatus)
 
         # If the item related to unified billing cycle purchased - until when the this price is relevant
         # @var int
@@ -22400,74 +20543,20 @@ class KalturaBillingPartnerConfig(KalturaPartnerConfiguration):
 
 # @package Kaltura
 # @subpackage Client
-class KalturaCategoryManagement(KalturaObjectBase):
-    """Category management"""
-
-    def __init__(self,
-            defaultTreeId=NotImplemented,
-            deviceFamilyToCategoryTree=NotImplemented):
-        KalturaObjectBase.__init__(self)
-
-        # Default CategoryVersion tree id
-        # @var int
-        self.defaultTreeId = defaultTreeId
-
-        # Device family to Category TreeId mapping
-        # @var map
-        self.deviceFamilyToCategoryTree = deviceFamilyToCategoryTree
-
-
-    PROPERTY_LOADERS = {
-        'defaultTreeId': getXmlNodeInt, 
-        'deviceFamilyToCategoryTree': (KalturaObjectFactory.createMap, 'KalturaLongValue'), 
-    }
-
-    def fromXml(self, node):
-        KalturaObjectBase.fromXml(self, node)
-        self.fromXmlImpl(node, KalturaCategoryManagement.PROPERTY_LOADERS)
-
-    def toParams(self):
-        kparams = KalturaObjectBase.toParams(self)
-        kparams.put("objectType", "KalturaCategoryManagement")
-        kparams.addIntIfDefined("defaultTreeId", self.defaultTreeId)
-        kparams.addMapIfDefined("deviceFamilyToCategoryTree", self.deviceFamilyToCategoryTree)
-        return kparams
-
-    def getDefaultTreeId(self):
-        return self.defaultTreeId
-
-    def setDefaultTreeId(self, newDefaultTreeId):
-        self.defaultTreeId = newDefaultTreeId
-
-    def getDeviceFamilyToCategoryTree(self):
-        return self.deviceFamilyToCategoryTree
-
-    def setDeviceFamilyToCategoryTree(self, newDeviceFamilyToCategoryTree):
-        self.deviceFamilyToCategoryTree = newDeviceFamilyToCategoryTree
-
-
-# @package Kaltura
-# @subpackage Client
 class KalturaCatalogPartnerConfig(KalturaPartnerConfiguration):
     """Partner catalog configuration"""
 
     def __init__(self,
-            singleMultilingualMode=NotImplemented,
-            categoryManagement=NotImplemented):
+            singleMultilingualMode=NotImplemented):
         KalturaPartnerConfiguration.__init__(self)
 
         # Single multilingual mode
         # @var bool
         self.singleMultilingualMode = singleMultilingualMode
 
-        # Category management
-        # @var KalturaCategoryManagement
-        self.categoryManagement = categoryManagement
-
 
     PROPERTY_LOADERS = {
         'singleMultilingualMode': getXmlNodeBool, 
-        'categoryManagement': (KalturaObjectFactory.create, 'KalturaCategoryManagement'), 
     }
 
     def fromXml(self, node):
@@ -22478,7 +20567,6 @@ class KalturaCatalogPartnerConfig(KalturaPartnerConfiguration):
         kparams = KalturaPartnerConfiguration.toParams(self)
         kparams.put("objectType", "KalturaCatalogPartnerConfig")
         kparams.addBoolIfDefined("singleMultilingualMode", self.singleMultilingualMode)
-        kparams.addObjectIfDefined("categoryManagement", self.categoryManagement)
         return kparams
 
     def getSingleMultilingualMode(self):
@@ -22486,12 +20574,6 @@ class KalturaCatalogPartnerConfig(KalturaPartnerConfiguration):
 
     def setSingleMultilingualMode(self, newSingleMultilingualMode):
         self.singleMultilingualMode = newSingleMultilingualMode
-
-    def getCategoryManagement(self):
-        return self.categoryManagement
-
-    def setCategoryManagement(self, newCategoryManagement):
-        self.categoryManagement = newCategoryManagement
 
 
 # @package Kaltura
@@ -22583,8 +20665,7 @@ class KalturaConcurrencyPartnerConfig(KalturaPartnerConfiguration):
     def __init__(self,
             deviceFamilyIds=NotImplemented,
             evictionPolicy=NotImplemented,
-            concurrencyThresholdInSeconds=NotImplemented,
-            revokeOnDeviceDelete=NotImplemented):
+            concurrencyThresholdInSeconds=NotImplemented):
         KalturaPartnerConfiguration.__init__(self)
 
         # Comma separated list of device Family Ids order by their priority.
@@ -22599,16 +20680,11 @@ class KalturaConcurrencyPartnerConfig(KalturaPartnerConfiguration):
         # @var int
         self.concurrencyThresholdInSeconds = concurrencyThresholdInSeconds
 
-        # Revoke on device delete
-        # @var bool
-        self.revokeOnDeviceDelete = revokeOnDeviceDelete
-
 
     PROPERTY_LOADERS = {
         'deviceFamilyIds': getXmlNodeText, 
         'evictionPolicy': (KalturaEnumsFactory.createString, "KalturaEvictionPolicyType"), 
         'concurrencyThresholdInSeconds': getXmlNodeInt, 
-        'revokeOnDeviceDelete': getXmlNodeBool, 
     }
 
     def fromXml(self, node):
@@ -22621,7 +20697,6 @@ class KalturaConcurrencyPartnerConfig(KalturaPartnerConfiguration):
         kparams.addStringIfDefined("deviceFamilyIds", self.deviceFamilyIds)
         kparams.addStringEnumIfDefined("evictionPolicy", self.evictionPolicy)
         kparams.addIntIfDefined("concurrencyThresholdInSeconds", self.concurrencyThresholdInSeconds)
-        kparams.addBoolIfDefined("revokeOnDeviceDelete", self.revokeOnDeviceDelete)
         return kparams
 
     def getDeviceFamilyIds(self):
@@ -22641,12 +20716,6 @@ class KalturaConcurrencyPartnerConfig(KalturaPartnerConfiguration):
 
     def setConcurrencyThresholdInSeconds(self, newConcurrencyThresholdInSeconds):
         self.concurrencyThresholdInSeconds = newConcurrencyThresholdInSeconds
-
-    def getRevokeOnDeviceDelete(self):
-        return self.revokeOnDeviceDelete
-
-    def setRevokeOnDeviceDelete(self, newRevokeOnDeviceDelete):
-        self.revokeOnDeviceDelete = newRevokeOnDeviceDelete
 
 
 # @package Kaltura
@@ -23006,144 +21075,6 @@ class KalturaObjectVirtualAssetPartnerConfig(KalturaPartnerConfiguration):
 
 # @package Kaltura
 # @subpackage Client
-class KalturaResetPasswordPartnerConfigTemplate(KalturaObjectBase):
-    def __init__(self,
-            id=NotImplemented,
-            label=NotImplemented,
-            isDefault=NotImplemented):
-        KalturaObjectBase.__init__(self)
-
-        # id
-        # @var string
-        self.id = id
-
-        # label
-        # @var string
-        self.label = label
-
-        # is Default
-        # @var bool
-        self.isDefault = isDefault
-
-
-    PROPERTY_LOADERS = {
-        'id': getXmlNodeText, 
-        'label': getXmlNodeText, 
-        'isDefault': getXmlNodeBool, 
-    }
-
-    def fromXml(self, node):
-        KalturaObjectBase.fromXml(self, node)
-        self.fromXmlImpl(node, KalturaResetPasswordPartnerConfigTemplate.PROPERTY_LOADERS)
-
-    def toParams(self):
-        kparams = KalturaObjectBase.toParams(self)
-        kparams.put("objectType", "KalturaResetPasswordPartnerConfigTemplate")
-        kparams.addStringIfDefined("id", self.id)
-        kparams.addStringIfDefined("label", self.label)
-        kparams.addBoolIfDefined("isDefault", self.isDefault)
-        return kparams
-
-    def getId(self):
-        return self.id
-
-    def setId(self, newId):
-        self.id = newId
-
-    def getLabel(self):
-        return self.label
-
-    def setLabel(self, newLabel):
-        self.label = newLabel
-
-    def getIsDefault(self):
-        return self.isDefault
-
-    def setIsDefault(self, newIsDefault):
-        self.isDefault = newIsDefault
-
-
-# @package Kaltura
-# @subpackage Client
-class KalturaResetPasswordPartnerConfig(KalturaObjectBase):
-    def __init__(self,
-            templateListLabel=NotImplemented,
-            templates=NotImplemented):
-        KalturaObjectBase.__init__(self)
-
-        # template List Label
-        # @var string
-        self.templateListLabel = templateListLabel
-
-        # templates
-        # @var array of KalturaResetPasswordPartnerConfigTemplate
-        self.templates = templates
-
-
-    PROPERTY_LOADERS = {
-        'templateListLabel': getXmlNodeText, 
-        'templates': (KalturaObjectFactory.createArray, 'KalturaResetPasswordPartnerConfigTemplate'), 
-    }
-
-    def fromXml(self, node):
-        KalturaObjectBase.fromXml(self, node)
-        self.fromXmlImpl(node, KalturaResetPasswordPartnerConfig.PROPERTY_LOADERS)
-
-    def toParams(self):
-        kparams = KalturaObjectBase.toParams(self)
-        kparams.put("objectType", "KalturaResetPasswordPartnerConfig")
-        kparams.addStringIfDefined("templateListLabel", self.templateListLabel)
-        kparams.addArrayIfDefined("templates", self.templates)
-        return kparams
-
-    def getTemplateListLabel(self):
-        return self.templateListLabel
-
-    def setTemplateListLabel(self, newTemplateListLabel):
-        self.templateListLabel = newTemplateListLabel
-
-    def getTemplates(self):
-        return self.templates
-
-    def setTemplates(self, newTemplates):
-        self.templates = newTemplates
-
-
-# @package Kaltura
-# @subpackage Client
-class KalturaOpcPartnerConfiguration(KalturaPartnerConfiguration):
-    def __init__(self,
-            resetPassword=NotImplemented):
-        KalturaPartnerConfiguration.__init__(self)
-
-        # Reset Password
-        # @var KalturaResetPasswordPartnerConfig
-        self.resetPassword = resetPassword
-
-
-    PROPERTY_LOADERS = {
-        'resetPassword': (KalturaObjectFactory.create, 'KalturaResetPasswordPartnerConfig'), 
-    }
-
-    def fromXml(self, node):
-        KalturaPartnerConfiguration.fromXml(self, node)
-        self.fromXmlImpl(node, KalturaOpcPartnerConfiguration.PROPERTY_LOADERS)
-
-    def toParams(self):
-        kparams = KalturaPartnerConfiguration.toParams(self)
-        kparams.put("objectType", "KalturaOpcPartnerConfiguration")
-        kparams.addObjectIfDefined("resetPassword", self.resetPassword)
-        return kparams
-
-    def getResetPassword(self):
-        return self.resetPassword
-
-    def setResetPassword(self, newResetPassword):
-        self.resetPassword = newResetPassword
-
-
-# @package Kaltura
-# @subpackage Client
 class KalturaDuration(KalturaObjectBase):
     """representation of duration time unit and value"""
 
@@ -23389,105 +21320,6 @@ class KalturaPlaybackPartnerConfig(KalturaPartnerConfiguration):
 
     def setDefaultAdapters(self, newDefaultAdapters):
         self.defaultAdapters = newDefaultAdapters
-
-
-# @package Kaltura
-# @subpackage Client
-class KalturaEncryption(KalturaObjectBase):
-    def __init__(self,
-            encryptionType=NotImplemented):
-        KalturaObjectBase.__init__(self)
-
-        # Encryption type
-        # @var KalturaEncryptionType
-        self.encryptionType = encryptionType
-
-
-    PROPERTY_LOADERS = {
-        'encryptionType': (KalturaEnumsFactory.createString, "KalturaEncryptionType"), 
-    }
-
-    def fromXml(self, node):
-        KalturaObjectBase.fromXml(self, node)
-        self.fromXmlImpl(node, KalturaEncryption.PROPERTY_LOADERS)
-
-    def toParams(self):
-        kparams = KalturaObjectBase.toParams(self)
-        kparams.put("objectType", "KalturaEncryption")
-        kparams.addStringEnumIfDefined("encryptionType", self.encryptionType)
-        return kparams
-
-    def getEncryptionType(self):
-        return self.encryptionType
-
-    def setEncryptionType(self, newEncryptionType):
-        self.encryptionType = newEncryptionType
-
-
-# @package Kaltura
-# @subpackage Client
-class KalturaDataEncryption(KalturaObjectBase):
-    def __init__(self,
-            username=NotImplemented):
-        KalturaObjectBase.__init__(self)
-
-        # Username encryption config
-        # @var KalturaEncryption
-        self.username = username
-
-
-    PROPERTY_LOADERS = {
-        'username': (KalturaObjectFactory.create, 'KalturaEncryption'), 
-    }
-
-    def fromXml(self, node):
-        KalturaObjectBase.fromXml(self, node)
-        self.fromXmlImpl(node, KalturaDataEncryption.PROPERTY_LOADERS)
-
-    def toParams(self):
-        kparams = KalturaObjectBase.toParams(self)
-        kparams.put("objectType", "KalturaDataEncryption")
-        kparams.addObjectIfDefined("username", self.username)
-        return kparams
-
-    def getUsername(self):
-        return self.username
-
-    def setUsername(self, newUsername):
-        self.username = newUsername
-
-
-# @package Kaltura
-# @subpackage Client
-class KalturaSecurityPartnerConfig(KalturaPartnerConfiguration):
-    def __init__(self,
-            encryption=NotImplemented):
-        KalturaPartnerConfiguration.__init__(self)
-
-        # Encryption config
-        # @var KalturaDataEncryption
-        self.encryption = encryption
-
-
-    PROPERTY_LOADERS = {
-        'encryption': (KalturaObjectFactory.create, 'KalturaDataEncryption'), 
-    }
-
-    def fromXml(self, node):
-        KalturaPartnerConfiguration.fromXml(self, node)
-        self.fromXmlImpl(node, KalturaSecurityPartnerConfig.PROPERTY_LOADERS)
-
-    def toParams(self):
-        kparams = KalturaPartnerConfiguration.toParams(self)
-        kparams.put("objectType", "KalturaSecurityPartnerConfig")
-        kparams.addObjectIfDefined("encryption", self.encryption)
-        return kparams
-
-    def getEncryption(self):
-        return self.encryption
-
-    def setEncryption(self, newEncryption):
-        self.encryption = newEncryption
 
 
 # @package Kaltura
@@ -23968,8 +21800,7 @@ class KalturaInboxMessage(KalturaObjectBase):
             status=NotImplemented,
             type=NotImplemented,
             createdAt=NotImplemented,
-            url=NotImplemented,
-            campaignId=NotImplemented):
+            url=NotImplemented):
         KalturaObjectBase.__init__(self)
 
         # message id
@@ -23999,11 +21830,6 @@ class KalturaInboxMessage(KalturaObjectBase):
         # @var string
         self.url = url
 
-        # campaignId
-        # @var int
-        # @readonly
-        self.campaignId = campaignId
-
 
     PROPERTY_LOADERS = {
         'id': getXmlNodeText, 
@@ -24012,7 +21838,6 @@ class KalturaInboxMessage(KalturaObjectBase):
         'type': (KalturaEnumsFactory.createString, "KalturaInboxMessageType"), 
         'createdAt': getXmlNodeInt, 
         'url': getXmlNodeText, 
-        'campaignId': getXmlNodeInt, 
     }
 
     def fromXml(self, node):
@@ -24053,9 +21878,6 @@ class KalturaInboxMessage(KalturaObjectBase):
 
     def setUrl(self, newUrl):
         self.url = newUrl
-
-    def getCampaignId(self):
-        return self.campaignId
 
 
 # @package Kaltura
@@ -27280,100 +25102,6 @@ class KalturaPpvEntitlement(KalturaEntitlement):
 
 # @package Kaltura
 # @subpackage Client
-class KalturaEntitlementDiscountDetails(KalturaObjectBase):
-    """Entitlement discount details"""
-
-    def __init__(self,
-            amount=NotImplemented,
-            startDate=NotImplemented,
-            endDate=NotImplemented):
-        KalturaObjectBase.__init__(self)
-
-        # Amount
-        # @var float
-        # @readonly
-        self.amount = amount
-
-        # Start date
-        # @var int
-        # @readonly
-        self.startDate = startDate
-
-        # End date
-        # @var int
-        # @readonly
-        self.endDate = endDate
-
-
-    PROPERTY_LOADERS = {
-        'amount': getXmlNodeFloat, 
-        'startDate': getXmlNodeInt, 
-        'endDate': getXmlNodeInt, 
-    }
-
-    def fromXml(self, node):
-        KalturaObjectBase.fromXml(self, node)
-        self.fromXmlImpl(node, KalturaEntitlementDiscountDetails.PROPERTY_LOADERS)
-
-    def toParams(self):
-        kparams = KalturaObjectBase.toParams(self)
-        kparams.put("objectType", "KalturaEntitlementDiscountDetails")
-        return kparams
-
-    def getAmount(self):
-        return self.amount
-
-    def getStartDate(self):
-        return self.startDate
-
-    def getEndDate(self):
-        return self.endDate
-
-
-# @package Kaltura
-# @subpackage Client
-class KalturaEntitlementPriceDetails(KalturaObjectBase):
-    """Entitlement price details"""
-
-    def __init__(self,
-            fullPrice=NotImplemented,
-            discountDetails=NotImplemented):
-        KalturaObjectBase.__init__(self)
-
-        # Full price
-        # @var KalturaPrice
-        # @readonly
-        self.fullPrice = fullPrice
-
-        # List of the season numbers to exclude.
-        # @var array of KalturaEntitlementDiscountDetails
-        # @readonly
-        self.discountDetails = discountDetails
-
-
-    PROPERTY_LOADERS = {
-        'fullPrice': (KalturaObjectFactory.create, 'KalturaPrice'), 
-        'discountDetails': (KalturaObjectFactory.createArray, 'KalturaEntitlementDiscountDetails'), 
-    }
-
-    def fromXml(self, node):
-        KalturaObjectBase.fromXml(self, node)
-        self.fromXmlImpl(node, KalturaEntitlementPriceDetails.PROPERTY_LOADERS)
-
-    def toParams(self):
-        kparams = KalturaObjectBase.toParams(self)
-        kparams.put("objectType", "KalturaEntitlementPriceDetails")
-        return kparams
-
-    def getFullPrice(self):
-        return self.fullPrice
-
-    def getDiscountDetails(self):
-        return self.discountDetails
-
-
-# @package Kaltura
-# @subpackage Client
 class KalturaSubscriptionEntitlement(KalturaEntitlement):
     """KalturaSubscriptionEntitlement"""
 
@@ -27401,8 +25129,7 @@ class KalturaSubscriptionEntitlement(KalturaEntitlement):
             paymentMethodId=NotImplemented,
             scheduledSubscriptionId=NotImplemented,
             unifiedPaymentId=NotImplemented,
-            isSuspended=NotImplemented,
-            priceDetails=NotImplemented):
+            isSuspended=NotImplemented):
         KalturaEntitlement.__init__(self,
             id,
             productId,
@@ -27463,11 +25190,6 @@ class KalturaSubscriptionEntitlement(KalturaEntitlement):
         # @readonly
         self.isSuspended = isSuspended
 
-        # Price details
-        # @var KalturaEntitlementPriceDetails
-        # @readonly
-        self.priceDetails = priceDetails
-
 
     PROPERTY_LOADERS = {
         'nextRenewalDate': getXmlNodeInt, 
@@ -27479,7 +25201,6 @@ class KalturaSubscriptionEntitlement(KalturaEntitlement):
         'scheduledSubscriptionId': getXmlNodeInt, 
         'unifiedPaymentId': getXmlNodeInt, 
         'isSuspended': getXmlNodeBool, 
-        'priceDetails': (KalturaObjectFactory.create, 'KalturaEntitlementPriceDetails'), 
     }
 
     def fromXml(self, node):
@@ -27525,213 +25246,6 @@ class KalturaSubscriptionEntitlement(KalturaEntitlement):
 
     def getIsSuspended(self):
         return self.isSuspended
-
-    def getPriceDetails(self):
-        return self.priceDetails
-
-
-# @package Kaltura
-# @subpackage Client
-class KalturaCouponEntitlementDiscountDetails(KalturaEntitlementDiscountDetails):
-    """Coupon discount details"""
-
-    def __init__(self,
-            amount=NotImplemented,
-            startDate=NotImplemented,
-            endDate=NotImplemented,
-            couponCode=NotImplemented,
-            endlessCoupon=NotImplemented):
-        KalturaEntitlementDiscountDetails.__init__(self,
-            amount,
-            startDate,
-            endDate)
-
-        # Coupon Code
-        # @var string
-        # @readonly
-        self.couponCode = couponCode
-
-        # Endless coupon
-        # @var bool
-        # @readonly
-        self.endlessCoupon = endlessCoupon
-
-
-    PROPERTY_LOADERS = {
-        'couponCode': getXmlNodeText, 
-        'endlessCoupon': getXmlNodeBool, 
-    }
-
-    def fromXml(self, node):
-        KalturaEntitlementDiscountDetails.fromXml(self, node)
-        self.fromXmlImpl(node, KalturaCouponEntitlementDiscountDetails.PROPERTY_LOADERS)
-
-    def toParams(self):
-        kparams = KalturaEntitlementDiscountDetails.toParams(self)
-        kparams.put("objectType", "KalturaCouponEntitlementDiscountDetails")
-        return kparams
-
-    def getCouponCode(self):
-        return self.couponCode
-
-    def getEndlessCoupon(self):
-        return self.endlessCoupon
-
-
-# @package Kaltura
-# @subpackage Client
-class KalturaEntitlementDiscountDetailsIdentifier(KalturaEntitlementDiscountDetails):
-    def __init__(self,
-            amount=NotImplemented,
-            startDate=NotImplemented,
-            endDate=NotImplemented,
-            id=NotImplemented):
-        KalturaEntitlementDiscountDetails.__init__(self,
-            amount,
-            startDate,
-            endDate)
-
-        # Identifier
-        # @var int
-        # @readonly
-        self.id = id
-
-
-    PROPERTY_LOADERS = {
-        'id': getXmlNodeInt, 
-    }
-
-    def fromXml(self, node):
-        KalturaEntitlementDiscountDetails.fromXml(self, node)
-        self.fromXmlImpl(node, KalturaEntitlementDiscountDetailsIdentifier.PROPERTY_LOADERS)
-
-    def toParams(self):
-        kparams = KalturaEntitlementDiscountDetails.toParams(self)
-        kparams.put("objectType", "KalturaEntitlementDiscountDetailsIdentifier")
-        return kparams
-
-    def getId(self):
-        return self.id
-
-
-# @package Kaltura
-# @subpackage Client
-class KalturaCompensationEntitlementDiscountDetails(KalturaEntitlementDiscountDetailsIdentifier):
-    """Compensation entitlement discount details"""
-
-    def __init__(self,
-            amount=NotImplemented,
-            startDate=NotImplemented,
-            endDate=NotImplemented,
-            id=NotImplemented):
-        KalturaEntitlementDiscountDetailsIdentifier.__init__(self,
-            amount,
-            startDate,
-            endDate,
-            id)
-
-
-    PROPERTY_LOADERS = {
-    }
-
-    def fromXml(self, node):
-        KalturaEntitlementDiscountDetailsIdentifier.fromXml(self, node)
-        self.fromXmlImpl(node, KalturaCompensationEntitlementDiscountDetails.PROPERTY_LOADERS)
-
-    def toParams(self):
-        kparams = KalturaEntitlementDiscountDetailsIdentifier.toParams(self)
-        kparams.put("objectType", "KalturaCompensationEntitlementDiscountDetails")
-        return kparams
-
-
-# @package Kaltura
-# @subpackage Client
-class KalturaCampaignEntitlementDiscountDetails(KalturaEntitlementDiscountDetailsIdentifier):
-    """Campaign entitlement discount details"""
-
-    def __init__(self,
-            amount=NotImplemented,
-            startDate=NotImplemented,
-            endDate=NotImplemented,
-            id=NotImplemented):
-        KalturaEntitlementDiscountDetailsIdentifier.__init__(self,
-            amount,
-            startDate,
-            endDate,
-            id)
-
-
-    PROPERTY_LOADERS = {
-    }
-
-    def fromXml(self, node):
-        KalturaEntitlementDiscountDetailsIdentifier.fromXml(self, node)
-        self.fromXmlImpl(node, KalturaCampaignEntitlementDiscountDetails.PROPERTY_LOADERS)
-
-    def toParams(self):
-        kparams = KalturaEntitlementDiscountDetailsIdentifier.toParams(self)
-        kparams.put("objectType", "KalturaCampaignEntitlementDiscountDetails")
-        return kparams
-
-
-# @package Kaltura
-# @subpackage Client
-class KalturaDiscountEntitlementDiscountDetails(KalturaEntitlementDiscountDetailsIdentifier):
-    """Discount entitlement discount details"""
-
-    def __init__(self,
-            amount=NotImplemented,
-            startDate=NotImplemented,
-            endDate=NotImplemented,
-            id=NotImplemented):
-        KalturaEntitlementDiscountDetailsIdentifier.__init__(self,
-            amount,
-            startDate,
-            endDate,
-            id)
-
-
-    PROPERTY_LOADERS = {
-    }
-
-    def fromXml(self, node):
-        KalturaEntitlementDiscountDetailsIdentifier.fromXml(self, node)
-        self.fromXmlImpl(node, KalturaDiscountEntitlementDiscountDetails.PROPERTY_LOADERS)
-
-    def toParams(self):
-        kparams = KalturaEntitlementDiscountDetailsIdentifier.toParams(self)
-        kparams.put("objectType", "KalturaDiscountEntitlementDiscountDetails")
-        return kparams
-
-
-# @package Kaltura
-# @subpackage Client
-class KalturaTrailEntitlementDiscountDetails(KalturaEntitlementDiscountDetailsIdentifier):
-    """Trail entitlement discount details"""
-
-    def __init__(self,
-            amount=NotImplemented,
-            startDate=NotImplemented,
-            endDate=NotImplemented,
-            id=NotImplemented):
-        KalturaEntitlementDiscountDetailsIdentifier.__init__(self,
-            amount,
-            startDate,
-            endDate,
-            id)
-
-
-    PROPERTY_LOADERS = {
-    }
-
-    def fromXml(self, node):
-        KalturaEntitlementDiscountDetailsIdentifier.fromXml(self, node)
-        self.fromXmlImpl(node, KalturaTrailEntitlementDiscountDetails.PROPERTY_LOADERS)
-
-    def toParams(self):
-        kparams = KalturaEntitlementDiscountDetailsIdentifier.toParams(self)
-        kparams.put("objectType", "KalturaTrailEntitlementDiscountDetails")
-        return kparams
 
 
 # @package Kaltura
@@ -28983,22 +26497,16 @@ class KalturaLiveAsset(KalturaMediaAsset):
         self.externalCdvrId = externalCdvrId
 
         # Is CDVR enabled for this asset
-        #             Please, note that value of this property is strictly connected with CDV-R setting on Partner level.
-        #             In order to enable CDV-R for KalturaLiveAsset, Partner CDV-R setting should be enabled.
         # @var bool
         # @readonly
         self.enableCdvr = enableCdvr
 
         # Is catch-up enabled for this asset
-        #             Please, note that value of this property is strictly connected with Catch Up setting on Partner level.
-        #             In order to enable Catch Up for KalturaLiveAsset, Partner Catch Up setting should be enabled.
         # @var bool
         # @readonly
         self.enableCatchUp = enableCatchUp
 
         # Is start over enabled for this asset
-        #             Please, note that value of this property is strictly connected with Start Over setting on Partner level.
-        #             In order to enable Start Over for KalturaLiveAsset, Partner Start Over setting should be enabled.
         # @var bool
         # @readonly
         self.enableStartOver = enableStartOver
@@ -29019,8 +26527,6 @@ class KalturaLiveAsset(KalturaMediaAsset):
         self.enableRecordingPlaybackNonEntitledChannel = enableRecordingPlaybackNonEntitledChannel
 
         # Is trick-play enabled for this asset
-        #             Please, note that value of this property is strictly connected with Trick Play setting on Partner level.
-        #             In order to enable Trick Play for KalturaLiveAsset, Partner Trick Play setting should be enabled.
         # @var bool
         # @readonly
         self.enableTrickPlay = enableTrickPlay
@@ -29226,26 +26732,18 @@ class KalturaProgramAsset(KalturaAsset):
         self.linearAssetId = linearAssetId
 
         # Is CDVR enabled for this asset
-        #             Please, note that value of this property is strictly connected with CDV-R setting on Partner and KalturaLiveAsset levels.
-        #             In order to enable CDV-R for KalturaProgramAsset, Partner and KalturaLiveAsset CDV-R settings should be enabled.
         # @var bool
         self.enableCdvr = enableCdvr
 
         # Is catch-up enabled for this asset
-        #             Please, note that value of this property is strictly connected with Catch Up setting on Partner and KalturaLiveAsset levels.
-        #             In order to enable Catch Up for KalturaProgramAsset, Partner and KalturaLiveAsset Catch Up settings should be enabled.
         # @var bool
         self.enableCatchUp = enableCatchUp
 
         # Is start over enabled for this asset
-        #             Please, note that value of this property is strictly connected with Start Over setting on Partner and KalturaLiveAsset levels.
-        #             In order to enable Start Over for KalturaProgramAsset, Partner and KalturaLiveAsset Start Over settings should be enabled.
         # @var bool
         self.enableStartOver = enableStartOver
 
         # Is trick-play enabled for this asset
-        #             Please, note that value of this property is strictly connected with Trick Play setting on Partner and KalturaLiveAsset levels.
-        #             In order to enable Trick Play for KalturaProgramAsset, Partner and KalturaLiveAsset Trick Play settings should be enabled.
         # @var bool
         self.enableTrickPlay = enableTrickPlay
 
@@ -30557,99 +28055,6 @@ class KalturaRatioListResponse(KalturaListResponse):
     def toParams(self):
         kparams = KalturaListResponse.toParams(self)
         kparams.put("objectType", "KalturaRatioListResponse")
-        kparams.addArrayIfDefined("objects", self.objects)
-        return kparams
-
-    def getObjects(self):
-        return self.objects
-
-    def setObjects(self, newObjects):
-        self.objects = newObjects
-
-
-# @package Kaltura
-# @subpackage Client
-class KalturaStreamingDevice(KalturaObjectBase):
-    """Watch history asset info"""
-
-    def __init__(self,
-            asset=NotImplemented,
-            userId=NotImplemented,
-            udid=NotImplemented):
-        KalturaObjectBase.__init__(self)
-
-        # Asset
-        # @var KalturaSlimAsset
-        # @readonly
-        self.asset = asset
-
-        # User identifier
-        # @var string
-        # @readonly
-        self.userId = userId
-
-        # Device UDID
-        # @var string
-        # @insertonly
-        self.udid = udid
-
-
-    PROPERTY_LOADERS = {
-        'asset': (KalturaObjectFactory.create, 'KalturaSlimAsset'), 
-        'userId': getXmlNodeText, 
-        'udid': getXmlNodeText, 
-    }
-
-    def fromXml(self, node):
-        KalturaObjectBase.fromXml(self, node)
-        self.fromXmlImpl(node, KalturaStreamingDevice.PROPERTY_LOADERS)
-
-    def toParams(self):
-        kparams = KalturaObjectBase.toParams(self)
-        kparams.put("objectType", "KalturaStreamingDevice")
-        kparams.addStringIfDefined("udid", self.udid)
-        return kparams
-
-    def getAsset(self):
-        return self.asset
-
-    def getUserId(self):
-        return self.userId
-
-    def getUdid(self):
-        return self.udid
-
-    def setUdid(self, newUdid):
-        self.udid = newUdid
-
-
-# @package Kaltura
-# @subpackage Client
-class KalturaStreamingDeviceListResponse(KalturaListResponse):
-    """Watch history asset wrapper"""
-
-    def __init__(self,
-            totalCount=NotImplemented,
-            objects=NotImplemented):
-        KalturaListResponse.__init__(self,
-            totalCount)
-
-        # Streaming devices
-        # @var array of KalturaStreamingDevice
-        self.objects = objects
-
-
-    PROPERTY_LOADERS = {
-        'objects': (KalturaObjectFactory.createArray, 'KalturaStreamingDevice'), 
-    }
-
-    def fromXml(self, node):
-        KalturaListResponse.fromXml(self, node)
-        self.fromXmlImpl(node, KalturaStreamingDeviceListResponse.PROPERTY_LOADERS)
-
-    def toParams(self):
-        kparams = KalturaListResponse.toParams(self)
-        kparams.put("objectType", "KalturaStreamingDeviceListResponse")
         kparams.addArrayIfDefined("objects", self.objects)
         return kparams
 
@@ -33741,11 +31146,11 @@ class KalturaPermission(KalturaObjectBase):
 
         # Comma separated permissions names from type SPECIAL_FEATURE
         # @var KalturaPermissionType
-        # @insertonly
         self.type = type
 
-        # Comma separated associated permission items IDs
+        # Comma separated assosiated permission items IDs
         # @var string
+        # @readonly
         self.permissionItemsIds = permissionItemsIds
 
 
@@ -33768,7 +31173,6 @@ class KalturaPermission(KalturaObjectBase):
         kparams.addStringIfDefined("name", self.name)
         kparams.addStringIfDefined("friendlyName", self.friendlyName)
         kparams.addStringEnumIfDefined("type", self.type)
-        kparams.addStringIfDefined("permissionItemsIds", self.permissionItemsIds)
         return kparams
 
     def getId(self):
@@ -33797,9 +31201,6 @@ class KalturaPermission(KalturaObjectBase):
 
     def getPermissionItemsIds(self):
         return self.permissionItemsIds
-
-    def setPermissionItemsIds(self, newPermissionItemsIds):
-        self.permissionItemsIds = newPermissionItemsIds
 
 
 # @package Kaltura
@@ -35644,8 +33045,7 @@ class KalturaBulkUploadIngestJobData(KalturaBulkUploadJobData):
     """instructions for upload data type with xml"""
 
     def __init__(self,
-            ingestProfileId=NotImplemented,
-            disableEpgNotification=NotImplemented):
+            ingestProfileId=NotImplemented):
         KalturaBulkUploadJobData.__init__(self)
 
         # Identifies the ingest profile that will handle the ingest of programs
@@ -35653,15 +33053,9 @@ class KalturaBulkUploadIngestJobData(KalturaBulkUploadJobData):
         # @var int
         self.ingestProfileId = ingestProfileId
 
-        # By default, after the successful ingest, devices will be notified about changes in epg channels.
-        #             This parameter disables this notification.
-        # @var bool
-        self.disableEpgNotification = disableEpgNotification
-
 
     PROPERTY_LOADERS = {
         'ingestProfileId': getXmlNodeInt, 
-        'disableEpgNotification': getXmlNodeBool, 
     }
 
     def fromXml(self, node):
@@ -35672,7 +33066,6 @@ class KalturaBulkUploadIngestJobData(KalturaBulkUploadJobData):
         kparams = KalturaBulkUploadJobData.toParams(self)
         kparams.put("objectType", "KalturaBulkUploadIngestJobData")
         kparams.addIntIfDefined("ingestProfileId", self.ingestProfileId)
-        kparams.addBoolIfDefined("disableEpgNotification", self.disableEpgNotification)
         return kparams
 
     def getIngestProfileId(self):
@@ -35680,12 +33073,6 @@ class KalturaBulkUploadIngestJobData(KalturaBulkUploadJobData):
 
     def setIngestProfileId(self, newIngestProfileId):
         self.ingestProfileId = newIngestProfileId
-
-    def getDisableEpgNotification(self):
-        return self.disableEpgNotification
-
-    def setDisableEpgNotification(self, newDisableEpgNotification):
-        self.disableEpgNotification = newDisableEpgNotification
 
 
 # @package Kaltura
@@ -35820,65 +33207,6 @@ class KalturaBulkUploadProgramAssetData(KalturaBulkUploadAssetData):
 
 # @package Kaltura
 # @subpackage Client
-class KalturaBulkUploadDynamicListData(KalturaBulkUploadObjectData):
-    """indicates the DynamicList object type in the bulk file"""
-
-    def __init__(self,
-            dynamicListId=NotImplemented):
-        KalturaBulkUploadObjectData.__init__(self)
-
-        # Identifies the dynamicList Id
-        # @var int
-        self.dynamicListId = dynamicListId
-
-
-    PROPERTY_LOADERS = {
-        'dynamicListId': getXmlNodeInt, 
-    }
-
-    def fromXml(self, node):
-        KalturaBulkUploadObjectData.fromXml(self, node)
-        self.fromXmlImpl(node, KalturaBulkUploadDynamicListData.PROPERTY_LOADERS)
-
-    def toParams(self):
-        kparams = KalturaBulkUploadObjectData.toParams(self)
-        kparams.put("objectType", "KalturaBulkUploadDynamicListData")
-        kparams.addIntIfDefined("dynamicListId", self.dynamicListId)
-        return kparams
-
-    def getDynamicListId(self):
-        return self.dynamicListId
-
-    def setDynamicListId(self, newDynamicListId):
-        self.dynamicListId = newDynamicListId
-
-
-# @package Kaltura
-# @subpackage Client
-class KalturaBulkUploadUdidDynamicListData(KalturaBulkUploadDynamicListData):
-    """indicates the UDID DynamicList object type in the bulk file"""
-
-    def __init__(self,
-            dynamicListId=NotImplemented):
-        KalturaBulkUploadDynamicListData.__init__(self,
-            dynamicListId)
-
-
-    PROPERTY_LOADERS = {
-    }
-
-    def fromXml(self, node):
-        KalturaBulkUploadDynamicListData.fromXml(self, node)
-        self.fromXmlImpl(node, KalturaBulkUploadUdidDynamicListData.PROPERTY_LOADERS)
-
-    def toParams(self):
-        kparams = KalturaBulkUploadDynamicListData.toParams(self)
-        kparams.put("objectType", "KalturaBulkUploadUdidDynamicListData")
-        return kparams
-
-
-# @package Kaltura
-# @subpackage Client
 class KalturaAssetFileContext(KalturaObjectBase):
     def __init__(self,
             viewLifeCycle=NotImplemented,
@@ -35997,41 +33325,6 @@ class KalturaAssetStatisticsQuery(KalturaObjectBase):
 
     def setEndDateGreaterThanOrEqual(self, newEndDateGreaterThanOrEqual):
         self.endDateGreaterThanOrEqual = newEndDateGreaterThanOrEqual
-
-
-# @package Kaltura
-# @subpackage Client
-class KalturaCampaignListResponse(KalturaListResponse):
-    def __init__(self,
-            totalCount=NotImplemented,
-            objects=NotImplemented):
-        KalturaListResponse.__init__(self,
-            totalCount)
-
-        # A list of objects
-        # @var array of KalturaCampaign
-        self.objects = objects
-
-
-    PROPERTY_LOADERS = {
-        'objects': (KalturaObjectFactory.createArray, 'KalturaCampaign'), 
-    }
-
-    def fromXml(self, node):
-        KalturaListResponse.fromXml(self, node)
-        self.fromXmlImpl(node, KalturaCampaignListResponse.PROPERTY_LOADERS)
-
-    def toParams(self):
-        kparams = KalturaListResponse.toParams(self)
-        kparams.put("objectType", "KalturaCampaignListResponse")
-        kparams.addArrayIfDefined("objects", self.objects)
-        return kparams
-
-    def getObjects(self):
-        return self.objects
-
-    def setObjects(self, newObjects):
-        self.objects = newObjects
 
 
 # @package Kaltura
@@ -36182,9 +33475,7 @@ class KalturaCategoryTree(KalturaObjectBase):
             isActive=NotImplemented,
             startDateInSeconds=NotImplemented,
             endDateInSeconds=NotImplemented,
-            type=NotImplemented,
-            versionId=NotImplemented,
-            virtualAssetId=NotImplemented):
+            type=NotImplemented):
         KalturaObjectBase.__init__(self)
 
         # Unique identifier for the category item
@@ -36235,16 +33526,6 @@ class KalturaCategoryTree(KalturaObjectBase):
         # @insertonly
         self.type = type
 
-        # Unique identifier for the category version
-        # @var int
-        # @readonly
-        self.versionId = versionId
-
-        # Virtual asset id
-        # @var int
-        # @readonly
-        self.virtualAssetId = virtualAssetId
-
 
     PROPERTY_LOADERS = {
         'id': getXmlNodeInt, 
@@ -36258,8 +33539,6 @@ class KalturaCategoryTree(KalturaObjectBase):
         'startDateInSeconds': getXmlNodeInt, 
         'endDateInSeconds': getXmlNodeInt, 
         'type': getXmlNodeText, 
-        'versionId': getXmlNodeInt, 
-        'virtualAssetId': getXmlNodeInt, 
     }
 
     def fromXml(self, node):
@@ -36335,47 +33614,6 @@ class KalturaCategoryTree(KalturaObjectBase):
 
     def setType(self, newType):
         self.type = newType
-
-    def getVersionId(self):
-        return self.versionId
-
-    def getVirtualAssetId(self):
-        return self.virtualAssetId
-
-
-# @package Kaltura
-# @subpackage Client
-class KalturaCategoryVersionListResponse(KalturaListResponse):
-    def __init__(self,
-            totalCount=NotImplemented,
-            objects=NotImplemented):
-        KalturaListResponse.__init__(self,
-            totalCount)
-
-        # A list of objects
-        # @var array of KalturaCategoryVersion
-        self.objects = objects
-
-
-    PROPERTY_LOADERS = {
-        'objects': (KalturaObjectFactory.createArray, 'KalturaCategoryVersion'), 
-    }
-
-    def fromXml(self, node):
-        KalturaListResponse.fromXml(self, node)
-        self.fromXmlImpl(node, KalturaCategoryVersionListResponse.PROPERTY_LOADERS)
-
-    def toParams(self):
-        kparams = KalturaListResponse.toParams(self)
-        kparams.put("objectType", "KalturaCategoryVersionListResponse")
-        kparams.addArrayIfDefined("objects", self.objects)
-        return kparams
-
-    def getObjects(self):
-        return self.objects
-
-    def setObjects(self, newObjects):
-        self.objects = newObjects
 
 
 # @package Kaltura
@@ -36602,6 +33840,41 @@ class KalturaCoupon(KalturaObjectBase):
 
 # @package Kaltura
 # @subpackage Client
+class KalturaCouponListResponse(KalturaListResponse):
+    def __init__(self,
+            totalCount=NotImplemented,
+            objects=NotImplemented):
+        KalturaListResponse.__init__(self,
+            totalCount)
+
+        # Coupons
+        # @var array of KalturaCoupon
+        self.objects = objects
+
+
+    PROPERTY_LOADERS = {
+        'objects': (KalturaObjectFactory.createArray, 'KalturaCoupon'), 
+    }
+
+    def fromXml(self, node):
+        KalturaListResponse.fromXml(self, node)
+        self.fromXmlImpl(node, KalturaCouponListResponse.PROPERTY_LOADERS)
+
+    def toParams(self):
+        kparams = KalturaListResponse.toParams(self)
+        kparams.put("objectType", "KalturaCouponListResponse")
+        kparams.addArrayIfDefined("objects", self.objects)
+        return kparams
+
+    def getObjects(self):
+        return self.objects
+
+    def setObjects(self, newObjects):
+        self.objects = newObjects
+
+
+# @package Kaltura
+# @subpackage Client
 class KalturaCouponGenerationOptions(KalturaObjectBase):
     """Coupon generation options"""
 
@@ -36725,76 +33998,6 @@ class KalturaRandomCouponGenerationOptions(KalturaCouponGenerationOptions):
 
     def setUseSpecialCharacters(self, newUseSpecialCharacters):
         self.useSpecialCharacters = newUseSpecialCharacters
-
-
-# @package Kaltura
-# @subpackage Client
-class KalturaDeviceReferenceDataListResponse(KalturaListResponse):
-    def __init__(self,
-            totalCount=NotImplemented,
-            objects=NotImplemented):
-        KalturaListResponse.__init__(self,
-            totalCount)
-
-        # A list of objects
-        # @var array of KalturaDeviceReferenceData
-        self.objects = objects
-
-
-    PROPERTY_LOADERS = {
-        'objects': (KalturaObjectFactory.createArray, 'KalturaDeviceReferenceData'), 
-    }
-
-    def fromXml(self, node):
-        KalturaListResponse.fromXml(self, node)
-        self.fromXmlImpl(node, KalturaDeviceReferenceDataListResponse.PROPERTY_LOADERS)
-
-    def toParams(self):
-        kparams = KalturaListResponse.toParams(self)
-        kparams.put("objectType", "KalturaDeviceReferenceDataListResponse")
-        kparams.addArrayIfDefined("objects", self.objects)
-        return kparams
-
-    def getObjects(self):
-        return self.objects
-
-    def setObjects(self, newObjects):
-        self.objects = newObjects
-
-
-# @package Kaltura
-# @subpackage Client
-class KalturaDynamicListListResponse(KalturaListResponse):
-    def __init__(self,
-            totalCount=NotImplemented,
-            objects=NotImplemented):
-        KalturaListResponse.__init__(self,
-            totalCount)
-
-        # A list of objects
-        # @var array of KalturaDynamicList
-        self.objects = objects
-
-
-    PROPERTY_LOADERS = {
-        'objects': (KalturaObjectFactory.createArray, 'KalturaDynamicList'), 
-    }
-
-    def fromXml(self, node):
-        KalturaListResponse.fromXml(self, node)
-        self.fromXmlImpl(node, KalturaDynamicListListResponse.PROPERTY_LOADERS)
-
-    def toParams(self):
-        kparams = KalturaListResponse.toParams(self)
-        kparams.put("objectType", "KalturaDynamicListListResponse")
-        kparams.addArrayIfDefined("objects", self.objects)
-        return kparams
-
-    def getObjects(self):
-        return self.objects
-
-    def setObjects(self, newObjects):
-        self.objects = newObjects
 
 
 # @package Kaltura
@@ -37140,105 +34343,6 @@ class KalturaEventNotificationObjectScope(KalturaEventNotificationScope):
 
     def setEventObject(self, newEventObject):
         self.eventObject = newEventObject
-
-
-# @package Kaltura
-# @subpackage Client
-class KalturaAssetEvent(KalturaEventObject):
-    def __init__(self,
-            userId=NotImplemented,
-            assetId=NotImplemented,
-            type=NotImplemented,
-            externalId=NotImplemented):
-        KalturaEventObject.__init__(self)
-
-        # User Id
-        # @var int
-        # @readonly
-        self.userId = userId
-
-        # Asset Id
-        # @var int
-        # @readonly
-        self.assetId = assetId
-
-        # Identifies the asset type (EPG, Recording, Movie, TV Series, etc). 
-        #             Possible values: 0 - EPG linear programs, 1 - Recording; or any asset type ID according to the asset types IDs defined in the system.
-        # @var int
-        # @readonly
-        self.type = type
-
-        # External identifier for the asset
-        # @var string
-        # @readonly
-        self.externalId = externalId
-
-
-    PROPERTY_LOADERS = {
-        'userId': getXmlNodeInt, 
-        'assetId': getXmlNodeInt, 
-        'type': getXmlNodeInt, 
-        'externalId': getXmlNodeText, 
-    }
-
-    def fromXml(self, node):
-        KalturaEventObject.fromXml(self, node)
-        self.fromXmlImpl(node, KalturaAssetEvent.PROPERTY_LOADERS)
-
-    def toParams(self):
-        kparams = KalturaEventObject.toParams(self)
-        kparams.put("objectType", "KalturaAssetEvent")
-        return kparams
-
-    def getUserId(self):
-        return self.userId
-
-    def getAssetId(self):
-        return self.assetId
-
-    def getType(self):
-        return self.type
-
-    def getExternalId(self):
-        return self.externalId
-
-
-# @package Kaltura
-# @subpackage Client
-class KalturaProgramAssetEvent(KalturaAssetEvent):
-    def __init__(self,
-            userId=NotImplemented,
-            assetId=NotImplemented,
-            type=NotImplemented,
-            externalId=NotImplemented,
-            liveAssetId=NotImplemented):
-        KalturaAssetEvent.__init__(self,
-            userId,
-            assetId,
-            type,
-            externalId)
-
-        # The  live asset Id that was identified according liveAssetExternalId
-        # @var int
-        # @readonly
-        self.liveAssetId = liveAssetId
-
-
-    PROPERTY_LOADERS = {
-        'liveAssetId': getXmlNodeInt, 
-    }
-
-    def fromXml(self, node):
-        KalturaAssetEvent.fromXml(self, node)
-        self.fromXmlImpl(node, KalturaProgramAssetEvent.PROPERTY_LOADERS)
-
-    def toParams(self):
-        kparams = KalturaAssetEvent.toParams(self)
-        kparams.put("objectType", "KalturaProgramAssetEvent")
-        return kparams
-
-    def getLiveAssetId(self):
-        return self.liveAssetId
 
 
 # @package Kaltura
@@ -38272,8 +35376,7 @@ class KalturaIotClientConfiguration(KalturaObjectBase):
             announcementTopic=NotImplemented,
             credentialsProvider=NotImplemented,
             cognitoUserPool=NotImplemented,
-            json=NotImplemented,
-            topics=NotImplemented):
+            json=NotImplemented):
         KalturaObjectBase.__init__(self)
 
         # announcementTopic
@@ -38292,17 +35395,12 @@ class KalturaIotClientConfiguration(KalturaObjectBase):
         # @var string
         self.json = json
 
-        # topics
-        # @var string
-        self.topics = topics
-
 
     PROPERTY_LOADERS = {
         'announcementTopic': getXmlNodeText, 
         'credentialsProvider': (KalturaObjectFactory.create, 'KalturaCredentialsProvider'), 
         'cognitoUserPool': (KalturaObjectFactory.create, 'KalturaCognitoUserPool'), 
         'json': getXmlNodeText, 
-        'topics': getXmlNodeText, 
     }
 
     def fromXml(self, node):
@@ -38316,7 +35414,6 @@ class KalturaIotClientConfiguration(KalturaObjectBase):
         kparams.addObjectIfDefined("credentialsProvider", self.credentialsProvider)
         kparams.addObjectIfDefined("cognitoUserPool", self.cognitoUserPool)
         kparams.addStringIfDefined("json", self.json)
-        kparams.addStringIfDefined("topics", self.topics)
         return kparams
 
     def getAnnouncementTopic(self):
@@ -38342,12 +35439,6 @@ class KalturaIotClientConfiguration(KalturaObjectBase):
 
     def setJson(self, newJson):
         self.json = newJson
-
-    def getTopics(self):
-        return self.topics
-
-    def setTopics(self, newTopics):
-        self.topics = newTopics
 
 
 # @package Kaltura
@@ -38860,79 +35951,6 @@ class KalturaPushMessage(KalturaObjectBase):
 
 # @package Kaltura
 # @subpackage Client
-class KalturaEpgNotificationSettings(KalturaObjectBase):
-    def __init__(self,
-            enabled=NotImplemented,
-            deviceFamilyIds=NotImplemented,
-            liveAssetIds=NotImplemented,
-            timeRange=NotImplemented):
-        KalturaObjectBase.__init__(self)
-
-        # EPG notification capability is enabled for the account
-        # @var bool
-        self.enabled = enabled
-
-        # Specify which devices should receive notifications
-        # @var string
-        self.deviceFamilyIds = deviceFamilyIds
-
-        # Specify which live assets should fire notifications
-        # @var string
-        self.liveAssetIds = liveAssetIds
-
-        # The range (in hours), in which, EPG updates triggers a notification,
-        #             every program that is updated and it's starts time falls within this range shall trigger a notification
-        # @var int
-        self.timeRange = timeRange
-
-
-    PROPERTY_LOADERS = {
-        'enabled': getXmlNodeBool, 
-        'deviceFamilyIds': getXmlNodeText, 
-        'liveAssetIds': getXmlNodeText, 
-        'timeRange': getXmlNodeInt, 
-    }
-
-    def fromXml(self, node):
-        KalturaObjectBase.fromXml(self, node)
-        self.fromXmlImpl(node, KalturaEpgNotificationSettings.PROPERTY_LOADERS)
-
-    def toParams(self):
-        kparams = KalturaObjectBase.toParams(self)
-        kparams.put("objectType", "KalturaEpgNotificationSettings")
-        kparams.addBoolIfDefined("enabled", self.enabled)
-        kparams.addStringIfDefined("deviceFamilyIds", self.deviceFamilyIds)
-        kparams.addStringIfDefined("liveAssetIds", self.liveAssetIds)
-        kparams.addIntIfDefined("timeRange", self.timeRange)
-        return kparams
-
-    def getEnabled(self):
-        return self.enabled
-
-    def setEnabled(self, newEnabled):
-        self.enabled = newEnabled
-
-    def getDeviceFamilyIds(self):
-        return self.deviceFamilyIds
-
-    def setDeviceFamilyIds(self, newDeviceFamilyIds):
-        self.deviceFamilyIds = newDeviceFamilyIds
-
-    def getLiveAssetIds(self):
-        return self.liveAssetIds
-
-    def setLiveAssetIds(self, newLiveAssetIds):
-        self.liveAssetIds = newLiveAssetIds
-
-    def getTimeRange(self):
-        return self.timeRange
-
-    def setTimeRange(self, newTimeRange):
-        self.timeRange = newTimeRange
-
-
-# @package Kaltura
-# @subpackage Client
 class KalturaNotificationsPartnerSettings(KalturaObjectBase):
     def __init__(self,
             pushNotificationEnabled=NotImplemented,
@@ -38952,8 +35970,7 @@ class KalturaNotificationsPartnerSettings(KalturaObjectBase):
             mailSenderName=NotImplemented,
             mailNotificationAdapterId=NotImplemented,
             smsEnabled=NotImplemented,
-            iotEnabled=NotImplemented,
-            epgNotification=NotImplemented):
+            iotEnabled=NotImplemented):
         KalturaObjectBase.__init__(self)
 
         # Push notification capability is enabled for the account
@@ -39028,10 +36045,6 @@ class KalturaNotificationsPartnerSettings(KalturaObjectBase):
         # @var bool
         self.iotEnabled = iotEnabled
 
-        # Settings for epg notifications
-        # @var KalturaEpgNotificationSettings
-        self.epgNotification = epgNotification
-
 
     PROPERTY_LOADERS = {
         'pushNotificationEnabled': getXmlNodeBool, 
@@ -39052,7 +36065,6 @@ class KalturaNotificationsPartnerSettings(KalturaObjectBase):
         'mailNotificationAdapterId': getXmlNodeInt, 
         'smsEnabled': getXmlNodeBool, 
         'iotEnabled': getXmlNodeBool, 
-        'epgNotification': (KalturaObjectFactory.create, 'KalturaEpgNotificationSettings'), 
     }
 
     def fromXml(self, node):
@@ -39080,7 +36092,6 @@ class KalturaNotificationsPartnerSettings(KalturaObjectBase):
         kparams.addIntIfDefined("mailNotificationAdapterId", self.mailNotificationAdapterId)
         kparams.addBoolIfDefined("smsEnabled", self.smsEnabled)
         kparams.addBoolIfDefined("iotEnabled", self.iotEnabled)
-        kparams.addObjectIfDefined("epgNotification", self.epgNotification)
         return kparams
 
     def getPushNotificationEnabled(self):
@@ -39190,12 +36201,6 @@ class KalturaNotificationsPartnerSettings(KalturaObjectBase):
 
     def setIotEnabled(self, newIotEnabled):
         self.iotEnabled = newIotEnabled
-
-    def getEpgNotification(self):
-        return self.epgNotification
-
-    def setEpgNotification(self, newEpgNotification):
-        self.epgNotification = newEpgNotification
 
 
 # @package Kaltura
@@ -42250,67 +39255,6 @@ class KalturaBusinessModuleRuleService(KalturaServiceBase):
 
 # @package Kaltura
 # @subpackage Client
-class KalturaCampaignService(KalturaServiceBase):
-    def __init__(self, client = None):
-        KalturaServiceBase.__init__(self, client)
-
-    def add(self, objectToAdd):
-        """Add an object"""
-
-        kparams = KalturaParams()
-        kparams.addObjectIfDefined("objectToAdd", objectToAdd)
-        self.client.queueServiceActionCall("campaign", "add", "KalturaCampaign", kparams)
-        if self.client.isMultiRequest():
-            return self.client.getMultiRequestResult()
-        resultNode = self.client.doQueue()
-        return KalturaObjectFactory.create(resultNode, 'KalturaCampaign')
-
-    def update(self, id, objectToUpdate):
-        """Update an object"""
-
-        kparams = KalturaParams()
-        kparams.addIntIfDefined("id", id);
-        kparams.addObjectIfDefined("objectToUpdate", objectToUpdate)
-        self.client.queueServiceActionCall("campaign", "update", "KalturaCampaign", kparams)
-        if self.client.isMultiRequest():
-            return self.client.getMultiRequestResult()
-        resultNode = self.client.doQueue()
-        return KalturaObjectFactory.create(resultNode, 'KalturaCampaign')
-
-    def delete(self, id):
-        """Delete an object"""
-
-        kparams = KalturaParams()
-        kparams.addIntIfDefined("id", id);
-        self.client.queueServiceActionCall("campaign", "delete", "None", kparams)
-        if self.client.isMultiRequest():
-            return self.client.getMultiRequestResult()
-        resultNode = self.client.doQueue()
-
-    def list(self, filter, pager = NotImplemented):
-        kparams = KalturaParams()
-        kparams.addObjectIfDefined("filter", filter)
-        kparams.addObjectIfDefined("pager", pager)
-        self.client.queueServiceActionCall("campaign", "list", "KalturaCampaignListResponse", kparams)
-        if self.client.isMultiRequest():
-            return self.client.getMultiRequestResult()
-        resultNode = self.client.doQueue()
-        return KalturaObjectFactory.create(resultNode, 'KalturaCampaignListResponse')
-
-    def setState(self, campaignId, newState):
-        """Set campaign&#39;s state"""
-
-        kparams = KalturaParams()
-        kparams.addIntIfDefined("campaignId", campaignId);
-        kparams.addStringIfDefined("newState", newState)
-        self.client.queueServiceActionCall("campaign", "setState", "None", kparams)
-        if self.client.isMultiRequest():
-            return self.client.getMultiRequestResult()
-        resultNode = self.client.doQueue()
-
-
-# @package Kaltura
-# @subpackage Client
 class KalturaCategoryItemService(KalturaServiceBase):
     def __init__(self, client = None):
         KalturaServiceBase.__init__(self, client)
@@ -42390,93 +39334,6 @@ class KalturaCategoryTreeService(KalturaServiceBase):
             return self.client.getMultiRequestResult()
         resultNode = self.client.doQueue()
         return KalturaObjectFactory.create(resultNode, 'KalturaCategoryTree')
-
-    def getByVersion(self, versionId = NotImplemented):
-        """Retrieve default category tree of deviceFamilyId by KS or specific one if versionId is set."""
-
-        kparams = KalturaParams()
-        kparams.addIntIfDefined("versionId", versionId);
-        self.client.queueServiceActionCall("categorytree", "getByVersion", "KalturaCategoryTree", kparams)
-        if self.client.isMultiRequest():
-            return self.client.getMultiRequestResult()
-        resultNode = self.client.doQueue()
-        return KalturaObjectFactory.create(resultNode, 'KalturaCategoryTree')
-
-
-# @package Kaltura
-# @subpackage Client
-class KalturaCategoryVersionService(KalturaServiceBase):
-    def __init__(self, client = None):
-        KalturaServiceBase.__init__(self, client)
-
-    def add(self, objectToAdd):
-        """categoryVersion add"""
-
-        kparams = KalturaParams()
-        kparams.addObjectIfDefined("objectToAdd", objectToAdd)
-        self.client.queueServiceActionCall("categoryversion", "add", "KalturaCategoryVersion", kparams)
-        if self.client.isMultiRequest():
-            return self.client.getMultiRequestResult()
-        resultNode = self.client.doQueue()
-        return KalturaObjectFactory.create(resultNode, 'KalturaCategoryVersion')
-
-    def update(self, id, objectToUpdate):
-        """categoryVersion update"""
-
-        kparams = KalturaParams()
-        kparams.addIntIfDefined("id", id);
-        kparams.addObjectIfDefined("objectToUpdate", objectToUpdate)
-        self.client.queueServiceActionCall("categoryversion", "update", "KalturaCategoryVersion", kparams)
-        if self.client.isMultiRequest():
-            return self.client.getMultiRequestResult()
-        resultNode = self.client.doQueue()
-        return KalturaObjectFactory.create(resultNode, 'KalturaCategoryVersion')
-
-    def delete(self, id):
-        """Remove category version"""
-
-        kparams = KalturaParams()
-        kparams.addIntIfDefined("id", id);
-        self.client.queueServiceActionCall("categoryversion", "delete", "None", kparams)
-        if self.client.isMultiRequest():
-            return self.client.getMultiRequestResult()
-        resultNode = self.client.doQueue()
-
-    def list(self, filter, pager = NotImplemented):
-        """Gets all category versions"""
-
-        kparams = KalturaParams()
-        kparams.addObjectIfDefined("filter", filter)
-        kparams.addObjectIfDefined("pager", pager)
-        self.client.queueServiceActionCall("categoryversion", "list", "KalturaCategoryVersionListResponse", kparams)
-        if self.client.isMultiRequest():
-            return self.client.getMultiRequestResult()
-        resultNode = self.client.doQueue()
-        return KalturaObjectFactory.create(resultNode, 'KalturaCategoryVersionListResponse')
-
-    def createTree(self, categoryItemId, name, comment):
-        """Acreate new tree for this categoryItem"""
-
-        kparams = KalturaParams()
-        kparams.addIntIfDefined("categoryItemId", categoryItemId);
-        kparams.addStringIfDefined("name", name)
-        kparams.addStringIfDefined("comment", comment)
-        self.client.queueServiceActionCall("categoryversion", "createTree", "KalturaCategoryVersion", kparams)
-        if self.client.isMultiRequest():
-            return self.client.getMultiRequestResult()
-        resultNode = self.client.doQueue()
-        return KalturaObjectFactory.create(resultNode, 'KalturaCategoryVersion')
-
-    def setDefault(self, id, force = False):
-        """Set new default category version"""
-
-        kparams = KalturaParams()
-        kparams.addIntIfDefined("id", id);
-        kparams.addBoolIfDefined("force", force);
-        self.client.queueServiceActionCall("categoryversion", "setDefault", "None", kparams)
-        if self.client.isMultiRequest():
-            return self.client.getMultiRequestResult()
-        resultNode = self.client.doQueue()
 
 
 # @package Kaltura
@@ -43029,6 +39886,17 @@ class KalturaCouponService(KalturaServiceBase):
         resultNode = self.client.doQueue()
         return KalturaObjectFactory.create(resultNode, 'KalturaCoupon')
 
+    def list(self, filter):
+        """Lists coupon codes."""
+
+        kparams = KalturaParams()
+        kparams.addObjectIfDefined("filter", filter)
+        self.client.queueServiceActionCall("coupon", "list", "KalturaCouponListResponse", kparams)
+        if self.client.isMultiRequest():
+            return self.client.getMultiRequestResult()
+        resultNode = self.client.doQueue()
+        return KalturaObjectFactory.create(resultNode, 'KalturaCouponListResponse')
+
 
 # @package Kaltura
 # @subpackage Client
@@ -43158,56 +40026,6 @@ class KalturaDeviceFamilyService(KalturaServiceBase):
 
 # @package Kaltura
 # @subpackage Client
-class KalturaDeviceReferenceDataService(KalturaServiceBase):
-    def __init__(self, client = None):
-        KalturaServiceBase.__init__(self, client)
-
-    def add(self, objectToAdd):
-        """Add an object"""
-
-        kparams = KalturaParams()
-        kparams.addObjectIfDefined("objectToAdd", objectToAdd)
-        self.client.queueServiceActionCall("devicereferencedata", "add", "KalturaDeviceReferenceData", kparams)
-        if self.client.isMultiRequest():
-            return self.client.getMultiRequestResult()
-        resultNode = self.client.doQueue()
-        return KalturaObjectFactory.create(resultNode, 'KalturaDeviceReferenceData')
-
-    def update(self, id, objectToUpdate):
-        """Update an object"""
-
-        kparams = KalturaParams()
-        kparams.addIntIfDefined("id", id);
-        kparams.addObjectIfDefined("objectToUpdate", objectToUpdate)
-        self.client.queueServiceActionCall("devicereferencedata", "update", "KalturaDeviceReferenceData", kparams)
-        if self.client.isMultiRequest():
-            return self.client.getMultiRequestResult()
-        resultNode = self.client.doQueue()
-        return KalturaObjectFactory.create(resultNode, 'KalturaDeviceReferenceData')
-
-    def delete(self, id):
-        """Delete an object"""
-
-        kparams = KalturaParams()
-        kparams.addIntIfDefined("id", id);
-        self.client.queueServiceActionCall("devicereferencedata", "delete", "None", kparams)
-        if self.client.isMultiRequest():
-            return self.client.getMultiRequestResult()
-        resultNode = self.client.doQueue()
-
-    def list(self, filter, pager = NotImplemented):
-        kparams = KalturaParams()
-        kparams.addObjectIfDefined("filter", filter)
-        kparams.addObjectIfDefined("pager", pager)
-        self.client.queueServiceActionCall("devicereferencedata", "list", "KalturaDeviceReferenceDataListResponse", kparams)
-        if self.client.isMultiRequest():
-            return self.client.getMultiRequestResult()
-        resultNode = self.client.doQueue()
-        return KalturaObjectFactory.create(resultNode, 'KalturaDeviceReferenceDataListResponse')
-
-
-# @package Kaltura
-# @subpackage Client
 class KalturaDiscountDetailsService(KalturaServiceBase):
     def __init__(self, client = None):
         KalturaServiceBase.__init__(self, client)
@@ -43239,69 +40057,6 @@ class KalturaDrmProfileService(KalturaServiceBase):
             return self.client.getMultiRequestResult()
         resultNode = self.client.doQueue()
         return KalturaObjectFactory.create(resultNode, 'KalturaDrmProfileListResponse')
-
-
-# @package Kaltura
-# @subpackage Client
-class KalturaDynamicListService(KalturaServiceBase):
-    def __init__(self, client = None):
-        KalturaServiceBase.__init__(self, client)
-
-    def add(self, objectToAdd):
-        """Add an object"""
-
-        kparams = KalturaParams()
-        kparams.addObjectIfDefined("objectToAdd", objectToAdd)
-        self.client.queueServiceActionCall("dynamiclist", "add", "KalturaDynamicList", kparams)
-        if self.client.isMultiRequest():
-            return self.client.getMultiRequestResult()
-        resultNode = self.client.doQueue()
-        return KalturaObjectFactory.create(resultNode, 'KalturaDynamicList')
-
-    def update(self, id, objectToUpdate):
-        """Update an object"""
-
-        kparams = KalturaParams()
-        kparams.addIntIfDefined("id", id);
-        kparams.addObjectIfDefined("objectToUpdate", objectToUpdate)
-        self.client.queueServiceActionCall("dynamiclist", "update", "KalturaDynamicList", kparams)
-        if self.client.isMultiRequest():
-            return self.client.getMultiRequestResult()
-        resultNode = self.client.doQueue()
-        return KalturaObjectFactory.create(resultNode, 'KalturaDynamicList')
-
-    def delete(self, id):
-        """Delete an object"""
-
-        kparams = KalturaParams()
-        kparams.addIntIfDefined("id", id);
-        self.client.queueServiceActionCall("dynamiclist", "delete", "None", kparams)
-        if self.client.isMultiRequest():
-            return self.client.getMultiRequestResult()
-        resultNode = self.client.doQueue()
-
-    def list(self, filter, pager = NotImplemented):
-        kparams = KalturaParams()
-        kparams.addObjectIfDefined("filter", filter)
-        kparams.addObjectIfDefined("pager", pager)
-        self.client.queueServiceActionCall("dynamiclist", "list", "KalturaDynamicListListResponse", kparams)
-        if self.client.isMultiRequest():
-            return self.client.getMultiRequestResult()
-        resultNode = self.client.doQueue()
-        return KalturaObjectFactory.create(resultNode, 'KalturaDynamicListListResponse')
-
-    def addFromBulkUpload(self, fileData, jobData, bulkUploadData):
-        """Add new bulk upload batch job Conversion profile id can be specified in the API."""
-
-        kparams = KalturaParams()
-        kfiles = {"fileData": fileData}
-        kparams.addObjectIfDefined("jobData", jobData)
-        kparams.addObjectIfDefined("bulkUploadData", bulkUploadData)
-        self.client.queueServiceActionCall("dynamiclist", "addFromBulkUpload", "KalturaBulkUpload", kparams, kfiles)
-        if self.client.isMultiRequest():
-            return self.client.getMultiRequestResult()
-        resultNode = self.client.doQueue()
-        return KalturaObjectFactory.create(resultNode, 'KalturaBulkUpload')
 
 
 # @package Kaltura
@@ -45781,18 +42536,6 @@ class KalturaPermissionService(KalturaServiceBase):
             return self.client.getMultiRequestResult()
         resultNode = self.client.doQueue()
 
-    def update(self, id, permission):
-        """Update an existing permission."""
-
-        kparams = KalturaParams()
-        kparams.addIntIfDefined("id", id);
-        kparams.addObjectIfDefined("permission", permission)
-        self.client.queueServiceActionCall("permission", "update", "KalturaPermission", kparams)
-        if self.client.isMultiRequest():
-            return self.client.getMultiRequestResult()
-        resultNode = self.client.doQueue()
-        return KalturaObjectFactory.create(resultNode, 'KalturaPermission')
-
 
 # @package Kaltura
 # @subpackage Client
@@ -47005,24 +43748,6 @@ class KalturaSsoAdapterProfileService(KalturaServiceBase):
 
 # @package Kaltura
 # @subpackage Client
-class KalturaStreamingDeviceService(KalturaServiceBase):
-    def __init__(self, client = None):
-        KalturaServiceBase.__init__(self, client)
-
-    def list(self, filter = NotImplemented):
-        """Lists of devices that are streaming at that moment"""
-
-        kparams = KalturaParams()
-        kparams.addObjectIfDefined("filter", filter)
-        self.client.queueServiceActionCall("streamingdevice", "list", "KalturaStreamingDeviceListResponse", kparams)
-        if self.client.isMultiRequest():
-            return self.client.getMultiRequestResult()
-        resultNode = self.client.doQueue()
-        return KalturaObjectFactory.create(resultNode, 'KalturaStreamingDeviceListResponse')
-
-
-# @package Kaltura
-# @subpackage Client
 class KalturaSubscriptionService(KalturaServiceBase):
     def __init__(self, client = None):
         KalturaServiceBase.__init__(self, client)
@@ -47133,6 +43858,16 @@ class KalturaSystemService(KalturaServiceBase):
         resultNode = self.client.doQueue()
         return getXmlNodeBool(resultNode)
 
+    def getLogLevel(self):
+        """Gets the current level of the KLogger"""
+
+        kparams = KalturaParams()
+        self.client.queueServiceActionCall("system", "getLogLevel", "None", kparams)
+        if self.client.isMultiRequest():
+            return self.client.getMultiRequestResult()
+        resultNode = self.client.doQueue()
+        return getXmlNodeText(resultNode)
+
     def getTime(self):
         """Returns current server timestamp"""
 
@@ -47169,6 +43904,17 @@ class KalturaSystemService(KalturaServiceBase):
 
         kparams = KalturaParams()
         self.client.queueServiceActionCall("system", "ping", "None", kparams)
+        if self.client.isMultiRequest():
+            return self.client.getMultiRequestResult()
+        resultNode = self.client.doQueue()
+        return getXmlNodeBool(resultNode)
+
+    def setLogLevel(self, level):
+        """Sets the current level of the KLogger"""
+
+        kparams = KalturaParams()
+        kparams.addStringIfDefined("level", level)
+        self.client.queueServiceActionCall("system", "setLogLevel", "None", kparams)
         if self.client.isMultiRequest():
             return self.client.getMultiRequestResult()
         resultNode = self.client.doQueue()
@@ -47894,10 +44640,8 @@ class KalturaCoreClient(KalturaClientPlugin):
             'bookmark': KalturaBookmarkService,
             'bulkUpload': KalturaBulkUploadService,
             'businessModuleRule': KalturaBusinessModuleRuleService,
-            'campaign': KalturaCampaignService,
             'categoryItem': KalturaCategoryItemService,
             'categoryTree': KalturaCategoryTreeService,
-            'categoryVersion': KalturaCategoryVersionService,
             'cdnAdapterProfile': KalturaCdnAdapterProfileService,
             'cdnPartnerSettings': KalturaCdnPartnerSettingsService,
             'cDVRAdapterProfile': KalturaCDVRAdapterProfileService,
@@ -47914,10 +44658,8 @@ class KalturaCoreClient(KalturaClientPlugin):
             'currency': KalturaCurrencyService,
             'deviceBrand': KalturaDeviceBrandService,
             'deviceFamily': KalturaDeviceFamilyService,
-            'deviceReferenceData': KalturaDeviceReferenceDataService,
             'discountDetails': KalturaDiscountDetailsService,
             'drmProfile': KalturaDrmProfileService,
-            'dynamicList': KalturaDynamicListService,
             'email': KalturaEmailService,
             'engagementAdapter': KalturaEngagementAdapterService,
             'engagement': KalturaEngagementService,
@@ -47992,7 +44734,6 @@ class KalturaCoreClient(KalturaClientPlugin):
             'social': KalturaSocialService,
             'socialFriendActivity': KalturaSocialFriendActivityService,
             'ssoAdapterProfile': KalturaSsoAdapterProfileService,
-            'streamingDevice': KalturaStreamingDeviceService,
             'subscription': KalturaSubscriptionService,
             'subscriptionSet': KalturaSubscriptionSetService,
             'system': KalturaSystemService,
@@ -48022,9 +44763,7 @@ class KalturaCoreClient(KalturaClientPlugin):
             'KalturaAnnouncementOrderBy': KalturaAnnouncementOrderBy,
             'KalturaAnnouncementRecipientsType': KalturaAnnouncementRecipientsType,
             'KalturaAnnouncementStatus': KalturaAnnouncementStatus,
-            'KalturaApiAction': KalturaApiAction,
             'KalturaApiParameterPermissionItemAction': KalturaApiParameterPermissionItemAction,
-            'KalturaApiService': KalturaApiService,
             'KalturaAppTokenHashType': KalturaAppTokenHashType,
             'KalturaAssetCommentOrderBy': KalturaAssetCommentOrderBy,
             'KalturaAssetFilePpvOrderBy': KalturaAssetFilePpvOrderBy,
@@ -48053,10 +44792,7 @@ class KalturaCoreClient(KalturaClientPlugin):
             'KalturaBulkUploadOrderBy': KalturaBulkUploadOrderBy,
             'KalturaBulkUploadResultStatus': KalturaBulkUploadResultStatus,
             'KalturaBundleType': KalturaBundleType,
-            'KalturaCampaignOrderBy': KalturaCampaignOrderBy,
             'KalturaCategoryItemOrderBy': KalturaCategoryItemOrderBy,
-            'KalturaCategoryVersionOrderBy': KalturaCategoryVersionOrderBy,
-            'KalturaCategoryVersionState': KalturaCategoryVersionState,
             'KalturaChannelEnrichment': KalturaChannelEnrichment,
             'KalturaChannelOrderBy': KalturaChannelOrderBy,
             'KalturaChannelsOrderBy': KalturaChannelsOrderBy,
@@ -48075,13 +44811,10 @@ class KalturaCoreClient(KalturaClientPlugin):
             'KalturaCouponStatus': KalturaCouponStatus,
             'KalturaCurrencyOrderBy': KalturaCurrencyOrderBy,
             'KalturaDeleteMediaPolicy': KalturaDeleteMediaPolicy,
-            'KalturaDeviceReferenceDataOrderBy': KalturaDeviceReferenceDataOrderBy,
             'KalturaDeviceStatus': KalturaDeviceStatus,
             'KalturaDowngradePolicy': KalturaDowngradePolicy,
             'KalturaDrmSchemeName': KalturaDrmSchemeName,
             'KalturaDurationUnit': KalturaDurationUnit,
-            'KalturaDynamicListOrderBy': KalturaDynamicListOrderBy,
-            'KalturaEncryptionType': KalturaEncryptionType,
             'KalturaEngagementOrderBy': KalturaEngagementOrderBy,
             'KalturaEngagementType': KalturaEngagementType,
             'KalturaEntitlementOrderBy': KalturaEntitlementOrderBy,
@@ -48122,6 +44855,7 @@ class KalturaCoreClient(KalturaClientPlugin):
             'KalturaIotProfileOrderBy': KalturaIotProfileOrderBy,
             'KalturaLanguageOrderBy': KalturaLanguageOrderBy,
             'KalturaLinearChannelType': KalturaLinearChannelType,
+            'KalturaLogLevel': KalturaLogLevel,
             'KalturaMathemticalOperatorType': KalturaMathemticalOperatorType,
             'KalturaMediaFileOrderBy': KalturaMediaFileOrderBy,
             'KalturaMediaFileStreamerType': KalturaMediaFileStreamerType,
@@ -48132,7 +44866,6 @@ class KalturaCoreClient(KalturaClientPlugin):
             'KalturaMetaTagOrderBy': KalturaMetaTagOrderBy,
             'KalturaMonetizationType': KalturaMonetizationType,
             'KalturaNotificationType': KalturaNotificationType,
-            'KalturaObjectState': KalturaObjectState,
             'KalturaObjectVirtualAssetInfoType': KalturaObjectVirtualAssetInfoType,
             'KalturaOTTUserOrderBy': KalturaOTTUserOrderBy,
             'KalturaParentalRuleOrderBy': KalturaParentalRuleOrderBy,
@@ -48190,7 +44923,6 @@ class KalturaCoreClient(KalturaClientPlugin):
             'KalturaSocialPlatform': KalturaSocialPlatform,
             'KalturaSocialPrivacy': KalturaSocialPrivacy,
             'KalturaSocialStatus': KalturaSocialStatus,
-            'KalturaStreamingDeviceOrderBy': KalturaStreamingDeviceOrderBy,
             'KalturaStreamType': KalturaStreamType,
             'KalturaSubscriptionDependencyType': KalturaSubscriptionDependencyType,
             'KalturaSubscriptionOrderBy': KalturaSubscriptionOrderBy,
@@ -48231,31 +44963,6 @@ class KalturaCoreClient(KalturaClientPlugin):
             'KalturaDetachedResponseProfile': KalturaDetachedResponseProfile,
             'KalturaOnDemandResponseProfile': KalturaOnDemandResponseProfile,
             'KalturaRelatedObjectFilter': KalturaRelatedObjectFilter,
-            'KalturaCrudFilter': KalturaCrudFilter,
-            'KalturaDeviceReferenceDataFilter': KalturaDeviceReferenceDataFilter,
-            'KalturaDeviceManufacturersReferenceDataFilter': KalturaDeviceManufacturersReferenceDataFilter,
-            'KalturaPasswordPolicyFilter': KalturaPasswordPolicyFilter,
-            'KalturaHouseholdSegmentFilter': KalturaHouseholdSegmentFilter,
-            'KalturaSmsAdapterProfileFilter': KalturaSmsAdapterProfileFilter,
-            'KalturaDynamicListFilter': KalturaDynamicListFilter,
-            'KalturaDynamicListIdInFilter': KalturaDynamicListIdInFilter,
-            'KalturaDynamicListSearchFilter': KalturaDynamicListSearchFilter,
-            'KalturaUdidDynamicListSearchFilter': KalturaUdidDynamicListSearchFilter,
-            'KalturaHouseholdCouponFilter': KalturaHouseholdCouponFilter,
-            'KalturaCategoryItemFilter': KalturaCategoryItemFilter,
-            'KalturaCategoryItemByIdInFilter': KalturaCategoryItemByIdInFilter,
-            'KalturaCategoryItemSearchFilter': KalturaCategoryItemSearchFilter,
-            'KalturaCategoryItemAncestorsFilter': KalturaCategoryItemAncestorsFilter,
-            'KalturaCategoryVersionFilter': KalturaCategoryVersionFilter,
-            'KalturaCategoryVersionFilterByTree': KalturaCategoryVersionFilterByTree,
-            'KalturaCampaignFilter': KalturaCampaignFilter,
-            'KalturaCampaignIdInFilter': KalturaCampaignIdInFilter,
-            'KalturaCampaignSearchFilter': KalturaCampaignSearchFilter,
-            'KalturaTriggerCampaignSearchFilter': KalturaTriggerCampaignSearchFilter,
-            'KalturaBatchCampaignSearchFilter': KalturaBatchCampaignSearchFilter,
-            'KalturaEventNotificationFilter': KalturaEventNotificationFilter,
-            'KalturaIotFilter': KalturaIotFilter,
-            'KalturaIotProfileFilter': KalturaIotProfileFilter,
             'KalturaValue': KalturaValue,
             'KalturaIntegerValue': KalturaIntegerValue,
             'KalturaFavoriteFilter': KalturaFavoriteFilter,
@@ -48266,6 +44973,18 @@ class KalturaCoreClient(KalturaClientPlugin):
             'KalturaMultilingualStringValue': KalturaMultilingualStringValue,
             'KalturaStringValue': KalturaStringValue,
             'KalturaOTTUserFilter': KalturaOTTUserFilter,
+            'KalturaCrudFilter': KalturaCrudFilter,
+            'KalturaPasswordPolicyFilter': KalturaPasswordPolicyFilter,
+            'KalturaHouseholdSegmentFilter': KalturaHouseholdSegmentFilter,
+            'KalturaSmsAdapterProfileFilter': KalturaSmsAdapterProfileFilter,
+            'KalturaHouseholdCouponFilter': KalturaHouseholdCouponFilter,
+            'KalturaCategoryItemFilter': KalturaCategoryItemFilter,
+            'KalturaCategoryItemByIdInFilter': KalturaCategoryItemByIdInFilter,
+            'KalturaCategoryItemSearchFilter': KalturaCategoryItemSearchFilter,
+            'KalturaCategoryItemAncestorsFilter': KalturaCategoryItemAncestorsFilter,
+            'KalturaEventNotificationFilter': KalturaEventNotificationFilter,
+            'KalturaIotFilter': KalturaIotFilter,
+            'KalturaIotProfileFilter': KalturaIotProfileFilter,
             'KalturaBulkUploadFilter': KalturaBulkUploadFilter,
             'KalturaSocialActionFilter': KalturaSocialActionFilter,
             'KalturaSocialCommentFilter': KalturaSocialCommentFilter,
@@ -48355,7 +45074,6 @@ class KalturaCoreClient(KalturaClientPlugin):
             'KalturaImageFilter': KalturaImageFilter,
             'KalturaImageTypeFilter': KalturaImageTypeFilter,
             'KalturaMediaFileFilter': KalturaMediaFileFilter,
-            'KalturaStreamingDeviceFilter': KalturaStreamingDeviceFilter,
             'KalturaTagFilter': KalturaTagFilter,
             'KalturaPaymentMethodProfileFilter': KalturaPaymentMethodProfileFilter,
             'KalturaAssetRuleFilter': KalturaAssetRuleFilter,
@@ -48369,9 +45087,7 @@ class KalturaCoreClient(KalturaClientPlugin):
             'KalturaLanguageFilter': KalturaLanguageFilter,
             'KalturaMetaFilter': KalturaMetaFilter,
             'KalturaParentalRuleFilter': KalturaParentalRuleFilter,
-            'KalturaBasePermissionFilter': KalturaBasePermissionFilter,
             'KalturaPermissionFilter': KalturaPermissionFilter,
-            'KalturaPermissionByIdInFilter': KalturaPermissionByIdInFilter,
             'KalturaPermissionItemFilter': KalturaPermissionItemFilter,
             'KalturaPermissionItemByIdInFilter': KalturaPermissionItemByIdInFilter,
             'KalturaPermissionItemByApiActionFilter': KalturaPermissionItemByApiActionFilter,
@@ -48395,7 +45111,6 @@ class KalturaCoreClient(KalturaClientPlugin):
             'KalturaMediaImage': KalturaMediaImage,
             'KalturaAssetFile': KalturaAssetFile,
             'KalturaStringValueArray': KalturaStringValueArray,
-            'KalturaBusinessModuleDetails': KalturaBusinessModuleDetails,
             'KalturaMediaFile': KalturaMediaFile,
             'KalturaBuzzScore': KalturaBuzzScore,
             'KalturaAssetStatistics': KalturaAssetStatistics,
@@ -48421,8 +45136,6 @@ class KalturaCoreClient(KalturaClientPlugin):
             'KalturaBulkUploadMediaAssetResult': KalturaBulkUploadMediaAssetResult,
             'KalturaBulkUploadLiveAssetResult': KalturaBulkUploadLiveAssetResult,
             'KalturaBulkUploadProgramAssetResult': KalturaBulkUploadProgramAssetResult,
-            'KalturaBulkUploadDynamicListResult': KalturaBulkUploadDynamicListResult,
-            'KalturaBulkUploadUdidDynamicListResult': KalturaBulkUploadUdidDynamicListResult,
             'KalturaSocialAction': KalturaSocialAction,
             'KalturaSocialActionListResponse': KalturaSocialActionListResponse,
             'KalturaSocialActionRate': KalturaSocialActionRate,
@@ -48468,43 +45181,14 @@ class KalturaCoreClient(KalturaClientPlugin):
             'KalturaAssetFilePpv': KalturaAssetFilePpv,
             'KalturaAssetFilePpvListResponse': KalturaAssetFilePpvListResponse,
             'KalturaCrudObject': KalturaCrudObject,
-            'KalturaDeviceReferenceData': KalturaDeviceReferenceData,
-            'KalturaDeviceManufacturerInformation': KalturaDeviceManufacturerInformation,
             'KalturaRegexExpression': KalturaRegexExpression,
             'KalturaPasswordPolicy': KalturaPasswordPolicy,
             'KalturaHouseholdSegment': KalturaHouseholdSegment,
             'KalturaSmsAdapterProfile': KalturaSmsAdapterProfile,
-            'KalturaDynamicList': KalturaDynamicList,
-            'KalturaUdidDynamicList': KalturaUdidDynamicList,
             'KalturaHouseholdCoupon': KalturaHouseholdCoupon,
             'KalturaUnifiedChannel': KalturaUnifiedChannel,
             'KalturaCategoryItem': KalturaCategoryItem,
             'KalturaUnifiedChannelInfo': KalturaUnifiedChannelInfo,
-            'KalturaCategoryVersion': KalturaCategoryVersion,
-            'KalturaCondition': KalturaCondition,
-            'KalturaPromotion': KalturaPromotion,
-            'KalturaCampaign': KalturaCampaign,
-            'KalturaBatchCampaign': KalturaBatchCampaign,
-            'KalturaTriggerCampaign': KalturaTriggerCampaign,
-            'KalturaNotCondition': KalturaNotCondition,
-            'KalturaOrCondition': KalturaOrCondition,
-            'KalturaCountryCondition': KalturaCountryCondition,
-            'KalturaDateCondition': KalturaDateCondition,
-            'KalturaHeaderCondition': KalturaHeaderCondition,
-            'KalturaAssetCondition': KalturaAssetCondition,
-            'KalturaConcurrencyCondition': KalturaConcurrencyCondition,
-            'KalturaIpRangeCondition': KalturaIpRangeCondition,
-            'KalturaBusinessModuleCondition': KalturaBusinessModuleCondition,
-            'KalturaSegmentsCondition': KalturaSegmentsCondition,
-            'KalturaSubscriptionCondition': KalturaSubscriptionCondition,
-            'KalturaUserSubscriptionCondition': KalturaUserSubscriptionCondition,
-            'KalturaAssetSubscriptionCondition': KalturaAssetSubscriptionCondition,
-            'KalturaUserRoleCondition': KalturaUserRoleCondition,
-            'KalturaDeviceBrandCondition': KalturaDeviceBrandCondition,
-            'KalturaDeviceFamilyCondition': KalturaDeviceFamilyCondition,
-            'KalturaDeviceManufacturerCondition': KalturaDeviceManufacturerCondition,
-            'KalturaDeviceModelCondition': KalturaDeviceModelCondition,
-            'KalturaUdidDynamicListCondition': KalturaUdidDynamicListCondition,
             'KalturaEventNotification': KalturaEventNotification,
             'KalturaIot': KalturaIot,
             'KalturaIotProfileAws': KalturaIotProfileAws,
@@ -48517,11 +45201,26 @@ class KalturaCoreClient(KalturaClientPlugin):
             'KalturaManualChannel': KalturaManualChannel,
             'KalturaRule': KalturaRule,
             'KalturaAssetRuleBase': KalturaAssetRuleBase,
+            'KalturaCondition': KalturaCondition,
             'KalturaRuleAction': KalturaRuleAction,
             'KalturaAssetRuleAction': KalturaAssetRuleAction,
             'KalturaAssetRule': KalturaAssetRule,
+            'KalturaAssetCondition': KalturaAssetCondition,
             'KalturaAssetUserRuleAction': KalturaAssetUserRuleAction,
             'KalturaAssetUserRule': KalturaAssetUserRule,
+            'KalturaNotCondition': KalturaNotCondition,
+            'KalturaOrCondition': KalturaOrCondition,
+            'KalturaCountryCondition': KalturaCountryCondition,
+            'KalturaDateCondition': KalturaDateCondition,
+            'KalturaHeaderCondition': KalturaHeaderCondition,
+            'KalturaConcurrencyCondition': KalturaConcurrencyCondition,
+            'KalturaIpRangeCondition': KalturaIpRangeCondition,
+            'KalturaBusinessModuleCondition': KalturaBusinessModuleCondition,
+            'KalturaSegmentsCondition': KalturaSegmentsCondition,
+            'KalturaSubscriptionCondition': KalturaSubscriptionCondition,
+            'KalturaUserSubscriptionCondition': KalturaUserSubscriptionCondition,
+            'KalturaAssetSubscriptionCondition': KalturaAssetSubscriptionCondition,
+            'KalturaUserRoleCondition': KalturaUserRoleCondition,
             'KalturaAccessControlBlockAction': KalturaAccessControlBlockAction,
             'KalturaTimeOffsetRuleAction': KalturaTimeOffsetRuleAction,
             'KalturaEndDateOffsetRuleAction': KalturaEndDateOffsetRuleAction,
@@ -48553,7 +45252,6 @@ class KalturaCoreClient(KalturaClientPlugin):
             'KalturaDiscount': KalturaDiscount,
             'KalturaDiscountDetails': KalturaDiscountDetails,
             'KalturaDiscountDetailsListResponse': KalturaDiscountDetailsListResponse,
-            'KalturaPromotionInfo': KalturaPromotionInfo,
             'KalturaProductPrice': KalturaProductPrice,
             'KalturaCollectionPrice': KalturaCollectionPrice,
             'KalturaPpvPrice': KalturaPpvPrice,
@@ -48578,7 +45276,6 @@ class KalturaCoreClient(KalturaClientPlugin):
             'KalturaPartnerConfiguration': KalturaPartnerConfiguration,
             'KalturaPartnerConfigurationListResponse': KalturaPartnerConfigurationListResponse,
             'KalturaBillingPartnerConfig': KalturaBillingPartnerConfig,
-            'KalturaCategoryManagement': KalturaCategoryManagement,
             'KalturaCatalogPartnerConfig': KalturaCatalogPartnerConfig,
             'KalturaBookmarkEventThreshold': KalturaBookmarkEventThreshold,
             'KalturaCommercePartnerConfig': KalturaCommercePartnerConfig,
@@ -48587,17 +45284,11 @@ class KalturaCoreClient(KalturaClientPlugin):
             'KalturaGeneralPartnerConfig': KalturaGeneralPartnerConfig,
             'KalturaObjectVirtualAssetInfo': KalturaObjectVirtualAssetInfo,
             'KalturaObjectVirtualAssetPartnerConfig': KalturaObjectVirtualAssetPartnerConfig,
-            'KalturaResetPasswordPartnerConfigTemplate': KalturaResetPasswordPartnerConfigTemplate,
-            'KalturaResetPasswordPartnerConfig': KalturaResetPasswordPartnerConfig,
-            'KalturaOpcPartnerConfiguration': KalturaOpcPartnerConfiguration,
             'KalturaDuration': KalturaDuration,
             'KalturaUnifiedBillingCycle': KalturaUnifiedBillingCycle,
             'KalturaPaymentPartnerConfig': KalturaPaymentPartnerConfig,
             'KalturaDefaultPlaybackAdapters': KalturaDefaultPlaybackAdapters,
             'KalturaPlaybackPartnerConfig': KalturaPlaybackPartnerConfig,
-            'KalturaEncryption': KalturaEncryption,
-            'KalturaDataEncryption': KalturaDataEncryption,
-            'KalturaSecurityPartnerConfig': KalturaSecurityPartnerConfig,
             'KalturaPersonalList': KalturaPersonalList,
             'KalturaPersonalListListResponse': KalturaPersonalListListResponse,
             'KalturaEngagementAdapterBase': KalturaEngagementAdapterBase,
@@ -48663,15 +45354,7 @@ class KalturaCoreClient(KalturaClientPlugin):
             'KalturaEntitlementListResponse': KalturaEntitlementListResponse,
             'KalturaCollectionEntitlement': KalturaCollectionEntitlement,
             'KalturaPpvEntitlement': KalturaPpvEntitlement,
-            'KalturaEntitlementDiscountDetails': KalturaEntitlementDiscountDetails,
-            'KalturaEntitlementPriceDetails': KalturaEntitlementPriceDetails,
             'KalturaSubscriptionEntitlement': KalturaSubscriptionEntitlement,
-            'KalturaCouponEntitlementDiscountDetails': KalturaCouponEntitlementDiscountDetails,
-            'KalturaEntitlementDiscountDetailsIdentifier': KalturaEntitlementDiscountDetailsIdentifier,
-            'KalturaCompensationEntitlementDiscountDetails': KalturaCompensationEntitlementDiscountDetails,
-            'KalturaCampaignEntitlementDiscountDetails': KalturaCampaignEntitlementDiscountDetails,
-            'KalturaDiscountEntitlementDiscountDetails': KalturaDiscountEntitlementDiscountDetails,
-            'KalturaTrailEntitlementDiscountDetails': KalturaTrailEntitlementDiscountDetails,
             'KalturaHouseholdPremiumServiceListResponse': KalturaHouseholdPremiumServiceListResponse,
             'KalturaRecording': KalturaRecording,
             'KalturaExternalRecording': KalturaExternalRecording,
@@ -48707,8 +45390,6 @@ class KalturaCoreClient(KalturaClientPlugin):
             'KalturaMediaFileTypeListResponse': KalturaMediaFileTypeListResponse,
             'KalturaRatio': KalturaRatio,
             'KalturaRatioListResponse': KalturaRatioListResponse,
-            'KalturaStreamingDevice': KalturaStreamingDevice,
-            'KalturaStreamingDeviceListResponse': KalturaStreamingDeviceListResponse,
             'KalturaTag': KalturaTag,
             'KalturaTagListResponse': KalturaTagListResponse,
             'KalturaAssetHistory': KalturaAssetHistory,
@@ -48792,31 +45473,24 @@ class KalturaCoreClient(KalturaClientPlugin):
             'KalturaBulkUploadMediaAssetData': KalturaBulkUploadMediaAssetData,
             'KalturaBulkUploadLiveAssetData': KalturaBulkUploadLiveAssetData,
             'KalturaBulkUploadProgramAssetData': KalturaBulkUploadProgramAssetData,
-            'KalturaBulkUploadDynamicListData': KalturaBulkUploadDynamicListData,
-            'KalturaBulkUploadUdidDynamicListData': KalturaBulkUploadUdidDynamicListData,
             'KalturaAssetFileContext': KalturaAssetFileContext,
             'KalturaAssetStatisticsQuery': KalturaAssetStatisticsQuery,
-            'KalturaCampaignListResponse': KalturaCampaignListResponse,
             'KalturaOTTCategory': KalturaOTTCategory,
             'KalturaCategoryItemListResponse': KalturaCategoryItemListResponse,
             'KalturaCategoryTree': KalturaCategoryTree,
-            'KalturaCategoryVersionListResponse': KalturaCategoryVersionListResponse,
             'KalturaCDNPartnerSettings': KalturaCDNPartnerSettings,
             'KalturaCompensation': KalturaCompensation,
             'KalturaCoupon': KalturaCoupon,
+            'KalturaCouponListResponse': KalturaCouponListResponse,
             'KalturaCouponGenerationOptions': KalturaCouponGenerationOptions,
             'KalturaPublicCouponGenerationOptions': KalturaPublicCouponGenerationOptions,
             'KalturaRandomCouponGenerationOptions': KalturaRandomCouponGenerationOptions,
-            'KalturaDeviceReferenceDataListResponse': KalturaDeviceReferenceDataListResponse,
-            'KalturaDynamicListListResponse': KalturaDynamicListListResponse,
             'KalturaKeyValue': KalturaKeyValue,
             'KalturaEmailMessage': KalturaEmailMessage,
             'KalturaEntitlementRenewal': KalturaEntitlementRenewal,
             'KalturaEventNotificationScope': KalturaEventNotificationScope,
             'KalturaEventObject': KalturaEventObject,
             'KalturaEventNotificationObjectScope': KalturaEventNotificationObjectScope,
-            'KalturaAssetEvent': KalturaAssetEvent,
-            'KalturaProgramAssetEvent': KalturaProgramAssetEvent,
             'KalturaBookmarkEvent': KalturaBookmarkEvent,
             'KalturaConcurrencyViolation': KalturaConcurrencyViolation,
             'KalturaEventNotificationListResponse': KalturaEventNotificationListResponse,
@@ -48845,7 +45519,6 @@ class KalturaCoreClient(KalturaClientPlugin):
             'KalturaMessageTemplate': KalturaMessageTemplate,
             'KalturaRegistryResponse': KalturaRegistryResponse,
             'KalturaPushMessage': KalturaPushMessage,
-            'KalturaEpgNotificationSettings': KalturaEpgNotificationSettings,
             'KalturaNotificationsPartnerSettings': KalturaNotificationsPartnerSettings,
             'KalturaNotificationsSettings': KalturaNotificationsSettings,
             'KalturaOTTUserDynamicData': KalturaOTTUserDynamicData,
