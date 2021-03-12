@@ -42,7 +42,7 @@ from ..Base import (
     KalturaServiceBase,
 )
 
-API_VERSION = '6.1.0.28909'
+API_VERSION = '6.1.0.28881'
 
 ########## enums ##########
 # @package Kaltura
@@ -9925,36 +9925,14 @@ class KalturaParentalRuleFilter(KalturaFilter):
 
 # @package Kaltura
 # @subpackage Client
-class KalturaBasePermissionFilter(KalturaFilter):
-    def __init__(self,
-            orderBy=NotImplemented):
-        KalturaFilter.__init__(self,
-            orderBy)
-
-
-    PROPERTY_LOADERS = {
-    }
-
-    def fromXml(self, node):
-        KalturaFilter.fromXml(self, node)
-        self.fromXmlImpl(node, KalturaBasePermissionFilter.PROPERTY_LOADERS)
-
-    def toParams(self):
-        kparams = KalturaFilter.toParams(self)
-        kparams.put("objectType", "KalturaBasePermissionFilter")
-        return kparams
-
-
-# @package Kaltura
-# @subpackage Client
-class KalturaPermissionFilter(KalturaBasePermissionFilter):
+class KalturaPermissionFilter(KalturaFilter):
     """Permissions filter"""
 
     def __init__(self,
             orderBy=NotImplemented,
             currentUserPermissionsContains=NotImplemented,
             roleIdIn=NotImplemented):
-        KalturaBasePermissionFilter.__init__(self,
+        KalturaFilter.__init__(self,
             orderBy)
 
         # Indicates whether the results should be filtered by userId using the current
@@ -9972,11 +9950,11 @@ class KalturaPermissionFilter(KalturaBasePermissionFilter):
     }
 
     def fromXml(self, node):
-        KalturaBasePermissionFilter.fromXml(self, node)
+        KalturaFilter.fromXml(self, node)
         self.fromXmlImpl(node, KalturaPermissionFilter.PROPERTY_LOADERS)
 
     def toParams(self):
-        kparams = KalturaBasePermissionFilter.toParams(self)
+        kparams = KalturaFilter.toParams(self)
         kparams.put("objectType", "KalturaPermissionFilter")
         kparams.addBoolIfDefined("currentUserPermissionsContains", self.currentUserPermissionsContains)
         kparams.addIntIfDefined("roleIdIn", self.roleIdIn)
@@ -9993,41 +9971,6 @@ class KalturaPermissionFilter(KalturaBasePermissionFilter):
 
     def setRoleIdIn(self, newRoleIdIn):
         self.roleIdIn = newRoleIdIn
-
-
-# @package Kaltura
-# @subpackage Client
-class KalturaPermissionByIdInFilter(KalturaBasePermissionFilter):
-    def __init__(self,
-            orderBy=NotImplemented,
-            idIn=NotImplemented):
-        KalturaBasePermissionFilter.__init__(self,
-            orderBy)
-
-        # Category item identifiers
-        # @var string
-        self.idIn = idIn
-
-
-    PROPERTY_LOADERS = {
-        'idIn': getXmlNodeText, 
-    }
-
-    def fromXml(self, node):
-        KalturaBasePermissionFilter.fromXml(self, node)
-        self.fromXmlImpl(node, KalturaPermissionByIdInFilter.PROPERTY_LOADERS)
-
-    def toParams(self):
-        kparams = KalturaBasePermissionFilter.toParams(self)
-        kparams.put("objectType", "KalturaPermissionByIdInFilter")
-        kparams.addStringIfDefined("idIn", self.idIn)
-        return kparams
-
-    def getIdIn(self):
-        return self.idIn
-
-    def setIdIn(self, newIdIn):
-        self.idIn = newIdIn
 
 
 # @package Kaltura
@@ -33741,11 +33684,11 @@ class KalturaPermission(KalturaObjectBase):
 
         # Comma separated permissions names from type SPECIAL_FEATURE
         # @var KalturaPermissionType
-        # @insertonly
         self.type = type
 
-        # Comma separated associated permission items IDs
+        # Comma separated assosiated permission items IDs
         # @var string
+        # @readonly
         self.permissionItemsIds = permissionItemsIds
 
 
@@ -33768,7 +33711,6 @@ class KalturaPermission(KalturaObjectBase):
         kparams.addStringIfDefined("name", self.name)
         kparams.addStringIfDefined("friendlyName", self.friendlyName)
         kparams.addStringEnumIfDefined("type", self.type)
-        kparams.addStringIfDefined("permissionItemsIds", self.permissionItemsIds)
         return kparams
 
     def getId(self):
@@ -33797,9 +33739,6 @@ class KalturaPermission(KalturaObjectBase):
 
     def getPermissionItemsIds(self):
         return self.permissionItemsIds
-
-    def setPermissionItemsIds(self, newPermissionItemsIds):
-        self.permissionItemsIds = newPermissionItemsIds
 
 
 # @package Kaltura
@@ -45781,18 +45720,6 @@ class KalturaPermissionService(KalturaServiceBase):
             return self.client.getMultiRequestResult()
         resultNode = self.client.doQueue()
 
-    def update(self, id, permission):
-        """Update an existing permission."""
-
-        kparams = KalturaParams()
-        kparams.addIntIfDefined("id", id);
-        kparams.addObjectIfDefined("permission", permission)
-        self.client.queueServiceActionCall("permission", "update", "KalturaPermission", kparams)
-        if self.client.isMultiRequest():
-            return self.client.getMultiRequestResult()
-        resultNode = self.client.doQueue()
-        return KalturaObjectFactory.create(resultNode, 'KalturaPermission')
-
 
 # @package Kaltura
 # @subpackage Client
@@ -48369,9 +48296,7 @@ class KalturaCoreClient(KalturaClientPlugin):
             'KalturaLanguageFilter': KalturaLanguageFilter,
             'KalturaMetaFilter': KalturaMetaFilter,
             'KalturaParentalRuleFilter': KalturaParentalRuleFilter,
-            'KalturaBasePermissionFilter': KalturaBasePermissionFilter,
             'KalturaPermissionFilter': KalturaPermissionFilter,
-            'KalturaPermissionByIdInFilter': KalturaPermissionByIdInFilter,
             'KalturaPermissionItemFilter': KalturaPermissionItemFilter,
             'KalturaPermissionItemByIdInFilter': KalturaPermissionItemByIdInFilter,
             'KalturaPermissionItemByApiActionFilter': KalturaPermissionItemByApiActionFilter,
