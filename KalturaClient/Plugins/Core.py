@@ -42,7 +42,7 @@ from ..Base import (
     KalturaServiceBase,
 )
 
-API_VERSION = '6.2.0.28982'
+API_VERSION = '6.2.0.28988'
 
 ########## enums ##########
 # @package Kaltura
@@ -7902,7 +7902,8 @@ class KalturaAssetHistoryFilter(KalturaFilter):
             typeIn=NotImplemented,
             assetIdIn=NotImplemented,
             statusEqual=NotImplemented,
-            daysLessThanOrEqual=NotImplemented):
+            daysLessThanOrEqual=NotImplemented,
+            kSql=NotImplemented):
         KalturaFilter.__init__(self,
             orderBy)
 
@@ -7926,12 +7927,17 @@ class KalturaAssetHistoryFilter(KalturaFilter):
         # @var int
         self.daysLessThanOrEqual = daysLessThanOrEqual
 
+        # KSQL expression
+        # @var string
+        self.kSql = kSql
+
 
     PROPERTY_LOADERS = {
         'typeIn': getXmlNodeText, 
         'assetIdIn': getXmlNodeText, 
         'statusEqual': (KalturaEnumsFactory.createString, "KalturaWatchStatus"), 
         'daysLessThanOrEqual': getXmlNodeInt, 
+        'kSql': getXmlNodeText, 
     }
 
     def fromXml(self, node):
@@ -7945,6 +7951,7 @@ class KalturaAssetHistoryFilter(KalturaFilter):
         kparams.addStringIfDefined("assetIdIn", self.assetIdIn)
         kparams.addStringEnumIfDefined("statusEqual", self.statusEqual)
         kparams.addIntIfDefined("daysLessThanOrEqual", self.daysLessThanOrEqual)
+        kparams.addStringIfDefined("kSql", self.kSql)
         return kparams
 
     def getTypeIn(self):
@@ -7970,6 +7977,12 @@ class KalturaAssetHistoryFilter(KalturaFilter):
 
     def setDaysLessThanOrEqual(self, newDaysLessThanOrEqual):
         self.daysLessThanOrEqual = newDaysLessThanOrEqual
+
+    def getKSql(self):
+        return self.kSql
+
+    def setKSql(self, newKSql):
+        self.kSql = newKSql
 
 
 # @package Kaltura
