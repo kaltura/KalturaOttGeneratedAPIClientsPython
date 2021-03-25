@@ -5,7 +5,7 @@
 #                          |_|\_\__,_|_|\__|\_,_|_| \__,_|
 #
 # This file is part of the Kaltura Collaborative Media Suite which allows users
-# to do with audio, video, and animation what Wiki platfroms allow them to do with
+# to do with audio, video, and animation what Wiki platforms allow them to do with
 # text.
 #
 # Copyright (C) 2006-2021  Kaltura Inc.
@@ -42,7 +42,7 @@ from ..Base import (
     KalturaServiceBase,
 )
 
-API_VERSION = '6.2.0.28984'
+API_VERSION = '6.2.0.29023'
 
 ########## enums ##########
 # @package Kaltura
@@ -7902,7 +7902,8 @@ class KalturaAssetHistoryFilter(KalturaFilter):
             typeIn=NotImplemented,
             assetIdIn=NotImplemented,
             statusEqual=NotImplemented,
-            daysLessThanOrEqual=NotImplemented):
+            daysLessThanOrEqual=NotImplemented,
+            kSql=NotImplemented):
         KalturaFilter.__init__(self,
             orderBy)
 
@@ -7926,12 +7927,17 @@ class KalturaAssetHistoryFilter(KalturaFilter):
         # @var int
         self.daysLessThanOrEqual = daysLessThanOrEqual
 
+        # KSQL expression
+        # @var string
+        self.kSql = kSql
+
 
     PROPERTY_LOADERS = {
         'typeIn': getXmlNodeText, 
         'assetIdIn': getXmlNodeText, 
         'statusEqual': (KalturaEnumsFactory.createString, "KalturaWatchStatus"), 
         'daysLessThanOrEqual': getXmlNodeInt, 
+        'kSql': getXmlNodeText, 
     }
 
     def fromXml(self, node):
@@ -7945,6 +7951,7 @@ class KalturaAssetHistoryFilter(KalturaFilter):
         kparams.addStringIfDefined("assetIdIn", self.assetIdIn)
         kparams.addStringEnumIfDefined("statusEqual", self.statusEqual)
         kparams.addIntIfDefined("daysLessThanOrEqual", self.daysLessThanOrEqual)
+        kparams.addStringIfDefined("kSql", self.kSql)
         return kparams
 
     def getTypeIn(self):
@@ -7970,6 +7977,12 @@ class KalturaAssetHistoryFilter(KalturaFilter):
 
     def setDaysLessThanOrEqual(self, newDaysLessThanOrEqual):
         self.daysLessThanOrEqual = newDaysLessThanOrEqual
+
+    def getKSql(self):
+        return self.kSql
+
+    def setKSql(self, newKSql):
+        self.kSql = newKSql
 
 
 # @package Kaltura
@@ -47356,6 +47369,17 @@ class KalturaSystemService(KalturaServiceBase):
         resultNode = self.client.doQueue()
         return getXmlNodeBool(resultNode)
 
+    def getLayeredCacheGroupConfig(self, groupId = 0):
+        """Returns the current layered cache group config of the sent groupId. You need to send groupId only if you wish to get it for a specific groupId and not the one the KS belongs to."""
+
+        kparams = KalturaParams()
+        kparams.addIntIfDefined("groupId", groupId);
+        self.client.queueServiceActionCall("system", "getLayeredCacheGroupConfig", "KalturaStringValue", kparams)
+        if self.client.isMultiRequest():
+            return self.client.getMultiRequestResult()
+        resultNode = self.client.doQueue()
+        return KalturaObjectFactory.create(resultNode, 'KalturaStringValue')
+
     def getTime(self):
         """Returns current server timestamp"""
 
@@ -47382,6 +47406,17 @@ class KalturaSystemService(KalturaServiceBase):
         kparams = KalturaParams()
         kparams.addIntIfDefined("groupId", groupId);
         self.client.queueServiceActionCall("system", "incrementLayeredCacheGroupConfigVersion", "None", kparams)
+        if self.client.isMultiRequest():
+            return self.client.getMultiRequestResult()
+        resultNode = self.client.doQueue()
+        return getXmlNodeBool(resultNode)
+
+    def invalidateLayeredCacheInvalidationKey(self, key):
+        """Returns true if the invalidation key was invalidated successfully or false otherwise."""
+
+        kparams = KalturaParams()
+        kparams.addStringIfDefined("key", key)
+        self.client.queueServiceActionCall("system", "invalidateLayeredCacheInvalidationKey", "None", kparams)
         if self.client.isMultiRequest():
             return self.client.getMultiRequestResult()
         resultNode = self.client.doQueue()
