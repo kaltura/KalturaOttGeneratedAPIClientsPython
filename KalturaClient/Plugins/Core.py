@@ -5,7 +5,7 @@
 #                          |_|\_\__,_|_|\__|\_,_|_| \__,_|
 #
 # This file is part of the Kaltura Collaborative Media Suite which allows users
-# to do with audio, video, and animation what Wiki platforms allow them to do with
+# to do with audio, video, and animation what Wiki platfroms allow them to do with
 # text.
 #
 # Copyright (C) 2006-2021  Kaltura Inc.
@@ -42,7 +42,7 @@ from ..Base import (
     KalturaServiceBase,
 )
 
-API_VERSION = '6.2.0.29023'
+API_VERSION = '6.3.0.29043'
 
 ########## enums ##########
 # @package Kaltura
@@ -2457,6 +2457,19 @@ class KalturaSubscriptionSetType(object):
 class KalturaSubscriptionTriggerType(object):
     START_DATE = "START_DATE"
     END_DATE = "END_DATE"
+
+    def __init__(self, value):
+        self.value = value
+
+    def getValue(self):
+        return self.value
+
+# @package Kaltura
+# @subpackage Client
+class KalturaSuspensionProfileInheritanceType(object):
+    ALWAYS = "ALWAYS"
+    NEVER = "NEVER"
+    DEFAULT = "DEFAULT"
 
     def __init__(self, value):
         self.value = value
@@ -11377,6 +11390,7 @@ class KalturaMediaFile(KalturaAssetFile):
             id=NotImplemented,
             type=NotImplemented,
             typeId=NotImplemented,
+            altUrl=NotImplemented,
             duration=NotImplemented,
             externalId=NotImplemented,
             altExternalId=NotImplemented,
@@ -11416,6 +11430,10 @@ class KalturaMediaFile(KalturaAssetFile):
         # Device types identifier as defined in the system
         # @var int
         self.typeId = typeId
+
+        # URL of the media file to be played
+        # @var string
+        self.altUrl = altUrl
 
         # Duration of the media file
         # @var int
@@ -11499,6 +11517,7 @@ class KalturaMediaFile(KalturaAssetFile):
         'id': getXmlNodeInt, 
         'type': getXmlNodeText, 
         'typeId': getXmlNodeInt, 
+        'altUrl': getXmlNodeText, 
         'duration': getXmlNodeInt, 
         'externalId': getXmlNodeText, 
         'altExternalId': getXmlNodeText, 
@@ -11529,6 +11548,7 @@ class KalturaMediaFile(KalturaAssetFile):
         kparams.put("objectType", "KalturaMediaFile")
         kparams.addIntIfDefined("assetId", self.assetId)
         kparams.addIntIfDefined("typeId", self.typeId)
+        kparams.addStringIfDefined("altUrl", self.altUrl)
         kparams.addIntIfDefined("duration", self.duration)
         kparams.addStringIfDefined("externalId", self.externalId)
         kparams.addStringIfDefined("altExternalId", self.altExternalId)
@@ -11567,6 +11587,12 @@ class KalturaMediaFile(KalturaAssetFile):
 
     def setTypeId(self, newTypeId):
         self.typeId = newTypeId
+
+    def getAltUrl(self):
+        return self.altUrl
+
+    def setAltUrl(self, newAltUrl):
+        self.altUrl = newAltUrl
 
     def getDuration(self):
         return self.duration
@@ -12062,6 +12088,7 @@ class KalturaPlaybackSource(KalturaMediaFile):
             id=NotImplemented,
             type=NotImplemented,
             typeId=NotImplemented,
+            altUrl=NotImplemented,
             duration=NotImplemented,
             externalId=NotImplemented,
             altExternalId=NotImplemented,
@@ -12093,6 +12120,7 @@ class KalturaPlaybackSource(KalturaMediaFile):
             id,
             type,
             typeId,
+            altUrl,
             duration,
             externalId,
             altExternalId,
@@ -15921,7 +15949,8 @@ class KalturaCategoryItem(KalturaCrudObject):
             endDateInSeconds=NotImplemented,
             type=NotImplemented,
             versionId=NotImplemented,
-            virtualAssetId=NotImplemented):
+            virtualAssetId=NotImplemented,
+            referenceId=NotImplemented):
         KalturaCrudObject.__init__(self)
 
         # Unique identifier for the category
@@ -15987,6 +16016,10 @@ class KalturaCategoryItem(KalturaCrudObject):
         # @readonly
         self.virtualAssetId = virtualAssetId
 
+        # Category reference identifier
+        # @var string
+        self.referenceId = referenceId
+
 
     PROPERTY_LOADERS = {
         'id': getXmlNodeInt, 
@@ -16003,6 +16036,7 @@ class KalturaCategoryItem(KalturaCrudObject):
         'type': getXmlNodeText, 
         'versionId': getXmlNodeInt, 
         'virtualAssetId': getXmlNodeInt, 
+        'referenceId': getXmlNodeText, 
     }
 
     def fromXml(self, node):
@@ -16020,6 +16054,7 @@ class KalturaCategoryItem(KalturaCrudObject):
         kparams.addIntIfDefined("startDateInSeconds", self.startDateInSeconds)
         kparams.addIntIfDefined("endDateInSeconds", self.endDateInSeconds)
         kparams.addStringIfDefined("type", self.type)
+        kparams.addStringIfDefined("referenceId", self.referenceId)
         return kparams
 
     def getId(self):
@@ -16087,6 +16122,12 @@ class KalturaCategoryItem(KalturaCrudObject):
 
     def getVirtualAssetId(self):
         return self.virtualAssetId
+
+    def getReferenceId(self):
+        return self.referenceId
+
+    def setReferenceId(self, newReferenceId):
+        self.referenceId = newReferenceId
 
 
 # @package Kaltura
@@ -22811,7 +22852,8 @@ class KalturaGeneralPartnerConfig(KalturaPartnerConfiguration):
             enableRegionFiltering=NotImplemented,
             defaultRegion=NotImplemented,
             rollingDeviceData=NotImplemented,
-            finishedPercentThreshold=NotImplemented):
+            finishedPercentThreshold=NotImplemented,
+            suspensionProfileInheritanceType=NotImplemented):
         KalturaPartnerConfiguration.__init__(self)
 
         # Partner name
@@ -22870,6 +22912,10 @@ class KalturaGeneralPartnerConfig(KalturaPartnerConfiguration):
         # @var int
         self.finishedPercentThreshold = finishedPercentThreshold
 
+        # Suspension Profile Inheritance
+        # @var KalturaSuspensionProfileInheritanceType
+        self.suspensionProfileInheritanceType = suspensionProfileInheritanceType
+
 
     PROPERTY_LOADERS = {
         'partnerName': getXmlNodeText, 
@@ -22886,6 +22932,7 @@ class KalturaGeneralPartnerConfig(KalturaPartnerConfiguration):
         'defaultRegion': getXmlNodeInt, 
         'rollingDeviceData': (KalturaObjectFactory.create, 'KalturaRollingDeviceRemovalData'), 
         'finishedPercentThreshold': getXmlNodeInt, 
+        'suspensionProfileInheritanceType': (KalturaEnumsFactory.createString, "KalturaSuspensionProfileInheritanceType"), 
     }
 
     def fromXml(self, node):
@@ -22909,6 +22956,7 @@ class KalturaGeneralPartnerConfig(KalturaPartnerConfiguration):
         kparams.addIntIfDefined("defaultRegion", self.defaultRegion)
         kparams.addObjectIfDefined("rollingDeviceData", self.rollingDeviceData)
         kparams.addIntIfDefined("finishedPercentThreshold", self.finishedPercentThreshold)
+        kparams.addStringEnumIfDefined("suspensionProfileInheritanceType", self.suspensionProfileInheritanceType)
         return kparams
 
     def getPartnerName(self):
@@ -22994,6 +23042,12 @@ class KalturaGeneralPartnerConfig(KalturaPartnerConfiguration):
 
     def setFinishedPercentThreshold(self, newFinishedPercentThreshold):
         self.finishedPercentThreshold = newFinishedPercentThreshold
+
+    def getSuspensionProfileInheritanceType(self):
+        return self.suspensionProfileInheritanceType
+
+    def setSuspensionProfileInheritanceType(self, newSuspensionProfileInheritanceType):
+        self.suspensionProfileInheritanceType = newSuspensionProfileInheritanceType
 
 
 # @package Kaltura
@@ -36402,7 +36456,8 @@ class KalturaCategoryTree(KalturaObjectBase):
             endDateInSeconds=NotImplemented,
             type=NotImplemented,
             versionId=NotImplemented,
-            virtualAssetId=NotImplemented):
+            virtualAssetId=NotImplemented,
+            referenceId=NotImplemented):
         KalturaObjectBase.__init__(self)
 
         # Unique identifier for the category item
@@ -36463,6 +36518,11 @@ class KalturaCategoryTree(KalturaObjectBase):
         # @readonly
         self.virtualAssetId = virtualAssetId
 
+        # Category reference identifier
+        # @var string
+        # @readonly
+        self.referenceId = referenceId
+
 
     PROPERTY_LOADERS = {
         'id': getXmlNodeInt, 
@@ -36478,6 +36538,7 @@ class KalturaCategoryTree(KalturaObjectBase):
         'type': getXmlNodeText, 
         'versionId': getXmlNodeInt, 
         'virtualAssetId': getXmlNodeInt, 
+        'referenceId': getXmlNodeText, 
     }
 
     def fromXml(self, node):
@@ -36559,6 +36620,9 @@ class KalturaCategoryTree(KalturaObjectBase):
 
     def getVirtualAssetId(self):
         return self.virtualAssetId
+
+    def getReferenceId(self):
+        return self.referenceId
 
 
 # @package Kaltura
@@ -41996,7 +42060,7 @@ class KalturaAssetFileService(KalturaServiceBase):
         resultNode = self.client.doQueue()
         return KalturaObjectFactory.create(resultNode, 'KalturaAssetFileContext')
 
-    def playManifest(self, partnerId, assetId, assetType, assetFileId, contextType, ks = NotImplemented, tokenizedUrl = NotImplemented):
+    def playManifest(self, partnerId, assetId, assetType, assetFileId, contextType, ks = NotImplemented, tokenizedUrl = NotImplemented, isAltUrl = False):
         """Redirects to play manifest"""
 
         kparams = KalturaParams()
@@ -42007,6 +42071,7 @@ class KalturaAssetFileService(KalturaServiceBase):
         kparams.addStringIfDefined("contextType", contextType)
         kparams.addStringIfDefined("ks", ks)
         kparams.addStringIfDefined("tokenizedUrl", tokenizedUrl)
+        kparams.addBoolIfDefined("isAltUrl", isAltUrl);
         self.client.queueServiceActionCall("assetfile", "playManifest", "KalturaAssetFile", kparams)
         if self.client.isMultiRequest():
             return self.client.getMultiRequestResult()
@@ -47369,6 +47434,19 @@ class KalturaSystemService(KalturaServiceBase):
         resultNode = self.client.doQueue()
         return getXmlNodeBool(resultNode)
 
+    def getInvalidationKeyValue(self, invalidationKey, layeredCacheConfigName = NotImplemented, groupId = 0):
+        """Returns the epoch value of an invalidation key if it was found"""
+
+        kparams = KalturaParams()
+        kparams.addStringIfDefined("invalidationKey", invalidationKey)
+        kparams.addStringIfDefined("layeredCacheConfigName", layeredCacheConfigName)
+        kparams.addIntIfDefined("groupId", groupId);
+        self.client.queueServiceActionCall("system", "getInvalidationKeyValue", "KalturaLongValue", kparams)
+        if self.client.isMultiRequest():
+            return self.client.getMultiRequestResult()
+        resultNode = self.client.doQueue()
+        return KalturaObjectFactory.create(resultNode, 'KalturaLongValue')
+
     def getLayeredCacheGroupConfig(self, groupId = 0):
         """Returns the current layered cache group config of the sent groupId. You need to send groupId only if you wish to get it for a specific groupId and not the one the KS belongs to."""
 
@@ -48457,6 +48535,7 @@ class KalturaCoreClient(KalturaClientPlugin):
             'KalturaSubscriptionSetOrderBy': KalturaSubscriptionSetOrderBy,
             'KalturaSubscriptionSetType': KalturaSubscriptionSetType,
             'KalturaSubscriptionTriggerType': KalturaSubscriptionTriggerType,
+            'KalturaSuspensionProfileInheritanceType': KalturaSuspensionProfileInheritanceType,
             'KalturaTagOrderBy': KalturaTagOrderBy,
             'KalturaTimeShiftedTvState': KalturaTimeShiftedTvState,
             'KalturaTopicAutomaticIssueNotification': KalturaTopicAutomaticIssueNotification,
