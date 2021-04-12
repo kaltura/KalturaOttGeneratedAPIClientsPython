@@ -5,7 +5,7 @@
 #                          |_|\_\__,_|_|\__|\_,_|_| \__,_|
 #
 # This file is part of the Kaltura Collaborative Media Suite which allows users
-# to do with audio, video, and animation what Wiki platforms allow them to do with
+# to do with audio, video, and animation what Wiki platfroms allow them to do with
 # text.
 #
 # Copyright (C) 2006-2021  Kaltura Inc.
@@ -42,7 +42,7 @@ from ..Base import (
     KalturaServiceBase,
 )
 
-API_VERSION = '6.2.0.29023'
+API_VERSION = '6.3.0.29040'
 
 ########## enums ##########
 # @package Kaltura
@@ -2457,6 +2457,19 @@ class KalturaSubscriptionSetType(object):
 class KalturaSubscriptionTriggerType(object):
     START_DATE = "START_DATE"
     END_DATE = "END_DATE"
+
+    def __init__(self, value):
+        self.value = value
+
+    def getValue(self):
+        return self.value
+
+# @package Kaltura
+# @subpackage Client
+class KalturaSuspensionProfileInheritanceType(object):
+    ALWAYS = "ALWAYS"
+    NEVER = "NEVER"
+    DEFAULT = "DEFAULT"
 
     def __init__(self, value):
         self.value = value
@@ -11377,6 +11390,7 @@ class KalturaMediaFile(KalturaAssetFile):
             id=NotImplemented,
             type=NotImplemented,
             typeId=NotImplemented,
+            altUrl=NotImplemented,
             duration=NotImplemented,
             externalId=NotImplemented,
             altExternalId=NotImplemented,
@@ -11416,6 +11430,10 @@ class KalturaMediaFile(KalturaAssetFile):
         # Device types identifier as defined in the system
         # @var int
         self.typeId = typeId
+
+        # URL of the media file to be played
+        # @var string
+        self.altUrl = altUrl
 
         # Duration of the media file
         # @var int
@@ -11499,6 +11517,7 @@ class KalturaMediaFile(KalturaAssetFile):
         'id': getXmlNodeInt, 
         'type': getXmlNodeText, 
         'typeId': getXmlNodeInt, 
+        'altUrl': getXmlNodeText, 
         'duration': getXmlNodeInt, 
         'externalId': getXmlNodeText, 
         'altExternalId': getXmlNodeText, 
@@ -11529,6 +11548,7 @@ class KalturaMediaFile(KalturaAssetFile):
         kparams.put("objectType", "KalturaMediaFile")
         kparams.addIntIfDefined("assetId", self.assetId)
         kparams.addIntIfDefined("typeId", self.typeId)
+        kparams.addStringIfDefined("altUrl", self.altUrl)
         kparams.addIntIfDefined("duration", self.duration)
         kparams.addStringIfDefined("externalId", self.externalId)
         kparams.addStringIfDefined("altExternalId", self.altExternalId)
@@ -11567,6 +11587,12 @@ class KalturaMediaFile(KalturaAssetFile):
 
     def setTypeId(self, newTypeId):
         self.typeId = newTypeId
+
+    def getAltUrl(self):
+        return self.altUrl
+
+    def setAltUrl(self, newAltUrl):
+        self.altUrl = newAltUrl
 
     def getDuration(self):
         return self.duration
@@ -12062,6 +12088,7 @@ class KalturaPlaybackSource(KalturaMediaFile):
             id=NotImplemented,
             type=NotImplemented,
             typeId=NotImplemented,
+            altUrl=NotImplemented,
             duration=NotImplemented,
             externalId=NotImplemented,
             altExternalId=NotImplemented,
@@ -12093,6 +12120,7 @@ class KalturaPlaybackSource(KalturaMediaFile):
             id,
             type,
             typeId,
+            altUrl,
             duration,
             externalId,
             altExternalId,
@@ -22811,7 +22839,8 @@ class KalturaGeneralPartnerConfig(KalturaPartnerConfiguration):
             enableRegionFiltering=NotImplemented,
             defaultRegion=NotImplemented,
             rollingDeviceData=NotImplemented,
-            finishedPercentThreshold=NotImplemented):
+            finishedPercentThreshold=NotImplemented,
+            suspensionProfileInheritanceType=NotImplemented):
         KalturaPartnerConfiguration.__init__(self)
 
         # Partner name
@@ -22870,6 +22899,10 @@ class KalturaGeneralPartnerConfig(KalturaPartnerConfiguration):
         # @var int
         self.finishedPercentThreshold = finishedPercentThreshold
 
+        # Suspension Profile Inheritance
+        # @var KalturaSuspensionProfileInheritanceType
+        self.suspensionProfileInheritanceType = suspensionProfileInheritanceType
+
 
     PROPERTY_LOADERS = {
         'partnerName': getXmlNodeText, 
@@ -22886,6 +22919,7 @@ class KalturaGeneralPartnerConfig(KalturaPartnerConfiguration):
         'defaultRegion': getXmlNodeInt, 
         'rollingDeviceData': (KalturaObjectFactory.create, 'KalturaRollingDeviceRemovalData'), 
         'finishedPercentThreshold': getXmlNodeInt, 
+        'suspensionProfileInheritanceType': (KalturaEnumsFactory.createString, "KalturaSuspensionProfileInheritanceType"), 
     }
 
     def fromXml(self, node):
@@ -22909,6 +22943,7 @@ class KalturaGeneralPartnerConfig(KalturaPartnerConfiguration):
         kparams.addIntIfDefined("defaultRegion", self.defaultRegion)
         kparams.addObjectIfDefined("rollingDeviceData", self.rollingDeviceData)
         kparams.addIntIfDefined("finishedPercentThreshold", self.finishedPercentThreshold)
+        kparams.addStringEnumIfDefined("suspensionProfileInheritanceType", self.suspensionProfileInheritanceType)
         return kparams
 
     def getPartnerName(self):
@@ -22994,6 +23029,12 @@ class KalturaGeneralPartnerConfig(KalturaPartnerConfiguration):
 
     def setFinishedPercentThreshold(self, newFinishedPercentThreshold):
         self.finishedPercentThreshold = newFinishedPercentThreshold
+
+    def getSuspensionProfileInheritanceType(self):
+        return self.suspensionProfileInheritanceType
+
+    def setSuspensionProfileInheritanceType(self, newSuspensionProfileInheritanceType):
+        self.suspensionProfileInheritanceType = newSuspensionProfileInheritanceType
 
 
 # @package Kaltura
@@ -39083,7 +39124,8 @@ class KalturaEpgNotificationSettings(KalturaObjectBase):
             enabled=NotImplemented,
             deviceFamilyIds=NotImplemented,
             liveAssetIds=NotImplemented,
-            timeRange=NotImplemented):
+            backwardTimeRange=NotImplemented,
+            forwardTimeRange=NotImplemented):
         KalturaObjectBase.__init__(self)
 
         # EPG notification capability is enabled for the account
@@ -39098,17 +39140,23 @@ class KalturaEpgNotificationSettings(KalturaObjectBase):
         # @var string
         self.liveAssetIds = liveAssetIds
 
-        # The range (in hours), in which, EPG updates triggers a notification,
+        # The backward range (in hours), in which, EPG updates triggers a notification,
         #             every program that is updated and it's starts time falls within this range shall trigger a notification
         # @var int
-        self.timeRange = timeRange
+        self.backwardTimeRange = backwardTimeRange
+
+        # The forward range (in hours), in which, EPG updates triggers a notification,
+        #             every program that is updated and it's starts time falls within this range shall trigger a notification
+        # @var int
+        self.forwardTimeRange = forwardTimeRange
 
 
     PROPERTY_LOADERS = {
         'enabled': getXmlNodeBool, 
         'deviceFamilyIds': getXmlNodeText, 
         'liveAssetIds': getXmlNodeText, 
-        'timeRange': getXmlNodeInt, 
+        'backwardTimeRange': getXmlNodeInt, 
+        'forwardTimeRange': getXmlNodeInt, 
     }
 
     def fromXml(self, node):
@@ -39121,7 +39169,8 @@ class KalturaEpgNotificationSettings(KalturaObjectBase):
         kparams.addBoolIfDefined("enabled", self.enabled)
         kparams.addStringIfDefined("deviceFamilyIds", self.deviceFamilyIds)
         kparams.addStringIfDefined("liveAssetIds", self.liveAssetIds)
-        kparams.addIntIfDefined("timeRange", self.timeRange)
+        kparams.addIntIfDefined("backwardTimeRange", self.backwardTimeRange)
+        kparams.addIntIfDefined("forwardTimeRange", self.forwardTimeRange)
         return kparams
 
     def getEnabled(self):
@@ -39142,11 +39191,17 @@ class KalturaEpgNotificationSettings(KalturaObjectBase):
     def setLiveAssetIds(self, newLiveAssetIds):
         self.liveAssetIds = newLiveAssetIds
 
-    def getTimeRange(self):
-        return self.timeRange
+    def getBackwardTimeRange(self):
+        return self.backwardTimeRange
 
-    def setTimeRange(self, newTimeRange):
-        self.timeRange = newTimeRange
+    def setBackwardTimeRange(self, newBackwardTimeRange):
+        self.backwardTimeRange = newBackwardTimeRange
+
+    def getForwardTimeRange(self):
+        return self.forwardTimeRange
+
+    def setForwardTimeRange(self, newForwardTimeRange):
+        self.forwardTimeRange = newForwardTimeRange
 
 
 # @package Kaltura
@@ -41996,7 +42051,7 @@ class KalturaAssetFileService(KalturaServiceBase):
         resultNode = self.client.doQueue()
         return KalturaObjectFactory.create(resultNode, 'KalturaAssetFileContext')
 
-    def playManifest(self, partnerId, assetId, assetType, assetFileId, contextType, ks = NotImplemented, tokenizedUrl = NotImplemented):
+    def playManifest(self, partnerId, assetId, assetType, assetFileId, contextType, ks = NotImplemented, tokenizedUrl = NotImplemented, isAltUrl = False):
         """Redirects to play manifest"""
 
         kparams = KalturaParams()
@@ -42007,6 +42062,7 @@ class KalturaAssetFileService(KalturaServiceBase):
         kparams.addStringIfDefined("contextType", contextType)
         kparams.addStringIfDefined("ks", ks)
         kparams.addStringIfDefined("tokenizedUrl", tokenizedUrl)
+        kparams.addBoolIfDefined("isAltUrl", isAltUrl);
         self.client.queueServiceActionCall("assetfile", "playManifest", "KalturaAssetFile", kparams)
         if self.client.isMultiRequest():
             return self.client.getMultiRequestResult()
@@ -47369,6 +47425,19 @@ class KalturaSystemService(KalturaServiceBase):
         resultNode = self.client.doQueue()
         return getXmlNodeBool(resultNode)
 
+    def getInvalidationKeyValue(self, invalidationKey, layeredCacheConfigName = NotImplemented, groupId = 0):
+        """Returns the epoch value of an invalidation key if it was found"""
+
+        kparams = KalturaParams()
+        kparams.addStringIfDefined("invalidationKey", invalidationKey)
+        kparams.addStringIfDefined("layeredCacheConfigName", layeredCacheConfigName)
+        kparams.addIntIfDefined("groupId", groupId);
+        self.client.queueServiceActionCall("system", "getInvalidationKeyValue", "KalturaLongValue", kparams)
+        if self.client.isMultiRequest():
+            return self.client.getMultiRequestResult()
+        resultNode = self.client.doQueue()
+        return KalturaObjectFactory.create(resultNode, 'KalturaLongValue')
+
     def getLayeredCacheGroupConfig(self, groupId = 0):
         """Returns the current layered cache group config of the sent groupId. You need to send groupId only if you wish to get it for a specific groupId and not the one the KS belongs to."""
 
@@ -48457,6 +48526,7 @@ class KalturaCoreClient(KalturaClientPlugin):
             'KalturaSubscriptionSetOrderBy': KalturaSubscriptionSetOrderBy,
             'KalturaSubscriptionSetType': KalturaSubscriptionSetType,
             'KalturaSubscriptionTriggerType': KalturaSubscriptionTriggerType,
+            'KalturaSuspensionProfileInheritanceType': KalturaSuspensionProfileInheritanceType,
             'KalturaTagOrderBy': KalturaTagOrderBy,
             'KalturaTimeShiftedTvState': KalturaTimeShiftedTvState,
             'KalturaTopicAutomaticIssueNotification': KalturaTopicAutomaticIssueNotification,
