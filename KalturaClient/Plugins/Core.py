@@ -42,7 +42,7 @@ from ..Base import (
     KalturaServiceBase,
 )
 
-API_VERSION = '6.3.0.29040'
+API_VERSION = '6.3.0.29045'
 
 ########## enums ##########
 # @package Kaltura
@@ -39124,8 +39124,7 @@ class KalturaEpgNotificationSettings(KalturaObjectBase):
             enabled=NotImplemented,
             deviceFamilyIds=NotImplemented,
             liveAssetIds=NotImplemented,
-            backwardTimeRange=NotImplemented,
-            forwardTimeRange=NotImplemented):
+            timeRange=NotImplemented):
         KalturaObjectBase.__init__(self)
 
         # EPG notification capability is enabled for the account
@@ -39140,23 +39139,17 @@ class KalturaEpgNotificationSettings(KalturaObjectBase):
         # @var string
         self.liveAssetIds = liveAssetIds
 
-        # The backward range (in hours), in which, EPG updates triggers a notification,
+        # The range (in hours), in which, EPG updates triggers a notification,
         #             every program that is updated and it's starts time falls within this range shall trigger a notification
         # @var int
-        self.backwardTimeRange = backwardTimeRange
-
-        # The forward range (in hours), in which, EPG updates triggers a notification,
-        #             every program that is updated and it's starts time falls within this range shall trigger a notification
-        # @var int
-        self.forwardTimeRange = forwardTimeRange
+        self.timeRange = timeRange
 
 
     PROPERTY_LOADERS = {
         'enabled': getXmlNodeBool, 
         'deviceFamilyIds': getXmlNodeText, 
         'liveAssetIds': getXmlNodeText, 
-        'backwardTimeRange': getXmlNodeInt, 
-        'forwardTimeRange': getXmlNodeInt, 
+        'timeRange': getXmlNodeInt, 
     }
 
     def fromXml(self, node):
@@ -39169,8 +39162,7 @@ class KalturaEpgNotificationSettings(KalturaObjectBase):
         kparams.addBoolIfDefined("enabled", self.enabled)
         kparams.addStringIfDefined("deviceFamilyIds", self.deviceFamilyIds)
         kparams.addStringIfDefined("liveAssetIds", self.liveAssetIds)
-        kparams.addIntIfDefined("backwardTimeRange", self.backwardTimeRange)
-        kparams.addIntIfDefined("forwardTimeRange", self.forwardTimeRange)
+        kparams.addIntIfDefined("timeRange", self.timeRange)
         return kparams
 
     def getEnabled(self):
@@ -39191,17 +39183,11 @@ class KalturaEpgNotificationSettings(KalturaObjectBase):
     def setLiveAssetIds(self, newLiveAssetIds):
         self.liveAssetIds = newLiveAssetIds
 
-    def getBackwardTimeRange(self):
-        return self.backwardTimeRange
+    def getTimeRange(self):
+        return self.timeRange
 
-    def setBackwardTimeRange(self, newBackwardTimeRange):
-        self.backwardTimeRange = newBackwardTimeRange
-
-    def getForwardTimeRange(self):
-        return self.forwardTimeRange
-
-    def setForwardTimeRange(self, newForwardTimeRange):
-        self.forwardTimeRange = newForwardTimeRange
+    def setTimeRange(self, newTimeRange):
+        self.timeRange = newTimeRange
 
 
 # @package Kaltura
