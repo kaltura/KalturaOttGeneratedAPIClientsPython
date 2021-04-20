@@ -5,7 +5,7 @@
 #                          |_|\_\__,_|_|\__|\_,_|_| \__,_|
 #
 # This file is part of the Kaltura Collaborative Media Suite which allows users
-# to do with audio, video, and animation what Wiki platfroms allow them to do with
+# to do with audio, video, and animation what Wiki platforms allow them to do with
 # text.
 #
 # Copyright (C) 2006-2021  Kaltura Inc.
@@ -42,7 +42,7 @@ from ..Base import (
     KalturaServiceBase,
 )
 
-API_VERSION = '6.3.0.29045'
+API_VERSION = '6.3.0.29059'
 
 ########## enums ##########
 # @package Kaltura
@@ -39147,7 +39147,8 @@ class KalturaEpgNotificationSettings(KalturaObjectBase):
             enabled=NotImplemented,
             deviceFamilyIds=NotImplemented,
             liveAssetIds=NotImplemented,
-            timeRange=NotImplemented):
+            backwardTimeRange=NotImplemented,
+            forwardTimeRange=NotImplemented):
         KalturaObjectBase.__init__(self)
 
         # EPG notification capability is enabled for the account
@@ -39162,17 +39163,23 @@ class KalturaEpgNotificationSettings(KalturaObjectBase):
         # @var string
         self.liveAssetIds = liveAssetIds
 
-        # The range (in hours), in which, EPG updates triggers a notification,
+        # The backward range (in hours), in which, EPG updates triggers a notification,
         #             every program that is updated and it's starts time falls within this range shall trigger a notification
         # @var int
-        self.timeRange = timeRange
+        self.backwardTimeRange = backwardTimeRange
+
+        # The forward range (in hours), in which, EPG updates triggers a notification,
+        #             every program that is updated and it's starts time falls within this range shall trigger a notification
+        # @var int
+        self.forwardTimeRange = forwardTimeRange
 
 
     PROPERTY_LOADERS = {
         'enabled': getXmlNodeBool, 
         'deviceFamilyIds': getXmlNodeText, 
         'liveAssetIds': getXmlNodeText, 
-        'timeRange': getXmlNodeInt, 
+        'backwardTimeRange': getXmlNodeInt, 
+        'forwardTimeRange': getXmlNodeInt, 
     }
 
     def fromXml(self, node):
@@ -39185,7 +39192,8 @@ class KalturaEpgNotificationSettings(KalturaObjectBase):
         kparams.addBoolIfDefined("enabled", self.enabled)
         kparams.addStringIfDefined("deviceFamilyIds", self.deviceFamilyIds)
         kparams.addStringIfDefined("liveAssetIds", self.liveAssetIds)
-        kparams.addIntIfDefined("timeRange", self.timeRange)
+        kparams.addIntIfDefined("backwardTimeRange", self.backwardTimeRange)
+        kparams.addIntIfDefined("forwardTimeRange", self.forwardTimeRange)
         return kparams
 
     def getEnabled(self):
@@ -39206,11 +39214,17 @@ class KalturaEpgNotificationSettings(KalturaObjectBase):
     def setLiveAssetIds(self, newLiveAssetIds):
         self.liveAssetIds = newLiveAssetIds
 
-    def getTimeRange(self):
-        return self.timeRange
+    def getBackwardTimeRange(self):
+        return self.backwardTimeRange
 
-    def setTimeRange(self, newTimeRange):
-        self.timeRange = newTimeRange
+    def setBackwardTimeRange(self, newBackwardTimeRange):
+        self.backwardTimeRange = newBackwardTimeRange
+
+    def getForwardTimeRange(self):
+        return self.forwardTimeRange
+
+    def setForwardTimeRange(self, newForwardTimeRange):
+        self.forwardTimeRange = newForwardTimeRange
 
 
 # @package Kaltura
