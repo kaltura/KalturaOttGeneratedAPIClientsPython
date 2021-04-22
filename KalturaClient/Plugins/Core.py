@@ -42,7 +42,7 @@ from ..Base import (
     KalturaServiceBase,
 )
 
-API_VERSION = '6.3.0.29047'
+API_VERSION = '6.3.0.29049'
 
 ########## enums ##########
 # @package Kaltura
@@ -1463,6 +1463,7 @@ class KalturaMediaFileStreamerType(object):
     MPEG_DASH = "MPEG_DASH"
     URL = "URL"
     SMOOTH_STREAMING = "SMOOTH_STREAMING"
+    MULTICAST = "MULTICAST"
     NONE = "NONE"
 
     def __init__(self, value):
@@ -35400,7 +35401,7 @@ class KalturaPlaybackContextOptions(KalturaObjectBase):
         # @var string
         self.mediaProtocol = mediaProtocol
 
-        # Playback streamer type: applehttp, mpegdash, url, smothstreaming, none
+        # Playback streamer type: applehttp, mpegdash, url, smothstreaming, multicast, none
         # @var string
         self.streamerType = streamerType
 
