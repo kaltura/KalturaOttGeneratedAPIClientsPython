@@ -42,7 +42,7 @@ from ..Base import (
     KalturaServiceBase,
 )
 
-API_VERSION = '6.4.0.29129'
+API_VERSION = '6.4.0.29132'
 
 ########## enums ##########
 # @package Kaltura
@@ -36244,7 +36244,8 @@ class KalturaAssetFileContext(KalturaObjectBase):
     def __init__(self,
             viewLifeCycle=NotImplemented,
             fullLifeCycle=NotImplemented,
-            isOfflinePlayBack=NotImplemented):
+            isOfflinePlayBack=NotImplemented,
+            isLivePlayBack=NotImplemented):
         KalturaObjectBase.__init__(self)
 
         # viewLifeCycle
@@ -36262,11 +36263,17 @@ class KalturaAssetFileContext(KalturaObjectBase):
         # @readonly
         self.isOfflinePlayBack = isOfflinePlayBack
 
+        # Is Live PlayBack
+        # @var bool
+        # @readonly
+        self.isLivePlayBack = isLivePlayBack
+
 
     PROPERTY_LOADERS = {
         'viewLifeCycle': getXmlNodeText, 
         'fullLifeCycle': getXmlNodeText, 
         'isOfflinePlayBack': getXmlNodeBool, 
+        'isLivePlayBack': getXmlNodeBool, 
     }
 
     def fromXml(self, node):
@@ -36286,6 +36293,9 @@ class KalturaAssetFileContext(KalturaObjectBase):
 
     def getIsOfflinePlayBack(self):
         return self.isOfflinePlayBack
+
+    def getIsLivePlayBack(self):
+        return self.isLivePlayBack
 
 
 # @package Kaltura
