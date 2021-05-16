@@ -42,7 +42,7 @@ from ..Base import (
     KalturaServiceBase,
 )
 
-API_VERSION = '6.4.0.29137'
+API_VERSION = '6.4.0.29140'
 
 ########## enums ##########
 # @package Kaltura
@@ -1678,7 +1678,6 @@ class KalturaPartnerConfigurationType(object):
     CATALOG = "Catalog"
     SECURITY = "Security"
     OPC = "Opc"
-    BASE = "Base"
 
     def __init__(self, value):
         self.value = value
@@ -4582,41 +4581,6 @@ class KalturaOTTUserFilter(KalturaFilter):
 
     def setEmailEqual(self, newEmailEqual):
         self.emailEqual = newEmailEqual
-
-
-# @package Kaltura
-# @subpackage Client
-class KalturaPartnerFilter(KalturaFilter):
-    def __init__(self,
-            orderBy=NotImplemented,
-            idIn=NotImplemented):
-        KalturaFilter.__init__(self,
-            orderBy)
-
-        # Comma separated discount codes
-        # @var string
-        self.idIn = idIn
-
-
-    PROPERTY_LOADERS = {
-        'idIn': getXmlNodeText, 
-    }
-
-    def fromXml(self, node):
-        KalturaFilter.fromXml(self, node)
-        self.fromXmlImpl(node, KalturaPartnerFilter.PROPERTY_LOADERS)
-
-    def toParams(self):
-        kparams = KalturaFilter.toParams(self)
-        kparams.put("objectType", "KalturaPartnerFilter")
-        kparams.addStringIfDefined("idIn", self.idIn)
-        return kparams
-
-    def getIdIn(self):
-        return self.idIn
-
-    def setIdIn(self, newIdIn):
-        self.idIn = newIdIn
 
 
 # @package Kaltura
@@ -12425,113 +12389,6 @@ class KalturaOTTUserListResponse(KalturaListResponse):
     def toParams(self):
         kparams = KalturaListResponse.toParams(self)
         kparams.put("objectType", "KalturaOTTUserListResponse")
-        kparams.addArrayIfDefined("objects", self.objects)
-        return kparams
-
-    def getObjects(self):
-        return self.objects
-
-    def setObjects(self, newObjects):
-        self.objects = newObjects
-
-
-# @package Kaltura
-# @subpackage Client
-class KalturaPartner(KalturaObjectBase):
-    def __init__(self,
-            id=NotImplemented,
-            name=NotImplemented,
-            createDate=NotImplemented,
-            updateDate=NotImplemented):
-        KalturaObjectBase.__init__(self)
-
-        # PartnerId
-        # @var int
-        self.id = id
-
-        # PartnerName
-        # @var string
-        self.name = name
-
-        # Creat date represented as epoch
-        # @var int
-        self.createDate = createDate
-
-        # Update date represented as epoch
-        # @var int
-        self.updateDate = updateDate
-
-
-    PROPERTY_LOADERS = {
-        'id': getXmlNodeInt, 
-        'name': getXmlNodeText, 
-        'createDate': getXmlNodeInt, 
-        'updateDate': getXmlNodeInt, 
-    }
-
-    def fromXml(self, node):
-        KalturaObjectBase.fromXml(self, node)
-        self.fromXmlImpl(node, KalturaPartner.PROPERTY_LOADERS)
-
-    def toParams(self):
-        kparams = KalturaObjectBase.toParams(self)
-        kparams.put("objectType", "KalturaPartner")
-        kparams.addIntIfDefined("id", self.id)
-        kparams.addStringIfDefined("name", self.name)
-        kparams.addIntIfDefined("createDate", self.createDate)
-        kparams.addIntIfDefined("updateDate", self.updateDate)
-        return kparams
-
-    def getId(self):
-        return self.id
-
-    def setId(self, newId):
-        self.id = newId
-
-    def getName(self):
-        return self.name
-
-    def setName(self, newName):
-        self.name = newName
-
-    def getCreateDate(self):
-        return self.createDate
-
-    def setCreateDate(self, newCreateDate):
-        self.createDate = newCreateDate
-
-    def getUpdateDate(self):
-        return self.updateDate
-
-    def setUpdateDate(self, newUpdateDate):
-        self.updateDate = newUpdateDate
-
-
-# @package Kaltura
-# @subpackage Client
-class KalturaPartnerListResponse(KalturaListResponse):
-    def __init__(self,
-            totalCount=NotImplemented,
-            objects=NotImplemented):
-        KalturaListResponse.__init__(self,
-            totalCount)
-
-        # A list of Partners
-        # @var array of KalturaPartner
-        self.objects = objects
-
-
-    PROPERTY_LOADERS = {
-        'objects': (KalturaObjectFactory.createArray, 'KalturaPartner'), 
-    }
-
-    def fromXml(self, node):
-        KalturaListResponse.fromXml(self, node)
-        self.fromXmlImpl(node, KalturaPartnerListResponse.PROPERTY_LOADERS)
-
-    def toParams(self):
-        kparams = KalturaListResponse.toParams(self)
-        kparams.put("objectType", "KalturaPartnerListResponse")
         kparams.addArrayIfDefined("objects", self.objects)
         return kparams
 
@@ -22679,117 +22536,6 @@ class KalturaPartnerConfigurationListResponse(KalturaListResponse):
 
     def setObjects(self, newObjects):
         self.objects = newObjects
-
-
-# @package Kaltura
-# @subpackage Client
-class KalturaBasePartnerConfiguration(KalturaPartnerConfiguration):
-    def __init__(self,
-            ksExpirationSeconds=NotImplemented,
-            appTokenSessionMaxDurationSeconds=NotImplemented,
-            anonymousKSExpirationSeconds=NotImplemented,
-            refreshExpirationForPinLoginSeconds=NotImplemented,
-            appTokenMaxExpirySeconds=NotImplemented,
-            uploadTokenExpirySeconds=NotImplemented,
-            apptokenUserValidationDisabled=NotImplemented):
-        KalturaPartnerConfiguration.__init__(self)
-
-        # KSExpirationSeconds
-        # @var int
-        self.ksExpirationSeconds = ksExpirationSeconds
-
-        # AppTokenSessionMaxDurationSeconds
-        # @var int
-        self.appTokenSessionMaxDurationSeconds = appTokenSessionMaxDurationSeconds
-
-        # AnonymousKSExpirationSeconds
-        # @var int
-        self.anonymousKSExpirationSeconds = anonymousKSExpirationSeconds
-
-        # RefreshExpirationForPinLoginSeconds
-        # @var int
-        self.refreshExpirationForPinLoginSeconds = refreshExpirationForPinLoginSeconds
-
-        # AppTokenMaxExpirySeconds
-        # @var int
-        self.appTokenMaxExpirySeconds = appTokenMaxExpirySeconds
-
-        # uploadTokenExpirySeconds
-        # @var int
-        self.uploadTokenExpirySeconds = uploadTokenExpirySeconds
-
-        # apptokenUserValidationDisabled
-        # @var bool
-        self.apptokenUserValidationDisabled = apptokenUserValidationDisabled
-
-
-    PROPERTY_LOADERS = {
-        'ksExpirationSeconds': getXmlNodeInt, 
-        'appTokenSessionMaxDurationSeconds': getXmlNodeInt, 
-        'anonymousKSExpirationSeconds': getXmlNodeInt, 
-        'refreshExpirationForPinLoginSeconds': getXmlNodeInt, 
-        'appTokenMaxExpirySeconds': getXmlNodeInt, 
-        'uploadTokenExpirySeconds': getXmlNodeInt, 
-        'apptokenUserValidationDisabled': getXmlNodeBool, 
-    }
-
-    def fromXml(self, node):
-        KalturaPartnerConfiguration.fromXml(self, node)
-        self.fromXmlImpl(node, KalturaBasePartnerConfiguration.PROPERTY_LOADERS)
-
-    def toParams(self):
-        kparams = KalturaPartnerConfiguration.toParams(self)
-        kparams.put("objectType", "KalturaBasePartnerConfiguration")
-        kparams.addIntIfDefined("ksExpirationSeconds", self.ksExpirationSeconds)
-        kparams.addIntIfDefined("appTokenSessionMaxDurationSeconds", self.appTokenSessionMaxDurationSeconds)
-        kparams.addIntIfDefined("anonymousKSExpirationSeconds", self.anonymousKSExpirationSeconds)
-        kparams.addIntIfDefined("refreshExpirationForPinLoginSeconds", self.refreshExpirationForPinLoginSeconds)
-        kparams.addIntIfDefined("appTokenMaxExpirySeconds", self.appTokenMaxExpirySeconds)
-        kparams.addIntIfDefined("uploadTokenExpirySeconds", self.uploadTokenExpirySeconds)
-        kparams.addBoolIfDefined("apptokenUserValidationDisabled", self.apptokenUserValidationDisabled)
-        return kparams
-
-    def getKsExpirationSeconds(self):
-        return self.ksExpirationSeconds
-
-    def setKsExpirationSeconds(self, newKsExpirationSeconds):
-        self.ksExpirationSeconds = newKsExpirationSeconds
-
-    def getAppTokenSessionMaxDurationSeconds(self):
-        return self.appTokenSessionMaxDurationSeconds
-
-    def setAppTokenSessionMaxDurationSeconds(self, newAppTokenSessionMaxDurationSeconds):
-        self.appTokenSessionMaxDurationSeconds = newAppTokenSessionMaxDurationSeconds
-
-    def getAnonymousKSExpirationSeconds(self):
-        return self.anonymousKSExpirationSeconds
-
-    def setAnonymousKSExpirationSeconds(self, newAnonymousKSExpirationSeconds):
-        self.anonymousKSExpirationSeconds = newAnonymousKSExpirationSeconds
-
-    def getRefreshExpirationForPinLoginSeconds(self):
-        return self.refreshExpirationForPinLoginSeconds
-
-    def setRefreshExpirationForPinLoginSeconds(self, newRefreshExpirationForPinLoginSeconds):
-        self.refreshExpirationForPinLoginSeconds = newRefreshExpirationForPinLoginSeconds
-
-    def getAppTokenMaxExpirySeconds(self):
-        return self.appTokenMaxExpirySeconds
-
-    def setAppTokenMaxExpirySeconds(self, newAppTokenMaxExpirySeconds):
-        self.appTokenMaxExpirySeconds = newAppTokenMaxExpirySeconds
-
-    def getUploadTokenExpirySeconds(self):
-        return self.uploadTokenExpirySeconds
-
-    def setUploadTokenExpirySeconds(self, newUploadTokenExpirySeconds):
-        self.uploadTokenExpirySeconds = newUploadTokenExpirySeconds
-
-    def getApptokenUserValidationDisabled(self):
-        return self.apptokenUserValidationDisabled
-
-    def setApptokenUserValidationDisabled(self, newApptokenUserValidationDisabled):
-        self.apptokenUserValidationDisabled = newApptokenUserValidationDisabled
 
 
 # @package Kaltura
@@ -39979,67 +39725,6 @@ class KalturaOTTUserDynamicData(KalturaObjectBase):
 
 # @package Kaltura
 # @subpackage Client
-class KalturaPartnerSetup(KalturaObjectBase):
-    """Parameters for partner setup"""
-
-    def __init__(self,
-            adminUsername=NotImplemented,
-            adminPassword=NotImplemented,
-            basePartnerConfiguration=NotImplemented):
-        KalturaObjectBase.__init__(self)
-
-        # admin Username
-        # @var string
-        self.adminUsername = adminUsername
-
-        # admin Password
-        # @var string
-        self.adminPassword = adminPassword
-
-        # basePartnerConfiguration
-        # @var KalturaBasePartnerConfiguration
-        self.basePartnerConfiguration = basePartnerConfiguration
-
-
-    PROPERTY_LOADERS = {
-        'adminUsername': getXmlNodeText, 
-        'adminPassword': getXmlNodeText, 
-        'basePartnerConfiguration': (KalturaObjectFactory.create, 'KalturaBasePartnerConfiguration'), 
-    }
-
-    def fromXml(self, node):
-        KalturaObjectBase.fromXml(self, node)
-        self.fromXmlImpl(node, KalturaPartnerSetup.PROPERTY_LOADERS)
-
-    def toParams(self):
-        kparams = KalturaObjectBase.toParams(self)
-        kparams.put("objectType", "KalturaPartnerSetup")
-        kparams.addStringIfDefined("adminUsername", self.adminUsername)
-        kparams.addStringIfDefined("adminPassword", self.adminPassword)
-        kparams.addObjectIfDefined("basePartnerConfiguration", self.basePartnerConfiguration)
-        return kparams
-
-    def getAdminUsername(self):
-        return self.adminUsername
-
-    def setAdminUsername(self, newAdminUsername):
-        self.adminUsername = newAdminUsername
-
-    def getAdminPassword(self):
-        return self.adminPassword
-
-    def setAdminPassword(self, newAdminPassword):
-        self.adminPassword = newAdminPassword
-
-    def getBasePartnerConfiguration(self):
-        return self.basePartnerConfiguration
-
-    def setBasePartnerConfiguration(self, newBasePartnerConfiguration):
-        self.basePartnerConfiguration = newBasePartnerConfiguration
-
-
-# @package Kaltura
-# @subpackage Client
 class KalturaPasswordPolicyListResponse(KalturaListResponse):
     def __init__(self,
             totalCount=NotImplemented,
@@ -46341,18 +46026,6 @@ class KalturaPartnerService(KalturaServiceBase):
     def __init__(self, client = None):
         KalturaServiceBase.__init__(self, client)
 
-    def add(self, partner, partnerSetup):
-        """Add a partner with default user"""
-
-        kparams = KalturaParams()
-        kparams.addObjectIfDefined("partner", partner)
-        kparams.addObjectIfDefined("partnerSetup", partnerSetup)
-        self.client.queueServiceActionCall("partner", "add", "KalturaPartner", kparams)
-        if self.client.isMultiRequest():
-            return self.client.getMultiRequestResult()
-        resultNode = self.client.doQueue()
-        return KalturaObjectFactory.create(resultNode, 'KalturaPartner')
-
     def externalLogin(self):
         """Returns a login session for external system (like OVP)"""
 
@@ -46362,17 +46035,6 @@ class KalturaPartnerService(KalturaServiceBase):
             return self.client.getMultiRequestResult()
         resultNode = self.client.doQueue()
         return KalturaObjectFactory.create(resultNode, 'KalturaLoginSession')
-
-    def list(self, filter = NotImplemented):
-        """Internal API !!! Returns the list of active Partners"""
-
-        kparams = KalturaParams()
-        kparams.addObjectIfDefined("filter", filter)
-        self.client.queueServiceActionCall("partner", "list", "KalturaPartnerListResponse", kparams)
-        if self.client.isMultiRequest():
-            return self.client.getMultiRequestResult()
-        resultNode = self.client.doQueue()
-        return KalturaObjectFactory.create(resultNode, 'KalturaPartnerListResponse')
 
 
 # @package Kaltura
@@ -49181,7 +48843,6 @@ class KalturaCoreClient(KalturaClientPlugin):
             'KalturaMultilingualStringValue': KalturaMultilingualStringValue,
             'KalturaStringValue': KalturaStringValue,
             'KalturaOTTUserFilter': KalturaOTTUserFilter,
-            'KalturaPartnerFilter': KalturaPartnerFilter,
             'KalturaBulkUploadFilter': KalturaBulkUploadFilter,
             'KalturaSocialActionFilter': KalturaSocialActionFilter,
             'KalturaSocialCommentFilter': KalturaSocialCommentFilter,
@@ -49326,8 +48987,6 @@ class KalturaCoreClient(KalturaClientPlugin):
             'KalturaFairPlayPlaybackPluginData': KalturaFairPlayPlaybackPluginData,
             'KalturaCustomDrmPlaybackPluginData': KalturaCustomDrmPlaybackPluginData,
             'KalturaOTTUserListResponse': KalturaOTTUserListResponse,
-            'KalturaPartner': KalturaPartner,
-            'KalturaPartnerListResponse': KalturaPartnerListResponse,
             'KalturaSSOAdapterProfile': KalturaSSOAdapterProfile,
             'KalturaSSOAdapterProfileListResponse': KalturaSSOAdapterProfileListResponse,
             'KalturaUserInterestTopic': KalturaUserInterestTopic,
@@ -49497,7 +49156,6 @@ class KalturaCoreClient(KalturaClientPlugin):
             'KalturaSubscriptionSwitchSet': KalturaSubscriptionSwitchSet,
             'KalturaPartnerConfiguration': KalturaPartnerConfiguration,
             'KalturaPartnerConfigurationListResponse': KalturaPartnerConfigurationListResponse,
-            'KalturaBasePartnerConfiguration': KalturaBasePartnerConfiguration,
             'KalturaBillingPartnerConfig': KalturaBillingPartnerConfig,
             'KalturaCategoryManagement': KalturaCategoryManagement,
             'KalturaCatalogPartnerConfig': KalturaCatalogPartnerConfig,
@@ -49772,7 +49430,6 @@ class KalturaCoreClient(KalturaClientPlugin):
             'KalturaNotificationsPartnerSettings': KalturaNotificationsPartnerSettings,
             'KalturaNotificationsSettings': KalturaNotificationsSettings,
             'KalturaOTTUserDynamicData': KalturaOTTUserDynamicData,
-            'KalturaPartnerSetup': KalturaPartnerSetup,
             'KalturaPasswordPolicyListResponse': KalturaPasswordPolicyListResponse,
             'KalturaPermissionItem': KalturaPermissionItem,
             'KalturaPermissionItemListResponse': KalturaPermissionItemListResponse,
