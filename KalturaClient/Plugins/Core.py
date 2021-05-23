@@ -42,7 +42,7 @@ from ..Base import (
     KalturaServiceBase,
 )
 
-API_VERSION = '6.4.0.29137'
+API_VERSION = '6.4.0.29148'
 
 ########## enums ##########
 # @package Kaltura
@@ -26064,11 +26064,11 @@ class KalturaDeviceFamilyBase(KalturaObjectBase):
 
         # Device family identifier
         # @var int
-        # @readonly
         self.id = id
 
         # Device family name
         # @var string
+        # @readonly
         self.name = name
 
 
@@ -26084,17 +26084,17 @@ class KalturaDeviceFamilyBase(KalturaObjectBase):
     def toParams(self):
         kparams = KalturaObjectBase.toParams(self)
         kparams.put("objectType", "KalturaDeviceFamilyBase")
-        kparams.addStringIfDefined("name", self.name)
+        kparams.addIntIfDefined("id", self.id)
         return kparams
 
     def getId(self):
         return self.id
 
+    def setId(self, newId):
+        self.id = newId
+
     def getName(self):
         return self.name
-
-    def setName(self, newName):
-        self.name = newName
 
 
 # @package Kaltura
@@ -26188,22 +26188,18 @@ class KalturaHouseholdLimitations(KalturaObjectBase):
 
         # Household limitation module name
         # @var string
-        # @readonly
         self.name = name
 
         # Max number of streams allowed for the household
         # @var int
-        # @readonly
         self.concurrentLimit = concurrentLimit
 
         # Max number of devices allowed for the household
         # @var int
-        # @readonly
         self.deviceLimit = deviceLimit
 
         # Allowed device change frequency code
         # @var int
-        # @readonly
         self.deviceFrequency = deviceFrequency
 
         # Allowed device change frequency description
@@ -26213,7 +26209,6 @@ class KalturaHouseholdLimitations(KalturaObjectBase):
 
         # Allowed user change frequency code
         # @var int
-        # @readonly
         self.userFrequency = userFrequency
 
         # Allowed user change frequency description
@@ -26228,12 +26223,10 @@ class KalturaHouseholdLimitations(KalturaObjectBase):
 
         # Max number of users allowed for the household
         # @var int
-        # @readonly
         self.usersLimit = usersLimit
 
         # Device families limitations
         # @var array of KalturaHouseholdDeviceFamilyLimitations
-        # @readonly
         self.deviceFamiliesLimitations = deviceFamiliesLimitations
 
 
@@ -26258,6 +26251,13 @@ class KalturaHouseholdLimitations(KalturaObjectBase):
     def toParams(self):
         kparams = KalturaObjectBase.toParams(self)
         kparams.put("objectType", "KalturaHouseholdLimitations")
+        kparams.addStringIfDefined("name", self.name)
+        kparams.addIntIfDefined("concurrentLimit", self.concurrentLimit)
+        kparams.addIntIfDefined("deviceLimit", self.deviceLimit)
+        kparams.addIntIfDefined("deviceFrequency", self.deviceFrequency)
+        kparams.addIntIfDefined("userFrequency", self.userFrequency)
+        kparams.addIntIfDefined("usersLimit", self.usersLimit)
+        kparams.addArrayIfDefined("deviceFamiliesLimitations", self.deviceFamiliesLimitations)
         return kparams
 
     def getId(self):
@@ -26266,20 +26266,35 @@ class KalturaHouseholdLimitations(KalturaObjectBase):
     def getName(self):
         return self.name
 
+    def setName(self, newName):
+        self.name = newName
+
     def getConcurrentLimit(self):
         return self.concurrentLimit
+
+    def setConcurrentLimit(self, newConcurrentLimit):
+        self.concurrentLimit = newConcurrentLimit
 
     def getDeviceLimit(self):
         return self.deviceLimit
 
+    def setDeviceLimit(self, newDeviceLimit):
+        self.deviceLimit = newDeviceLimit
+
     def getDeviceFrequency(self):
         return self.deviceFrequency
+
+    def setDeviceFrequency(self, newDeviceFrequency):
+        self.deviceFrequency = newDeviceFrequency
 
     def getDeviceFrequencyDescription(self):
         return self.deviceFrequencyDescription
 
     def getUserFrequency(self):
         return self.userFrequency
+
+    def setUserFrequency(self, newUserFrequency):
+        self.userFrequency = newUserFrequency
 
     def getUserFrequencyDescription(self):
         return self.userFrequencyDescription
@@ -26290,8 +26305,14 @@ class KalturaHouseholdLimitations(KalturaObjectBase):
     def getUsersLimit(self):
         return self.usersLimit
 
+    def setUsersLimit(self, newUsersLimit):
+        self.usersLimit = newUsersLimit
+
     def getDeviceFamiliesLimitations(self):
         return self.deviceFamiliesLimitations
+
+    def setDeviceFamiliesLimitations(self, newDeviceFamiliesLimitations):
+        self.deviceFamiliesLimitations = newDeviceFamiliesLimitations
 
 
 # @package Kaltura
@@ -44970,6 +44991,28 @@ class KalturaHouseholdDeviceService(KalturaServiceBase):
 class KalturaHouseholdLimitationsService(KalturaServiceBase):
     def __init__(self, client = None):
         KalturaServiceBase.__init__(self, client)
+
+    def add(self, householdLimitations):
+        """Add household limitation"""
+
+        kparams = KalturaParams()
+        kparams.addObjectIfDefined("householdLimitations", householdLimitations)
+        self.client.queueServiceActionCall("householdlimitations", "add", "KalturaHouseholdLimitations", kparams)
+        if self.client.isMultiRequest():
+            return self.client.getMultiRequestResult()
+        resultNode = self.client.doQueue()
+        return KalturaObjectFactory.create(resultNode, 'KalturaHouseholdLimitations')
+
+    def delete(self, householdLimitationsId):
+        """Delete household limitation"""
+
+        kparams = KalturaParams()
+        kparams.addIntIfDefined("householdLimitationsId", householdLimitationsId);
+        self.client.queueServiceActionCall("householdlimitations", "delete", "None", kparams)
+        if self.client.isMultiRequest():
+            return self.client.getMultiRequestResult()
+        resultNode = self.client.doQueue()
+        return getXmlNodeBool(resultNode)
 
     def get(self, id):
         """Get the limitation module by id"""
