@@ -42,7 +42,7 @@ from ..Base import (
     KalturaServiceBase,
 )
 
-API_VERSION = '6.5.0.29360'
+API_VERSION = '6.5.0.29374'
 
 ########## enums ##########
 # @package Kaltura
@@ -47967,6 +47967,17 @@ class KalturaSeriesRecordingService(KalturaServiceBase):
             return self.client.getMultiRequestResult()
         resultNode = self.client.doQueue()
         return KalturaObjectFactory.create(resultNode, 'KalturaSeriesRecordingListResponse')
+
+    def rebookCanceledByEpgId(self, epgId):
+        """Enable EPG recording that was canceled as part of series"""
+
+        kparams = KalturaParams()
+        kparams.addIntIfDefined("epgId", epgId);
+        self.client.queueServiceActionCall("seriesrecording", "rebookCanceledByEpgId", "KalturaSeriesRecording", kparams)
+        if self.client.isMultiRequest():
+            return self.client.getMultiRequestResult()
+        resultNode = self.client.doQueue()
+        return KalturaObjectFactory.create(resultNode, 'KalturaSeriesRecording')
 
 
 # @package Kaltura
