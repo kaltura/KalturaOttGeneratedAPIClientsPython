@@ -42,7 +42,7 @@ from ..Base import (
     KalturaServiceBase,
 )
 
-API_VERSION = '6.5.0.29158'
+API_VERSION = '6.4.0.29138'
 
 ########## enums ##########
 # @package Kaltura
@@ -1678,7 +1678,6 @@ class KalturaPartnerConfigurationType(object):
     CATALOG = "Catalog"
     SECURITY = "Security"
     OPC = "Opc"
-    BASE = "Base"
 
     def __init__(self, value):
         self.value = value
@@ -4582,41 +4581,6 @@ class KalturaOTTUserFilter(KalturaFilter):
 
     def setEmailEqual(self, newEmailEqual):
         self.emailEqual = newEmailEqual
-
-
-# @package Kaltura
-# @subpackage Client
-class KalturaPartnerFilter(KalturaFilter):
-    def __init__(self,
-            orderBy=NotImplemented,
-            idIn=NotImplemented):
-        KalturaFilter.__init__(self,
-            orderBy)
-
-        # Comma separated discount codes
-        # @var string
-        self.idIn = idIn
-
-
-    PROPERTY_LOADERS = {
-        'idIn': getXmlNodeText, 
-    }
-
-    def fromXml(self, node):
-        KalturaFilter.fromXml(self, node)
-        self.fromXmlImpl(node, KalturaPartnerFilter.PROPERTY_LOADERS)
-
-    def toParams(self):
-        kparams = KalturaFilter.toParams(self)
-        kparams.put("objectType", "KalturaPartnerFilter")
-        kparams.addStringIfDefined("idIn", self.idIn)
-        return kparams
-
-    def getIdIn(self):
-        return self.idIn
-
-    def setIdIn(self, newIdIn):
-        self.idIn = newIdIn
 
 
 # @package Kaltura
@@ -12425,113 +12389,6 @@ class KalturaOTTUserListResponse(KalturaListResponse):
     def toParams(self):
         kparams = KalturaListResponse.toParams(self)
         kparams.put("objectType", "KalturaOTTUserListResponse")
-        kparams.addArrayIfDefined("objects", self.objects)
-        return kparams
-
-    def getObjects(self):
-        return self.objects
-
-    def setObjects(self, newObjects):
-        self.objects = newObjects
-
-
-# @package Kaltura
-# @subpackage Client
-class KalturaPartner(KalturaObjectBase):
-    def __init__(self,
-            id=NotImplemented,
-            name=NotImplemented,
-            createDate=NotImplemented,
-            updateDate=NotImplemented):
-        KalturaObjectBase.__init__(self)
-
-        # PartnerId
-        # @var int
-        self.id = id
-
-        # PartnerName
-        # @var string
-        self.name = name
-
-        # Creat date represented as epoch
-        # @var int
-        self.createDate = createDate
-
-        # Update date represented as epoch
-        # @var int
-        self.updateDate = updateDate
-
-
-    PROPERTY_LOADERS = {
-        'id': getXmlNodeInt, 
-        'name': getXmlNodeText, 
-        'createDate': getXmlNodeInt, 
-        'updateDate': getXmlNodeInt, 
-    }
-
-    def fromXml(self, node):
-        KalturaObjectBase.fromXml(self, node)
-        self.fromXmlImpl(node, KalturaPartner.PROPERTY_LOADERS)
-
-    def toParams(self):
-        kparams = KalturaObjectBase.toParams(self)
-        kparams.put("objectType", "KalturaPartner")
-        kparams.addIntIfDefined("id", self.id)
-        kparams.addStringIfDefined("name", self.name)
-        kparams.addIntIfDefined("createDate", self.createDate)
-        kparams.addIntIfDefined("updateDate", self.updateDate)
-        return kparams
-
-    def getId(self):
-        return self.id
-
-    def setId(self, newId):
-        self.id = newId
-
-    def getName(self):
-        return self.name
-
-    def setName(self, newName):
-        self.name = newName
-
-    def getCreateDate(self):
-        return self.createDate
-
-    def setCreateDate(self, newCreateDate):
-        self.createDate = newCreateDate
-
-    def getUpdateDate(self):
-        return self.updateDate
-
-    def setUpdateDate(self, newUpdateDate):
-        self.updateDate = newUpdateDate
-
-
-# @package Kaltura
-# @subpackage Client
-class KalturaPartnerListResponse(KalturaListResponse):
-    def __init__(self,
-            totalCount=NotImplemented,
-            objects=NotImplemented):
-        KalturaListResponse.__init__(self,
-            totalCount)
-
-        # A list of Partners
-        # @var array of KalturaPartner
-        self.objects = objects
-
-
-    PROPERTY_LOADERS = {
-        'objects': (KalturaObjectFactory.createArray, 'KalturaPartner'), 
-    }
-
-    def fromXml(self, node):
-        KalturaListResponse.fromXml(self, node)
-        self.fromXmlImpl(node, KalturaPartnerListResponse.PROPERTY_LOADERS)
-
-    def toParams(self):
-        kparams = KalturaListResponse.toParams(self)
-        kparams.put("objectType", "KalturaPartnerListResponse")
         kparams.addArrayIfDefined("objects", self.objects)
         return kparams
 
@@ -22683,117 +22540,6 @@ class KalturaPartnerConfigurationListResponse(KalturaListResponse):
 
 # @package Kaltura
 # @subpackage Client
-class KalturaBasePartnerConfiguration(KalturaPartnerConfiguration):
-    def __init__(self,
-            ksExpirationSeconds=NotImplemented,
-            appTokenSessionMaxDurationSeconds=NotImplemented,
-            anonymousKSExpirationSeconds=NotImplemented,
-            refreshExpirationForPinLoginSeconds=NotImplemented,
-            appTokenMaxExpirySeconds=NotImplemented,
-            uploadTokenExpirySeconds=NotImplemented,
-            apptokenUserValidationDisabled=NotImplemented):
-        KalturaPartnerConfiguration.__init__(self)
-
-        # KSExpirationSeconds
-        # @var int
-        self.ksExpirationSeconds = ksExpirationSeconds
-
-        # AppTokenSessionMaxDurationSeconds
-        # @var int
-        self.appTokenSessionMaxDurationSeconds = appTokenSessionMaxDurationSeconds
-
-        # AnonymousKSExpirationSeconds
-        # @var int
-        self.anonymousKSExpirationSeconds = anonymousKSExpirationSeconds
-
-        # RefreshExpirationForPinLoginSeconds
-        # @var int
-        self.refreshExpirationForPinLoginSeconds = refreshExpirationForPinLoginSeconds
-
-        # AppTokenMaxExpirySeconds
-        # @var int
-        self.appTokenMaxExpirySeconds = appTokenMaxExpirySeconds
-
-        # uploadTokenExpirySeconds
-        # @var int
-        self.uploadTokenExpirySeconds = uploadTokenExpirySeconds
-
-        # apptokenUserValidationDisabled
-        # @var bool
-        self.apptokenUserValidationDisabled = apptokenUserValidationDisabled
-
-
-    PROPERTY_LOADERS = {
-        'ksExpirationSeconds': getXmlNodeInt, 
-        'appTokenSessionMaxDurationSeconds': getXmlNodeInt, 
-        'anonymousKSExpirationSeconds': getXmlNodeInt, 
-        'refreshExpirationForPinLoginSeconds': getXmlNodeInt, 
-        'appTokenMaxExpirySeconds': getXmlNodeInt, 
-        'uploadTokenExpirySeconds': getXmlNodeInt, 
-        'apptokenUserValidationDisabled': getXmlNodeBool, 
-    }
-
-    def fromXml(self, node):
-        KalturaPartnerConfiguration.fromXml(self, node)
-        self.fromXmlImpl(node, KalturaBasePartnerConfiguration.PROPERTY_LOADERS)
-
-    def toParams(self):
-        kparams = KalturaPartnerConfiguration.toParams(self)
-        kparams.put("objectType", "KalturaBasePartnerConfiguration")
-        kparams.addIntIfDefined("ksExpirationSeconds", self.ksExpirationSeconds)
-        kparams.addIntIfDefined("appTokenSessionMaxDurationSeconds", self.appTokenSessionMaxDurationSeconds)
-        kparams.addIntIfDefined("anonymousKSExpirationSeconds", self.anonymousKSExpirationSeconds)
-        kparams.addIntIfDefined("refreshExpirationForPinLoginSeconds", self.refreshExpirationForPinLoginSeconds)
-        kparams.addIntIfDefined("appTokenMaxExpirySeconds", self.appTokenMaxExpirySeconds)
-        kparams.addIntIfDefined("uploadTokenExpirySeconds", self.uploadTokenExpirySeconds)
-        kparams.addBoolIfDefined("apptokenUserValidationDisabled", self.apptokenUserValidationDisabled)
-        return kparams
-
-    def getKsExpirationSeconds(self):
-        return self.ksExpirationSeconds
-
-    def setKsExpirationSeconds(self, newKsExpirationSeconds):
-        self.ksExpirationSeconds = newKsExpirationSeconds
-
-    def getAppTokenSessionMaxDurationSeconds(self):
-        return self.appTokenSessionMaxDurationSeconds
-
-    def setAppTokenSessionMaxDurationSeconds(self, newAppTokenSessionMaxDurationSeconds):
-        self.appTokenSessionMaxDurationSeconds = newAppTokenSessionMaxDurationSeconds
-
-    def getAnonymousKSExpirationSeconds(self):
-        return self.anonymousKSExpirationSeconds
-
-    def setAnonymousKSExpirationSeconds(self, newAnonymousKSExpirationSeconds):
-        self.anonymousKSExpirationSeconds = newAnonymousKSExpirationSeconds
-
-    def getRefreshExpirationForPinLoginSeconds(self):
-        return self.refreshExpirationForPinLoginSeconds
-
-    def setRefreshExpirationForPinLoginSeconds(self, newRefreshExpirationForPinLoginSeconds):
-        self.refreshExpirationForPinLoginSeconds = newRefreshExpirationForPinLoginSeconds
-
-    def getAppTokenMaxExpirySeconds(self):
-        return self.appTokenMaxExpirySeconds
-
-    def setAppTokenMaxExpirySeconds(self, newAppTokenMaxExpirySeconds):
-        self.appTokenMaxExpirySeconds = newAppTokenMaxExpirySeconds
-
-    def getUploadTokenExpirySeconds(self):
-        return self.uploadTokenExpirySeconds
-
-    def setUploadTokenExpirySeconds(self, newUploadTokenExpirySeconds):
-        self.uploadTokenExpirySeconds = newUploadTokenExpirySeconds
-
-    def getApptokenUserValidationDisabled(self):
-        return self.apptokenUserValidationDisabled
-
-    def setApptokenUserValidationDisabled(self, newApptokenUserValidationDisabled):
-        self.apptokenUserValidationDisabled = newApptokenUserValidationDisabled
-
-
-# @package Kaltura
-# @subpackage Client
 class KalturaBillingPartnerConfig(KalturaPartnerConfiguration):
     """Partner billing configuration"""
 
@@ -26064,11 +25810,11 @@ class KalturaDeviceFamilyBase(KalturaObjectBase):
 
         # Device family identifier
         # @var int
+        # @readonly
         self.id = id
 
         # Device family name
         # @var string
-        # @readonly
         self.name = name
 
 
@@ -26084,17 +25830,17 @@ class KalturaDeviceFamilyBase(KalturaObjectBase):
     def toParams(self):
         kparams = KalturaObjectBase.toParams(self)
         kparams.put("objectType", "KalturaDeviceFamilyBase")
-        kparams.addIntIfDefined("id", self.id)
+        kparams.addStringIfDefined("name", self.name)
         return kparams
 
     def getId(self):
         return self.id
 
-    def setId(self, newId):
-        self.id = newId
-
     def getName(self):
         return self.name
+
+    def setName(self, newName):
+        self.name = newName
 
 
 # @package Kaltura
@@ -26188,18 +25934,22 @@ class KalturaHouseholdLimitations(KalturaObjectBase):
 
         # Household limitation module name
         # @var string
+        # @readonly
         self.name = name
 
         # Max number of streams allowed for the household
         # @var int
+        # @readonly
         self.concurrentLimit = concurrentLimit
 
         # Max number of devices allowed for the household
         # @var int
+        # @readonly
         self.deviceLimit = deviceLimit
 
         # Allowed device change frequency code
         # @var int
+        # @readonly
         self.deviceFrequency = deviceFrequency
 
         # Allowed device change frequency description
@@ -26209,6 +25959,7 @@ class KalturaHouseholdLimitations(KalturaObjectBase):
 
         # Allowed user change frequency code
         # @var int
+        # @readonly
         self.userFrequency = userFrequency
 
         # Allowed user change frequency description
@@ -26223,10 +25974,12 @@ class KalturaHouseholdLimitations(KalturaObjectBase):
 
         # Max number of users allowed for the household
         # @var int
+        # @readonly
         self.usersLimit = usersLimit
 
         # Device families limitations
         # @var array of KalturaHouseholdDeviceFamilyLimitations
+        # @readonly
         self.deviceFamiliesLimitations = deviceFamiliesLimitations
 
 
@@ -26251,13 +26004,6 @@ class KalturaHouseholdLimitations(KalturaObjectBase):
     def toParams(self):
         kparams = KalturaObjectBase.toParams(self)
         kparams.put("objectType", "KalturaHouseholdLimitations")
-        kparams.addStringIfDefined("name", self.name)
-        kparams.addIntIfDefined("concurrentLimit", self.concurrentLimit)
-        kparams.addIntIfDefined("deviceLimit", self.deviceLimit)
-        kparams.addIntIfDefined("deviceFrequency", self.deviceFrequency)
-        kparams.addIntIfDefined("userFrequency", self.userFrequency)
-        kparams.addIntIfDefined("usersLimit", self.usersLimit)
-        kparams.addArrayIfDefined("deviceFamiliesLimitations", self.deviceFamiliesLimitations)
         return kparams
 
     def getId(self):
@@ -26266,35 +26012,20 @@ class KalturaHouseholdLimitations(KalturaObjectBase):
     def getName(self):
         return self.name
 
-    def setName(self, newName):
-        self.name = newName
-
     def getConcurrentLimit(self):
         return self.concurrentLimit
-
-    def setConcurrentLimit(self, newConcurrentLimit):
-        self.concurrentLimit = newConcurrentLimit
 
     def getDeviceLimit(self):
         return self.deviceLimit
 
-    def setDeviceLimit(self, newDeviceLimit):
-        self.deviceLimit = newDeviceLimit
-
     def getDeviceFrequency(self):
         return self.deviceFrequency
-
-    def setDeviceFrequency(self, newDeviceFrequency):
-        self.deviceFrequency = newDeviceFrequency
 
     def getDeviceFrequencyDescription(self):
         return self.deviceFrequencyDescription
 
     def getUserFrequency(self):
         return self.userFrequency
-
-    def setUserFrequency(self, newUserFrequency):
-        self.userFrequency = newUserFrequency
 
     def getUserFrequencyDescription(self):
         return self.userFrequencyDescription
@@ -26305,14 +26036,8 @@ class KalturaHouseholdLimitations(KalturaObjectBase):
     def getUsersLimit(self):
         return self.usersLimit
 
-    def setUsersLimit(self, newUsersLimit):
-        self.usersLimit = newUsersLimit
-
     def getDeviceFamiliesLimitations(self):
         return self.deviceFamiliesLimitations
-
-    def setDeviceFamiliesLimitations(self, newDeviceFamiliesLimitations):
-        self.deviceFamiliesLimitations = newDeviceFamiliesLimitations
 
 
 # @package Kaltura
@@ -38559,52 +38284,6 @@ class KalturaLoginResponse(KalturaObjectBase):
 
 # @package Kaltura
 # @subpackage Client
-class KalturaDynamicData(KalturaObjectBase):
-    def __init__(self,
-            key=NotImplemented,
-            value=NotImplemented):
-        KalturaObjectBase.__init__(self)
-
-        # Key
-        # @var string
-        self.key = key
-
-        # Value
-        # @var KalturaValue
-        self.value = value
-
-
-    PROPERTY_LOADERS = {
-        'key': getXmlNodeText, 
-        'value': (KalturaObjectFactory.create, 'KalturaValue'), 
-    }
-
-    def fromXml(self, node):
-        KalturaObjectBase.fromXml(self, node)
-        self.fromXmlImpl(node, KalturaDynamicData.PROPERTY_LOADERS)
-
-    def toParams(self):
-        kparams = KalturaObjectBase.toParams(self)
-        kparams.put("objectType", "KalturaDynamicData")
-        kparams.addStringIfDefined("key", self.key)
-        kparams.addObjectIfDefined("value", self.value)
-        return kparams
-
-    def getKey(self):
-        return self.key
-
-    def setKey(self, newKey):
-        self.key = newKey
-
-    def getValue(self):
-        return self.value
-
-    def setValue(self, newValue):
-        self.value = newValue
-
-
-# @package Kaltura
-# @subpackage Client
 class KalturaPaymentGatewayConfiguration(KalturaObjectBase):
     def __init__(self,
             paymentGatewayConfiguration=NotImplemented):
@@ -40042,67 +39721,6 @@ class KalturaOTTUserDynamicData(KalturaObjectBase):
 
     def setValue(self, newValue):
         self.value = newValue
-
-
-# @package Kaltura
-# @subpackage Client
-class KalturaPartnerSetup(KalturaObjectBase):
-    """Parameters for partner setup"""
-
-    def __init__(self,
-            adminUsername=NotImplemented,
-            adminPassword=NotImplemented,
-            basePartnerConfiguration=NotImplemented):
-        KalturaObjectBase.__init__(self)
-
-        # admin Username
-        # @var string
-        self.adminUsername = adminUsername
-
-        # admin Password
-        # @var string
-        self.adminPassword = adminPassword
-
-        # basePartnerConfiguration
-        # @var KalturaBasePartnerConfiguration
-        self.basePartnerConfiguration = basePartnerConfiguration
-
-
-    PROPERTY_LOADERS = {
-        'adminUsername': getXmlNodeText, 
-        'adminPassword': getXmlNodeText, 
-        'basePartnerConfiguration': (KalturaObjectFactory.create, 'KalturaBasePartnerConfiguration'), 
-    }
-
-    def fromXml(self, node):
-        KalturaObjectBase.fromXml(self, node)
-        self.fromXmlImpl(node, KalturaPartnerSetup.PROPERTY_LOADERS)
-
-    def toParams(self):
-        kparams = KalturaObjectBase.toParams(self)
-        kparams.put("objectType", "KalturaPartnerSetup")
-        kparams.addStringIfDefined("adminUsername", self.adminUsername)
-        kparams.addStringIfDefined("adminPassword", self.adminPassword)
-        kparams.addObjectIfDefined("basePartnerConfiguration", self.basePartnerConfiguration)
-        return kparams
-
-    def getAdminUsername(self):
-        return self.adminUsername
-
-    def setAdminUsername(self, newAdminUsername):
-        self.adminUsername = newAdminUsername
-
-    def getAdminPassword(self):
-        return self.adminPassword
-
-    def setAdminPassword(self, newAdminPassword):
-        self.adminPassword = newAdminPassword
-
-    def getBasePartnerConfiguration(self):
-        return self.basePartnerConfiguration
-
-    def setBasePartnerConfiguration(self, newBasePartnerConfiguration):
-        self.basePartnerConfiguration = newBasePartnerConfiguration
 
 
 # @package Kaltura
@@ -44960,18 +44578,6 @@ class KalturaHouseholdDeviceService(KalturaServiceBase):
         resultNode = self.client.doQueue()
         return getXmlNodeBool(resultNode)
 
-    def deleteDynamicData(self, udid, key):
-        """Deletes dynamic data item with key  for device with identifier ."""
-
-        kparams = KalturaParams()
-        kparams.addStringIfDefined("udid", udid)
-        kparams.addStringIfDefined("key", key)
-        self.client.queueServiceActionCall("householddevice", "deleteDynamicData", "None", kparams)
-        if self.client.isMultiRequest():
-            return self.client.getMultiRequestResult()
-        resultNode = self.client.doQueue()
-        return getXmlNodeBool(resultNode)
-
     def generatePin(self, udid, brandId):
         """Generates device pin to use when adding a device to household by pin"""
 
@@ -45043,47 +44649,12 @@ class KalturaHouseholdDeviceService(KalturaServiceBase):
         resultNode = self.client.doQueue()
         return getXmlNodeBool(resultNode)
 
-    def upsertDynamicData(self, udid, key, value):
-        """Adds or updates dynamic data item for device with identifier udid. If it is needed to update several items, use a multi-request to avoid race conditions."""
-
-        kparams = KalturaParams()
-        kparams.addStringIfDefined("udid", udid)
-        kparams.addStringIfDefined("key", key)
-        kparams.addObjectIfDefined("value", value)
-        self.client.queueServiceActionCall("householddevice", "upsertDynamicData", "KalturaDynamicData", kparams)
-        if self.client.isMultiRequest():
-            return self.client.getMultiRequestResult()
-        resultNode = self.client.doQueue()
-        return KalturaObjectFactory.create(resultNode, 'KalturaDynamicData')
-
 
 # @package Kaltura
 # @subpackage Client
 class KalturaHouseholdLimitationsService(KalturaServiceBase):
     def __init__(self, client = None):
         KalturaServiceBase.__init__(self, client)
-
-    def add(self, householdLimitations):
-        """Add household limitation"""
-
-        kparams = KalturaParams()
-        kparams.addObjectIfDefined("householdLimitations", householdLimitations)
-        self.client.queueServiceActionCall("householdlimitations", "add", "KalturaHouseholdLimitations", kparams)
-        if self.client.isMultiRequest():
-            return self.client.getMultiRequestResult()
-        resultNode = self.client.doQueue()
-        return KalturaObjectFactory.create(resultNode, 'KalturaHouseholdLimitations')
-
-    def delete(self, householdLimitationsId):
-        """Delete household limitation"""
-
-        kparams = KalturaParams()
-        kparams.addIntIfDefined("householdLimitationsId", householdLimitationsId);
-        self.client.queueServiceActionCall("householdlimitations", "delete", "None", kparams)
-        if self.client.isMultiRequest():
-            return self.client.getMultiRequestResult()
-        resultNode = self.client.doQueue()
-        return getXmlNodeBool(resultNode)
 
     def get(self, id):
         """Get the limitation module by id"""
@@ -46150,17 +45721,6 @@ class KalturaOttUserService(KalturaServiceBase):
         resultNode = self.client.doQueue()
         return getXmlNodeBool(resultNode)
 
-    def deleteDynamicData(self, key):
-        """Deletes dynamic data item for a user."""
-
-        kparams = KalturaParams()
-        kparams.addStringIfDefined("key", key)
-        self.client.queueServiceActionCall("ottuser", "deleteDynamicData", "None", kparams)
-        if self.client.isMultiRequest():
-            return self.client.getMultiRequestResult()
-        resultNode = self.client.doQueue()
-        return getXmlNodeBool(resultNode)
-
     def get(self):
         """Retrieving users&#39; data"""
 
@@ -46296,8 +45856,7 @@ class KalturaOttUserService(KalturaServiceBase):
         return KalturaObjectFactory.create(resultNode, 'KalturaOTTUser')
 
     def updateDynamicData(self, key, value):
-        """Update user dynamic data. If it is needed to update several items, use a multi-request to avoid race conditions.
-                    This API endpoint will deprecated soon. Please use UpsertDynamicData instead of it."""
+        """Update user dynamic data"""
 
         kparams = KalturaParams()
         kparams.addStringIfDefined("key", key)
@@ -46331,18 +45890,6 @@ class KalturaOttUserService(KalturaServiceBase):
         if self.client.isMultiRequest():
             return self.client.getMultiRequestResult()
         resultNode = self.client.doQueue()
-
-    def upsertDynamicData(self, key, value):
-        """Adds or updates dynamic data item for a user. If it is needed to update several items, use a multi-request to avoid race conditions."""
-
-        kparams = KalturaParams()
-        kparams.addStringIfDefined("key", key)
-        kparams.addObjectIfDefined("value", value)
-        self.client.queueServiceActionCall("ottuser", "upsertDynamicData", "KalturaDynamicData", kparams)
-        if self.client.isMultiRequest():
-            return self.client.getMultiRequestResult()
-        resultNode = self.client.doQueue()
-        return KalturaObjectFactory.create(resultNode, 'KalturaDynamicData')
 
 
 # @package Kaltura
@@ -46479,18 +46026,6 @@ class KalturaPartnerService(KalturaServiceBase):
     def __init__(self, client = None):
         KalturaServiceBase.__init__(self, client)
 
-    def add(self, partner, partnerSetup):
-        """Add a partner with default user"""
-
-        kparams = KalturaParams()
-        kparams.addObjectIfDefined("partner", partner)
-        kparams.addObjectIfDefined("partnerSetup", partnerSetup)
-        self.client.queueServiceActionCall("partner", "add", "KalturaPartner", kparams)
-        if self.client.isMultiRequest():
-            return self.client.getMultiRequestResult()
-        resultNode = self.client.doQueue()
-        return KalturaObjectFactory.create(resultNode, 'KalturaPartner')
-
     def externalLogin(self):
         """Returns a login session for external system (like OVP)"""
 
@@ -46500,17 +46035,6 @@ class KalturaPartnerService(KalturaServiceBase):
             return self.client.getMultiRequestResult()
         resultNode = self.client.doQueue()
         return KalturaObjectFactory.create(resultNode, 'KalturaLoginSession')
-
-    def list(self, filter = NotImplemented):
-        """Internal API !!! Returns the list of active Partners"""
-
-        kparams = KalturaParams()
-        kparams.addObjectIfDefined("filter", filter)
-        self.client.queueServiceActionCall("partner", "list", "KalturaPartnerListResponse", kparams)
-        if self.client.isMultiRequest():
-            return self.client.getMultiRequestResult()
-        resultNode = self.client.doQueue()
-        return KalturaObjectFactory.create(resultNode, 'KalturaPartnerListResponse')
 
 
 # @package Kaltura
@@ -49319,7 +48843,6 @@ class KalturaCoreClient(KalturaClientPlugin):
             'KalturaMultilingualStringValue': KalturaMultilingualStringValue,
             'KalturaStringValue': KalturaStringValue,
             'KalturaOTTUserFilter': KalturaOTTUserFilter,
-            'KalturaPartnerFilter': KalturaPartnerFilter,
             'KalturaBulkUploadFilter': KalturaBulkUploadFilter,
             'KalturaSocialActionFilter': KalturaSocialActionFilter,
             'KalturaSocialCommentFilter': KalturaSocialCommentFilter,
@@ -49464,8 +48987,6 @@ class KalturaCoreClient(KalturaClientPlugin):
             'KalturaFairPlayPlaybackPluginData': KalturaFairPlayPlaybackPluginData,
             'KalturaCustomDrmPlaybackPluginData': KalturaCustomDrmPlaybackPluginData,
             'KalturaOTTUserListResponse': KalturaOTTUserListResponse,
-            'KalturaPartner': KalturaPartner,
-            'KalturaPartnerListResponse': KalturaPartnerListResponse,
             'KalturaSSOAdapterProfile': KalturaSSOAdapterProfile,
             'KalturaSSOAdapterProfileListResponse': KalturaSSOAdapterProfileListResponse,
             'KalturaUserInterestTopic': KalturaUserInterestTopic,
@@ -49635,7 +49156,6 @@ class KalturaCoreClient(KalturaClientPlugin):
             'KalturaSubscriptionSwitchSet': KalturaSubscriptionSwitchSet,
             'KalturaPartnerConfiguration': KalturaPartnerConfiguration,
             'KalturaPartnerConfigurationListResponse': KalturaPartnerConfigurationListResponse,
-            'KalturaBasePartnerConfiguration': KalturaBasePartnerConfiguration,
             'KalturaBillingPartnerConfig': KalturaBillingPartnerConfig,
             'KalturaCategoryManagement': KalturaCategoryManagement,
             'KalturaCatalogPartnerConfig': KalturaCatalogPartnerConfig,
@@ -49887,7 +49407,6 @@ class KalturaCoreClient(KalturaClientPlugin):
             'KalturaDevicePin': KalturaDevicePin,
             'KalturaLoginSession': KalturaLoginSession,
             'KalturaLoginResponse': KalturaLoginResponse,
-            'KalturaDynamicData': KalturaDynamicData,
             'KalturaPaymentGatewayConfiguration': KalturaPaymentGatewayConfiguration,
             'KalturaHouseholdQuota': KalturaHouseholdQuota,
             'KalturaHouseholdSegmentListResponse': KalturaHouseholdSegmentListResponse,
@@ -49911,7 +49430,6 @@ class KalturaCoreClient(KalturaClientPlugin):
             'KalturaNotificationsPartnerSettings': KalturaNotificationsPartnerSettings,
             'KalturaNotificationsSettings': KalturaNotificationsSettings,
             'KalturaOTTUserDynamicData': KalturaOTTUserDynamicData,
-            'KalturaPartnerSetup': KalturaPartnerSetup,
             'KalturaPasswordPolicyListResponse': KalturaPasswordPolicyListResponse,
             'KalturaPermissionItem': KalturaPermissionItem,
             'KalturaPermissionItemListResponse': KalturaPermissionItemListResponse,
