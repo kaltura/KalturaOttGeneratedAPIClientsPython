@@ -42,7 +42,7 @@ from ..Base import (
     KalturaServiceBase,
 )
 
-API_VERSION = '6.5.0.29179'
+API_VERSION = '6.5.0.29176'
 
 ########## enums ##########
 # @package Kaltura
@@ -41351,6 +41351,434 @@ class KalturaSSOAdapterProfileInvoke(KalturaObjectBase):
 
 # @package Kaltura
 # @subpackage Client
+class KalturaSubscriptionCouponGroup(KalturaObjectBase):
+    """Coupons group details"""
+
+    def __init__(self,
+            id=NotImplemented,
+            startDate=NotImplemented,
+            endDate=NotImplemented):
+        KalturaObjectBase.__init__(self)
+
+        # Coupon group identifier
+        # @var int
+        self.id = id
+
+        # The first date the coupons in this coupons group are valid
+        # @var int
+        self.startDate = startDate
+
+        # The last date the coupons in this coupons group are valid
+        # @var int
+        self.endDate = endDate
+
+
+    PROPERTY_LOADERS = {
+        'id': getXmlNodeInt, 
+        'startDate': getXmlNodeInt, 
+        'endDate': getXmlNodeInt, 
+    }
+
+    def fromXml(self, node):
+        KalturaObjectBase.fromXml(self, node)
+        self.fromXmlImpl(node, KalturaSubscriptionCouponGroup.PROPERTY_LOADERS)
+
+    def toParams(self):
+        kparams = KalturaObjectBase.toParams(self)
+        kparams.put("objectType", "KalturaSubscriptionCouponGroup")
+        kparams.addIntIfDefined("id", self.id)
+        kparams.addIntIfDefined("startDate", self.startDate)
+        kparams.addIntIfDefined("endDate", self.endDate)
+        return kparams
+
+    def getId(self):
+        return self.id
+
+    def setId(self, newId):
+        self.id = newId
+
+    def getStartDate(self):
+        return self.startDate
+
+    def setStartDate(self, newStartDate):
+        self.startDate = newStartDate
+
+    def getEndDate(self):
+        return self.endDate
+
+    def setEndDate(self, newEndDate):
+        self.endDate = newEndDate
+
+
+# @package Kaltura
+# @subpackage Client
+class KalturaSubscriptionInternal(KalturaObjectBase):
+    """Subscription"""
+
+    def __init__(self,
+            channelsIds=NotImplemented,
+            startDate=NotImplemented,
+            endDate=NotImplemented,
+            fileTypesIds=NotImplemented,
+            internalDiscountModuleId=NotImplemented,
+            name=NotImplemented,
+            multilingualName=NotImplemented,
+            description=NotImplemented,
+            multilingualDescription=NotImplemented,
+            prorityInOrder=NotImplemented,
+            pricePlanIds=NotImplemented,
+            previewModuleId=NotImplemented,
+            householdLimitationsId=NotImplemented,
+            gracePeriodMinutes=NotImplemented,
+            premiumServices=NotImplemented,
+            maxViewsNumber=NotImplemented,
+            viewLifeCycle=NotImplemented,
+            waiverPeriod=NotImplemented,
+            isWaiverEnabled=NotImplemented,
+            couponsGroups=NotImplemented,
+            productCodes=NotImplemented,
+            dependencyType=NotImplemented,
+            externalId=NotImplemented,
+            isCancellationBlocked=NotImplemented,
+            preSaleDate=NotImplemented,
+            adsPolicy=NotImplemented,
+            adsParam=NotImplemented):
+        KalturaObjectBase.__init__(self)
+
+        # Comma separated channels Ids associated with this subscription
+        # @var string
+        self.channelsIds = channelsIds
+
+        # The first date the subscription is available for purchasing
+        # @var int
+        self.startDate = startDate
+
+        # The last date the subscription is available for purchasing
+        # @var int
+        self.endDate = endDate
+
+        # Comma separated file types identifiers that are supported in this subscription
+        # @var string
+        self.fileTypesIds = fileTypesIds
+
+        # The internal discount module identifier for the subscription
+        # @var int
+        self.internalDiscountModuleId = internalDiscountModuleId
+
+        # Name of the subscription
+        # @var string
+        # @readonly
+        self.name = name
+
+        # Name of the subscription
+        # @var array of KalturaTranslationToken
+        self.multilingualName = multilingualName
+
+        # description of the subscription
+        # @var string
+        # @readonly
+        self.description = description
+
+        # description of the subscription
+        # @var array of KalturaTranslationToken
+        self.multilingualDescription = multilingualDescription
+
+        # Subscription order (when returned in methods that retrieve subscriptions)
+        # @var int
+        self.prorityInOrder = prorityInOrder
+
+        # Comma separated subscription price plan identifiers
+        # @var string
+        self.pricePlanIds = pricePlanIds
+
+        # Subscription preview module identifier
+        # @var int
+        self.previewModuleId = previewModuleId
+
+        # The household limitation module identifier associated with this subscription
+        # @var int
+        self.householdLimitationsId = householdLimitationsId
+
+        # The subscription grace period in minutes
+        # @var int
+        self.gracePeriodMinutes = gracePeriodMinutes
+
+        # List of premium services included in the subscription
+        # @var array of KalturaPremiumService
+        self.premiumServices = premiumServices
+
+        # The maximum number of times an item in this usage module can be viewed
+        # @var int
+        self.maxViewsNumber = maxViewsNumber
+
+        # The amount time an item is available for viewing since a user started watching the item
+        # @var int
+        self.viewLifeCycle = viewLifeCycle
+
+        # Time period during which the end user can waive his rights to cancel a purchase. When the time period is passed, the purchase can no longer be cancelled
+        # @var int
+        self.waiverPeriod = waiverPeriod
+
+        # Indicates whether or not the end user has the right to waive his rights to cancel a purchase
+        # @var bool
+        self.isWaiverEnabled = isWaiverEnabled
+
+        # List of Coupons group
+        # @var array of KalturaSubscriptionCouponGroup
+        self.couponsGroups = couponsGroups
+
+        # List of Subscription product codes
+        # @var array of KalturaProductCode
+        self.productCodes = productCodes
+
+        # Dependency Type
+        # @var KalturaSubscriptionDependencyType
+        self.dependencyType = dependencyType
+
+        # External ID
+        # @var string
+        self.externalId = externalId
+
+        # Is cancellation blocked for the subscription
+        # @var bool
+        self.isCancellationBlocked = isCancellationBlocked
+
+        # The Pre-Sale date the subscription is available for purchasing
+        # @var int
+        self.preSaleDate = preSaleDate
+
+        # Ads policy
+        # @var KalturaAdsPolicy
+        self.adsPolicy = adsPolicy
+
+        # The parameters to pass to the ads server
+        # @var string
+        self.adsParam = adsParam
+
+
+    PROPERTY_LOADERS = {
+        'channelsIds': getXmlNodeText, 
+        'startDate': getXmlNodeInt, 
+        'endDate': getXmlNodeInt, 
+        'fileTypesIds': getXmlNodeText, 
+        'internalDiscountModuleId': getXmlNodeInt, 
+        'name': getXmlNodeText, 
+        'multilingualName': (KalturaObjectFactory.createArray, 'KalturaTranslationToken'), 
+        'description': getXmlNodeText, 
+        'multilingualDescription': (KalturaObjectFactory.createArray, 'KalturaTranslationToken'), 
+        'prorityInOrder': getXmlNodeInt, 
+        'pricePlanIds': getXmlNodeText, 
+        'previewModuleId': getXmlNodeInt, 
+        'householdLimitationsId': getXmlNodeInt, 
+        'gracePeriodMinutes': getXmlNodeInt, 
+        'premiumServices': (KalturaObjectFactory.createArray, 'KalturaPremiumService'), 
+        'maxViewsNumber': getXmlNodeInt, 
+        'viewLifeCycle': getXmlNodeInt, 
+        'waiverPeriod': getXmlNodeInt, 
+        'isWaiverEnabled': getXmlNodeBool, 
+        'couponsGroups': (KalturaObjectFactory.createArray, 'KalturaSubscriptionCouponGroup'), 
+        'productCodes': (KalturaObjectFactory.createArray, 'KalturaProductCode'), 
+        'dependencyType': (KalturaEnumsFactory.createString, "KalturaSubscriptionDependencyType"), 
+        'externalId': getXmlNodeText, 
+        'isCancellationBlocked': getXmlNodeBool, 
+        'preSaleDate': getXmlNodeInt, 
+        'adsPolicy': (KalturaEnumsFactory.createString, "KalturaAdsPolicy"), 
+        'adsParam': getXmlNodeText, 
+    }
+
+    def fromXml(self, node):
+        KalturaObjectBase.fromXml(self, node)
+        self.fromXmlImpl(node, KalturaSubscriptionInternal.PROPERTY_LOADERS)
+
+    def toParams(self):
+        kparams = KalturaObjectBase.toParams(self)
+        kparams.put("objectType", "KalturaSubscriptionInternal")
+        kparams.addStringIfDefined("channelsIds", self.channelsIds)
+        kparams.addIntIfDefined("startDate", self.startDate)
+        kparams.addIntIfDefined("endDate", self.endDate)
+        kparams.addStringIfDefined("fileTypesIds", self.fileTypesIds)
+        kparams.addIntIfDefined("internalDiscountModuleId", self.internalDiscountModuleId)
+        kparams.addArrayIfDefined("multilingualName", self.multilingualName)
+        kparams.addArrayIfDefined("multilingualDescription", self.multilingualDescription)
+        kparams.addIntIfDefined("prorityInOrder", self.prorityInOrder)
+        kparams.addStringIfDefined("pricePlanIds", self.pricePlanIds)
+        kparams.addIntIfDefined("previewModuleId", self.previewModuleId)
+        kparams.addIntIfDefined("householdLimitationsId", self.householdLimitationsId)
+        kparams.addIntIfDefined("gracePeriodMinutes", self.gracePeriodMinutes)
+        kparams.addArrayIfDefined("premiumServices", self.premiumServices)
+        kparams.addIntIfDefined("maxViewsNumber", self.maxViewsNumber)
+        kparams.addIntIfDefined("viewLifeCycle", self.viewLifeCycle)
+        kparams.addIntIfDefined("waiverPeriod", self.waiverPeriod)
+        kparams.addBoolIfDefined("isWaiverEnabled", self.isWaiverEnabled)
+        kparams.addArrayIfDefined("couponsGroups", self.couponsGroups)
+        kparams.addArrayIfDefined("productCodes", self.productCodes)
+        kparams.addStringEnumIfDefined("dependencyType", self.dependencyType)
+        kparams.addStringIfDefined("externalId", self.externalId)
+        kparams.addBoolIfDefined("isCancellationBlocked", self.isCancellationBlocked)
+        kparams.addIntIfDefined("preSaleDate", self.preSaleDate)
+        kparams.addStringEnumIfDefined("adsPolicy", self.adsPolicy)
+        kparams.addStringIfDefined("adsParam", self.adsParam)
+        return kparams
+
+    def getChannelsIds(self):
+        return self.channelsIds
+
+    def setChannelsIds(self, newChannelsIds):
+        self.channelsIds = newChannelsIds
+
+    def getStartDate(self):
+        return self.startDate
+
+    def setStartDate(self, newStartDate):
+        self.startDate = newStartDate
+
+    def getEndDate(self):
+        return self.endDate
+
+    def setEndDate(self, newEndDate):
+        self.endDate = newEndDate
+
+    def getFileTypesIds(self):
+        return self.fileTypesIds
+
+    def setFileTypesIds(self, newFileTypesIds):
+        self.fileTypesIds = newFileTypesIds
+
+    def getInternalDiscountModuleId(self):
+        return self.internalDiscountModuleId
+
+    def setInternalDiscountModuleId(self, newInternalDiscountModuleId):
+        self.internalDiscountModuleId = newInternalDiscountModuleId
+
+    def getName(self):
+        return self.name
+
+    def getMultilingualName(self):
+        return self.multilingualName
+
+    def setMultilingualName(self, newMultilingualName):
+        self.multilingualName = newMultilingualName
+
+    def getDescription(self):
+        return self.description
+
+    def getMultilingualDescription(self):
+        return self.multilingualDescription
+
+    def setMultilingualDescription(self, newMultilingualDescription):
+        self.multilingualDescription = newMultilingualDescription
+
+    def getProrityInOrder(self):
+        return self.prorityInOrder
+
+    def setProrityInOrder(self, newProrityInOrder):
+        self.prorityInOrder = newProrityInOrder
+
+    def getPricePlanIds(self):
+        return self.pricePlanIds
+
+    def setPricePlanIds(self, newPricePlanIds):
+        self.pricePlanIds = newPricePlanIds
+
+    def getPreviewModuleId(self):
+        return self.previewModuleId
+
+    def setPreviewModuleId(self, newPreviewModuleId):
+        self.previewModuleId = newPreviewModuleId
+
+    def getHouseholdLimitationsId(self):
+        return self.householdLimitationsId
+
+    def setHouseholdLimitationsId(self, newHouseholdLimitationsId):
+        self.householdLimitationsId = newHouseholdLimitationsId
+
+    def getGracePeriodMinutes(self):
+        return self.gracePeriodMinutes
+
+    def setGracePeriodMinutes(self, newGracePeriodMinutes):
+        self.gracePeriodMinutes = newGracePeriodMinutes
+
+    def getPremiumServices(self):
+        return self.premiumServices
+
+    def setPremiumServices(self, newPremiumServices):
+        self.premiumServices = newPremiumServices
+
+    def getMaxViewsNumber(self):
+        return self.maxViewsNumber
+
+    def setMaxViewsNumber(self, newMaxViewsNumber):
+        self.maxViewsNumber = newMaxViewsNumber
+
+    def getViewLifeCycle(self):
+        return self.viewLifeCycle
+
+    def setViewLifeCycle(self, newViewLifeCycle):
+        self.viewLifeCycle = newViewLifeCycle
+
+    def getWaiverPeriod(self):
+        return self.waiverPeriod
+
+    def setWaiverPeriod(self, newWaiverPeriod):
+        self.waiverPeriod = newWaiverPeriod
+
+    def getIsWaiverEnabled(self):
+        return self.isWaiverEnabled
+
+    def setIsWaiverEnabled(self, newIsWaiverEnabled):
+        self.isWaiverEnabled = newIsWaiverEnabled
+
+    def getCouponsGroups(self):
+        return self.couponsGroups
+
+    def setCouponsGroups(self, newCouponsGroups):
+        self.couponsGroups = newCouponsGroups
+
+    def getProductCodes(self):
+        return self.productCodes
+
+    def setProductCodes(self, newProductCodes):
+        self.productCodes = newProductCodes
+
+    def getDependencyType(self):
+        return self.dependencyType
+
+    def setDependencyType(self, newDependencyType):
+        self.dependencyType = newDependencyType
+
+    def getExternalId(self):
+        return self.externalId
+
+    def setExternalId(self, newExternalId):
+        self.externalId = newExternalId
+
+    def getIsCancellationBlocked(self):
+        return self.isCancellationBlocked
+
+    def setIsCancellationBlocked(self, newIsCancellationBlocked):
+        self.isCancellationBlocked = newIsCancellationBlocked
+
+    def getPreSaleDate(self):
+        return self.preSaleDate
+
+    def setPreSaleDate(self, newPreSaleDate):
+        self.preSaleDate = newPreSaleDate
+
+    def getAdsPolicy(self):
+        return self.adsPolicy
+
+    def setAdsPolicy(self, newAdsPolicy):
+        self.adsPolicy = newAdsPolicy
+
+    def getAdsParam(self):
+        return self.adsParam
+
+    def setAdsParam(self, newAdsParam):
+        self.adsParam = newAdsParam
+
+
+# @package Kaltura
+# @subpackage Client
 class KalturaTimeShiftedTvPartnerSettings(KalturaObjectBase):
     def __init__(self,
             catchUpEnabled=NotImplemented,
@@ -46708,16 +47136,6 @@ class KalturaPartnerService(KalturaServiceBase):
         resultNode = self.client.doQueue()
         return KalturaObjectFactory.create(resultNode, 'KalturaPartner')
 
-    def createIndexes(self):
-        """Internal API !!! create ElasticSearch indexes for partner"""
-
-        kparams = KalturaParams()
-        self.client.queueServiceActionCall("partner", "createIndexes", "None", kparams)
-        if self.client.isMultiRequest():
-            return self.client.getMultiRequestResult()
-        resultNode = self.client.doQueue()
-        return getXmlNodeBool(resultNode)
-
     def delete(self, id):
         """Internal API !!! Delete Partner"""
 
@@ -48372,6 +48790,28 @@ class KalturaStreamingDeviceService(KalturaServiceBase):
 class KalturaSubscriptionService(KalturaServiceBase):
     def __init__(self, client = None):
         KalturaServiceBase.__init__(self, client)
+
+    def add(self, subscription):
+        """Internal API !!! Insert new subscription for partner"""
+
+        kparams = KalturaParams()
+        kparams.addObjectIfDefined("subscription", subscription)
+        self.client.queueServiceActionCall("subscription", "add", "KalturaSubscriptionInternal", kparams)
+        if self.client.isMultiRequest():
+            return self.client.getMultiRequestResult()
+        resultNode = self.client.doQueue()
+        return KalturaObjectFactory.create(resultNode, 'KalturaSubscriptionInternal')
+
+    def delete(self, id):
+        """Internal API !!! Delete subscription"""
+
+        kparams = KalturaParams()
+        kparams.addIntIfDefined("id", id);
+        self.client.queueServiceActionCall("subscription", "delete", "None", kparams)
+        if self.client.isMultiRequest():
+            return self.client.getMultiRequestResult()
+        resultNode = self.client.doQueue()
+        return getXmlNodeBool(resultNode)
 
     def list(self, filter = NotImplemented, pager = NotImplemented):
         """Returns a list of subscriptions requested by Subscription ID or file ID"""
@@ -50308,6 +50748,8 @@ class KalturaCoreClient(KalturaClientPlugin):
             'KalturaActionPermissionItem': KalturaActionPermissionItem,
             'KalturaSocialUserConfig': KalturaSocialUserConfig,
             'KalturaSSOAdapterProfileInvoke': KalturaSSOAdapterProfileInvoke,
+            'KalturaSubscriptionCouponGroup': KalturaSubscriptionCouponGroup,
+            'KalturaSubscriptionInternal': KalturaSubscriptionInternal,
             'KalturaTimeShiftedTvPartnerSettings': KalturaTimeShiftedTvPartnerSettings,
             'KalturaPurchaseBase': KalturaPurchaseBase,
             'KalturaPurchase': KalturaPurchase,
