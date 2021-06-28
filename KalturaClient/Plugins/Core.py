@@ -42,7 +42,7 @@ from ..Base import (
     KalturaServiceBase,
 )
 
-API_VERSION = '6.5.0.29176'
+API_VERSION = '6.5.0.29184'
 
 ########## enums ##########
 # @package Kaltura
@@ -47135,6 +47135,16 @@ class KalturaPartnerService(KalturaServiceBase):
             return self.client.getMultiRequestResult()
         resultNode = self.client.doQueue()
         return KalturaObjectFactory.create(resultNode, 'KalturaPartner')
+
+    def createIndexes(self):
+        """Internal API !!! create ElasticSearch indexes for partner"""
+
+        kparams = KalturaParams()
+        self.client.queueServiceActionCall("partner", "createIndexes", "None", kparams)
+        if self.client.isMultiRequest():
+            return self.client.getMultiRequestResult()
+        resultNode = self.client.doQueue()
+        return getXmlNodeBool(resultNode)
 
     def delete(self, id):
         """Internal API !!! Delete Partner"""
