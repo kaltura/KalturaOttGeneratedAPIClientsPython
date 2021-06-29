@@ -42,7 +42,7 @@ from ..Base import (
     KalturaServiceBase,
 )
 
-API_VERSION = '6.5.0.29184'
+API_VERSION = '6.5.0.29194'
 
 ########## enums ##########
 # @package Kaltura
@@ -41431,10 +41431,6 @@ class KalturaSubscriptionInternal(KalturaObjectBase):
             householdLimitationsId=NotImplemented,
             gracePeriodMinutes=NotImplemented,
             premiumServices=NotImplemented,
-            maxViewsNumber=NotImplemented,
-            viewLifeCycle=NotImplemented,
-            waiverPeriod=NotImplemented,
-            isWaiverEnabled=NotImplemented,
             couponsGroups=NotImplemented,
             productCodes=NotImplemented,
             dependencyType=NotImplemented,
@@ -41442,7 +41438,8 @@ class KalturaSubscriptionInternal(KalturaObjectBase):
             isCancellationBlocked=NotImplemented,
             preSaleDate=NotImplemented,
             adsPolicy=NotImplemented,
-            adsParam=NotImplemented):
+            adsParam=NotImplemented,
+            isActive=NotImplemented):
         KalturaObjectBase.__init__(self)
 
         # Comma separated channels Ids associated with this subscription
@@ -41507,22 +41504,6 @@ class KalturaSubscriptionInternal(KalturaObjectBase):
         # @var array of KalturaPremiumService
         self.premiumServices = premiumServices
 
-        # The maximum number of times an item in this usage module can be viewed
-        # @var int
-        self.maxViewsNumber = maxViewsNumber
-
-        # The amount time an item is available for viewing since a user started watching the item
-        # @var int
-        self.viewLifeCycle = viewLifeCycle
-
-        # Time period during which the end user can waive his rights to cancel a purchase. When the time period is passed, the purchase can no longer be cancelled
-        # @var int
-        self.waiverPeriod = waiverPeriod
-
-        # Indicates whether or not the end user has the right to waive his rights to cancel a purchase
-        # @var bool
-        self.isWaiverEnabled = isWaiverEnabled
-
         # List of Coupons group
         # @var array of KalturaSubscriptionCouponGroup
         self.couponsGroups = couponsGroups
@@ -41555,6 +41536,10 @@ class KalturaSubscriptionInternal(KalturaObjectBase):
         # @var string
         self.adsParam = adsParam
 
+        # Is active subscription
+        # @var bool
+        self.isActive = isActive
+
 
     PROPERTY_LOADERS = {
         'channelsIds': getXmlNodeText, 
@@ -41572,10 +41557,6 @@ class KalturaSubscriptionInternal(KalturaObjectBase):
         'householdLimitationsId': getXmlNodeInt, 
         'gracePeriodMinutes': getXmlNodeInt, 
         'premiumServices': (KalturaObjectFactory.createArray, 'KalturaPremiumService'), 
-        'maxViewsNumber': getXmlNodeInt, 
-        'viewLifeCycle': getXmlNodeInt, 
-        'waiverPeriod': getXmlNodeInt, 
-        'isWaiverEnabled': getXmlNodeBool, 
         'couponsGroups': (KalturaObjectFactory.createArray, 'KalturaSubscriptionCouponGroup'), 
         'productCodes': (KalturaObjectFactory.createArray, 'KalturaProductCode'), 
         'dependencyType': (KalturaEnumsFactory.createString, "KalturaSubscriptionDependencyType"), 
@@ -41584,6 +41565,7 @@ class KalturaSubscriptionInternal(KalturaObjectBase):
         'preSaleDate': getXmlNodeInt, 
         'adsPolicy': (KalturaEnumsFactory.createString, "KalturaAdsPolicy"), 
         'adsParam': getXmlNodeText, 
+        'isActive': getXmlNodeBool, 
     }
 
     def fromXml(self, node):
@@ -41606,10 +41588,6 @@ class KalturaSubscriptionInternal(KalturaObjectBase):
         kparams.addIntIfDefined("householdLimitationsId", self.householdLimitationsId)
         kparams.addIntIfDefined("gracePeriodMinutes", self.gracePeriodMinutes)
         kparams.addArrayIfDefined("premiumServices", self.premiumServices)
-        kparams.addIntIfDefined("maxViewsNumber", self.maxViewsNumber)
-        kparams.addIntIfDefined("viewLifeCycle", self.viewLifeCycle)
-        kparams.addIntIfDefined("waiverPeriod", self.waiverPeriod)
-        kparams.addBoolIfDefined("isWaiverEnabled", self.isWaiverEnabled)
         kparams.addArrayIfDefined("couponsGroups", self.couponsGroups)
         kparams.addArrayIfDefined("productCodes", self.productCodes)
         kparams.addStringEnumIfDefined("dependencyType", self.dependencyType)
@@ -41618,6 +41596,7 @@ class KalturaSubscriptionInternal(KalturaObjectBase):
         kparams.addIntIfDefined("preSaleDate", self.preSaleDate)
         kparams.addStringEnumIfDefined("adsPolicy", self.adsPolicy)
         kparams.addStringIfDefined("adsParam", self.adsParam)
+        kparams.addBoolIfDefined("isActive", self.isActive)
         return kparams
 
     def getChannelsIds(self):
@@ -41704,30 +41683,6 @@ class KalturaSubscriptionInternal(KalturaObjectBase):
     def setPremiumServices(self, newPremiumServices):
         self.premiumServices = newPremiumServices
 
-    def getMaxViewsNumber(self):
-        return self.maxViewsNumber
-
-    def setMaxViewsNumber(self, newMaxViewsNumber):
-        self.maxViewsNumber = newMaxViewsNumber
-
-    def getViewLifeCycle(self):
-        return self.viewLifeCycle
-
-    def setViewLifeCycle(self, newViewLifeCycle):
-        self.viewLifeCycle = newViewLifeCycle
-
-    def getWaiverPeriod(self):
-        return self.waiverPeriod
-
-    def setWaiverPeriod(self, newWaiverPeriod):
-        self.waiverPeriod = newWaiverPeriod
-
-    def getIsWaiverEnabled(self):
-        return self.isWaiverEnabled
-
-    def setIsWaiverEnabled(self, newIsWaiverEnabled):
-        self.isWaiverEnabled = newIsWaiverEnabled
-
     def getCouponsGroups(self):
         return self.couponsGroups
 
@@ -41775,6 +41730,12 @@ class KalturaSubscriptionInternal(KalturaObjectBase):
 
     def setAdsParam(self, newAdsParam):
         self.adsParam = newAdsParam
+
+    def getIsActive(self):
+        return self.isActive
+
+    def setIsActive(self, newIsActive):
+        self.isActive = newIsActive
 
 
 # @package Kaltura
