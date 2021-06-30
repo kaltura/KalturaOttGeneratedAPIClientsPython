@@ -42,7 +42,7 @@ from ..Base import (
     KalturaServiceBase,
 )
 
-API_VERSION = '6.5.0.29194'
+API_VERSION = '6.5.0.29195'
 
 ########## enums ##########
 # @package Kaltura
@@ -48762,12 +48762,12 @@ class KalturaSubscriptionService(KalturaServiceBase):
     def __init__(self, client = None):
         KalturaServiceBase.__init__(self, client)
 
-    def add(self, subscription):
+    def addInternal(self, subscription):
         """Internal API !!! Insert new subscription for partner"""
 
         kparams = KalturaParams()
         kparams.addObjectIfDefined("subscription", subscription)
-        self.client.queueServiceActionCall("subscription", "add", "KalturaSubscriptionInternal", kparams)
+        self.client.queueServiceActionCall("subscription", "addInternal", "KalturaSubscriptionInternal", kparams)
         if self.client.isMultiRequest():
             return self.client.getMultiRequestResult()
         resultNode = self.client.doQueue()
