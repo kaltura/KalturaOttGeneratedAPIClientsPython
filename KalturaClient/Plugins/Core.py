@@ -42,7 +42,7 @@ from ..Base import (
     KalturaServiceBase,
 )
 
-API_VERSION = '6.6.0.29185'
+API_VERSION = '6.6.0.29188'
 
 ########## enums ##########
 # @package Kaltura
@@ -28637,6 +28637,52 @@ class KalturaRecordingListResponse(KalturaListResponse):
 
 # @package Kaltura
 # @subpackage Client
+class KalturaSeriesRecordingOption(KalturaObjectBase):
+    def __init__(self,
+            minSeasonNumber=NotImplemented,
+            minEpisodeNumber=NotImplemented):
+        KalturaObjectBase.__init__(self)
+
+        # min Season Number
+        # @var int
+        self.minSeasonNumber = minSeasonNumber
+
+        # min Season Number
+        # @var int
+        self.minEpisodeNumber = minEpisodeNumber
+
+
+    PROPERTY_LOADERS = {
+        'minSeasonNumber': getXmlNodeInt, 
+        'minEpisodeNumber': getXmlNodeInt, 
+    }
+
+    def fromXml(self, node):
+        KalturaObjectBase.fromXml(self, node)
+        self.fromXmlImpl(node, KalturaSeriesRecordingOption.PROPERTY_LOADERS)
+
+    def toParams(self):
+        kparams = KalturaObjectBase.toParams(self)
+        kparams.put("objectType", "KalturaSeriesRecordingOption")
+        kparams.addIntIfDefined("minSeasonNumber", self.minSeasonNumber)
+        kparams.addIntIfDefined("minEpisodeNumber", self.minEpisodeNumber)
+        return kparams
+
+    def getMinSeasonNumber(self):
+        return self.minSeasonNumber
+
+    def setMinSeasonNumber(self, newMinSeasonNumber):
+        self.minSeasonNumber = newMinSeasonNumber
+
+    def getMinEpisodeNumber(self):
+        return self.minEpisodeNumber
+
+    def setMinEpisodeNumber(self, newMinEpisodeNumber):
+        self.minEpisodeNumber = newMinEpisodeNumber
+
+
+# @package Kaltura
+# @subpackage Client
 class KalturaSeriesRecording(KalturaObjectBase):
     def __init__(self,
             id=NotImplemented,
@@ -28647,7 +28693,8 @@ class KalturaSeriesRecording(KalturaObjectBase):
             type=NotImplemented,
             createDate=NotImplemented,
             updateDate=NotImplemented,
-            excludedSeasons=NotImplemented):
+            excludedSeasons=NotImplemented,
+            seriesRecordingOption=NotImplemented):
         KalturaObjectBase.__init__(self)
 
         # Kaltura unique ID representing the series recording identifier
@@ -28690,6 +28737,10 @@ class KalturaSeriesRecording(KalturaObjectBase):
         # @readonly
         self.excludedSeasons = excludedSeasons
 
+        # Series Recording Option
+        # @var KalturaSeriesRecordingOption
+        self.seriesRecordingOption = seriesRecordingOption
+
 
     PROPERTY_LOADERS = {
         'id': getXmlNodeInt, 
@@ -28701,6 +28752,7 @@ class KalturaSeriesRecording(KalturaObjectBase):
         'createDate': getXmlNodeInt, 
         'updateDate': getXmlNodeInt, 
         'excludedSeasons': (KalturaObjectFactory.createArray, 'KalturaIntegerValue'), 
+        'seriesRecordingOption': (KalturaObjectFactory.create, 'KalturaSeriesRecordingOption'), 
     }
 
     def fromXml(self, node):
@@ -28715,6 +28767,7 @@ class KalturaSeriesRecording(KalturaObjectBase):
         kparams.addStringIfDefined("seriesId", self.seriesId)
         kparams.addIntIfDefined("seasonNumber", self.seasonNumber)
         kparams.addStringEnumIfDefined("type", self.type)
+        kparams.addObjectIfDefined("seriesRecordingOption", self.seriesRecordingOption)
         return kparams
 
     def getId(self):
@@ -28758,6 +28811,12 @@ class KalturaSeriesRecording(KalturaObjectBase):
 
     def getExcludedSeasons(self):
         return self.excludedSeasons
+
+    def getSeriesRecordingOption(self):
+        return self.seriesRecordingOption
+
+    def setSeriesRecordingOption(self, newSeriesRecordingOption):
+        self.seriesRecordingOption = newSeriesRecordingOption
 
 
 # @package Kaltura
@@ -28810,6 +28869,7 @@ class KalturaExternalSeriesRecording(KalturaSeriesRecording):
             createDate=NotImplemented,
             updateDate=NotImplemented,
             excludedSeasons=NotImplemented,
+            seriesRecordingOption=NotImplemented,
             metaData=NotImplemented):
         KalturaSeriesRecording.__init__(self,
             id,
@@ -28820,7 +28880,8 @@ class KalturaExternalSeriesRecording(KalturaSeriesRecording):
             type,
             createDate,
             updateDate,
-            excludedSeasons)
+            excludedSeasons,
+            seriesRecordingOption)
 
         # MetaData filtering
         # @var map
@@ -50110,6 +50171,7 @@ class KalturaCoreClient(KalturaClientPlugin):
             'KalturaRecording': KalturaRecording,
             'KalturaExternalRecording': KalturaExternalRecording,
             'KalturaRecordingListResponse': KalturaRecordingListResponse,
+            'KalturaSeriesRecordingOption': KalturaSeriesRecordingOption,
             'KalturaSeriesRecording': KalturaSeriesRecording,
             'KalturaSeriesRecordingListResponse': KalturaSeriesRecordingListResponse,
             'KalturaExternalSeriesRecording': KalturaExternalSeriesRecording,
