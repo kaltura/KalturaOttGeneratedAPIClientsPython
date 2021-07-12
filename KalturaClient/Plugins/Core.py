@@ -42,7 +42,7 @@ from ..Base import (
     KalturaServiceBase,
 )
 
-API_VERSION = '6.5.0.29184'
+API_VERSION = '6.5.0.29190'
 
 ########## enums ##########
 # @package Kaltura
@@ -23321,7 +23321,8 @@ class KalturaGeneralPartnerConfig(KalturaPartnerConfiguration):
             defaultRegion=NotImplemented,
             rollingDeviceData=NotImplemented,
             finishedPercentThreshold=NotImplemented,
-            suspensionProfileInheritanceType=NotImplemented):
+            suspensionProfileInheritanceType=NotImplemented,
+            allowDeviceMobility=NotImplemented):
         KalturaPartnerConfiguration.__init__(self)
 
         # Partner name
@@ -23384,6 +23385,10 @@ class KalturaGeneralPartnerConfig(KalturaPartnerConfiguration):
         # @var KalturaSuspensionProfileInheritanceType
         self.suspensionProfileInheritanceType = suspensionProfileInheritanceType
 
+        # Allow Device Mobility
+        # @var bool
+        self.allowDeviceMobility = allowDeviceMobility
+
 
     PROPERTY_LOADERS = {
         'partnerName': getXmlNodeText, 
@@ -23401,6 +23406,7 @@ class KalturaGeneralPartnerConfig(KalturaPartnerConfiguration):
         'rollingDeviceData': (KalturaObjectFactory.create, 'KalturaRollingDeviceRemovalData'), 
         'finishedPercentThreshold': getXmlNodeInt, 
         'suspensionProfileInheritanceType': (KalturaEnumsFactory.createString, "KalturaSuspensionProfileInheritanceType"), 
+        'allowDeviceMobility': getXmlNodeBool, 
     }
 
     def fromXml(self, node):
@@ -23425,6 +23431,7 @@ class KalturaGeneralPartnerConfig(KalturaPartnerConfiguration):
         kparams.addObjectIfDefined("rollingDeviceData", self.rollingDeviceData)
         kparams.addIntIfDefined("finishedPercentThreshold", self.finishedPercentThreshold)
         kparams.addStringEnumIfDefined("suspensionProfileInheritanceType", self.suspensionProfileInheritanceType)
+        kparams.addBoolIfDefined("allowDeviceMobility", self.allowDeviceMobility)
         return kparams
 
     def getPartnerName(self):
@@ -23516,6 +23523,12 @@ class KalturaGeneralPartnerConfig(KalturaPartnerConfiguration):
 
     def setSuspensionProfileInheritanceType(self, newSuspensionProfileInheritanceType):
         self.suspensionProfileInheritanceType = newSuspensionProfileInheritanceType
+
+    def getAllowDeviceMobility(self):
+        return self.allowDeviceMobility
+
+    def setAllowDeviceMobility(self, newAllowDeviceMobility):
+        self.allowDeviceMobility = newAllowDeviceMobility
 
 
 # @package Kaltura
