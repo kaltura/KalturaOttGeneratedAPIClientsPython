@@ -42,7 +42,7 @@ from ..Base import (
     KalturaServiceBase,
 )
 
-API_VERSION = '6.6.0.29202'
+API_VERSION = '6.6.0.29205'
 
 ########## enums ##########
 # @package Kaltura
@@ -23386,16 +23386,22 @@ class KalturaCommercePartnerConfig(KalturaPartnerConfiguration):
     """partner configuration for commerce"""
 
     def __init__(self,
-            bookmarkEventThresholds=NotImplemented):
+            bookmarkEventThresholds=NotImplemented,
+            keepSubscriptionAddOns=NotImplemented):
         KalturaPartnerConfiguration.__init__(self)
 
         # configuration for bookmark event threshold (when to dispatch the event) in seconds.
         # @var array of KalturaBookmarkEventThreshold
         self.bookmarkEventThresholds = bookmarkEventThresholds
 
+        # configuration for keep add-ons after subscription deletion
+        # @var bool
+        self.keepSubscriptionAddOns = keepSubscriptionAddOns
+
 
     PROPERTY_LOADERS = {
         'bookmarkEventThresholds': (KalturaObjectFactory.createArray, 'KalturaBookmarkEventThreshold'), 
+        'keepSubscriptionAddOns': getXmlNodeBool, 
     }
 
     def fromXml(self, node):
@@ -23406,6 +23412,7 @@ class KalturaCommercePartnerConfig(KalturaPartnerConfiguration):
         kparams = KalturaPartnerConfiguration.toParams(self)
         kparams.put("objectType", "KalturaCommercePartnerConfig")
         kparams.addArrayIfDefined("bookmarkEventThresholds", self.bookmarkEventThresholds)
+        kparams.addBoolIfDefined("keepSubscriptionAddOns", self.keepSubscriptionAddOns)
         return kparams
 
     def getBookmarkEventThresholds(self):
@@ -23413,6 +23420,12 @@ class KalturaCommercePartnerConfig(KalturaPartnerConfiguration):
 
     def setBookmarkEventThresholds(self, newBookmarkEventThresholds):
         self.bookmarkEventThresholds = newBookmarkEventThresholds
+
+    def getKeepSubscriptionAddOns(self):
+        return self.keepSubscriptionAddOns
+
+    def setKeepSubscriptionAddOns(self, newKeepSubscriptionAddOns):
+        self.keepSubscriptionAddOns = newKeepSubscriptionAddOns
 
 
 # @package Kaltura
@@ -23555,7 +23568,8 @@ class KalturaGeneralPartnerConfig(KalturaPartnerConfiguration):
             defaultRegion=NotImplemented,
             rollingDeviceData=NotImplemented,
             finishedPercentThreshold=NotImplemented,
-            suspensionProfileInheritanceType=NotImplemented):
+            suspensionProfileInheritanceType=NotImplemented,
+            allowDeviceMobility=NotImplemented):
         KalturaPartnerConfiguration.__init__(self)
 
         # Partner name
@@ -23618,6 +23632,10 @@ class KalturaGeneralPartnerConfig(KalturaPartnerConfiguration):
         # @var KalturaSuspensionProfileInheritanceType
         self.suspensionProfileInheritanceType = suspensionProfileInheritanceType
 
+        # Allow Device Mobility
+        # @var bool
+        self.allowDeviceMobility = allowDeviceMobility
+
 
     PROPERTY_LOADERS = {
         'partnerName': getXmlNodeText, 
@@ -23635,6 +23653,7 @@ class KalturaGeneralPartnerConfig(KalturaPartnerConfiguration):
         'rollingDeviceData': (KalturaObjectFactory.create, 'KalturaRollingDeviceRemovalData'), 
         'finishedPercentThreshold': getXmlNodeInt, 
         'suspensionProfileInheritanceType': (KalturaEnumsFactory.createString, "KalturaSuspensionProfileInheritanceType"), 
+        'allowDeviceMobility': getXmlNodeBool, 
     }
 
     def fromXml(self, node):
@@ -23659,6 +23678,7 @@ class KalturaGeneralPartnerConfig(KalturaPartnerConfiguration):
         kparams.addObjectIfDefined("rollingDeviceData", self.rollingDeviceData)
         kparams.addIntIfDefined("finishedPercentThreshold", self.finishedPercentThreshold)
         kparams.addStringEnumIfDefined("suspensionProfileInheritanceType", self.suspensionProfileInheritanceType)
+        kparams.addBoolIfDefined("allowDeviceMobility", self.allowDeviceMobility)
         return kparams
 
     def getPartnerName(self):
@@ -23750,6 +23770,12 @@ class KalturaGeneralPartnerConfig(KalturaPartnerConfiguration):
 
     def setSuspensionProfileInheritanceType(self, newSuspensionProfileInheritanceType):
         self.suspensionProfileInheritanceType = newSuspensionProfileInheritanceType
+
+    def getAllowDeviceMobility(self):
+        return self.allowDeviceMobility
+
+    def setAllowDeviceMobility(self, newAllowDeviceMobility):
+        self.allowDeviceMobility = newAllowDeviceMobility
 
 
 # @package Kaltura
@@ -45352,8 +45378,7 @@ class KalturaFollowTvSeriesService(KalturaServiceBase):
         return KalturaObjectFactory.create(resultNode, 'KalturaFollowTvSeries')
 
     def delete(self, assetId):
-        """Delete a user&#39;s tv series follow.
-                    Possible status codes: UserNotFollowing = 8012, NotFound = 500007, InvalidAssetId = 4024, AnnouncementNotFound = 8006"""
+        """Delete a user&#39;s tv series follow."""
 
         kparams = KalturaParams()
         kparams.addIntIfDefined("assetId", assetId);
