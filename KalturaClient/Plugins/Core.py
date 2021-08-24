@@ -5,7 +5,7 @@
 #                          |_|\_\__,_|_|\__|\_,_|_| \__,_|
 #
 # This file is part of the Kaltura Collaborative Media Suite which allows users
-# to do with audio, video, and animation what Wiki platfroms allow them to do with
+# to do with audio, video, and animation what Wiki platforms allow them to do with
 # text.
 #
 # Copyright (C) 2006-2021  Kaltura Inc.
@@ -42,7 +42,7 @@ from ..Base import (
     KalturaServiceBase,
 )
 
-API_VERSION = '6.7.0.29292'
+API_VERSION = '6.7.0.29314'
 
 ########## enums ##########
 # @package Kaltura
@@ -4663,7 +4663,7 @@ class KalturaPartnerFilter(KalturaFilter):
 # @package Kaltura
 # @subpackage Client
 class KalturaUserSessionProfileFilter(KalturaFilter):
-    """User Session Profile"""
+    """User Session Profile filter"""
 
     def __init__(self,
             orderBy=NotImplemented,
@@ -13036,47 +13036,24 @@ class KalturaUserInterestListResponse(KalturaListResponse):
 
 # @package Kaltura
 # @subpackage Client
-class KalturaCondition(KalturaObjectBase):
-    """Condition"""
+class KalturaUserSessionProfileExpression(KalturaObjectBase):
+    """Define KalturaUserSessionProfileExpression"""
 
-    def __init__(self,
-            type=NotImplemented,
-            description=NotImplemented):
+    def __init__(self):
         KalturaObjectBase.__init__(self)
-
-        # The type of the condition
-        # @var KalturaRuleConditionType
-        # @readonly
-        self.type = type
-
-        # Description
-        # @var string
-        self.description = description
 
 
     PROPERTY_LOADERS = {
-        'type': (KalturaEnumsFactory.createString, "KalturaRuleConditionType"), 
-        'description': getXmlNodeText, 
     }
 
     def fromXml(self, node):
         KalturaObjectBase.fromXml(self, node)
-        self.fromXmlImpl(node, KalturaCondition.PROPERTY_LOADERS)
+        self.fromXmlImpl(node, KalturaUserSessionProfileExpression.PROPERTY_LOADERS)
 
     def toParams(self):
         kparams = KalturaObjectBase.toParams(self)
-        kparams.put("objectType", "KalturaCondition")
-        kparams.addStringIfDefined("description", self.description)
+        kparams.put("objectType", "KalturaUserSessionProfileExpression")
         return kparams
-
-    def getType(self):
-        return self.type
-
-    def getDescription(self):
-        return self.description
-
-    def setDescription(self, newDescription):
-        self.description = newDescription
 
 
 # @package Kaltura
@@ -13174,28 +13151,187 @@ class KalturaUserSessionProfileListResponse(KalturaListResponse):
 
 # @package Kaltura
 # @subpackage Client
-class KalturaUserSessionProfileExpression(KalturaCondition):
-    """Define KalturaUserSessionProfileExpression"""
+class KalturaExpressionAnd(KalturaUserSessionProfileExpression):
+    """And Expression"""
+
+    def __init__(self,
+            expressions=NotImplemented):
+        KalturaUserSessionProfileExpression.__init__(self)
+
+        # expressions with and relation between them
+        # @var array of KalturaUserSessionProfileExpression
+        self.expressions = expressions
+
+
+    PROPERTY_LOADERS = {
+        'expressions': (KalturaObjectFactory.createArray, 'KalturaUserSessionProfileExpression'), 
+    }
+
+    def fromXml(self, node):
+        KalturaUserSessionProfileExpression.fromXml(self, node)
+        self.fromXmlImpl(node, KalturaExpressionAnd.PROPERTY_LOADERS)
+
+    def toParams(self):
+        kparams = KalturaUserSessionProfileExpression.toParams(self)
+        kparams.put("objectType", "KalturaExpressionAnd")
+        kparams.addArrayIfDefined("expressions", self.expressions)
+        return kparams
+
+    def getExpressions(self):
+        return self.expressions
+
+    def setExpressions(self, newExpressions):
+        self.expressions = newExpressions
+
+
+# @package Kaltura
+# @subpackage Client
+class KalturaExpressionNot(KalturaUserSessionProfileExpression):
+    """Not Expression"""
+
+    def __init__(self,
+            expression=NotImplemented):
+        KalturaUserSessionProfileExpression.__init__(self)
+
+        # expression
+        # @var KalturaUserSessionProfileExpression
+        self.expression = expression
+
+
+    PROPERTY_LOADERS = {
+        'expression': (KalturaObjectFactory.create, 'KalturaUserSessionProfileExpression'), 
+    }
+
+    def fromXml(self, node):
+        KalturaUserSessionProfileExpression.fromXml(self, node)
+        self.fromXmlImpl(node, KalturaExpressionNot.PROPERTY_LOADERS)
+
+    def toParams(self):
+        kparams = KalturaUserSessionProfileExpression.toParams(self)
+        kparams.put("objectType", "KalturaExpressionNot")
+        kparams.addObjectIfDefined("expression", self.expression)
+        return kparams
+
+    def getExpression(self):
+        return self.expression
+
+    def setExpression(self, newExpression):
+        self.expression = newExpression
+
+
+# @package Kaltura
+# @subpackage Client
+class KalturaExpressionOr(KalturaUserSessionProfileExpression):
+    """Or Expression"""
+
+    def __init__(self,
+            expressions=NotImplemented):
+        KalturaUserSessionProfileExpression.__init__(self)
+
+        # expressions with or relation between them
+        # @var array of KalturaUserSessionProfileExpression
+        self.expressions = expressions
+
+
+    PROPERTY_LOADERS = {
+        'expressions': (KalturaObjectFactory.createArray, 'KalturaUserSessionProfileExpression'), 
+    }
+
+    def fromXml(self, node):
+        KalturaUserSessionProfileExpression.fromXml(self, node)
+        self.fromXmlImpl(node, KalturaExpressionOr.PROPERTY_LOADERS)
+
+    def toParams(self):
+        kparams = KalturaUserSessionProfileExpression.toParams(self)
+        kparams.put("objectType", "KalturaExpressionOr")
+        kparams.addArrayIfDefined("expressions", self.expressions)
+        return kparams
+
+    def getExpressions(self):
+        return self.expressions
+
+    def setExpressions(self, newExpressions):
+        self.expressions = newExpressions
+
+
+# @package Kaltura
+# @subpackage Client
+class KalturaCondition(KalturaObjectBase):
+    """Condition"""
 
     def __init__(self,
             type=NotImplemented,
             description=NotImplemented):
-        KalturaCondition.__init__(self,
-            type,
-            description)
+        KalturaObjectBase.__init__(self)
+
+        # The type of the condition
+        # @var KalturaRuleConditionType
+        # @readonly
+        self.type = type
+
+        # Description
+        # @var string
+        self.description = description
 
 
     PROPERTY_LOADERS = {
+        'type': (KalturaEnumsFactory.createString, "KalturaRuleConditionType"), 
+        'description': getXmlNodeText, 
     }
 
     def fromXml(self, node):
-        KalturaCondition.fromXml(self, node)
-        self.fromXmlImpl(node, KalturaUserSessionProfileExpression.PROPERTY_LOADERS)
+        KalturaObjectBase.fromXml(self, node)
+        self.fromXmlImpl(node, KalturaCondition.PROPERTY_LOADERS)
 
     def toParams(self):
-        kparams = KalturaCondition.toParams(self)
-        kparams.put("objectType", "KalturaUserSessionProfileExpression")
+        kparams = KalturaObjectBase.toParams(self)
+        kparams.put("objectType", "KalturaCondition")
+        kparams.addStringIfDefined("description", self.description)
         return kparams
+
+    def getType(self):
+        return self.type
+
+    def getDescription(self):
+        return self.description
+
+    def setDescription(self, newDescription):
+        self.description = newDescription
+
+
+# @package Kaltura
+# @subpackage Client
+class KalturaUserSessionCondition(KalturaUserSessionProfileExpression):
+    """SimpleExpression hold single condition"""
+
+    def __init__(self,
+            condition=NotImplemented):
+        KalturaUserSessionProfileExpression.__init__(self)
+
+        # expression
+        # @var KalturaCondition
+        self.condition = condition
+
+
+    PROPERTY_LOADERS = {
+        'condition': (KalturaObjectFactory.create, 'KalturaCondition'), 
+    }
+
+    def fromXml(self, node):
+        KalturaUserSessionProfileExpression.fromXml(self, node)
+        self.fromXmlImpl(node, KalturaUserSessionCondition.PROPERTY_LOADERS)
+
+    def toParams(self):
+        kparams = KalturaUserSessionProfileExpression.toParams(self)
+        kparams.put("objectType", "KalturaUserSessionCondition")
+        kparams.addObjectIfDefined("condition", self.condition)
+        return kparams
+
+    def getCondition(self):
+        return self.condition
+
+    def setCondition(self, newCondition):
+        self.condition = newCondition
 
 
 # @package Kaltura
@@ -51508,10 +51644,14 @@ class KalturaCoreClient(KalturaClientPlugin):
             'KalturaUserInterestTopic': KalturaUserInterestTopic,
             'KalturaUserInterest': KalturaUserInterest,
             'KalturaUserInterestListResponse': KalturaUserInterestListResponse,
-            'KalturaCondition': KalturaCondition,
+            'KalturaUserSessionProfileExpression': KalturaUserSessionProfileExpression,
             'KalturaUserSessionProfile': KalturaUserSessionProfile,
             'KalturaUserSessionProfileListResponse': KalturaUserSessionProfileListResponse,
-            'KalturaUserSessionProfileExpression': KalturaUserSessionProfileExpression,
+            'KalturaExpressionAnd': KalturaExpressionAnd,
+            'KalturaExpressionNot': KalturaExpressionNot,
+            'KalturaExpressionOr': KalturaExpressionOr,
+            'KalturaCondition': KalturaCondition,
+            'KalturaUserSessionCondition': KalturaUserSessionCondition,
             'KalturaNotCondition': KalturaNotCondition,
             'KalturaOrCondition': KalturaOrCondition,
             'KalturaCountryCondition': KalturaCountryCondition,
