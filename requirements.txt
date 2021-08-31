@@ -1,5 +1,0 @@
-setuptools
-requests
-requests-toolbelt
-six
-pycryptodome
