@@ -29,7 +29,6 @@ The API client depends on the following python modules that are not included by 
  - requests (2.4.2 or above) - can be downloaded from https://pypi.python.org/pypi/requests/
  - requests-toolbelt - https://pypi.python.org/pypi/requests-toolbelt
  - six - https://pypi.python.org/pypi/six
- - pycryptodome - optional - needed for V2 sessions keys
 
 requests is used to handle API calls to Kaltura. This means that if you want
 to do multi part file uploads, you should pass through the file path rather
@@ -37,8 +36,7 @@ than an open file handle.
 
 == INSTALLATION ==
 
-
-Make sure you have the modules listed under the 'external dependencies' installed (e.g. pip install -r requirements.txt).
+Make sure you have the modules listed under the 'external dependencies' installed.
 Install the Kaltura client by running 'python setup.py install' in the client's root directory.
 
 == TESTING THE CLIENT LIBRARY ==
@@ -48,7 +46,7 @@ See KalturaClient/tests/README.txt
 == RELEASE NOTES ==
 
 Jan 2017 - Python 3 support. Replaced poster with requests.
-Sep 2015 - support JSON requests, compatible with Kaltura server version 6.7.0.29255 and above. 
+Sep 2015 - support JSON requests, compatible with Kaltura server version 6.7.0.29277 and above. 
 Aug 2013 - the library was refactored to make it installable as a PyPI package.
 	This refactoring changed the way Kaltura client plugin modules are loaded -
 	before the change the metadata plugin (for example) was loaded by:
