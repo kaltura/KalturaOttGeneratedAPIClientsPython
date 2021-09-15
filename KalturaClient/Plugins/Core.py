@@ -42,7 +42,7 @@ from ..Base import (
     KalturaServiceBase,
 )
 
-API_VERSION = '6.8.0.29291'
+API_VERSION = '6.8.0.29296'
 
 ########## enums ##########
 # @package Kaltura
@@ -1464,6 +1464,18 @@ class KalturaLinearChannelType(object):
     OTT = "OTT"
     DTT_AND_OTT = "DTT_AND_OTT"
     VRM_EXPORT = "VRM_EXPORT"
+
+    def __init__(self, value):
+        self.value = value
+
+    def getValue(self):
+        return self.value
+
+# @package Kaltura
+# @subpackage Client
+class KalturaManualCollectionAssetType(object):
+    MEDIA = "media"
+    EPG = "epg"
 
     def __init__(self, value):
         self.value = value
@@ -20229,6 +20241,54 @@ class KalturaDynamicChannel(KalturaChannel):
 
 # @package Kaltura
 # @subpackage Client
+class KalturaManualCollectionAsset(KalturaObjectBase):
+    def __init__(self,
+            id=NotImplemented,
+            type=NotImplemented):
+        KalturaObjectBase.__init__(self)
+
+        # Internal identifier of the asset
+        # @var string
+        # @insertonly
+        self.id = id
+
+        # The type of the asset. Possible values: media, epg
+        # @var KalturaManualCollectionAssetType
+        # @insertonly
+        self.type = type
+
+
+    PROPERTY_LOADERS = {
+        'id': getXmlNodeText, 
+        'type': (KalturaEnumsFactory.createString, "KalturaManualCollectionAssetType"), 
+    }
+
+    def fromXml(self, node):
+        KalturaObjectBase.fromXml(self, node)
+        self.fromXmlImpl(node, KalturaManualCollectionAsset.PROPERTY_LOADERS)
+
+    def toParams(self):
+        kparams = KalturaObjectBase.toParams(self)
+        kparams.put("objectType", "KalturaManualCollectionAsset")
+        kparams.addStringIfDefined("id", self.id)
+        kparams.addStringEnumIfDefined("type", self.type)
+        return kparams
+
+    def getId(self):
+        return self.id
+
+    def setId(self, newId):
+        self.id = newId
+
+    def getType(self):
+        return self.type
+
+    def setType(self, newType):
+        self.type = newType
+
+
+# @package Kaltura
+# @subpackage Client
 class KalturaManualChannel(KalturaChannel):
     def __init__(self,
             id=NotImplemented,
@@ -20247,7 +20307,8 @@ class KalturaManualChannel(KalturaChannel):
             assetUserRuleId=NotImplemented,
             metaData=NotImplemented,
             virtualAssetId=NotImplemented,
-            mediaIds=NotImplemented):
+            mediaIds=NotImplemented,
+            assets=NotImplemented):
         KalturaChannel.__init__(self,
             id,
             name,
@@ -20270,9 +20331,14 @@ class KalturaManualChannel(KalturaChannel):
         # @var string
         self.mediaIds = mediaIds
 
+        # List of assets identifier
+        # @var array of KalturaManualCollectionAsset
+        self.assets = assets
+
 
     PROPERTY_LOADERS = {
         'mediaIds': getXmlNodeText, 
+        'assets': (KalturaObjectFactory.createArray, 'KalturaManualCollectionAsset'), 
     }
 
     def fromXml(self, node):
@@ -20283,6 +20349,7 @@ class KalturaManualChannel(KalturaChannel):
         kparams = KalturaChannel.toParams(self)
         kparams.put("objectType", "KalturaManualChannel")
         kparams.addStringIfDefined("mediaIds", self.mediaIds)
+        kparams.addArrayIfDefined("assets", self.assets)
         return kparams
 
     def getMediaIds(self):
@@ -20290,6 +20357,12 @@ class KalturaManualChannel(KalturaChannel):
 
     def setMediaIds(self, newMediaIds):
         self.mediaIds = newMediaIds
+
+    def getAssets(self):
+        return self.assets
+
+    def setAssets(self, newAssets):
+        self.assets = newAssets
 
 
 # @package Kaltura
@@ -50635,6 +50708,7 @@ class KalturaCoreClient(KalturaClientPlugin):
             'KalturaLabelOrderBy': KalturaLabelOrderBy,
             'KalturaLanguageOrderBy': KalturaLanguageOrderBy,
             'KalturaLinearChannelType': KalturaLinearChannelType,
+            'KalturaManualCollectionAssetType': KalturaManualCollectionAssetType,
             'KalturaMathemticalOperatorType': KalturaMathemticalOperatorType,
             'KalturaMediaFileOrderBy': KalturaMediaFileOrderBy,
             'KalturaMediaFileStreamerType': KalturaMediaFileStreamerType,
@@ -51046,6 +51120,7 @@ class KalturaCoreClient(KalturaClientPlugin):
             'KalturaChannelOrder': KalturaChannelOrder,
             'KalturaChannel': KalturaChannel,
             'KalturaDynamicChannel': KalturaDynamicChannel,
+            'KalturaManualCollectionAsset': KalturaManualCollectionAsset,
             'KalturaManualChannel': KalturaManualChannel,
             'KalturaDiscount': KalturaDiscount,
             'KalturaHouseholdPremiumService': KalturaHouseholdPremiumService,
