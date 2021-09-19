@@ -42,7 +42,7 @@ from ..Base import (
     KalturaServiceBase,
 )
 
-API_VERSION = '6.8.0.29606'
+API_VERSION = '6.8.0.29615'
 
 ########## enums ##########
 # @package Kaltura
@@ -2158,8 +2158,8 @@ class KalturaRuleActionType(object):
     FILTERASSETBYKSQL = "FilterAssetByKsql"
     FILTERFILEBYQUALITYINDISCOVERY = "FilterFileByQualityInDiscovery"
     FILTERFILEBYQUALITYINPLAYBACK = "FilterFileByQualityInPlayback"
-    FILTERFILEBYASSETTYPEINDISCOVERY = "FilterFileByAssetTypeInDiscovery"
-    FILTERFILEBYASSETTYPEINPLAYBACK = "FilterFileByAssetTypeInPlayback"
+    FILTERFILEBYFILETYPEIDFORASSETTYPEINDISCOVERY = "FilterFileByFileTypeIdForAssetTypeInDiscovery"
+    FILTERFILEBYFILETYPEIDFORASSETTYPEINPLAYBACK = "FilterFileByFileTypeIdForAssetTypeInPlayback"
     FILTERFILEBYFILETYPEIDINDISCOVERY = "FilterFileByFileTypeIdInDiscovery"
     FILTERFILEBYFILETYPEIDINPLAYBACK = "FilterFileByFileTypeIdInPlayback"
     FILTERFILEBYAUDIOCODECINDISCOVERY = "FilterFileByAudioCodecInDiscovery"
@@ -2199,6 +2199,7 @@ class KalturaRuleConditionType(object):
     DEVICE_UDID_DYNAMIC_LIST = "DEVICE_UDID_DYNAMIC_LIST"
     DYNAMIC_KEYS = "DYNAMIC_KEYS"
     USER_SESSION_PROFILE = "USER_SESSION_PROFILE"
+    DEVICE_DYNAMIC_DATA = "DEVICE_DYNAMIC_DATA"
 
     def __init__(self, value):
         self.value = value
@@ -14337,18 +14338,24 @@ class KalturaDynamicKeysCondition(KalturaCondition):
     def __init__(self,
             type=NotImplemented,
             description=NotImplemented,
-            keyValues=NotImplemented):
+            key=NotImplemented,
+            values=NotImplemented):
         KalturaCondition.__init__(self,
             type,
             description)
 
-        # DynamicKeysCondition
-        # @var map
-        self.keyValues = keyValues
+        # key
+        # @var string
+        self.key = key
+
+        # comma-separated values
+        # @var string
+        self.values = values
 
 
     PROPERTY_LOADERS = {
-        'keyValues': (KalturaObjectFactory.createMap, 'KalturaStringValueArray'), 
+        'key': getXmlNodeText, 
+        'values': getXmlNodeText, 
     }
 
     def fromXml(self, node):
@@ -14358,14 +14365,71 @@ class KalturaDynamicKeysCondition(KalturaCondition):
     def toParams(self):
         kparams = KalturaCondition.toParams(self)
         kparams.put("objectType", "KalturaDynamicKeysCondition")
-        kparams.addMapIfDefined("keyValues", self.keyValues)
+        kparams.addStringIfDefined("key", self.key)
+        kparams.addStringIfDefined("values", self.values)
         return kparams
 
-    def getKeyValues(self):
-        return self.keyValues
+    def getKey(self):
+        return self.key
 
-    def setKeyValues(self, newKeyValues):
-        self.keyValues = newKeyValues
+    def setKey(self, newKey):
+        self.key = newKey
+
+    def getValues(self):
+        return self.values
+
+    def setValues(self, newValues):
+        self.values = newValues
+
+
+# @package Kaltura
+# @subpackage Client
+class KalturaDeviceDynamicDataCondition(KalturaCondition):
+    def __init__(self,
+            type=NotImplemented,
+            description=NotImplemented,
+            key=NotImplemented,
+            value=NotImplemented):
+        KalturaCondition.__init__(self,
+            type,
+            description)
+
+        # key
+        # @var string
+        self.key = key
+
+        # value
+        # @var string
+        self.value = value
+
+
+    PROPERTY_LOADERS = {
+        'key': getXmlNodeText, 
+        'value': getXmlNodeText, 
+    }
+
+    def fromXml(self, node):
+        KalturaCondition.fromXml(self, node)
+        self.fromXmlImpl(node, KalturaDeviceDynamicDataCondition.PROPERTY_LOADERS)
+
+    def toParams(self):
+        kparams = KalturaCondition.toParams(self)
+        kparams.put("objectType", "KalturaDeviceDynamicDataCondition")
+        kparams.addStringIfDefined("key", self.key)
+        kparams.addStringIfDefined("value", self.value)
+        return kparams
+
+    def getKey(self):
+        return self.key
+
+    def setKey(self, newKey):
+        self.key = newKey
+
+    def getValue(self):
+        return self.value
+
+    def setValue(self, newValue):
+        self.value = newValue
 
 
 # @package Kaltura
@@ -21778,194 +21842,6 @@ class KalturaFilterAction(KalturaAssetRuleAction):
 
 # @package Kaltura
 # @subpackage Client
-class KalturaFilterFileByFileTypeIdAction(KalturaFilterAction):
-    """FilterFile By FileType"""
-
-    def __init__(self,
-            type=NotImplemented,
-            description=NotImplemented,
-            fileTypeIdIn=NotImplemented):
-        KalturaFilterAction.__init__(self,
-            type,
-            description)
-
-        # List of comma separated fileTypesIds
-        # @var string
-        self.fileTypeIdIn = fileTypeIdIn
-
-
-    PROPERTY_LOADERS = {
-        'fileTypeIdIn': getXmlNodeText, 
-    }
-
-    def fromXml(self, node):
-        KalturaFilterAction.fromXml(self, node)
-        self.fromXmlImpl(node, KalturaFilterFileByFileTypeIdAction.PROPERTY_LOADERS)
-
-    def toParams(self):
-        kparams = KalturaFilterAction.toParams(self)
-        kparams.put("objectType", "KalturaFilterFileByFileTypeIdAction")
-        kparams.addStringIfDefined("fileTypeIdIn", self.fileTypeIdIn)
-        return kparams
-
-    def getFileTypeIdIn(self):
-        return self.fileTypeIdIn
-
-    def setFileTypeIdIn(self, newFileTypeIdIn):
-        self.fileTypeIdIn = newFileTypeIdIn
-
-
-# @package Kaltura
-# @subpackage Client
-class KalturaFilterFileByAssetTypeAction(KalturaFilterFileByFileTypeIdAction):
-    """FilterFile By FileType For AssetType"""
-
-    def __init__(self,
-            type=NotImplemented,
-            description=NotImplemented,
-            fileTypeIdIn=NotImplemented,
-            assetTypeIn=NotImplemented):
-        KalturaFilterFileByFileTypeIdAction.__init__(self,
-            type,
-            description,
-            fileTypeIdIn)
-
-        # List of comma separated assetTypes
-        # @var string
-        self.assetTypeIn = assetTypeIn
-
-
-    PROPERTY_LOADERS = {
-        'assetTypeIn': getXmlNodeText, 
-    }
-
-    def fromXml(self, node):
-        KalturaFilterFileByFileTypeIdAction.fromXml(self, node)
-        self.fromXmlImpl(node, KalturaFilterFileByAssetTypeAction.PROPERTY_LOADERS)
-
-    def toParams(self):
-        kparams = KalturaFilterFileByFileTypeIdAction.toParams(self)
-        kparams.put("objectType", "KalturaFilterFileByAssetTypeAction")
-        kparams.addStringIfDefined("assetTypeIn", self.assetTypeIn)
-        return kparams
-
-    def getAssetTypeIn(self):
-        return self.assetTypeIn
-
-    def setAssetTypeIn(self, newAssetTypeIn):
-        self.assetTypeIn = newAssetTypeIn
-
-
-# @package Kaltura
-# @subpackage Client
-class KalturaFilterFileByAssetTypeInDiscoveryAction(KalturaFilterFileByAssetTypeAction):
-    def __init__(self,
-            type=NotImplemented,
-            description=NotImplemented,
-            fileTypeIdIn=NotImplemented,
-            assetTypeIn=NotImplemented):
-        KalturaFilterFileByAssetTypeAction.__init__(self,
-            type,
-            description,
-            fileTypeIdIn,
-            assetTypeIn)
-
-
-    PROPERTY_LOADERS = {
-    }
-
-    def fromXml(self, node):
-        KalturaFilterFileByAssetTypeAction.fromXml(self, node)
-        self.fromXmlImpl(node, KalturaFilterFileByAssetTypeInDiscoveryAction.PROPERTY_LOADERS)
-
-    def toParams(self):
-        kparams = KalturaFilterFileByAssetTypeAction.toParams(self)
-        kparams.put("objectType", "KalturaFilterFileByAssetTypeInDiscoveryAction")
-        return kparams
-
-
-# @package Kaltura
-# @subpackage Client
-class KalturaFilterFileByAssetTypeInPlaybackAction(KalturaFilterFileByAssetTypeAction):
-    def __init__(self,
-            type=NotImplemented,
-            description=NotImplemented,
-            fileTypeIdIn=NotImplemented,
-            assetTypeIn=NotImplemented):
-        KalturaFilterFileByAssetTypeAction.__init__(self,
-            type,
-            description,
-            fileTypeIdIn,
-            assetTypeIn)
-
-
-    PROPERTY_LOADERS = {
-    }
-
-    def fromXml(self, node):
-        KalturaFilterFileByAssetTypeAction.fromXml(self, node)
-        self.fromXmlImpl(node, KalturaFilterFileByAssetTypeInPlaybackAction.PROPERTY_LOADERS)
-
-    def toParams(self):
-        kparams = KalturaFilterFileByAssetTypeAction.toParams(self)
-        kparams.put("objectType", "KalturaFilterFileByAssetTypeInPlaybackAction")
-        return kparams
-
-
-# @package Kaltura
-# @subpackage Client
-class KalturaFilterFileByFileTypeIdInDiscoveryAction(KalturaFilterFileByFileTypeIdAction):
-    def __init__(self,
-            type=NotImplemented,
-            description=NotImplemented,
-            fileTypeIdIn=NotImplemented):
-        KalturaFilterFileByFileTypeIdAction.__init__(self,
-            type,
-            description,
-            fileTypeIdIn)
-
-
-    PROPERTY_LOADERS = {
-    }
-
-    def fromXml(self, node):
-        KalturaFilterFileByFileTypeIdAction.fromXml(self, node)
-        self.fromXmlImpl(node, KalturaFilterFileByFileTypeIdInDiscoveryAction.PROPERTY_LOADERS)
-
-    def toParams(self):
-        kparams = KalturaFilterFileByFileTypeIdAction.toParams(self)
-        kparams.put("objectType", "KalturaFilterFileByFileTypeIdInDiscoveryAction")
-        return kparams
-
-
-# @package Kaltura
-# @subpackage Client
-class KalturaFilterFileByFileTypeIdInPlaybackAction(KalturaFilterFileByFileTypeIdAction):
-    def __init__(self,
-            type=NotImplemented,
-            description=NotImplemented,
-            fileTypeIdIn=NotImplemented):
-        KalturaFilterFileByFileTypeIdAction.__init__(self,
-            type,
-            description,
-            fileTypeIdIn)
-
-
-    PROPERTY_LOADERS = {
-    }
-
-    def fromXml(self, node):
-        KalturaFilterFileByFileTypeIdAction.fromXml(self, node)
-        self.fromXmlImpl(node, KalturaFilterFileByFileTypeIdInPlaybackAction.PROPERTY_LOADERS)
-
-    def toParams(self):
-        kparams = KalturaFilterFileByFileTypeIdAction.toParams(self)
-        kparams.put("objectType", "KalturaFilterFileByFileTypeIdInPlaybackAction")
-        return kparams
-
-
-# @package Kaltura
-# @subpackage Client
 class KalturaFilterFileByAudioCodecAction(KalturaFilterAction):
     """FilterFile By AudioCodec"""
 
@@ -22052,6 +21928,194 @@ class KalturaFilterFileByAudioCodecInPlaybackAction(KalturaFilterFileByAudioCode
     def toParams(self):
         kparams = KalturaFilterFileByAudioCodecAction.toParams(self)
         kparams.put("objectType", "KalturaFilterFileByAudioCodecInPlaybackAction")
+        return kparams
+
+
+# @package Kaltura
+# @subpackage Client
+class KalturaFilterFileByFileTypeIdAction(KalturaFilterAction):
+    """FilterFile By FileType"""
+
+    def __init__(self,
+            type=NotImplemented,
+            description=NotImplemented,
+            fileTypeIdIn=NotImplemented):
+        KalturaFilterAction.__init__(self,
+            type,
+            description)
+
+        # List of comma separated fileTypesIds
+        # @var string
+        self.fileTypeIdIn = fileTypeIdIn
+
+
+    PROPERTY_LOADERS = {
+        'fileTypeIdIn': getXmlNodeText, 
+    }
+
+    def fromXml(self, node):
+        KalturaFilterAction.fromXml(self, node)
+        self.fromXmlImpl(node, KalturaFilterFileByFileTypeIdAction.PROPERTY_LOADERS)
+
+    def toParams(self):
+        kparams = KalturaFilterAction.toParams(self)
+        kparams.put("objectType", "KalturaFilterFileByFileTypeIdAction")
+        kparams.addStringIfDefined("fileTypeIdIn", self.fileTypeIdIn)
+        return kparams
+
+    def getFileTypeIdIn(self):
+        return self.fileTypeIdIn
+
+    def setFileTypeIdIn(self, newFileTypeIdIn):
+        self.fileTypeIdIn = newFileTypeIdIn
+
+
+# @package Kaltura
+# @subpackage Client
+class KalturaFilterFileByFileTypeIdInDiscoveryAction(KalturaFilterFileByFileTypeIdAction):
+    def __init__(self,
+            type=NotImplemented,
+            description=NotImplemented,
+            fileTypeIdIn=NotImplemented):
+        KalturaFilterFileByFileTypeIdAction.__init__(self,
+            type,
+            description,
+            fileTypeIdIn)
+
+
+    PROPERTY_LOADERS = {
+    }
+
+    def fromXml(self, node):
+        KalturaFilterFileByFileTypeIdAction.fromXml(self, node)
+        self.fromXmlImpl(node, KalturaFilterFileByFileTypeIdInDiscoveryAction.PROPERTY_LOADERS)
+
+    def toParams(self):
+        kparams = KalturaFilterFileByFileTypeIdAction.toParams(self)
+        kparams.put("objectType", "KalturaFilterFileByFileTypeIdInDiscoveryAction")
+        return kparams
+
+
+# @package Kaltura
+# @subpackage Client
+class KalturaFilterFileByFileTypeIdInPlaybackAction(KalturaFilterFileByFileTypeIdAction):
+    def __init__(self,
+            type=NotImplemented,
+            description=NotImplemented,
+            fileTypeIdIn=NotImplemented):
+        KalturaFilterFileByFileTypeIdAction.__init__(self,
+            type,
+            description,
+            fileTypeIdIn)
+
+
+    PROPERTY_LOADERS = {
+    }
+
+    def fromXml(self, node):
+        KalturaFilterFileByFileTypeIdAction.fromXml(self, node)
+        self.fromXmlImpl(node, KalturaFilterFileByFileTypeIdInPlaybackAction.PROPERTY_LOADERS)
+
+    def toParams(self):
+        kparams = KalturaFilterFileByFileTypeIdAction.toParams(self)
+        kparams.put("objectType", "KalturaFilterFileByFileTypeIdInPlaybackAction")
+        return kparams
+
+
+# @package Kaltura
+# @subpackage Client
+class KalturaFilterFileByFileTypeIdForAssetTypeAction(KalturaFilterFileByFileTypeIdAction):
+    """Filter file By FileType For AssetType"""
+
+    def __init__(self,
+            type=NotImplemented,
+            description=NotImplemented,
+            fileTypeIdIn=NotImplemented,
+            assetTypeIn=NotImplemented):
+        KalturaFilterFileByFileTypeIdAction.__init__(self,
+            type,
+            description,
+            fileTypeIdIn)
+
+        # List of comma separated assetTypes
+        # @var string
+        self.assetTypeIn = assetTypeIn
+
+
+    PROPERTY_LOADERS = {
+        'assetTypeIn': getXmlNodeText, 
+    }
+
+    def fromXml(self, node):
+        KalturaFilterFileByFileTypeIdAction.fromXml(self, node)
+        self.fromXmlImpl(node, KalturaFilterFileByFileTypeIdForAssetTypeAction.PROPERTY_LOADERS)
+
+    def toParams(self):
+        kparams = KalturaFilterFileByFileTypeIdAction.toParams(self)
+        kparams.put("objectType", "KalturaFilterFileByFileTypeIdForAssetTypeAction")
+        kparams.addStringIfDefined("assetTypeIn", self.assetTypeIn)
+        return kparams
+
+    def getAssetTypeIn(self):
+        return self.assetTypeIn
+
+    def setAssetTypeIn(self, newAssetTypeIn):
+        self.assetTypeIn = newAssetTypeIn
+
+
+# @package Kaltura
+# @subpackage Client
+class KalturaFilterFileByFileTypeIdForAssetTypeInDiscoveryAction(KalturaFilterFileByFileTypeIdForAssetTypeAction):
+    def __init__(self,
+            type=NotImplemented,
+            description=NotImplemented,
+            fileTypeIdIn=NotImplemented,
+            assetTypeIn=NotImplemented):
+        KalturaFilterFileByFileTypeIdForAssetTypeAction.__init__(self,
+            type,
+            description,
+            fileTypeIdIn,
+            assetTypeIn)
+
+
+    PROPERTY_LOADERS = {
+    }
+
+    def fromXml(self, node):
+        KalturaFilterFileByFileTypeIdForAssetTypeAction.fromXml(self, node)
+        self.fromXmlImpl(node, KalturaFilterFileByFileTypeIdForAssetTypeInDiscoveryAction.PROPERTY_LOADERS)
+
+    def toParams(self):
+        kparams = KalturaFilterFileByFileTypeIdForAssetTypeAction.toParams(self)
+        kparams.put("objectType", "KalturaFilterFileByFileTypeIdForAssetTypeInDiscoveryAction")
+        return kparams
+
+
+# @package Kaltura
+# @subpackage Client
+class KalturaFilterFileByFileTypeIdForAssetTypeInPlaybackAction(KalturaFilterFileByFileTypeIdForAssetTypeAction):
+    def __init__(self,
+            type=NotImplemented,
+            description=NotImplemented,
+            fileTypeIdIn=NotImplemented,
+            assetTypeIn=NotImplemented):
+        KalturaFilterFileByFileTypeIdForAssetTypeAction.__init__(self,
+            type,
+            description,
+            fileTypeIdIn,
+            assetTypeIn)
+
+
+    PROPERTY_LOADERS = {
+    }
+
+    def fromXml(self, node):
+        KalturaFilterFileByFileTypeIdForAssetTypeAction.fromXml(self, node)
+        self.fromXmlImpl(node, KalturaFilterFileByFileTypeIdForAssetTypeInPlaybackAction.PROPERTY_LOADERS)
+
+    def toParams(self):
+        kparams = KalturaFilterFileByFileTypeIdForAssetTypeAction.toParams(self)
+        kparams.put("objectType", "KalturaFilterFileByFileTypeIdForAssetTypeInPlaybackAction")
         return kparams
 
 
@@ -22154,18 +22218,18 @@ class KalturaFilterFileByQualityAction(KalturaFilterAction):
     def __init__(self,
             type=NotImplemented,
             description=NotImplemented,
-            typeQualityIn=NotImplemented):
+            qualityIn=NotImplemented):
         KalturaFilterAction.__init__(self,
             type,
             description)
 
         # List of comma separated qualities
         # @var string
-        self.typeQualityIn = typeQualityIn
+        self.qualityIn = qualityIn
 
 
     PROPERTY_LOADERS = {
-        'typeQualityIn': getXmlNodeText, 
+        'qualityIn': getXmlNodeText, 
     }
 
     def fromXml(self, node):
@@ -22175,14 +22239,14 @@ class KalturaFilterFileByQualityAction(KalturaFilterAction):
     def toParams(self):
         kparams = KalturaFilterAction.toParams(self)
         kparams.put("objectType", "KalturaFilterFileByQualityAction")
-        kparams.addStringIfDefined("typeQualityIn", self.typeQualityIn)
+        kparams.addStringIfDefined("qualityIn", self.qualityIn)
         return kparams
 
-    def getTypeQualityIn(self):
-        return self.typeQualityIn
+    def getQualityIn(self):
+        return self.qualityIn
 
-    def setTypeQualityIn(self, newTypeQualityIn):
-        self.typeQualityIn = newTypeQualityIn
+    def setQualityIn(self, newQualityIn):
+        self.qualityIn = newQualityIn
 
 
 # @package Kaltura
@@ -22191,11 +22255,11 @@ class KalturaFilterFileByQualityInDiscoveryAction(KalturaFilterFileByQualityActi
     def __init__(self,
             type=NotImplemented,
             description=NotImplemented,
-            typeQualityIn=NotImplemented):
+            qualityIn=NotImplemented):
         KalturaFilterFileByQualityAction.__init__(self,
             type,
             description,
-            typeQualityIn)
+            qualityIn)
 
 
     PROPERTY_LOADERS = {
@@ -22217,11 +22281,11 @@ class KalturaFilterFileByQualityInPlaybackAction(KalturaFilterFileByQualityActio
     def __init__(self,
             type=NotImplemented,
             description=NotImplemented,
-            typeQualityIn=NotImplemented):
+            qualityIn=NotImplemented):
         KalturaFilterFileByQualityAction.__init__(self,
             type,
             description,
-            typeQualityIn)
+            qualityIn)
 
 
     PROPERTY_LOADERS = {
@@ -52274,6 +52338,7 @@ class KalturaCoreClient(KalturaClientPlugin):
             'KalturaDeviceModelCondition': KalturaDeviceModelCondition,
             'KalturaUdidDynamicListCondition': KalturaUdidDynamicListCondition,
             'KalturaDynamicKeysCondition': KalturaDynamicKeysCondition,
+            'KalturaDeviceDynamicDataCondition': KalturaDeviceDynamicDataCondition,
             'KalturaUserSessionProfileCondition': KalturaUserSessionProfileCondition,
             'KalturaMessage': KalturaMessage,
             'KalturaBulkUploadResult': KalturaBulkUploadResult,
@@ -52389,15 +52454,15 @@ class KalturaCoreClient(KalturaClientPlugin):
             'KalturaAssetLifeCycleTagTransitionAction': KalturaAssetLifeCycleTagTransitionAction,
             'KalturaAssetLifeCycleBuisnessModuleTransitionAction': KalturaAssetLifeCycleBuisnessModuleTransitionAction,
             'KalturaFilterAction': KalturaFilterAction,
-            'KalturaFilterFileByFileTypeIdAction': KalturaFilterFileByFileTypeIdAction,
-            'KalturaFilterFileByAssetTypeAction': KalturaFilterFileByAssetTypeAction,
-            'KalturaFilterFileByAssetTypeInDiscoveryAction': KalturaFilterFileByAssetTypeInDiscoveryAction,
-            'KalturaFilterFileByAssetTypeInPlaybackAction': KalturaFilterFileByAssetTypeInPlaybackAction,
-            'KalturaFilterFileByFileTypeIdInDiscoveryAction': KalturaFilterFileByFileTypeIdInDiscoveryAction,
-            'KalturaFilterFileByFileTypeIdInPlaybackAction': KalturaFilterFileByFileTypeIdInPlaybackAction,
             'KalturaFilterFileByAudioCodecAction': KalturaFilterFileByAudioCodecAction,
             'KalturaFilterFileByAudioCodecInDiscoveryAction': KalturaFilterFileByAudioCodecInDiscoveryAction,
             'KalturaFilterFileByAudioCodecInPlaybackAction': KalturaFilterFileByAudioCodecInPlaybackAction,
+            'KalturaFilterFileByFileTypeIdAction': KalturaFilterFileByFileTypeIdAction,
+            'KalturaFilterFileByFileTypeIdInDiscoveryAction': KalturaFilterFileByFileTypeIdInDiscoveryAction,
+            'KalturaFilterFileByFileTypeIdInPlaybackAction': KalturaFilterFileByFileTypeIdInPlaybackAction,
+            'KalturaFilterFileByFileTypeIdForAssetTypeAction': KalturaFilterFileByFileTypeIdForAssetTypeAction,
+            'KalturaFilterFileByFileTypeIdForAssetTypeInDiscoveryAction': KalturaFilterFileByFileTypeIdForAssetTypeInDiscoveryAction,
+            'KalturaFilterFileByFileTypeIdForAssetTypeInPlaybackAction': KalturaFilterFileByFileTypeIdForAssetTypeInPlaybackAction,
             'KalturaFilterFileByLabelAction': KalturaFilterFileByLabelAction,
             'KalturaFilterFileByLabelInDiscoveryAction': KalturaFilterFileByLabelInDiscoveryAction,
             'KalturaFilterFileByLabelInPlaybackAction': KalturaFilterFileByLabelInPlaybackAction,
