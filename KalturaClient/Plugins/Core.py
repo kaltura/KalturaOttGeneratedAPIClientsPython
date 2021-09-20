@@ -42,7 +42,7 @@ from ..Base import (
     KalturaServiceBase,
 )
 
-API_VERSION = '6.8.0.29299'
+API_VERSION = '6.8.0.29300'
 
 ########## enums ##########
 # @package Kaltura
@@ -20249,12 +20249,10 @@ class KalturaManualCollectionAsset(KalturaObjectBase):
 
         # Internal identifier of the asset
         # @var string
-        # @insertonly
         self.id = id
 
         # The type of the asset. Possible values: media, epg
         # @var KalturaManualCollectionAssetType
-        # @insertonly
         self.type = type
 
 
