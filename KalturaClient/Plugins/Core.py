@@ -42,7 +42,7 @@ from ..Base import (
     KalturaServiceBase,
 )
 
-API_VERSION = '6.8.0.29532'
+API_VERSION = '6.8.0.29561'
 
 ########## enums ##########
 # @package Kaltura
@@ -30545,6 +30545,121 @@ class KalturaLiveAsset(KalturaMediaAsset):
 
 # @package Kaltura
 # @subpackage Client
+class KalturaLineupChannelAsset(KalturaLiveAsset):
+    """A Lineup channel asset is KalturaLiveAsset in a context of specific region (includes LCN)"""
+
+    def __init__(self,
+            id=NotImplemented,
+            type=NotImplemented,
+            name=NotImplemented,
+            multilingualName=NotImplemented,
+            description=NotImplemented,
+            multilingualDescription=NotImplemented,
+            images=NotImplemented,
+            mediaFiles=NotImplemented,
+            metas=NotImplemented,
+            tags=NotImplemented,
+            relatedEntities=NotImplemented,
+            startDate=NotImplemented,
+            endDate=NotImplemented,
+            createDate=NotImplemented,
+            updateDate=NotImplemented,
+            externalId=NotImplemented,
+            indexStatus=NotImplemented,
+            externalIds=NotImplemented,
+            entryId=NotImplemented,
+            deviceRuleId=NotImplemented,
+            geoBlockRuleId=NotImplemented,
+            status=NotImplemented,
+            inheritancePolicy=NotImplemented,
+            enableCdvrState=NotImplemented,
+            enableCatchUpState=NotImplemented,
+            enableStartOverState=NotImplemented,
+            bufferCatchUpSetting=NotImplemented,
+            bufferTrickPlaySetting=NotImplemented,
+            enableRecordingPlaybackNonEntitledChannelState=NotImplemented,
+            enableTrickPlayState=NotImplemented,
+            externalEpgIngestId=NotImplemented,
+            externalCdvrId=NotImplemented,
+            enableCdvr=NotImplemented,
+            enableCatchUp=NotImplemented,
+            enableStartOver=NotImplemented,
+            catchUpBuffer=NotImplemented,
+            trickPlayBuffer=NotImplemented,
+            enableRecordingPlaybackNonEntitledChannel=NotImplemented,
+            enableTrickPlay=NotImplemented,
+            channelType=NotImplemented,
+            lcn=NotImplemented):
+        KalturaLiveAsset.__init__(self,
+            id,
+            type,
+            name,
+            multilingualName,
+            description,
+            multilingualDescription,
+            images,
+            mediaFiles,
+            metas,
+            tags,
+            relatedEntities,
+            startDate,
+            endDate,
+            createDate,
+            updateDate,
+            externalId,
+            indexStatus,
+            externalIds,
+            entryId,
+            deviceRuleId,
+            geoBlockRuleId,
+            status,
+            inheritancePolicy,
+            enableCdvrState,
+            enableCatchUpState,
+            enableStartOverState,
+            bufferCatchUpSetting,
+            bufferTrickPlaySetting,
+            enableRecordingPlaybackNonEntitledChannelState,
+            enableTrickPlayState,
+            externalEpgIngestId,
+            externalCdvrId,
+            enableCdvr,
+            enableCatchUp,
+            enableStartOver,
+            catchUpBuffer,
+            trickPlayBuffer,
+            enableRecordingPlaybackNonEntitledChannel,
+            enableTrickPlay,
+            channelType)
+
+        # Lineup channel number (LCN) - A logical linear channel number. This number is unique in the region context.
+        # @var int
+        self.lcn = lcn
+
+
+    PROPERTY_LOADERS = {
+        'lcn': getXmlNodeInt, 
+    }
+
+    def fromXml(self, node):
+        KalturaLiveAsset.fromXml(self, node)
+        self.fromXmlImpl(node, KalturaLineupChannelAsset.PROPERTY_LOADERS)
+
+    def toParams(self):
+        kparams = KalturaLiveAsset.toParams(self)
+        kparams.put("objectType", "KalturaLineupChannelAsset")
+        kparams.addIntIfDefined("lcn", self.lcn)
+        return kparams
+
+    def getLcn(self):
+        return self.lcn
+
+    def setLcn(self, newLcn):
+        self.lcn = newLcn
+
+
+# @package Kaltura
+# @subpackage Client
 class KalturaProgramAsset(KalturaAsset):
     """Program-asset info"""
 
@@ -40336,6 +40451,41 @@ class KalturaLicensedUrlRecordingRequest(KalturaLicensedUrlBaseRequest):
 
 # @package Kaltura
 # @subpackage Client
+class KalturaLineupChannelAssetListResponse(KalturaListResponse):
+    def __init__(self,
+            totalCount=NotImplemented,
+            objects=NotImplemented):
+        KalturaListResponse.__init__(self,
+            totalCount)
+
+        # A list of objects
+        # @var array of KalturaLineupChannelAsset
+        self.objects = objects
+
+
+    PROPERTY_LOADERS = {
+        'objects': (KalturaObjectFactory.createArray, 'KalturaLineupChannelAsset'), 
+    }
+
+    def fromXml(self, node):
+        KalturaListResponse.fromXml(self, node)
+        self.fromXmlImpl(node, KalturaLineupChannelAssetListResponse.PROPERTY_LOADERS)
+
+    def toParams(self):
+        kparams = KalturaListResponse.toParams(self)
+        kparams.put("objectType", "KalturaLineupChannelAssetListResponse")
+        kparams.addArrayIfDefined("objects", self.objects)
+        return kparams
+
+    def getObjects(self):
+        return self.objects
+
+    def setObjects(self, newObjects):
+        self.objects = newObjects
+
+
+# @package Kaltura
+# @subpackage Client
 class KalturaMessageTemplate(KalturaObjectBase):
     def __init__(self,
             message=NotImplemented,
@@ -47059,6 +47209,25 @@ class KalturaLicensedUrlService(KalturaServiceBase):
 
 # @package Kaltura
 # @subpackage Client
+class KalturaLineupService(KalturaServiceBase):
+    def __init__(self, client = None):
+        KalturaServiceBase.__init__(self, client)
+
+    def get(self, pageIndex, pageSize):
+        """Return regional lineup (list of lineup channel asset objects) based on the requester session characteristics and his region."""
+
+        kparams = KalturaParams()
+        kparams.addIntIfDefined("pageIndex", pageIndex);
+        kparams.addIntIfDefined("pageSize", pageSize);
+        self.client.queueServiceActionCall("lineup", "get", "KalturaLineupChannelAssetListResponse", kparams)
+        if self.client.isMultiRequest():
+            return self.client.getMultiRequestResult()
+        resultNode = self.client.doQueue()
+        return KalturaObjectFactory.create(resultNode, 'KalturaLineupChannelAssetListResponse')
+
+
+# @package Kaltura
+# @subpackage Client
 class KalturaMediaConcurrencyRuleService(KalturaServiceBase):
     def __init__(self, client = None):
         KalturaServiceBase.__init__(self, client)
@@ -50616,6 +50785,7 @@ class KalturaCoreClient(KalturaClientPlugin):
             'label': KalturaLabelService,
             'language': KalturaLanguageService,
             'licensedUrl': KalturaLicensedUrlService,
+            'lineup': KalturaLineupService,
             'mediaConcurrencyRule': KalturaMediaConcurrencyRuleService,
             'mediaFile': KalturaMediaFileService,
             'mediaFileType': KalturaMediaFileTypeService,
@@ -51384,6 +51554,7 @@ class KalturaCoreClient(KalturaClientPlugin):
             'KalturaAssetListResponse': KalturaAssetListResponse,
             'KalturaMediaAsset': KalturaMediaAsset,
             'KalturaLiveAsset': KalturaLiveAsset,
+            'KalturaLineupChannelAsset': KalturaLineupChannelAsset,
             'KalturaProgramAsset': KalturaProgramAsset,
             'KalturaRecordingAsset': KalturaRecordingAsset,
             'KalturaEpg': KalturaEpg,
@@ -51543,6 +51714,7 @@ class KalturaCoreClient(KalturaClientPlugin):
             'KalturaLicensedUrlMediaRequest': KalturaLicensedUrlMediaRequest,
             'KalturaLicensedUrlEpgRequest': KalturaLicensedUrlEpgRequest,
             'KalturaLicensedUrlRecordingRequest': KalturaLicensedUrlRecordingRequest,
+            'KalturaLineupChannelAssetListResponse': KalturaLineupChannelAssetListResponse,
             'KalturaMessageTemplate': KalturaMessageTemplate,
             'KalturaRegistryResponse': KalturaRegistryResponse,
             'KalturaPushMessage': KalturaPushMessage,
