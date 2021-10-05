@@ -42,7 +42,7 @@ from ..Base import (
     KalturaServiceBase,
 )
 
-API_VERSION = '6.7.0.29302'
+API_VERSION = '6.9.0.29587'
 
 ########## enums ##########
 # @package Kaltura
@@ -648,6 +648,18 @@ class KalturaChannelsOrderBy(object):
     CREATE_DATE_DESC = "CREATE_DATE_DESC"
     UPDATE_DATE_ASC = "UPDATE_DATE_ASC"
     UPDATE_DATE_DESC = "UPDATE_DATE_DESC"
+
+    def __init__(self, value):
+        self.value = value
+
+    def getValue(self):
+        return self.value
+
+# @package Kaltura
+# @subpackage Client
+class KalturaChannelStruct(object):
+    MANUAL = "Manual"
+    DYNAMIC = "Dynamic"
 
     def __init__(self, value):
         self.value = value
@@ -1464,6 +1476,18 @@ class KalturaLinearChannelType(object):
     OTT = "OTT"
     DTT_AND_OTT = "DTT_AND_OTT"
     VRM_EXPORT = "VRM_EXPORT"
+
+    def __init__(self, value):
+        self.value = value
+
+    def getValue(self):
+        return self.value
+
+# @package Kaltura
+# @subpackage Client
+class KalturaManualCollectionAssetType(object):
+    MEDIA = "media"
+    EPG = "epg"
 
     def __init__(self, value):
         self.value = value
@@ -8287,7 +8311,29 @@ class KalturaAssetImagePerRatioFilter(KalturaRelatedObjectFilter):
 
 # @package Kaltura
 # @subpackage Client
-class KalturaAssetStructFilter(KalturaFilter):
+class KalturaBaseAssetStructFilter(KalturaFilter):
+    def __init__(self,
+            orderBy=NotImplemented):
+        KalturaFilter.__init__(self,
+            orderBy)
+
+
+    PROPERTY_LOADERS = {
+    }
+
+    def fromXml(self, node):
+        KalturaFilter.fromXml(self, node)
+        self.fromXmlImpl(node, KalturaBaseAssetStructFilter.PROPERTY_LOADERS)
+
+    def toParams(self):
+        kparams = KalturaFilter.toParams(self)
+        kparams.put("objectType", "KalturaBaseAssetStructFilter")
+        return kparams
+
+
+# @package Kaltura
+# @subpackage Client
+class KalturaAssetStructFilter(KalturaBaseAssetStructFilter):
     """Filtering Asset Structs"""
 
     def __init__(self,
@@ -8296,7 +8342,7 @@ class KalturaAssetStructFilter(KalturaFilter):
             metaIdEqual=NotImplemented,
             isProtectedEqual=NotImplemented,
             objectVirtualAssetInfoTypeEqual=NotImplemented):
-        KalturaFilter.__init__(self,
+        KalturaBaseAssetStructFilter.__init__(self,
             orderBy)
 
         # Comma separated identifiers, id = 0 is identified as program AssetStruct
@@ -8324,11 +8370,11 @@ class KalturaAssetStructFilter(KalturaFilter):
     }
 
     def fromXml(self, node):
-        KalturaFilter.fromXml(self, node)
+        KalturaBaseAssetStructFilter.fromXml(self, node)
         self.fromXmlImpl(node, KalturaAssetStructFilter.PROPERTY_LOADERS)
 
     def toParams(self):
-        kparams = KalturaFilter.toParams(self)
+        kparams = KalturaBaseAssetStructFilter.toParams(self)
         kparams.put("objectType", "KalturaAssetStructFilter")
         kparams.addStringIfDefined("idIn", self.idIn)
         kparams.addIntIfDefined("metaIdEqual", self.metaIdEqual)
@@ -8359,6 +8405,28 @@ class KalturaAssetStructFilter(KalturaFilter):
 
     def setObjectVirtualAssetInfoTypeEqual(self, newObjectVirtualAssetInfoTypeEqual):
         self.objectVirtualAssetInfoTypeEqual = newObjectVirtualAssetInfoTypeEqual
+
+
+# @package Kaltura
+# @subpackage Client
+class KalturaLinearAssetStructFilter(KalturaBaseAssetStructFilter):
+    def __init__(self,
+            orderBy=NotImplemented):
+        KalturaBaseAssetStructFilter.__init__(self,
+            orderBy)
+
+
+    PROPERTY_LOADERS = {
+    }
+
+    def fromXml(self, node):
+        KalturaBaseAssetStructFilter.fromXml(self, node)
+        self.fromXmlImpl(node, KalturaLinearAssetStructFilter.PROPERTY_LOADERS)
+
+    def toParams(self):
+        kparams = KalturaBaseAssetStructFilter.toParams(self)
+        kparams.put("objectType", "KalturaLinearAssetStructFilter")
+        return kparams
 
 
 # @package Kaltura
@@ -9211,7 +9279,29 @@ class KalturaBookmark(KalturaSlimAsset):
 
 # @package Kaltura
 # @subpackage Client
-class KalturaChannelsFilter(KalturaFilter):
+class KalturaChannelsBaseFilter(KalturaFilter):
+    def __init__(self,
+            orderBy=NotImplemented):
+        KalturaFilter.__init__(self,
+            orderBy)
+
+
+    PROPERTY_LOADERS = {
+    }
+
+    def fromXml(self, node):
+        KalturaFilter.fromXml(self, node)
+        self.fromXmlImpl(node, KalturaChannelsBaseFilter.PROPERTY_LOADERS)
+
+    def toParams(self):
+        kparams = KalturaFilter.toParams(self)
+        kparams.put("objectType", "KalturaChannelsBaseFilter")
+        return kparams
+
+
+# @package Kaltura
+# @subpackage Client
+class KalturaChannelsFilter(KalturaChannelsBaseFilter):
     def __init__(self,
             orderBy=NotImplemented,
             idEqual=NotImplemented,
@@ -9219,7 +9309,7 @@ class KalturaChannelsFilter(KalturaFilter):
             nameEqual=NotImplemented,
             nameStartsWith=NotImplemented,
             idIn=NotImplemented):
-        KalturaFilter.__init__(self,
+        KalturaChannelsBaseFilter.__init__(self,
             orderBy)
 
         # channel identifier to filter by
@@ -9252,11 +9342,11 @@ class KalturaChannelsFilter(KalturaFilter):
     }
 
     def fromXml(self, node):
-        KalturaFilter.fromXml(self, node)
+        KalturaChannelsBaseFilter.fromXml(self, node)
         self.fromXmlImpl(node, KalturaChannelsFilter.PROPERTY_LOADERS)
 
     def toParams(self):
-        kparams = KalturaFilter.toParams(self)
+        kparams = KalturaChannelsBaseFilter.toParams(self)
         kparams.put("objectType", "KalturaChannelsFilter")
         kparams.addIntIfDefined("idEqual", self.idEqual)
         kparams.addIntIfDefined("mediaIdEqual", self.mediaIdEqual)
@@ -9294,6 +9384,54 @@ class KalturaChannelsFilter(KalturaFilter):
 
     def setIdIn(self, newIdIn):
         self.idIn = newIdIn
+
+
+# @package Kaltura
+# @subpackage Client
+class KalturaChannelSearchByKsqlFilter(KalturaChannelsBaseFilter):
+    def __init__(self,
+            orderBy=NotImplemented,
+            kSql=NotImplemented,
+            channelStructEqual=NotImplemented):
+        KalturaChannelsBaseFilter.__init__(self,
+            orderBy)
+
+        # KSQL expression
+        # @var string
+        self.kSql = kSql
+
+        # channel struct
+        # @var KalturaChannelStruct
+        self.channelStructEqual = channelStructEqual
+
+
+    PROPERTY_LOADERS = {
+        'kSql': getXmlNodeText, 
+        'channelStructEqual': (KalturaEnumsFactory.createString, "KalturaChannelStruct"), 
+    }
+
+    def fromXml(self, node):
+        KalturaChannelsBaseFilter.fromXml(self, node)
+        self.fromXmlImpl(node, KalturaChannelSearchByKsqlFilter.PROPERTY_LOADERS)
+
+    def toParams(self):
+        kparams = KalturaChannelsBaseFilter.toParams(self)
+        kparams.put("objectType", "KalturaChannelSearchByKsqlFilter")
+        kparams.addStringIfDefined("kSql", self.kSql)
+        kparams.addStringEnumIfDefined("channelStructEqual", self.channelStructEqual)
+        return kparams
+
+    def getKSql(self):
+        return self.kSql
+
+    def setKSql(self, newKSql):
+        self.kSql = newKSql
+
+    def getChannelStructEqual(self):
+        return self.channelStructEqual
+
+    def setChannelStructEqual(self, newChannelStructEqual):
+        self.channelStructEqual = newChannelStructEqual
 
 
 # @package Kaltura
@@ -11505,7 +11643,8 @@ class KalturaMediaImage(KalturaObjectBase):
             version=NotImplemented,
             id=NotImplemented,
             isDefault=NotImplemented,
-            imageTypeId=NotImplemented):
+            imageTypeId=NotImplemented,
+            imageTypeName=NotImplemented):
         KalturaObjectBase.__init__(self)
 
         # Image aspect ratio
@@ -11541,6 +11680,10 @@ class KalturaMediaImage(KalturaObjectBase):
         # @var int
         self.imageTypeId = imageTypeId
 
+        # Image type Name
+        # @var string
+        self.imageTypeName = imageTypeName
+
 
     PROPERTY_LOADERS = {
         'ratio': getXmlNodeText, 
@@ -11551,6 +11694,7 @@ class KalturaMediaImage(KalturaObjectBase):
         'id': getXmlNodeText, 
         'isDefault': getXmlNodeBool, 
         'imageTypeId': getXmlNodeInt, 
+        'imageTypeName': getXmlNodeText, 
     }
 
     def fromXml(self, node):
@@ -11567,6 +11711,7 @@ class KalturaMediaImage(KalturaObjectBase):
         kparams.addIntIfDefined("version", self.version)
         kparams.addBoolIfDefined("isDefault", self.isDefault)
         kparams.addIntIfDefined("imageTypeId", self.imageTypeId)
+        kparams.addStringIfDefined("imageTypeName", self.imageTypeName)
         return kparams
 
     def getRatio(self):
@@ -11613,6 +11758,12 @@ class KalturaMediaImage(KalturaObjectBase):
 
     def setImageTypeId(self, newImageTypeId):
         self.imageTypeId = newImageTypeId
+
+    def getImageTypeName(self):
+        return self.imageTypeName
+
+    def setImageTypeName(self, newImageTypeName):
+        self.imageTypeName = newImageTypeName
 
 
 # @package Kaltura
@@ -20217,6 +20368,52 @@ class KalturaDynamicChannel(KalturaChannel):
 
 # @package Kaltura
 # @subpackage Client
+class KalturaManualCollectionAsset(KalturaObjectBase):
+    def __init__(self,
+            id=NotImplemented,
+            type=NotImplemented):
+        KalturaObjectBase.__init__(self)
+
+        # Internal identifier of the asset
+        # @var string
+        self.id = id
+
+        # The type of the asset. Possible values: media, epg
+        # @var KalturaManualCollectionAssetType
+        self.type = type
+
+
+    PROPERTY_LOADERS = {
+        'id': getXmlNodeText, 
+        'type': (KalturaEnumsFactory.createString, "KalturaManualCollectionAssetType"), 
+    }
+
+    def fromXml(self, node):
+        KalturaObjectBase.fromXml(self, node)
+        self.fromXmlImpl(node, KalturaManualCollectionAsset.PROPERTY_LOADERS)
+
+    def toParams(self):
+        kparams = KalturaObjectBase.toParams(self)
+        kparams.put("objectType", "KalturaManualCollectionAsset")
+        kparams.addStringIfDefined("id", self.id)
+        kparams.addStringEnumIfDefined("type", self.type)
+        return kparams
+
+    def getId(self):
+        return self.id
+
+    def setId(self, newId):
+        self.id = newId
+
+    def getType(self):
+        return self.type
+
+    def setType(self, newType):
+        self.type = newType
+
+
+# @package Kaltura
+# @subpackage Client
 class KalturaManualChannel(KalturaChannel):
     def __init__(self,
             id=NotImplemented,
@@ -20235,7 +20432,8 @@ class KalturaManualChannel(KalturaChannel):
             assetUserRuleId=NotImplemented,
             metaData=NotImplemented,
             virtualAssetId=NotImplemented,
-            mediaIds=NotImplemented):
+            mediaIds=NotImplemented,
+            assets=NotImplemented):
         KalturaChannel.__init__(self,
             id,
             name,
@@ -20258,9 +20456,14 @@ class KalturaManualChannel(KalturaChannel):
         # @var string
         self.mediaIds = mediaIds
 
+        # List of assets identifier
+        # @var array of KalturaManualCollectionAsset
+        self.assets = assets
+
 
     PROPERTY_LOADERS = {
         'mediaIds': getXmlNodeText, 
+        'assets': (KalturaObjectFactory.createArray, 'KalturaManualCollectionAsset'), 
     }
 
     def fromXml(self, node):
@@ -20271,6 +20474,7 @@ class KalturaManualChannel(KalturaChannel):
         kparams = KalturaChannel.toParams(self)
         kparams.put("objectType", "KalturaManualChannel")
         kparams.addStringIfDefined("mediaIds", self.mediaIds)
+        kparams.addArrayIfDefined("assets", self.assets)
         return kparams
 
     def getMediaIds(self):
@@ -20278,6 +20482,12 @@ class KalturaManualChannel(KalturaChannel):
 
     def setMediaIds(self, newMediaIds):
         self.mediaIds = newMediaIds
+
+    def getAssets(self):
+        return self.assets
+
+    def setAssets(self, newAssets):
+        self.assets = newAssets
 
 
 # @package Kaltura
@@ -23267,6 +23477,7 @@ class KalturaBasePartnerConfiguration(KalturaPartnerConfiguration):
             anonymousKSExpirationSeconds=NotImplemented,
             refreshExpirationForPinLoginSeconds=NotImplemented,
             appTokenMaxExpirySeconds=NotImplemented,
+            autoRefreshAppToken=NotImplemented,
             uploadTokenExpirySeconds=NotImplemented,
             apptokenUserValidationDisabled=NotImplemented):
         KalturaPartnerConfiguration.__init__(self)
@@ -23291,6 +23502,10 @@ class KalturaBasePartnerConfiguration(KalturaPartnerConfiguration):
         # @var int
         self.appTokenMaxExpirySeconds = appTokenMaxExpirySeconds
 
+        # AutoRefreshAppToken
+        # @var bool
+        self.autoRefreshAppToken = autoRefreshAppToken
+
         # uploadTokenExpirySeconds
         # @var int
         self.uploadTokenExpirySeconds = uploadTokenExpirySeconds
@@ -23306,6 +23521,7 @@ class KalturaBasePartnerConfiguration(KalturaPartnerConfiguration):
         'anonymousKSExpirationSeconds': getXmlNodeInt, 
         'refreshExpirationForPinLoginSeconds': getXmlNodeInt, 
         'appTokenMaxExpirySeconds': getXmlNodeInt, 
+        'autoRefreshAppToken': getXmlNodeBool, 
         'uploadTokenExpirySeconds': getXmlNodeInt, 
         'apptokenUserValidationDisabled': getXmlNodeBool, 
     }
@@ -23322,6 +23538,7 @@ class KalturaBasePartnerConfiguration(KalturaPartnerConfiguration):
         kparams.addIntIfDefined("anonymousKSExpirationSeconds", self.anonymousKSExpirationSeconds)
         kparams.addIntIfDefined("refreshExpirationForPinLoginSeconds", self.refreshExpirationForPinLoginSeconds)
         kparams.addIntIfDefined("appTokenMaxExpirySeconds", self.appTokenMaxExpirySeconds)
+        kparams.addBoolIfDefined("autoRefreshAppToken", self.autoRefreshAppToken)
         kparams.addIntIfDefined("uploadTokenExpirySeconds", self.uploadTokenExpirySeconds)
         kparams.addBoolIfDefined("apptokenUserValidationDisabled", self.apptokenUserValidationDisabled)
         return kparams
@@ -23355,6 +23572,12 @@ class KalturaBasePartnerConfiguration(KalturaPartnerConfiguration):
 
     def setAppTokenMaxExpirySeconds(self, newAppTokenMaxExpirySeconds):
         self.appTokenMaxExpirySeconds = newAppTokenMaxExpirySeconds
+
+    def getAutoRefreshAppToken(self):
+        return self.autoRefreshAppToken
+
+    def setAutoRefreshAppToken(self, newAutoRefreshAppToken):
+        self.autoRefreshAppToken = newAutoRefreshAppToken
 
     def getUploadTokenExpirySeconds(self):
         return self.uploadTokenExpirySeconds
@@ -23807,6 +24030,7 @@ class KalturaGeneralPartnerConfig(KalturaPartnerConfiguration):
             enableRegionFiltering=NotImplemented,
             defaultRegion=NotImplemented,
             rollingDeviceData=NotImplemented,
+            linearWatchHistoryThreshold=NotImplemented,
             finishedPercentThreshold=NotImplemented,
             suspensionProfileInheritanceType=NotImplemented,
             allowDeviceMobility=NotImplemented):
@@ -23864,6 +24088,10 @@ class KalturaGeneralPartnerConfig(KalturaPartnerConfiguration):
         # @var KalturaRollingDeviceRemovalData
         self.rollingDeviceData = rollingDeviceData
 
+        # minimum bookmark position of a linear channel to be included in a watch history
+        # @var int
+        self.linearWatchHistoryThreshold = linearWatchHistoryThreshold
+
         # Finished PercentThreshold
         # @var int
         self.finishedPercentThreshold = finishedPercentThreshold
@@ -23891,6 +24119,7 @@ class KalturaGeneralPartnerConfig(KalturaPartnerConfiguration):
         'enableRegionFiltering': getXmlNodeBool, 
         'defaultRegion': getXmlNodeInt, 
         'rollingDeviceData': (KalturaObjectFactory.create, 'KalturaRollingDeviceRemovalData'), 
+        'linearWatchHistoryThreshold': getXmlNodeInt, 
         'finishedPercentThreshold': getXmlNodeInt, 
         'suspensionProfileInheritanceType': (KalturaEnumsFactory.createString, "KalturaSuspensionProfileInheritanceType"), 
         'allowDeviceMobility': getXmlNodeBool, 
@@ -23916,6 +24145,7 @@ class KalturaGeneralPartnerConfig(KalturaPartnerConfiguration):
         kparams.addBoolIfDefined("enableRegionFiltering", self.enableRegionFiltering)
         kparams.addIntIfDefined("defaultRegion", self.defaultRegion)
         kparams.addObjectIfDefined("rollingDeviceData", self.rollingDeviceData)
+        kparams.addIntIfDefined("linearWatchHistoryThreshold", self.linearWatchHistoryThreshold)
         kparams.addIntIfDefined("finishedPercentThreshold", self.finishedPercentThreshold)
         kparams.addStringEnumIfDefined("suspensionProfileInheritanceType", self.suspensionProfileInheritanceType)
         kparams.addBoolIfDefined("allowDeviceMobility", self.allowDeviceMobility)
@@ -23998,6 +24228,12 @@ class KalturaGeneralPartnerConfig(KalturaPartnerConfiguration):
 
     def setRollingDeviceData(self, newRollingDeviceData):
         self.rollingDeviceData = newRollingDeviceData
+
+    def getLinearWatchHistoryThreshold(self):
+        return self.linearWatchHistoryThreshold
+
+    def setLinearWatchHistoryThreshold(self, newLinearWatchHistoryThreshold):
+        self.linearWatchHistoryThreshold = newLinearWatchHistoryThreshold
 
     def getFinishedPercentThreshold(self):
         return self.finishedPercentThreshold
@@ -26874,7 +27110,9 @@ class KalturaHouseholdLimitations(KalturaObjectBase):
             userFrequencyDescription=NotImplemented,
             npvrQuotaInSeconds=NotImplemented,
             usersLimit=NotImplemented,
-            deviceFamiliesLimitations=NotImplemented):
+            deviceFamiliesLimitations=NotImplemented,
+            description=NotImplemented,
+            associatedDeviceFamiliesIdsIn=NotImplemented):
         KalturaObjectBase.__init__(self)
 
         # Household limitation module identifier
@@ -26925,6 +27163,14 @@ class KalturaHouseholdLimitations(KalturaObjectBase):
         # @var array of KalturaHouseholdDeviceFamilyLimitations
         self.deviceFamiliesLimitations = deviceFamiliesLimitations
 
+        # Allowed device change frequency description
+        # @var string
+        self.description = description
+
+        # Associated Device Families ids
+        # @var string
+        self.associatedDeviceFamiliesIdsIn = associatedDeviceFamiliesIdsIn
+
 
     PROPERTY_LOADERS = {
         'id': getXmlNodeInt, 
@@ -26938,6 +27184,8 @@ class KalturaHouseholdLimitations(KalturaObjectBase):
         'npvrQuotaInSeconds': getXmlNodeInt, 
         'usersLimit': getXmlNodeInt, 
         'deviceFamiliesLimitations': (KalturaObjectFactory.createArray, 'KalturaHouseholdDeviceFamilyLimitations'), 
+        'description': getXmlNodeText, 
+        'associatedDeviceFamiliesIdsIn': getXmlNodeText, 
     }
 
     def fromXml(self, node):
@@ -26954,6 +27202,8 @@ class KalturaHouseholdLimitations(KalturaObjectBase):
         kparams.addIntIfDefined("userFrequency", self.userFrequency)
         kparams.addIntIfDefined("usersLimit", self.usersLimit)
         kparams.addArrayIfDefined("deviceFamiliesLimitations", self.deviceFamiliesLimitations)
+        kparams.addStringIfDefined("description", self.description)
+        kparams.addStringIfDefined("associatedDeviceFamiliesIdsIn", self.associatedDeviceFamiliesIdsIn)
         return kparams
 
     def getId(self):
@@ -27009,6 +27259,18 @@ class KalturaHouseholdLimitations(KalturaObjectBase):
 
     def setDeviceFamiliesLimitations(self, newDeviceFamiliesLimitations):
         self.deviceFamiliesLimitations = newDeviceFamiliesLimitations
+
+    def getDescription(self):
+        return self.description
+
+    def setDescription(self, newDescription):
+        self.description = newDescription
+
+    def getAssociatedDeviceFamiliesIdsIn(self):
+        return self.associatedDeviceFamiliesIdsIn
+
+    def setAssociatedDeviceFamiliesIdsIn(self, newAssociatedDeviceFamiliesIdsIn):
+        self.associatedDeviceFamiliesIdsIn = newAssociatedDeviceFamiliesIdsIn
 
 
 # @package Kaltura
@@ -31278,6 +31540,7 @@ class KalturaImage(KalturaObjectBase):
             id=NotImplemented,
             version=NotImplemented,
             imageTypeId=NotImplemented,
+            imageTypeName=NotImplemented,
             imageObjectId=NotImplemented,
             imageObjectType=NotImplemented,
             status=NotImplemented,
@@ -31299,6 +31562,10 @@ class KalturaImage(KalturaObjectBase):
         # Image type ID
         # @var int
         self.imageTypeId = imageTypeId
+
+        # Image type Name
+        # @var string
+        self.imageTypeName = imageTypeName
 
         # ID of the object the image is related to
         # @var int
@@ -31333,6 +31600,7 @@ class KalturaImage(KalturaObjectBase):
         'id': getXmlNodeInt, 
         'version': getXmlNodeText, 
         'imageTypeId': getXmlNodeInt, 
+        'imageTypeName': getXmlNodeText, 
         'imageObjectId': getXmlNodeInt, 
         'imageObjectType': (KalturaEnumsFactory.createString, "KalturaImageObjectType"), 
         'status': (KalturaEnumsFactory.createString, "KalturaImageStatus"), 
@@ -31349,6 +31617,7 @@ class KalturaImage(KalturaObjectBase):
         kparams = KalturaObjectBase.toParams(self)
         kparams.put("objectType", "KalturaImage")
         kparams.addIntIfDefined("imageTypeId", self.imageTypeId)
+        kparams.addStringIfDefined("imageTypeName", self.imageTypeName)
         kparams.addIntIfDefined("imageObjectId", self.imageObjectId)
         kparams.addStringEnumIfDefined("imageObjectType", self.imageObjectType)
         return kparams
@@ -31364,6 +31633,12 @@ class KalturaImage(KalturaObjectBase):
 
     def setImageTypeId(self, newImageTypeId):
         self.imageTypeId = newImageTypeId
+
+    def getImageTypeName(self):
+        return self.imageTypeName
+
+    def setImageTypeName(self, newImageTypeName):
+        self.imageTypeName = newImageTypeName
 
     def getImageObjectId(self):
         return self.imageObjectId
@@ -38585,6 +38860,52 @@ class KalturaEntitlementRenewal(KalturaObjectBase):
 
 # @package Kaltura
 # @subpackage Client
+class KalturaEpgServicePartnerConfiguration(KalturaObjectBase):
+    def __init__(self,
+            numberOfSlots=NotImplemented,
+            firstSlotOffset=NotImplemented):
+        KalturaObjectBase.__init__(self)
+
+        # The number of slots (NOS) that are supported (1, 2, 3, 4, 6, 8, 12, 24)
+        # @var int
+        self.numberOfSlots = numberOfSlots
+
+        # The offset of the first slot from 00:00 UTC
+        # @var int
+        self.firstSlotOffset = firstSlotOffset
+
+
+    PROPERTY_LOADERS = {
+        'numberOfSlots': getXmlNodeInt, 
+        'firstSlotOffset': getXmlNodeInt, 
+    }
+
+    def fromXml(self, node):
+        KalturaObjectBase.fromXml(self, node)
+        self.fromXmlImpl(node, KalturaEpgServicePartnerConfiguration.PROPERTY_LOADERS)
+
+    def toParams(self):
+        kparams = KalturaObjectBase.toParams(self)
+        kparams.put("objectType", "KalturaEpgServicePartnerConfiguration")
+        kparams.addIntIfDefined("numberOfSlots", self.numberOfSlots)
+        kparams.addIntIfDefined("firstSlotOffset", self.firstSlotOffset)
+        return kparams
+
+    def getNumberOfSlots(self):
+        return self.numberOfSlots
+
+    def setNumberOfSlots(self, newNumberOfSlots):
+        self.numberOfSlots = newNumberOfSlots
+
+    def getFirstSlotOffset(self):
+        return self.firstSlotOffset
+
+    def setFirstSlotOffset(self, newFirstSlotOffset):
+        self.firstSlotOffset = newFirstSlotOffset
+
+
+# @package Kaltura
+# @subpackage Client
 class KalturaEventNotificationScope(KalturaObjectBase):
     """Kaltura event notification scope"""
 
@@ -40571,6 +40892,39 @@ class KalturaEpgNotificationSettings(KalturaObjectBase):
 
 # @package Kaltura
 # @subpackage Client
+class KalturaLineupNotificationSettings(KalturaObjectBase):
+    def __init__(self,
+            enabled=NotImplemented):
+        KalturaObjectBase.__init__(self)
+
+        # if lineup notifications are enabled.
+        # @var bool
+        self.enabled = enabled
+
+
+    PROPERTY_LOADERS = {
+        'enabled': getXmlNodeBool, 
+    }
+
+    def fromXml(self, node):
+        KalturaObjectBase.fromXml(self, node)
+        self.fromXmlImpl(node, KalturaLineupNotificationSettings.PROPERTY_LOADERS)
+
+    def toParams(self):
+        kparams = KalturaObjectBase.toParams(self)
+        kparams.put("objectType", "KalturaLineupNotificationSettings")
+        kparams.addBoolIfDefined("enabled", self.enabled)
+        return kparams
+
+    def getEnabled(self):
+        return self.enabled
+
+    def setEnabled(self, newEnabled):
+        self.enabled = newEnabled
+
+
+# @package Kaltura
+# @subpackage Client
 class KalturaNotificationsPartnerSettings(KalturaObjectBase):
     def __init__(self,
             pushNotificationEnabled=NotImplemented,
@@ -40591,7 +40945,8 @@ class KalturaNotificationsPartnerSettings(KalturaObjectBase):
             mailNotificationAdapterId=NotImplemented,
             smsEnabled=NotImplemented,
             iotEnabled=NotImplemented,
-            epgNotification=NotImplemented):
+            epgNotification=NotImplemented,
+            lineupNotification=NotImplemented):
         KalturaObjectBase.__init__(self)
 
         # Push notification capability is enabled for the account
@@ -40670,6 +41025,10 @@ class KalturaNotificationsPartnerSettings(KalturaObjectBase):
         # @var KalturaEpgNotificationSettings
         self.epgNotification = epgNotification
 
+        # Settings for lineup notifications
+        # @var KalturaLineupNotificationSettings
+        self.lineupNotification = lineupNotification
+
 
     PROPERTY_LOADERS = {
         'pushNotificationEnabled': getXmlNodeBool, 
@@ -40691,6 +41050,7 @@ class KalturaNotificationsPartnerSettings(KalturaObjectBase):
         'smsEnabled': getXmlNodeBool, 
         'iotEnabled': getXmlNodeBool, 
         'epgNotification': (KalturaObjectFactory.create, 'KalturaEpgNotificationSettings'), 
+        'lineupNotification': (KalturaObjectFactory.create, 'KalturaLineupNotificationSettings'), 
     }
 
     def fromXml(self, node):
@@ -40719,6 +41079,7 @@ class KalturaNotificationsPartnerSettings(KalturaObjectBase):
         kparams.addBoolIfDefined("smsEnabled", self.smsEnabled)
         kparams.addBoolIfDefined("iotEnabled", self.iotEnabled)
         kparams.addObjectIfDefined("epgNotification", self.epgNotification)
+        kparams.addObjectIfDefined("lineupNotification", self.lineupNotification)
         return kparams
 
     def getPushNotificationEnabled(self):
@@ -40834,6 +41195,12 @@ class KalturaNotificationsPartnerSettings(KalturaObjectBase):
 
     def setEpgNotification(self, newEpgNotification):
         self.epgNotification = newEpgNotification
+
+    def getLineupNotification(self):
+        return self.lineupNotification
+
+    def setLineupNotification(self, newLineupNotification):
+        self.lineupNotification = newLineupNotification
 
 
 # @package Kaltura
@@ -45576,6 +45943,33 @@ class KalturaEpgService(KalturaServiceBase):
 
 # @package Kaltura
 # @subpackage Client
+class KalturaEpgServicePartnerConfigurationService(KalturaServiceBase):
+    def __init__(self, client = None):
+        KalturaServiceBase.__init__(self, client)
+
+    def get(self):
+        """Returns EPG cache service partner configurations"""
+
+        kparams = KalturaParams()
+        self.client.queueServiceActionCall("epgservicepartnerconfiguration", "get", "KalturaEpgServicePartnerConfiguration", kparams)
+        if self.client.isMultiRequest():
+            return self.client.getMultiRequestResult()
+        resultNode = self.client.doQueue()
+        return KalturaObjectFactory.create(resultNode, 'KalturaEpgServicePartnerConfiguration')
+
+    def update(self, config):
+        """Returns EPG cache service partner configurations"""
+
+        kparams = KalturaParams()
+        kparams.addObjectIfDefined("config", config)
+        self.client.queueServiceActionCall("epgservicepartnerconfiguration", "update", "None", kparams)
+        if self.client.isMultiRequest():
+            return self.client.getMultiRequestResult()
+        resultNode = self.client.doQueue()
+
+
+# @package Kaltura
+# @subpackage Client
 class KalturaEventNotificationActionService(KalturaServiceBase):
     def __init__(self, client = None):
         KalturaServiceBase.__init__(self, client)
@@ -46204,6 +46598,17 @@ class KalturaHouseholdLimitationsService(KalturaServiceBase):
         resultNode = self.client.doQueue()
         return KalturaObjectFactory.create(resultNode, 'KalturaHouseholdLimitations')
 
+    def isUsed(self, dlmId):
+        """Checks if the DLM is used"""
+
+        kparams = KalturaParams()
+        kparams.addIntIfDefined("dlmId", dlmId);
+        self.client.queueServiceActionCall("householdlimitations", "isUsed", "None", kparams)
+        if self.client.isMultiRequest():
+            return self.client.getMultiRequestResult()
+        resultNode = self.client.doQueue()
+        return getXmlNodeBool(resultNode)
+
     def list(self):
         """Get the list of PartnerConfiguration"""
 
@@ -46213,6 +46618,18 @@ class KalturaHouseholdLimitationsService(KalturaServiceBase):
             return self.client.getMultiRequestResult()
         resultNode = self.client.doQueue()
         return KalturaObjectFactory.create(resultNode, 'KalturaHouseholdLimitationsListResponse')
+
+    def update(self, dlmId, householdLimitation):
+        """Updates household limitation"""
+
+        kparams = KalturaParams()
+        kparams.addIntIfDefined("dlmId", dlmId);
+        kparams.addObjectIfDefined("householdLimitation", householdLimitation)
+        self.client.queueServiceActionCall("householdlimitations", "update", "KalturaHouseholdLimitations", kparams)
+        if self.client.isMultiRequest():
+            return self.client.getMultiRequestResult()
+        resultNode = self.client.doQueue()
+        return KalturaObjectFactory.create(resultNode, 'KalturaHouseholdLimitations')
 
 
 # @package Kaltura
@@ -50375,6 +50792,7 @@ class KalturaCoreClient(KalturaClientPlugin):
             'engagement': KalturaEngagementService,
             'entitlement': KalturaEntitlementService,
             'epg': KalturaEpgService,
+            'epgServicePartnerConfiguration': KalturaEpgServicePartnerConfigurationService,
             'eventNotificationAction': KalturaEventNotificationActionService,
             'eventNotification': KalturaEventNotificationService,
             'exportTask': KalturaExportTaskService,
@@ -50517,6 +50935,7 @@ class KalturaCoreClient(KalturaClientPlugin):
             'KalturaChannelEnrichment': KalturaChannelEnrichment,
             'KalturaChannelOrderBy': KalturaChannelOrderBy,
             'KalturaChannelsOrderBy': KalturaChannelsOrderBy,
+            'KalturaChannelStruct': KalturaChannelStruct,
             'KalturaChannelType': KalturaChannelType,
             'KalturaCollectionOrderBy': KalturaCollectionOrderBy,
             'KalturaCompensationType': KalturaCompensationType,
@@ -50583,6 +51002,7 @@ class KalturaCoreClient(KalturaClientPlugin):
             'KalturaLabelOrderBy': KalturaLabelOrderBy,
             'KalturaLanguageOrderBy': KalturaLanguageOrderBy,
             'KalturaLinearChannelType': KalturaLinearChannelType,
+            'KalturaManualCollectionAssetType': KalturaManualCollectionAssetType,
             'KalturaMathemticalOperatorType': KalturaMathemticalOperatorType,
             'KalturaMediaFileOrderBy': KalturaMediaFileOrderBy,
             'KalturaMediaFileStreamerType': KalturaMediaFileStreamerType,
@@ -50806,7 +51226,9 @@ class KalturaCoreClient(KalturaClientPlugin):
             'KalturaAssetHistoryFilter': KalturaAssetHistoryFilter,
             'KalturaAssetHistorySuppressFilter': KalturaAssetHistorySuppressFilter,
             'KalturaAssetImagePerRatioFilter': KalturaAssetImagePerRatioFilter,
+            'KalturaBaseAssetStructFilter': KalturaBaseAssetStructFilter,
             'KalturaAssetStructFilter': KalturaAssetStructFilter,
+            'KalturaLinearAssetStructFilter': KalturaLinearAssetStructFilter,
             'KalturaAssetStructMetaFilter': KalturaAssetStructMetaFilter,
             'KalturaSlimAsset': KalturaSlimAsset,
             'KalturaBookmarkFilter': KalturaBookmarkFilter,
@@ -50816,7 +51238,9 @@ class KalturaCoreClient(KalturaClientPlugin):
             'KalturaOTTUser': KalturaOTTUser,
             'KalturaBookmarkPlayerData': KalturaBookmarkPlayerData,
             'KalturaBookmark': KalturaBookmark,
+            'KalturaChannelsBaseFilter': KalturaChannelsBaseFilter,
             'KalturaChannelsFilter': KalturaChannelsFilter,
+            'KalturaChannelSearchByKsqlFilter': KalturaChannelSearchByKsqlFilter,
             'KalturaImageFilter': KalturaImageFilter,
             'KalturaImageTypeFilter': KalturaImageTypeFilter,
             'KalturaLabelFilter': KalturaLabelFilter,
@@ -50994,6 +51418,7 @@ class KalturaCoreClient(KalturaClientPlugin):
             'KalturaChannelOrder': KalturaChannelOrder,
             'KalturaChannel': KalturaChannel,
             'KalturaDynamicChannel': KalturaDynamicChannel,
+            'KalturaManualCollectionAsset': KalturaManualCollectionAsset,
             'KalturaManualChannel': KalturaManualChannel,
             'KalturaDiscount': KalturaDiscount,
             'KalturaHouseholdPremiumService': KalturaHouseholdPremiumService,
@@ -51293,6 +51718,7 @@ class KalturaCoreClient(KalturaClientPlugin):
             'KalturaKeyValue': KalturaKeyValue,
             'KalturaEmailMessage': KalturaEmailMessage,
             'KalturaEntitlementRenewal': KalturaEntitlementRenewal,
+            'KalturaEpgServicePartnerConfiguration': KalturaEpgServicePartnerConfiguration,
             'KalturaEventNotificationScope': KalturaEventNotificationScope,
             'KalturaEventObject': KalturaEventObject,
             'KalturaEventNotificationObjectScope': KalturaEventNotificationObjectScope,
@@ -51329,6 +51755,7 @@ class KalturaCoreClient(KalturaClientPlugin):
             'KalturaRegistryResponse': KalturaRegistryResponse,
             'KalturaPushMessage': KalturaPushMessage,
             'KalturaEpgNotificationSettings': KalturaEpgNotificationSettings,
+            'KalturaLineupNotificationSettings': KalturaLineupNotificationSettings,
             'KalturaNotificationsPartnerSettings': KalturaNotificationsPartnerSettings,
             'KalturaNotificationsSettings': KalturaNotificationsSettings,
             'KalturaOTTUserDynamicData': KalturaOTTUserDynamicData,
