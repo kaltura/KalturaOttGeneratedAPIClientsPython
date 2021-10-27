@@ -42,7 +42,7 @@ from ..Base import (
     KalturaServiceBase,
 )
 
-API_VERSION = '6.8.0.29566'
+API_VERSION = '6.8.0.29576'
 
 ########## enums ##########
 # @package Kaltura
@@ -1740,8 +1740,8 @@ class KalturaPartnerConfigurationType(object):
     SECURITY = "Security"
     OPC = "Opc"
     BASE = "Base"
-    DEFAULTPARENTALSETTINGS = "DefaultParentalSettings"
     CUSTOMFIELDS = "CustomFields"
+    DEFAULTPARENTALSETTINGS = "DefaultParentalSettings"
 
     def __init__(self, value):
         self.value = value
@@ -25239,11 +25239,11 @@ class KalturaDefaultParentalSettingsPartnerConfig(KalturaPartnerConfiguration):
         self.defaultTvSeriesParentalRuleId = defaultTvSeriesParentalRuleId
 
         # defaultParentalPin
-        # @var int
+        # @var string
         self.defaultParentalPin = defaultParentalPin
 
         # defaultPurchasePin
-        # @var int
+        # @var string
         self.defaultPurchasePin = defaultPurchasePin
 
         # defaultPurchaseSettings
@@ -25254,8 +25254,8 @@ class KalturaDefaultParentalSettingsPartnerConfig(KalturaPartnerConfiguration):
     PROPERTY_LOADERS = {
         'defaultMoviesParentalRuleId': getXmlNodeInt, 
         'defaultTvSeriesParentalRuleId': getXmlNodeInt, 
-        'defaultParentalPin': getXmlNodeInt, 
-        'defaultPurchasePin': getXmlNodeInt, 
+        'defaultParentalPin': getXmlNodeText, 
+        'defaultPurchasePin': getXmlNodeText, 
         'defaultPurchaseSettings': getXmlNodeInt, 
     }
 
@@ -25268,8 +25268,8 @@ class KalturaDefaultParentalSettingsPartnerConfig(KalturaPartnerConfiguration):
         kparams.put("objectType", "KalturaDefaultParentalSettingsPartnerConfig")
         kparams.addIntIfDefined("defaultMoviesParentalRuleId", self.defaultMoviesParentalRuleId)
         kparams.addIntIfDefined("defaultTvSeriesParentalRuleId", self.defaultTvSeriesParentalRuleId)
-        kparams.addIntIfDefined("defaultParentalPin", self.defaultParentalPin)
-        kparams.addIntIfDefined("defaultPurchasePin", self.defaultPurchasePin)
+        kparams.addStringIfDefined("defaultParentalPin", self.defaultParentalPin)
+        kparams.addStringIfDefined("defaultPurchasePin", self.defaultPurchasePin)
         kparams.addIntIfDefined("defaultPurchaseSettings", self.defaultPurchaseSettings)
         return kparams
 
