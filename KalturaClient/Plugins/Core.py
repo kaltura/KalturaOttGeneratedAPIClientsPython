@@ -42,7 +42,7 @@ from ..Base import (
     KalturaServiceBase,
 )
 
-API_VERSION = '6.8.0.29579'
+API_VERSION = '6.8.0.29598'
 
 ########## enums ##########
 # @package Kaltura
@@ -672,6 +672,19 @@ class KalturaChannelStruct(object):
 class KalturaChannelType(object):
     INTERNAL = "Internal"
     EXTERNAL = "External"
+
+    def __init__(self, value):
+        self.value = value
+
+    def getValue(self):
+        return self.value
+
+# @package Kaltura
+# @subpackage Client
+class KalturaChronologicalRecordStartTime(object):
+    NONE = "NONE"
+    NOW = "NOW"
+    EPG_START_TIME = "EPG_START_TIME"
 
     def __init__(self, value):
         self.value = value
@@ -1727,6 +1740,8 @@ class KalturaPartnerConfigurationType(object):
     SECURITY = "Security"
     OPC = "Opc"
     BASE = "Base"
+    CUSTOMFIELDS = "CustomFields"
+    DEFAULTPARENTALSETTINGS = "DefaultParentalSettings"
 
     def __init__(self, value):
         self.value = value
@@ -5771,7 +5786,7 @@ class KalturaUsageModuleFilter(KalturaFilter):
         KalturaFilter.__init__(self,
             orderBy)
 
-        # Comma separated discount codes
+        # Comma separated usageModule ids
         # @var int
         self.idEqual = idEqual
 
@@ -24163,7 +24178,7 @@ class KalturaPpv(KalturaObjectBase):
         # @readonly
         self.updateDate = updateDate
 
-        # Specifies when was the Subscription created. Date and time represented as epoch.
+        # Specifies when was the ppv created. Date and time represented as epoch.
         # @var int
         # @readonly
         self.createDate = createDate
@@ -25289,6 +25304,126 @@ class KalturaConcurrencyPartnerConfig(KalturaPartnerConfiguration):
 
     def setRevokeOnDeviceDelete(self, newRevokeOnDeviceDelete):
         self.revokeOnDeviceDelete = newRevokeOnDeviceDelete
+
+
+# @package Kaltura
+# @subpackage Client
+class KalturaCustomFieldsPartnerConfiguration(KalturaPartnerConfiguration):
+    """Custom Fields Partner Configuration"""
+
+    def __init__(self,
+            metaSystemNameInsteadOfAliasList=NotImplemented):
+        KalturaPartnerConfiguration.__init__(self)
+
+        # Array of clientTag values
+        # @var string
+        self.metaSystemNameInsteadOfAliasList = metaSystemNameInsteadOfAliasList
+
+
+    PROPERTY_LOADERS = {
+        'metaSystemNameInsteadOfAliasList': getXmlNodeText, 
+    }
+
+    def fromXml(self, node):
+        KalturaPartnerConfiguration.fromXml(self, node)
+        self.fromXmlImpl(node, KalturaCustomFieldsPartnerConfiguration.PROPERTY_LOADERS)
+
+    def toParams(self):
+        kparams = KalturaPartnerConfiguration.toParams(self)
+        kparams.put("objectType", "KalturaCustomFieldsPartnerConfiguration")
+        kparams.addStringIfDefined("metaSystemNameInsteadOfAliasList", self.metaSystemNameInsteadOfAliasList)
+        return kparams
+
+    def getMetaSystemNameInsteadOfAliasList(self):
+        return self.metaSystemNameInsteadOfAliasList
+
+    def setMetaSystemNameInsteadOfAliasList(self, newMetaSystemNameInsteadOfAliasList):
+        self.metaSystemNameInsteadOfAliasList = newMetaSystemNameInsteadOfAliasList
+
+
+# @package Kaltura
+# @subpackage Client
+class KalturaDefaultParentalSettingsPartnerConfig(KalturaPartnerConfiguration):
+    def __init__(self,
+            defaultMoviesParentalRuleId=NotImplemented,
+            defaultTvSeriesParentalRuleId=NotImplemented,
+            defaultParentalPin=NotImplemented,
+            defaultPurchasePin=NotImplemented,
+            defaultPurchaseSettings=NotImplemented):
+        KalturaPartnerConfiguration.__init__(self)
+
+        # defaultTvSeriesParentalRuleId
+        # @var int
+        self.defaultMoviesParentalRuleId = defaultMoviesParentalRuleId
+
+        # defaultTvSeriesParentalRuleId
+        # @var int
+        self.defaultTvSeriesParentalRuleId = defaultTvSeriesParentalRuleId
+
+        # defaultParentalPin
+        # @var string
+        self.defaultParentalPin = defaultParentalPin
+
+        # defaultPurchasePin
+        # @var string
+        self.defaultPurchasePin = defaultPurchasePin
+
+        # defaultPurchaseSettings
+        # @var int
+        self.defaultPurchaseSettings = defaultPurchaseSettings
+
+
+    PROPERTY_LOADERS = {
+        'defaultMoviesParentalRuleId': getXmlNodeInt, 
+        'defaultTvSeriesParentalRuleId': getXmlNodeInt, 
+        'defaultParentalPin': getXmlNodeText, 
+        'defaultPurchasePin': getXmlNodeText, 
+        'defaultPurchaseSettings': getXmlNodeInt, 
+    }
+
+    def fromXml(self, node):
+        KalturaPartnerConfiguration.fromXml(self, node)
+        self.fromXmlImpl(node, KalturaDefaultParentalSettingsPartnerConfig.PROPERTY_LOADERS)
+
+    def toParams(self):
+        kparams = KalturaPartnerConfiguration.toParams(self)
+        kparams.put("objectType", "KalturaDefaultParentalSettingsPartnerConfig")
+        kparams.addIntIfDefined("defaultMoviesParentalRuleId", self.defaultMoviesParentalRuleId)
+        kparams.addIntIfDefined("defaultTvSeriesParentalRuleId", self.defaultTvSeriesParentalRuleId)
+        kparams.addStringIfDefined("defaultParentalPin", self.defaultParentalPin)
+        kparams.addStringIfDefined("defaultPurchasePin", self.defaultPurchasePin)
+        kparams.addIntIfDefined("defaultPurchaseSettings", self.defaultPurchaseSettings)
+        return kparams
+
+    def getDefaultMoviesParentalRuleId(self):
+        return self.defaultMoviesParentalRuleId
+
+    def setDefaultMoviesParentalRuleId(self, newDefaultMoviesParentalRuleId):
+        self.defaultMoviesParentalRuleId = newDefaultMoviesParentalRuleId
+
+    def getDefaultTvSeriesParentalRuleId(self):
+        return self.defaultTvSeriesParentalRuleId
+
+    def setDefaultTvSeriesParentalRuleId(self, newDefaultTvSeriesParentalRuleId):
+        self.defaultTvSeriesParentalRuleId = newDefaultTvSeriesParentalRuleId
+
+    def getDefaultParentalPin(self):
+        return self.defaultParentalPin
+
+    def setDefaultParentalPin(self, newDefaultParentalPin):
+        self.defaultParentalPin = newDefaultParentalPin
+
+    def getDefaultPurchasePin(self):
+        return self.defaultPurchasePin
+
+    def setDefaultPurchasePin(self, newDefaultPurchasePin):
+        self.defaultPurchasePin = newDefaultPurchasePin
+
+    def getDefaultPurchaseSettings(self):
+        return self.defaultPurchaseSettings
+
+    def setDefaultPurchaseSettings(self, newDefaultPurchaseSettings):
+        self.defaultPurchaseSettings = newDefaultPurchaseSettings
 
 
 # @package Kaltura
@@ -30773,7 +30908,8 @@ class KalturaRecordingListResponse(KalturaListResponse):
 class KalturaSeriesRecordingOption(KalturaObjectBase):
     def __init__(self,
             minSeasonNumber=NotImplemented,
-            minEpisodeNumber=NotImplemented):
+            minEpisodeNumber=NotImplemented,
+            chronologicalRecordStartTime=NotImplemented):
         KalturaObjectBase.__init__(self)
 
         # min Season Number
@@ -30784,10 +30920,15 @@ class KalturaSeriesRecordingOption(KalturaObjectBase):
         # @var int
         self.minEpisodeNumber = minEpisodeNumber
 
+        # Record future only from selected value
+        # @var KalturaChronologicalRecordStartTime
+        self.chronologicalRecordStartTime = chronologicalRecordStartTime
+
 
     PROPERTY_LOADERS = {
         'minSeasonNumber': getXmlNodeInt, 
         'minEpisodeNumber': getXmlNodeInt, 
+        'chronologicalRecordStartTime': (KalturaEnumsFactory.createString, "KalturaChronologicalRecordStartTime"), 
     }
 
     def fromXml(self, node):
@@ -30799,6 +30940,7 @@ class KalturaSeriesRecordingOption(KalturaObjectBase):
         kparams.put("objectType", "KalturaSeriesRecordingOption")
         kparams.addIntIfDefined("minSeasonNumber", self.minSeasonNumber)
         kparams.addIntIfDefined("minEpisodeNumber", self.minEpisodeNumber)
+        kparams.addStringEnumIfDefined("chronologicalRecordStartTime", self.chronologicalRecordStartTime)
         return kparams
 
     def getMinSeasonNumber(self):
@@ -30812,6 +30954,12 @@ class KalturaSeriesRecordingOption(KalturaObjectBase):
 
     def setMinEpisodeNumber(self, newMinEpisodeNumber):
         self.minEpisodeNumber = newMinEpisodeNumber
+
+    def getChronologicalRecordStartTime(self):
+        return self.chronologicalRecordStartTime
+
+    def setChronologicalRecordStartTime(self, newChronologicalRecordStartTime):
+        self.chronologicalRecordStartTime = newChronologicalRecordStartTime
 
 
 # @package Kaltura
@@ -31987,6 +32135,121 @@ class KalturaLiveAsset(KalturaMediaAsset):
 
 # @package Kaltura
 # @subpackage Client
+class KalturaLineupChannelAsset(KalturaLiveAsset):
+    """A Lineup channel asset is KalturaLiveAsset in a context of specific region (includes LCN)"""
+
+    def __init__(self,
+            id=NotImplemented,
+            type=NotImplemented,
+            name=NotImplemented,
+            multilingualName=NotImplemented,
+            description=NotImplemented,
+            multilingualDescription=NotImplemented,
+            images=NotImplemented,
+            mediaFiles=NotImplemented,
+            metas=NotImplemented,
+            tags=NotImplemented,
+            relatedEntities=NotImplemented,
+            startDate=NotImplemented,
+            endDate=NotImplemented,
+            createDate=NotImplemented,
+            updateDate=NotImplemented,
+            externalId=NotImplemented,
+            indexStatus=NotImplemented,
+            externalIds=NotImplemented,
+            entryId=NotImplemented,
+            deviceRuleId=NotImplemented,
+            geoBlockRuleId=NotImplemented,
+            status=NotImplemented,
+            inheritancePolicy=NotImplemented,
+            enableCdvrState=NotImplemented,
+            enableCatchUpState=NotImplemented,
+            enableStartOverState=NotImplemented,
+            bufferCatchUpSetting=NotImplemented,
+            bufferTrickPlaySetting=NotImplemented,
+            enableRecordingPlaybackNonEntitledChannelState=NotImplemented,
+            enableTrickPlayState=NotImplemented,
+            externalEpgIngestId=NotImplemented,
+            externalCdvrId=NotImplemented,
+            enableCdvr=NotImplemented,
+            enableCatchUp=NotImplemented,
+            enableStartOver=NotImplemented,
+            catchUpBuffer=NotImplemented,
+            trickPlayBuffer=NotImplemented,
+            enableRecordingPlaybackNonEntitledChannel=NotImplemented,
+            enableTrickPlay=NotImplemented,
+            channelType=NotImplemented,
+            lcn=NotImplemented):
+        KalturaLiveAsset.__init__(self,
+            id,
+            type,
+            name,
+            multilingualName,
+            description,
+            multilingualDescription,
+            images,
+            mediaFiles,
+            metas,
+            tags,
+            relatedEntities,
+            startDate,
+            endDate,
+            createDate,
+            updateDate,
+            externalId,
+            indexStatus,
+            externalIds,
+            entryId,
+            deviceRuleId,
+            geoBlockRuleId,
+            status,
+            inheritancePolicy,
+            enableCdvrState,
+            enableCatchUpState,
+            enableStartOverState,
+            bufferCatchUpSetting,
+            bufferTrickPlaySetting,
+            enableRecordingPlaybackNonEntitledChannelState,
+            enableTrickPlayState,
+            externalEpgIngestId,
+            externalCdvrId,
+            enableCdvr,
+            enableCatchUp,
+            enableStartOver,
+            catchUpBuffer,
+            trickPlayBuffer,
+            enableRecordingPlaybackNonEntitledChannel,
+            enableTrickPlay,
+            channelType)
+
+        # Lineup channel number (LCN) - A logical linear channel number. This number is unique in the region context.
+        # @var int
+        self.lcn = lcn
+
+
+    PROPERTY_LOADERS = {
+        'lcn': getXmlNodeInt, 
+    }
+
+    def fromXml(self, node):
+        KalturaLiveAsset.fromXml(self, node)
+        self.fromXmlImpl(node, KalturaLineupChannelAsset.PROPERTY_LOADERS)
+
+    def toParams(self):
+        kparams = KalturaLiveAsset.toParams(self)
+        kparams.put("objectType", "KalturaLineupChannelAsset")
+        kparams.addIntIfDefined("lcn", self.lcn)
+        return kparams
+
+    def getLcn(self):
+        return self.lcn
+
+    def setLcn(self, newLcn):
+        self.lcn = newLcn
+
+
+# @package Kaltura
+# @subpackage Client
 class KalturaProgramAsset(KalturaAsset):
     """Program-asset info"""
 
@@ -32612,7 +32875,8 @@ class KalturaAssetStructMeta(KalturaObjectBase):
             updateDate=NotImplemented,
             isInherited=NotImplemented,
             isLocationTag=NotImplemented,
-            suppressedOrder=NotImplemented):
+            suppressedOrder=NotImplemented,
+            aliasName=NotImplemented):
         KalturaObjectBase.__init__(self)
 
         # Asset Struct id (template_id)
@@ -32659,6 +32923,10 @@ class KalturaAssetStructMeta(KalturaObjectBase):
         # @var int
         self.suppressedOrder = suppressedOrder
 
+        # Case sensitive alias value
+        # @var string
+        self.aliasName = aliasName
+
 
     PROPERTY_LOADERS = {
         'assetStructId': getXmlNodeInt, 
@@ -32671,6 +32939,7 @@ class KalturaAssetStructMeta(KalturaObjectBase):
         'isInherited': getXmlNodeBool, 
         'isLocationTag': getXmlNodeBool, 
         'suppressedOrder': getXmlNodeInt, 
+        'aliasName': getXmlNodeText, 
     }
 
     def fromXml(self, node):
@@ -32686,6 +32955,7 @@ class KalturaAssetStructMeta(KalturaObjectBase):
         kparams.addBoolIfDefined("isInherited", self.isInherited)
         kparams.addBoolIfDefined("isLocationTag", self.isLocationTag)
         kparams.addIntIfDefined("suppressedOrder", self.suppressedOrder)
+        kparams.addStringIfDefined("aliasName", self.aliasName)
         return kparams
 
     def getAssetStructId(self):
@@ -32735,6 +33005,12 @@ class KalturaAssetStructMeta(KalturaObjectBase):
 
     def setSuppressedOrder(self, newSuppressedOrder):
         self.suppressedOrder = newSuppressedOrder
+
+    def getAliasName(self):
+        return self.aliasName
+
+    def setAliasName(self, newAliasName):
+        self.aliasName = newAliasName
 
 
 # @package Kaltura
@@ -41824,6 +42100,41 @@ class KalturaLicensedUrlRecordingRequest(KalturaLicensedUrlBaseRequest):
 
 # @package Kaltura
 # @subpackage Client
+class KalturaLineupChannelAssetListResponse(KalturaListResponse):
+    def __init__(self,
+            totalCount=NotImplemented,
+            objects=NotImplemented):
+        KalturaListResponse.__init__(self,
+            totalCount)
+
+        # A list of objects
+        # @var array of KalturaLineupChannelAsset
+        self.objects = objects
+
+
+    PROPERTY_LOADERS = {
+        'objects': (KalturaObjectFactory.createArray, 'KalturaLineupChannelAsset'), 
+    }
+
+    def fromXml(self, node):
+        KalturaListResponse.fromXml(self, node)
+        self.fromXmlImpl(node, KalturaLineupChannelAssetListResponse.PROPERTY_LOADERS)
+
+    def toParams(self):
+        kparams = KalturaListResponse.toParams(self)
+        kparams.put("objectType", "KalturaLineupChannelAssetListResponse")
+        kparams.addArrayIfDefined("objects", self.objects)
+        return kparams
+
+    def getObjects(self):
+        return self.objects
+
+    def setObjects(self, newObjects):
+        self.objects = newObjects
+
+
+# @package Kaltura
+# @subpackage Client
 class KalturaMessageTemplate(KalturaObjectBase):
     def __init__(self,
             message=NotImplemented,
@@ -47702,7 +48013,7 @@ class KalturaHouseholdService(KalturaServiceBase):
         return KalturaObjectFactory.create(resultNode, 'KalturaHousehold')
 
     def list(self, filter, pager = NotImplemented):
-        """Get recently watched media for user, ordered by recently watched first."""
+        """Retrive household for the partner filter by external identifier"""
 
         kparams = KalturaParams()
         kparams.addObjectIfDefined("filter", filter)
@@ -48643,6 +48954,25 @@ class KalturaLicensedUrlService(KalturaServiceBase):
             return self.client.getMultiRequestResult()
         resultNode = self.client.doQueue()
         return KalturaObjectFactory.create(resultNode, 'KalturaLicensedUrl')
+
+
+# @package Kaltura
+# @subpackage Client
+class KalturaLineupService(KalturaServiceBase):
+    def __init__(self, client = None):
+        KalturaServiceBase.__init__(self, client)
+
+    def get(self, pageIndex, pageSize):
+        """Return regional lineup (list of lineup channel asset objects) based on the requester session characteristics and his region."""
+
+        kparams = KalturaParams()
+        kparams.addIntIfDefined("pageIndex", pageIndex);
+        kparams.addIntIfDefined("pageSize", pageSize);
+        self.client.queueServiceActionCall("lineup", "get", "KalturaLineupChannelAssetListResponse", kparams)
+        if self.client.isMultiRequest():
+            return self.client.getMultiRequestResult()
+        resultNode = self.client.doQueue()
+        return KalturaObjectFactory.create(resultNode, 'KalturaLineupChannelAssetListResponse')
 
 
 # @package Kaltura
@@ -52322,6 +52652,7 @@ class KalturaCoreClient(KalturaClientPlugin):
             'label': KalturaLabelService,
             'language': KalturaLanguageService,
             'licensedUrl': KalturaLicensedUrlService,
+            'lineup': KalturaLineupService,
             'mediaConcurrencyRule': KalturaMediaConcurrencyRuleService,
             'mediaFile': KalturaMediaFileService,
             'mediaFileType': KalturaMediaFileTypeService,
@@ -52441,6 +52772,7 @@ class KalturaCoreClient(KalturaClientPlugin):
             'KalturaChannelsOrderBy': KalturaChannelsOrderBy,
             'KalturaChannelStruct': KalturaChannelStruct,
             'KalturaChannelType': KalturaChannelType,
+            'KalturaChronologicalRecordStartTime': KalturaChronologicalRecordStartTime,
             'KalturaCollectionOrderBy': KalturaCollectionOrderBy,
             'KalturaCompensationType': KalturaCompensationType,
             'KalturaConcurrencyLimitationType': KalturaConcurrencyLimitationType,
@@ -53022,6 +53354,8 @@ class KalturaCoreClient(KalturaClientPlugin):
             'KalturaBookmarkEventThreshold': KalturaBookmarkEventThreshold,
             'KalturaCommercePartnerConfig': KalturaCommercePartnerConfig,
             'KalturaConcurrencyPartnerConfig': KalturaConcurrencyPartnerConfig,
+            'KalturaCustomFieldsPartnerConfiguration': KalturaCustomFieldsPartnerConfiguration,
+            'KalturaDefaultParentalSettingsPartnerConfig': KalturaDefaultParentalSettingsPartnerConfig,
             'KalturaRollingDeviceRemovalData': KalturaRollingDeviceRemovalData,
             'KalturaGeneralPartnerConfig': KalturaGeneralPartnerConfig,
             'KalturaObjectVirtualAssetInfo': KalturaObjectVirtualAssetInfo,
@@ -53130,6 +53464,7 @@ class KalturaCoreClient(KalturaClientPlugin):
             'KalturaAssetListResponse': KalturaAssetListResponse,
             'KalturaMediaAsset': KalturaMediaAsset,
             'KalturaLiveAsset': KalturaLiveAsset,
+            'KalturaLineupChannelAsset': KalturaLineupChannelAsset,
             'KalturaProgramAsset': KalturaProgramAsset,
             'KalturaRecordingAsset': KalturaRecordingAsset,
             'KalturaEpg': KalturaEpg,
@@ -53290,6 +53625,7 @@ class KalturaCoreClient(KalturaClientPlugin):
             'KalturaLicensedUrlMediaRequest': KalturaLicensedUrlMediaRequest,
             'KalturaLicensedUrlEpgRequest': KalturaLicensedUrlEpgRequest,
             'KalturaLicensedUrlRecordingRequest': KalturaLicensedUrlRecordingRequest,
+            'KalturaLineupChannelAssetListResponse': KalturaLineupChannelAssetListResponse,
             'KalturaMessageTemplate': KalturaMessageTemplate,
             'KalturaRegistryResponse': KalturaRegistryResponse,
             'KalturaPushMessage': KalturaPushMessage,
