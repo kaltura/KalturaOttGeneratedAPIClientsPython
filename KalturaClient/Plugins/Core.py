@@ -42,7 +42,7 @@ from ..Base import (
     KalturaServiceBase,
 )
 
-API_VERSION = '6.8.0.29600'
+API_VERSION = '6.8.0.29606'
 
 ########## enums ##########
 # @package Kaltura
@@ -1671,6 +1671,8 @@ class KalturaObjectVirtualAssetInfoType(object):
     SUBSCRIPTION = "Subscription"
     SEGMENT = "Segment"
     CATEGORY = "Category"
+    TVOD = "Tvod"
+    BOXSET = "Boxset"
 
     def __init__(self, value):
         self.value = value
@@ -24109,7 +24111,8 @@ class KalturaPpv(KalturaObjectBase):
             adsPolicy=NotImplemented,
             isActive=NotImplemented,
             updateDate=NotImplemented,
-            createDate=NotImplemented):
+            createDate=NotImplemented,
+            virtualAssetId=NotImplemented):
         KalturaObjectBase.__init__(self)
 
         # PPV identifier
@@ -24183,6 +24186,11 @@ class KalturaPpv(KalturaObjectBase):
         # @readonly
         self.createDate = createDate
 
+        # Virtual asset id
+        # @var int
+        # @readonly
+        self.virtualAssetId = virtualAssetId
+
 
     PROPERTY_LOADERS = {
         'id': getXmlNodeText, 
@@ -24202,6 +24210,7 @@ class KalturaPpv(KalturaObjectBase):
         'isActive': getXmlNodeBool, 
         'updateDate': getXmlNodeInt, 
         'createDate': getXmlNodeInt, 
+        'virtualAssetId': getXmlNodeInt, 
     }
 
     def fromXml(self, node):
@@ -24319,6 +24328,9 @@ class KalturaPpv(KalturaObjectBase):
 
     def getCreateDate(self):
         return self.createDate
+
+    def getVirtualAssetId(self):
+        return self.virtualAssetId
 
 
 # @package Kaltura
