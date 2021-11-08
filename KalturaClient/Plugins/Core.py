@@ -42,7 +42,7 @@ from ..Base import (
     KalturaServiceBase,
 )
 
-API_VERSION = '6.8.0.29608'
+API_VERSION = '6.8.0.29620'
 
 ########## enums ##########
 # @package Kaltura
@@ -5788,7 +5788,7 @@ class KalturaUsageModuleFilter(KalturaFilter):
         KalturaFilter.__init__(self,
             orderBy)
 
-        # Comma separated usageModule ids
+        # usageModule id
         # @var int
         self.idEqual = idEqual
 
@@ -19352,6 +19352,7 @@ class KalturaPriceDetails(KalturaObjectBase):
 
         # The price code identifier
         # @var int
+        # @readonly
         self.id = id
 
         # The price code name
@@ -19387,7 +19388,6 @@ class KalturaPriceDetails(KalturaObjectBase):
     def toParams(self):
         kparams = KalturaObjectBase.toParams(self)
         kparams.put("objectType", "KalturaPriceDetails")
-        kparams.addIntIfDefined("id", self.id)
         kparams.addStringIfDefined("name", self.name)
         kparams.addArrayIfDefined("multiCurrencyPrice", self.multiCurrencyPrice)
         kparams.addArrayIfDefined("descriptions", self.descriptions)
@@ -19395,9 +19395,6 @@ class KalturaPriceDetails(KalturaObjectBase):
 
     def getId(self):
         return self.id
-
-    def setId(self, newId):
-        self.id = newId
 
     def getName(self):
         return self.name
@@ -24098,16 +24095,19 @@ class KalturaPpv(KalturaObjectBase):
             id=NotImplemented,
             name=NotImplemented,
             price=NotImplemented,
+            priceDetailsId=NotImplemented,
             fileTypes=NotImplemented,
             fileTypesIds=NotImplemented,
             discountModule=NotImplemented,
+            discountId=NotImplemented,
             couponsGroup=NotImplemented,
+            couponsGroupId=NotImplemented,
             descriptions=NotImplemented,
             productCode=NotImplemented,
             isSubscriptionOnly=NotImplemented,
             firstDeviceLimitation=NotImplemented,
             usageModule=NotImplemented,
-            externalId=NotImplemented,
+            usageModuleId=NotImplemented,
             adsPolicy=NotImplemented,
             isActive=NotImplemented,
             updateDate=NotImplemented,
@@ -24123,25 +24123,41 @@ class KalturaPpv(KalturaObjectBase):
         # @var string
         self.name = name
 
-        # The price of the ppv
+        # This property will deprecated soon. Please use PriceId instead of it.
         # @var KalturaPriceDetails
+        # @readonly
         self.price = price
 
-        # A list of file types identifiers that are supported in this ppv
+        # The price if of the ppv
+        # @var int
+        self.priceDetailsId = priceDetailsId
+
+        # This property will deprecated soon. Please use fileTypesIds instead of it.
         # @var array of KalturaIntegerValue
+        # @readonly
         self.fileTypes = fileTypes
 
         # Comma separated file types identifiers that are supported in this subscription
         # @var string
         self.fileTypesIds = fileTypesIds
 
-        # The internal discount module for the ppv
+        # This property will deprecated soon. Please use DiscountId instead of it.
         # @var KalturaDiscountModule
+        # @readonly
         self.discountModule = discountModule
 
-        # Coupons group for the ppv
+        # The discount id for the ppv
+        # @var int
+        self.discountId = discountId
+
+        # This property will deprecated soon. Please use CouponsGroupId instead of it.
         # @var KalturaCouponsGroup
+        # @readonly
         self.couponsGroup = couponsGroup
+
+        # Coupons group id for the ppv
+        # @var int
+        self.couponsGroupId = couponsGroupId
 
         # A list of the descriptions of the ppv on different languages (language code and translation)
         # @var array of KalturaTranslationToken
@@ -24149,7 +24165,6 @@ class KalturaPpv(KalturaObjectBase):
 
         # Product code for the ppv
         # @var string
-        # @readonly
         self.productCode = productCode
 
         # Indicates whether or not this ppv can be purchased standalone or only as part of a subscription
@@ -24160,13 +24175,14 @@ class KalturaPpv(KalturaObjectBase):
         # @var bool
         self.firstDeviceLimitation = firstDeviceLimitation
 
-        # PPV usage module
+        # This property will deprecated soon. Please use UsageModuleId instead of it.
         # @var KalturaUsageModule
+        # @readonly
         self.usageModule = usageModule
 
-        # External ID
-        # @var string
-        self.externalId = externalId
+        # PPV usage module Id
+        # @var int
+        self.usageModuleId = usageModuleId
 
         # adsPolicy
         # @var KalturaAdsPolicy
@@ -24196,16 +24212,19 @@ class KalturaPpv(KalturaObjectBase):
         'id': getXmlNodeText, 
         'name': getXmlNodeText, 
         'price': (KalturaObjectFactory.create, 'KalturaPriceDetails'), 
+        'priceDetailsId': getXmlNodeInt, 
         'fileTypes': (KalturaObjectFactory.createArray, 'KalturaIntegerValue'), 
         'fileTypesIds': getXmlNodeText, 
         'discountModule': (KalturaObjectFactory.create, 'KalturaDiscountModule'), 
+        'discountId': getXmlNodeInt, 
         'couponsGroup': (KalturaObjectFactory.create, 'KalturaCouponsGroup'), 
+        'couponsGroupId': getXmlNodeInt, 
         'descriptions': (KalturaObjectFactory.createArray, 'KalturaTranslationToken'), 
         'productCode': getXmlNodeText, 
         'isSubscriptionOnly': getXmlNodeBool, 
         'firstDeviceLimitation': getXmlNodeBool, 
         'usageModule': (KalturaObjectFactory.create, 'KalturaUsageModule'), 
-        'externalId': getXmlNodeText, 
+        'usageModuleId': getXmlNodeInt, 
         'adsPolicy': (KalturaEnumsFactory.createString, "KalturaAdsPolicy"), 
         'isActive': getXmlNodeBool, 
         'updateDate': getXmlNodeInt, 
@@ -24222,16 +24241,15 @@ class KalturaPpv(KalturaObjectBase):
         kparams.put("objectType", "KalturaPpv")
         kparams.addStringIfDefined("id", self.id)
         kparams.addStringIfDefined("name", self.name)
-        kparams.addObjectIfDefined("price", self.price)
-        kparams.addArrayIfDefined("fileTypes", self.fileTypes)
+        kparams.addIntIfDefined("priceDetailsId", self.priceDetailsId)
         kparams.addStringIfDefined("fileTypesIds", self.fileTypesIds)
-        kparams.addObjectIfDefined("discountModule", self.discountModule)
-        kparams.addObjectIfDefined("couponsGroup", self.couponsGroup)
+        kparams.addIntIfDefined("discountId", self.discountId)
+        kparams.addIntIfDefined("couponsGroupId", self.couponsGroupId)
         kparams.addArrayIfDefined("descriptions", self.descriptions)
+        kparams.addStringIfDefined("productCode", self.productCode)
         kparams.addBoolIfDefined("isSubscriptionOnly", self.isSubscriptionOnly)
         kparams.addBoolIfDefined("firstDeviceLimitation", self.firstDeviceLimitation)
-        kparams.addObjectIfDefined("usageModule", self.usageModule)
-        kparams.addStringIfDefined("externalId", self.externalId)
+        kparams.addIntIfDefined("usageModuleId", self.usageModuleId)
         kparams.addStringEnumIfDefined("adsPolicy", self.adsPolicy)
         kparams.addBoolIfDefined("isActive", self.isActive)
         return kparams
@@ -24251,14 +24269,14 @@ class KalturaPpv(KalturaObjectBase):
     def getPrice(self):
         return self.price
 
-    def setPrice(self, newPrice):
-        self.price = newPrice
+    def getPriceDetailsId(self):
+        return self.priceDetailsId
+
+    def setPriceDetailsId(self, newPriceDetailsId):
+        self.priceDetailsId = newPriceDetailsId
 
     def getFileTypes(self):
         return self.fileTypes
-
-    def setFileTypes(self, newFileTypes):
-        self.fileTypes = newFileTypes
 
     def getFileTypesIds(self):
         return self.fileTypesIds
@@ -24269,14 +24287,20 @@ class KalturaPpv(KalturaObjectBase):
     def getDiscountModule(self):
         return self.discountModule
 
-    def setDiscountModule(self, newDiscountModule):
-        self.discountModule = newDiscountModule
+    def getDiscountId(self):
+        return self.discountId
+
+    def setDiscountId(self, newDiscountId):
+        self.discountId = newDiscountId
 
     def getCouponsGroup(self):
         return self.couponsGroup
 
-    def setCouponsGroup(self, newCouponsGroup):
-        self.couponsGroup = newCouponsGroup
+    def getCouponsGroupId(self):
+        return self.couponsGroupId
+
+    def setCouponsGroupId(self, newCouponsGroupId):
+        self.couponsGroupId = newCouponsGroupId
 
     def getDescriptions(self):
         return self.descriptions
@@ -24286,6 +24310,9 @@ class KalturaPpv(KalturaObjectBase):
 
     def getProductCode(self):
         return self.productCode
+
+    def setProductCode(self, newProductCode):
+        self.productCode = newProductCode
 
     def getIsSubscriptionOnly(self):
         return self.isSubscriptionOnly
@@ -24302,14 +24329,11 @@ class KalturaPpv(KalturaObjectBase):
     def getUsageModule(self):
         return self.usageModule
 
-    def setUsageModule(self, newUsageModule):
-        self.usageModule = newUsageModule
+    def getUsageModuleId(self):
+        return self.usageModuleId
 
-    def getExternalId(self):
-        return self.externalId
-
-    def setExternalId(self, newExternalId):
-        self.externalId = newExternalId
+    def setUsageModuleId(self, newUsageModuleId):
+        self.usageModuleId = newUsageModuleId
 
     def getAdsPolicy(self):
         return self.adsPolicy
@@ -48985,6 +49009,17 @@ class KalturaLineupService(KalturaServiceBase):
             return self.client.getMultiRequestResult()
         resultNode = self.client.doQueue()
         return KalturaObjectFactory.create(resultNode, 'KalturaLineupChannelAssetListResponse')
+
+    def sendUpdatedNotification(self, regionIds):
+        """Sends lineup update requested notification."""
+
+        kparams = KalturaParams()
+        kparams.addStringIfDefined("regionIds", regionIds)
+        self.client.queueServiceActionCall("lineup", "sendUpdatedNotification", "None", kparams)
+        if self.client.isMultiRequest():
+            return self.client.getMultiRequestResult()
+        resultNode = self.client.doQueue()
+        return getXmlNodeBool(resultNode)
 
 
 # @package Kaltura
