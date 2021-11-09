@@ -42,7 +42,7 @@ from ..Base import (
     KalturaServiceBase,
 )
 
-API_VERSION = '6.8.0.29571'
+API_VERSION = '7.0.0.29582'
 
 ########## enums ##########
 # @package Kaltura
@@ -48851,6 +48851,17 @@ class KalturaLineupService(KalturaServiceBase):
             return self.client.getMultiRequestResult()
         resultNode = self.client.doQueue()
         return KalturaObjectFactory.create(resultNode, 'KalturaLineupChannelAssetListResponse')
+
+    def sendUpdatedNotification(self, regionIds):
+        """Sends lineup update requested notification."""
+
+        kparams = KalturaParams()
+        kparams.addStringIfDefined("regionIds", regionIds)
+        self.client.queueServiceActionCall("lineup", "sendUpdatedNotification", "None", kparams)
+        if self.client.isMultiRequest():
+            return self.client.getMultiRequestResult()
+        resultNode = self.client.doQueue()
+        return getXmlNodeBool(resultNode)
 
 
 # @package Kaltura
