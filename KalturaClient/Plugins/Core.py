@@ -42,7 +42,7 @@ from ..Base import (
     KalturaServiceBase,
 )
 
-API_VERSION = '7.0.0.29605'
+API_VERSION = '6.8.0.29568'
 
 ########## enums ##########
 # @package Kaltura
@@ -1741,7 +1741,6 @@ class KalturaPartnerConfigurationType(object):
     OPC = "Opc"
     BASE = "Base"
     CUSTOMFIELDS = "CustomFields"
-    DEFAULTPARENTALSETTINGS = "DefaultParentalSettings"
 
     def __init__(self, value):
         self.value = value
@@ -7186,7 +7185,8 @@ class KalturaScheduledRecordingProgramFilter(KalturaAssetFilter):
             recordingTypeEqual=NotImplemented,
             channelsIn=NotImplemented,
             startDateGreaterThanOrNull=NotImplemented,
-            endDateLessThanOrNull=NotImplemented):
+            endDateLessThanOrNull=NotImplemented,
+            seriesIdsIn=NotImplemented):
         KalturaAssetFilter.__init__(self,
             orderBy,
             name,
@@ -7209,12 +7209,17 @@ class KalturaScheduledRecordingProgramFilter(KalturaAssetFilter):
         # @var int
         self.endDateLessThanOrNull = endDateLessThanOrNull
 
+        # Series to filter by
+        # @var string
+        self.seriesIdsIn = seriesIdsIn
+
 
     PROPERTY_LOADERS = {
         'recordingTypeEqual': (KalturaEnumsFactory.createString, "KalturaScheduledRecordingAssetType"), 
         'channelsIn': getXmlNodeText, 
         'startDateGreaterThanOrNull': getXmlNodeInt, 
         'endDateLessThanOrNull': getXmlNodeInt, 
+        'seriesIdsIn': getXmlNodeText, 
     }
 
     def fromXml(self, node):
@@ -7228,6 +7233,7 @@ class KalturaScheduledRecordingProgramFilter(KalturaAssetFilter):
         kparams.addStringIfDefined("channelsIn", self.channelsIn)
         kparams.addIntIfDefined("startDateGreaterThanOrNull", self.startDateGreaterThanOrNull)
         kparams.addIntIfDefined("endDateLessThanOrNull", self.endDateLessThanOrNull)
+        kparams.addStringIfDefined("seriesIdsIn", self.seriesIdsIn)
         return kparams
 
     def getRecordingTypeEqual(self):
@@ -7253,6 +7259,12 @@ class KalturaScheduledRecordingProgramFilter(KalturaAssetFilter):
 
     def setEndDateLessThanOrNull(self, newEndDateLessThanOrNull):
         self.endDateLessThanOrNull = newEndDateLessThanOrNull
+
+    def getSeriesIdsIn(self):
+        return self.seriesIdsIn
+
+    def setSeriesIdsIn(self, newSeriesIdsIn):
+        self.seriesIdsIn = newSeriesIdsIn
 
 
 # @package Kaltura
@@ -25217,91 +25229,6 @@ class KalturaCustomFieldsPartnerConfiguration(KalturaPartnerConfiguration):
 
     def setMetaSystemNameInsteadOfAliasList(self, newMetaSystemNameInsteadOfAliasList):
         self.metaSystemNameInsteadOfAliasList = newMetaSystemNameInsteadOfAliasList
-
-
-# @package Kaltura
-# @subpackage Client
-class KalturaDefaultParentalSettingsPartnerConfig(KalturaPartnerConfiguration):
-    def __init__(self,
-            defaultMoviesParentalRuleId=NotImplemented,
-            defaultTvSeriesParentalRuleId=NotImplemented,
-            defaultParentalPin=NotImplemented,
-            defaultPurchasePin=NotImplemented,
-            defaultPurchaseSettings=NotImplemented):
-        KalturaPartnerConfiguration.__init__(self)
-
-        # defaultTvSeriesParentalRuleId
-        # @var int
-        self.defaultMoviesParentalRuleId = defaultMoviesParentalRuleId
-
-        # defaultTvSeriesParentalRuleId
-        # @var int
-        self.defaultTvSeriesParentalRuleId = defaultTvSeriesParentalRuleId
-
-        # defaultParentalPin
-        # @var string
-        self.defaultParentalPin = defaultParentalPin
-
-        # defaultPurchasePin
-        # @var string
-        self.defaultPurchasePin = defaultPurchasePin
-
-        # defaultPurchaseSettings
-        # @var int
-        self.defaultPurchaseSettings = defaultPurchaseSettings
-
-
-    PROPERTY_LOADERS = {
-        'defaultMoviesParentalRuleId': getXmlNodeInt, 
-        'defaultTvSeriesParentalRuleId': getXmlNodeInt, 
-        'defaultParentalPin': getXmlNodeText, 
-        'defaultPurchasePin': getXmlNodeText, 
-        'defaultPurchaseSettings': getXmlNodeInt, 
-    }
-
-    def fromXml(self, node):
-        KalturaPartnerConfiguration.fromXml(self, node)
-        self.fromXmlImpl(node, KalturaDefaultParentalSettingsPartnerConfig.PROPERTY_LOADERS)
-
-    def toParams(self):
-        kparams = KalturaPartnerConfiguration.toParams(self)
-        kparams.put("objectType", "KalturaDefaultParentalSettingsPartnerConfig")
-        kparams.addIntIfDefined("defaultMoviesParentalRuleId", self.defaultMoviesParentalRuleId)
-        kparams.addIntIfDefined("defaultTvSeriesParentalRuleId", self.defaultTvSeriesParentalRuleId)
-        kparams.addStringIfDefined("defaultParentalPin", self.defaultParentalPin)
-        kparams.addStringIfDefined("defaultPurchasePin", self.defaultPurchasePin)
-        kparams.addIntIfDefined("defaultPurchaseSettings", self.defaultPurchaseSettings)
-        return kparams
-
-    def getDefaultMoviesParentalRuleId(self):
-        return self.defaultMoviesParentalRuleId
-
-    def setDefaultMoviesParentalRuleId(self, newDefaultMoviesParentalRuleId):
-        self.defaultMoviesParentalRuleId = newDefaultMoviesParentalRuleId
-
-    def getDefaultTvSeriesParentalRuleId(self):
-        return self.defaultTvSeriesParentalRuleId
-
-    def setDefaultTvSeriesParentalRuleId(self, newDefaultTvSeriesParentalRuleId):
-        self.defaultTvSeriesParentalRuleId = newDefaultTvSeriesParentalRuleId
-
-    def getDefaultParentalPin(self):
-        return self.defaultParentalPin
-
-    def setDefaultParentalPin(self, newDefaultParentalPin):
-        self.defaultParentalPin = newDefaultParentalPin
-
-    def getDefaultPurchasePin(self):
-        return self.defaultPurchasePin
-
-    def setDefaultPurchasePin(self, newDefaultPurchasePin):
-        self.defaultPurchasePin = newDefaultPurchasePin
-
-    def getDefaultPurchaseSettings(self):
-        return self.defaultPurchaseSettings
-
-    def setDefaultPurchaseSettings(self, newDefaultPurchaseSettings):
-        self.defaultPurchaseSettings = newDefaultPurchaseSettings
 
 
 # @package Kaltura
@@ -48852,17 +48779,6 @@ class KalturaLineupService(KalturaServiceBase):
         resultNode = self.client.doQueue()
         return KalturaObjectFactory.create(resultNode, 'KalturaLineupChannelAssetListResponse')
 
-    def sendUpdatedNotification(self, regionIds):
-        """Sends lineup update requested notification."""
-
-        kparams = KalturaParams()
-        kparams.addStringIfDefined("regionIds", regionIds)
-        self.client.queueServiceActionCall("lineup", "sendUpdatedNotification", "None", kparams)
-        if self.client.isMultiRequest():
-            return self.client.getMultiRequestResult()
-        resultNode = self.client.doQueue()
-        return getXmlNodeBool(resultNode)
-
 
 # @package Kaltura
 # @subpackage Client
@@ -53195,7 +53111,6 @@ class KalturaCoreClient(KalturaClientPlugin):
             'KalturaCommercePartnerConfig': KalturaCommercePartnerConfig,
             'KalturaConcurrencyPartnerConfig': KalturaConcurrencyPartnerConfig,
             'KalturaCustomFieldsPartnerConfiguration': KalturaCustomFieldsPartnerConfiguration,
-            'KalturaDefaultParentalSettingsPartnerConfig': KalturaDefaultParentalSettingsPartnerConfig,
             'KalturaRollingDeviceRemovalData': KalturaRollingDeviceRemovalData,
             'KalturaGeneralPartnerConfig': KalturaGeneralPartnerConfig,
             'KalturaObjectVirtualAssetInfo': KalturaObjectVirtualAssetInfo,
