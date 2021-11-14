@@ -42,7 +42,7 @@ from ..Base import (
     KalturaServiceBase,
 )
 
-API_VERSION = '6.8.0.29668'
+API_VERSION = '7.0.0.29708'
 
 ########## enums ##########
 # @package Kaltura
@@ -2301,6 +2301,30 @@ class KalturaScheduledRecordingAssetType(object):
 # @subpackage Client
 class KalturaSearchHistoryOrderBy(object):
     NONE = "NONE"
+
+    def __init__(self, value):
+        self.value = value
+
+    def getValue(self):
+        return self.value
+
+# @package Kaltura
+# @subpackage Client
+class KalturaSearchPriorityCriteriaType(object):
+    KSQL = "KSql"
+
+    def __init__(self, value):
+        self.value = value
+
+    def getValue(self):
+        return self.value
+
+# @package Kaltura
+# @subpackage Client
+class KalturaSearchPriorityGroupOrderBy(object):
+    PRIORITY_DESC = "PRIORITY_DESC"
+    NAME_ASC = "NAME_ASC"
+    NAME_DESC = "NAME_DESC"
 
     def __init__(self, value):
         self.value = value
@@ -9951,6 +9975,54 @@ class KalturaTagFilter(KalturaFilter):
 
     def setIdIn(self, newIdIn):
         self.idIn = newIdIn
+
+
+# @package Kaltura
+# @subpackage Client
+class KalturaSearchPriorityGroupFilter(KalturaFilter):
+    def __init__(self,
+            orderBy=NotImplemented,
+            activeOnlyEqual=NotImplemented,
+            idEqual=NotImplemented):
+        KalturaFilter.__init__(self,
+            orderBy)
+
+        # Return only search priority groups that are in use
+        # @var bool
+        self.activeOnlyEqual = activeOnlyEqual
+
+        # Identifier of search priority group to return
+        # @var int
+        self.idEqual = idEqual
+
+
+    PROPERTY_LOADERS = {
+        'activeOnlyEqual': getXmlNodeBool, 
+        'idEqual': getXmlNodeInt, 
+    }
+
+    def fromXml(self, node):
+        KalturaFilter.fromXml(self, node)
+        self.fromXmlImpl(node, KalturaSearchPriorityGroupFilter.PROPERTY_LOADERS)
+
+    def toParams(self):
+        kparams = KalturaFilter.toParams(self)
+        kparams.put("objectType", "KalturaSearchPriorityGroupFilter")
+        kparams.addBoolIfDefined("activeOnlyEqual", self.activeOnlyEqual)
+        kparams.addIntIfDefined("idEqual", self.idEqual)
+        return kparams
+
+    def getActiveOnlyEqual(self):
+        return self.activeOnlyEqual
+
+    def setActiveOnlyEqual(self, newActiveOnlyEqual):
+        self.activeOnlyEqual = newActiveOnlyEqual
+
+    def getIdEqual(self):
+        return self.idEqual
+
+    def setIdEqual(self, newIdEqual):
+        self.idEqual = newIdEqual
 
 
 # @package Kaltura
@@ -34396,6 +34468,154 @@ class KalturaAssetHistoryListResponse(KalturaListResponse):
 
 # @package Kaltura
 # @subpackage Client
+class KalturaSearchPriorityCriteria(KalturaObjectBase):
+    def __init__(self,
+            type=NotImplemented,
+            value=NotImplemented):
+        KalturaObjectBase.__init__(self)
+
+        # Criterion type
+        # @var KalturaSearchPriorityCriteriaType
+        self.type = type
+
+        # Condition
+        #             KSQL has to have no more than 10 conditions. Text, boolean, enum and tag fields can be used only with = operator, numeric and datetime fields - only with &lt;, = and &gt; operators.
+        # @var string
+        self.value = value
+
+
+    PROPERTY_LOADERS = {
+        'type': (KalturaEnumsFactory.createString, "KalturaSearchPriorityCriteriaType"), 
+        'value': getXmlNodeText, 
+    }
+
+    def fromXml(self, node):
+        KalturaObjectBase.fromXml(self, node)
+        self.fromXmlImpl(node, KalturaSearchPriorityCriteria.PROPERTY_LOADERS)
+
+    def toParams(self):
+        kparams = KalturaObjectBase.toParams(self)
+        kparams.put("objectType", "KalturaSearchPriorityCriteria")
+        kparams.addStringEnumIfDefined("type", self.type)
+        kparams.addStringIfDefined("value", self.value)
+        return kparams
+
+    def getType(self):
+        return self.type
+
+    def setType(self, newType):
+        self.type = newType
+
+    def getValue(self):
+        return self.value
+
+    def setValue(self, newValue):
+        self.value = newValue
+
+
+# @package Kaltura
+# @subpackage Client
+class KalturaSearchPriorityGroup(KalturaObjectBase):
+    def __init__(self,
+            id=NotImplemented,
+            name=NotImplemented,
+            multilingualName=NotImplemented,
+            criteria=NotImplemented):
+        KalturaObjectBase.__init__(self)
+
+        # Identifier
+        # @var int
+        # @readonly
+        self.id = id
+
+        # Name
+        # @var string
+        # @readonly
+        self.name = name
+
+        # Name
+        # @var array of KalturaTranslationToken
+        self.multilingualName = multilingualName
+
+        # Search criterion
+        # @var KalturaSearchPriorityCriteria
+        self.criteria = criteria
+
+
+    PROPERTY_LOADERS = {
+        'id': getXmlNodeInt, 
+        'name': getXmlNodeText, 
+        'multilingualName': (KalturaObjectFactory.createArray, 'KalturaTranslationToken'), 
+        'criteria': (KalturaObjectFactory.create, 'KalturaSearchPriorityCriteria'), 
+    }
+
+    def fromXml(self, node):
+        KalturaObjectBase.fromXml(self, node)
+        self.fromXmlImpl(node, KalturaSearchPriorityGroup.PROPERTY_LOADERS)
+
+    def toParams(self):
+        kparams = KalturaObjectBase.toParams(self)
+        kparams.put("objectType", "KalturaSearchPriorityGroup")
+        kparams.addArrayIfDefined("multilingualName", self.multilingualName)
+        kparams.addObjectIfDefined("criteria", self.criteria)
+        return kparams
+
+    def getId(self):
+        return self.id
+
+    def getName(self):
+        return self.name
+
+    def getMultilingualName(self):
+        return self.multilingualName
+
+    def setMultilingualName(self, newMultilingualName):
+        self.multilingualName = newMultilingualName
+
+    def getCriteria(self):
+        return self.criteria
+
+    def setCriteria(self, newCriteria):
+        self.criteria = newCriteria
+
+
+# @package Kaltura
+# @subpackage Client
+class KalturaSearchPriorityGroupListResponse(KalturaListResponse):
+    def __init__(self,
+            totalCount=NotImplemented,
+            objects=NotImplemented):
+        KalturaListResponse.__init__(self,
+            totalCount)
+
+        # List of search priority groups
+        # @var array of KalturaSearchPriorityGroup
+        self.objects = objects
+
+
+    PROPERTY_LOADERS = {
+        'objects': (KalturaObjectFactory.createArray, 'KalturaSearchPriorityGroup'), 
+    }
+
+    def fromXml(self, node):
+        KalturaListResponse.fromXml(self, node)
+        self.fromXmlImpl(node, KalturaSearchPriorityGroupListResponse.PROPERTY_LOADERS)
+
+    def toParams(self):
+        kparams = KalturaListResponse.toParams(self)
+        kparams.put("objectType", "KalturaSearchPriorityGroupListResponse")
+        kparams.addArrayIfDefined("objects", self.objects)
+        return kparams
+
+    def getObjects(self):
+        return self.objects
+
+    def setObjects(self, newObjects):
+        self.objects = newObjects
+
+
+# @package Kaltura
+# @subpackage Client
 class KalturaSuspendSettings(KalturaObjectBase):
     """Suspend Settings"""
 
@@ -43862,6 +44082,39 @@ class KalturaRegionChannelNumber(KalturaObjectBase):
 
 # @package Kaltura
 # @subpackage Client
+class KalturaSearchPriorityGroupOrderedIdsSet(KalturaObjectBase):
+    def __init__(self,
+            priorityGroupIds=NotImplemented):
+        KalturaObjectBase.__init__(self)
+
+        # The order and effectively the priority of each group.
+        # @var string
+        self.priorityGroupIds = priorityGroupIds
+
+
+    PROPERTY_LOADERS = {
+        'priorityGroupIds': getXmlNodeText, 
+    }
+
+    def fromXml(self, node):
+        KalturaObjectBase.fromXml(self, node)
+        self.fromXmlImpl(node, KalturaSearchPriorityGroupOrderedIdsSet.PROPERTY_LOADERS)
+
+    def toParams(self):
+        kparams = KalturaObjectBase.toParams(self)
+        kparams.put("objectType", "KalturaSearchPriorityGroupOrderedIdsSet")
+        kparams.addStringIfDefined("priorityGroupIds", self.priorityGroupIds)
+        return kparams
+
+    def getPriorityGroupIds(self):
+        return self.priorityGroupIds
+
+    def setPriorityGroupIds(self, newPriorityGroupIds):
+        self.priorityGroupIds = newPriorityGroupIds
+
+
+# @package Kaltura
+# @subpackage Client
 class KalturaSessionCharacteristic(KalturaObjectBase):
     """Kaltura Session Characteristic"""
 
@@ -51222,6 +51475,87 @@ class KalturaSearchHistoryService(KalturaServiceBase):
 
 # @package Kaltura
 # @subpackage Client
+class KalturaSearchPriorityGroupService(KalturaServiceBase):
+    def __init__(self, client = None):
+        KalturaServiceBase.__init__(self, client)
+
+    def add(self, searchPriorityGroup):
+        """Add a new priority group."""
+
+        kparams = KalturaParams()
+        kparams.addObjectIfDefined("searchPriorityGroup", searchPriorityGroup)
+        self.client.queueServiceActionCall("searchprioritygroup", "add", "KalturaSearchPriorityGroup", kparams)
+        if self.client.isMultiRequest():
+            return self.client.getMultiRequestResult()
+        resultNode = self.client.doQueue()
+        return KalturaObjectFactory.create(resultNode, 'KalturaSearchPriorityGroup')
+
+    def delete(self, id):
+        """Delete the existing priority group by its identifier."""
+
+        kparams = KalturaParams()
+        kparams.addIntIfDefined("id", id);
+        self.client.queueServiceActionCall("searchprioritygroup", "delete", "None", kparams)
+        if self.client.isMultiRequest():
+            return self.client.getMultiRequestResult()
+        resultNode = self.client.doQueue()
+        return getXmlNodeBool(resultNode)
+
+    def list(self, filter, pager = NotImplemented):
+        """Gets list of search priority groups which meet the filter criteria."""
+
+        kparams = KalturaParams()
+        kparams.addObjectIfDefined("filter", filter)
+        kparams.addObjectIfDefined("pager", pager)
+        self.client.queueServiceActionCall("searchprioritygroup", "list", "KalturaSearchPriorityGroupListResponse", kparams)
+        if self.client.isMultiRequest():
+            return self.client.getMultiRequestResult()
+        resultNode = self.client.doQueue()
+        return KalturaObjectFactory.create(resultNode, 'KalturaSearchPriorityGroupListResponse')
+
+    def update(self, id, searchPriorityGroup):
+        """Update an existing priority group."""
+
+        kparams = KalturaParams()
+        kparams.addIntIfDefined("id", id);
+        kparams.addObjectIfDefined("searchPriorityGroup", searchPriorityGroup)
+        self.client.queueServiceActionCall("searchprioritygroup", "update", "KalturaSearchPriorityGroup", kparams)
+        if self.client.isMultiRequest():
+            return self.client.getMultiRequestResult()
+        resultNode = self.client.doQueue()
+        return KalturaObjectFactory.create(resultNode, 'KalturaSearchPriorityGroup')
+
+
+# @package Kaltura
+# @subpackage Client
+class KalturaSearchPriorityGroupOrderedIdsSetService(KalturaServiceBase):
+    def __init__(self, client = None):
+        KalturaServiceBase.__init__(self, client)
+
+    def get(self):
+        """Return the current ordering of priority groups for the partner."""
+
+        kparams = KalturaParams()
+        self.client.queueServiceActionCall("searchprioritygrouporderedidsset", "get", "KalturaSearchPriorityGroupOrderedIdsSet", kparams)
+        if self.client.isMultiRequest():
+            return self.client.getMultiRequestResult()
+        resultNode = self.client.doQueue()
+        return KalturaObjectFactory.create(resultNode, 'KalturaSearchPriorityGroupOrderedIdsSet')
+
+    def set(self, orderedList):
+        """Set the ordering of priority groups for the partner."""
+
+        kparams = KalturaParams()
+        kparams.addObjectIfDefined("orderedList", orderedList)
+        self.client.queueServiceActionCall("searchprioritygrouporderedidsset", "set", "KalturaSearchPriorityGroupOrderedIdsSet", kparams)
+        if self.client.isMultiRequest():
+            return self.client.getMultiRequestResult()
+        resultNode = self.client.doQueue()
+        return KalturaObjectFactory.create(resultNode, 'KalturaSearchPriorityGroupOrderedIdsSet')
+
+
+# @package Kaltura
+# @subpackage Client
 class KalturaSegmentationTypeService(KalturaServiceBase):
     def __init__(self, client = None):
         KalturaServiceBase.__init__(self, client)
@@ -52915,6 +53249,8 @@ class KalturaCoreClient(KalturaClientPlugin):
             'reminder': KalturaReminderService,
             'report': KalturaReportService,
             'searchHistory': KalturaSearchHistoryService,
+            'searchPriorityGroup': KalturaSearchPriorityGroupService,
+            'searchPriorityGroupOrderedIdsSet': KalturaSearchPriorityGroupOrderedIdsSetService,
             'segmentationType': KalturaSegmentationTypeService,
             'seriesRecording': KalturaSeriesRecordingService,
             'session': KalturaSessionService,
@@ -53118,6 +53454,8 @@ class KalturaCoreClient(KalturaClientPlugin):
             'KalturaRuleType': KalturaRuleType,
             'KalturaScheduledRecordingAssetType': KalturaScheduledRecordingAssetType,
             'KalturaSearchHistoryOrderBy': KalturaSearchHistoryOrderBy,
+            'KalturaSearchPriorityCriteriaType': KalturaSearchPriorityCriteriaType,
+            'KalturaSearchPriorityGroupOrderBy': KalturaSearchPriorityGroupOrderBy,
             'KalturaSeriesRecordingOrderBy': KalturaSeriesRecordingOrderBy,
             'KalturaSeriesReminderOrderBy': KalturaSeriesReminderOrderBy,
             'KalturaSkipOperators': KalturaSkipOperators,
@@ -53309,6 +53647,7 @@ class KalturaCoreClient(KalturaClientPlugin):
             'KalturaMediaFileFilter': KalturaMediaFileFilter,
             'KalturaStreamingDeviceFilter': KalturaStreamingDeviceFilter,
             'KalturaTagFilter': KalturaTagFilter,
+            'KalturaSearchPriorityGroupFilter': KalturaSearchPriorityGroupFilter,
             'KalturaPaymentMethodProfileFilter': KalturaPaymentMethodProfileFilter,
             'KalturaAssetRuleFilter': KalturaAssetRuleFilter,
             'KalturaAssetUserRuleFilter': KalturaAssetUserRuleFilter,
@@ -53717,6 +54056,9 @@ class KalturaCoreClient(KalturaClientPlugin):
             'KalturaTagListResponse': KalturaTagListResponse,
             'KalturaAssetHistory': KalturaAssetHistory,
             'KalturaAssetHistoryListResponse': KalturaAssetHistoryListResponse,
+            'KalturaSearchPriorityCriteria': KalturaSearchPriorityCriteria,
+            'KalturaSearchPriorityGroup': KalturaSearchPriorityGroup,
+            'KalturaSearchPriorityGroupListResponse': KalturaSearchPriorityGroupListResponse,
             'KalturaSuspendSettings': KalturaSuspendSettings,
             'KalturaHouseholdPaymentGateway': KalturaHouseholdPaymentGateway,
             'KalturaHouseholdPaymentGatewayListResponse': KalturaHouseholdPaymentGatewayListResponse,
@@ -53873,6 +54215,7 @@ class KalturaCoreClient(KalturaClientPlugin):
             'KalturaPurchaseSettings': KalturaPurchaseSettings,
             'KalturaActionResult': KalturaActionResult,
             'KalturaRegionChannelNumber': KalturaRegionChannelNumber,
+            'KalturaSearchPriorityGroupOrderedIdsSet': KalturaSearchPriorityGroupOrderedIdsSet,
             'KalturaSessionCharacteristic': KalturaSessionCharacteristic,
             'KalturaSmsAdapterProfileListResponse': KalturaSmsAdapterProfileListResponse,
             'KalturaNetworkActionStatus': KalturaNetworkActionStatus,
