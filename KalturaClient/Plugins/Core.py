@@ -42,7 +42,7 @@ from ..Base import (
     KalturaServiceBase,
 )
 
-API_VERSION = '7.1.0.29649'
+API_VERSION = '7.1.0.29664'
 
 ########## enums ##########
 # @package Kaltura
@@ -1431,6 +1431,21 @@ class KalturaIngestProfileOverlapPolicy(object):
     REJECT = "REJECT"
     CUT_SOURCE = "CUT_SOURCE"
     CUT_TARGET = "CUT_TARGET"
+
+    def __init__(self, value):
+        self.value = value
+
+    def getValue(self):
+        return self.value
+
+# @package Kaltura
+# @subpackage Client
+class KalturaIngestStatus(object):
+    TOTAL_FAILURE = "TOTAL_FAILURE"
+    PARTIAL_FAILURE = "PARTIAL_FAILURE"
+    WARNING = "WARNING"
+    IN_PROGRESS = "IN_PROGRESS"
+    SUCCESS = "SUCCESS"
 
     def __init__(self, value):
         self.value = value
@@ -6414,6 +6429,128 @@ class KalturaTopicNotificationMessageFilter(KalturaFilter):
 
     def setTopicNotificationIdEqual(self, newTopicNotificationIdEqual):
         self.topicNotificationIdEqual = newTopicNotificationIdEqual
+
+
+# @package Kaltura
+# @subpackage Client
+class KalturaIngestByCompoundFilter(KalturaFilter):
+    def __init__(self,
+            orderBy=NotImplemented,
+            ingestNameContains=NotImplemented,
+            ingestedByUserIdIn=NotImplemented,
+            ingestStatusIn=NotImplemented,
+            createdDateGreaterThan=NotImplemented,
+            createdDateSmallerThan=NotImplemented):
+        KalturaFilter.__init__(self,
+            orderBy)
+
+        # A string that is included in the ingest file name
+        # @var string
+        self.ingestNameContains = ingestNameContains
+
+        # Comma seperated user ids
+        # @var string
+        self.ingestedByUserIdIn = ingestedByUserIdIn
+
+        # Comma seperated valid stutuses
+        # @var string
+        self.ingestStatusIn = ingestStatusIn
+
+        # Ingest created date greater then this value. . Date and time represented as epoch.
+        # @var int
+        self.createdDateGreaterThan = createdDateGreaterThan
+
+        # Ingest created date smaller than this value. Date and time represented as epoch.
+        # @var int
+        self.createdDateSmallerThan = createdDateSmallerThan
+
+
+    PROPERTY_LOADERS = {
+        'ingestNameContains': getXmlNodeText, 
+        'ingestedByUserIdIn': getXmlNodeText, 
+        'ingestStatusIn': getXmlNodeText, 
+        'createdDateGreaterThan': getXmlNodeInt, 
+        'createdDateSmallerThan': getXmlNodeInt, 
+    }
+
+    def fromXml(self, node):
+        KalturaFilter.fromXml(self, node)
+        self.fromXmlImpl(node, KalturaIngestByCompoundFilter.PROPERTY_LOADERS)
+
+    def toParams(self):
+        kparams = KalturaFilter.toParams(self)
+        kparams.put("objectType", "KalturaIngestByCompoundFilter")
+        kparams.addStringIfDefined("ingestNameContains", self.ingestNameContains)
+        kparams.addStringIfDefined("ingestedByUserIdIn", self.ingestedByUserIdIn)
+        kparams.addStringIfDefined("ingestStatusIn", self.ingestStatusIn)
+        kparams.addIntIfDefined("createdDateGreaterThan", self.createdDateGreaterThan)
+        kparams.addIntIfDefined("createdDateSmallerThan", self.createdDateSmallerThan)
+        return kparams
+
+    def getIngestNameContains(self):
+        return self.ingestNameContains
+
+    def setIngestNameContains(self, newIngestNameContains):
+        self.ingestNameContains = newIngestNameContains
+
+    def getIngestedByUserIdIn(self):
+        return self.ingestedByUserIdIn
+
+    def setIngestedByUserIdIn(self, newIngestedByUserIdIn):
+        self.ingestedByUserIdIn = newIngestedByUserIdIn
+
+    def getIngestStatusIn(self):
+        return self.ingestStatusIn
+
+    def setIngestStatusIn(self, newIngestStatusIn):
+        self.ingestStatusIn = newIngestStatusIn
+
+    def getCreatedDateGreaterThan(self):
+        return self.createdDateGreaterThan
+
+    def setCreatedDateGreaterThan(self, newCreatedDateGreaterThan):
+        self.createdDateGreaterThan = newCreatedDateGreaterThan
+
+    def getCreatedDateSmallerThan(self):
+        return self.createdDateSmallerThan
+
+    def setCreatedDateSmallerThan(self, newCreatedDateSmallerThan):
+        self.createdDateSmallerThan = newCreatedDateSmallerThan
+
+
+# @package Kaltura
+# @subpackage Client
+class KalturaIngestByIdsFilter(KalturaFilter):
+    def __init__(self,
+            orderBy=NotImplemented,
+            ingestIdIn=NotImplemented):
+        KalturaFilter.__init__(self,
+            orderBy)
+
+        # Comma seperated ingest profile ids
+        # @var string
+        self.ingestIdIn = ingestIdIn
+
+
+    PROPERTY_LOADERS = {
+        'ingestIdIn': getXmlNodeText, 
+    }
+
+    def fromXml(self, node):
+        KalturaFilter.fromXml(self, node)
+        self.fromXmlImpl(node, KalturaIngestByIdsFilter.PROPERTY_LOADERS)
+
+    def toParams(self):
+        kparams = KalturaFilter.toParams(self)
+        kparams.put("objectType", "KalturaIngestByIdsFilter")
+        kparams.addStringIfDefined("ingestIdIn", self.ingestIdIn)
+        return kparams
+
+    def getIngestIdIn(self):
+        return self.ingestIdIn
+
+    def setIngestIdIn(self, newIngestIdIn):
+        self.ingestIdIn = newIngestIdIn
 
 
 # @package Kaltura
@@ -11615,7 +11752,8 @@ class KalturaAnnouncement(KalturaObjectBase):
             mailTemplate=NotImplemented,
             mailSubject=NotImplemented,
             includeSms=NotImplemented,
-            includeIot=NotImplemented):
+            includeIot=NotImplemented,
+            includeUserInbox=NotImplemented):
         KalturaObjectBase.__init__(self)
 
         # Announcement name
@@ -11676,6 +11814,10 @@ class KalturaAnnouncement(KalturaObjectBase):
         # @var bool
         self.includeIot = includeIot
 
+        # Should add to user inbox
+        # @var bool
+        self.includeUserInbox = includeUserInbox
+
 
     PROPERTY_LOADERS = {
         'name': getXmlNodeText, 
@@ -11692,6 +11834,7 @@ class KalturaAnnouncement(KalturaObjectBase):
         'mailSubject': getXmlNodeText, 
         'includeSms': getXmlNodeBool, 
         'includeIot': getXmlNodeBool, 
+        'includeUserInbox': getXmlNodeBool, 
     }
 
     def fromXml(self, node):
@@ -11713,6 +11856,7 @@ class KalturaAnnouncement(KalturaObjectBase):
         kparams.addStringIfDefined("mailSubject", self.mailSubject)
         kparams.addBoolIfDefined("includeSms", self.includeSms)
         kparams.addBoolIfDefined("includeIot", self.includeIot)
+        kparams.addBoolIfDefined("includeUserInbox", self.includeUserInbox)
         return kparams
 
     def getName(self):
@@ -11792,6 +11936,12 @@ class KalturaAnnouncement(KalturaObjectBase):
 
     def setIncludeIot(self, newIncludeIot):
         self.includeIot = newIncludeIot
+
+    def getIncludeUserInbox(self):
+        return self.includeUserInbox
+
+    def setIncludeUserInbox(self, newIncludeUserInbox):
+        self.includeUserInbox = newIncludeUserInbox
 
 
 # @package Kaltura
@@ -42217,6 +42367,241 @@ class KalturaUrlResource(KalturaContentResource):
 
 # @package Kaltura
 # @subpackage Client
+class KalturaIngestStatusEpgConfiguration(KalturaObjectBase):
+    def __init__(self,
+            isSupported=NotImplemented,
+            retainingPeriod=NotImplemented):
+        KalturaObjectBase.__init__(self)
+
+        # Defines whether partner in question enabled core ingest status service.
+        # @var bool
+        self.isSupported = isSupported
+
+        # Defines the time in seconds that the service retain information about ingest status.
+        # @var int
+        self.retainingPeriod = retainingPeriod
+
+
+    PROPERTY_LOADERS = {
+        'isSupported': getXmlNodeBool, 
+        'retainingPeriod': getXmlNodeInt, 
+    }
+
+    def fromXml(self, node):
+        KalturaObjectBase.fromXml(self, node)
+        self.fromXmlImpl(node, KalturaIngestStatusEpgConfiguration.PROPERTY_LOADERS)
+
+    def toParams(self):
+        kparams = KalturaObjectBase.toParams(self)
+        kparams.put("objectType", "KalturaIngestStatusEpgConfiguration")
+        kparams.addBoolIfDefined("isSupported", self.isSupported)
+        kparams.addIntIfDefined("retainingPeriod", self.retainingPeriod)
+        return kparams
+
+    def getIsSupported(self):
+        return self.isSupported
+
+    def setIsSupported(self, newIsSupported):
+        self.isSupported = newIsSupported
+
+    def getRetainingPeriod(self):
+        return self.retainingPeriod
+
+    def setRetainingPeriod(self, newRetainingPeriod):
+        self.retainingPeriod = newRetainingPeriod
+
+
+# @package Kaltura
+# @subpackage Client
+class KalturaIngestStatusPartnerConfiguration(KalturaObjectBase):
+    def __init__(self,
+            epg=NotImplemented):
+        KalturaObjectBase.__init__(self)
+
+        # Defines the epg configuration of the partner.
+        # @var KalturaIngestStatusEpgConfiguration
+        self.epg = epg
+
+
+    PROPERTY_LOADERS = {
+        'epg': (KalturaObjectFactory.create, 'KalturaIngestStatusEpgConfiguration'), 
+    }
+
+    def fromXml(self, node):
+        KalturaObjectBase.fromXml(self, node)
+        self.fromXmlImpl(node, KalturaIngestStatusPartnerConfiguration.PROPERTY_LOADERS)
+
+    def toParams(self):
+        kparams = KalturaObjectBase.toParams(self)
+        kparams.put("objectType", "KalturaIngestStatusPartnerConfiguration")
+        kparams.addObjectIfDefined("epg", self.epg)
+        return kparams
+
+    def getEpg(self):
+        return self.epg
+
+    def setEpg(self, newEpg):
+        self.epg = newEpg
+
+
+# @package Kaltura
+# @subpackage Client
+class KalturaIngestEpg(KalturaObjectBase):
+    def __init__(self,
+            ingestId=NotImplemented,
+            ingestName=NotImplemented,
+            ingestFilenameExtension=NotImplemented,
+            createdDate=NotImplemented,
+            ingestedByUserId=NotImplemented,
+            completedDate=NotImplemented,
+            ingestProfileId=NotImplemented,
+            status=NotImplemented):
+        KalturaObjectBase.__init__(self)
+
+        # Unique id of the ingest job in question
+        # @var int
+        # @readonly
+        self.ingestId = ingestId
+
+        # The ingested file name without its extention
+        # @var string
+        self.ingestName = ingestName
+
+        # The ingested file name extention
+        # @var string
+        self.ingestFilenameExtension = ingestFilenameExtension
+
+        # The ingest job created date and time. Date and time represented as epoch.
+        # @var int
+        self.createdDate = createdDate
+
+        # The user id of the addFromBulkUpload caller.
+        # @var int
+        self.ingestedByUserId = ingestedByUserId
+
+        # The ingest job completed date and time. Date and time represented as epoch.
+        # @var int
+        self.completedDate = completedDate
+
+        # The ingest profile id that of the ingest job.
+        # @var int
+        self.ingestProfileId = ingestProfileId
+
+        # The ingest profile id that of the ingest job.
+        # @var KalturaIngestStatus
+        self.status = status
+
+
+    PROPERTY_LOADERS = {
+        'ingestId': getXmlNodeInt, 
+        'ingestName': getXmlNodeText, 
+        'ingestFilenameExtension': getXmlNodeText, 
+        'createdDate': getXmlNodeInt, 
+        'ingestedByUserId': getXmlNodeInt, 
+        'completedDate': getXmlNodeInt, 
+        'ingestProfileId': getXmlNodeInt, 
+        'status': (KalturaEnumsFactory.createString, "KalturaIngestStatus"), 
+    }
+
+    def fromXml(self, node):
+        KalturaObjectBase.fromXml(self, node)
+        self.fromXmlImpl(node, KalturaIngestEpg.PROPERTY_LOADERS)
+
+    def toParams(self):
+        kparams = KalturaObjectBase.toParams(self)
+        kparams.put("objectType", "KalturaIngestEpg")
+        kparams.addStringIfDefined("ingestName", self.ingestName)
+        kparams.addStringIfDefined("ingestFilenameExtension", self.ingestFilenameExtension)
+        kparams.addIntIfDefined("createdDate", self.createdDate)
+        kparams.addIntIfDefined("ingestedByUserId", self.ingestedByUserId)
+        kparams.addIntIfDefined("completedDate", self.completedDate)
+        kparams.addIntIfDefined("ingestProfileId", self.ingestProfileId)
+        kparams.addStringEnumIfDefined("status", self.status)
+        return kparams
+
+    def getIngestId(self):
+        return self.ingestId
+
+    def getIngestName(self):
+        return self.ingestName
+
+    def setIngestName(self, newIngestName):
+        self.ingestName = newIngestName
+
+    def getIngestFilenameExtension(self):
+        return self.ingestFilenameExtension
+
+    def setIngestFilenameExtension(self, newIngestFilenameExtension):
+        self.ingestFilenameExtension = newIngestFilenameExtension
+
+    def getCreatedDate(self):
+        return self.createdDate
+
+    def setCreatedDate(self, newCreatedDate):
+        self.createdDate = newCreatedDate
+
+    def getIngestedByUserId(self):
+        return self.ingestedByUserId
+
+    def setIngestedByUserId(self, newIngestedByUserId):
+        self.ingestedByUserId = newIngestedByUserId
+
+    def getCompletedDate(self):
+        return self.completedDate
+
+    def setCompletedDate(self, newCompletedDate):
+        self.completedDate = newCompletedDate
+
+    def getIngestProfileId(self):
+        return self.ingestProfileId
+
+    def setIngestProfileId(self, newIngestProfileId):
+        self.ingestProfileId = newIngestProfileId
+
+    def getStatus(self):
+        return self.status
+
+    def setStatus(self, newStatus):
+        self.status = newStatus
+
+
+# @package Kaltura
+# @subpackage Client
+class KalturaIngestStatusEpgListResponse(KalturaListResponse):
+    def __init__(self,
+            totalCount=NotImplemented,
+            objects=NotImplemented):
+        KalturaListResponse.__init__(self,
+            totalCount)
+
+        # IngestStatus
+        # @var array of KalturaIngestEpg
+        self.objects = objects
+
+
+    PROPERTY_LOADERS = {
+        'objects': (KalturaObjectFactory.createArray, 'KalturaIngestEpg'), 
+    }
+
+    def fromXml(self, node):
+        KalturaListResponse.fromXml(self, node)
+        self.fromXmlImpl(node, KalturaIngestStatusEpgListResponse.PROPERTY_LOADERS)
+
+    def toParams(self):
+        kparams = KalturaListResponse.toParams(self)
+        kparams.put("objectType", "KalturaIngestStatusEpgListResponse")
+        kparams.addArrayIfDefined("objects", self.objects)
+        return kparams
+
+    def getObjects(self):
+        return self.objects
+
+    def setObjects(self, newObjects):
+        self.objects = newObjects
+
+
+# @package Kaltura
+# @subpackage Client
 class KalturaIotDefault(KalturaObjectBase):
     def __init__(self,
             poolId=NotImplemented,
@@ -49459,6 +49844,46 @@ class KalturaIngestProfileService(KalturaServiceBase):
 
 # @package Kaltura
 # @subpackage Client
+class KalturaIngestStatusService(KalturaServiceBase):
+    def __init__(self, client = None):
+        KalturaServiceBase.__init__(self, client)
+
+    def getEpgList(self, idsFilter = NotImplemented, filter = NotImplemented, pager = NotImplemented):
+        """Response with list of ingest jobs."""
+
+        kparams = KalturaParams()
+        kparams.addObjectIfDefined("idsFilter", idsFilter)
+        kparams.addObjectIfDefined("filter", filter)
+        kparams.addObjectIfDefined("pager", pager)
+        self.client.queueServiceActionCall("ingeststatus", "getEpgList", "KalturaIngestStatusEpgListResponse", kparams)
+        if self.client.isMultiRequest():
+            return self.client.getMultiRequestResult()
+        resultNode = self.client.doQueue()
+        return KalturaObjectFactory.create(resultNode, 'KalturaIngestStatusEpgListResponse')
+
+    def getPartnerConfiguration(self):
+        """Returns Core Ingest service partner configurations"""
+
+        kparams = KalturaParams()
+        self.client.queueServiceActionCall("ingeststatus", "getPartnerConfiguration", "KalturaIngestStatusPartnerConfiguration", kparams)
+        if self.client.isMultiRequest():
+            return self.client.getMultiRequestResult()
+        resultNode = self.client.doQueue()
+        return KalturaObjectFactory.create(resultNode, 'KalturaIngestStatusPartnerConfiguration')
+
+    def updatePartnerConfiguration(self, config):
+        """Returns Core Ingest service partner configurations"""
+
+        kparams = KalturaParams()
+        kparams.addObjectIfDefined("config", config)
+        self.client.queueServiceActionCall("ingeststatus", "updatePartnerConfiguration", "None", kparams)
+        if self.client.isMultiRequest():
+            return self.client.getMultiRequestResult()
+        resultNode = self.client.doQueue()
+
+
+# @package Kaltura
+# @subpackage Client
 class KalturaIotService(KalturaServiceBase):
     def __init__(self, client = None):
         KalturaServiceBase.__init__(self, client)
@@ -53397,6 +53822,7 @@ class KalturaCoreClient(KalturaClientPlugin):
             'imageType': KalturaImageTypeService,
             'inboxMessage': KalturaInboxMessageService,
             'IngestProfile': KalturaIngestProfileService,
+            'ingestStatus': KalturaIngestStatusService,
             'iot': KalturaIotService,
             'iotProfile': KalturaIotProfileService,
             'label': KalturaLabelService,
@@ -53585,6 +54011,7 @@ class KalturaCoreClient(KalturaClientPlugin):
             'KalturaInboxMessageType': KalturaInboxMessageType,
             'KalturaIngestProfileAutofillPolicy': KalturaIngestProfileAutofillPolicy,
             'KalturaIngestProfileOverlapPolicy': KalturaIngestProfileOverlapPolicy,
+            'KalturaIngestStatus': KalturaIngestStatus,
             'KalturaIotOrderBy': KalturaIotOrderBy,
             'KalturaIotProfileOrderBy': KalturaIotProfileOrderBy,
             'KalturaLabelOrderBy': KalturaLabelOrderBy,
@@ -53777,6 +54204,8 @@ class KalturaCoreClient(KalturaClientPlugin):
             'KalturaTopicNotificationFilter': KalturaTopicNotificationFilter,
             'KalturaSubscriptionSubscribeReference': KalturaSubscriptionSubscribeReference,
             'KalturaTopicNotificationMessageFilter': KalturaTopicNotificationMessageFilter,
+            'KalturaIngestByCompoundFilter': KalturaIngestByCompoundFilter,
+            'KalturaIngestByIdsFilter': KalturaIngestByIdsFilter,
             'KalturaAggregationCountFilter': KalturaAggregationCountFilter,
             'KalturaPersistedFilter': KalturaPersistedFilter,
             'KalturaDynamicOrderBy': KalturaDynamicOrderBy,
@@ -54376,6 +54805,10 @@ class KalturaCoreClient(KalturaClientPlugin):
             'KalturaContentResource': KalturaContentResource,
             'KalturaUploadedFileTokenResource': KalturaUploadedFileTokenResource,
             'KalturaUrlResource': KalturaUrlResource,
+            'KalturaIngestStatusEpgConfiguration': KalturaIngestStatusEpgConfiguration,
+            'KalturaIngestStatusPartnerConfiguration': KalturaIngestStatusPartnerConfiguration,
+            'KalturaIngestEpg': KalturaIngestEpg,
+            'KalturaIngestStatusEpgListResponse': KalturaIngestStatusEpgListResponse,
             'KalturaIotDefault': KalturaIotDefault,
             'KalturaCognitoIdentity': KalturaCognitoIdentity,
             'KalturaCredentialsProvider': KalturaCredentialsProvider,
