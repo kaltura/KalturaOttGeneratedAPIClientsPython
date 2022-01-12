@@ -8,7 +8,7 @@
 # to do with audio, video, and animation what Wiki platforms allow them to do with
 # text.
 #
-# Copyright (C) 2006-2021  Kaltura Inc.
+# Copyright (C) 2006-2022  Kaltura Inc.
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU Affero General Public License as
@@ -42,7 +42,7 @@ from ..Base import (
     KalturaServiceBase,
 )
 
-API_VERSION = '7.1.0.29666'
+API_VERSION = '7.1.0.29667'
 
 ########## enums ##########
 # @package Kaltura
