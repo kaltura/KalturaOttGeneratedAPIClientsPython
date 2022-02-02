@@ -42,7 +42,7 @@ from ..Base import (
     KalturaServiceBase,
 )
 
-API_VERSION = '7.2.0.29748'
+API_VERSION = '7.2.0.29783'
 
 ########## enums ##########
 # @package Kaltura
@@ -271,6 +271,37 @@ class KalturaAssetOrderBy(object):
     NAME_ASC = "NAME_ASC"
     NAME_DESC = "NAME_DESC"
     VIEWS_DESC = "VIEWS_DESC"
+    RATINGS_DESC = "RATINGS_DESC"
+    VOTES_DESC = "VOTES_DESC"
+    START_DATE_DESC = "START_DATE_DESC"
+    START_DATE_ASC = "START_DATE_ASC"
+    LIKES_DESC = "LIKES_DESC"
+    CREATE_DATE_ASC = "CREATE_DATE_ASC"
+    CREATE_DATE_DESC = "CREATE_DATE_DESC"
+
+    def __init__(self, value):
+        self.value = value
+
+    def getValue(self):
+        return self.value
+
+# @package Kaltura
+# @subpackage Client
+class KalturaAssetOrderByStatistics(object):
+    VIEWS_DESC = "VIEWS_DESC"
+
+    def __init__(self, value):
+        self.value = value
+
+    def getValue(self):
+        return self.value
+
+# @package Kaltura
+# @subpackage Client
+class KalturaAssetOrderByType(object):
+    RELEVANCY_DESC = "RELEVANCY_DESC"
+    NAME_ASC = "NAME_ASC"
+    NAME_DESC = "NAME_DESC"
     RATINGS_DESC = "RATINGS_DESC"
     VOTES_DESC = "VOTES_DESC"
     START_DATE_DESC = "START_DATE_DESC"
@@ -1725,6 +1756,7 @@ class KalturaObjectVirtualAssetInfoType(object):
     CATEGORY = "Category"
     TVOD = "Tvod"
     BOXSET = "Boxset"
+    PAGO = "PAGO"
 
     def __init__(self, value):
         self.value = value
@@ -6737,6 +6769,26 @@ class KalturaPersistedFilter(KalturaFilter):
 
 # @package Kaltura
 # @subpackage Client
+class KalturaBaseAssetOrder(KalturaObjectBase):
+    def __init__(self):
+        KalturaObjectBase.__init__(self)
+
+
+    PROPERTY_LOADERS = {
+    }
+
+    def fromXml(self, node):
+        KalturaObjectBase.fromXml(self, node)
+        self.fromXmlImpl(node, KalturaBaseAssetOrder.PROPERTY_LOADERS)
+
+    def toParams(self):
+        kparams = KalturaObjectBase.toParams(self)
+        kparams.put("objectType", "KalturaBaseAssetOrder")
+        return kparams
+
+
+# @package Kaltura
+# @subpackage Client
 class KalturaDynamicOrderBy(KalturaObjectBase):
     """Kaltura Asset Order"""
 
@@ -6790,6 +6842,7 @@ class KalturaAssetFilter(KalturaPersistedFilter):
             orderBy=NotImplemented,
             name=NotImplemented,
             dynamicOrderBy=NotImplemented,
+            orderingParameters=NotImplemented,
             trendingDaysEqual=NotImplemented,
             shouldApplyPriorityGroupsEqual=NotImplemented):
         KalturaPersistedFilter.__init__(self,
@@ -6799,6 +6852,10 @@ class KalturaAssetFilter(KalturaPersistedFilter):
         # dynamicOrderBy - order by Meta
         # @var KalturaDynamicOrderBy
         self.dynamicOrderBy = dynamicOrderBy
+
+        # Parameters for asset list sorting.
+        # @var array of KalturaBaseAssetOrder
+        self.orderingParameters = orderingParameters
 
         # Trending Days Equal
         # @var int
@@ -6811,6 +6868,7 @@ class KalturaAssetFilter(KalturaPersistedFilter):
 
     PROPERTY_LOADERS = {
         'dynamicOrderBy': (KalturaObjectFactory.create, 'KalturaDynamicOrderBy'), 
+        'orderingParameters': (KalturaObjectFactory.createArray, 'KalturaBaseAssetOrder'), 
         'trendingDaysEqual': getXmlNodeInt, 
         'shouldApplyPriorityGroupsEqual': getXmlNodeBool, 
     }
@@ -6823,6 +6881,7 @@ class KalturaAssetFilter(KalturaPersistedFilter):
         kparams = KalturaPersistedFilter.toParams(self)
         kparams.put("objectType", "KalturaAssetFilter")
         kparams.addObjectIfDefined("dynamicOrderBy", self.dynamicOrderBy)
+        kparams.addArrayIfDefined("orderingParameters", self.orderingParameters)
         kparams.addIntIfDefined("trendingDaysEqual", self.trendingDaysEqual)
         kparams.addBoolIfDefined("shouldApplyPriorityGroupsEqual", self.shouldApplyPriorityGroupsEqual)
         return kparams
@@ -6832,6 +6891,12 @@ class KalturaAssetFilter(KalturaPersistedFilter):
 
     def setDynamicOrderBy(self, newDynamicOrderBy):
         self.dynamicOrderBy = newDynamicOrderBy
+
+    def getOrderingParameters(self):
+        return self.orderingParameters
+
+    def setOrderingParameters(self, newOrderingParameters):
+        self.orderingParameters = newOrderingParameters
 
     def getTrendingDaysEqual(self):
         return self.trendingDaysEqual
@@ -6875,6 +6940,7 @@ class KalturaBaseSearchAssetFilter(KalturaAssetFilter):
             orderBy=NotImplemented,
             name=NotImplemented,
             dynamicOrderBy=NotImplemented,
+            orderingParameters=NotImplemented,
             trendingDaysEqual=NotImplemented,
             shouldApplyPriorityGroupsEqual=NotImplemented,
             kSql=NotImplemented,
@@ -6885,6 +6951,7 @@ class KalturaBaseSearchAssetFilter(KalturaAssetFilter):
             orderBy,
             name,
             dynamicOrderBy,
+            orderingParameters,
             trendingDaysEqual,
             shouldApplyPriorityGroupsEqual)
 
@@ -6970,6 +7037,7 @@ class KalturaChannelFilter(KalturaBaseSearchAssetFilter):
             orderBy=NotImplemented,
             name=NotImplemented,
             dynamicOrderBy=NotImplemented,
+            orderingParameters=NotImplemented,
             trendingDaysEqual=NotImplemented,
             shouldApplyPriorityGroupsEqual=NotImplemented,
             kSql=NotImplemented,
@@ -6982,6 +7050,7 @@ class KalturaChannelFilter(KalturaBaseSearchAssetFilter):
             orderBy,
             name,
             dynamicOrderBy,
+            orderingParameters,
             trendingDaysEqual,
             shouldApplyPriorityGroupsEqual,
             kSql,
@@ -7029,11 +7098,137 @@ class KalturaChannelFilter(KalturaBaseSearchAssetFilter):
 
 # @package Kaltura
 # @subpackage Client
+class KalturaAssetDynamicOrder(KalturaBaseAssetOrder):
+    def __init__(self,
+            name=NotImplemented,
+            orderBy=NotImplemented):
+        KalturaBaseAssetOrder.__init__(self)
+
+        # order by name
+        # @var string
+        self.name = name
+
+        # order by meta asc/desc
+        # @var KalturaMetaTagOrderBy
+        self.orderBy = orderBy
+
+
+    PROPERTY_LOADERS = {
+        'name': getXmlNodeText, 
+        'orderBy': (KalturaEnumsFactory.createString, "KalturaMetaTagOrderBy"), 
+    }
+
+    def fromXml(self, node):
+        KalturaBaseAssetOrder.fromXml(self, node)
+        self.fromXmlImpl(node, KalturaAssetDynamicOrder.PROPERTY_LOADERS)
+
+    def toParams(self):
+        kparams = KalturaBaseAssetOrder.toParams(self)
+        kparams.put("objectType", "KalturaAssetDynamicOrder")
+        kparams.addStringIfDefined("name", self.name)
+        kparams.addStringEnumIfDefined("orderBy", self.orderBy)
+        return kparams
+
+    def getName(self):
+        return self.name
+
+    def setName(self, newName):
+        self.name = newName
+
+    def getOrderBy(self):
+        return self.orderBy
+
+    def setOrderBy(self, newOrderBy):
+        self.orderBy = newOrderBy
+
+
+# @package Kaltura
+# @subpackage Client
+class KalturaAssetOrder(KalturaBaseAssetOrder):
+    def __init__(self,
+            orderBy=NotImplemented):
+        KalturaBaseAssetOrder.__init__(self)
+
+        # Order By
+        # @var KalturaAssetOrderByType
+        self.orderBy = orderBy
+
+
+    PROPERTY_LOADERS = {
+        'orderBy': (KalturaEnumsFactory.createString, "KalturaAssetOrderByType"), 
+    }
+
+    def fromXml(self, node):
+        KalturaBaseAssetOrder.fromXml(self, node)
+        self.fromXmlImpl(node, KalturaAssetOrder.PROPERTY_LOADERS)
+
+    def toParams(self):
+        kparams = KalturaBaseAssetOrder.toParams(self)
+        kparams.put("objectType", "KalturaAssetOrder")
+        kparams.addStringEnumIfDefined("orderBy", self.orderBy)
+        return kparams
+
+    def getOrderBy(self):
+        return self.orderBy
+
+    def setOrderBy(self, newOrderBy):
+        self.orderBy = newOrderBy
+
+
+# @package Kaltura
+# @subpackage Client
+class KalturaAssetStatisticsOrder(KalturaBaseAssetOrder):
+    def __init__(self,
+            trendingDaysEqual=NotImplemented,
+            orderBy=NotImplemented):
+        KalturaBaseAssetOrder.__init__(self)
+
+        # Trending Days Equal
+        # @var int
+        self.trendingDaysEqual = trendingDaysEqual
+
+        # order by meta asc/desc
+        # @var KalturaAssetOrderByStatistics
+        self.orderBy = orderBy
+
+
+    PROPERTY_LOADERS = {
+        'trendingDaysEqual': getXmlNodeInt, 
+        'orderBy': (KalturaEnumsFactory.createString, "KalturaAssetOrderByStatistics"), 
+    }
+
+    def fromXml(self, node):
+        KalturaBaseAssetOrder.fromXml(self, node)
+        self.fromXmlImpl(node, KalturaAssetStatisticsOrder.PROPERTY_LOADERS)
+
+    def toParams(self):
+        kparams = KalturaBaseAssetOrder.toParams(self)
+        kparams.put("objectType", "KalturaAssetStatisticsOrder")
+        kparams.addIntIfDefined("trendingDaysEqual", self.trendingDaysEqual)
+        kparams.addStringEnumIfDefined("orderBy", self.orderBy)
+        return kparams
+
+    def getTrendingDaysEqual(self):
+        return self.trendingDaysEqual
+
+    def setTrendingDaysEqual(self, newTrendingDaysEqual):
+        self.trendingDaysEqual = newTrendingDaysEqual
+
+    def getOrderBy(self):
+        return self.orderBy
+
+    def setOrderBy(self, newOrderBy):
+        self.orderBy = newOrderBy
+
+
+# @package Kaltura
+# @subpackage Client
 class KalturaPersonalListSearchFilter(KalturaBaseSearchAssetFilter):
     def __init__(self,
             orderBy=NotImplemented,
             name=NotImplemented,
             dynamicOrderBy=NotImplemented,
+            orderingParameters=NotImplemented,
             trendingDaysEqual=NotImplemented,
             shouldApplyPriorityGroupsEqual=NotImplemented,
             kSql=NotImplemented,
@@ -7045,6 +7240,7 @@ class KalturaPersonalListSearchFilter(KalturaBaseSearchAssetFilter):
             orderBy,
             name,
             dynamicOrderBy,
+            orderingParameters,
             trendingDaysEqual,
             shouldApplyPriorityGroupsEqual,
             kSql,
@@ -7086,6 +7282,7 @@ class KalturaRelatedFilter(KalturaBaseSearchAssetFilter):
             orderBy=NotImplemented,
             name=NotImplemented,
             dynamicOrderBy=NotImplemented,
+            orderingParameters=NotImplemented,
             trendingDaysEqual=NotImplemented,
             shouldApplyPriorityGroupsEqual=NotImplemented,
             kSql=NotImplemented,
@@ -7099,6 +7296,7 @@ class KalturaRelatedFilter(KalturaBaseSearchAssetFilter):
             orderBy,
             name,
             dynamicOrderBy,
+            orderingParameters,
             trendingDaysEqual,
             shouldApplyPriorityGroupsEqual,
             kSql,
@@ -7165,6 +7363,7 @@ class KalturaSearchAssetFilter(KalturaBaseSearchAssetFilter):
             orderBy=NotImplemented,
             name=NotImplemented,
             dynamicOrderBy=NotImplemented,
+            orderingParameters=NotImplemented,
             trendingDaysEqual=NotImplemented,
             shouldApplyPriorityGroupsEqual=NotImplemented,
             kSql=NotImplemented,
@@ -7176,6 +7375,7 @@ class KalturaSearchAssetFilter(KalturaBaseSearchAssetFilter):
             orderBy,
             name,
             dynamicOrderBy,
+            orderingParameters,
             trendingDaysEqual,
             shouldApplyPriorityGroupsEqual,
             kSql,
@@ -7219,6 +7419,7 @@ class KalturaSearchAssetListFilter(KalturaSearchAssetFilter):
             orderBy=NotImplemented,
             name=NotImplemented,
             dynamicOrderBy=NotImplemented,
+            orderingParameters=NotImplemented,
             trendingDaysEqual=NotImplemented,
             shouldApplyPriorityGroupsEqual=NotImplemented,
             kSql=NotImplemented,
@@ -7231,6 +7432,7 @@ class KalturaSearchAssetListFilter(KalturaSearchAssetFilter):
             orderBy,
             name,
             dynamicOrderBy,
+            orderingParameters,
             trendingDaysEqual,
             shouldApplyPriorityGroupsEqual,
             kSql,
@@ -7342,6 +7544,7 @@ class KalturaBundleFilter(KalturaAssetFilter):
             orderBy=NotImplemented,
             name=NotImplemented,
             dynamicOrderBy=NotImplemented,
+            orderingParameters=NotImplemented,
             trendingDaysEqual=NotImplemented,
             shouldApplyPriorityGroupsEqual=NotImplemented,
             idEqual=NotImplemented,
@@ -7351,6 +7554,7 @@ class KalturaBundleFilter(KalturaAssetFilter):
             orderBy,
             name,
             dynamicOrderBy,
+            orderingParameters,
             trendingDaysEqual,
             shouldApplyPriorityGroupsEqual)
 
@@ -7413,6 +7617,7 @@ class KalturaChannelExternalFilter(KalturaAssetFilter):
             orderBy=NotImplemented,
             name=NotImplemented,
             dynamicOrderBy=NotImplemented,
+            orderingParameters=NotImplemented,
             trendingDaysEqual=NotImplemented,
             shouldApplyPriorityGroupsEqual=NotImplemented,
             idEqual=NotImplemented,
@@ -7422,6 +7627,7 @@ class KalturaChannelExternalFilter(KalturaAssetFilter):
             orderBy,
             name,
             dynamicOrderBy,
+            orderingParameters,
             trendingDaysEqual,
             shouldApplyPriorityGroupsEqual)
 
@@ -7482,6 +7688,7 @@ class KalturaRelatedExternalFilter(KalturaAssetFilter):
             orderBy=NotImplemented,
             name=NotImplemented,
             dynamicOrderBy=NotImplemented,
+            orderingParameters=NotImplemented,
             trendingDaysEqual=NotImplemented,
             shouldApplyPriorityGroupsEqual=NotImplemented,
             idEqual=NotImplemented,
@@ -7492,6 +7699,7 @@ class KalturaRelatedExternalFilter(KalturaAssetFilter):
             orderBy,
             name,
             dynamicOrderBy,
+            orderingParameters,
             trendingDaysEqual,
             shouldApplyPriorityGroupsEqual)
 
@@ -7566,6 +7774,7 @@ class KalturaScheduledRecordingProgramFilter(KalturaAssetFilter):
             orderBy=NotImplemented,
             name=NotImplemented,
             dynamicOrderBy=NotImplemented,
+            orderingParameters=NotImplemented,
             trendingDaysEqual=NotImplemented,
             shouldApplyPriorityGroupsEqual=NotImplemented,
             recordingTypeEqual=NotImplemented,
@@ -7577,6 +7786,7 @@ class KalturaScheduledRecordingProgramFilter(KalturaAssetFilter):
             orderBy,
             name,
             dynamicOrderBy,
+            orderingParameters,
             trendingDaysEqual,
             shouldApplyPriorityGroupsEqual)
 
@@ -7661,6 +7871,7 @@ class KalturaSearchExternalFilter(KalturaAssetFilter):
             orderBy=NotImplemented,
             name=NotImplemented,
             dynamicOrderBy=NotImplemented,
+            orderingParameters=NotImplemented,
             trendingDaysEqual=NotImplemented,
             shouldApplyPriorityGroupsEqual=NotImplemented,
             query=NotImplemented,
@@ -7670,6 +7881,7 @@ class KalturaSearchExternalFilter(KalturaAssetFilter):
             orderBy,
             name,
             dynamicOrderBy,
+            orderingParameters,
             trendingDaysEqual,
             shouldApplyPriorityGroupsEqual)
 
@@ -29589,7 +29801,7 @@ class KalturaHouseholdDeviceFamilyLimitations(KalturaDeviceFamilyBase):
             deviceLimit=NotImplemented,
             concurrentLimit=NotImplemented,
             isDefaultDeviceLimit=NotImplemented,
-            isDefaultConcurrentLimit =NotImplemented):
+            isDefaultConcurrentLimit=NotImplemented):
         KalturaDeviceFamilyBase.__init__(self,
             id,
             name)
@@ -29614,7 +29826,7 @@ class KalturaHouseholdDeviceFamilyLimitations(KalturaDeviceFamilyBase):
         # Is the Max number of streams allowed for this family is default value or not
         # @var bool
         # @readonly
-        self.isDefaultConcurrentLimit  = isDefaultConcurrentLimit 
+        self.isDefaultConcurrentLimit = isDefaultConcurrentLimit
 
 
     PROPERTY_LOADERS = {
@@ -29622,7 +29834,7 @@ class KalturaHouseholdDeviceFamilyLimitations(KalturaDeviceFamilyBase):
         'deviceLimit': getXmlNodeInt, 
         'concurrentLimit': getXmlNodeInt, 
         'isDefaultDeviceLimit': getXmlNodeBool, 
-        'isDefaultConcurrentLimit ': getXmlNodeBool, 
+        'isDefaultConcurrentLimit': getXmlNodeBool, 
     }
 
     def fromXml(self, node):
@@ -29658,8 +29870,8 @@ class KalturaHouseholdDeviceFamilyLimitations(KalturaDeviceFamilyBase):
     def getIsDefaultDeviceLimit(self):
         return self.isDefaultDeviceLimit
 
-    def getIsDefaultConcurrentLimit (self):
-        return self.isDefaultConcurrentLimit 
+    def getIsDefaultConcurrentLimit(self):
+        return self.isDefaultConcurrentLimit
 
 
 # @package Kaltura
@@ -54573,6 +54785,8 @@ class KalturaCoreClient(KalturaClientPlugin):
             'KalturaAssetLifeCycleRuleActionType': KalturaAssetLifeCycleRuleActionType,
             'KalturaAssetLifeCycleRuleTransitionType': KalturaAssetLifeCycleRuleTransitionType,
             'KalturaAssetOrderBy': KalturaAssetOrderBy,
+            'KalturaAssetOrderByStatistics': KalturaAssetOrderByStatistics,
+            'KalturaAssetOrderByType': KalturaAssetOrderByType,
             'KalturaAssetReferenceType': KalturaAssetReferenceType,
             'KalturaAssetReminderOrderBy': KalturaAssetReminderOrderBy,
             'KalturaAssetRuleOrderBy': KalturaAssetRuleOrderBy,
@@ -54863,11 +55077,15 @@ class KalturaCoreClient(KalturaClientPlugin):
             'KalturaIngestByIdsFilter': KalturaIngestByIdsFilter,
             'KalturaAggregationCountFilter': KalturaAggregationCountFilter,
             'KalturaPersistedFilter': KalturaPersistedFilter,
+            'KalturaBaseAssetOrder': KalturaBaseAssetOrder,
             'KalturaDynamicOrderBy': KalturaDynamicOrderBy,
             'KalturaAssetFilter': KalturaAssetFilter,
             'KalturaAssetGroupBy': KalturaAssetGroupBy,
             'KalturaBaseSearchAssetFilter': KalturaBaseSearchAssetFilter,
             'KalturaChannelFilter': KalturaChannelFilter,
+            'KalturaAssetDynamicOrder': KalturaAssetDynamicOrder,
+            'KalturaAssetOrder': KalturaAssetOrder,
+            'KalturaAssetStatisticsOrder': KalturaAssetStatisticsOrder,
             'KalturaPersonalListSearchFilter': KalturaPersonalListSearchFilter,
             'KalturaRelatedFilter': KalturaRelatedFilter,
             'KalturaSearchAssetFilter': KalturaSearchAssetFilter,
