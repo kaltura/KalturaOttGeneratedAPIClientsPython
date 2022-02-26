@@ -42,7 +42,7 @@ from ..Base import (
     KalturaServiceBase,
 )
 
-API_VERSION = '7.2.0.29784'
+API_VERSION = '7.3.0.29805'
 
 ########## enums ##########
 # @package Kaltura
@@ -21315,11 +21315,17 @@ class KalturaPrice(KalturaObjectBase):
     """Price"""
 
     def __init__(self,
+            currencyId=NotImplemented,
             amount=NotImplemented,
             currency=NotImplemented,
             currencySign=NotImplemented,
             countryId=NotImplemented):
         KalturaObjectBase.__init__(self)
+
+        # Currency ID
+        # @var int
+        # @readonly
+        self.currencyId = currencyId
 
         # Price
         # @var float
@@ -21339,6 +21345,7 @@ class KalturaPrice(KalturaObjectBase):
 
 
     PROPERTY_LOADERS = {
+        'currencyId': getXmlNodeInt, 
         'amount': getXmlNodeFloat, 
         'currency': getXmlNodeText, 
         'currencySign': getXmlNodeText, 
@@ -21357,6 +21364,9 @@ class KalturaPrice(KalturaObjectBase):
         kparams.addStringIfDefined("currencySign", self.currencySign)
         kparams.addIntIfDefined("countryId", self.countryId)
         return kparams
+
+    def getCurrencyId(self):
+        return self.currencyId
 
     def getAmount(self):
         return self.amount
@@ -22161,12 +22171,14 @@ class KalturaDiscount(KalturaPrice):
     """Discount"""
 
     def __init__(self,
+            currencyId=NotImplemented,
             amount=NotImplemented,
             currency=NotImplemented,
             currencySign=NotImplemented,
             countryId=NotImplemented,
             percentage=NotImplemented):
         KalturaPrice.__init__(self,
+            currencyId,
             amount,
             currency,
             currencySign,
@@ -45766,7 +45778,8 @@ class KalturaTimeShiftedTvPartnerSettings(KalturaObjectBase):
             quotaOveragePolicy=NotImplemented,
             protectionPolicy=NotImplemented,
             recoveryGracePeriod=NotImplemented,
-            privateCopyEnabled=NotImplemented):
+            privateCopyEnabled=NotImplemented,
+            defaultQuota=NotImplemented):
         KalturaObjectBase.__init__(self)
 
         # Is catch-up enabled
@@ -45857,6 +45870,10 @@ class KalturaTimeShiftedTvPartnerSettings(KalturaObjectBase):
         # @var bool
         self.privateCopyEnabled = privateCopyEnabled
 
+        # Quota in seconds
+        # @var int
+        self.defaultQuota = defaultQuota
+
 
     PROPERTY_LOADERS = {
         'catchUpEnabled': getXmlNodeBool, 
@@ -45881,6 +45898,7 @@ class KalturaTimeShiftedTvPartnerSettings(KalturaObjectBase):
         'protectionPolicy': (KalturaEnumsFactory.createString, "KalturaProtectionPolicy"), 
         'recoveryGracePeriod': getXmlNodeInt, 
         'privateCopyEnabled': getXmlNodeBool, 
+        'defaultQuota': getXmlNodeInt, 
     }
 
     def fromXml(self, node):
@@ -45912,6 +45930,7 @@ class KalturaTimeShiftedTvPartnerSettings(KalturaObjectBase):
         kparams.addStringEnumIfDefined("protectionPolicy", self.protectionPolicy)
         kparams.addIntIfDefined("recoveryGracePeriod", self.recoveryGracePeriod)
         kparams.addBoolIfDefined("privateCopyEnabled", self.privateCopyEnabled)
+        kparams.addIntIfDefined("defaultQuota", self.defaultQuota)
         return kparams
 
     def getCatchUpEnabled(self):
@@ -46045,6 +46064,12 @@ class KalturaTimeShiftedTvPartnerSettings(KalturaObjectBase):
 
     def setPrivateCopyEnabled(self, newPrivateCopyEnabled):
         self.privateCopyEnabled = newPrivateCopyEnabled
+
+    def getDefaultQuota(self):
+        return self.defaultQuota
+
+    def setDefaultQuota(self, newDefaultQuota):
+        self.defaultQuota = newDefaultQuota
 
 
 # @package Kaltura
