@@ -42,7 +42,7 @@ from ..Base import (
     KalturaServiceBase,
 )
 
-API_VERSION = '7.2.0.29784'
+API_VERSION = '7.2.0.29717'
 
 ########## enums ##########
 # @package Kaltura
@@ -287,37 +287,6 @@ class KalturaAssetOrderBy(object):
 
 # @package Kaltura
 # @subpackage Client
-class KalturaAssetOrderByStatistics(object):
-    VIEWS_DESC = "VIEWS_DESC"
-
-    def __init__(self, value):
-        self.value = value
-
-    def getValue(self):
-        return self.value
-
-# @package Kaltura
-# @subpackage Client
-class KalturaAssetOrderByType(object):
-    RELEVANCY_DESC = "RELEVANCY_DESC"
-    NAME_ASC = "NAME_ASC"
-    NAME_DESC = "NAME_DESC"
-    RATINGS_DESC = "RATINGS_DESC"
-    VOTES_DESC = "VOTES_DESC"
-    START_DATE_DESC = "START_DATE_DESC"
-    START_DATE_ASC = "START_DATE_ASC"
-    LIKES_DESC = "LIKES_DESC"
-    CREATE_DATE_ASC = "CREATE_DATE_ASC"
-    CREATE_DATE_DESC = "CREATE_DATE_DESC"
-
-    def __init__(self, value):
-        self.value = value
-
-    def getValue(self):
-        return self.value
-
-# @package Kaltura
-# @subpackage Client
 class KalturaAssetReferenceType(object):
     MEDIA = "media"
     EPG_INTERNAL = "epg_internal"
@@ -451,6 +420,7 @@ class KalturaBillingItemsType(object):
     PRE_PAID = "pre_paid"
     PRE_PAID_EXPIRED = "pre_paid_expired"
     COLLECTION = "collection"
+    PROGRAMASSETGROUPOFFER = "programAssetGroupOffer"
 
     def __init__(self, value):
         self.value = value
@@ -1756,6 +1726,7 @@ class KalturaObjectVirtualAssetInfoType(object):
     CATEGORY = "Category"
     TVOD = "Tvod"
     BOXSET = "Boxset"
+    PAGO = "PAGO"
 
     def __init__(self, value):
         self.value = value
@@ -2064,6 +2035,20 @@ class KalturaPricePlanOrderBy(object):
 class KalturaProductPriceOrderBy(object):
     PRODUCT_ID_ASC = "PRODUCT_ID_ASC"
     PRODUCT_ID_DESC = "PRODUCT_ID_DESC"
+
+    def __init__(self, value):
+        self.value = value
+
+    def getValue(self):
+        return self.value
+
+# @package Kaltura
+# @subpackage Client
+class KalturaProgramAssetGroupOfferOrderBy(object):
+    NAME_ASC = "NAME_ASC"
+    NAME_DESC = "NAME_DESC"
+    UPDATE_DATE_ASC = "UPDATE_DATE_ASC"
+    UPDATE_DATE_DESC = "UPDATE_DATE_DESC"
 
     def __init__(self, value):
         self.value = value
@@ -2804,6 +2789,7 @@ class KalturaTransactionType(object):
     PPV = "ppv"
     SUBSCRIPTION = "subscription"
     COLLECTION = "collection"
+    PROGRAMASSETGROUPOFFER = "programAssetGroupOffer"
 
     def __init__(self, value):
         self.value = value
@@ -5660,6 +5646,82 @@ class KalturaPricePlanFilter(KalturaFilter):
 
 # @package Kaltura
 # @subpackage Client
+class KalturaProgramAssetGroupOfferFilter(KalturaFilter):
+    """Program asset group offer details"""
+
+    def __init__(self,
+            orderBy=NotImplemented,
+            alsoInactive=NotImplemented):
+        KalturaFilter.__init__(self,
+            orderBy)
+
+        # return also inactive
+        # @var bool
+        self.alsoInactive = alsoInactive
+
+
+    PROPERTY_LOADERS = {
+        'alsoInactive': getXmlNodeBool, 
+    }
+
+    def fromXml(self, node):
+        KalturaFilter.fromXml(self, node)
+        self.fromXmlImpl(node, KalturaProgramAssetGroupOfferFilter.PROPERTY_LOADERS)
+
+    def toParams(self):
+        kparams = KalturaFilter.toParams(self)
+        kparams.put("objectType", "KalturaProgramAssetGroupOfferFilter")
+        kparams.addBoolIfDefined("alsoInactive", self.alsoInactive)
+        return kparams
+
+    def getAlsoInactive(self):
+        return self.alsoInactive
+
+    def setAlsoInactive(self, newAlsoInactive):
+        self.alsoInactive = newAlsoInactive
+
+
+# @package Kaltura
+# @subpackage Client
+class KalturaProgramAssetGroupOfferIdInFilter(KalturaProgramAssetGroupOfferFilter):
+    """Program asset group offer details"""
+
+    def __init__(self,
+            orderBy=NotImplemented,
+            alsoInactive=NotImplemented,
+            idIn=NotImplemented):
+        KalturaProgramAssetGroupOfferFilter.__init__(self,
+            orderBy,
+            alsoInactive)
+
+        # Program asset group offer identifiers
+        # @var string
+        self.idIn = idIn
+
+
+    PROPERTY_LOADERS = {
+        'idIn': getXmlNodeText, 
+    }
+
+    def fromXml(self, node):
+        KalturaProgramAssetGroupOfferFilter.fromXml(self, node)
+        self.fromXmlImpl(node, KalturaProgramAssetGroupOfferIdInFilter.PROPERTY_LOADERS)
+
+    def toParams(self):
+        kparams = KalturaProgramAssetGroupOfferFilter.toParams(self)
+        kparams.put("objectType", "KalturaProgramAssetGroupOfferIdInFilter")
+        kparams.addStringIfDefined("idIn", self.idIn)
+        return kparams
+
+    def getIdIn(self):
+        return self.idIn
+
+    def setIdIn(self, newIdIn):
+        self.idIn = newIdIn
+
+
+# @package Kaltura
+# @subpackage Client
 class KalturaSubscriptionSetFilter(KalturaFilter):
     def __init__(self,
             orderBy=NotImplemented,
@@ -6678,26 +6740,6 @@ class KalturaPersistedFilter(KalturaFilter):
 
 # @package Kaltura
 # @subpackage Client
-class KalturaBaseAssetOrder(KalturaObjectBase):
-    def __init__(self):
-        KalturaObjectBase.__init__(self)
-
-
-    PROPERTY_LOADERS = {
-    }
-
-    def fromXml(self, node):
-        KalturaObjectBase.fromXml(self, node)
-        self.fromXmlImpl(node, KalturaBaseAssetOrder.PROPERTY_LOADERS)
-
-    def toParams(self):
-        kparams = KalturaObjectBase.toParams(self)
-        kparams.put("objectType", "KalturaBaseAssetOrder")
-        return kparams
-
-
-# @package Kaltura
-# @subpackage Client
 class KalturaDynamicOrderBy(KalturaObjectBase):
     """Kaltura Asset Order"""
 
@@ -6751,7 +6793,6 @@ class KalturaAssetFilter(KalturaPersistedFilter):
             orderBy=NotImplemented,
             name=NotImplemented,
             dynamicOrderBy=NotImplemented,
-            orderingParameters=NotImplemented,
             trendingDaysEqual=NotImplemented,
             shouldApplyPriorityGroupsEqual=NotImplemented):
         KalturaPersistedFilter.__init__(self,
@@ -6761,10 +6802,6 @@ class KalturaAssetFilter(KalturaPersistedFilter):
         # dynamicOrderBy - order by Meta
         # @var KalturaDynamicOrderBy
         self.dynamicOrderBy = dynamicOrderBy
-
-        # Parameters for asset list sorting.
-        # @var array of KalturaBaseAssetOrder
-        self.orderingParameters = orderingParameters
 
         # Trending Days Equal
         # @var int
@@ -6777,7 +6814,6 @@ class KalturaAssetFilter(KalturaPersistedFilter):
 
     PROPERTY_LOADERS = {
         'dynamicOrderBy': (KalturaObjectFactory.create, 'KalturaDynamicOrderBy'), 
-        'orderingParameters': (KalturaObjectFactory.createArray, 'KalturaBaseAssetOrder'), 
         'trendingDaysEqual': getXmlNodeInt, 
         'shouldApplyPriorityGroupsEqual': getXmlNodeBool, 
     }
@@ -6790,7 +6826,6 @@ class KalturaAssetFilter(KalturaPersistedFilter):
         kparams = KalturaPersistedFilter.toParams(self)
         kparams.put("objectType", "KalturaAssetFilter")
         kparams.addObjectIfDefined("dynamicOrderBy", self.dynamicOrderBy)
-        kparams.addArrayIfDefined("orderingParameters", self.orderingParameters)
         kparams.addIntIfDefined("trendingDaysEqual", self.trendingDaysEqual)
         kparams.addBoolIfDefined("shouldApplyPriorityGroupsEqual", self.shouldApplyPriorityGroupsEqual)
         return kparams
@@ -6800,12 +6835,6 @@ class KalturaAssetFilter(KalturaPersistedFilter):
 
     def setDynamicOrderBy(self, newDynamicOrderBy):
         self.dynamicOrderBy = newDynamicOrderBy
-
-    def getOrderingParameters(self):
-        return self.orderingParameters
-
-    def setOrderingParameters(self, newOrderingParameters):
-        self.orderingParameters = newOrderingParameters
 
     def getTrendingDaysEqual(self):
         return self.trendingDaysEqual
@@ -6849,7 +6878,6 @@ class KalturaBaseSearchAssetFilter(KalturaAssetFilter):
             orderBy=NotImplemented,
             name=NotImplemented,
             dynamicOrderBy=NotImplemented,
-            orderingParameters=NotImplemented,
             trendingDaysEqual=NotImplemented,
             shouldApplyPriorityGroupsEqual=NotImplemented,
             kSql=NotImplemented,
@@ -6860,7 +6888,6 @@ class KalturaBaseSearchAssetFilter(KalturaAssetFilter):
             orderBy,
             name,
             dynamicOrderBy,
-            orderingParameters,
             trendingDaysEqual,
             shouldApplyPriorityGroupsEqual)
 
@@ -6946,7 +6973,6 @@ class KalturaChannelFilter(KalturaBaseSearchAssetFilter):
             orderBy=NotImplemented,
             name=NotImplemented,
             dynamicOrderBy=NotImplemented,
-            orderingParameters=NotImplemented,
             trendingDaysEqual=NotImplemented,
             shouldApplyPriorityGroupsEqual=NotImplemented,
             kSql=NotImplemented,
@@ -6959,7 +6985,6 @@ class KalturaChannelFilter(KalturaBaseSearchAssetFilter):
             orderBy,
             name,
             dynamicOrderBy,
-            orderingParameters,
             trendingDaysEqual,
             shouldApplyPriorityGroupsEqual,
             kSql,
@@ -7007,137 +7032,11 @@ class KalturaChannelFilter(KalturaBaseSearchAssetFilter):
 
 # @package Kaltura
 # @subpackage Client
-class KalturaAssetDynamicOrder(KalturaBaseAssetOrder):
-    def __init__(self,
-            name=NotImplemented,
-            orderBy=NotImplemented):
-        KalturaBaseAssetOrder.__init__(self)
-
-        # order by name
-        # @var string
-        self.name = name
-
-        # order by meta asc/desc
-        # @var KalturaMetaTagOrderBy
-        self.orderBy = orderBy
-
-
-    PROPERTY_LOADERS = {
-        'name': getXmlNodeText, 
-        'orderBy': (KalturaEnumsFactory.createString, "KalturaMetaTagOrderBy"), 
-    }
-
-    def fromXml(self, node):
-        KalturaBaseAssetOrder.fromXml(self, node)
-        self.fromXmlImpl(node, KalturaAssetDynamicOrder.PROPERTY_LOADERS)
-
-    def toParams(self):
-        kparams = KalturaBaseAssetOrder.toParams(self)
-        kparams.put("objectType", "KalturaAssetDynamicOrder")
-        kparams.addStringIfDefined("name", self.name)
-        kparams.addStringEnumIfDefined("orderBy", self.orderBy)
-        return kparams
-
-    def getName(self):
-        return self.name
-
-    def setName(self, newName):
-        self.name = newName
-
-    def getOrderBy(self):
-        return self.orderBy
-
-    def setOrderBy(self, newOrderBy):
-        self.orderBy = newOrderBy
-
-
-# @package Kaltura
-# @subpackage Client
-class KalturaAssetOrder(KalturaBaseAssetOrder):
-    def __init__(self,
-            orderBy=NotImplemented):
-        KalturaBaseAssetOrder.__init__(self)
-
-        # Order By
-        # @var KalturaAssetOrderByType
-        self.orderBy = orderBy
-
-
-    PROPERTY_LOADERS = {
-        'orderBy': (KalturaEnumsFactory.createString, "KalturaAssetOrderByType"), 
-    }
-
-    def fromXml(self, node):
-        KalturaBaseAssetOrder.fromXml(self, node)
-        self.fromXmlImpl(node, KalturaAssetOrder.PROPERTY_LOADERS)
-
-    def toParams(self):
-        kparams = KalturaBaseAssetOrder.toParams(self)
-        kparams.put("objectType", "KalturaAssetOrder")
-        kparams.addStringEnumIfDefined("orderBy", self.orderBy)
-        return kparams
-
-    def getOrderBy(self):
-        return self.orderBy
-
-    def setOrderBy(self, newOrderBy):
-        self.orderBy = newOrderBy
-
-
-# @package Kaltura
-# @subpackage Client
-class KalturaAssetStatisticsOrder(KalturaBaseAssetOrder):
-    def __init__(self,
-            trendingDaysEqual=NotImplemented,
-            orderBy=NotImplemented):
-        KalturaBaseAssetOrder.__init__(self)
-
-        # Trending Days Equal
-        # @var int
-        self.trendingDaysEqual = trendingDaysEqual
-
-        # order by meta asc/desc
-        # @var KalturaAssetOrderByStatistics
-        self.orderBy = orderBy
-
-
-    PROPERTY_LOADERS = {
-        'trendingDaysEqual': getXmlNodeInt, 
-        'orderBy': (KalturaEnumsFactory.createString, "KalturaAssetOrderByStatistics"), 
-    }
-
-    def fromXml(self, node):
-        KalturaBaseAssetOrder.fromXml(self, node)
-        self.fromXmlImpl(node, KalturaAssetStatisticsOrder.PROPERTY_LOADERS)
-
-    def toParams(self):
-        kparams = KalturaBaseAssetOrder.toParams(self)
-        kparams.put("objectType", "KalturaAssetStatisticsOrder")
-        kparams.addIntIfDefined("trendingDaysEqual", self.trendingDaysEqual)
-        kparams.addStringEnumIfDefined("orderBy", self.orderBy)
-        return kparams
-
-    def getTrendingDaysEqual(self):
-        return self.trendingDaysEqual
-
-    def setTrendingDaysEqual(self, newTrendingDaysEqual):
-        self.trendingDaysEqual = newTrendingDaysEqual
-
-    def getOrderBy(self):
-        return self.orderBy
-
-    def setOrderBy(self, newOrderBy):
-        self.orderBy = newOrderBy
-
-
-# @package Kaltura
-# @subpackage Client
 class KalturaPersonalListSearchFilter(KalturaBaseSearchAssetFilter):
     def __init__(self,
             orderBy=NotImplemented,
             name=NotImplemented,
             dynamicOrderBy=NotImplemented,
-            orderingParameters=NotImplemented,
             trendingDaysEqual=NotImplemented,
             shouldApplyPriorityGroupsEqual=NotImplemented,
             kSql=NotImplemented,
@@ -7149,7 +7048,6 @@ class KalturaPersonalListSearchFilter(KalturaBaseSearchAssetFilter):
             orderBy,
             name,
             dynamicOrderBy,
-            orderingParameters,
             trendingDaysEqual,
             shouldApplyPriorityGroupsEqual,
             kSql,
@@ -7191,7 +7089,6 @@ class KalturaRelatedFilter(KalturaBaseSearchAssetFilter):
             orderBy=NotImplemented,
             name=NotImplemented,
             dynamicOrderBy=NotImplemented,
-            orderingParameters=NotImplemented,
             trendingDaysEqual=NotImplemented,
             shouldApplyPriorityGroupsEqual=NotImplemented,
             kSql=NotImplemented,
@@ -7205,7 +7102,6 @@ class KalturaRelatedFilter(KalturaBaseSearchAssetFilter):
             orderBy,
             name,
             dynamicOrderBy,
-            orderingParameters,
             trendingDaysEqual,
             shouldApplyPriorityGroupsEqual,
             kSql,
@@ -7272,7 +7168,6 @@ class KalturaSearchAssetFilter(KalturaBaseSearchAssetFilter):
             orderBy=NotImplemented,
             name=NotImplemented,
             dynamicOrderBy=NotImplemented,
-            orderingParameters=NotImplemented,
             trendingDaysEqual=NotImplemented,
             shouldApplyPriorityGroupsEqual=NotImplemented,
             kSql=NotImplemented,
@@ -7284,7 +7179,6 @@ class KalturaSearchAssetFilter(KalturaBaseSearchAssetFilter):
             orderBy,
             name,
             dynamicOrderBy,
-            orderingParameters,
             trendingDaysEqual,
             shouldApplyPriorityGroupsEqual,
             kSql,
@@ -7328,7 +7222,6 @@ class KalturaSearchAssetListFilter(KalturaSearchAssetFilter):
             orderBy=NotImplemented,
             name=NotImplemented,
             dynamicOrderBy=NotImplemented,
-            orderingParameters=NotImplemented,
             trendingDaysEqual=NotImplemented,
             shouldApplyPriorityGroupsEqual=NotImplemented,
             kSql=NotImplemented,
@@ -7341,7 +7234,6 @@ class KalturaSearchAssetListFilter(KalturaSearchAssetFilter):
             orderBy,
             name,
             dynamicOrderBy,
-            orderingParameters,
             trendingDaysEqual,
             shouldApplyPriorityGroupsEqual,
             kSql,
@@ -7453,7 +7345,6 @@ class KalturaBundleFilter(KalturaAssetFilter):
             orderBy=NotImplemented,
             name=NotImplemented,
             dynamicOrderBy=NotImplemented,
-            orderingParameters=NotImplemented,
             trendingDaysEqual=NotImplemented,
             shouldApplyPriorityGroupsEqual=NotImplemented,
             idEqual=NotImplemented,
@@ -7463,7 +7354,6 @@ class KalturaBundleFilter(KalturaAssetFilter):
             orderBy,
             name,
             dynamicOrderBy,
-            orderingParameters,
             trendingDaysEqual,
             shouldApplyPriorityGroupsEqual)
 
@@ -7526,7 +7416,6 @@ class KalturaChannelExternalFilter(KalturaAssetFilter):
             orderBy=NotImplemented,
             name=NotImplemented,
             dynamicOrderBy=NotImplemented,
-            orderingParameters=NotImplemented,
             trendingDaysEqual=NotImplemented,
             shouldApplyPriorityGroupsEqual=NotImplemented,
             idEqual=NotImplemented,
@@ -7536,7 +7425,6 @@ class KalturaChannelExternalFilter(KalturaAssetFilter):
             orderBy,
             name,
             dynamicOrderBy,
-            orderingParameters,
             trendingDaysEqual,
             shouldApplyPriorityGroupsEqual)
 
@@ -7597,7 +7485,6 @@ class KalturaRelatedExternalFilter(KalturaAssetFilter):
             orderBy=NotImplemented,
             name=NotImplemented,
             dynamicOrderBy=NotImplemented,
-            orderingParameters=NotImplemented,
             trendingDaysEqual=NotImplemented,
             shouldApplyPriorityGroupsEqual=NotImplemented,
             idEqual=NotImplemented,
@@ -7608,7 +7495,6 @@ class KalturaRelatedExternalFilter(KalturaAssetFilter):
             orderBy,
             name,
             dynamicOrderBy,
-            orderingParameters,
             trendingDaysEqual,
             shouldApplyPriorityGroupsEqual)
 
@@ -7683,7 +7569,6 @@ class KalturaScheduledRecordingProgramFilter(KalturaAssetFilter):
             orderBy=NotImplemented,
             name=NotImplemented,
             dynamicOrderBy=NotImplemented,
-            orderingParameters=NotImplemented,
             trendingDaysEqual=NotImplemented,
             shouldApplyPriorityGroupsEqual=NotImplemented,
             recordingTypeEqual=NotImplemented,
@@ -7695,7 +7580,6 @@ class KalturaScheduledRecordingProgramFilter(KalturaAssetFilter):
             orderBy,
             name,
             dynamicOrderBy,
-            orderingParameters,
             trendingDaysEqual,
             shouldApplyPriorityGroupsEqual)
 
@@ -7780,7 +7664,6 @@ class KalturaSearchExternalFilter(KalturaAssetFilter):
             orderBy=NotImplemented,
             name=NotImplemented,
             dynamicOrderBy=NotImplemented,
-            orderingParameters=NotImplemented,
             trendingDaysEqual=NotImplemented,
             shouldApplyPriorityGroupsEqual=NotImplemented,
             query=NotImplemented,
@@ -7790,7 +7673,6 @@ class KalturaSearchExternalFilter(KalturaAssetFilter):
             orderBy,
             name,
             dynamicOrderBy,
-            orderingParameters,
             trendingDaysEqual,
             shouldApplyPriorityGroupsEqual)
 
@@ -8507,7 +8389,8 @@ class KalturaProductPriceFilter(KalturaFilter):
             fileIdIn=NotImplemented,
             collectionIdIn=NotImplemented,
             isLowest=NotImplemented,
-            couponCodeEqual=NotImplemented):
+            couponCodeEqual=NotImplemented,
+            programAssetGroupOfferIdIn=NotImplemented):
         KalturaFilter.__init__(self,
             orderBy)
 
@@ -8531,6 +8414,10 @@ class KalturaProductPriceFilter(KalturaFilter):
         # @var string
         self.couponCodeEqual = couponCodeEqual
 
+        # Comma separated ProgramAssetGroupOffer identifiers
+        # @var string
+        self.programAssetGroupOfferIdIn = programAssetGroupOfferIdIn
+
 
     PROPERTY_LOADERS = {
         'subscriptionIdIn': getXmlNodeText, 
@@ -8538,6 +8425,7 @@ class KalturaProductPriceFilter(KalturaFilter):
         'collectionIdIn': getXmlNodeText, 
         'isLowest': getXmlNodeBool, 
         'couponCodeEqual': getXmlNodeText, 
+        'programAssetGroupOfferIdIn': getXmlNodeText, 
     }
 
     def fromXml(self, node):
@@ -8552,6 +8440,7 @@ class KalturaProductPriceFilter(KalturaFilter):
         kparams.addStringIfDefined("collectionIdIn", self.collectionIdIn)
         kparams.addBoolIfDefined("isLowest", self.isLowest)
         kparams.addStringIfDefined("couponCodeEqual", self.couponCodeEqual)
+        kparams.addStringIfDefined("programAssetGroupOfferIdIn", self.programAssetGroupOfferIdIn)
         return kparams
 
     def getSubscriptionIdIn(self):
@@ -8583,6 +8472,12 @@ class KalturaProductPriceFilter(KalturaFilter):
 
     def setCouponCodeEqual(self, newCouponCodeEqual):
         self.couponCodeEqual = newCouponCodeEqual
+
+    def getProgramAssetGroupOfferIdIn(self):
+        return self.programAssetGroupOfferIdIn
+
+    def setProgramAssetGroupOfferIdIn(self, newProgramAssetGroupOfferIdIn):
+        self.programAssetGroupOfferIdIn = newProgramAssetGroupOfferIdIn
 
 
 # @package Kaltura
@@ -21311,6 +21206,250 @@ class KalturaPricePlan(KalturaUsageModule):
 
 # @package Kaltura
 # @subpackage Client
+class KalturaProgramAssetGroupOffer(KalturaOTTObjectSupportNullable):
+    """Program asset group offer details"""
+
+    def __init__(self,
+            id=NotImplemented,
+            name=NotImplemented,
+            multilingualName=NotImplemented,
+            priceDetailsId=NotImplemented,
+            fileTypesIds=NotImplemented,
+            discountModuleId=NotImplemented,
+            couponsGroupId=NotImplemented,
+            description=NotImplemented,
+            multilingualDescription=NotImplemented,
+            virtualAssetId=NotImplemented,
+            isActive=NotImplemented,
+            createDate=NotImplemented,
+            updateDate=NotImplemented,
+            startDate=NotImplemented,
+            endDate=NotImplemented,
+            expiryDate=NotImplemented,
+            externalId=NotImplemented,
+            externalOfferId=NotImplemented):
+        KalturaOTTObjectSupportNullable.__init__(self)
+
+        # Unique Kaltura internal identifier for the module
+        # @var int
+        self.id = id
+
+        # Name of the Program asset group offer
+        # @var string
+        # @readonly
+        self.name = name
+
+        # Name of the Program asset group offer
+        # @var array of KalturaTranslationToken
+        self.multilingualName = multilingualName
+
+        # ID of the KalturaPriceDetails object which contains details of the price to be paid for purchasing this KalturaProgramAssetGroupOffer.
+        # @var int
+        self.priceDetailsId = priceDetailsId
+
+        # Comma separated file types identifiers that are supported in this Program asset group offer.
+        #             The subset of KalturaMediaFiles of the live linear channel on which the associated Program Assets are carried to which households entitled to this
+        #             Program Asset Group Offer are entitled to view E.g.may be used to restrict entitlement only to HD flavour of the Program Asset(and not the UHD flavour)
+        #             If this parameter is empty, the Household shall be entitled to all KalturaMediaFiles associated with the KalturaLiveAsset.
+        # @var string
+        self.fileTypesIds = fileTypesIds
+
+        # The internal discount module identifier for the Program asset group offer
+        # @var int
+        self.discountModuleId = discountModuleId
+
+        # Coupons group id for the Program asset group offer
+        # @var int
+        self.couponsGroupId = couponsGroupId
+
+        # A list of the descriptions of the Program asset group offer on different languages (language code and translation)
+        # @var string
+        # @readonly
+        self.description = description
+
+        # A list of the descriptions of the Program asset group offer on different languages (language code and translation)
+        # @var array of KalturaTranslationToken
+        self.multilingualDescription = multilingualDescription
+
+        # The id of the paired asset
+        # @var int
+        # @readonly
+        self.virtualAssetId = virtualAssetId
+
+        # Indicates whether the PAGO is active or not (includes whether the PAGO can be purchased and whether it is returned in list API response for regular users)
+        # @var bool
+        self.isActive = isActive
+
+        # Specifies when was the pago created. Date and time represented as epoch.
+        # @var int
+        # @readonly
+        self.createDate = createDate
+
+        # Specifies when was the pago last updated. Date and time represented as epoch.
+        # @var int
+        # @readonly
+        self.updateDate = updateDate
+
+        # he date/time at which the Program Asset Group Offer is first purchasable by households. Date and time represented as epoch.
+        # @var int
+        self.startDate = startDate
+
+        # The date/time at which the Program Asset Group Offer is last purchasable by households.Date and time represented as epoch.
+        # @var int
+        self.endDate = endDate
+
+        # The last date/time at which the system will attempt to locate Program Assets that may be associated with this offer.Date and time represented as epoch.
+        # @var int
+        self.expiryDate = expiryDate
+
+        # External identifier
+        # @var string
+        self.externalId = externalId
+
+        # Identifies the Program Assets which will be entitled by Households that purchase this offer. Must be a unique value in the context of an account.
+        # @var string
+        self.externalOfferId = externalOfferId
+
+
+    PROPERTY_LOADERS = {
+        'id': getXmlNodeInt, 
+        'name': getXmlNodeText, 
+        'multilingualName': (KalturaObjectFactory.createArray, 'KalturaTranslationToken'), 
+        'priceDetailsId': getXmlNodeInt, 
+        'fileTypesIds': getXmlNodeText, 
+        'discountModuleId': getXmlNodeInt, 
+        'couponsGroupId': getXmlNodeInt, 
+        'description': getXmlNodeText, 
+        'multilingualDescription': (KalturaObjectFactory.createArray, 'KalturaTranslationToken'), 
+        'virtualAssetId': getXmlNodeInt, 
+        'isActive': getXmlNodeBool, 
+        'createDate': getXmlNodeInt, 
+        'updateDate': getXmlNodeInt, 
+        'startDate': getXmlNodeInt, 
+        'endDate': getXmlNodeInt, 
+        'expiryDate': getXmlNodeInt, 
+        'externalId': getXmlNodeText, 
+        'externalOfferId': getXmlNodeText, 
+    }
+
+    def fromXml(self, node):
+        KalturaOTTObjectSupportNullable.fromXml(self, node)
+        self.fromXmlImpl(node, KalturaProgramAssetGroupOffer.PROPERTY_LOADERS)
+
+    def toParams(self):
+        kparams = KalturaOTTObjectSupportNullable.toParams(self)
+        kparams.put("objectType", "KalturaProgramAssetGroupOffer")
+        kparams.addIntIfDefined("id", self.id)
+        kparams.addArrayIfDefined("multilingualName", self.multilingualName)
+        kparams.addIntIfDefined("priceDetailsId", self.priceDetailsId)
+        kparams.addStringIfDefined("fileTypesIds", self.fileTypesIds)
+        kparams.addIntIfDefined("discountModuleId", self.discountModuleId)
+        kparams.addIntIfDefined("couponsGroupId", self.couponsGroupId)
+        kparams.addArrayIfDefined("multilingualDescription", self.multilingualDescription)
+        kparams.addBoolIfDefined("isActive", self.isActive)
+        kparams.addIntIfDefined("startDate", self.startDate)
+        kparams.addIntIfDefined("endDate", self.endDate)
+        kparams.addIntIfDefined("expiryDate", self.expiryDate)
+        kparams.addStringIfDefined("externalId", self.externalId)
+        kparams.addStringIfDefined("externalOfferId", self.externalOfferId)
+        return kparams
+
+    def getId(self):
+        return self.id
+
+    def setId(self, newId):
+        self.id = newId
+
+    def getName(self):
+        return self.name
+
+    def getMultilingualName(self):
+        return self.multilingualName
+
+    def setMultilingualName(self, newMultilingualName):
+        self.multilingualName = newMultilingualName
+
+    def getPriceDetailsId(self):
+        return self.priceDetailsId
+
+    def setPriceDetailsId(self, newPriceDetailsId):
+        self.priceDetailsId = newPriceDetailsId
+
+    def getFileTypesIds(self):
+        return self.fileTypesIds
+
+    def setFileTypesIds(self, newFileTypesIds):
+        self.fileTypesIds = newFileTypesIds
+
+    def getDiscountModuleId(self):
+        return self.discountModuleId
+
+    def setDiscountModuleId(self, newDiscountModuleId):
+        self.discountModuleId = newDiscountModuleId
+
+    def getCouponsGroupId(self):
+        return self.couponsGroupId
+
+    def setCouponsGroupId(self, newCouponsGroupId):
+        self.couponsGroupId = newCouponsGroupId
+
+    def getDescription(self):
+        return self.description
+
+    def getMultilingualDescription(self):
+        return self.multilingualDescription
+
+    def setMultilingualDescription(self, newMultilingualDescription):
+        self.multilingualDescription = newMultilingualDescription
+
+    def getVirtualAssetId(self):
+        return self.virtualAssetId
+
+    def getIsActive(self):
+        return self.isActive
+
+    def setIsActive(self, newIsActive):
+        self.isActive = newIsActive
+
+    def getCreateDate(self):
+        return self.createDate
+
+    def getUpdateDate(self):
+        return self.updateDate
+
+    def getStartDate(self):
+        return self.startDate
+
+    def setStartDate(self, newStartDate):
+        self.startDate = newStartDate
+
+    def getEndDate(self):
+        return self.endDate
+
+    def setEndDate(self, newEndDate):
+        self.endDate = newEndDate
+
+    def getExpiryDate(self):
+        return self.expiryDate
+
+    def setExpiryDate(self, newExpiryDate):
+        self.expiryDate = newExpiryDate
+
+    def getExternalId(self):
+        return self.externalId
+
+    def setExternalId(self, newExternalId):
+        self.externalId = newExternalId
+
+    def getExternalOfferId(self):
+        return self.externalOfferId
+
+    def setExternalOfferId(self, newExternalOfferId):
+        self.externalOfferId = newExternalOfferId
+
+
+# @package Kaltura
+# @subpackage Client
 class KalturaPrice(KalturaObjectBase):
     """Price"""
 
@@ -24906,6 +25045,40 @@ class KalturaPpvPrice(KalturaProductPrice):
 
 # @package Kaltura
 # @subpackage Client
+class KalturaProgramAssetGroupOfferPrice(KalturaProductPrice):
+    """ProgramAssetGroupOffer price details"""
+
+    def __init__(self,
+            productId=NotImplemented,
+            productType=NotImplemented,
+            price=NotImplemented,
+            fullPrice=NotImplemented,
+            purchaseStatus=NotImplemented,
+            promotionInfo=NotImplemented):
+        KalturaProductPrice.__init__(self,
+            productId,
+            productType,
+            price,
+            fullPrice,
+            purchaseStatus,
+            promotionInfo)
+
+
+    PROPERTY_LOADERS = {
+    }
+
+    def fromXml(self, node):
+        KalturaProductPrice.fromXml(self, node)
+        self.fromXmlImpl(node, KalturaProgramAssetGroupOfferPrice.PROPERTY_LOADERS)
+
+    def toParams(self):
+        kparams = KalturaProductPrice.toParams(self)
+        kparams.put("objectType", "KalturaProgramAssetGroupOfferPrice")
+        return kparams
+
+
+# @package Kaltura
+# @subpackage Client
 class KalturaSubscriptionPrice(KalturaProductPrice):
     """Subscription price details"""
 
@@ -25428,6 +25601,43 @@ class KalturaProductsPriceListResponse(KalturaListResponse):
     def toParams(self):
         kparams = KalturaListResponse.toParams(self)
         kparams.put("objectType", "KalturaProductsPriceListResponse")
+        kparams.addArrayIfDefined("objects", self.objects)
+        return kparams
+
+    def getObjects(self):
+        return self.objects
+
+    def setObjects(self, newObjects):
+        self.objects = newObjects
+
+
+# @package Kaltura
+# @subpackage Client
+class KalturaProgramAssetGroupOfferListResponse(KalturaListResponse):
+    """ProgramAssetGroupOffer list"""
+
+    def __init__(self,
+            totalCount=NotImplemented,
+            objects=NotImplemented):
+        KalturaListResponse.__init__(self,
+            totalCount)
+
+        # A list of collections
+        # @var array of KalturaProgramAssetGroupOffer
+        self.objects = objects
+
+
+    PROPERTY_LOADERS = {
+        'objects': (KalturaObjectFactory.createArray, 'KalturaProgramAssetGroupOffer'), 
+    }
+
+    def fromXml(self, node):
+        KalturaListResponse.fromXml(self, node)
+        self.fromXmlImpl(node, KalturaProgramAssetGroupOfferListResponse.PROPERTY_LOADERS)
+
+    def toParams(self):
+        kparams = KalturaListResponse.toParams(self)
+        kparams.put("objectType", "KalturaProgramAssetGroupOfferListResponse")
         kparams.addArrayIfDefined("objects", self.objects)
         return kparams
 
@@ -29429,7 +29639,7 @@ class KalturaHouseholdDeviceFamilyLimitations(KalturaDeviceFamilyBase):
             deviceLimit=NotImplemented,
             concurrentLimit=NotImplemented,
             isDefaultDeviceLimit=NotImplemented,
-            isDefaultConcurrentLimit=NotImplemented):
+            isDefaultConcurrentLimit =NotImplemented):
         KalturaDeviceFamilyBase.__init__(self,
             id,
             name)
@@ -29454,7 +29664,7 @@ class KalturaHouseholdDeviceFamilyLimitations(KalturaDeviceFamilyBase):
         # Is the Max number of streams allowed for this family is default value or not
         # @var bool
         # @readonly
-        self.isDefaultConcurrentLimit = isDefaultConcurrentLimit
+        self.isDefaultConcurrentLimit  = isDefaultConcurrentLimit 
 
 
     PROPERTY_LOADERS = {
@@ -29462,7 +29672,7 @@ class KalturaHouseholdDeviceFamilyLimitations(KalturaDeviceFamilyBase):
         'deviceLimit': getXmlNodeInt, 
         'concurrentLimit': getXmlNodeInt, 
         'isDefaultDeviceLimit': getXmlNodeBool, 
-        'isDefaultConcurrentLimit': getXmlNodeBool, 
+        'isDefaultConcurrentLimit ': getXmlNodeBool, 
     }
 
     def fromXml(self, node):
@@ -29498,8 +29708,8 @@ class KalturaHouseholdDeviceFamilyLimitations(KalturaDeviceFamilyBase):
     def getIsDefaultDeviceLimit(self):
         return self.isDefaultDeviceLimit
 
-    def getIsDefaultConcurrentLimit(self):
-        return self.isDefaultConcurrentLimit
+    def getIsDefaultConcurrentLimit (self):
+        return self.isDefaultConcurrentLimit 
 
 
 # @package Kaltura
@@ -31131,6 +31341,58 @@ class KalturaPpvEntitlement(KalturaEntitlement):
 
     def getMediaId(self):
         return self.mediaId
+
+
+# @package Kaltura
+# @subpackage Client
+class KalturaProgramAssetGroupOfferEntitlement(KalturaEntitlement):
+    """ProgramAssetGroupOfferEntitlement"""
+
+    def __init__(self,
+            id=NotImplemented,
+            productId=NotImplemented,
+            currentUses=NotImplemented,
+            endDate=NotImplemented,
+            currentDate=NotImplemented,
+            lastViewDate=NotImplemented,
+            purchaseDate=NotImplemented,
+            paymentMethod=NotImplemented,
+            deviceUdid=NotImplemented,
+            deviceName=NotImplemented,
+            isCancelationWindowEnabled=NotImplemented,
+            maxUses=NotImplemented,
+            userId=NotImplemented,
+            householdId=NotImplemented,
+            isPending=NotImplemented):
+        KalturaEntitlement.__init__(self,
+            id,
+            productId,
+            currentUses,
+            endDate,
+            currentDate,
+            lastViewDate,
+            purchaseDate,
+            paymentMethod,
+            deviceUdid,
+            deviceName,
+            isCancelationWindowEnabled,
+            maxUses,
+            userId,
+            householdId,
+            isPending)
+
+
+    PROPERTY_LOADERS = {
+    }
+
+    def fromXml(self, node):
+        KalturaEntitlement.fromXml(self, node)
+        self.fromXmlImpl(node, KalturaProgramAssetGroupOfferEntitlement.PROPERTY_LOADERS)
+
+    def toParams(self):
+        kparams = KalturaEntitlement.toParams(self)
+        kparams.put("objectType", "KalturaProgramAssetGroupOfferEntitlement")
+        return kparams
 
 
 # @package Kaltura
@@ -33226,8 +33488,7 @@ class KalturaProgramAsset(KalturaAsset):
             enableCdvr=NotImplemented,
             enableCatchUp=NotImplemented,
             enableStartOver=NotImplemented,
-            enableTrickPlay=NotImplemented,
-            externalOfferIds=NotImplemented):
+            enableTrickPlay=NotImplemented):
         KalturaAsset.__init__(self,
             id,
             type,
@@ -33294,10 +33555,6 @@ class KalturaProgramAsset(KalturaAsset):
         # @var bool
         self.enableTrickPlay = enableTrickPlay
 
-        # Contains comma separate list of KalturaProgramAssetGroupOffer.externalOfferId values indicating the PAGOs to which the Program Asset is bound.
-        # @var string
-        self.externalOfferIds = externalOfferIds
-
 
     PROPERTY_LOADERS = {
         'epgChannelId': getXmlNodeInt, 
@@ -33309,7 +33566,6 @@ class KalturaProgramAsset(KalturaAsset):
         'enableCatchUp': getXmlNodeBool, 
         'enableStartOver': getXmlNodeBool, 
         'enableTrickPlay': getXmlNodeBool, 
-        'externalOfferIds': getXmlNodeText, 
     }
 
     def fromXml(self, node):
@@ -33326,7 +33582,6 @@ class KalturaProgramAsset(KalturaAsset):
         kparams.addBoolIfDefined("enableCatchUp", self.enableCatchUp)
         kparams.addBoolIfDefined("enableStartOver", self.enableStartOver)
         kparams.addBoolIfDefined("enableTrickPlay", self.enableTrickPlay)
-        kparams.addStringIfDefined("externalOfferIds", self.externalOfferIds)
         return kparams
 
     def getEpgChannelId(self):
@@ -33377,12 +33632,6 @@ class KalturaProgramAsset(KalturaAsset):
     def setEnableTrickPlay(self, newEnableTrickPlay):
         self.enableTrickPlay = newEnableTrickPlay
 
-    def getExternalOfferIds(self):
-        return self.externalOfferIds
-
-    def setExternalOfferIds(self, newExternalOfferIds):
-        self.externalOfferIds = newExternalOfferIds
-
 
 # @package Kaltura
 # @subpackage Client
@@ -33416,7 +33665,6 @@ class KalturaRecordingAsset(KalturaProgramAsset):
             enableCatchUp=NotImplemented,
             enableStartOver=NotImplemented,
             enableTrickPlay=NotImplemented,
-            externalOfferIds=NotImplemented,
             recordingId=NotImplemented,
             recordingType=NotImplemented,
             viewableUntilDate=NotImplemented):
@@ -33446,8 +33694,7 @@ class KalturaRecordingAsset(KalturaProgramAsset):
             enableCdvr,
             enableCatchUp,
             enableStartOver,
-            enableTrickPlay,
-            externalOfferIds)
+            enableTrickPlay)
 
         # Recording identifier
         # @var string
@@ -33528,8 +33775,7 @@ class KalturaEpg(KalturaProgramAsset):
             enableCdvr=NotImplemented,
             enableCatchUp=NotImplemented,
             enableStartOver=NotImplemented,
-            enableTrickPlay=NotImplemented,
-            externalOfferIds=NotImplemented):
+            enableTrickPlay=NotImplemented):
         KalturaProgramAsset.__init__(self,
             id,
             type,
@@ -33556,8 +33802,7 @@ class KalturaEpg(KalturaProgramAsset):
             enableCdvr,
             enableCatchUp,
             enableStartOver,
-            enableTrickPlay,
-            externalOfferIds)
+            enableTrickPlay)
 
 
     PROPERTY_LOADERS = {
@@ -48981,7 +49226,7 @@ class KalturaEntitlementService(KalturaServiceBase):
         resultNode = self.client.doQueue()
 
     def cancel(self, assetId, productType):
-        """Immediately cancel a subscription, PPV or collection. Cancel is possible only if within cancellation window and content not already consumed"""
+        """Immediately cancel a subscription, PPV, collection or programAssetGroupOffer. Cancel is possible only if within cancellation window and content not already consumed"""
 
         kparams = KalturaParams()
         kparams.addIntIfDefined("assetId", assetId);
@@ -49024,7 +49269,7 @@ class KalturaEntitlementService(KalturaServiceBase):
         return getXmlNodeBool(resultNode)
 
     def forceCancel(self, assetId, productType):
-        """Immediately cancel a subscription, PPV or collection. Cancel applies regardless of cancellation window and content consumption status"""
+        """Immediately cancel a subscription, PPV, collection or programAssetGroupOffer. Cancel applies regardless of cancellation window and content consumption status"""
 
         kparams = KalturaParams()
         kparams.addIntIfDefined("assetId", assetId);
@@ -49047,7 +49292,7 @@ class KalturaEntitlementService(KalturaServiceBase):
         return KalturaObjectFactory.create(resultNode, 'KalturaEntitlementRenewal')
 
     def grant(self, productId, productType, history, contentId = 0):
-        """Grant household for an entitlement for a PPV or Subscription."""
+        """Grant household for an entitlement for a PPV, Subscription or programAssetGroupOffer."""
 
         kparams = KalturaParams()
         kparams.addIntIfDefined("productId", productId);
@@ -52076,6 +52321,59 @@ class KalturaProductPriceService(KalturaServiceBase):
 
 # @package Kaltura
 # @subpackage Client
+class KalturaProgramAssetGroupOfferService(KalturaServiceBase):
+    def __init__(self, client = None):
+        KalturaServiceBase.__init__(self, client)
+
+    def add(self, programAssetGroupOffer):
+        """Insert new ProgramAssetGroupOffer for partner"""
+
+        kparams = KalturaParams()
+        kparams.addObjectIfDefined("programAssetGroupOffer", programAssetGroupOffer)
+        self.client.queueServiceActionCall("programassetgroupoffer", "add", "KalturaProgramAssetGroupOffer", kparams)
+        if self.client.isMultiRequest():
+            return self.client.getMultiRequestResult()
+        resultNode = self.client.doQueue()
+        return KalturaObjectFactory.create(resultNode, 'KalturaProgramAssetGroupOffer')
+
+    def delete(self, id):
+        """Delete programAssetGroupOffer"""
+
+        kparams = KalturaParams()
+        kparams.addIntIfDefined("id", id);
+        self.client.queueServiceActionCall("programassetgroupoffer", "delete", "None", kparams)
+        if self.client.isMultiRequest():
+            return self.client.getMultiRequestResult()
+        resultNode = self.client.doQueue()
+        return getXmlNodeBool(resultNode)
+
+    def list(self, filter = NotImplemented, pager = NotImplemented):
+        """Gets all Program asset group offer"""
+
+        kparams = KalturaParams()
+        kparams.addObjectIfDefined("filter", filter)
+        kparams.addObjectIfDefined("pager", pager)
+        self.client.queueServiceActionCall("programassetgroupoffer", "list", "KalturaProgramAssetGroupOfferListResponse", kparams)
+        if self.client.isMultiRequest():
+            return self.client.getMultiRequestResult()
+        resultNode = self.client.doQueue()
+        return KalturaObjectFactory.create(resultNode, 'KalturaProgramAssetGroupOfferListResponse')
+
+    def update(self, id, programAssetGroupOffer):
+        """Update ProgramAssetGroupOffer"""
+
+        kparams = KalturaParams()
+        kparams.addIntIfDefined("id", id);
+        kparams.addObjectIfDefined("programAssetGroupOffer", programAssetGroupOffer)
+        self.client.queueServiceActionCall("programassetgroupoffer", "update", "KalturaProgramAssetGroupOffer", kparams)
+        if self.client.isMultiRequest():
+            return self.client.getMultiRequestResult()
+        resultNode = self.client.doQueue()
+        return KalturaObjectFactory.create(resultNode, 'KalturaProgramAssetGroupOffer')
+
+
+# @package Kaltura
+# @subpackage Client
 class KalturaPurchaseSettingsService(KalturaServiceBase):
     def __init__(self, client = None):
         KalturaServiceBase.__init__(self, client)
@@ -54294,6 +54592,7 @@ class KalturaCoreClient(KalturaClientPlugin):
             'priceDetails': KalturaPriceDetailsService,
             'pricePlan': KalturaPricePlanService,
             'productPrice': KalturaProductPriceService,
+            'programAssetGroupOffer': KalturaProgramAssetGroupOfferService,
             'purchaseSettings': KalturaPurchaseSettingsService,
             'ratio': KalturaRatioService,
             'recommendationProfile': KalturaRecommendationProfileService,
@@ -54359,8 +54658,6 @@ class KalturaCoreClient(KalturaClientPlugin):
             'KalturaAssetLifeCycleRuleActionType': KalturaAssetLifeCycleRuleActionType,
             'KalturaAssetLifeCycleRuleTransitionType': KalturaAssetLifeCycleRuleTransitionType,
             'KalturaAssetOrderBy': KalturaAssetOrderBy,
-            'KalturaAssetOrderByStatistics': KalturaAssetOrderByStatistics,
-            'KalturaAssetOrderByType': KalturaAssetOrderByType,
             'KalturaAssetReferenceType': KalturaAssetReferenceType,
             'KalturaAssetReminderOrderBy': KalturaAssetReminderOrderBy,
             'KalturaAssetRuleOrderBy': KalturaAssetRuleOrderBy,
@@ -54493,6 +54790,7 @@ class KalturaCoreClient(KalturaClientPlugin):
             'KalturaPriceDetailsOrderBy': KalturaPriceDetailsOrderBy,
             'KalturaPricePlanOrderBy': KalturaPricePlanOrderBy,
             'KalturaProductPriceOrderBy': KalturaProductPriceOrderBy,
+            'KalturaProgramAssetGroupOfferOrderBy': KalturaProgramAssetGroupOfferOrderBy,
             'KalturaProtectionPolicy': KalturaProtectionPolicy,
             'KalturaPurchaseSettingsType': KalturaPurchaseSettingsType,
             'KalturaPurchaseStatus': KalturaPurchaseStatus,
@@ -54624,6 +54922,8 @@ class KalturaCoreClient(KalturaClientPlugin):
             'KalturaPreviewModuleFilter': KalturaPreviewModuleFilter,
             'KalturaPriceDetailsFilter': KalturaPriceDetailsFilter,
             'KalturaPricePlanFilter': KalturaPricePlanFilter,
+            'KalturaProgramAssetGroupOfferFilter': KalturaProgramAssetGroupOfferFilter,
+            'KalturaProgramAssetGroupOfferIdInFilter': KalturaProgramAssetGroupOfferIdInFilter,
             'KalturaSubscriptionSetFilter': KalturaSubscriptionSetFilter,
             'KalturaSubscriptionDependencySetFilter': KalturaSubscriptionDependencySetFilter,
             'KalturaSubscriptionFilter': KalturaSubscriptionFilter,
@@ -54648,15 +54948,11 @@ class KalturaCoreClient(KalturaClientPlugin):
             'KalturaIngestByIdsFilter': KalturaIngestByIdsFilter,
             'KalturaAggregationCountFilter': KalturaAggregationCountFilter,
             'KalturaPersistedFilter': KalturaPersistedFilter,
-            'KalturaBaseAssetOrder': KalturaBaseAssetOrder,
             'KalturaDynamicOrderBy': KalturaDynamicOrderBy,
             'KalturaAssetFilter': KalturaAssetFilter,
             'KalturaAssetGroupBy': KalturaAssetGroupBy,
             'KalturaBaseSearchAssetFilter': KalturaBaseSearchAssetFilter,
             'KalturaChannelFilter': KalturaChannelFilter,
-            'KalturaAssetDynamicOrder': KalturaAssetDynamicOrder,
-            'KalturaAssetOrder': KalturaAssetOrder,
-            'KalturaAssetStatisticsOrder': KalturaAssetStatisticsOrder,
             'KalturaPersonalListSearchFilter': KalturaPersonalListSearchFilter,
             'KalturaRelatedFilter': KalturaRelatedFilter,
             'KalturaSearchAssetFilter': KalturaSearchAssetFilter,
@@ -54898,6 +55194,7 @@ class KalturaCoreClient(KalturaClientPlugin):
             'KalturaChannelFieldOrder': KalturaChannelFieldOrder,
             'KalturaChannelSlidingWindowOrder': KalturaChannelSlidingWindowOrder,
             'KalturaPricePlan': KalturaPricePlan,
+            'KalturaProgramAssetGroupOffer': KalturaProgramAssetGroupOffer,
             'KalturaPrice': KalturaPrice,
             'KalturaPriceDetails': KalturaPriceDetails,
             'KalturaPreviewModule': KalturaPreviewModule,
@@ -54965,6 +55262,7 @@ class KalturaCoreClient(KalturaClientPlugin):
             'KalturaProductPrice': KalturaProductPrice,
             'KalturaCollectionPrice': KalturaCollectionPrice,
             'KalturaPpvPrice': KalturaPpvPrice,
+            'KalturaProgramAssetGroupOfferPrice': KalturaProgramAssetGroupOfferPrice,
             'KalturaSubscriptionPrice': KalturaSubscriptionPrice,
             'KalturaPpv': KalturaPpv,
             'KalturaPpvListResponse': KalturaPpvListResponse,
@@ -54973,6 +55271,7 @@ class KalturaCoreClient(KalturaClientPlugin):
             'KalturaPricePlanListResponse': KalturaPricePlanListResponse,
             'KalturaProductPriceListResponse': KalturaProductPriceListResponse,
             'KalturaProductsPriceListResponse': KalturaProductsPriceListResponse,
+            'KalturaProgramAssetGroupOfferListResponse': KalturaProgramAssetGroupOfferListResponse,
             'KalturaSubscriptionListResponse': KalturaSubscriptionListResponse,
             'KalturaSubscriptionSet': KalturaSubscriptionSet,
             'KalturaSubscriptionSetListResponse': KalturaSubscriptionSetListResponse,
@@ -55071,6 +55370,7 @@ class KalturaCoreClient(KalturaClientPlugin):
             'KalturaEntitlementListResponse': KalturaEntitlementListResponse,
             'KalturaCollectionEntitlement': KalturaCollectionEntitlement,
             'KalturaPpvEntitlement': KalturaPpvEntitlement,
+            'KalturaProgramAssetGroupOfferEntitlement': KalturaProgramAssetGroupOfferEntitlement,
             'KalturaEntitlementDiscountDetails': KalturaEntitlementDiscountDetails,
             'KalturaEntitlementPriceDetails': KalturaEntitlementPriceDetails,
             'KalturaSubscriptionEntitlement': KalturaSubscriptionEntitlement,
