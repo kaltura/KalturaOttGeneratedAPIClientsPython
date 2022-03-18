@@ -42,7 +42,7 @@ from ..Base import (
     KalturaServiceBase,
 )
 
-API_VERSION = '7.3.0.29809'
+API_VERSION = '7.3.0.29810'
 
 ########## enums ##########
 # @package Kaltura
@@ -2326,6 +2326,7 @@ class KalturaRuleConditionType(object):
     DYNAMIC_KEYS = "DYNAMIC_KEYS"
     USER_SESSION_PROFILE = "USER_SESSION_PROFILE"
     DEVICE_DYNAMIC_DATA = "DEVICE_DYNAMIC_DATA"
+    IP_V6_RANGE = "IP_V6_RANGE"
 
     def __init__(self, value):
         self.value = value
@@ -15229,6 +15230,58 @@ class KalturaUserSessionProfileCondition(KalturaCondition):
 
     def setId(self, newId):
         self.id = newId
+
+
+# @package Kaltura
+# @subpackage Client
+class KalturaIpV6RangeCondition(KalturaCondition):
+    """IP V6 range condition"""
+
+    def __init__(self,
+            type=NotImplemented,
+            description=NotImplemented,
+            fromIP=NotImplemented,
+            toIP=NotImplemented):
+        KalturaCondition.__init__(self,
+            type,
+            description)
+
+        # From IP address range
+        # @var string
+        self.fromIP = fromIP
+
+        # TO IP address range
+        # @var string
+        self.toIP = toIP
+
+
+    PROPERTY_LOADERS = {
+        'fromIP': getXmlNodeText, 
+        'toIP': getXmlNodeText, 
+    }
+
+    def fromXml(self, node):
+        KalturaCondition.fromXml(self, node)
+        self.fromXmlImpl(node, KalturaIpV6RangeCondition.PROPERTY_LOADERS)
+
+    def toParams(self):
+        kparams = KalturaCondition.toParams(self)
+        kparams.put("objectType", "KalturaIpV6RangeCondition")
+        kparams.addStringIfDefined("fromIP", self.fromIP)
+        kparams.addStringIfDefined("toIP", self.toIP)
+        return kparams
+
+    def getFromIP(self):
+        return self.fromIP
+
+    def setFromIP(self, newFromIP):
+        self.fromIP = newFromIP
+
+    def getToIP(self):
+        return self.toIP
+
+    def setToIP(self, newToIP):
+        self.toIP = newToIP
 
 
 # @package Kaltura
@@ -54830,6 +54883,7 @@ class KalturaCoreClient(KalturaClientPlugin):
             'KalturaDynamicKeysCondition': KalturaDynamicKeysCondition,
             'KalturaDeviceDynamicDataCondition': KalturaDeviceDynamicDataCondition,
             'KalturaUserSessionProfileCondition': KalturaUserSessionProfileCondition,
+            'KalturaIpV6RangeCondition': KalturaIpV6RangeCondition,
             'KalturaMessage': KalturaMessage,
             'KalturaBulkUploadResult': KalturaBulkUploadResult,
             'KalturaBulkUpload': KalturaBulkUpload,
