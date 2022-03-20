@@ -42,7 +42,7 @@ from ..Base import (
     KalturaServiceBase,
 )
 
-API_VERSION = '7.3.0.29794'
+API_VERSION = '7.3.0.29810'
 
 ########## enums ##########
 # @package Kaltura
@@ -1478,40 +1478,6 @@ class KalturaInboxMessageType(object):
 
 # @package Kaltura
 # @subpackage Client
-class KalturaIngestEpgProgramResultOrderBy(object):
-    NONE = "NONE"
-    EXTERNAL_PROGRAM_ID_DESC = "EXTERNAL_PROGRAM_ID_DESC"
-    EXTERNAL_PROGRAM_ID_ASC = "EXTERNAL_PROGRAM_ID_ASC"
-    LINEAR_CHANNEL_ID_DESC = "LINEAR_CHANNEL_ID_DESC"
-    LINEAR_CHANNEL_ID_ASC = "LINEAR_CHANNEL_ID_ASC"
-    INDEX_IN_FILE_DESC = "INDEX_IN_FILE_DESC"
-    INDEX_IN_FILE_ASC = "INDEX_IN_FILE_ASC"
-    START_DATE_DESC = "START_DATE_DESC"
-    START_DATE_ASC = "START_DATE_ASC"
-    SEVERITY_DESC = "SEVERITY_DESC"
-    SEVERITY_ASC = "SEVERITY_ASC"
-
-    def __init__(self, value):
-        self.value = value
-
-    def getValue(self):
-        return self.value
-
-# @package Kaltura
-# @subpackage Client
-class KalturaIngestEpgProgramStatus(object):
-    FAILURE = "FAILURE"
-    WARNING = "WARNING"
-    SUCCESS = "SUCCESS"
-
-    def __init__(self, value):
-        self.value = value
-
-    def getValue(self):
-        return self.value
-
-# @package Kaltura
-# @subpackage Client
 class KalturaIngestProfileAutofillPolicy(object):
     REJECT = "REJECT"
     AUTOFILL = "AUTOFILL"
@@ -1790,7 +1756,6 @@ class KalturaObjectVirtualAssetInfoType(object):
     CATEGORY = "Category"
     TVOD = "Tvod"
     BOXSET = "Boxset"
-    PAGO = "PAGO"
 
     def __init__(self, value):
         self.value = value
@@ -2099,20 +2064,6 @@ class KalturaPricePlanOrderBy(object):
 class KalturaProductPriceOrderBy(object):
     PRODUCT_ID_ASC = "PRODUCT_ID_ASC"
     PRODUCT_ID_DESC = "PRODUCT_ID_DESC"
-
-    def __init__(self, value):
-        self.value = value
-
-    def getValue(self):
-        return self.value
-
-# @package Kaltura
-# @subpackage Client
-class KalturaProgramAssetGroupOfferOrderBy(object):
-    NAME_ASC = "NAME_ASC"
-    NAME_DESC = "NAME_DESC"
-    UPDATE_DATE_ASC = "UPDATE_DATE_ASC"
-    UPDATE_DATE_DESC = "UPDATE_DATE_DESC"
 
     def __init__(self, value):
         self.value = value
@@ -5709,82 +5660,6 @@ class KalturaPricePlanFilter(KalturaFilter):
 
 # @package Kaltura
 # @subpackage Client
-class KalturaProgramAssetGroupOfferFilter(KalturaFilter):
-    """Program asset group offer filter"""
-
-    def __init__(self,
-            orderBy=NotImplemented,
-            alsoInactive=NotImplemented):
-        KalturaFilter.__init__(self,
-            orderBy)
-
-        # return also inactive
-        # @var bool
-        self.alsoInactive = alsoInactive
-
-
-    PROPERTY_LOADERS = {
-        'alsoInactive': getXmlNodeBool, 
-    }
-
-    def fromXml(self, node):
-        KalturaFilter.fromXml(self, node)
-        self.fromXmlImpl(node, KalturaProgramAssetGroupOfferFilter.PROPERTY_LOADERS)
-
-    def toParams(self):
-        kparams = KalturaFilter.toParams(self)
-        kparams.put("objectType", "KalturaProgramAssetGroupOfferFilter")
-        kparams.addBoolIfDefined("alsoInactive", self.alsoInactive)
-        return kparams
-
-    def getAlsoInactive(self):
-        return self.alsoInactive
-
-    def setAlsoInactive(self, newAlsoInactive):
-        self.alsoInactive = newAlsoInactive
-
-
-# @package Kaltura
-# @subpackage Client
-class KalturaProgramAssetGroupOfferIdInFilter(KalturaProgramAssetGroupOfferFilter):
-    """Program asset group offer filter"""
-
-    def __init__(self,
-            orderBy=NotImplemented,
-            alsoInactive=NotImplemented,
-            idIn=NotImplemented):
-        KalturaProgramAssetGroupOfferFilter.__init__(self,
-            orderBy,
-            alsoInactive)
-
-        # Comma separated asset group offer identifiers
-        # @var string
-        self.idIn = idIn
-
-
-    PROPERTY_LOADERS = {
-        'idIn': getXmlNodeText, 
-    }
-
-    def fromXml(self, node):
-        KalturaProgramAssetGroupOfferFilter.fromXml(self, node)
-        self.fromXmlImpl(node, KalturaProgramAssetGroupOfferIdInFilter.PROPERTY_LOADERS)
-
-    def toParams(self):
-        kparams = KalturaProgramAssetGroupOfferFilter.toParams(self)
-        kparams.put("objectType", "KalturaProgramAssetGroupOfferIdInFilter")
-        kparams.addStringIfDefined("idIn", self.idIn)
-        return kparams
-
-    def getIdIn(self):
-        return self.idIn
-
-    def setIdIn(self, newIdIn):
-        self.idIn = newIdIn
-
-
-# @package Kaltura
-# @subpackage Client
 class KalturaSubscriptionSetFilter(KalturaFilter):
     def __init__(self,
             orderBy=NotImplemented,
@@ -6740,245 +6615,6 @@ class KalturaIngestByIdsFilter(KalturaFilter):
 
     def setIngestIdIn(self, newIngestIdIn):
         self.ingestIdIn = newIngestIdIn
-
-
-# @package Kaltura
-# @subpackage Client
-class KalturaIngestEpgProgramResultFilter(KalturaFilter):
-    def __init__(self,
-            orderBy=NotImplemented):
-        KalturaFilter.__init__(self,
-            orderBy)
-
-
-    PROPERTY_LOADERS = {
-    }
-
-    def fromXml(self, node):
-        KalturaFilter.fromXml(self, node)
-        self.fromXmlImpl(node, KalturaIngestEpgProgramResultFilter.PROPERTY_LOADERS)
-
-    def toParams(self):
-        kparams = KalturaFilter.toParams(self)
-        kparams.put("objectType", "KalturaIngestEpgProgramResultFilter")
-        return kparams
-
-
-# @package Kaltura
-# @subpackage Client
-class KalturaIngestProgramResultsByRefineFilter(KalturaIngestEpgProgramResultFilter):
-    def __init__(self,
-            orderBy=NotImplemented,
-            ingestStatusIn=NotImplemented,
-            startDateGreaterThan=NotImplemented,
-            startDateSmallerThan=NotImplemented):
-        KalturaIngestEpgProgramResultFilter.__init__(self,
-            orderBy)
-
-        # Comma seperated valid statuses - only &#39;FAILURE&#39;, &#39;WARNING&#39; and &#39;SUCCESS&#39; are valid strings. No repetitions are allowed.
-        # @var string
-        self.ingestStatusIn = ingestStatusIn
-
-        # Program EPG start date greater then this value. Date and time represented as epoch.
-        # @var int
-        self.startDateGreaterThan = startDateGreaterThan
-
-        # Program EPG start date smaller than this value. Date and time represented as epoch.
-        # @var int
-        self.startDateSmallerThan = startDateSmallerThan
-
-
-    PROPERTY_LOADERS = {
-        'ingestStatusIn': getXmlNodeText, 
-        'startDateGreaterThan': getXmlNodeInt, 
-        'startDateSmallerThan': getXmlNodeInt, 
-    }
-
-    def fromXml(self, node):
-        KalturaIngestEpgProgramResultFilter.fromXml(self, node)
-        self.fromXmlImpl(node, KalturaIngestProgramResultsByRefineFilter.PROPERTY_LOADERS)
-
-    def toParams(self):
-        kparams = KalturaIngestEpgProgramResultFilter.toParams(self)
-        kparams.put("objectType", "KalturaIngestProgramResultsByRefineFilter")
-        kparams.addStringIfDefined("ingestStatusIn", self.ingestStatusIn)
-        kparams.addIntIfDefined("startDateGreaterThan", self.startDateGreaterThan)
-        kparams.addIntIfDefined("startDateSmallerThan", self.startDateSmallerThan)
-        return kparams
-
-    def getIngestStatusIn(self):
-        return self.ingestStatusIn
-
-    def setIngestStatusIn(self, newIngestStatusIn):
-        self.ingestStatusIn = newIngestStatusIn
-
-    def getStartDateGreaterThan(self):
-        return self.startDateGreaterThan
-
-    def setStartDateGreaterThan(self, newStartDateGreaterThan):
-        self.startDateGreaterThan = newStartDateGreaterThan
-
-    def getStartDateSmallerThan(self):
-        return self.startDateSmallerThan
-
-    def setStartDateSmallerThan(self, newStartDateSmallerThan):
-        self.startDateSmallerThan = newStartDateSmallerThan
-
-
-# @package Kaltura
-# @subpackage Client
-class KalturaIngestProgramResultsByCombinedFieldsFilter(KalturaIngestProgramResultsByRefineFilter):
-    def __init__(self,
-            orderBy=NotImplemented,
-            ingestStatusIn=NotImplemented,
-            startDateGreaterThan=NotImplemented,
-            startDateSmallerThan=NotImplemented,
-            combinedFieldsValue=NotImplemented):
-        KalturaIngestProgramResultsByRefineFilter.__init__(self,
-            orderBy,
-            ingestStatusIn,
-            startDateGreaterThan,
-            startDateSmallerThan)
-
-        # String value to substring search by ProgramID or ExternalProgramID or LinearChannelID.
-        #             Up to 20 ids are allowed.
-        # @var string
-        self.combinedFieldsValue = combinedFieldsValue
-
-
-    PROPERTY_LOADERS = {
-        'combinedFieldsValue': getXmlNodeText, 
-    }
-
-    def fromXml(self, node):
-        KalturaIngestProgramResultsByRefineFilter.fromXml(self, node)
-        self.fromXmlImpl(node, KalturaIngestProgramResultsByCombinedFieldsFilter.PROPERTY_LOADERS)
-
-    def toParams(self):
-        kparams = KalturaIngestProgramResultsByRefineFilter.toParams(self)
-        kparams.put("objectType", "KalturaIngestProgramResultsByCombinedFieldsFilter")
-        kparams.addStringIfDefined("combinedFieldsValue", self.combinedFieldsValue)
-        return kparams
-
-    def getCombinedFieldsValue(self):
-        return self.combinedFieldsValue
-
-    def setCombinedFieldsValue(self, newCombinedFieldsValue):
-        self.combinedFieldsValue = newCombinedFieldsValue
-
-
-# @package Kaltura
-# @subpackage Client
-class KalturaIngestProgramResultsByCompoundFilter(KalturaIngestProgramResultsByRefineFilter):
-    def __init__(self,
-            orderBy=NotImplemented,
-            ingestStatusIn=NotImplemented,
-            startDateGreaterThan=NotImplemented,
-            startDateSmallerThan=NotImplemented,
-            linearChannelIdIn=NotImplemented):
-        KalturaIngestProgramResultsByRefineFilter.__init__(self,
-            orderBy,
-            ingestStatusIn,
-            startDateGreaterThan,
-            startDateSmallerThan)
-
-        # Comma seperated channel id (the id of the linear channel asset that the program belongs to).
-        #             Up to 20 ids are allowed.
-        # @var string
-        self.linearChannelIdIn = linearChannelIdIn
-
-
-    PROPERTY_LOADERS = {
-        'linearChannelIdIn': getXmlNodeText, 
-    }
-
-    def fromXml(self, node):
-        KalturaIngestProgramResultsByRefineFilter.fromXml(self, node)
-        self.fromXmlImpl(node, KalturaIngestProgramResultsByCompoundFilter.PROPERTY_LOADERS)
-
-    def toParams(self):
-        kparams = KalturaIngestProgramResultsByRefineFilter.toParams(self)
-        kparams.put("objectType", "KalturaIngestProgramResultsByCompoundFilter")
-        kparams.addStringIfDefined("linearChannelIdIn", self.linearChannelIdIn)
-        return kparams
-
-    def getLinearChannelIdIn(self):
-        return self.linearChannelIdIn
-
-    def setLinearChannelIdIn(self, newLinearChannelIdIn):
-        self.linearChannelIdIn = newLinearChannelIdIn
-
-
-# @package Kaltura
-# @subpackage Client
-class KalturaIngestProgramResultsByExternalIdsFilter(KalturaIngestEpgProgramResultFilter):
-    def __init__(self,
-            orderBy=NotImplemented,
-            externalProgramIdIn=NotImplemented):
-        KalturaIngestEpgProgramResultFilter.__init__(self,
-            orderBy)
-
-        # Comma seperated external program id.
-        #             Up to 20 ids are allowed.
-        # @var string
-        self.externalProgramIdIn = externalProgramIdIn
-
-
-    PROPERTY_LOADERS = {
-        'externalProgramIdIn': getXmlNodeText, 
-    }
-
-    def fromXml(self, node):
-        KalturaIngestEpgProgramResultFilter.fromXml(self, node)
-        self.fromXmlImpl(node, KalturaIngestProgramResultsByExternalIdsFilter.PROPERTY_LOADERS)
-
-    def toParams(self):
-        kparams = KalturaIngestEpgProgramResultFilter.toParams(self)
-        kparams.put("objectType", "KalturaIngestProgramResultsByExternalIdsFilter")
-        kparams.addStringIfDefined("externalProgramIdIn", self.externalProgramIdIn)
-        return kparams
-
-    def getExternalProgramIdIn(self):
-        return self.externalProgramIdIn
-
-    def setExternalProgramIdIn(self, newExternalProgramIdIn):
-        self.externalProgramIdIn = newExternalProgramIdIn
-
-
-# @package Kaltura
-# @subpackage Client
-class KalturaIngestProgramResultsByProgramIdsFilter(KalturaIngestEpgProgramResultFilter):
-    def __init__(self,
-            orderBy=NotImplemented,
-            programIdIn=NotImplemented):
-        KalturaIngestEpgProgramResultFilter.__init__(self,
-            orderBy)
-
-        # Comma seperated program id (the unique ingested program id as it determined by Kaltura BE).
-        #             Up to 20 ids are allowed.
-        # @var string
-        self.programIdIn = programIdIn
-
-
-    PROPERTY_LOADERS = {
-        'programIdIn': getXmlNodeText, 
-    }
-
-    def fromXml(self, node):
-        KalturaIngestEpgProgramResultFilter.fromXml(self, node)
-        self.fromXmlImpl(node, KalturaIngestProgramResultsByProgramIdsFilter.PROPERTY_LOADERS)
-
-    def toParams(self):
-        kparams = KalturaIngestEpgProgramResultFilter.toParams(self)
-        kparams.put("objectType", "KalturaIngestProgramResultsByProgramIdsFilter")
-        kparams.addStringIfDefined("programIdIn", self.programIdIn)
-        return kparams
-
-    def getProgramIdIn(self):
-        return self.programIdIn
-
-    def setProgramIdIn(self, newProgramIdIn):
-        self.programIdIn = newProgramIdIn
 
 
 # @package Kaltura
@@ -21675,224 +21311,6 @@ class KalturaPricePlan(KalturaUsageModule):
 
 # @package Kaltura
 # @subpackage Client
-class KalturaProgramAssetGroupOffer(KalturaOTTObjectSupportNullable):
-    """Program asset group offer details"""
-
-    def __init__(self,
-            id=NotImplemented,
-            name=NotImplemented,
-            multilingualName=NotImplemented,
-            priceDetailsId=NotImplemented,
-            fileTypesIds=NotImplemented,
-            description=NotImplemented,
-            multilingualDescription=NotImplemented,
-            virtualAssetId=NotImplemented,
-            isActive=NotImplemented,
-            createDate=NotImplemented,
-            updateDate=NotImplemented,
-            startDate=NotImplemented,
-            endDate=NotImplemented,
-            expiryDate=NotImplemented,
-            externalId=NotImplemented,
-            externalOfferId=NotImplemented):
-        KalturaOTTObjectSupportNullable.__init__(self)
-
-        # Unique Kaltura internal identifier for the module
-        # @var int
-        self.id = id
-
-        # Name of the Program asset group offer
-        # @var string
-        # @readonly
-        self.name = name
-
-        # Name of the Program asset group offer
-        # @var array of KalturaTranslationToken
-        self.multilingualName = multilingualName
-
-        # ID of the KalturaPriceDetails object which contains details of the price to be paid for purchasing this KalturaProgramAssetGroupOffer.
-        # @var int
-        self.priceDetailsId = priceDetailsId
-
-        # Comma separated file types identifiers that are supported in this Program asset group offer.
-        #             The subset of KalturaMediaFiles of the live linear channel on which the associated Program Assets are carried to which households entitled to this
-        #             Program Asset Group Offer are entitled to view E.g.may be used to restrict entitlement only to HD flavour of the Program Asset(and not the UHD flavour)
-        #             If this parameter is empty, the Household shall be entitled to all KalturaMediaFiles associated with the KalturaLiveAsset.
-        # @var string
-        self.fileTypesIds = fileTypesIds
-
-        # A list of the descriptions of the Program asset group offer on different languages (language code and translation)
-        # @var string
-        # @readonly
-        self.description = description
-
-        # A list of the descriptions of the Program asset group offer on different languages (language code and translation)
-        # @var array of KalturaTranslationToken
-        self.multilingualDescription = multilingualDescription
-
-        # The id of the paired asset
-        # @var int
-        # @readonly
-        self.virtualAssetId = virtualAssetId
-
-        # Indicates whether the PAGO is active or not (includes whether the PAGO can be purchased and whether it is returned in list API response for regular users)
-        # @var bool
-        self.isActive = isActive
-
-        # Specifies when was the pago created. Date and time represented as epoch.
-        # @var int
-        # @readonly
-        self.createDate = createDate
-
-        # Specifies when was the pago last updated. Date and time represented as epoch.
-        # @var int
-        # @readonly
-        self.updateDate = updateDate
-
-        # The date/time at which the Program Asset Group Offer is first purchasable by households. Date and time represented as epoch.
-        # @var int
-        self.startDate = startDate
-
-        # The date/time at which the Program Asset Group Offer is last purchasable by households.Date and time represented as epoch.
-        # @var int
-        self.endDate = endDate
-
-        # The last date/time at which the system will attempt to locate Program Assets that may be associated with this offer.Date and time represented as epoch.
-        # @var int
-        self.expiryDate = expiryDate
-
-        # External identifier
-        # @var string
-        self.externalId = externalId
-
-        # Identifies the Program Assets which will be entitled by Households that purchase this offer. Must be a unique value in the context of an account.
-        # @var string
-        self.externalOfferId = externalOfferId
-
-
-    PROPERTY_LOADERS = {
-        'id': getXmlNodeInt, 
-        'name': getXmlNodeText, 
-        'multilingualName': (KalturaObjectFactory.createArray, 'KalturaTranslationToken'), 
-        'priceDetailsId': getXmlNodeInt, 
-        'fileTypesIds': getXmlNodeText, 
-        'description': getXmlNodeText, 
-        'multilingualDescription': (KalturaObjectFactory.createArray, 'KalturaTranslationToken'), 
-        'virtualAssetId': getXmlNodeInt, 
-        'isActive': getXmlNodeBool, 
-        'createDate': getXmlNodeInt, 
-        'updateDate': getXmlNodeInt, 
-        'startDate': getXmlNodeInt, 
-        'endDate': getXmlNodeInt, 
-        'expiryDate': getXmlNodeInt, 
-        'externalId': getXmlNodeText, 
-        'externalOfferId': getXmlNodeText, 
-    }
-
-    def fromXml(self, node):
-        KalturaOTTObjectSupportNullable.fromXml(self, node)
-        self.fromXmlImpl(node, KalturaProgramAssetGroupOffer.PROPERTY_LOADERS)
-
-    def toParams(self):
-        kparams = KalturaOTTObjectSupportNullable.toParams(self)
-        kparams.put("objectType", "KalturaProgramAssetGroupOffer")
-        kparams.addIntIfDefined("id", self.id)
-        kparams.addArrayIfDefined("multilingualName", self.multilingualName)
-        kparams.addIntIfDefined("priceDetailsId", self.priceDetailsId)
-        kparams.addStringIfDefined("fileTypesIds", self.fileTypesIds)
-        kparams.addArrayIfDefined("multilingualDescription", self.multilingualDescription)
-        kparams.addBoolIfDefined("isActive", self.isActive)
-        kparams.addIntIfDefined("startDate", self.startDate)
-        kparams.addIntIfDefined("endDate", self.endDate)
-        kparams.addIntIfDefined("expiryDate", self.expiryDate)
-        kparams.addStringIfDefined("externalId", self.externalId)
-        kparams.addStringIfDefined("externalOfferId", self.externalOfferId)
-        return kparams
-
-    def getId(self):
-        return self.id
-
-    def setId(self, newId):
-        self.id = newId
-
-    def getName(self):
-        return self.name
-
-    def getMultilingualName(self):
-        return self.multilingualName
-
-    def setMultilingualName(self, newMultilingualName):
-        self.multilingualName = newMultilingualName
-
-    def getPriceDetailsId(self):
-        return self.priceDetailsId
-
-    def setPriceDetailsId(self, newPriceDetailsId):
-        self.priceDetailsId = newPriceDetailsId
-
-    def getFileTypesIds(self):
-        return self.fileTypesIds
-
-    def setFileTypesIds(self, newFileTypesIds):
-        self.fileTypesIds = newFileTypesIds
-
-    def getDescription(self):
-        return self.description
-
-    def getMultilingualDescription(self):
-        return self.multilingualDescription
-
-    def setMultilingualDescription(self, newMultilingualDescription):
-        self.multilingualDescription = newMultilingualDescription
-
-    def getVirtualAssetId(self):
-        return self.virtualAssetId
-
-    def getIsActive(self):
-        return self.isActive
-
-    def setIsActive(self, newIsActive):
-        self.isActive = newIsActive
-
-    def getCreateDate(self):
-        return self.createDate
-
-    def getUpdateDate(self):
-        return self.updateDate
-
-    def getStartDate(self):
-        return self.startDate
-
-    def setStartDate(self, newStartDate):
-        self.startDate = newStartDate
-
-    def getEndDate(self):
-        return self.endDate
-
-    def setEndDate(self, newEndDate):
-        self.endDate = newEndDate
-
-    def getExpiryDate(self):
-        return self.expiryDate
-
-    def setExpiryDate(self, newExpiryDate):
-        self.expiryDate = newExpiryDate
-
-    def getExternalId(self):
-        return self.externalId
-
-    def setExternalId(self, newExternalId):
-        self.externalId = newExternalId
-
-    def getExternalOfferId(self):
-        return self.externalOfferId
-
-    def setExternalOfferId(self, newExternalOfferId):
-        self.externalOfferId = newExternalOfferId
-
-
-# @package Kaltura
-# @subpackage Client
 class KalturaPrice(KalturaObjectBase):
     """Price"""
 
@@ -26022,43 +25440,6 @@ class KalturaProductsPriceListResponse(KalturaListResponse):
     def toParams(self):
         kparams = KalturaListResponse.toParams(self)
         kparams.put("objectType", "KalturaProductsPriceListResponse")
-        kparams.addArrayIfDefined("objects", self.objects)
-        return kparams
-
-    def getObjects(self):
-        return self.objects
-
-    def setObjects(self, newObjects):
-        self.objects = newObjects
-
-
-# @package Kaltura
-# @subpackage Client
-class KalturaProgramAssetGroupOfferListResponse(KalturaListResponse):
-    """ProgramAssetGroupOffer list"""
-
-    def __init__(self,
-            totalCount=NotImplemented,
-            objects=NotImplemented):
-        KalturaListResponse.__init__(self,
-            totalCount)
-
-        # A list of collections
-        # @var array of KalturaProgramAssetGroupOffer
-        self.objects = objects
-
-
-    PROPERTY_LOADERS = {
-        'objects': (KalturaObjectFactory.createArray, 'KalturaProgramAssetGroupOffer'), 
-    }
-
-    def fromXml(self, node):
-        KalturaListResponse.fromXml(self, node)
-        self.fromXmlImpl(node, KalturaProgramAssetGroupOfferListResponse.PROPERTY_LOADERS)
-
-    def toParams(self):
-        kparams = KalturaListResponse.toParams(self)
-        kparams.put("objectType", "KalturaProgramAssetGroupOfferListResponse")
         kparams.addArrayIfDefined("objects", self.objects)
         return kparams
 
@@ -43669,524 +43050,6 @@ class KalturaIngestStatusEpgListResponse(KalturaListResponse):
 
 # @package Kaltura
 # @subpackage Client
-class KalturaEpgIngestErrorMessage(KalturaObjectBase):
-    """A Kaltura error message"""
-
-    def __init__(self,
-            message=NotImplemented,
-            code=NotImplemented,
-            args=NotImplemented):
-        KalturaObjectBase.__init__(self)
-
-        # The message description with arguments place holders
-        # @var string
-        self.message = message
-
-        # The message code
-        # @var string
-        self.code = code
-
-        # Message args
-        # @var map
-        self.args = args
-
-
-    PROPERTY_LOADERS = {
-        'message': getXmlNodeText, 
-        'code': getXmlNodeText, 
-        'args': (KalturaObjectFactory.createMap, 'KalturaStringValue'), 
-    }
-
-    def fromXml(self, node):
-        KalturaObjectBase.fromXml(self, node)
-        self.fromXmlImpl(node, KalturaEpgIngestErrorMessage.PROPERTY_LOADERS)
-
-    def toParams(self):
-        kparams = KalturaObjectBase.toParams(self)
-        kparams.put("objectType", "KalturaEpgIngestErrorMessage")
-        kparams.addStringIfDefined("message", self.message)
-        kparams.addStringIfDefined("code", self.code)
-        kparams.addMapIfDefined("args", self.args)
-        return kparams
-
-    def getMessage(self):
-        return self.message
-
-    def setMessage(self, newMessage):
-        self.message = newMessage
-
-    def getCode(self):
-        return self.code
-
-    def setCode(self, newCode):
-        self.code = newCode
-
-    def getArgs(self):
-        return self.args
-
-    def setArgs(self, newArgs):
-        self.args = newArgs
-
-
-# @package Kaltura
-# @subpackage Client
-class KalturaAggregatedIngestInfo(KalturaObjectBase):
-    def __init__(self,
-            resultsCount=NotImplemented,
-            totalFailureCount=NotImplemented,
-            partialFailureCount=NotImplemented,
-            warningsCount=NotImplemented):
-        KalturaObjectBase.__init__(self)
-
-        # Number of results
-        # @var int
-        self.resultsCount = resultsCount
-
-        # Number of results that include at least one error of severity TotalFailure
-        # @var int
-        self.totalFailureCount = totalFailureCount
-
-        # Number of results that include no error with severity TotalFailure but at at least one error of severity PartialFailure
-        # @var int
-        self.partialFailureCount = partialFailureCount
-
-        # Number of results that include at least one warning
-        # @var int
-        self.warningsCount = warningsCount
-
-
-    PROPERTY_LOADERS = {
-        'resultsCount': getXmlNodeInt, 
-        'totalFailureCount': getXmlNodeInt, 
-        'partialFailureCount': getXmlNodeInt, 
-        'warningsCount': getXmlNodeInt, 
-    }
-
-    def fromXml(self, node):
-        KalturaObjectBase.fromXml(self, node)
-        self.fromXmlImpl(node, KalturaAggregatedIngestInfo.PROPERTY_LOADERS)
-
-    def toParams(self):
-        kparams = KalturaObjectBase.toParams(self)
-        kparams.put("objectType", "KalturaAggregatedIngestInfo")
-        kparams.addIntIfDefined("resultsCount", self.resultsCount)
-        kparams.addIntIfDefined("totalFailureCount", self.totalFailureCount)
-        kparams.addIntIfDefined("partialFailureCount", self.partialFailureCount)
-        kparams.addIntIfDefined("warningsCount", self.warningsCount)
-        return kparams
-
-    def getResultsCount(self):
-        return self.resultsCount
-
-    def setResultsCount(self, newResultsCount):
-        self.resultsCount = newResultsCount
-
-    def getTotalFailureCount(self):
-        return self.totalFailureCount
-
-    def setTotalFailureCount(self, newTotalFailureCount):
-        self.totalFailureCount = newTotalFailureCount
-
-    def getPartialFailureCount(self):
-        return self.partialFailureCount
-
-    def setPartialFailureCount(self, newPartialFailureCount):
-        self.partialFailureCount = newPartialFailureCount
-
-    def getWarningsCount(self):
-        return self.warningsCount
-
-    def setWarningsCount(self, newWarningsCount):
-        self.warningsCount = newWarningsCount
-
-
-# @package Kaltura
-# @subpackage Client
-class KalturaChannelAggregatedIngestInfo(KalturaObjectBase):
-    def __init__(self,
-            linearChannelId=NotImplemented,
-            aggregatedErrors=NotImplemented):
-        KalturaObjectBase.__init__(self)
-
-        # The linear channel asset id
-        # @var int
-        self.linearChannelId = linearChannelId
-
-        # Aggregated error counters
-        # @var KalturaAggregatedIngestInfo
-        self.aggregatedErrors = aggregatedErrors
-
-
-    PROPERTY_LOADERS = {
-        'linearChannelId': getXmlNodeInt, 
-        'aggregatedErrors': (KalturaObjectFactory.create, 'KalturaAggregatedIngestInfo'), 
-    }
-
-    def fromXml(self, node):
-        KalturaObjectBase.fromXml(self, node)
-        self.fromXmlImpl(node, KalturaChannelAggregatedIngestInfo.PROPERTY_LOADERS)
-
-    def toParams(self):
-        kparams = KalturaObjectBase.toParams(self)
-        kparams.put("objectType", "KalturaChannelAggregatedIngestInfo")
-        kparams.addIntIfDefined("linearChannelId", self.linearChannelId)
-        kparams.addObjectIfDefined("aggregatedErrors", self.aggregatedErrors)
-        return kparams
-
-    def getLinearChannelId(self):
-        return self.linearChannelId
-
-    def setLinearChannelId(self, newLinearChannelId):
-        self.linearChannelId = newLinearChannelId
-
-    def getAggregatedErrors(self):
-        return self.aggregatedErrors
-
-    def setAggregatedErrors(self, newAggregatedErrors):
-        self.aggregatedErrors = newAggregatedErrors
-
-
-# @package Kaltura
-# @subpackage Client
-class KalturaDateAggregatedIngestInfo(KalturaObjectBase):
-    def __init__(self,
-            date=NotImplemented,
-            aggregatedErrors=NotImplemented):
-        KalturaObjectBase.__init__(self)
-
-        # 00:00 UTC of the date in question
-        # @var int
-        self.date = date
-
-        # Aggregated error counters
-        # @var KalturaAggregatedIngestInfo
-        self.aggregatedErrors = aggregatedErrors
-
-
-    PROPERTY_LOADERS = {
-        'date': getXmlNodeInt, 
-        'aggregatedErrors': (KalturaObjectFactory.create, 'KalturaAggregatedIngestInfo'), 
-    }
-
-    def fromXml(self, node):
-        KalturaObjectBase.fromXml(self, node)
-        self.fromXmlImpl(node, KalturaDateAggregatedIngestInfo.PROPERTY_LOADERS)
-
-    def toParams(self):
-        kparams = KalturaObjectBase.toParams(self)
-        kparams.put("objectType", "KalturaDateAggregatedIngestInfo")
-        kparams.addIntIfDefined("date", self.date)
-        kparams.addObjectIfDefined("aggregatedErrors", self.aggregatedErrors)
-        return kparams
-
-    def getDate(self):
-        return self.date
-
-    def setDate(self, newDate):
-        self.date = newDate
-
-    def getAggregatedErrors(self):
-        return self.aggregatedErrors
-
-    def setAggregatedErrors(self, newAggregatedErrors):
-        self.aggregatedErrors = newAggregatedErrors
-
-
-# @package Kaltura
-# @subpackage Client
-class KalturaIngestEpgDetailsAggregation(KalturaObjectBase):
-    def __init__(self,
-            linearChannels=NotImplemented,
-            dates=NotImplemented,
-            all=NotImplemented):
-        KalturaObjectBase.__init__(self)
-
-        # Array of aggregated information per channel that included in the ingest job in question
-        # @var array of KalturaChannelAggregatedIngestInfo
-        self.linearChannels = linearChannels
-
-        # Array of aggregated information per date that included in the ingest job in question
-        # @var array of KalturaDateAggregatedIngestInfo
-        self.dates = dates
-
-        # All aggregated counters
-        # @var KalturaAggregatedIngestInfo
-        self.all = all
-
-
-    PROPERTY_LOADERS = {
-        'linearChannels': (KalturaObjectFactory.createArray, 'KalturaChannelAggregatedIngestInfo'), 
-        'dates': (KalturaObjectFactory.createArray, 'KalturaDateAggregatedIngestInfo'), 
-        'all': (KalturaObjectFactory.create, 'KalturaAggregatedIngestInfo'), 
-    }
-
-    def fromXml(self, node):
-        KalturaObjectBase.fromXml(self, node)
-        self.fromXmlImpl(node, KalturaIngestEpgDetailsAggregation.PROPERTY_LOADERS)
-
-    def toParams(self):
-        kparams = KalturaObjectBase.toParams(self)
-        kparams.put("objectType", "KalturaIngestEpgDetailsAggregation")
-        kparams.addArrayIfDefined("linearChannels", self.linearChannels)
-        kparams.addArrayIfDefined("dates", self.dates)
-        kparams.addObjectIfDefined("all", self.all)
-        return kparams
-
-    def getLinearChannels(self):
-        return self.linearChannels
-
-    def setLinearChannels(self, newLinearChannels):
-        self.linearChannels = newLinearChannels
-
-    def getDates(self):
-        return self.dates
-
-    def setDates(self, newDates):
-        self.dates = newDates
-
-    def getAll(self):
-        return self.all
-
-    def setAll(self, newAll):
-        self.all = newAll
-
-
-# @package Kaltura
-# @subpackage Client
-class KalturaIngestEpgDetails(KalturaIngestEpg):
-    def __init__(self,
-            ingestId=NotImplemented,
-            ingestName=NotImplemented,
-            ingestFilenameExtension=NotImplemented,
-            createdDate=NotImplemented,
-            ingestedByUserId=NotImplemented,
-            completedDate=NotImplemented,
-            ingestProfileId=NotImplemented,
-            status=NotImplemented,
-            errors=NotImplemented,
-            aggregations=NotImplemented):
-        KalturaIngestEpg.__init__(self,
-            ingestId,
-            ingestName,
-            ingestFilenameExtension,
-            createdDate,
-            ingestedByUserId,
-            completedDate,
-            ingestProfileId,
-            status)
-
-        # Errors
-        # @var array of KalturaEpgIngestErrorMessage
-        self.errors = errors
-
-        # Aggregated counters
-        # @var KalturaIngestEpgDetailsAggregation
-        self.aggregations = aggregations
-
-
-    PROPERTY_LOADERS = {
-        'errors': (KalturaObjectFactory.createArray, 'KalturaEpgIngestErrorMessage'), 
-        'aggregations': (KalturaObjectFactory.create, 'KalturaIngestEpgDetailsAggregation'), 
-    }
-
-    def fromXml(self, node):
-        KalturaIngestEpg.fromXml(self, node)
-        self.fromXmlImpl(node, KalturaIngestEpgDetails.PROPERTY_LOADERS)
-
-    def toParams(self):
-        kparams = KalturaIngestEpg.toParams(self)
-        kparams.put("objectType", "KalturaIngestEpgDetails")
-        kparams.addArrayIfDefined("errors", self.errors)
-        kparams.addObjectIfDefined("aggregations", self.aggregations)
-        return kparams
-
-    def getErrors(self):
-        return self.errors
-
-    def setErrors(self, newErrors):
-        self.errors = newErrors
-
-    def getAggregations(self):
-        return self.aggregations
-
-    def setAggregations(self, newAggregations):
-        self.aggregations = newAggregations
-
-
-# @package Kaltura
-# @subpackage Client
-class KalturaIngestEpgProgramResult(KalturaObjectBase):
-    def __init__(self,
-            programId=NotImplemented,
-            externalProgramId=NotImplemented,
-            linearChannelId=NotImplemented,
-            indexInFile=NotImplemented,
-            startDate=NotImplemented,
-            endDate=NotImplemented,
-            status=NotImplemented,
-            errors=NotImplemented,
-            warnings=NotImplemented):
-        KalturaObjectBase.__init__(self)
-
-        # The unique ingested program id
-        # @var int
-        self.programId = programId
-
-        # An external program id
-        # @var string
-        self.externalProgramId = externalProgramId
-
-        # The id of the linear channel asset that the program belongs to
-        # @var int
-        self.linearChannelId = linearChannelId
-
-        # The index of the program in the ingested file
-        # @var int
-        self.indexInFile = indexInFile
-
-        # Program EPG start date. Date and time represented as epoch
-        # @var int
-        self.startDate = startDate
-
-        # Program EPG end date. Date and time represented as epoch
-        # @var int
-        self.endDate = endDate
-
-        # The program status
-        # @var KalturaIngestEpgProgramStatus
-        self.status = status
-
-        # List of errors. Note: error cause the data in question or the whole ingest to fail
-        # @var array of KalturaEpgIngestErrorMessage
-        self.errors = errors
-
-        # List of warnings. Note: warning cause no failure
-        # @var array of KalturaMessage
-        self.warnings = warnings
-
-
-    PROPERTY_LOADERS = {
-        'programId': getXmlNodeInt, 
-        'externalProgramId': getXmlNodeText, 
-        'linearChannelId': getXmlNodeInt, 
-        'indexInFile': getXmlNodeInt, 
-        'startDate': getXmlNodeInt, 
-        'endDate': getXmlNodeInt, 
-        'status': (KalturaEnumsFactory.createString, "KalturaIngestEpgProgramStatus"), 
-        'errors': (KalturaObjectFactory.createArray, 'KalturaEpgIngestErrorMessage'), 
-        'warnings': (KalturaObjectFactory.createArray, 'KalturaMessage'), 
-    }
-
-    def fromXml(self, node):
-        KalturaObjectBase.fromXml(self, node)
-        self.fromXmlImpl(node, KalturaIngestEpgProgramResult.PROPERTY_LOADERS)
-
-    def toParams(self):
-        kparams = KalturaObjectBase.toParams(self)
-        kparams.put("objectType", "KalturaIngestEpgProgramResult")
-        kparams.addIntIfDefined("programId", self.programId)
-        kparams.addStringIfDefined("externalProgramId", self.externalProgramId)
-        kparams.addIntIfDefined("linearChannelId", self.linearChannelId)
-        kparams.addIntIfDefined("indexInFile", self.indexInFile)
-        kparams.addIntIfDefined("startDate", self.startDate)
-        kparams.addIntIfDefined("endDate", self.endDate)
-        kparams.addStringEnumIfDefined("status", self.status)
-        kparams.addArrayIfDefined("errors", self.errors)
-        kparams.addArrayIfDefined("warnings", self.warnings)
-        return kparams
-
-    def getProgramId(self):
-        return self.programId
-
-    def setProgramId(self, newProgramId):
-        self.programId = newProgramId
-
-    def getExternalProgramId(self):
-        return self.externalProgramId
-
-    def setExternalProgramId(self, newExternalProgramId):
-        self.externalProgramId = newExternalProgramId
-
-    def getLinearChannelId(self):
-        return self.linearChannelId
-
-    def setLinearChannelId(self, newLinearChannelId):
-        self.linearChannelId = newLinearChannelId
-
-    def getIndexInFile(self):
-        return self.indexInFile
-
-    def setIndexInFile(self, newIndexInFile):
-        self.indexInFile = newIndexInFile
-
-    def getStartDate(self):
-        return self.startDate
-
-    def setStartDate(self, newStartDate):
-        self.startDate = newStartDate
-
-    def getEndDate(self):
-        return self.endDate
-
-    def setEndDate(self, newEndDate):
-        self.endDate = newEndDate
-
-    def getStatus(self):
-        return self.status
-
-    def setStatus(self, newStatus):
-        self.status = newStatus
-
-    def getErrors(self):
-        return self.errors
-
-    def setErrors(self, newErrors):
-        self.errors = newErrors
-
-    def getWarnings(self):
-        return self.warnings
-
-    def setWarnings(self, newWarnings):
-        self.warnings = newWarnings
-
-
-# @package Kaltura
-# @subpackage Client
-class KalturaIngestStatusEpgProgramResultListResponse(KalturaListResponse):
-    def __init__(self,
-            totalCount=NotImplemented,
-            objects=NotImplemented):
-        KalturaListResponse.__init__(self,
-            totalCount)
-
-        # IngestStatusEpgProgramResult
-        # @var array of KalturaIngestEpgProgramResult
-        self.objects = objects
-
-
-    PROPERTY_LOADERS = {
-        'objects': (KalturaObjectFactory.createArray, 'KalturaIngestEpgProgramResult'), 
-    }
-
-    def fromXml(self, node):
-        KalturaListResponse.fromXml(self, node)
-        self.fromXmlImpl(node, KalturaIngestStatusEpgProgramResultListResponse.PROPERTY_LOADERS)
-
-    def toParams(self):
-        kparams = KalturaListResponse.toParams(self)
-        kparams.put("objectType", "KalturaIngestStatusEpgProgramResultListResponse")
-        kparams.addArrayIfDefined("objects", self.objects)
-        return kparams
-
-    def getObjects(self):
-        return self.objects
-
-    def setObjects(self, newObjects):
-        self.objects = newObjects
-
-
-# @package Kaltura
-# @subpackage Client
 class KalturaIotDefault(KalturaObjectBase):
     def __init__(self,
             poolId=NotImplemented,
@@ -51446,17 +50309,6 @@ class KalturaIngestStatusService(KalturaServiceBase):
     def __init__(self, client = None):
         KalturaServiceBase.__init__(self, client)
 
-    def getEpgDetails(self, ingestId):
-        """Returns information about specific Ingest job"""
-
-        kparams = KalturaParams()
-        kparams.addIntIfDefined("ingestId", ingestId);
-        self.client.queueServiceActionCall("ingeststatus", "getEpgDetails", "KalturaIngestEpgDetails", kparams)
-        if self.client.isMultiRequest():
-            return self.client.getMultiRequestResult()
-        resultNode = self.client.doQueue()
-        return KalturaObjectFactory.create(resultNode, 'KalturaIngestEpgDetails')
-
     def getEpgList(self, idsFilter = NotImplemented, filter = NotImplemented, pager = NotImplemented):
         """Response with list of ingest jobs."""
 
@@ -51469,19 +50321,6 @@ class KalturaIngestStatusService(KalturaServiceBase):
             return self.client.getMultiRequestResult()
         resultNode = self.client.doQueue()
         return KalturaObjectFactory.create(resultNode, 'KalturaIngestStatusEpgListResponse')
-
-    def getEpgProgramResultList(self, ingestId, filter = NotImplemented, pager = NotImplemented):
-        """Get as input ingest job id, filter and pager and response with page of filtered detailed ingest job results."""
-
-        kparams = KalturaParams()
-        kparams.addIntIfDefined("ingestId", ingestId);
-        kparams.addObjectIfDefined("filter", filter)
-        kparams.addObjectIfDefined("pager", pager)
-        self.client.queueServiceActionCall("ingeststatus", "getEpgProgramResultList", "KalturaIngestStatusEpgProgramResultListResponse", kparams)
-        if self.client.isMultiRequest():
-            return self.client.getMultiRequestResult()
-        resultNode = self.client.doQueue()
-        return KalturaObjectFactory.create(resultNode, 'KalturaIngestStatusEpgProgramResultListResponse')
 
     def getPartnerConfiguration(self):
         """Returns Core Ingest service partner configurations"""
@@ -53258,59 +52097,6 @@ class KalturaProductPriceService(KalturaServiceBase):
             return self.client.getMultiRequestResult()
         resultNode = self.client.doQueue()
         return KalturaObjectFactory.create(resultNode, 'KalturaProductPriceListResponse')
-
-
-# @package Kaltura
-# @subpackage Client
-class KalturaProgramAssetGroupOfferService(KalturaServiceBase):
-    def __init__(self, client = None):
-        KalturaServiceBase.__init__(self, client)
-
-    def add(self, programAssetGroupOffer):
-        """Insert new ProgramAssetGroupOffer for partner"""
-
-        kparams = KalturaParams()
-        kparams.addObjectIfDefined("programAssetGroupOffer", programAssetGroupOffer)
-        self.client.queueServiceActionCall("programassetgroupoffer", "add", "KalturaProgramAssetGroupOffer", kparams)
-        if self.client.isMultiRequest():
-            return self.client.getMultiRequestResult()
-        resultNode = self.client.doQueue()
-        return KalturaObjectFactory.create(resultNode, 'KalturaProgramAssetGroupOffer')
-
-    def delete(self, id):
-        """Delete programAssetGroupOffer"""
-
-        kparams = KalturaParams()
-        kparams.addIntIfDefined("id", id);
-        self.client.queueServiceActionCall("programassetgroupoffer", "delete", "None", kparams)
-        if self.client.isMultiRequest():
-            return self.client.getMultiRequestResult()
-        resultNode = self.client.doQueue()
-        return getXmlNodeBool(resultNode)
-
-    def list(self, filter = NotImplemented, pager = NotImplemented):
-        """Gets all Program asset group offer"""
-
-        kparams = KalturaParams()
-        kparams.addObjectIfDefined("filter", filter)
-        kparams.addObjectIfDefined("pager", pager)
-        self.client.queueServiceActionCall("programassetgroupoffer", "list", "KalturaProgramAssetGroupOfferListResponse", kparams)
-        if self.client.isMultiRequest():
-            return self.client.getMultiRequestResult()
-        resultNode = self.client.doQueue()
-        return KalturaObjectFactory.create(resultNode, 'KalturaProgramAssetGroupOfferListResponse')
-
-    def update(self, id, programAssetGroupOffer):
-        """Update ProgramAssetGroupOffer"""
-
-        kparams = KalturaParams()
-        kparams.addIntIfDefined("id", id);
-        kparams.addObjectIfDefined("programAssetGroupOffer", programAssetGroupOffer)
-        self.client.queueServiceActionCall("programassetgroupoffer", "update", "KalturaProgramAssetGroupOffer", kparams)
-        if self.client.isMultiRequest():
-            return self.client.getMultiRequestResult()
-        resultNode = self.client.doQueue()
-        return KalturaObjectFactory.create(resultNode, 'KalturaProgramAssetGroupOffer')
 
 
 # @package Kaltura
@@ -55533,7 +54319,6 @@ class KalturaCoreClient(KalturaClientPlugin):
             'priceDetails': KalturaPriceDetailsService,
             'pricePlan': KalturaPricePlanService,
             'productPrice': KalturaProductPriceService,
-            'programAssetGroupOffer': KalturaProgramAssetGroupOfferService,
             'purchaseSettings': KalturaPurchaseSettingsService,
             'ratio': KalturaRatioService,
             'recommendationProfile': KalturaRecommendationProfileService,
@@ -55689,8 +54474,6 @@ class KalturaCoreClient(KalturaClientPlugin):
             'KalturaInboxMessageOrderBy': KalturaInboxMessageOrderBy,
             'KalturaInboxMessageStatus': KalturaInboxMessageStatus,
             'KalturaInboxMessageType': KalturaInboxMessageType,
-            'KalturaIngestEpgProgramResultOrderBy': KalturaIngestEpgProgramResultOrderBy,
-            'KalturaIngestEpgProgramStatus': KalturaIngestEpgProgramStatus,
             'KalturaIngestProfileAutofillPolicy': KalturaIngestProfileAutofillPolicy,
             'KalturaIngestProfileOverlapPolicy': KalturaIngestProfileOverlapPolicy,
             'KalturaIngestStatus': KalturaIngestStatus,
@@ -55735,7 +54518,6 @@ class KalturaCoreClient(KalturaClientPlugin):
             'KalturaPriceDetailsOrderBy': KalturaPriceDetailsOrderBy,
             'KalturaPricePlanOrderBy': KalturaPricePlanOrderBy,
             'KalturaProductPriceOrderBy': KalturaProductPriceOrderBy,
-            'KalturaProgramAssetGroupOfferOrderBy': KalturaProgramAssetGroupOfferOrderBy,
             'KalturaProtectionPolicy': KalturaProtectionPolicy,
             'KalturaPurchaseSettingsType': KalturaPurchaseSettingsType,
             'KalturaPurchaseStatus': KalturaPurchaseStatus,
@@ -55867,8 +54649,6 @@ class KalturaCoreClient(KalturaClientPlugin):
             'KalturaPreviewModuleFilter': KalturaPreviewModuleFilter,
             'KalturaPriceDetailsFilter': KalturaPriceDetailsFilter,
             'KalturaPricePlanFilter': KalturaPricePlanFilter,
-            'KalturaProgramAssetGroupOfferFilter': KalturaProgramAssetGroupOfferFilter,
-            'KalturaProgramAssetGroupOfferIdInFilter': KalturaProgramAssetGroupOfferIdInFilter,
             'KalturaSubscriptionSetFilter': KalturaSubscriptionSetFilter,
             'KalturaSubscriptionDependencySetFilter': KalturaSubscriptionDependencySetFilter,
             'KalturaSubscriptionFilter': KalturaSubscriptionFilter,
@@ -55891,12 +54671,6 @@ class KalturaCoreClient(KalturaClientPlugin):
             'KalturaTopicNotificationMessageFilter': KalturaTopicNotificationMessageFilter,
             'KalturaIngestByCompoundFilter': KalturaIngestByCompoundFilter,
             'KalturaIngestByIdsFilter': KalturaIngestByIdsFilter,
-            'KalturaIngestEpgProgramResultFilter': KalturaIngestEpgProgramResultFilter,
-            'KalturaIngestProgramResultsByRefineFilter': KalturaIngestProgramResultsByRefineFilter,
-            'KalturaIngestProgramResultsByCombinedFieldsFilter': KalturaIngestProgramResultsByCombinedFieldsFilter,
-            'KalturaIngestProgramResultsByCompoundFilter': KalturaIngestProgramResultsByCompoundFilter,
-            'KalturaIngestProgramResultsByExternalIdsFilter': KalturaIngestProgramResultsByExternalIdsFilter,
-            'KalturaIngestProgramResultsByProgramIdsFilter': KalturaIngestProgramResultsByProgramIdsFilter,
             'KalturaAggregationCountFilter': KalturaAggregationCountFilter,
             'KalturaPersistedFilter': KalturaPersistedFilter,
             'KalturaBaseAssetOrder': KalturaBaseAssetOrder,
@@ -56149,7 +54923,6 @@ class KalturaCoreClient(KalturaClientPlugin):
             'KalturaChannelFieldOrder': KalturaChannelFieldOrder,
             'KalturaChannelSlidingWindowOrder': KalturaChannelSlidingWindowOrder,
             'KalturaPricePlan': KalturaPricePlan,
-            'KalturaProgramAssetGroupOffer': KalturaProgramAssetGroupOffer,
             'KalturaPrice': KalturaPrice,
             'KalturaPriceDetails': KalturaPriceDetails,
             'KalturaPreviewModule': KalturaPreviewModule,
@@ -56225,7 +54998,6 @@ class KalturaCoreClient(KalturaClientPlugin):
             'KalturaPricePlanListResponse': KalturaPricePlanListResponse,
             'KalturaProductPriceListResponse': KalturaProductPriceListResponse,
             'KalturaProductsPriceListResponse': KalturaProductsPriceListResponse,
-            'KalturaProgramAssetGroupOfferListResponse': KalturaProgramAssetGroupOfferListResponse,
             'KalturaSubscriptionListResponse': KalturaSubscriptionListResponse,
             'KalturaSubscriptionSet': KalturaSubscriptionSet,
             'KalturaSubscriptionSetListResponse': KalturaSubscriptionSetListResponse,
@@ -56510,14 +55282,6 @@ class KalturaCoreClient(KalturaClientPlugin):
             'KalturaIngestStatusPartnerConfiguration': KalturaIngestStatusPartnerConfiguration,
             'KalturaIngestEpg': KalturaIngestEpg,
             'KalturaIngestStatusEpgListResponse': KalturaIngestStatusEpgListResponse,
-            'KalturaEpgIngestErrorMessage': KalturaEpgIngestErrorMessage,
-            'KalturaAggregatedIngestInfo': KalturaAggregatedIngestInfo,
-            'KalturaChannelAggregatedIngestInfo': KalturaChannelAggregatedIngestInfo,
-            'KalturaDateAggregatedIngestInfo': KalturaDateAggregatedIngestInfo,
-            'KalturaIngestEpgDetailsAggregation': KalturaIngestEpgDetailsAggregation,
-            'KalturaIngestEpgDetails': KalturaIngestEpgDetails,
-            'KalturaIngestEpgProgramResult': KalturaIngestEpgProgramResult,
-            'KalturaIngestStatusEpgProgramResultListResponse': KalturaIngestStatusEpgProgramResultListResponse,
             'KalturaIotDefault': KalturaIotDefault,
             'KalturaCognitoIdentity': KalturaCognitoIdentity,
             'KalturaCredentialsProvider': KalturaCredentialsProvider,
