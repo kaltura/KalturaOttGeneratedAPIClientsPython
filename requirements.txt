@@ -1,5 +1,9 @@
+-e .
+pytest
+pytest-cov
 setuptools
 requests
 requests-toolbelt
 six
 pycryptodome
+lxml
