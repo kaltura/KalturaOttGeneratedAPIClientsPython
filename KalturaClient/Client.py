@@ -27,7 +27,26 @@
 # =============================================================================
 from __future__ import absolute_import
 
+import binascii
+import hashlib
+import mimetypes
+import random
+import base64
+import types
+import time
+import os
 
+import logging
+import requests
+try:
+    from http.client import HTTPConnection # py3
+except ImportError:
+    from httplib import HTTPConnection # py2
+from requests_toolbelt.multipart.encoder import MultipartEncoder
+
+import six
+
+from lxml import etree
 from KalturaClient.Base import (
     IKalturaClientPlugin,
     IKalturaLogger,
@@ -44,19 +63,6 @@ from KalturaClient.exceptions import (
 from KalturaClient.Plugins.Core import (
     API_VERSION, KalturaClientConfiguration, KalturaRequestConfiguration)
 
-import binascii
-import hashlib
-import mimetypes
-import random
-import base64
-import types
-import time
-import os
-import xml.etree.ElementTree as etree
-
-import requests
-from requests_toolbelt.multipart.encoder import MultipartEncoder
-import six
 
 try:
     from Crypto import Random
@@ -64,6 +70,26 @@ try:
 except ImportError:
     pass            # PyCrypto is required only for creating KS V2
 
+def debug_requests_on():
+    '''Switches on logging of the requests module.'''
+    HTTPConnection.debuglevel = 1
+
+    logging.basicConfig()
+    logging.getLogger().setLevel(logging.DEBUG)
+    requests_log = logging.getLogger("requests.packages.urllib3")
+    requests_log.setLevel(logging.DEBUG)
+    requests_log.propagate = True
+
+def debug_requests_off():
+    '''Switches off logging of the requests module, might be some side-effects'''
+    HTTPConnection.debuglevel = 0
+
+    root_logger = logging.getLogger()
+    root_logger.setLevel(logging.WARNING)
+    root_logger.handlers = []
+    requests_log = logging.getLogger("requests.packages.urllib3")
+    requests_log.setLevel(logging.WARNING)
+    requests_log.propagate = False
 
 def _get_file_params(files):
     """Return the full parameters needed for uploading files - name, file
@@ -117,14 +143,14 @@ class KalturaClient(object):
         self.callsQueue = []
         self.requestHeaders = {}
         self.clientConfiguration = {
-            'clientTag': 'python-22-01-12',
+            'clientTag': 'python-22-04-04',
             'apiVersion': API_VERSION,
         }
         self.requestConfiguration = {}
 
         self.config = config
         logger = self.config.getLogger()
-        if (logger):
+        if logger:
             self.shouldLog = True
 
         KalturaObjectFactory.registerObjects(
@@ -230,7 +256,7 @@ class KalturaClient(object):
                 params.put(param, self.requestConfiguration[param])
 
         call = KalturaServiceActionCall(service, action, params, files)
-        if (self.multiRequestReturnType is not None):
+        if self.multiRequestReturnType is not None:
             self.multiRequestReturnType.append(returnType)
         self.callsQueue.append(call)
 
@@ -241,7 +267,7 @@ class KalturaClient(object):
             params.put(param, self.clientConfiguration[param])
         params.put("format", self.config.format)
         url = self.config.serviceUrl + "/api_v3"
-        if (self.multiRequestReturnType is not None):
+        if self.multiRequestReturnType is not None:
             url += "/service/multirequest"
             for i, call in enumerate(self.callsQueue):
                 callParams = call.getParamsForMultiRequest(i)
@@ -321,7 +347,8 @@ class KalturaClient(object):
     def parsePostResult(self, postResult):
         self.log("result (xml): %s" % postResult)
         try:
-            resultXml = etree.fromstring(postResult)
+            parser = etree.XMLParser(encoding='ISO-8859-1', ns_clean=True, recover=True)
+            resultXml = etree.fromstring(postResult, parser=parser)
         except etree.ParseError as e:
             raise KalturaClientException(
                 e, KalturaClientException.ERROR_INVALID_XML)
@@ -349,7 +376,7 @@ class KalturaClient(object):
 
         if self.config.format != KALTURA_SERVICE_FORMAT_XML:
             raise KalturaClientException(
-                "unsupported format: %s" % (postResult),
+                'unsupported format; Only KALTURA_SERVICE_FORMAT_XML is supported.',
                 KalturaClientException.ERROR_FORMAT_NOT_SUPPORTED)
 
         startTime = time.time()
@@ -418,7 +445,7 @@ class KalturaClient(object):
         if resultXml is None:
             return []
         result = []
-        for i, childNode in enumerate(resultXml.getchildren()):
+        for i, childNode in enumerate(resultXml):
             exceptionObj = self.getExceptionIfError(childNode)
             if exceptionObj is not None:
                 result.append(exceptionObj)
@@ -436,7 +463,7 @@ class KalturaClient(object):
         return result
 
     def isMultiRequest(self):
-        return (self.multiRequestReturnType is not None)
+        return self.multiRequestReturnType is not None
 
     def getMultiRequestResult(self):
         return MultiRequestSubResult('%s:result' % len(self.callsQueue))
