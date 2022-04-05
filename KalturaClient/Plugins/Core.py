@@ -42,7 +42,7 @@ from ..Base import (
     KalturaServiceBase,
 )
 
-API_VERSION = '7.4.0.29857'
+API_VERSION = '7.4.0.29865'
 
 ########## enums ##########
 # @package Kaltura
@@ -318,6 +318,18 @@ class KalturaAssetOrderByType(object):
 
 # @package Kaltura
 # @subpackage Client
+class KalturaAssetPersonalMarkupSearchOrderBy(object):
+    NONE = "NONE"
+    REQUEST_ORDER = "REQUEST_ORDER"
+
+    def __init__(self, value):
+        self.value = value
+
+    def getValue(self):
+        return self.value
+
+# @package Kaltura
+# @subpackage Client
 class KalturaAssetReferenceType(object):
     MEDIA = "media"
     EPG_INTERNAL = "epg_internal"
@@ -451,6 +463,7 @@ class KalturaBillingItemsType(object):
     PRE_PAID = "pre_paid"
     PRE_PAID_EXPIRED = "pre_paid_expired"
     COLLECTION = "collection"
+    PROGRAM_ASSET_GROUP_OFFER = "program_asset_group_offer"
 
     def __init__(self, value):
         self.value = value
@@ -569,6 +582,7 @@ class KalturaBulkUploadResultStatus(object):
 class KalturaBundleType(object):
     SUBSCRIPTION = "subscription"
     COLLECTION = "collection"
+    PAGO = "pago"
 
     def __init__(self, value):
         self.value = value
@@ -925,6 +939,54 @@ class KalturaCurrencyOrderBy(object):
 class KalturaDeleteMediaPolicy(object):
     DISABLE = "Disable"
     DELETE = "Delete"
+
+    def __init__(self, value):
+        self.value = value
+
+    def getValue(self):
+        return self.value
+
+# @package Kaltura
+# @subpackage Client
+class KalturaDeviceBrandOrderBy(object):
+    ID_ASC = "ID_ASC"
+    ID_DESC = "ID_DESC"
+
+    def __init__(self, value):
+        self.value = value
+
+    def getValue(self):
+        return self.value
+
+# @package Kaltura
+# @subpackage Client
+class KalturaDeviceBrandType(object):
+    SYSTEM = "System"
+    CUSTOM = "Custom"
+
+    def __init__(self, value):
+        self.value = value
+
+    def getValue(self):
+        return self.value
+
+# @package Kaltura
+# @subpackage Client
+class KalturaDeviceFamilyOrderBy(object):
+    ID_ASC = "ID_ASC"
+    ID_DESC = "ID_DESC"
+
+    def __init__(self, value):
+        self.value = value
+
+    def getValue(self):
+        return self.value
+
+# @package Kaltura
+# @subpackage Client
+class KalturaDeviceFamilyType(object):
+    SYSTEM = "System"
+    CUSTOM = "Custom"
 
     def __init__(self, value):
         self.value = value
@@ -2164,6 +2226,7 @@ class KalturaPurchaseStatus(object):
     INVALID_CURRENCY = "invalid_currency"
     CURRENCY_NOT_DEFINED_ON_PRICE_CODE = "currency_not_defined_on_price_code"
     PENDING_ENTITLEMENT = "pending_entitlement"
+    PROGRAM_ASSET_GROUP_OFFER_PURCHASED = "program_asset_group_offer_purchased"
 
     def __init__(self, value):
         self.value = value
@@ -2854,6 +2917,7 @@ class KalturaTransactionType(object):
     PPV = "ppv"
     SUBSCRIPTION = "subscription"
     COLLECTION = "collection"
+    PROGRAMASSETGROUPOFFER = "programAssetGroupOffer"
 
     def __init__(self, value):
         self.value = value
@@ -8019,6 +8083,117 @@ class KalturaConfigurationsFilter(KalturaFilter):
 
 # @package Kaltura
 # @subpackage Client
+class KalturaBaseEntitlementFilter(KalturaFilter):
+    """Entitlements filter"""
+
+    def __init__(self,
+            orderBy=NotImplemented):
+        KalturaFilter.__init__(self,
+            orderBy)
+
+
+    PROPERTY_LOADERS = {
+    }
+
+    def fromXml(self, node):
+        KalturaFilter.fromXml(self, node)
+        self.fromXmlImpl(node, KalturaBaseEntitlementFilter.PROPERTY_LOADERS)
+
+    def toParams(self):
+        kparams = KalturaFilter.toParams(self)
+        kparams.put("objectType", "KalturaBaseEntitlementFilter")
+        return kparams
+
+
+# @package Kaltura
+# @subpackage Client
+class KalturaEntitlementFilter(KalturaBaseEntitlementFilter):
+    """Entitlements filter"""
+
+    def __init__(self,
+            orderBy=NotImplemented,
+            productTypeEqual=NotImplemented,
+            entityReferenceEqual=NotImplemented,
+            isExpiredEqual=NotImplemented):
+        KalturaBaseEntitlementFilter.__init__(self,
+            orderBy)
+
+        # The type of the entitlements to return
+        # @var KalturaTransactionType
+        self.productTypeEqual = productTypeEqual
+
+        # Reference type to filter by
+        # @var KalturaEntityReferenceBy
+        self.entityReferenceEqual = entityReferenceEqual
+
+        # Is expired
+        # @var bool
+        self.isExpiredEqual = isExpiredEqual
+
+
+    PROPERTY_LOADERS = {
+        'productTypeEqual': (KalturaEnumsFactory.createString, "KalturaTransactionType"), 
+        'entityReferenceEqual': (KalturaEnumsFactory.createString, "KalturaEntityReferenceBy"), 
+        'isExpiredEqual': getXmlNodeBool, 
+    }
+
+    def fromXml(self, node):
+        KalturaBaseEntitlementFilter.fromXml(self, node)
+        self.fromXmlImpl(node, KalturaEntitlementFilter.PROPERTY_LOADERS)
+
+    def toParams(self):
+        kparams = KalturaBaseEntitlementFilter.toParams(self)
+        kparams.put("objectType", "KalturaEntitlementFilter")
+        kparams.addStringEnumIfDefined("productTypeEqual", self.productTypeEqual)
+        kparams.addStringEnumIfDefined("entityReferenceEqual", self.entityReferenceEqual)
+        kparams.addBoolIfDefined("isExpiredEqual", self.isExpiredEqual)
+        return kparams
+
+    def getProductTypeEqual(self):
+        return self.productTypeEqual
+
+    def setProductTypeEqual(self, newProductTypeEqual):
+        self.productTypeEqual = newProductTypeEqual
+
+    def getEntityReferenceEqual(self):
+        return self.entityReferenceEqual
+
+    def setEntityReferenceEqual(self, newEntityReferenceEqual):
+        self.entityReferenceEqual = newEntityReferenceEqual
+
+    def getIsExpiredEqual(self):
+        return self.isExpiredEqual
+
+    def setIsExpiredEqual(self, newIsExpiredEqual):
+        self.isExpiredEqual = newIsExpiredEqual
+
+
+# @package Kaltura
+# @subpackage Client
+class KalturaProgramAssetGroupOfferEntitlementFilter(KalturaBaseEntitlementFilter):
+    """Program asset group offer Entitlements filter"""
+
+    def __init__(self,
+            orderBy=NotImplemented):
+        KalturaBaseEntitlementFilter.__init__(self,
+            orderBy)
+
+
+    PROPERTY_LOADERS = {
+    }
+
+    def fromXml(self, node):
+        KalturaBaseEntitlementFilter.fromXml(self, node)
+        self.fromXmlImpl(node, KalturaProgramAssetGroupOfferEntitlementFilter.PROPERTY_LOADERS)
+
+    def toParams(self):
+        kparams = KalturaBaseEntitlementFilter.toParams(self)
+        kparams.put("objectType", "KalturaProgramAssetGroupOfferEntitlementFilter")
+        return kparams
+
+
+# @package Kaltura
+# @subpackage Client
 class KalturaRecordingFilter(KalturaFilter):
     """Filtering recordings"""
 
@@ -8231,69 +8406,6 @@ class KalturaCloudSeriesRecordingFilter(KalturaSeriesRecordingFilter):
 
 # @package Kaltura
 # @subpackage Client
-class KalturaEntitlementFilter(KalturaFilter):
-    """Entitlements filter"""
-
-    def __init__(self,
-            orderBy=NotImplemented,
-            productTypeEqual=NotImplemented,
-            entityReferenceEqual=NotImplemented,
-            isExpiredEqual=NotImplemented):
-        KalturaFilter.__init__(self,
-            orderBy)
-
-        # The type of the entitlements to return
-        # @var KalturaTransactionType
-        self.productTypeEqual = productTypeEqual
-
-        # Reference type to filter by
-        # @var KalturaEntityReferenceBy
-        self.entityReferenceEqual = entityReferenceEqual
-
-        # Is expired
-        # @var bool
-        self.isExpiredEqual = isExpiredEqual
-
-
-    PROPERTY_LOADERS = {
-        'productTypeEqual': (KalturaEnumsFactory.createString, "KalturaTransactionType"), 
-        'entityReferenceEqual': (KalturaEnumsFactory.createString, "KalturaEntityReferenceBy"), 
-        'isExpiredEqual': getXmlNodeBool, 
-    }
-
-    def fromXml(self, node):
-        KalturaFilter.fromXml(self, node)
-        self.fromXmlImpl(node, KalturaEntitlementFilter.PROPERTY_LOADERS)
-
-    def toParams(self):
-        kparams = KalturaFilter.toParams(self)
-        kparams.put("objectType", "KalturaEntitlementFilter")
-        kparams.addStringEnumIfDefined("productTypeEqual", self.productTypeEqual)
-        kparams.addStringEnumIfDefined("entityReferenceEqual", self.entityReferenceEqual)
-        kparams.addBoolIfDefined("isExpiredEqual", self.isExpiredEqual)
-        return kparams
-
-    def getProductTypeEqual(self):
-        return self.productTypeEqual
-
-    def setProductTypeEqual(self, newProductTypeEqual):
-        self.productTypeEqual = newProductTypeEqual
-
-    def getEntityReferenceEqual(self):
-        return self.entityReferenceEqual
-
-    def setEntityReferenceEqual(self, newEntityReferenceEqual):
-        self.entityReferenceEqual = newEntityReferenceEqual
-
-    def getIsExpiredEqual(self):
-        return self.isExpiredEqual
-
-    def setIsExpiredEqual(self, newIsExpiredEqual):
-        self.isExpiredEqual = newIsExpiredEqual
-
-
-# @package Kaltura
-# @subpackage Client
 class KalturaExternalRecordingResponseProfileFilter(KalturaRelatedObjectFilter):
     """Kaltura External Recording ResponseProfile Filter"""
 
@@ -8325,7 +8437,8 @@ class KalturaProductPriceFilter(KalturaFilter):
             fileIdIn=NotImplemented,
             collectionIdIn=NotImplemented,
             isLowest=NotImplemented,
-            couponCodeEqual=NotImplemented):
+            couponCodeEqual=NotImplemented,
+            programAssetGroupOfferIdIn=NotImplemented):
         KalturaFilter.__init__(self,
             orderBy)
 
@@ -8349,6 +8462,10 @@ class KalturaProductPriceFilter(KalturaFilter):
         # @var string
         self.couponCodeEqual = couponCodeEqual
 
+        # Comma separated ProgramAssetGroupOffer identifiers
+        # @var string
+        self.programAssetGroupOfferIdIn = programAssetGroupOfferIdIn
+
 
     PROPERTY_LOADERS = {
         'subscriptionIdIn': getXmlNodeText, 
@@ -8356,6 +8473,7 @@ class KalturaProductPriceFilter(KalturaFilter):
         'collectionIdIn': getXmlNodeText, 
         'isLowest': getXmlNodeBool, 
         'couponCodeEqual': getXmlNodeText, 
+        'programAssetGroupOfferIdIn': getXmlNodeText, 
     }
 
     def fromXml(self, node):
@@ -8370,6 +8488,7 @@ class KalturaProductPriceFilter(KalturaFilter):
         kparams.addStringIfDefined("collectionIdIn", self.collectionIdIn)
         kparams.addBoolIfDefined("isLowest", self.isLowest)
         kparams.addStringIfDefined("couponCodeEqual", self.couponCodeEqual)
+        kparams.addStringIfDefined("programAssetGroupOfferIdIn", self.programAssetGroupOfferIdIn)
         return kparams
 
     def getSubscriptionIdIn(self):
@@ -8401,6 +8520,12 @@ class KalturaProductPriceFilter(KalturaFilter):
 
     def setCouponCodeEqual(self, newCouponCodeEqual):
         self.couponCodeEqual = newCouponCodeEqual
+
+    def getProgramAssetGroupOfferIdIn(self):
+        return self.programAssetGroupOfferIdIn
+
+    def setProgramAssetGroupOfferIdIn(self, newProgramAssetGroupOfferIdIn):
+        self.programAssetGroupOfferIdIn = newProgramAssetGroupOfferIdIn
 
 
 # @package Kaltura
@@ -10556,6 +10681,43 @@ class KalturaPaymentMethodProfileFilter(KalturaFilter):
 
 # @package Kaltura
 # @subpackage Client
+class KalturaAssetPersonalMarkupSearchFilter(KalturaFilter):
+    """Asset Personal Markup search filter"""
+
+    def __init__(self,
+            orderBy=NotImplemented,
+            assetsIn=NotImplemented):
+        KalturaFilter.__init__(self,
+            orderBy)
+
+        # all assets to search their personal markups
+        # @var array of KalturaSlimAsset
+        self.assetsIn = assetsIn
+
+
+    PROPERTY_LOADERS = {
+        'assetsIn': (KalturaObjectFactory.createArray, 'KalturaSlimAsset'), 
+    }
+
+    def fromXml(self, node):
+        KalturaFilter.fromXml(self, node)
+        self.fromXmlImpl(node, KalturaAssetPersonalMarkupSearchFilter.PROPERTY_LOADERS)
+
+    def toParams(self):
+        kparams = KalturaFilter.toParams(self)
+        kparams.put("objectType", "KalturaAssetPersonalMarkupSearchFilter")
+        kparams.addArrayIfDefined("assetsIn", self.assetsIn)
+        return kparams
+
+    def getAssetsIn(self):
+        return self.assetsIn
+
+    def setAssetsIn(self, newAssetsIn):
+        self.assetsIn = newAssetsIn
+
+
+# @package Kaltura
+# @subpackage Client
 class KalturaAssetRuleFilter(KalturaFilter):
     """Asset rule filter"""
 
@@ -11074,6 +11236,141 @@ class KalturaCurrencyFilter(KalturaFilter):
 
     def setExcludePartner(self, newExcludePartner):
         self.excludePartner = newExcludePartner
+
+
+# @package Kaltura
+# @subpackage Client
+class KalturaDeviceBrandFilter(KalturaFilter):
+    def __init__(self,
+            orderBy=NotImplemented,
+            idEqual=NotImplemented,
+            deviceFamilyIdEqual=NotImplemented,
+            nameEqual=NotImplemented,
+            typeEqual=NotImplemented):
+        KalturaFilter.__init__(self,
+            orderBy)
+
+        # Filter the device brand with this identifier.
+        # @var int
+        self.idEqual = idEqual
+
+        # Filter the device brands with this device family&#39;s identifier.
+        # @var int
+        self.deviceFamilyIdEqual = deviceFamilyIdEqual
+
+        # Filter the device brand with this name.
+        # @var string
+        self.nameEqual = nameEqual
+
+        # Filter device brands of this type
+        # @var KalturaDeviceBrandType
+        self.typeEqual = typeEqual
+
+
+    PROPERTY_LOADERS = {
+        'idEqual': getXmlNodeInt, 
+        'deviceFamilyIdEqual': getXmlNodeInt, 
+        'nameEqual': getXmlNodeText, 
+        'typeEqual': (KalturaEnumsFactory.createString, "KalturaDeviceBrandType"), 
+    }
+
+    def fromXml(self, node):
+        KalturaFilter.fromXml(self, node)
+        self.fromXmlImpl(node, KalturaDeviceBrandFilter.PROPERTY_LOADERS)
+
+    def toParams(self):
+        kparams = KalturaFilter.toParams(self)
+        kparams.put("objectType", "KalturaDeviceBrandFilter")
+        kparams.addIntIfDefined("idEqual", self.idEqual)
+        kparams.addIntIfDefined("deviceFamilyIdEqual", self.deviceFamilyIdEqual)
+        kparams.addStringIfDefined("nameEqual", self.nameEqual)
+        kparams.addStringEnumIfDefined("typeEqual", self.typeEqual)
+        return kparams
+
+    def getIdEqual(self):
+        return self.idEqual
+
+    def setIdEqual(self, newIdEqual):
+        self.idEqual = newIdEqual
+
+    def getDeviceFamilyIdEqual(self):
+        return self.deviceFamilyIdEqual
+
+    def setDeviceFamilyIdEqual(self, newDeviceFamilyIdEqual):
+        self.deviceFamilyIdEqual = newDeviceFamilyIdEqual
+
+    def getNameEqual(self):
+        return self.nameEqual
+
+    def setNameEqual(self, newNameEqual):
+        self.nameEqual = newNameEqual
+
+    def getTypeEqual(self):
+        return self.typeEqual
+
+    def setTypeEqual(self, newTypeEqual):
+        self.typeEqual = newTypeEqual
+
+
+# @package Kaltura
+# @subpackage Client
+class KalturaDeviceFamilyFilter(KalturaFilter):
+    def __init__(self,
+            orderBy=NotImplemented,
+            idEqual=NotImplemented,
+            nameEqual=NotImplemented,
+            typeEqual=NotImplemented):
+        KalturaFilter.__init__(self,
+            orderBy)
+
+        # Filter the device family with this identifier.
+        # @var int
+        self.idEqual = idEqual
+
+        # Filter the device family with this name.
+        # @var string
+        self.nameEqual = nameEqual
+
+        # Filter device families of this type
+        # @var KalturaDeviceFamilyType
+        self.typeEqual = typeEqual
+
+
+    PROPERTY_LOADERS = {
+        'idEqual': getXmlNodeInt, 
+        'nameEqual': getXmlNodeText, 
+        'typeEqual': (KalturaEnumsFactory.createString, "KalturaDeviceFamilyType"), 
+    }
+
+    def fromXml(self, node):
+        KalturaFilter.fromXml(self, node)
+        self.fromXmlImpl(node, KalturaDeviceFamilyFilter.PROPERTY_LOADERS)
+
+    def toParams(self):
+        kparams = KalturaFilter.toParams(self)
+        kparams.put("objectType", "KalturaDeviceFamilyFilter")
+        kparams.addIntIfDefined("idEqual", self.idEqual)
+        kparams.addStringIfDefined("nameEqual", self.nameEqual)
+        kparams.addStringEnumIfDefined("typeEqual", self.typeEqual)
+        return kparams
+
+    def getIdEqual(self):
+        return self.idEqual
+
+    def setIdEqual(self, newIdEqual):
+        self.idEqual = newIdEqual
+
+    def getNameEqual(self):
+        return self.nameEqual
+
+    def setNameEqual(self, newNameEqual):
+        self.nameEqual = newNameEqual
+
+    def getTypeEqual(self):
+        return self.typeEqual
+
+    def setTypeEqual(self, newTypeEqual):
+        self.typeEqual = newTypeEqual
 
 
 # @package Kaltura
@@ -25745,6 +26042,40 @@ class KalturaPpvPrice(KalturaProductPrice):
 
 # @package Kaltura
 # @subpackage Client
+class KalturaProgramAssetGroupOfferPrice(KalturaProductPrice):
+    """ProgramAssetGroupOffer price details"""
+
+    def __init__(self,
+            productId=NotImplemented,
+            productType=NotImplemented,
+            price=NotImplemented,
+            fullPrice=NotImplemented,
+            purchaseStatus=NotImplemented,
+            promotionInfo=NotImplemented):
+        KalturaProductPrice.__init__(self,
+            productId,
+            productType,
+            price,
+            fullPrice,
+            purchaseStatus,
+            promotionInfo)
+
+
+    PROPERTY_LOADERS = {
+    }
+
+    def fromXml(self, node):
+        KalturaProductPrice.fromXml(self, node)
+        self.fromXmlImpl(node, KalturaProgramAssetGroupOfferPrice.PROPERTY_LOADERS)
+
+    def toParams(self):
+        kparams = KalturaProductPrice.toParams(self)
+        kparams.put("objectType", "KalturaProgramAssetGroupOfferPrice")
+        return kparams
+
+
+# @package Kaltura
+# @subpackage Client
 class KalturaSubscriptionPrice(KalturaProductPrice):
     """Subscription price details"""
 
@@ -31016,7 +31347,8 @@ class KalturaDeviceFamilyBase(KalturaObjectBase):
 
     def __init__(self,
             id=NotImplemented,
-            name=NotImplemented):
+            name=NotImplemented,
+            type=NotImplemented):
         KalturaObjectBase.__init__(self)
 
         # Device family identifier
@@ -31025,13 +31357,20 @@ class KalturaDeviceFamilyBase(KalturaObjectBase):
 
         # Device family name
         # @var string
-        # @readonly
         self.name = name
+
+        # Type of device family.
+        #              if this device family belongs only to this group,
+        #              otherwise.
+        # @var KalturaDeviceFamilyType
+        # @readonly
+        self.type = type
 
 
     PROPERTY_LOADERS = {
         'id': getXmlNodeInt, 
         'name': getXmlNodeText, 
+        'type': (KalturaEnumsFactory.createString, "KalturaDeviceFamilyType"), 
     }
 
     def fromXml(self, node):
@@ -31042,6 +31381,7 @@ class KalturaDeviceFamilyBase(KalturaObjectBase):
         kparams = KalturaObjectBase.toParams(self)
         kparams.put("objectType", "KalturaDeviceFamilyBase")
         kparams.addIntIfDefined("id", self.id)
+        kparams.addStringIfDefined("name", self.name)
         return kparams
 
     def getId(self):
@@ -31053,6 +31393,12 @@ class KalturaDeviceFamilyBase(KalturaObjectBase):
     def getName(self):
         return self.name
 
+    def setName(self, newName):
+        self.name = newName
+
+    def getType(self):
+        return self.type
+
 
 # @package Kaltura
 # @subpackage Client
@@ -31062,6 +31408,7 @@ class KalturaHouseholdDeviceFamilyLimitations(KalturaDeviceFamilyBase):
     def __init__(self,
             id=NotImplemented,
             name=NotImplemented,
+            type=NotImplemented,
             frequency=NotImplemented,
             deviceLimit=NotImplemented,
             concurrentLimit=NotImplemented,
@@ -31069,7 +31416,8 @@ class KalturaHouseholdDeviceFamilyLimitations(KalturaDeviceFamilyBase):
             isDefaultConcurrentLimit=NotImplemented):
         KalturaDeviceFamilyBase.__init__(self,
             id,
-            name)
+            name,
+            type)
 
         # Allowed device change frequency code
         # @var int
@@ -31362,10 +31710,12 @@ class KalturaDeviceFamily(KalturaDeviceFamilyBase):
 
     def __init__(self,
             id=NotImplemented,
-            name=NotImplemented):
+            name=NotImplemented,
+            type=NotImplemented):
         KalturaDeviceFamilyBase.__init__(self,
             id,
-            name)
+            name,
+            type)
 
 
     PROPERTY_LOADERS = {
@@ -33007,6 +33357,58 @@ class KalturaPpvEntitlement(KalturaEntitlement):
 
     def getMediaId(self):
         return self.mediaId
+
+
+# @package Kaltura
+# @subpackage Client
+class KalturaProgramAssetGroupOfferEntitlement(KalturaEntitlement):
+    """ProgramAssetGroupOfferEntitlement"""
+
+    def __init__(self,
+            id=NotImplemented,
+            productId=NotImplemented,
+            currentUses=NotImplemented,
+            endDate=NotImplemented,
+            currentDate=NotImplemented,
+            lastViewDate=NotImplemented,
+            purchaseDate=NotImplemented,
+            paymentMethod=NotImplemented,
+            deviceUdid=NotImplemented,
+            deviceName=NotImplemented,
+            isCancelationWindowEnabled=NotImplemented,
+            maxUses=NotImplemented,
+            userId=NotImplemented,
+            householdId=NotImplemented,
+            isPending=NotImplemented):
+        KalturaEntitlement.__init__(self,
+            id,
+            productId,
+            currentUses,
+            endDate,
+            currentDate,
+            lastViewDate,
+            purchaseDate,
+            paymentMethod,
+            deviceUdid,
+            deviceName,
+            isCancelationWindowEnabled,
+            maxUses,
+            userId,
+            householdId,
+            isPending)
+
+
+    PROPERTY_LOADERS = {
+    }
+
+    def fromXml(self, node):
+        KalturaEntitlement.fromXml(self, node)
+        self.fromXmlImpl(node, KalturaProgramAssetGroupOfferEntitlement.PROPERTY_LOADERS)
+
+    def toParams(self):
+        kparams = KalturaEntitlement.toParams(self)
+        kparams.put("objectType", "KalturaProgramAssetGroupOfferEntitlement")
+        return kparams
 
 
 # @package Kaltura
@@ -38021,6 +38423,150 @@ class KalturaPaymentMethodProfileListResponse(KalturaListResponse):
 
 # @package Kaltura
 # @subpackage Client
+class KalturaProductMarkup(KalturaObjectBase):
+    """Product Markup"""
+
+    def __init__(self,
+            productId=NotImplemented,
+            productType=NotImplemented,
+            isEntitled=NotImplemented):
+        KalturaObjectBase.__init__(self)
+
+        # Product Id
+        # @var int
+        # @readonly
+        self.productId = productId
+
+        # Product Type
+        # @var KalturaTransactionType
+        # @readonly
+        self.productType = productType
+
+        # Is Entitled to this product
+        # @var bool
+        # @readonly
+        self.isEntitled = isEntitled
+
+
+    PROPERTY_LOADERS = {
+        'productId': getXmlNodeInt, 
+        'productType': (KalturaEnumsFactory.createString, "KalturaTransactionType"), 
+        'isEntitled': getXmlNodeBool, 
+    }
+
+    def fromXml(self, node):
+        KalturaObjectBase.fromXml(self, node)
+        self.fromXmlImpl(node, KalturaProductMarkup.PROPERTY_LOADERS)
+
+    def toParams(self):
+        kparams = KalturaObjectBase.toParams(self)
+        kparams.put("objectType", "KalturaProductMarkup")
+        return kparams
+
+    def getProductId(self):
+        return self.productId
+
+    def getProductType(self):
+        return self.productType
+
+    def getIsEntitled(self):
+        return self.isEntitled
+
+
+# @package Kaltura
+# @subpackage Client
+class KalturaAssetPersonalMarkup(KalturaObjectBase):
+    """Asset Personal Markup"""
+
+    def __init__(self,
+            assetId=NotImplemented,
+            assetType=NotImplemented,
+            products=NotImplemented):
+        KalturaObjectBase.__init__(self)
+
+        # Asset Id
+        # @var int
+        # @readonly
+        self.assetId = assetId
+
+        # Asset Type
+        # @var KalturaAssetType
+        # @readonly
+        self.assetType = assetType
+
+        # all related asset&#39;s Product Markups
+        # @var array of KalturaProductMarkup
+        self.products = products
+
+
+    PROPERTY_LOADERS = {
+        'assetId': getXmlNodeInt, 
+        'assetType': (KalturaEnumsFactory.createString, "KalturaAssetType"), 
+        'products': (KalturaObjectFactory.createArray, 'KalturaProductMarkup'), 
+    }
+
+    def fromXml(self, node):
+        KalturaObjectBase.fromXml(self, node)
+        self.fromXmlImpl(node, KalturaAssetPersonalMarkup.PROPERTY_LOADERS)
+
+    def toParams(self):
+        kparams = KalturaObjectBase.toParams(self)
+        kparams.put("objectType", "KalturaAssetPersonalMarkup")
+        kparams.addArrayIfDefined("products", self.products)
+        return kparams
+
+    def getAssetId(self):
+        return self.assetId
+
+    def getAssetType(self):
+        return self.assetType
+
+    def getProducts(self):
+        return self.products
+
+    def setProducts(self, newProducts):
+        self.products = newProducts
+
+
+# @package Kaltura
+# @subpackage Client
+class KalturaAssetPersonalMarkupListResponse(KalturaListResponse):
+    """Asset Personal Markup"""
+
+    def __init__(self,
+            totalCount=NotImplemented,
+            objects=NotImplemented):
+        KalturaListResponse.__init__(self,
+            totalCount)
+
+        # Adapters
+        # @var array of KalturaAssetPersonalMarkup
+        self.objects = objects
+
+
+    PROPERTY_LOADERS = {
+        'objects': (KalturaObjectFactory.createArray, 'KalturaAssetPersonalMarkup'), 
+    }
+
+    def fromXml(self, node):
+        KalturaListResponse.fromXml(self, node)
+        self.fromXmlImpl(node, KalturaAssetPersonalMarkupListResponse.PROPERTY_LOADERS)
+
+    def toParams(self):
+        kparams = KalturaListResponse.toParams(self)
+        kparams.put("objectType", "KalturaAssetPersonalMarkupListResponse")
+        kparams.addArrayIfDefined("objects", self.objects)
+        return kparams
+
+    def getObjects(self):
+        return self.objects
+
+    def setObjects(self, newObjects):
+        self.objects = newObjects
+
+
+# @package Kaltura
+# @subpackage Client
 class KalturaAssetRuleListResponse(KalturaListResponse):
     def __init__(self,
             totalCount=NotImplemented,
@@ -38479,12 +39025,12 @@ class KalturaDeviceBrand(KalturaObjectBase):
     def __init__(self,
             id=NotImplemented,
             name=NotImplemented,
-            deviceFamilyid=NotImplemented):
+            deviceFamilyId=NotImplemented,
+            type=NotImplemented):
         KalturaObjectBase.__init__(self)
 
         # Device brand identifier
         # @var int
-        # @readonly
         self.id = id
 
         # Device brand name
@@ -38493,14 +39039,21 @@ class KalturaDeviceBrand(KalturaObjectBase):
 
         # Device family identifier
         # @var int
+        self.deviceFamilyId = deviceFamilyId
+
+        # Type of device family.
+        #              if this device family belongs only to this group,
+        #              otherwise.
+        # @var KalturaDeviceBrandType
         # @readonly
-        self.deviceFamilyid = deviceFamilyid
+        self.type = type
 
 
     PROPERTY_LOADERS = {
         'id': getXmlNodeInt, 
         'name': getXmlNodeText, 
-        'deviceFamilyid': getXmlNodeInt, 
+        'deviceFamilyId': getXmlNodeInt, 
+        'type': (KalturaEnumsFactory.createString, "KalturaDeviceBrandType"), 
     }
 
     def fromXml(self, node):
@@ -38510,11 +39063,16 @@ class KalturaDeviceBrand(KalturaObjectBase):
     def toParams(self):
         kparams = KalturaObjectBase.toParams(self)
         kparams.put("objectType", "KalturaDeviceBrand")
+        kparams.addIntIfDefined("id", self.id)
         kparams.addStringIfDefined("name", self.name)
+        kparams.addIntIfDefined("deviceFamilyId", self.deviceFamilyId)
         return kparams
 
     def getId(self):
         return self.id
+
+    def setId(self, newId):
+        self.id = newId
 
     def getName(self):
         return self.name
@@ -38522,8 +39080,14 @@ class KalturaDeviceBrand(KalturaObjectBase):
     def setName(self, newName):
         self.name = newName
 
-    def getDeviceFamilyid(self):
-        return self.deviceFamilyid
+    def getDeviceFamilyId(self):
+        return self.deviceFamilyId
+
+    def setDeviceFamilyId(self, newDeviceFamilyId):
+        self.deviceFamilyId = newDeviceFamilyId
+
+    def getType(self):
+        return self.type
 
 
 # @package Kaltura
@@ -48583,6 +49147,24 @@ class KalturaAssetHistoryService(KalturaServiceBase):
 
 # @package Kaltura
 # @subpackage Client
+class KalturaAssetPersonalMarkupService(KalturaServiceBase):
+    def __init__(self, client = None):
+        KalturaServiceBase.__init__(self, client)
+
+    def list(self, filter):
+        """Response with list of assetPersonalMarkup."""
+
+        kparams = KalturaParams()
+        kparams.addObjectIfDefined("filter", filter)
+        self.client.queueServiceActionCall("assetpersonalmarkup", "list", "KalturaAssetPersonalMarkupListResponse", kparams)
+        if self.client.isMultiRequest():
+            return self.client.getMultiRequestResult()
+        resultNode = self.client.doQueue()
+        return KalturaObjectFactory.create(resultNode, 'KalturaAssetPersonalMarkupListResponse')
+
+
+# @package Kaltura
+# @subpackage Client
 class KalturaAssetRuleService(KalturaServiceBase):
     def __init__(self, client = None):
         KalturaServiceBase.__init__(self, client)
@@ -49856,15 +50438,40 @@ class KalturaDeviceBrandService(KalturaServiceBase):
     def __init__(self, client = None):
         KalturaServiceBase.__init__(self, client)
 
-    def list(self):
+    def add(self, deviceBrand):
+        """Adds a new device brand which belongs to a specific group."""
+
+        kparams = KalturaParams()
+        kparams.addObjectIfDefined("deviceBrand", deviceBrand)
+        self.client.queueServiceActionCall("devicebrand", "add", "KalturaDeviceBrand", kparams)
+        if self.client.isMultiRequest():
+            return self.client.getMultiRequestResult()
+        resultNode = self.client.doQueue()
+        return KalturaObjectFactory.create(resultNode, 'KalturaDeviceBrand')
+
+    def list(self, filter = NotImplemented, pager = NotImplemented):
         """Return a list of the available device brands."""
 
         kparams = KalturaParams()
+        kparams.addObjectIfDefined("filter", filter)
+        kparams.addObjectIfDefined("pager", pager)
         self.client.queueServiceActionCall("devicebrand", "list", "KalturaDeviceBrandListResponse", kparams)
         if self.client.isMultiRequest():
             return self.client.getMultiRequestResult()
         resultNode = self.client.doQueue()
         return KalturaObjectFactory.create(resultNode, 'KalturaDeviceBrandListResponse')
+
+    def update(self, id, deviceBrand):
+        """Updates an existing device brand which belongs to a specific group."""
+
+        kparams = KalturaParams()
+        kparams.addIntIfDefined("id", id);
+        kparams.addObjectIfDefined("deviceBrand", deviceBrand)
+        self.client.queueServiceActionCall("devicebrand", "update", "KalturaDeviceBrand", kparams)
+        if self.client.isMultiRequest():
+            return self.client.getMultiRequestResult()
+        resultNode = self.client.doQueue()
+        return KalturaObjectFactory.create(resultNode, 'KalturaDeviceBrand')
 
 
 # @package Kaltura
@@ -49873,15 +50480,40 @@ class KalturaDeviceFamilyService(KalturaServiceBase):
     def __init__(self, client = None):
         KalturaServiceBase.__init__(self, client)
 
-    def list(self):
+    def add(self, deviceFamily):
+        """Adds a new device family which belongs to a specific group."""
+
+        kparams = KalturaParams()
+        kparams.addObjectIfDefined("deviceFamily", deviceFamily)
+        self.client.queueServiceActionCall("devicefamily", "add", "KalturaDeviceFamily", kparams)
+        if self.client.isMultiRequest():
+            return self.client.getMultiRequestResult()
+        resultNode = self.client.doQueue()
+        return KalturaObjectFactory.create(resultNode, 'KalturaDeviceFamily')
+
+    def list(self, filter = NotImplemented, pager = NotImplemented):
         """Return a list of the available device families."""
 
         kparams = KalturaParams()
+        kparams.addObjectIfDefined("filter", filter)
+        kparams.addObjectIfDefined("pager", pager)
         self.client.queueServiceActionCall("devicefamily", "list", "KalturaDeviceFamilyListResponse", kparams)
         if self.client.isMultiRequest():
             return self.client.getMultiRequestResult()
         resultNode = self.client.doQueue()
         return KalturaObjectFactory.create(resultNode, 'KalturaDeviceFamilyListResponse')
+
+    def update(self, id, deviceFamily):
+        """Updates an existing device family which belongs to a specific group."""
+
+        kparams = KalturaParams()
+        kparams.addIntIfDefined("id", id);
+        kparams.addObjectIfDefined("deviceFamily", deviceFamily)
+        self.client.queueServiceActionCall("devicefamily", "update", "KalturaDeviceFamily", kparams)
+        if self.client.isMultiRequest():
+            return self.client.getMultiRequestResult()
+        resultNode = self.client.doQueue()
+        return KalturaObjectFactory.create(resultNode, 'KalturaDeviceFamily')
 
 
 # @package Kaltura
@@ -50269,7 +50901,7 @@ class KalturaEntitlementService(KalturaServiceBase):
         resultNode = self.client.doQueue()
 
     def cancel(self, assetId, productType):
-        """Immediately cancel a subscription, PPV or collection. Cancel is possible only if within cancellation window and content not already consumed"""
+        """Immediately cancel a subscription, PPV, collection or programAssetGroupOffer. Cancel is possible only if within cancellation window and content not already consumed"""
 
         kparams = KalturaParams()
         kparams.addIntIfDefined("assetId", assetId);
@@ -50312,7 +50944,7 @@ class KalturaEntitlementService(KalturaServiceBase):
         return getXmlNodeBool(resultNode)
 
     def forceCancel(self, assetId, productType):
-        """Immediately cancel a subscription, PPV or collection. Cancel applies regardless of cancellation window and content consumption status"""
+        """Immediately cancel a subscription, PPV, collection or programAssetGroupOffer. Cancel applies regardless of cancellation window and content consumption status"""
 
         kparams = KalturaParams()
         kparams.addIntIfDefined("assetId", assetId);
@@ -50335,7 +50967,7 @@ class KalturaEntitlementService(KalturaServiceBase):
         return KalturaObjectFactory.create(resultNode, 'KalturaEntitlementRenewal')
 
     def grant(self, productId, productType, history, contentId = 0):
-        """Grant household for an entitlement for a PPV or Subscription."""
+        """Grant household for an entitlement for a PPV, Subscription or programAssetGroupOffer."""
 
         kparams = KalturaParams()
         kparams.addIntIfDefined("productId", productId);
@@ -55037,7 +55669,7 @@ class KalturaTransactionService(KalturaServiceBase):
         return getXmlNodeInt(resultNode)
 
     def purchase(self, purchase):
-        """Purchase specific product or subscription for a household. Upon successful charge entitlements to use the requested product or subscription are granted."""
+        """Purchase specific product, subscription or Program asset group offer (PAGO) for a household. Upon successful charge entitlements to use the requested product or subscription are granted."""
 
         kparams = KalturaParams()
         kparams.addObjectIfDefined("purchase", purchase)
@@ -55567,6 +56199,7 @@ class KalturaCoreClient(KalturaClientPlugin):
             'assetFile': KalturaAssetFileService,
             'assetFilePpv': KalturaAssetFilePpvService,
             'assetHistory': KalturaAssetHistoryService,
+            'assetPersonalMarkup': KalturaAssetPersonalMarkupService,
             'assetRule': KalturaAssetRuleService,
             'assetStatistics': KalturaAssetStatisticsService,
             'assetStruct': KalturaAssetStructService,
@@ -55731,6 +56364,7 @@ class KalturaCoreClient(KalturaClientPlugin):
             'KalturaAssetOrderBy': KalturaAssetOrderBy,
             'KalturaAssetOrderByStatistics': KalturaAssetOrderByStatistics,
             'KalturaAssetOrderByType': KalturaAssetOrderByType,
+            'KalturaAssetPersonalMarkupSearchOrderBy': KalturaAssetPersonalMarkupSearchOrderBy,
             'KalturaAssetReferenceType': KalturaAssetReferenceType,
             'KalturaAssetReminderOrderBy': KalturaAssetReminderOrderBy,
             'KalturaAssetRuleOrderBy': KalturaAssetRuleOrderBy,
@@ -55775,6 +56409,10 @@ class KalturaCoreClient(KalturaClientPlugin):
             'KalturaCouponStatus': KalturaCouponStatus,
             'KalturaCurrencyOrderBy': KalturaCurrencyOrderBy,
             'KalturaDeleteMediaPolicy': KalturaDeleteMediaPolicy,
+            'KalturaDeviceBrandOrderBy': KalturaDeviceBrandOrderBy,
+            'KalturaDeviceBrandType': KalturaDeviceBrandType,
+            'KalturaDeviceFamilyOrderBy': KalturaDeviceFamilyOrderBy,
+            'KalturaDeviceFamilyType': KalturaDeviceFamilyType,
             'KalturaDeviceReferenceDataOrderBy': KalturaDeviceReferenceDataOrderBy,
             'KalturaDeviceStatus': KalturaDeviceStatus,
             'KalturaDowngradePolicy': KalturaDowngradePolicy,
@@ -56044,12 +56682,14 @@ class KalturaCoreClient(KalturaClientPlugin):
             'KalturaConfigurationGroupDeviceFilter': KalturaConfigurationGroupDeviceFilter,
             'KalturaConfigurationGroupTagFilter': KalturaConfigurationGroupTagFilter,
             'KalturaConfigurationsFilter': KalturaConfigurationsFilter,
+            'KalturaBaseEntitlementFilter': KalturaBaseEntitlementFilter,
+            'KalturaEntitlementFilter': KalturaEntitlementFilter,
+            'KalturaProgramAssetGroupOfferEntitlementFilter': KalturaProgramAssetGroupOfferEntitlementFilter,
             'KalturaRecordingFilter': KalturaRecordingFilter,
             'KalturaExternalRecordingFilter': KalturaExternalRecordingFilter,
             'KalturaCloudRecordingFilter': KalturaCloudRecordingFilter,
             'KalturaSeriesRecordingFilter': KalturaSeriesRecordingFilter,
             'KalturaCloudSeriesRecordingFilter': KalturaCloudSeriesRecordingFilter,
-            'KalturaEntitlementFilter': KalturaEntitlementFilter,
             'KalturaExternalRecordingResponseProfileFilter': KalturaExternalRecordingResponseProfileFilter,
             'KalturaProductPriceFilter': KalturaProductPriceFilter,
             'KalturaRecordingContextFilter': KalturaRecordingContextFilter,
@@ -56087,6 +56727,7 @@ class KalturaCoreClient(KalturaClientPlugin):
             'KalturaTagFilter': KalturaTagFilter,
             'KalturaSearchPriorityGroupFilter': KalturaSearchPriorityGroupFilter,
             'KalturaPaymentMethodProfileFilter': KalturaPaymentMethodProfileFilter,
+            'KalturaAssetPersonalMarkupSearchFilter': KalturaAssetPersonalMarkupSearchFilter,
             'KalturaAssetRuleFilter': KalturaAssetRuleFilter,
             'KalturaAssetUserRuleFilter': KalturaAssetUserRuleFilter,
             'KalturaCampaignFilter': KalturaCampaignFilter,
@@ -56097,6 +56738,8 @@ class KalturaCoreClient(KalturaClientPlugin):
             'KalturaBusinessModuleRuleFilter': KalturaBusinessModuleRuleFilter,
             'KalturaCountryFilter': KalturaCountryFilter,
             'KalturaCurrencyFilter': KalturaCurrencyFilter,
+            'KalturaDeviceBrandFilter': KalturaDeviceBrandFilter,
+            'KalturaDeviceFamilyFilter': KalturaDeviceFamilyFilter,
             'KalturaEventNotificationFilter': KalturaEventNotificationFilter,
             'KalturaExportTaskFilter': KalturaExportTaskFilter,
             'KalturaExternalChannelProfileFilter': KalturaExternalChannelProfileFilter,
@@ -56352,6 +56995,7 @@ class KalturaCoreClient(KalturaClientPlugin):
             'KalturaProductPrice': KalturaProductPrice,
             'KalturaCollectionPrice': KalturaCollectionPrice,
             'KalturaPpvPrice': KalturaPpvPrice,
+            'KalturaProgramAssetGroupOfferPrice': KalturaProgramAssetGroupOfferPrice,
             'KalturaSubscriptionPrice': KalturaSubscriptionPrice,
             'KalturaPpv': KalturaPpv,
             'KalturaPpvListResponse': KalturaPpvListResponse,
@@ -56472,6 +57116,7 @@ class KalturaCoreClient(KalturaClientPlugin):
             'KalturaEntitlementListResponse': KalturaEntitlementListResponse,
             'KalturaCollectionEntitlement': KalturaCollectionEntitlement,
             'KalturaPpvEntitlement': KalturaPpvEntitlement,
+            'KalturaProgramAssetGroupOfferEntitlement': KalturaProgramAssetGroupOfferEntitlement,
             'KalturaEntitlementDiscountDetails': KalturaEntitlementDiscountDetails,
             'KalturaEntitlementPriceDetails': KalturaEntitlementPriceDetails,
             'KalturaSubscriptionEntitlement': KalturaSubscriptionEntitlement,
@@ -56543,6 +57188,9 @@ class KalturaCoreClient(KalturaClientPlugin):
             'KalturaPaymentGatewayProfileListResponse': KalturaPaymentGatewayProfileListResponse,
             'KalturaPaymentMethodProfile': KalturaPaymentMethodProfile,
             'KalturaPaymentMethodProfileListResponse': KalturaPaymentMethodProfileListResponse,
+            'KalturaProductMarkup': KalturaProductMarkup,
+            'KalturaAssetPersonalMarkup': KalturaAssetPersonalMarkup,
+            'KalturaAssetPersonalMarkupListResponse': KalturaAssetPersonalMarkupListResponse,
             'KalturaAssetRuleListResponse': KalturaAssetRuleListResponse,
             'KalturaAssetUserRuleListResponse': KalturaAssetUserRuleListResponse,
             'KalturaBusinessModuleRuleListResponse': KalturaBusinessModuleRuleListResponse,
