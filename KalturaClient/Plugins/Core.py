@@ -42,7 +42,7 @@ from ..Base import (
     KalturaServiceBase,
 )
 
-API_VERSION = '7.4.0.29851'
+API_VERSION = '7.4.0.29852'
 
 ########## enums ##########
 # @package Kaltura
@@ -52271,12 +52271,12 @@ class KalturaIotProfileService(KalturaServiceBase):
         resultNode = self.client.doQueue()
         return KalturaObjectFactory.create(resultNode, 'KalturaIotProfile')
 
-    def delete(self, id):
+    def get(self, id):
         """Get existing KalturaIotProfile"""
 
         kparams = KalturaParams()
         kparams.addIntIfDefined("id", id);
-        self.client.queueServiceActionCall("iotprofile", "delete", "KalturaIotProfile", kparams)
+        self.client.queueServiceActionCall("iotprofile", "get", "KalturaIotProfile", kparams)
         if self.client.isMultiRequest():
             return self.client.getMultiRequestResult()
         resultNode = self.client.doQueue()
