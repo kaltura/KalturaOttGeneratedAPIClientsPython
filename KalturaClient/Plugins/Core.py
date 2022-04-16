@@ -42,7 +42,7 @@ from ..Base import (
     KalturaServiceBase,
 )
 
-API_VERSION = '7.5.0.29864'
+API_VERSION = '7.5.0.29866'
 
 ########## enums ##########
 # @package Kaltura
