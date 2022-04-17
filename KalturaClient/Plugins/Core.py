@@ -42,7 +42,7 @@ from ..Base import (
     KalturaServiceBase,
 )
 
-API_VERSION = '7.3.0.29794'
+API_VERSION = '7.4.0.29812'
 
 ########## enums ##########
 # @package Kaltura
@@ -26723,7 +26723,9 @@ class KalturaCommercePartnerConfig(KalturaPartnerConfiguration):
 
     def __init__(self,
             bookmarkEventThresholds=NotImplemented,
-            keepSubscriptionAddOns=NotImplemented):
+            keepSubscriptionAddOns=NotImplemented,
+            programAssetEntitlementPaddingStart=NotImplemented,
+            programAssetEntitlementPaddingEnd=NotImplemented):
         KalturaPartnerConfiguration.__init__(self)
 
         # configuration for bookmark event threshold (when to dispatch the event) in seconds.
@@ -26734,10 +26736,20 @@ class KalturaCommercePartnerConfig(KalturaPartnerConfiguration):
         # @var bool
         self.keepSubscriptionAddOns = keepSubscriptionAddOns
 
+        # configuration for asset start entitlement padding e.g. asset start time - padding still relevant for asset
+        # @var int
+        self.programAssetEntitlementPaddingStart = programAssetEntitlementPaddingStart
+
+        # configuration for asset end entitlement padding e.g. asset end time + padding still relevant for asset
+        # @var int
+        self.programAssetEntitlementPaddingEnd = programAssetEntitlementPaddingEnd
+
 
     PROPERTY_LOADERS = {
         'bookmarkEventThresholds': (KalturaObjectFactory.createArray, 'KalturaBookmarkEventThreshold'), 
         'keepSubscriptionAddOns': getXmlNodeBool, 
+        'programAssetEntitlementPaddingStart': getXmlNodeInt, 
+        'programAssetEntitlementPaddingEnd': getXmlNodeInt, 
     }
 
     def fromXml(self, node):
@@ -26749,6 +26761,8 @@ class KalturaCommercePartnerConfig(KalturaPartnerConfiguration):
         kparams.put("objectType", "KalturaCommercePartnerConfig")
         kparams.addArrayIfDefined("bookmarkEventThresholds", self.bookmarkEventThresholds)
         kparams.addBoolIfDefined("keepSubscriptionAddOns", self.keepSubscriptionAddOns)
+        kparams.addIntIfDefined("programAssetEntitlementPaddingStart", self.programAssetEntitlementPaddingStart)
+        kparams.addIntIfDefined("programAssetEntitlementPaddingEnd", self.programAssetEntitlementPaddingEnd)
         return kparams
 
     def getBookmarkEventThresholds(self):
@@ -26762,6 +26776,18 @@ class KalturaCommercePartnerConfig(KalturaPartnerConfiguration):
 
     def setKeepSubscriptionAddOns(self, newKeepSubscriptionAddOns):
         self.keepSubscriptionAddOns = newKeepSubscriptionAddOns
+
+    def getProgramAssetEntitlementPaddingStart(self):
+        return self.programAssetEntitlementPaddingStart
+
+    def setProgramAssetEntitlementPaddingStart(self, newProgramAssetEntitlementPaddingStart):
+        self.programAssetEntitlementPaddingStart = newProgramAssetEntitlementPaddingStart
+
+    def getProgramAssetEntitlementPaddingEnd(self):
+        return self.programAssetEntitlementPaddingEnd
+
+    def setProgramAssetEntitlementPaddingEnd(self, newProgramAssetEntitlementPaddingEnd):
+        self.programAssetEntitlementPaddingEnd = newProgramAssetEntitlementPaddingEnd
 
 
 # @package Kaltura
