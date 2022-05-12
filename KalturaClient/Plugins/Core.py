@@ -42,7 +42,7 @@ from ..Base import (
     KalturaServiceBase,
 )
 
-API_VERSION = '7.4.0.29874'
+API_VERSION = '7.4.0.29868'
 
 ########## enums ##########
 # @package Kaltura
@@ -2438,8 +2438,6 @@ class KalturaRuleConditionType(object):
     DYNAMIC_KEYS = "DYNAMIC_KEYS"
     USER_SESSION_PROFILE = "USER_SESSION_PROFILE"
     DEVICE_DYNAMIC_DATA = "DEVICE_DYNAMIC_DATA"
-    IP_V6_RANGE = "IP_V6_RANGE"
-    ASSET_SHOP = "ASSET_SHOP"
 
     def __init__(self, value):
         self.value = value
@@ -10802,8 +10800,7 @@ class KalturaAssetUserRuleFilter(KalturaFilter):
     def __init__(self,
             orderBy=NotImplemented,
             attachedUserIdEqualCurrent=NotImplemented,
-            actionsContainType=NotImplemented,
-            conditionsContainType=NotImplemented):
+            actionsContainType=NotImplemented):
         KalturaFilter.__init__(self,
             orderBy)
 
@@ -10815,15 +10812,10 @@ class KalturaAssetUserRuleFilter(KalturaFilter):
         # @var KalturaRuleActionType
         self.actionsContainType = actionsContainType
 
-        # Indicates that only asset rules are returned that have exactly one and not more associated condition.
-        # @var KalturaRuleConditionType
-        self.conditionsContainType = conditionsContainType
-
 
     PROPERTY_LOADERS = {
         'attachedUserIdEqualCurrent': getXmlNodeBool, 
         'actionsContainType': (KalturaEnumsFactory.createString, "KalturaRuleActionType"), 
-        'conditionsContainType': (KalturaEnumsFactory.createString, "KalturaRuleConditionType"), 
     }
 
     def fromXml(self, node):
@@ -10835,7 +10827,6 @@ class KalturaAssetUserRuleFilter(KalturaFilter):
         kparams.put("objectType", "KalturaAssetUserRuleFilter")
         kparams.addBoolIfDefined("attachedUserIdEqualCurrent", self.attachedUserIdEqualCurrent)
         kparams.addStringEnumIfDefined("actionsContainType", self.actionsContainType)
-        kparams.addStringEnumIfDefined("conditionsContainType", self.conditionsContainType)
         return kparams
 
     def getAttachedUserIdEqualCurrent(self):
@@ -10849,12 +10840,6 @@ class KalturaAssetUserRuleFilter(KalturaFilter):
 
     def setActionsContainType(self, newActionsContainType):
         self.actionsContainType = newActionsContainType
-
-    def getConditionsContainType(self):
-        return self.conditionsContainType
-
-    def setConditionsContainType(self, newConditionsContainType):
-        self.conditionsContainType = newConditionsContainType
 
 
 # @package Kaltura
@@ -17568,26 +17553,41 @@ class KalturaAssetRule(KalturaAssetRuleBase):
 
 # @package Kaltura
 # @subpackage Client
-class KalturaAssetConditionBase(KalturaCondition):
+class KalturaAssetCondition(KalturaCondition):
+    """Asset Condition"""
+
     def __init__(self,
             type=NotImplemented,
-            description=NotImplemented):
+            description=NotImplemented,
+            ksql=NotImplemented):
         KalturaCondition.__init__(self,
             type,
             description)
 
+        # KSQL
+        # @var string
+        self.ksql = ksql
+
 
     PROPERTY_LOADERS = {
+        'ksql': getXmlNodeText, 
     }
 
     def fromXml(self, node):
         KalturaCondition.fromXml(self, node)
-        self.fromXmlImpl(node, KalturaAssetConditionBase.PROPERTY_LOADERS)
+        self.fromXmlImpl(node, KalturaAssetCondition.PROPERTY_LOADERS)
 
     def toParams(self):
         kparams = KalturaCondition.toParams(self)
-        kparams.put("objectType", "KalturaAssetConditionBase")
+        kparams.put("objectType", "KalturaAssetCondition")
+        kparams.addStringIfDefined("ksql", self.ksql)
         return kparams
+
+    def getKsql(self):
+        return self.ksql
+
+    def setKsql(self, newKsql):
+        self.ksql = newKsql
 
 
 # @package Kaltura
@@ -17632,8 +17632,8 @@ class KalturaAssetUserRule(KalturaAssetRuleBase):
             description,
             label)
 
-        # List of conditions for the user rule
-        # @var array of KalturaAssetConditionBase
+        # List of Ksql conditions for the user rule
+        # @var array of KalturaAssetCondition
         self.conditions = conditions
 
         # List of actions for the user rule
@@ -17642,7 +17642,7 @@ class KalturaAssetUserRule(KalturaAssetRuleBase):
 
 
     PROPERTY_LOADERS = {
-        'conditions': (KalturaObjectFactory.createArray, 'KalturaAssetConditionBase'), 
+        'conditions': (KalturaObjectFactory.createArray, 'KalturaAssetCondition'), 
         'actions': (KalturaObjectFactory.createArray, 'KalturaAssetUserRuleAction'), 
     }
 
@@ -17668,43 +17668,6 @@ class KalturaAssetUserRule(KalturaAssetRuleBase):
 
     def setActions(self, newActions):
         self.actions = newActions
-
-
-# @package Kaltura
-# @subpackage Client
-class KalturaAssetShopCondition(KalturaAssetConditionBase):
-    def __init__(self,
-            type=NotImplemented,
-            description=NotImplemented,
-            value=NotImplemented):
-        KalturaAssetConditionBase.__init__(self,
-            type,
-            description)
-
-        # Shop marker&#39;s value
-        # @var string
-        self.value = value
-
-
-    PROPERTY_LOADERS = {
-        'value': getXmlNodeText, 
-    }
-
-    def fromXml(self, node):
-        KalturaAssetConditionBase.fromXml(self, node)
-        self.fromXmlImpl(node, KalturaAssetShopCondition.PROPERTY_LOADERS)
-
-    def toParams(self):
-        kparams = KalturaAssetConditionBase.toParams(self)
-        kparams.put("objectType", "KalturaAssetShopCondition")
-        kparams.addStringIfDefined("value", self.value)
-        return kparams
-
-    def getValue(self):
-        return self.value
-
-    def setValue(self, newValue):
-        self.value = newValue
 
 
 # @package Kaltura
@@ -17932,45 +17895,6 @@ class KalturaHeaderCondition(KalturaNotCondition):
 
     def setValue(self, newValue):
         self.value = newValue
-
-
-# @package Kaltura
-# @subpackage Client
-class KalturaAssetCondition(KalturaAssetConditionBase):
-    """Asset Condition"""
-
-    def __init__(self,
-            type=NotImplemented,
-            description=NotImplemented,
-            ksql=NotImplemented):
-        KalturaAssetConditionBase.__init__(self,
-            type,
-            description)
-
-        # KSQL
-        # @var string
-        self.ksql = ksql
-
-
-    PROPERTY_LOADERS = {
-        'ksql': getXmlNodeText, 
-    }
-
-    def fromXml(self, node):
-        KalturaAssetConditionBase.fromXml(self, node)
-        self.fromXmlImpl(node, KalturaAssetCondition.PROPERTY_LOADERS)
-
-    def toParams(self):
-        kparams = KalturaAssetConditionBase.toParams(self)
-        kparams.put("objectType", "KalturaAssetCondition")
-        kparams.addStringIfDefined("ksql", self.ksql)
-        return kparams
-
-    def getKsql(self):
-        return self.ksql
-
-    def setKsql(self, newKsql):
-        self.ksql = newKsql
 
 
 # @package Kaltura
@@ -18624,58 +18548,6 @@ class KalturaUserSessionProfileCondition(KalturaCondition):
 
     def setId(self, newId):
         self.id = newId
-
-
-# @package Kaltura
-# @subpackage Client
-class KalturaIpV6RangeCondition(KalturaCondition):
-    """IP V6 range condition"""
-
-    def __init__(self,
-            type=NotImplemented,
-            description=NotImplemented,
-            fromIP=NotImplemented,
-            toIP=NotImplemented):
-        KalturaCondition.__init__(self,
-            type,
-            description)
-
-        # From IP address range
-        # @var string
-        self.fromIP = fromIP
-
-        # TO IP address range
-        # @var string
-        self.toIP = toIP
-
-
-    PROPERTY_LOADERS = {
-        'fromIP': getXmlNodeText, 
-        'toIP': getXmlNodeText, 
-    }
-
-    def fromXml(self, node):
-        KalturaCondition.fromXml(self, node)
-        self.fromXmlImpl(node, KalturaIpV6RangeCondition.PROPERTY_LOADERS)
-
-    def toParams(self):
-        kparams = KalturaCondition.toParams(self)
-        kparams.put("objectType", "KalturaIpV6RangeCondition")
-        kparams.addStringIfDefined("fromIP", self.fromIP)
-        kparams.addStringIfDefined("toIP", self.toIP)
-        return kparams
-
-    def getFromIP(self):
-        return self.fromIP
-
-    def setFromIP(self, newFromIP):
-        self.fromIP = newFromIP
-
-    def getToIP(self):
-        return self.toIP
-
-    def setToIP(self, newToIP):
-        self.toIP = newToIP
 
 
 # @package Kaltura
@@ -27234,8 +27106,7 @@ class KalturaCatalogPartnerConfig(KalturaPartnerConfiguration):
             singleMultilingualMode=NotImplemented,
             categoryManagement=NotImplemented,
             epgMultilingualFallbackSupport=NotImplemented,
-            uploadExportDatalake=NotImplemented,
-            shopMarkerMetaId=NotImplemented):
+            uploadExportDatalake=NotImplemented):
         KalturaPartnerConfiguration.__init__(self)
 
         # Single multilingual mode
@@ -27254,17 +27125,12 @@ class KalturaCatalogPartnerConfig(KalturaPartnerConfiguration):
         # @var bool
         self.uploadExportDatalake = uploadExportDatalake
 
-        # Shop Marker&#39;s identifier
-        # @var int
-        self.shopMarkerMetaId = shopMarkerMetaId
-
 
     PROPERTY_LOADERS = {
         'singleMultilingualMode': getXmlNodeBool, 
         'categoryManagement': (KalturaObjectFactory.create, 'KalturaCategoryManagement'), 
         'epgMultilingualFallbackSupport': getXmlNodeBool, 
         'uploadExportDatalake': getXmlNodeBool, 
-        'shopMarkerMetaId': getXmlNodeInt, 
     }
 
     def fromXml(self, node):
@@ -27278,7 +27144,6 @@ class KalturaCatalogPartnerConfig(KalturaPartnerConfiguration):
         kparams.addObjectIfDefined("categoryManagement", self.categoryManagement)
         kparams.addBoolIfDefined("epgMultilingualFallbackSupport", self.epgMultilingualFallbackSupport)
         kparams.addBoolIfDefined("uploadExportDatalake", self.uploadExportDatalake)
-        kparams.addIntIfDefined("shopMarkerMetaId", self.shopMarkerMetaId)
         return kparams
 
     def getSingleMultilingualMode(self):
@@ -27304,12 +27169,6 @@ class KalturaCatalogPartnerConfig(KalturaPartnerConfiguration):
 
     def setUploadExportDatalake(self, newUploadExportDatalake):
         self.uploadExportDatalake = newUploadExportDatalake
-
-    def getShopMarkerMetaId(self):
-        return self.shopMarkerMetaId
-
-    def setShopMarkerMetaId(self, newShopMarkerMetaId):
-        self.shopMarkerMetaId = newShopMarkerMetaId
 
 
 # @package Kaltura
@@ -35287,6 +35146,8 @@ class KalturaLiveAsset(KalturaMediaAsset):
             enableCatchUpState=NotImplemented,
             enableStartOverState=NotImplemented,
             bufferCatchUpSetting=NotImplemented,
+            paddingBeforeProgramStartsSetting=NotImplemented,
+            paddingAfterProgramEndsSetting=NotImplemented,
             bufferTrickPlaySetting=NotImplemented,
             enableRecordingPlaybackNonEntitledChannelState=NotImplemented,
             enableTrickPlayState=NotImplemented,
@@ -35296,6 +35157,8 @@ class KalturaLiveAsset(KalturaMediaAsset):
             enableCatchUp=NotImplemented,
             enableStartOver=NotImplemented,
             catchUpBuffer=NotImplemented,
+            paddingBeforeProgramStarts=NotImplemented,
+            paddingAfterProgramEnds=NotImplemented,
             trickPlayBuffer=NotImplemented,
             enableRecordingPlaybackNonEntitledChannel=NotImplemented,
             enableTrickPlay=NotImplemented,
@@ -35340,6 +35203,14 @@ class KalturaLiveAsset(KalturaMediaAsset):
         # buffer Catch-up, configuration only
         # @var int
         self.bufferCatchUpSetting = bufferCatchUpSetting
+
+        # padding before program starts in seconds, configuration only
+        # @var int
+        self.paddingBeforeProgramStartsSetting = paddingBeforeProgramStartsSetting
+
+        # padding after program ends in seconds, configuration only
+        # @var int
+        self.paddingAfterProgramEndsSetting = paddingAfterProgramEndsSetting
 
         # buffer Trick-play, configuration only
         # @var int
@@ -35387,6 +35258,18 @@ class KalturaLiveAsset(KalturaMediaAsset):
         # @readonly
         self.catchUpBuffer = catchUpBuffer
 
+        # Returns padding before program starts in seconds from a live asset if configured,
+        #             otherwise returns corresponding value from TimeShiftedTvPartnerSettings.
+        # @var int
+        # @readonly
+        self.paddingBeforeProgramStarts = paddingBeforeProgramStarts
+
+        # Returns padding after program ends in seconds from a live asset if configured,
+        #             otherwise returns corresponding value from TimeShiftedTvPartnerSettings.
+        # @var int
+        # @readonly
+        self.paddingAfterProgramEnds = paddingAfterProgramEnds
+
         # summed Trick-play buffer, the TimeShiftedTvPartnerSettings are also taken into consideration
         # @var int
         # @readonly
@@ -35414,6 +35297,8 @@ class KalturaLiveAsset(KalturaMediaAsset):
         'enableCatchUpState': (KalturaEnumsFactory.createString, "KalturaTimeShiftedTvState"), 
         'enableStartOverState': (KalturaEnumsFactory.createString, "KalturaTimeShiftedTvState"), 
         'bufferCatchUpSetting': getXmlNodeInt, 
+        'paddingBeforeProgramStartsSetting': getXmlNodeInt, 
+        'paddingAfterProgramEndsSetting': getXmlNodeInt, 
         'bufferTrickPlaySetting': getXmlNodeInt, 
         'enableRecordingPlaybackNonEntitledChannelState': (KalturaEnumsFactory.createString, "KalturaTimeShiftedTvState"), 
         'enableTrickPlayState': (KalturaEnumsFactory.createString, "KalturaTimeShiftedTvState"), 
@@ -35423,6 +35308,8 @@ class KalturaLiveAsset(KalturaMediaAsset):
         'enableCatchUp': getXmlNodeBool, 
         'enableStartOver': getXmlNodeBool, 
         'catchUpBuffer': getXmlNodeInt, 
+        'paddingBeforeProgramStarts': getXmlNodeInt, 
+        'paddingAfterProgramEnds': getXmlNodeInt, 
         'trickPlayBuffer': getXmlNodeInt, 
         'enableRecordingPlaybackNonEntitledChannel': getXmlNodeBool, 
         'enableTrickPlay': getXmlNodeBool, 
@@ -35440,6 +35327,8 @@ class KalturaLiveAsset(KalturaMediaAsset):
         kparams.addStringEnumIfDefined("enableCatchUpState", self.enableCatchUpState)
         kparams.addStringEnumIfDefined("enableStartOverState", self.enableStartOverState)
         kparams.addIntIfDefined("bufferCatchUpSetting", self.bufferCatchUpSetting)
+        kparams.addIntIfDefined("paddingBeforeProgramStartsSetting", self.paddingBeforeProgramStartsSetting)
+        kparams.addIntIfDefined("paddingAfterProgramEndsSetting", self.paddingAfterProgramEndsSetting)
         kparams.addIntIfDefined("bufferTrickPlaySetting", self.bufferTrickPlaySetting)
         kparams.addStringEnumIfDefined("enableRecordingPlaybackNonEntitledChannelState", self.enableRecordingPlaybackNonEntitledChannelState)
         kparams.addStringEnumIfDefined("enableTrickPlayState", self.enableTrickPlayState)
@@ -35471,6 +35360,18 @@ class KalturaLiveAsset(KalturaMediaAsset):
 
     def setBufferCatchUpSetting(self, newBufferCatchUpSetting):
         self.bufferCatchUpSetting = newBufferCatchUpSetting
+
+    def getPaddingBeforeProgramStartsSetting(self):
+        return self.paddingBeforeProgramStartsSetting
+
+    def setPaddingBeforeProgramStartsSetting(self, newPaddingBeforeProgramStartsSetting):
+        self.paddingBeforeProgramStartsSetting = newPaddingBeforeProgramStartsSetting
+
+    def getPaddingAfterProgramEndsSetting(self):
+        return self.paddingAfterProgramEndsSetting
+
+    def setPaddingAfterProgramEndsSetting(self, newPaddingAfterProgramEndsSetting):
+        self.paddingAfterProgramEndsSetting = newPaddingAfterProgramEndsSetting
 
     def getBufferTrickPlaySetting(self):
         return self.bufferTrickPlaySetting
@@ -35513,6 +35414,12 @@ class KalturaLiveAsset(KalturaMediaAsset):
 
     def getCatchUpBuffer(self):
         return self.catchUpBuffer
+
+    def getPaddingBeforeProgramStarts(self):
+        return self.paddingBeforeProgramStarts
+
+    def getPaddingAfterProgramEnds(self):
+        return self.paddingAfterProgramEnds
 
     def getTrickPlayBuffer(self):
         return self.trickPlayBuffer
@@ -35563,6 +35470,8 @@ class KalturaLineupChannelAsset(KalturaLiveAsset):
             enableCatchUpState=NotImplemented,
             enableStartOverState=NotImplemented,
             bufferCatchUpSetting=NotImplemented,
+            paddingBeforeProgramStartsSetting=NotImplemented,
+            paddingAfterProgramEndsSetting=NotImplemented,
             bufferTrickPlaySetting=NotImplemented,
             enableRecordingPlaybackNonEntitledChannelState=NotImplemented,
             enableTrickPlayState=NotImplemented,
@@ -35572,6 +35481,8 @@ class KalturaLineupChannelAsset(KalturaLiveAsset):
             enableCatchUp=NotImplemented,
             enableStartOver=NotImplemented,
             catchUpBuffer=NotImplemented,
+            paddingBeforeProgramStarts=NotImplemented,
+            paddingAfterProgramEnds=NotImplemented,
             trickPlayBuffer=NotImplemented,
             enableRecordingPlaybackNonEntitledChannel=NotImplemented,
             enableTrickPlay=NotImplemented,
@@ -35605,6 +35516,8 @@ class KalturaLineupChannelAsset(KalturaLiveAsset):
             enableCatchUpState,
             enableStartOverState,
             bufferCatchUpSetting,
+            paddingBeforeProgramStartsSetting,
+            paddingAfterProgramEndsSetting,
             bufferTrickPlaySetting,
             enableRecordingPlaybackNonEntitledChannelState,
             enableTrickPlayState,
@@ -35614,6 +35527,8 @@ class KalturaLineupChannelAsset(KalturaLiveAsset):
             enableCatchUp,
             enableStartOver,
             catchUpBuffer,
+            paddingBeforeProgramStarts,
+            paddingAfterProgramEnds,
             trickPlayBuffer,
             enableRecordingPlaybackNonEntitledChannel,
             enableTrickPlay,
@@ -52287,12 +52202,12 @@ class KalturaIotProfileService(KalturaServiceBase):
         resultNode = self.client.doQueue()
         return KalturaObjectFactory.create(resultNode, 'KalturaIotProfile')
 
-    def get(self, id):
+    def delete(self, id):
         """Get existing KalturaIotProfile"""
 
         kparams = KalturaParams()
         kparams.addIntIfDefined("id", id);
-        self.client.queueServiceActionCall("iotprofile", "get", "KalturaIotProfile", kparams)
+        self.client.queueServiceActionCall("iotprofile", "delete", "KalturaIotProfile", kparams)
         if self.client.isMultiRequest():
             return self.client.getMultiRequestResult()
         resultNode = self.client.doQueue()
@@ -56794,16 +56709,14 @@ class KalturaCoreClient(KalturaClientPlugin):
             'KalturaRuleAction': KalturaRuleAction,
             'KalturaAssetRuleAction': KalturaAssetRuleAction,
             'KalturaAssetRule': KalturaAssetRule,
-            'KalturaAssetConditionBase': KalturaAssetConditionBase,
+            'KalturaAssetCondition': KalturaAssetCondition,
             'KalturaAssetUserRuleAction': KalturaAssetUserRuleAction,
             'KalturaAssetUserRule': KalturaAssetUserRule,
-            'KalturaAssetShopCondition': KalturaAssetShopCondition,
             'KalturaNotCondition': KalturaNotCondition,
             'KalturaOrCondition': KalturaOrCondition,
             'KalturaCountryCondition': KalturaCountryCondition,
             'KalturaDateCondition': KalturaDateCondition,
             'KalturaHeaderCondition': KalturaHeaderCondition,
-            'KalturaAssetCondition': KalturaAssetCondition,
             'KalturaConcurrencyCondition': KalturaConcurrencyCondition,
             'KalturaIpRangeCondition': KalturaIpRangeCondition,
             'KalturaBusinessModuleCondition': KalturaBusinessModuleCondition,
@@ -56820,7 +56733,6 @@ class KalturaCoreClient(KalturaClientPlugin):
             'KalturaDynamicKeysCondition': KalturaDynamicKeysCondition,
             'KalturaDeviceDynamicDataCondition': KalturaDeviceDynamicDataCondition,
             'KalturaUserSessionProfileCondition': KalturaUserSessionProfileCondition,
-            'KalturaIpV6RangeCondition': KalturaIpV6RangeCondition,
             'KalturaAccessControlBlockAction': KalturaAccessControlBlockAction,
             'KalturaAllowPlaybackAction': KalturaAllowPlaybackAction,
             'KalturaApplyPlaybackAdapterAction': KalturaApplyPlaybackAdapterAction,
