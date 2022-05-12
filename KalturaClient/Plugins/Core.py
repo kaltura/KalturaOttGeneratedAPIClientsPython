@@ -42,7 +42,7 @@ from ..Base import (
     KalturaServiceBase,
 )
 
-API_VERSION = '7.4.0.29868'
+API_VERSION = '7.6.0.29891'
 
 ########## enums ##########
 # @package Kaltura
@@ -2438,6 +2438,8 @@ class KalturaRuleConditionType(object):
     DYNAMIC_KEYS = "DYNAMIC_KEYS"
     USER_SESSION_PROFILE = "USER_SESSION_PROFILE"
     DEVICE_DYNAMIC_DATA = "DEVICE_DYNAMIC_DATA"
+    IP_V6_RANGE = "IP_V6_RANGE"
+    ASSET_SHOP = "ASSET_SHOP"
 
     def __init__(self, value):
         self.value = value
@@ -10800,7 +10802,8 @@ class KalturaAssetUserRuleFilter(KalturaFilter):
     def __init__(self,
             orderBy=NotImplemented,
             attachedUserIdEqualCurrent=NotImplemented,
-            actionsContainType=NotImplemented):
+            actionsContainType=NotImplemented,
+            conditionsContainType=NotImplemented):
         KalturaFilter.__init__(self,
             orderBy)
 
@@ -10812,10 +10815,15 @@ class KalturaAssetUserRuleFilter(KalturaFilter):
         # @var KalturaRuleActionType
         self.actionsContainType = actionsContainType
 
+        # Indicates that only asset rules are returned that have exactly one and not more associated condition.
+        # @var KalturaRuleConditionType
+        self.conditionsContainType = conditionsContainType
+
 
     PROPERTY_LOADERS = {
         'attachedUserIdEqualCurrent': getXmlNodeBool, 
         'actionsContainType': (KalturaEnumsFactory.createString, "KalturaRuleActionType"), 
+        'conditionsContainType': (KalturaEnumsFactory.createString, "KalturaRuleConditionType"), 
     }
 
     def fromXml(self, node):
@@ -10827,6 +10835,7 @@ class KalturaAssetUserRuleFilter(KalturaFilter):
         kparams.put("objectType", "KalturaAssetUserRuleFilter")
         kparams.addBoolIfDefined("attachedUserIdEqualCurrent", self.attachedUserIdEqualCurrent)
         kparams.addStringEnumIfDefined("actionsContainType", self.actionsContainType)
+        kparams.addStringEnumIfDefined("conditionsContainType", self.conditionsContainType)
         return kparams
 
     def getAttachedUserIdEqualCurrent(self):
@@ -10840,6 +10849,12 @@ class KalturaAssetUserRuleFilter(KalturaFilter):
 
     def setActionsContainType(self, newActionsContainType):
         self.actionsContainType = newActionsContainType
+
+    def getConditionsContainType(self):
+        return self.conditionsContainType
+
+    def setConditionsContainType(self, newConditionsContainType):
+        self.conditionsContainType = newConditionsContainType
 
 
 # @package Kaltura
@@ -17553,41 +17568,26 @@ class KalturaAssetRule(KalturaAssetRuleBase):
 
 # @package Kaltura
 # @subpackage Client
-class KalturaAssetCondition(KalturaCondition):
-    """Asset Condition"""
-
+class KalturaAssetConditionBase(KalturaCondition):
     def __init__(self,
             type=NotImplemented,
-            description=NotImplemented,
-            ksql=NotImplemented):
+            description=NotImplemented):
         KalturaCondition.__init__(self,
             type,
             description)
 
-        # KSQL
-        # @var string
-        self.ksql = ksql
-
 
     PROPERTY_LOADERS = {
-        'ksql': getXmlNodeText, 
     }
 
     def fromXml(self, node):
         KalturaCondition.fromXml(self, node)
-        self.fromXmlImpl(node, KalturaAssetCondition.PROPERTY_LOADERS)
+        self.fromXmlImpl(node, KalturaAssetConditionBase.PROPERTY_LOADERS)
 
     def toParams(self):
         kparams = KalturaCondition.toParams(self)
-        kparams.put("objectType", "KalturaAssetCondition")
-        kparams.addStringIfDefined("ksql", self.ksql)
+        kparams.put("objectType", "KalturaAssetConditionBase")
         return kparams
-
-    def getKsql(self):
-        return self.ksql
-
-    def setKsql(self, newKsql):
-        self.ksql = newKsql
 
 
 # @package Kaltura
@@ -17632,8 +17632,8 @@ class KalturaAssetUserRule(KalturaAssetRuleBase):
             description,
             label)
 
-        # List of Ksql conditions for the user rule
-        # @var array of KalturaAssetCondition
+        # List of conditions for the user rule
+        # @var array of KalturaAssetConditionBase
         self.conditions = conditions
 
         # List of actions for the user rule
@@ -17642,7 +17642,7 @@ class KalturaAssetUserRule(KalturaAssetRuleBase):
 
 
     PROPERTY_LOADERS = {
-        'conditions': (KalturaObjectFactory.createArray, 'KalturaAssetCondition'), 
+        'conditions': (KalturaObjectFactory.createArray, 'KalturaAssetConditionBase'), 
         'actions': (KalturaObjectFactory.createArray, 'KalturaAssetUserRuleAction'), 
     }
 
@@ -17668,6 +17668,43 @@ class KalturaAssetUserRule(KalturaAssetRuleBase):
 
     def setActions(self, newActions):
         self.actions = newActions
+
+
+# @package Kaltura
+# @subpackage Client
+class KalturaAssetShopCondition(KalturaAssetConditionBase):
+    def __init__(self,
+            type=NotImplemented,
+            description=NotImplemented,
+            value=NotImplemented):
+        KalturaAssetConditionBase.__init__(self,
+            type,
+            description)
+
+        # Shop marker&#39;s value
+        # @var string
+        self.value = value
+
+
+    PROPERTY_LOADERS = {
+        'value': getXmlNodeText, 
+    }
+
+    def fromXml(self, node):
+        KalturaAssetConditionBase.fromXml(self, node)
+        self.fromXmlImpl(node, KalturaAssetShopCondition.PROPERTY_LOADERS)
+
+    def toParams(self):
+        kparams = KalturaAssetConditionBase.toParams(self)
+        kparams.put("objectType", "KalturaAssetShopCondition")
+        kparams.addStringIfDefined("value", self.value)
+        return kparams
+
+    def getValue(self):
+        return self.value
+
+    def setValue(self, newValue):
+        self.value = newValue
 
 
 # @package Kaltura
@@ -17895,6 +17932,45 @@ class KalturaHeaderCondition(KalturaNotCondition):
 
     def setValue(self, newValue):
         self.value = newValue
+
+
+# @package Kaltura
+# @subpackage Client
+class KalturaAssetCondition(KalturaAssetConditionBase):
+    """Asset Condition"""
+
+    def __init__(self,
+            type=NotImplemented,
+            description=NotImplemented,
+            ksql=NotImplemented):
+        KalturaAssetConditionBase.__init__(self,
+            type,
+            description)
+
+        # KSQL
+        # @var string
+        self.ksql = ksql
+
+
+    PROPERTY_LOADERS = {
+        'ksql': getXmlNodeText, 
+    }
+
+    def fromXml(self, node):
+        KalturaAssetConditionBase.fromXml(self, node)
+        self.fromXmlImpl(node, KalturaAssetCondition.PROPERTY_LOADERS)
+
+    def toParams(self):
+        kparams = KalturaAssetConditionBase.toParams(self)
+        kparams.put("objectType", "KalturaAssetCondition")
+        kparams.addStringIfDefined("ksql", self.ksql)
+        return kparams
+
+    def getKsql(self):
+        return self.ksql
+
+    def setKsql(self, newKsql):
+        self.ksql = newKsql
 
 
 # @package Kaltura
@@ -18548,6 +18624,58 @@ class KalturaUserSessionProfileCondition(KalturaCondition):
 
     def setId(self, newId):
         self.id = newId
+
+
+# @package Kaltura
+# @subpackage Client
+class KalturaIpV6RangeCondition(KalturaCondition):
+    """IP V6 range condition"""
+
+    def __init__(self,
+            type=NotImplemented,
+            description=NotImplemented,
+            fromIP=NotImplemented,
+            toIP=NotImplemented):
+        KalturaCondition.__init__(self,
+            type,
+            description)
+
+        # From IP address range
+        # @var string
+        self.fromIP = fromIP
+
+        # TO IP address range
+        # @var string
+        self.toIP = toIP
+
+
+    PROPERTY_LOADERS = {
+        'fromIP': getXmlNodeText, 
+        'toIP': getXmlNodeText, 
+    }
+
+    def fromXml(self, node):
+        KalturaCondition.fromXml(self, node)
+        self.fromXmlImpl(node, KalturaIpV6RangeCondition.PROPERTY_LOADERS)
+
+    def toParams(self):
+        kparams = KalturaCondition.toParams(self)
+        kparams.put("objectType", "KalturaIpV6RangeCondition")
+        kparams.addStringIfDefined("fromIP", self.fromIP)
+        kparams.addStringIfDefined("toIP", self.toIP)
+        return kparams
+
+    def getFromIP(self):
+        return self.fromIP
+
+    def setFromIP(self, newFromIP):
+        self.fromIP = newFromIP
+
+    def getToIP(self):
+        return self.toIP
+
+    def setToIP(self, newToIP):
+        self.toIP = newToIP
 
 
 # @package Kaltura
@@ -27106,7 +27234,8 @@ class KalturaCatalogPartnerConfig(KalturaPartnerConfiguration):
             singleMultilingualMode=NotImplemented,
             categoryManagement=NotImplemented,
             epgMultilingualFallbackSupport=NotImplemented,
-            uploadExportDatalake=NotImplemented):
+            uploadExportDatalake=NotImplemented,
+            shopMarkerMetaId=NotImplemented):
         KalturaPartnerConfiguration.__init__(self)
 
         # Single multilingual mode
@@ -27125,12 +27254,17 @@ class KalturaCatalogPartnerConfig(KalturaPartnerConfiguration):
         # @var bool
         self.uploadExportDatalake = uploadExportDatalake
 
+        # Shop Marker&#39;s identifier
+        # @var int
+        self.shopMarkerMetaId = shopMarkerMetaId
+
 
     PROPERTY_LOADERS = {
         'singleMultilingualMode': getXmlNodeBool, 
         'categoryManagement': (KalturaObjectFactory.create, 'KalturaCategoryManagement'), 
         'epgMultilingualFallbackSupport': getXmlNodeBool, 
         'uploadExportDatalake': getXmlNodeBool, 
+        'shopMarkerMetaId': getXmlNodeInt, 
     }
 
     def fromXml(self, node):
@@ -27144,6 +27278,7 @@ class KalturaCatalogPartnerConfig(KalturaPartnerConfiguration):
         kparams.addObjectIfDefined("categoryManagement", self.categoryManagement)
         kparams.addBoolIfDefined("epgMultilingualFallbackSupport", self.epgMultilingualFallbackSupport)
         kparams.addBoolIfDefined("uploadExportDatalake", self.uploadExportDatalake)
+        kparams.addIntIfDefined("shopMarkerMetaId", self.shopMarkerMetaId)
         return kparams
 
     def getSingleMultilingualMode(self):
@@ -27169,6 +27304,12 @@ class KalturaCatalogPartnerConfig(KalturaPartnerConfiguration):
 
     def setUploadExportDatalake(self, newUploadExportDatalake):
         self.uploadExportDatalake = newUploadExportDatalake
+
+    def getShopMarkerMetaId(self):
+        return self.shopMarkerMetaId
+
+    def setShopMarkerMetaId(self, newShopMarkerMetaId):
+        self.shopMarkerMetaId = newShopMarkerMetaId
 
 
 # @package Kaltura
@@ -52202,12 +52343,12 @@ class KalturaIotProfileService(KalturaServiceBase):
         resultNode = self.client.doQueue()
         return KalturaObjectFactory.create(resultNode, 'KalturaIotProfile')
 
-    def delete(self, id):
+    def get(self, id):
         """Get existing KalturaIotProfile"""
 
         kparams = KalturaParams()
         kparams.addIntIfDefined("id", id);
-        self.client.queueServiceActionCall("iotprofile", "delete", "KalturaIotProfile", kparams)
+        self.client.queueServiceActionCall("iotprofile", "get", "KalturaIotProfile", kparams)
         if self.client.isMultiRequest():
             return self.client.getMultiRequestResult()
         resultNode = self.client.doQueue()
@@ -56709,14 +56850,16 @@ class KalturaCoreClient(KalturaClientPlugin):
             'KalturaRuleAction': KalturaRuleAction,
             'KalturaAssetRuleAction': KalturaAssetRuleAction,
             'KalturaAssetRule': KalturaAssetRule,
-            'KalturaAssetCondition': KalturaAssetCondition,
+            'KalturaAssetConditionBase': KalturaAssetConditionBase,
             'KalturaAssetUserRuleAction': KalturaAssetUserRuleAction,
             'KalturaAssetUserRule': KalturaAssetUserRule,
+            'KalturaAssetShopCondition': KalturaAssetShopCondition,
             'KalturaNotCondition': KalturaNotCondition,
             'KalturaOrCondition': KalturaOrCondition,
             'KalturaCountryCondition': KalturaCountryCondition,
             'KalturaDateCondition': KalturaDateCondition,
             'KalturaHeaderCondition': KalturaHeaderCondition,
+            'KalturaAssetCondition': KalturaAssetCondition,
             'KalturaConcurrencyCondition': KalturaConcurrencyCondition,
             'KalturaIpRangeCondition': KalturaIpRangeCondition,
             'KalturaBusinessModuleCondition': KalturaBusinessModuleCondition,
@@ -56733,6 +56876,7 @@ class KalturaCoreClient(KalturaClientPlugin):
             'KalturaDynamicKeysCondition': KalturaDynamicKeysCondition,
             'KalturaDeviceDynamicDataCondition': KalturaDeviceDynamicDataCondition,
             'KalturaUserSessionProfileCondition': KalturaUserSessionProfileCondition,
+            'KalturaIpV6RangeCondition': KalturaIpV6RangeCondition,
             'KalturaAccessControlBlockAction': KalturaAccessControlBlockAction,
             'KalturaAllowPlaybackAction': KalturaAllowPlaybackAction,
             'KalturaApplyPlaybackAdapterAction': KalturaApplyPlaybackAdapterAction,
