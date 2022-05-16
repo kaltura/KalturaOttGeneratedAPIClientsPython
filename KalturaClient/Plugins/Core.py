@@ -42,7 +42,7 @@ from ..Base import (
     KalturaServiceBase,
 )
 
-API_VERSION = '7.4.0.29935'
+API_VERSION = '7.6.0.29957'
 
 ########## enums ##########
 # @package Kaltura
@@ -2438,6 +2438,7 @@ class KalturaRuleConditionType(object):
     DYNAMIC_KEYS = "DYNAMIC_KEYS"
     USER_SESSION_PROFILE = "USER_SESSION_PROFILE"
     DEVICE_DYNAMIC_DATA = "DEVICE_DYNAMIC_DATA"
+    IP_V6_RANGE = "IP_V6_RANGE"
     ASSET_SHOP = "ASSET_SHOP"
 
     def __init__(self, value):
@@ -18627,6 +18628,58 @@ class KalturaUserSessionProfileCondition(KalturaCondition):
 
 # @package Kaltura
 # @subpackage Client
+class KalturaIpV6RangeCondition(KalturaCondition):
+    """IP V6 range condition"""
+
+    def __init__(self,
+            type=NotImplemented,
+            description=NotImplemented,
+            fromIP=NotImplemented,
+            toIP=NotImplemented):
+        KalturaCondition.__init__(self,
+            type,
+            description)
+
+        # From IP address range
+        # @var string
+        self.fromIP = fromIP
+
+        # TO IP address range
+        # @var string
+        self.toIP = toIP
+
+
+    PROPERTY_LOADERS = {
+        'fromIP': getXmlNodeText, 
+        'toIP': getXmlNodeText, 
+    }
+
+    def fromXml(self, node):
+        KalturaCondition.fromXml(self, node)
+        self.fromXmlImpl(node, KalturaIpV6RangeCondition.PROPERTY_LOADERS)
+
+    def toParams(self):
+        kparams = KalturaCondition.toParams(self)
+        kparams.put("objectType", "KalturaIpV6RangeCondition")
+        kparams.addStringIfDefined("fromIP", self.fromIP)
+        kparams.addStringIfDefined("toIP", self.toIP)
+        return kparams
+
+    def getFromIP(self):
+        return self.fromIP
+
+    def setFromIP(self, newFromIP):
+        self.fromIP = newFromIP
+
+    def getToIP(self):
+        return self.toIP
+
+    def setToIP(self, newToIP):
+        self.toIP = newToIP
+
+
+# @package Kaltura
+# @subpackage Client
 class KalturaAccessControlBlockAction(KalturaAssetRuleAction):
     def __init__(self,
             type=NotImplemented,
@@ -27181,7 +27234,8 @@ class KalturaCatalogPartnerConfig(KalturaPartnerConfiguration):
             singleMultilingualMode=NotImplemented,
             categoryManagement=NotImplemented,
             epgMultilingualFallbackSupport=NotImplemented,
-            uploadExportDatalake=NotImplemented):
+            uploadExportDatalake=NotImplemented,
+            shopMarkerMetaId=NotImplemented):
         KalturaPartnerConfiguration.__init__(self)
 
         # Single multilingual mode
@@ -27200,12 +27254,17 @@ class KalturaCatalogPartnerConfig(KalturaPartnerConfiguration):
         # @var bool
         self.uploadExportDatalake = uploadExportDatalake
 
+        # Shop Marker&#39;s identifier
+        # @var int
+        self.shopMarkerMetaId = shopMarkerMetaId
+
 
     PROPERTY_LOADERS = {
         'singleMultilingualMode': getXmlNodeBool, 
         'categoryManagement': (KalturaObjectFactory.create, 'KalturaCategoryManagement'), 
         'epgMultilingualFallbackSupport': getXmlNodeBool, 
         'uploadExportDatalake': getXmlNodeBool, 
+        'shopMarkerMetaId': getXmlNodeInt, 
     }
 
     def fromXml(self, node):
@@ -27219,6 +27278,7 @@ class KalturaCatalogPartnerConfig(KalturaPartnerConfiguration):
         kparams.addObjectIfDefined("categoryManagement", self.categoryManagement)
         kparams.addBoolIfDefined("epgMultilingualFallbackSupport", self.epgMultilingualFallbackSupport)
         kparams.addBoolIfDefined("uploadExportDatalake", self.uploadExportDatalake)
+        kparams.addIntIfDefined("shopMarkerMetaId", self.shopMarkerMetaId)
         return kparams
 
     def getSingleMultilingualMode(self):
@@ -27244,6 +27304,12 @@ class KalturaCatalogPartnerConfig(KalturaPartnerConfiguration):
 
     def setUploadExportDatalake(self, newUploadExportDatalake):
         self.uploadExportDatalake = newUploadExportDatalake
+
+    def getShopMarkerMetaId(self):
+        return self.shopMarkerMetaId
+
+    def setShopMarkerMetaId(self, newShopMarkerMetaId):
+        self.shopMarkerMetaId = newShopMarkerMetaId
 
 
 # @package Kaltura
@@ -52470,12 +52536,12 @@ class KalturaIotProfileService(KalturaServiceBase):
         resultNode = self.client.doQueue()
         return KalturaObjectFactory.create(resultNode, 'KalturaIotProfile')
 
-    def delete(self, id):
+    def get(self, id):
         """Get existing KalturaIotProfile"""
 
         kparams = KalturaParams()
         kparams.addIntIfDefined("id", id);
-        self.client.queueServiceActionCall("iotprofile", "delete", "KalturaIotProfile", kparams)
+        self.client.queueServiceActionCall("iotprofile", "get", "KalturaIotProfile", kparams)
         if self.client.isMultiRequest():
             return self.client.getMultiRequestResult()
         resultNode = self.client.doQueue()
@@ -57064,6 +57130,7 @@ class KalturaCoreClient(KalturaClientPlugin):
             'KalturaDynamicKeysCondition': KalturaDynamicKeysCondition,
             'KalturaDeviceDynamicDataCondition': KalturaDeviceDynamicDataCondition,
             'KalturaUserSessionProfileCondition': KalturaUserSessionProfileCondition,
+            'KalturaIpV6RangeCondition': KalturaIpV6RangeCondition,
             'KalturaAccessControlBlockAction': KalturaAccessControlBlockAction,
             'KalturaAllowPlaybackAction': KalturaAllowPlaybackAction,
             'KalturaApplyPlaybackAdapterAction': KalturaApplyPlaybackAdapterAction,
