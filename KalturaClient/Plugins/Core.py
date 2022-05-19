@@ -42,7 +42,7 @@ from ..Base import (
     KalturaServiceBase,
 )
 
-API_VERSION = '7.6.0.29894'
+API_VERSION = '7.6.0.29891'
 
 ########## enums ##########
 # @package Kaltura
@@ -35287,8 +35287,6 @@ class KalturaLiveAsset(KalturaMediaAsset):
             enableCatchUpState=NotImplemented,
             enableStartOverState=NotImplemented,
             bufferCatchUpSetting=NotImplemented,
-            paddingBeforeProgramStarts=NotImplemented,
-            paddingAfterProgramEnds=NotImplemented,
             bufferTrickPlaySetting=NotImplemented,
             enableRecordingPlaybackNonEntitledChannelState=NotImplemented,
             enableTrickPlayState=NotImplemented,
@@ -35342,16 +35340,6 @@ class KalturaLiveAsset(KalturaMediaAsset):
         # buffer Catch-up, configuration only
         # @var int
         self.bufferCatchUpSetting = bufferCatchUpSetting
-
-        # Returns padding before program starts in seconds from a live asset if configured,
-        #             otherwise returns corresponding value from TimeShiftedTvPartnerSettings.
-        # @var int
-        self.paddingBeforeProgramStarts = paddingBeforeProgramStarts
-
-        # Returns padding after program ends in seconds from a live asset if configured,
-        #             otherwise returns corresponding value from TimeShiftedTvPartnerSettings.
-        # @var int
-        self.paddingAfterProgramEnds = paddingAfterProgramEnds
 
         # buffer Trick-play, configuration only
         # @var int
@@ -35426,8 +35414,6 @@ class KalturaLiveAsset(KalturaMediaAsset):
         'enableCatchUpState': (KalturaEnumsFactory.createString, "KalturaTimeShiftedTvState"), 
         'enableStartOverState': (KalturaEnumsFactory.createString, "KalturaTimeShiftedTvState"), 
         'bufferCatchUpSetting': getXmlNodeInt, 
-        'paddingBeforeProgramStarts': getXmlNodeInt, 
-        'paddingAfterProgramEnds': getXmlNodeInt, 
         'bufferTrickPlaySetting': getXmlNodeInt, 
         'enableRecordingPlaybackNonEntitledChannelState': (KalturaEnumsFactory.createString, "KalturaTimeShiftedTvState"), 
         'enableTrickPlayState': (KalturaEnumsFactory.createString, "KalturaTimeShiftedTvState"), 
@@ -35454,8 +35440,6 @@ class KalturaLiveAsset(KalturaMediaAsset):
         kparams.addStringEnumIfDefined("enableCatchUpState", self.enableCatchUpState)
         kparams.addStringEnumIfDefined("enableStartOverState", self.enableStartOverState)
         kparams.addIntIfDefined("bufferCatchUpSetting", self.bufferCatchUpSetting)
-        kparams.addIntIfDefined("paddingBeforeProgramStarts", self.paddingBeforeProgramStarts)
-        kparams.addIntIfDefined("paddingAfterProgramEnds", self.paddingAfterProgramEnds)
         kparams.addIntIfDefined("bufferTrickPlaySetting", self.bufferTrickPlaySetting)
         kparams.addStringEnumIfDefined("enableRecordingPlaybackNonEntitledChannelState", self.enableRecordingPlaybackNonEntitledChannelState)
         kparams.addStringEnumIfDefined("enableTrickPlayState", self.enableTrickPlayState)
@@ -35487,18 +35471,6 @@ class KalturaLiveAsset(KalturaMediaAsset):
 
     def setBufferCatchUpSetting(self, newBufferCatchUpSetting):
         self.bufferCatchUpSetting = newBufferCatchUpSetting
-
-    def getPaddingBeforeProgramStarts(self):
-        return self.paddingBeforeProgramStarts
-
-    def setPaddingBeforeProgramStarts(self, newPaddingBeforeProgramStarts):
-        self.paddingBeforeProgramStarts = newPaddingBeforeProgramStarts
-
-    def getPaddingAfterProgramEnds(self):
-        return self.paddingAfterProgramEnds
-
-    def setPaddingAfterProgramEnds(self, newPaddingAfterProgramEnds):
-        self.paddingAfterProgramEnds = newPaddingAfterProgramEnds
 
     def getBufferTrickPlaySetting(self):
         return self.bufferTrickPlaySetting
@@ -35591,8 +35563,6 @@ class KalturaLineupChannelAsset(KalturaLiveAsset):
             enableCatchUpState=NotImplemented,
             enableStartOverState=NotImplemented,
             bufferCatchUpSetting=NotImplemented,
-            paddingBeforeProgramStarts=NotImplemented,
-            paddingAfterProgramEnds=NotImplemented,
             bufferTrickPlaySetting=NotImplemented,
             enableRecordingPlaybackNonEntitledChannelState=NotImplemented,
             enableTrickPlayState=NotImplemented,
@@ -35635,8 +35605,6 @@ class KalturaLineupChannelAsset(KalturaLiveAsset):
             enableCatchUpState,
             enableStartOverState,
             bufferCatchUpSetting,
-            paddingBeforeProgramStarts,
-            paddingAfterProgramEnds,
             bufferTrickPlaySetting,
             enableRecordingPlaybackNonEntitledChannelState,
             enableTrickPlayState,
