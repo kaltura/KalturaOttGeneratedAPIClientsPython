@@ -42,7 +42,7 @@ from ..Base import (
     KalturaServiceBase,
 )
 
-API_VERSION = '7.4.0.29874'
+API_VERSION = '7.5.1.29887'
 
 ########## enums ##########
 # @package Kaltura
@@ -2439,7 +2439,6 @@ class KalturaRuleConditionType(object):
     USER_SESSION_PROFILE = "USER_SESSION_PROFILE"
     DEVICE_DYNAMIC_DATA = "DEVICE_DYNAMIC_DATA"
     IP_V6_RANGE = "IP_V6_RANGE"
-    ASSET_SHOP = "ASSET_SHOP"
 
     def __init__(self, value):
         self.value = value
@@ -10802,8 +10801,7 @@ class KalturaAssetUserRuleFilter(KalturaFilter):
     def __init__(self,
             orderBy=NotImplemented,
             attachedUserIdEqualCurrent=NotImplemented,
-            actionsContainType=NotImplemented,
-            conditionsContainType=NotImplemented):
+            actionsContainType=NotImplemented):
         KalturaFilter.__init__(self,
             orderBy)
 
@@ -10815,15 +10813,10 @@ class KalturaAssetUserRuleFilter(KalturaFilter):
         # @var KalturaRuleActionType
         self.actionsContainType = actionsContainType
 
-        # Indicates that only asset rules are returned that have exactly one and not more associated condition.
-        # @var KalturaRuleConditionType
-        self.conditionsContainType = conditionsContainType
-
 
     PROPERTY_LOADERS = {
         'attachedUserIdEqualCurrent': getXmlNodeBool, 
         'actionsContainType': (KalturaEnumsFactory.createString, "KalturaRuleActionType"), 
-        'conditionsContainType': (KalturaEnumsFactory.createString, "KalturaRuleConditionType"), 
     }
 
     def fromXml(self, node):
@@ -10835,7 +10828,6 @@ class KalturaAssetUserRuleFilter(KalturaFilter):
         kparams.put("objectType", "KalturaAssetUserRuleFilter")
         kparams.addBoolIfDefined("attachedUserIdEqualCurrent", self.attachedUserIdEqualCurrent)
         kparams.addStringEnumIfDefined("actionsContainType", self.actionsContainType)
-        kparams.addStringEnumIfDefined("conditionsContainType", self.conditionsContainType)
         return kparams
 
     def getAttachedUserIdEqualCurrent(self):
@@ -10849,12 +10841,6 @@ class KalturaAssetUserRuleFilter(KalturaFilter):
 
     def setActionsContainType(self, newActionsContainType):
         self.actionsContainType = newActionsContainType
-
-    def getConditionsContainType(self):
-        return self.conditionsContainType
-
-    def setConditionsContainType(self, newConditionsContainType):
-        self.conditionsContainType = newConditionsContainType
 
 
 # @package Kaltura
@@ -17568,26 +17554,41 @@ class KalturaAssetRule(KalturaAssetRuleBase):
 
 # @package Kaltura
 # @subpackage Client
-class KalturaAssetConditionBase(KalturaCondition):
+class KalturaAssetCondition(KalturaCondition):
+    """Asset Condition"""
+
     def __init__(self,
             type=NotImplemented,
-            description=NotImplemented):
+            description=NotImplemented,
+            ksql=NotImplemented):
         KalturaCondition.__init__(self,
             type,
             description)
 
+        # KSQL
+        # @var string
+        self.ksql = ksql
+
 
     PROPERTY_LOADERS = {
+        'ksql': getXmlNodeText, 
     }
 
     def fromXml(self, node):
         KalturaCondition.fromXml(self, node)
-        self.fromXmlImpl(node, KalturaAssetConditionBase.PROPERTY_LOADERS)
+        self.fromXmlImpl(node, KalturaAssetCondition.PROPERTY_LOADERS)
 
     def toParams(self):
         kparams = KalturaCondition.toParams(self)
-        kparams.put("objectType", "KalturaAssetConditionBase")
+        kparams.put("objectType", "KalturaAssetCondition")
+        kparams.addStringIfDefined("ksql", self.ksql)
         return kparams
+
+    def getKsql(self):
+        return self.ksql
+
+    def setKsql(self, newKsql):
+        self.ksql = newKsql
 
 
 # @package Kaltura
@@ -17632,8 +17633,8 @@ class KalturaAssetUserRule(KalturaAssetRuleBase):
             description,
             label)
 
-        # List of conditions for the user rule
-        # @var array of KalturaAssetConditionBase
+        # List of Ksql conditions for the user rule
+        # @var array of KalturaAssetCondition
         self.conditions = conditions
 
         # List of actions for the user rule
@@ -17642,7 +17643,7 @@ class KalturaAssetUserRule(KalturaAssetRuleBase):
 
 
     PROPERTY_LOADERS = {
-        'conditions': (KalturaObjectFactory.createArray, 'KalturaAssetConditionBase'), 
+        'conditions': (KalturaObjectFactory.createArray, 'KalturaAssetCondition'), 
         'actions': (KalturaObjectFactory.createArray, 'KalturaAssetUserRuleAction'), 
     }
 
@@ -17668,43 +17669,6 @@ class KalturaAssetUserRule(KalturaAssetRuleBase):
 
     def setActions(self, newActions):
         self.actions = newActions
-
-
-# @package Kaltura
-# @subpackage Client
-class KalturaAssetShopCondition(KalturaAssetConditionBase):
-    def __init__(self,
-            type=NotImplemented,
-            description=NotImplemented,
-            value=NotImplemented):
-        KalturaAssetConditionBase.__init__(self,
-            type,
-            description)
-
-        # Shop marker&#39;s value
-        # @var string
-        self.value = value
-
-
-    PROPERTY_LOADERS = {
-        'value': getXmlNodeText, 
-    }
-
-    def fromXml(self, node):
-        KalturaAssetConditionBase.fromXml(self, node)
-        self.fromXmlImpl(node, KalturaAssetShopCondition.PROPERTY_LOADERS)
-
-    def toParams(self):
-        kparams = KalturaAssetConditionBase.toParams(self)
-        kparams.put("objectType", "KalturaAssetShopCondition")
-        kparams.addStringIfDefined("value", self.value)
-        return kparams
-
-    def getValue(self):
-        return self.value
-
-    def setValue(self, newValue):
-        self.value = newValue
 
 
 # @package Kaltura
@@ -17932,45 +17896,6 @@ class KalturaHeaderCondition(KalturaNotCondition):
 
     def setValue(self, newValue):
         self.value = newValue
-
-
-# @package Kaltura
-# @subpackage Client
-class KalturaAssetCondition(KalturaAssetConditionBase):
-    """Asset Condition"""
-
-    def __init__(self,
-            type=NotImplemented,
-            description=NotImplemented,
-            ksql=NotImplemented):
-        KalturaAssetConditionBase.__init__(self,
-            type,
-            description)
-
-        # KSQL
-        # @var string
-        self.ksql = ksql
-
-
-    PROPERTY_LOADERS = {
-        'ksql': getXmlNodeText, 
-    }
-
-    def fromXml(self, node):
-        KalturaAssetConditionBase.fromXml(self, node)
-        self.fromXmlImpl(node, KalturaAssetCondition.PROPERTY_LOADERS)
-
-    def toParams(self):
-        kparams = KalturaAssetConditionBase.toParams(self)
-        kparams.put("objectType", "KalturaAssetCondition")
-        kparams.addStringIfDefined("ksql", self.ksql)
-        return kparams
-
-    def getKsql(self):
-        return self.ksql
-
-    def setKsql(self, newKsql):
-        self.ksql = newKsql
 
 
 # @package Kaltura
@@ -27234,8 +27159,7 @@ class KalturaCatalogPartnerConfig(KalturaPartnerConfiguration):
             singleMultilingualMode=NotImplemented,
             categoryManagement=NotImplemented,
             epgMultilingualFallbackSupport=NotImplemented,
-            uploadExportDatalake=NotImplemented,
-            shopMarkerMetaId=NotImplemented):
+            uploadExportDatalake=NotImplemented):
         KalturaPartnerConfiguration.__init__(self)
 
         # Single multilingual mode
@@ -27254,17 +27178,12 @@ class KalturaCatalogPartnerConfig(KalturaPartnerConfiguration):
         # @var bool
         self.uploadExportDatalake = uploadExportDatalake
 
-        # Shop Marker&#39;s identifier
-        # @var int
-        self.shopMarkerMetaId = shopMarkerMetaId
-
 
     PROPERTY_LOADERS = {
         'singleMultilingualMode': getXmlNodeBool, 
         'categoryManagement': (KalturaObjectFactory.create, 'KalturaCategoryManagement'), 
         'epgMultilingualFallbackSupport': getXmlNodeBool, 
         'uploadExportDatalake': getXmlNodeBool, 
-        'shopMarkerMetaId': getXmlNodeInt, 
     }
 
     def fromXml(self, node):
@@ -27278,7 +27197,6 @@ class KalturaCatalogPartnerConfig(KalturaPartnerConfiguration):
         kparams.addObjectIfDefined("categoryManagement", self.categoryManagement)
         kparams.addBoolIfDefined("epgMultilingualFallbackSupport", self.epgMultilingualFallbackSupport)
         kparams.addBoolIfDefined("uploadExportDatalake", self.uploadExportDatalake)
-        kparams.addIntIfDefined("shopMarkerMetaId", self.shopMarkerMetaId)
         return kparams
 
     def getSingleMultilingualMode(self):
@@ -27304,12 +27222,6 @@ class KalturaCatalogPartnerConfig(KalturaPartnerConfiguration):
 
     def setUploadExportDatalake(self, newUploadExportDatalake):
         self.uploadExportDatalake = newUploadExportDatalake
-
-    def getShopMarkerMetaId(self):
-        return self.shopMarkerMetaId
-
-    def setShopMarkerMetaId(self, newShopMarkerMetaId):
-        self.shopMarkerMetaId = newShopMarkerMetaId
 
 
 # @package Kaltura
@@ -39078,7 +38990,7 @@ class KalturaDeviceBrand(KalturaObjectBase):
     def __init__(self,
             id=NotImplemented,
             name=NotImplemented,
-            deviceFamilyId=NotImplemented,
+            deviceFamilyid=NotImplemented,
             type=NotImplemented):
         KalturaObjectBase.__init__(self)
 
@@ -39092,7 +39004,7 @@ class KalturaDeviceBrand(KalturaObjectBase):
 
         # Device family identifier
         # @var int
-        self.deviceFamilyId = deviceFamilyId
+        self.deviceFamilyid = deviceFamilyid
 
         # Type of device family.
         #              if this device family belongs only to this group,
@@ -39105,7 +39017,7 @@ class KalturaDeviceBrand(KalturaObjectBase):
     PROPERTY_LOADERS = {
         'id': getXmlNodeInt, 
         'name': getXmlNodeText, 
-        'deviceFamilyId': getXmlNodeInt, 
+        'deviceFamilyid': getXmlNodeInt, 
         'type': (KalturaEnumsFactory.createString, "KalturaDeviceBrandType"), 
     }
 
@@ -39118,7 +39030,7 @@ class KalturaDeviceBrand(KalturaObjectBase):
         kparams.put("objectType", "KalturaDeviceBrand")
         kparams.addIntIfDefined("id", self.id)
         kparams.addStringIfDefined("name", self.name)
-        kparams.addIntIfDefined("deviceFamilyId", self.deviceFamilyId)
+        kparams.addIntIfDefined("deviceFamilyid", self.deviceFamilyid)
         return kparams
 
     def getId(self):
@@ -39133,11 +39045,11 @@ class KalturaDeviceBrand(KalturaObjectBase):
     def setName(self, newName):
         self.name = newName
 
-    def getDeviceFamilyId(self):
-        return self.deviceFamilyId
+    def getDeviceFamilyid(self):
+        return self.deviceFamilyid
 
-    def setDeviceFamilyId(self, newDeviceFamilyId):
-        self.deviceFamilyId = newDeviceFamilyId
+    def setDeviceFamilyid(self, newDeviceFamilyid):
+        self.deviceFamilyid = newDeviceFamilyid
 
     def getType(self):
         return self.type
@@ -56794,16 +56706,14 @@ class KalturaCoreClient(KalturaClientPlugin):
             'KalturaRuleAction': KalturaRuleAction,
             'KalturaAssetRuleAction': KalturaAssetRuleAction,
             'KalturaAssetRule': KalturaAssetRule,
-            'KalturaAssetConditionBase': KalturaAssetConditionBase,
+            'KalturaAssetCondition': KalturaAssetCondition,
             'KalturaAssetUserRuleAction': KalturaAssetUserRuleAction,
             'KalturaAssetUserRule': KalturaAssetUserRule,
-            'KalturaAssetShopCondition': KalturaAssetShopCondition,
             'KalturaNotCondition': KalturaNotCondition,
             'KalturaOrCondition': KalturaOrCondition,
             'KalturaCountryCondition': KalturaCountryCondition,
             'KalturaDateCondition': KalturaDateCondition,
             'KalturaHeaderCondition': KalturaHeaderCondition,
-            'KalturaAssetCondition': KalturaAssetCondition,
             'KalturaConcurrencyCondition': KalturaConcurrencyCondition,
             'KalturaIpRangeCondition': KalturaIpRangeCondition,
             'KalturaBusinessModuleCondition': KalturaBusinessModuleCondition,
