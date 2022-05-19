@@ -42,7 +42,7 @@ from ..Base import (
     KalturaServiceBase,
 )
 
-API_VERSION = '7.6.0.29893'
+API_VERSION = '7.6.0.29894'
 
 ########## enums ##########
 # @package Kaltura
@@ -39078,7 +39078,7 @@ class KalturaDeviceBrand(KalturaObjectBase):
     def __init__(self,
             id=NotImplemented,
             name=NotImplemented,
-            deviceFamilyId=NotImplemented,
+            deviceFamilyid=NotImplemented,
             type=NotImplemented):
         KalturaObjectBase.__init__(self)
 
@@ -39092,7 +39092,7 @@ class KalturaDeviceBrand(KalturaObjectBase):
 
         # Device family identifier
         # @var int
-        self.deviceFamilyId = deviceFamilyId
+        self.deviceFamilyid = deviceFamilyid
 
         # Type of device family.
         #              if this device family belongs only to this group,
@@ -39105,7 +39105,7 @@ class KalturaDeviceBrand(KalturaObjectBase):
     PROPERTY_LOADERS = {
         'id': getXmlNodeInt, 
         'name': getXmlNodeText, 
-        'deviceFamilyId': getXmlNodeInt, 
+        'deviceFamilyid': getXmlNodeInt, 
         'type': (KalturaEnumsFactory.createString, "KalturaDeviceBrandType"), 
     }
 
@@ -39118,7 +39118,7 @@ class KalturaDeviceBrand(KalturaObjectBase):
         kparams.put("objectType", "KalturaDeviceBrand")
         kparams.addIntIfDefined("id", self.id)
         kparams.addStringIfDefined("name", self.name)
-        kparams.addIntIfDefined("deviceFamilyId", self.deviceFamilyId)
+        kparams.addIntIfDefined("deviceFamilyid", self.deviceFamilyid)
         return kparams
 
     def getId(self):
@@ -39133,11 +39133,11 @@ class KalturaDeviceBrand(KalturaObjectBase):
     def setName(self, newName):
         self.name = newName
 
-    def getDeviceFamilyId(self):
-        return self.deviceFamilyId
+    def getDeviceFamilyid(self):
+        return self.deviceFamilyid
 
-    def setDeviceFamilyId(self, newDeviceFamilyId):
-        self.deviceFamilyId = newDeviceFamilyId
+    def setDeviceFamilyid(self, newDeviceFamilyid):
+        self.deviceFamilyid = newDeviceFamilyid
 
     def getType(self):
         return self.type
