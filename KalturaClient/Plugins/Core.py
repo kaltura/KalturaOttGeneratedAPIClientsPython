@@ -42,7 +42,7 @@ from ..Base import (
     KalturaServiceBase,
 )
 
-API_VERSION = '7.6.0.29891'
+API_VERSION = '7.7.0.29908'
 
 ########## enums ##########
 # @package Kaltura
@@ -2005,6 +2005,17 @@ class KalturaPermissionType(object):
     NORMAL = "NORMAL"
     GROUP = "GROUP"
     SPECIAL_FEATURE = "SPECIAL_FEATURE"
+
+    def __init__(self, value):
+        self.value = value
+
+    def getValue(self):
+        return self.value
+
+# @package Kaltura
+# @subpackage Client
+class KalturaPersonalAssetSelectionOrderBy(object):
+    ASSET_SELECTION_DATE_DESC = "ASSET_SELECTION_DATE_DESC"
 
     def __init__(self, value):
         self.value = value
@@ -10471,6 +10482,41 @@ class KalturaMediaFileFilter(KalturaFilter):
 
     def setIdEqual(self, newIdEqual):
         self.idEqual = newIdEqual
+
+
+# @package Kaltura
+# @subpackage Client
+class KalturaPersonalAssetSelectionFilter(KalturaFilter):
+    def __init__(self,
+            orderBy=NotImplemented,
+            slotNumberEqual=NotImplemented):
+        KalturaFilter.__init__(self,
+            orderBy)
+
+        # selected assets for specific slot number
+        # @var int
+        self.slotNumberEqual = slotNumberEqual
+
+
+    PROPERTY_LOADERS = {
+        'slotNumberEqual': getXmlNodeInt, 
+    }
+
+    def fromXml(self, node):
+        KalturaFilter.fromXml(self, node)
+        self.fromXmlImpl(node, KalturaPersonalAssetSelectionFilter.PROPERTY_LOADERS)
+
+    def toParams(self):
+        kparams = KalturaFilter.toParams(self)
+        kparams.put("objectType", "KalturaPersonalAssetSelectionFilter")
+        kparams.addIntIfDefined("slotNumberEqual", self.slotNumberEqual)
+        return kparams
+
+    def getSlotNumberEqual(self):
+        return self.slotNumberEqual
+
+    def setSlotNumberEqual(self, newSlotNumberEqual):
+        self.slotNumberEqual = newSlotNumberEqual
 
 
 # @package Kaltura
@@ -35287,6 +35333,8 @@ class KalturaLiveAsset(KalturaMediaAsset):
             enableCatchUpState=NotImplemented,
             enableStartOverState=NotImplemented,
             bufferCatchUpSetting=NotImplemented,
+            paddingBeforeProgramStarts=NotImplemented,
+            paddingAfterProgramEnds=NotImplemented,
             bufferTrickPlaySetting=NotImplemented,
             enableRecordingPlaybackNonEntitledChannelState=NotImplemented,
             enableTrickPlayState=NotImplemented,
@@ -35340,6 +35388,16 @@ class KalturaLiveAsset(KalturaMediaAsset):
         # buffer Catch-up, configuration only
         # @var int
         self.bufferCatchUpSetting = bufferCatchUpSetting
+
+        # Returns padding before program starts in seconds from a live asset if configured,
+        #             otherwise returns corresponding value from TimeShiftedTvPartnerSettings.
+        # @var int
+        self.paddingBeforeProgramStarts = paddingBeforeProgramStarts
+
+        # Returns padding after program ends in seconds from a live asset if configured,
+        #             otherwise returns corresponding value from TimeShiftedTvPartnerSettings.
+        # @var int
+        self.paddingAfterProgramEnds = paddingAfterProgramEnds
 
         # buffer Trick-play, configuration only
         # @var int
@@ -35414,6 +35472,8 @@ class KalturaLiveAsset(KalturaMediaAsset):
         'enableCatchUpState': (KalturaEnumsFactory.createString, "KalturaTimeShiftedTvState"), 
         'enableStartOverState': (KalturaEnumsFactory.createString, "KalturaTimeShiftedTvState"), 
         'bufferCatchUpSetting': getXmlNodeInt, 
+        'paddingBeforeProgramStarts': getXmlNodeInt, 
+        'paddingAfterProgramEnds': getXmlNodeInt, 
         'bufferTrickPlaySetting': getXmlNodeInt, 
         'enableRecordingPlaybackNonEntitledChannelState': (KalturaEnumsFactory.createString, "KalturaTimeShiftedTvState"), 
         'enableTrickPlayState': (KalturaEnumsFactory.createString, "KalturaTimeShiftedTvState"), 
@@ -35440,6 +35500,8 @@ class KalturaLiveAsset(KalturaMediaAsset):
         kparams.addStringEnumIfDefined("enableCatchUpState", self.enableCatchUpState)
         kparams.addStringEnumIfDefined("enableStartOverState", self.enableStartOverState)
         kparams.addIntIfDefined("bufferCatchUpSetting", self.bufferCatchUpSetting)
+        kparams.addIntIfDefined("paddingBeforeProgramStarts", self.paddingBeforeProgramStarts)
+        kparams.addIntIfDefined("paddingAfterProgramEnds", self.paddingAfterProgramEnds)
         kparams.addIntIfDefined("bufferTrickPlaySetting", self.bufferTrickPlaySetting)
         kparams.addStringEnumIfDefined("enableRecordingPlaybackNonEntitledChannelState", self.enableRecordingPlaybackNonEntitledChannelState)
         kparams.addStringEnumIfDefined("enableTrickPlayState", self.enableTrickPlayState)
@@ -35471,6 +35533,18 @@ class KalturaLiveAsset(KalturaMediaAsset):
 
     def setBufferCatchUpSetting(self, newBufferCatchUpSetting):
         self.bufferCatchUpSetting = newBufferCatchUpSetting
+
+    def getPaddingBeforeProgramStarts(self):
+        return self.paddingBeforeProgramStarts
+
+    def setPaddingBeforeProgramStarts(self, newPaddingBeforeProgramStarts):
+        self.paddingBeforeProgramStarts = newPaddingBeforeProgramStarts
+
+    def getPaddingAfterProgramEnds(self):
+        return self.paddingAfterProgramEnds
+
+    def setPaddingAfterProgramEnds(self, newPaddingAfterProgramEnds):
+        self.paddingAfterProgramEnds = newPaddingAfterProgramEnds
 
     def getBufferTrickPlaySetting(self):
         return self.bufferTrickPlaySetting
@@ -35563,6 +35637,8 @@ class KalturaLineupChannelAsset(KalturaLiveAsset):
             enableCatchUpState=NotImplemented,
             enableStartOverState=NotImplemented,
             bufferCatchUpSetting=NotImplemented,
+            paddingBeforeProgramStarts=NotImplemented,
+            paddingAfterProgramEnds=NotImplemented,
             bufferTrickPlaySetting=NotImplemented,
             enableRecordingPlaybackNonEntitledChannelState=NotImplemented,
             enableTrickPlayState=NotImplemented,
@@ -35605,6 +35681,8 @@ class KalturaLineupChannelAsset(KalturaLiveAsset):
             enableCatchUpState,
             enableStartOverState,
             bufferCatchUpSetting,
+            paddingBeforeProgramStarts,
+            paddingAfterProgramEnds,
             bufferTrickPlaySetting,
             enableRecordingPlaybackNonEntitledChannelState,
             enableTrickPlayState,
@@ -39078,7 +39156,7 @@ class KalturaDeviceBrand(KalturaObjectBase):
     def __init__(self,
             id=NotImplemented,
             name=NotImplemented,
-            deviceFamilyId=NotImplemented,
+            deviceFamilyid=NotImplemented,
             type=NotImplemented):
         KalturaObjectBase.__init__(self)
 
@@ -39092,7 +39170,7 @@ class KalturaDeviceBrand(KalturaObjectBase):
 
         # Device family identifier
         # @var int
-        self.deviceFamilyId = deviceFamilyId
+        self.deviceFamilyid = deviceFamilyid
 
         # Type of device family.
         #              if this device family belongs only to this group,
@@ -39105,7 +39183,7 @@ class KalturaDeviceBrand(KalturaObjectBase):
     PROPERTY_LOADERS = {
         'id': getXmlNodeInt, 
         'name': getXmlNodeText, 
-        'deviceFamilyId': getXmlNodeInt, 
+        'deviceFamilyid': getXmlNodeInt, 
         'type': (KalturaEnumsFactory.createString, "KalturaDeviceBrandType"), 
     }
 
@@ -39118,7 +39196,7 @@ class KalturaDeviceBrand(KalturaObjectBase):
         kparams.put("objectType", "KalturaDeviceBrand")
         kparams.addIntIfDefined("id", self.id)
         kparams.addStringIfDefined("name", self.name)
-        kparams.addIntIfDefined("deviceFamilyId", self.deviceFamilyId)
+        kparams.addIntIfDefined("deviceFamilyid", self.deviceFamilyid)
         return kparams
 
     def getId(self):
@@ -39133,11 +39211,11 @@ class KalturaDeviceBrand(KalturaObjectBase):
     def setName(self, newName):
         self.name = newName
 
-    def getDeviceFamilyId(self):
-        return self.deviceFamilyId
+    def getDeviceFamilyid(self):
+        return self.deviceFamilyid
 
-    def setDeviceFamilyId(self, newDeviceFamilyId):
-        self.deviceFamilyId = newDeviceFamilyId
+    def setDeviceFamilyid(self, newDeviceFamilyid):
+        self.deviceFamilyid = newDeviceFamilyid
 
     def getType(self):
         return self.type
@@ -43526,6 +43604,58 @@ class KalturaAssetFileContext(KalturaObjectBase):
 
 # @package Kaltura
 # @subpackage Client
+class KalturaAssetPersonalSelection(KalturaObjectBase):
+    """Asset personal selection"""
+
+    def __init__(self,
+            assetId=NotImplemented,
+            assetType=NotImplemented,
+            updateDate=NotImplemented):
+        KalturaObjectBase.__init__(self)
+
+        # Asset Id
+        # @var int
+        # @readonly
+        self.assetId = assetId
+
+        # Asset Type
+        # @var KalturaAssetType
+        # @readonly
+        self.assetType = assetType
+
+        # Update Date
+        # @var int
+        # @readonly
+        self.updateDate = updateDate
+
+
+    PROPERTY_LOADERS = {
+        'assetId': getXmlNodeInt, 
+        'assetType': (KalturaEnumsFactory.createString, "KalturaAssetType"), 
+        'updateDate': getXmlNodeInt, 
+    }
+
+    def fromXml(self, node):
+        KalturaObjectBase.fromXml(self, node)
+        self.fromXmlImpl(node, KalturaAssetPersonalSelection.PROPERTY_LOADERS)
+
+    def toParams(self):
+        kparams = KalturaObjectBase.toParams(self)
+        kparams.put("objectType", "KalturaAssetPersonalSelection")
+        return kparams
+
+    def getAssetId(self):
+        return self.assetId
+
+    def getAssetType(self):
+        return self.assetType
+
+    def getUpdateDate(self):
+        return self.updateDate
+
+
+# @package Kaltura
+# @subpackage Client
 class KalturaAssetStatisticsQuery(KalturaObjectBase):
     def __init__(self,
             assetIdIn=NotImplemented,
@@ -45809,6 +45939,199 @@ class KalturaLicensedUrlRecordingRequest(KalturaLicensedUrlBaseRequest):
 
     def setFileType(self, newFileType):
         self.fileType = newFileType
+
+
+# @package Kaltura
+# @subpackage Client
+class KalturaLiveToVodLinearAssetConfiguration(KalturaObjectBase):
+    """Configuration of isL2vEnabled and retentionPeriodDays per each channel, overriding the defaults set in the account&#39;s configuration."""
+
+    def __init__(self,
+            linearAssetId=NotImplemented,
+            isL2vEnabled=NotImplemented,
+            retentionPeriodDays=NotImplemented):
+        KalturaObjectBase.__init__(self)
+
+        # Linear asset&#39;s identifier.
+        # @var int
+        self.linearAssetId = linearAssetId
+
+        # Enable/disable the feature per linear channel. Considered only if the flag is enabled on the account level.
+        # @var bool
+        self.isL2vEnabled = isL2vEnabled
+
+        # Number of days the L2V asset is retained in the system.
+        #             Optional - if configured, overriding the account level value.
+        # @var int
+        self.retentionPeriodDays = retentionPeriodDays
+
+
+    PROPERTY_LOADERS = {
+        'linearAssetId': getXmlNodeInt, 
+        'isL2vEnabled': getXmlNodeBool, 
+        'retentionPeriodDays': getXmlNodeInt, 
+    }
+
+    def fromXml(self, node):
+        KalturaObjectBase.fromXml(self, node)
+        self.fromXmlImpl(node, KalturaLiveToVodLinearAssetConfiguration.PROPERTY_LOADERS)
+
+    def toParams(self):
+        kparams = KalturaObjectBase.toParams(self)
+        kparams.put("objectType", "KalturaLiveToVodLinearAssetConfiguration")
+        kparams.addIntIfDefined("linearAssetId", self.linearAssetId)
+        kparams.addBoolIfDefined("isL2vEnabled", self.isL2vEnabled)
+        kparams.addIntIfDefined("retentionPeriodDays", self.retentionPeriodDays)
+        return kparams
+
+    def getLinearAssetId(self):
+        return self.linearAssetId
+
+    def setLinearAssetId(self, newLinearAssetId):
+        self.linearAssetId = newLinearAssetId
+
+    def getIsL2vEnabled(self):
+        return self.isL2vEnabled
+
+    def setIsL2vEnabled(self, newIsL2vEnabled):
+        self.isL2vEnabled = newIsL2vEnabled
+
+    def getRetentionPeriodDays(self):
+        return self.retentionPeriodDays
+
+    def setRetentionPeriodDays(self, newRetentionPeriodDays):
+        self.retentionPeriodDays = newRetentionPeriodDays
+
+
+# @package Kaltura
+# @subpackage Client
+class KalturaLiveToVodFullConfiguration(KalturaObjectBase):
+    def __init__(self,
+            isL2vEnabled=NotImplemented,
+            retentionPeriodDays=NotImplemented,
+            metadataClassifier=NotImplemented,
+            linearAssets=NotImplemented):
+        KalturaObjectBase.__init__(self)
+
+        # Enable/disable the feature globally. If disabled, then all linear assets are not enabled.
+        # @var bool
+        self.isL2vEnabled = isL2vEnabled
+
+        # Number of days the L2V asset is retained in the system.
+        # @var int
+        self.retentionPeriodDays = retentionPeriodDays
+
+        # The name (label) of the metadata field marking the program asset to be duplicated as a L2V asset.
+        # @var string
+        self.metadataClassifier = metadataClassifier
+
+        # Configuring isL2vEnabled/retentionPeriodDays per each channel, overriding the defaults set in the global isL2vEnabled and retentionPeriodDays parameters.
+        # @var array of KalturaLiveToVodLinearAssetConfiguration
+        self.linearAssets = linearAssets
+
+
+    PROPERTY_LOADERS = {
+        'isL2vEnabled': getXmlNodeBool, 
+        'retentionPeriodDays': getXmlNodeInt, 
+        'metadataClassifier': getXmlNodeText, 
+        'linearAssets': (KalturaObjectFactory.createArray, 'KalturaLiveToVodLinearAssetConfiguration'), 
+    }
+
+    def fromXml(self, node):
+        KalturaObjectBase.fromXml(self, node)
+        self.fromXmlImpl(node, KalturaLiveToVodFullConfiguration.PROPERTY_LOADERS)
+
+    def toParams(self):
+        kparams = KalturaObjectBase.toParams(self)
+        kparams.put("objectType", "KalturaLiveToVodFullConfiguration")
+        kparams.addBoolIfDefined("isL2vEnabled", self.isL2vEnabled)
+        kparams.addIntIfDefined("retentionPeriodDays", self.retentionPeriodDays)
+        kparams.addStringIfDefined("metadataClassifier", self.metadataClassifier)
+        kparams.addArrayIfDefined("linearAssets", self.linearAssets)
+        return kparams
+
+    def getIsL2vEnabled(self):
+        return self.isL2vEnabled
+
+    def setIsL2vEnabled(self, newIsL2vEnabled):
+        self.isL2vEnabled = newIsL2vEnabled
+
+    def getRetentionPeriodDays(self):
+        return self.retentionPeriodDays
+
+    def setRetentionPeriodDays(self, newRetentionPeriodDays):
+        self.retentionPeriodDays = newRetentionPeriodDays
+
+    def getMetadataClassifier(self):
+        return self.metadataClassifier
+
+    def setMetadataClassifier(self, newMetadataClassifier):
+        self.metadataClassifier = newMetadataClassifier
+
+    def getLinearAssets(self):
+        return self.linearAssets
+
+    def setLinearAssets(self, newLinearAssets):
+        self.linearAssets = newLinearAssets
+
+
+# @package Kaltura
+# @subpackage Client
+class KalturaLiveToVodPartnerConfiguration(KalturaObjectBase):
+    def __init__(self,
+            isL2vEnabled=NotImplemented,
+            retentionPeriodDays=NotImplemented,
+            metadataClassifier=NotImplemented):
+        KalturaObjectBase.__init__(self)
+
+        # Enable/disable the feature globally. If disabled, then all linear assets are not enabled.
+        # @var bool
+        self.isL2vEnabled = isL2vEnabled
+
+        # Number of days the L2V asset is retained in the system.
+        # @var int
+        self.retentionPeriodDays = retentionPeriodDays
+
+        # The name (label) of the metadata field marking the program asset to be duplicated as a L2V asset.
+        # @var string
+        self.metadataClassifier = metadataClassifier
+
+
+    PROPERTY_LOADERS = {
+        'isL2vEnabled': getXmlNodeBool, 
+        'retentionPeriodDays': getXmlNodeInt, 
+        'metadataClassifier': getXmlNodeText, 
+    }
+
+    def fromXml(self, node):
+        KalturaObjectBase.fromXml(self, node)
+        self.fromXmlImpl(node, KalturaLiveToVodPartnerConfiguration.PROPERTY_LOADERS)
+
+    def toParams(self):
+        kparams = KalturaObjectBase.toParams(self)
+        kparams.put("objectType", "KalturaLiveToVodPartnerConfiguration")
+        kparams.addBoolIfDefined("isL2vEnabled", self.isL2vEnabled)
+        kparams.addIntIfDefined("retentionPeriodDays", self.retentionPeriodDays)
+        kparams.addStringIfDefined("metadataClassifier", self.metadataClassifier)
+        return kparams
+
+    def getIsL2vEnabled(self):
+        return self.isL2vEnabled
+
+    def setIsL2vEnabled(self, newIsL2vEnabled):
+        self.isL2vEnabled = newIsL2vEnabled
+
+    def getRetentionPeriodDays(self):
+        return self.retentionPeriodDays
+
+    def setRetentionPeriodDays(self, newRetentionPeriodDays):
+        self.retentionPeriodDays = newRetentionPeriodDays
+
+    def getMetadataClassifier(self):
+        return self.metadataClassifier
+
+    def setMetadataClassifier(self, newMetadataClassifier):
+        self.metadataClassifier = newMetadataClassifier
 
 
 # @package Kaltura
@@ -48968,6 +49291,17 @@ class KalturaAssetService(KalturaServiceBase):
         resultNode = self.client.doQueue()
         return KalturaObjectFactory.create(resultNode, 'KalturaAssetListResponse')
 
+    def listPersonalSelection(self, filter):
+        """Returns recent selected assets"""
+
+        kparams = KalturaParams()
+        kparams.addObjectIfDefined("filter", filter)
+        self.client.queueServiceActionCall("asset", "listPersonalSelection", "KalturaAssetListResponse", kparams)
+        if self.client.isMultiRequest():
+            return self.client.getMultiRequestResult()
+        resultNode = self.client.doQueue()
+        return KalturaObjectFactory.create(resultNode, 'KalturaAssetListResponse')
+
     def removeMetasAndTags(self, id, assetReferenceType, idIn):
         """remove metas and tags from asset"""
 
@@ -49142,6 +49476,48 @@ class KalturaAssetPersonalMarkupService(KalturaServiceBase):
             return self.client.getMultiRequestResult()
         resultNode = self.client.doQueue()
         return KalturaObjectFactory.create(resultNode, 'KalturaAssetPersonalMarkupListResponse')
+
+
+# @package Kaltura
+# @subpackage Client
+class KalturaAssetPersonalSelectionService(KalturaServiceBase):
+    def __init__(self, client = None):
+        KalturaServiceBase.__init__(self, client)
+
+    def delete(self, assetId, assetType, slotNumber):
+        """Remove asset selection in slot"""
+
+        kparams = KalturaParams()
+        kparams.addIntIfDefined("assetId", assetId);
+        kparams.addStringIfDefined("assetType", assetType)
+        kparams.addIntIfDefined("slotNumber", slotNumber);
+        self.client.queueServiceActionCall("assetpersonalselection", "delete", "None", kparams)
+        if self.client.isMultiRequest():
+            return self.client.getMultiRequestResult()
+        resultNode = self.client.doQueue()
+
+    def deleteAll(self, slotNumber):
+        """Remove asset selection in slot"""
+
+        kparams = KalturaParams()
+        kparams.addIntIfDefined("slotNumber", slotNumber);
+        self.client.queueServiceActionCall("assetpersonalselection", "deleteAll", "None", kparams)
+        if self.client.isMultiRequest():
+            return self.client.getMultiRequestResult()
+        resultNode = self.client.doQueue()
+
+    def upsert(self, assetId, assetType, slotNumber):
+        """Add or update asset selection in slot"""
+
+        kparams = KalturaParams()
+        kparams.addIntIfDefined("assetId", assetId);
+        kparams.addStringIfDefined("assetType", assetType)
+        kparams.addIntIfDefined("slotNumber", slotNumber);
+        self.client.queueServiceActionCall("assetpersonalselection", "upsert", "KalturaAssetPersonalSelection", kparams)
+        if self.client.isMultiRequest():
+            return self.client.getMultiRequestResult()
+        resultNode = self.client.doQueue()
+        return KalturaObjectFactory.create(resultNode, 'KalturaAssetPersonalSelection')
 
 
 # @package Kaltura
@@ -52428,6 +52804,66 @@ class KalturaLineupService(KalturaServiceBase):
             return self.client.getMultiRequestResult()
         resultNode = self.client.doQueue()
         return getXmlNodeBool(resultNode)
+
+
+# @package Kaltura
+# @subpackage Client
+class KalturaLiveToVodService(KalturaServiceBase):
+    def __init__(self, client = None):
+        KalturaServiceBase.__init__(self, client)
+
+    def getConfiguration(self):
+        """Get existing L2V configuration for both the partner level and all channels level."""
+
+        kparams = KalturaParams()
+        self.client.queueServiceActionCall("livetovod", "getConfiguration", "KalturaLiveToVodFullConfiguration", kparams)
+        if self.client.isMultiRequest():
+            return self.client.getMultiRequestResult()
+        resultNode = self.client.doQueue()
+        return KalturaObjectFactory.create(resultNode, 'KalturaLiveToVodFullConfiguration')
+
+    def getLinearAssetConfiguration(self, linearAssetId):
+        """Get existing L2V configuration for a specific linear asset."""
+
+        kparams = KalturaParams()
+        kparams.addIntIfDefined("linearAssetId", linearAssetId);
+        self.client.queueServiceActionCall("livetovod", "getLinearAssetConfiguration", "KalturaLiveToVodLinearAssetConfiguration", kparams)
+        if self.client.isMultiRequest():
+            return self.client.getMultiRequestResult()
+        resultNode = self.client.doQueue()
+        return KalturaObjectFactory.create(resultNode, 'KalturaLiveToVodLinearAssetConfiguration')
+
+    def getPartnerConfiguration(self):
+        """Get existing L2V partner configuration."""
+
+        kparams = KalturaParams()
+        self.client.queueServiceActionCall("livetovod", "getPartnerConfiguration", "KalturaLiveToVodPartnerConfiguration", kparams)
+        if self.client.isMultiRequest():
+            return self.client.getMultiRequestResult()
+        resultNode = self.client.doQueue()
+        return KalturaObjectFactory.create(resultNode, 'KalturaLiveToVodPartnerConfiguration')
+
+    def updateLinearAssetConfiguration(self, configuration):
+        """Set L2V configuration for a specific Linear channel."""
+
+        kparams = KalturaParams()
+        kparams.addObjectIfDefined("configuration", configuration)
+        self.client.queueServiceActionCall("livetovod", "updateLinearAssetConfiguration", "KalturaLiveToVodLinearAssetConfiguration", kparams)
+        if self.client.isMultiRequest():
+            return self.client.getMultiRequestResult()
+        resultNode = self.client.doQueue()
+        return KalturaObjectFactory.create(resultNode, 'KalturaLiveToVodLinearAssetConfiguration')
+
+    def updatePartnerConfiguration(self, configuration):
+        """Set L2V configuration on the partner level."""
+
+        kparams = KalturaParams()
+        kparams.addObjectIfDefined("configuration", configuration)
+        self.client.queueServiceActionCall("livetovod", "updatePartnerConfiguration", "KalturaLiveToVodPartnerConfiguration", kparams)
+        if self.client.isMultiRequest():
+            return self.client.getMultiRequestResult()
+        resultNode = self.client.doQueue()
+        return KalturaObjectFactory.create(resultNode, 'KalturaLiveToVodPartnerConfiguration')
 
 
 # @package Kaltura
@@ -56165,6 +56601,7 @@ class KalturaCoreClient(KalturaClientPlugin):
             'assetFilePpv': KalturaAssetFilePpvService,
             'assetHistory': KalturaAssetHistoryService,
             'assetPersonalMarkup': KalturaAssetPersonalMarkupService,
+            'assetPersonalSelection': KalturaAssetPersonalSelectionService,
             'assetRule': KalturaAssetRuleService,
             'assetStatistics': KalturaAssetStatisticsService,
             'assetStruct': KalturaAssetStructService,
@@ -56232,6 +56669,7 @@ class KalturaCoreClient(KalturaClientPlugin):
             'language': KalturaLanguageService,
             'licensedUrl': KalturaLicensedUrlService,
             'lineup': KalturaLineupService,
+            'liveToVod': KalturaLiveToVodService,
             'mediaConcurrencyRule': KalturaMediaConcurrencyRuleService,
             'mediaFile': KalturaMediaFileService,
             'mediaFileType': KalturaMediaFileTypeService,
@@ -56456,6 +56894,7 @@ class KalturaCoreClient(KalturaClientPlugin):
             'KalturaPermissionItemOrderBy': KalturaPermissionItemOrderBy,
             'KalturaPermissionOrderBy': KalturaPermissionOrderBy,
             'KalturaPermissionType': KalturaPermissionType,
+            'KalturaPersonalAssetSelectionOrderBy': KalturaPersonalAssetSelectionOrderBy,
             'KalturaPersonalFeedOrderBy': KalturaPersonalFeedOrderBy,
             'KalturaPersonalListOrderBy': KalturaPersonalListOrderBy,
             'KalturaPinType': KalturaPinType,
@@ -56688,6 +57127,7 @@ class KalturaCoreClient(KalturaClientPlugin):
             'KalturaImageTypeFilter': KalturaImageTypeFilter,
             'KalturaLabelFilter': KalturaLabelFilter,
             'KalturaMediaFileFilter': KalturaMediaFileFilter,
+            'KalturaPersonalAssetSelectionFilter': KalturaPersonalAssetSelectionFilter,
             'KalturaStreamingDeviceFilter': KalturaStreamingDeviceFilter,
             'KalturaTagFilter': KalturaTagFilter,
             'KalturaSearchPriorityGroupFilter': KalturaSearchPriorityGroupFilter,
@@ -57241,6 +57681,7 @@ class KalturaCoreClient(KalturaClientPlugin):
             'KalturaBulkUploadLiveAssetData': KalturaBulkUploadLiveAssetData,
             'KalturaBulkUploadProgramAssetData': KalturaBulkUploadProgramAssetData,
             'KalturaAssetFileContext': KalturaAssetFileContext,
+            'KalturaAssetPersonalSelection': KalturaAssetPersonalSelection,
             'KalturaAssetStatisticsQuery': KalturaAssetStatisticsQuery,
             'KalturaOTTCategory': KalturaOTTCategory,
             'KalturaCategoryTree': KalturaCategoryTree,
@@ -57282,6 +57723,9 @@ class KalturaCoreClient(KalturaClientPlugin):
             'KalturaLicensedUrlMediaRequest': KalturaLicensedUrlMediaRequest,
             'KalturaLicensedUrlEpgRequest': KalturaLicensedUrlEpgRequest,
             'KalturaLicensedUrlRecordingRequest': KalturaLicensedUrlRecordingRequest,
+            'KalturaLiveToVodLinearAssetConfiguration': KalturaLiveToVodLinearAssetConfiguration,
+            'KalturaLiveToVodFullConfiguration': KalturaLiveToVodFullConfiguration,
+            'KalturaLiveToVodPartnerConfiguration': KalturaLiveToVodPartnerConfiguration,
             'KalturaMessageTemplate': KalturaMessageTemplate,
             'KalturaRegistryResponse': KalturaRegistryResponse,
             'KalturaPushMessage': KalturaPushMessage,
