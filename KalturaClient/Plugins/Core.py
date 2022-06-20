@@ -42,7 +42,7 @@ from ..Base import (
     KalturaServiceBase,
 )
 
-API_VERSION = '7.7.0.29910'
+API_VERSION = '7.7.0.29914'
 
 ########## enums ##########
 # @package Kaltura
@@ -35168,6 +35168,130 @@ class KalturaAssetListResponse(KalturaListResponse):
 
 # @package Kaltura
 # @subpackage Client
+class KalturaLiveToVodInfoAsset(KalturaObjectBase):
+    def __init__(self,
+            linearAssetId=NotImplemented,
+            epgId=NotImplemented,
+            epgChannelId=NotImplemented,
+            crid=NotImplemented,
+            originalStartDate=NotImplemented,
+            originalEndDate=NotImplemented,
+            paddingBeforeProgramStarts=NotImplemented,
+            paddingAfterProgramEnds=NotImplemented):
+        KalturaObjectBase.__init__(self)
+
+        # Linear Asset Id
+        # @var int
+        self.linearAssetId = linearAssetId
+
+        # EPG Id
+        # @var string
+        self.epgId = epgId
+
+        # EPG Channel Id
+        # @var int
+        self.epgChannelId = epgChannelId
+
+        # Crid
+        # @var string
+        self.crid = crid
+
+        # Original Start Date
+        # @var int
+        self.originalStartDate = originalStartDate
+
+        # Original End Date
+        # @var int
+        self.originalEndDate = originalEndDate
+
+        # Padding before program starts
+        # @var int
+        self.paddingBeforeProgramStarts = paddingBeforeProgramStarts
+
+        # Padding after program ends
+        # @var int
+        self.paddingAfterProgramEnds = paddingAfterProgramEnds
+
+
+    PROPERTY_LOADERS = {
+        'linearAssetId': getXmlNodeInt, 
+        'epgId': getXmlNodeText, 
+        'epgChannelId': getXmlNodeInt, 
+        'crid': getXmlNodeText, 
+        'originalStartDate': getXmlNodeInt, 
+        'originalEndDate': getXmlNodeInt, 
+        'paddingBeforeProgramStarts': getXmlNodeInt, 
+        'paddingAfterProgramEnds': getXmlNodeInt, 
+    }
+
+    def fromXml(self, node):
+        KalturaObjectBase.fromXml(self, node)
+        self.fromXmlImpl(node, KalturaLiveToVodInfoAsset.PROPERTY_LOADERS)
+
+    def toParams(self):
+        kparams = KalturaObjectBase.toParams(self)
+        kparams.put("objectType", "KalturaLiveToVodInfoAsset")
+        kparams.addIntIfDefined("linearAssetId", self.linearAssetId)
+        kparams.addStringIfDefined("epgId", self.epgId)
+        kparams.addIntIfDefined("epgChannelId", self.epgChannelId)
+        kparams.addStringIfDefined("crid", self.crid)
+        kparams.addIntIfDefined("originalStartDate", self.originalStartDate)
+        kparams.addIntIfDefined("originalEndDate", self.originalEndDate)
+        kparams.addIntIfDefined("paddingBeforeProgramStarts", self.paddingBeforeProgramStarts)
+        kparams.addIntIfDefined("paddingAfterProgramEnds", self.paddingAfterProgramEnds)
+        return kparams
+
+    def getLinearAssetId(self):
+        return self.linearAssetId
+
+    def setLinearAssetId(self, newLinearAssetId):
+        self.linearAssetId = newLinearAssetId
+
+    def getEpgId(self):
+        return self.epgId
+
+    def setEpgId(self, newEpgId):
+        self.epgId = newEpgId
+
+    def getEpgChannelId(self):
+        return self.epgChannelId
+
+    def setEpgChannelId(self, newEpgChannelId):
+        self.epgChannelId = newEpgChannelId
+
+    def getCrid(self):
+        return self.crid
+
+    def setCrid(self, newCrid):
+        self.crid = newCrid
+
+    def getOriginalStartDate(self):
+        return self.originalStartDate
+
+    def setOriginalStartDate(self, newOriginalStartDate):
+        self.originalStartDate = newOriginalStartDate
+
+    def getOriginalEndDate(self):
+        return self.originalEndDate
+
+    def setOriginalEndDate(self, newOriginalEndDate):
+        self.originalEndDate = newOriginalEndDate
+
+    def getPaddingBeforeProgramStarts(self):
+        return self.paddingBeforeProgramStarts
+
+    def setPaddingBeforeProgramStarts(self, newPaddingBeforeProgramStarts):
+        self.paddingBeforeProgramStarts = newPaddingBeforeProgramStarts
+
+    def getPaddingAfterProgramEnds(self):
+        return self.paddingAfterProgramEnds
+
+    def setPaddingAfterProgramEnds(self, newPaddingAfterProgramEnds):
+        self.paddingAfterProgramEnds = newPaddingAfterProgramEnds
+
+
+# @package Kaltura
+# @subpackage Client
 class KalturaMediaAsset(KalturaAsset):
     """Media-asset info"""
 
@@ -35194,7 +35318,8 @@ class KalturaMediaAsset(KalturaAsset):
             deviceRuleId=NotImplemented,
             geoBlockRuleId=NotImplemented,
             status=NotImplemented,
-            inheritancePolicy=NotImplemented):
+            inheritancePolicy=NotImplemented,
+            liveToVod=NotImplemented):
         KalturaAsset.__init__(self,
             id,
             type,
@@ -35238,6 +35363,10 @@ class KalturaMediaAsset(KalturaAsset):
         # @var KalturaAssetInheritancePolicy
         self.inheritancePolicy = inheritancePolicy
 
+        # Live to VOD (if present)
+        # @var KalturaLiveToVodInfoAsset
+        self.liveToVod = liveToVod
+
 
     PROPERTY_LOADERS = {
         'externalIds': getXmlNodeText, 
@@ -35246,6 +35375,7 @@ class KalturaMediaAsset(KalturaAsset):
         'geoBlockRuleId': getXmlNodeInt, 
         'status': getXmlNodeBool, 
         'inheritancePolicy': (KalturaEnumsFactory.createString, "KalturaAssetInheritancePolicy"), 
+        'liveToVod': (KalturaObjectFactory.create, 'KalturaLiveToVodInfoAsset'), 
     }
 
     def fromXml(self, node):
@@ -35261,6 +35391,7 @@ class KalturaMediaAsset(KalturaAsset):
         kparams.addIntIfDefined("geoBlockRuleId", self.geoBlockRuleId)
         kparams.addBoolIfDefined("status", self.status)
         kparams.addStringEnumIfDefined("inheritancePolicy", self.inheritancePolicy)
+        kparams.addObjectIfDefined("liveToVod", self.liveToVod)
         return kparams
 
     def getExternalIds(self):
@@ -35299,6 +35430,12 @@ class KalturaMediaAsset(KalturaAsset):
     def setInheritancePolicy(self, newInheritancePolicy):
         self.inheritancePolicy = newInheritancePolicy
 
+    def getLiveToVod(self):
+        return self.liveToVod
+
+    def setLiveToVod(self, newLiveToVod):
+        self.liveToVod = newLiveToVod
+
 
 # @package Kaltura
 # @subpackage Client
@@ -35329,6 +35466,7 @@ class KalturaLiveAsset(KalturaMediaAsset):
             geoBlockRuleId=NotImplemented,
             status=NotImplemented,
             inheritancePolicy=NotImplemented,
+            liveToVod=NotImplemented,
             enableCdvrState=NotImplemented,
             enableCatchUpState=NotImplemented,
             enableStartOverState=NotImplemented,
@@ -35371,7 +35509,8 @@ class KalturaLiveAsset(KalturaMediaAsset):
             deviceRuleId,
             geoBlockRuleId,
             status,
-            inheritancePolicy)
+            inheritancePolicy,
+            liveToVod)
 
         # Enable CDVR, configuration only
         # @var KalturaTimeShiftedTvState
@@ -35633,6 +35772,7 @@ class KalturaLineupChannelAsset(KalturaLiveAsset):
             geoBlockRuleId=NotImplemented,
             status=NotImplemented,
             inheritancePolicy=NotImplemented,
+            liveToVod=NotImplemented,
             enableCdvrState=NotImplemented,
             enableCatchUpState=NotImplemented,
             enableStartOverState=NotImplemented,
@@ -35677,6 +35817,7 @@ class KalturaLineupChannelAsset(KalturaLiveAsset):
             geoBlockRuleId,
             status,
             inheritancePolicy,
+            liveToVod,
             enableCdvrState,
             enableCatchUpState,
             enableStartOverState,
@@ -57550,6 +57691,7 @@ class KalturaCoreClient(KalturaClientPlugin):
             'KalturaRelatedEntityArray': KalturaRelatedEntityArray,
             'KalturaAsset': KalturaAsset,
             'KalturaAssetListResponse': KalturaAssetListResponse,
+            'KalturaLiveToVodInfoAsset': KalturaLiveToVodInfoAsset,
             'KalturaMediaAsset': KalturaMediaAsset,
             'KalturaLiveAsset': KalturaLiveAsset,
             'KalturaLineupChannelAsset': KalturaLineupChannelAsset,
