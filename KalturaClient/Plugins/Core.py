@@ -42,7 +42,7 @@ from ..Base import (
     KalturaServiceBase,
 )
 
-API_VERSION = '7.7.0.29917'
+API_VERSION = '7.7.0.29995'
 
 ########## enums ##########
 # @package Kaltura
@@ -594,6 +594,11 @@ class KalturaBundleType(object):
 # @subpackage Client
 class KalturaCampaignOrderBy(object):
     START_DATE_DESC = "START_DATE_DESC"
+    START_DATE_ASC = "START_DATE_ASC"
+    UPDATE_DATE_DESC = "UPDATE_DATE_DESC"
+    UPDATE_DATE_ASC = "UPDATE_DATE_ASC"
+    END_DATE_DESC = "END_DATE_DESC"
+    END_DATE_ASC = "END_DATE_ASC"
 
     def __init__(self, value):
         self.value = value
@@ -2451,6 +2456,8 @@ class KalturaRuleConditionType(object):
     DEVICE_DYNAMIC_DATA = "DEVICE_DYNAMIC_DATA"
     IP_V6_RANGE = "IP_V6_RANGE"
     ASSET_SHOP = "ASSET_SHOP"
+    CHANNEL = "CHANNEL"
+    FILE_TYPE = "FILE_TYPE"
 
     def __init__(self, value):
         self.value = value
@@ -10935,7 +10942,10 @@ class KalturaCampaignSearchFilter(KalturaCampaignFilter):
             startDateGreaterThanOrEqual=NotImplemented,
             endDateLessThanOrEqual=NotImplemented,
             stateEqual=NotImplemented,
-            hasPromotion=NotImplemented):
+            hasPromotion=NotImplemented,
+            nameEqual=NotImplemented,
+            nameContains=NotImplemented,
+            stateIn=NotImplemented):
         KalturaCampaignFilter.__init__(self,
             orderBy)
 
@@ -10955,12 +10965,27 @@ class KalturaCampaignSearchFilter(KalturaCampaignFilter):
         # @var bool
         self.hasPromotion = hasPromotion
 
+        # Filter the Campaign with this name.
+        # @var string
+        self.nameEqual = nameEqual
+
+        # A string that is included in the Campaign name
+        # @var string
+        self.nameContains = nameContains
+
+        # Comma separated Campaign State list
+        # @var string
+        self.stateIn = stateIn
+
 
     PROPERTY_LOADERS = {
         'startDateGreaterThanOrEqual': getXmlNodeInt, 
         'endDateLessThanOrEqual': getXmlNodeInt, 
         'stateEqual': (KalturaEnumsFactory.createString, "KalturaObjectState"), 
         'hasPromotion': getXmlNodeBool, 
+        'nameEqual': getXmlNodeText, 
+        'nameContains': getXmlNodeText, 
+        'stateIn': getXmlNodeText, 
     }
 
     def fromXml(self, node):
@@ -10974,6 +10999,9 @@ class KalturaCampaignSearchFilter(KalturaCampaignFilter):
         kparams.addIntIfDefined("endDateLessThanOrEqual", self.endDateLessThanOrEqual)
         kparams.addStringEnumIfDefined("stateEqual", self.stateEqual)
         kparams.addBoolIfDefined("hasPromotion", self.hasPromotion)
+        kparams.addStringIfDefined("nameEqual", self.nameEqual)
+        kparams.addStringIfDefined("nameContains", self.nameContains)
+        kparams.addStringIfDefined("stateIn", self.stateIn)
         return kparams
 
     def getStartDateGreaterThanOrEqual(self):
@@ -11000,6 +11028,24 @@ class KalturaCampaignSearchFilter(KalturaCampaignFilter):
     def setHasPromotion(self, newHasPromotion):
         self.hasPromotion = newHasPromotion
 
+    def getNameEqual(self):
+        return self.nameEqual
+
+    def setNameEqual(self, newNameEqual):
+        self.nameEqual = newNameEqual
+
+    def getNameContains(self):
+        return self.nameContains
+
+    def setNameContains(self, newNameContains):
+        self.nameContains = newNameContains
+
+    def getStateIn(self):
+        return self.stateIn
+
+    def setStateIn(self, newStateIn):
+        self.stateIn = newStateIn
+
 
 # @package Kaltura
 # @subpackage Client
@@ -11009,13 +11055,19 @@ class KalturaBatchCampaignSearchFilter(KalturaCampaignSearchFilter):
             startDateGreaterThanOrEqual=NotImplemented,
             endDateLessThanOrEqual=NotImplemented,
             stateEqual=NotImplemented,
-            hasPromotion=NotImplemented):
+            hasPromotion=NotImplemented,
+            nameEqual=NotImplemented,
+            nameContains=NotImplemented,
+            stateIn=NotImplemented):
         KalturaCampaignSearchFilter.__init__(self,
             orderBy,
             startDateGreaterThanOrEqual,
             endDateLessThanOrEqual,
             stateEqual,
-            hasPromotion)
+            hasPromotion,
+            nameEqual,
+            nameContains,
+            stateIn)
 
 
     PROPERTY_LOADERS = {
@@ -11074,13 +11126,19 @@ class KalturaTriggerCampaignSearchFilter(KalturaCampaignSearchFilter):
             startDateGreaterThanOrEqual=NotImplemented,
             endDateLessThanOrEqual=NotImplemented,
             stateEqual=NotImplemented,
-            hasPromotion=NotImplemented):
+            hasPromotion=NotImplemented,
+            nameEqual=NotImplemented,
+            nameContains=NotImplemented,
+            stateIn=NotImplemented):
         KalturaCampaignSearchFilter.__init__(self,
             orderBy,
             startDateGreaterThanOrEqual,
             endDateLessThanOrEqual,
             stateEqual,
-            hasPromotion)
+            hasPromotion,
+            nameEqual,
+            nameContains,
+            stateIn)
 
 
     PROPERTY_LOADERS = {
@@ -17755,6 +17813,43 @@ class KalturaAssetShopCondition(KalturaAssetConditionBase):
 
 # @package Kaltura
 # @subpackage Client
+class KalturaChannelCondition(KalturaCondition):
+    def __init__(self,
+            type=NotImplemented,
+            description=NotImplemented,
+            idIn=NotImplemented):
+        KalturaCondition.__init__(self,
+            type,
+            description)
+
+        # Comma separated channel IDs list
+        # @var string
+        self.idIn = idIn
+
+
+    PROPERTY_LOADERS = {
+        'idIn': getXmlNodeText, 
+    }
+
+    def fromXml(self, node):
+        KalturaCondition.fromXml(self, node)
+        self.fromXmlImpl(node, KalturaChannelCondition.PROPERTY_LOADERS)
+
+    def toParams(self):
+        kparams = KalturaCondition.toParams(self)
+        kparams.put("objectType", "KalturaChannelCondition")
+        kparams.addStringIfDefined("idIn", self.idIn)
+        return kparams
+
+    def getIdIn(self):
+        return self.idIn
+
+    def setIdIn(self, newIdIn):
+        self.idIn = newIdIn
+
+
+# @package Kaltura
+# @subpackage Client
 class KalturaNotCondition(KalturaCondition):
     """Not condition"""
 
@@ -18670,6 +18765,43 @@ class KalturaUserSessionProfileCondition(KalturaCondition):
 
     def setId(self, newId):
         self.id = newId
+
+
+# @package Kaltura
+# @subpackage Client
+class KalturaFileTypeCondition(KalturaCondition):
+    def __init__(self,
+            type=NotImplemented,
+            description=NotImplemented,
+            idIn=NotImplemented):
+        KalturaCondition.__init__(self,
+            type,
+            description)
+
+        # Comma separated filetype IDs list
+        # @var string
+        self.idIn = idIn
+
+
+    PROPERTY_LOADERS = {
+        'idIn': getXmlNodeText, 
+    }
+
+    def fromXml(self, node):
+        KalturaCondition.fromXml(self, node)
+        self.fromXmlImpl(node, KalturaFileTypeCondition.PROPERTY_LOADERS)
+
+    def toParams(self):
+        kparams = KalturaCondition.toParams(self)
+        kparams.put("objectType", "KalturaFileTypeCondition")
+        kparams.addStringIfDefined("idIn", self.idIn)
+        return kparams
+
+    def getIdIn(self):
+        return self.idIn
+
+    def setIdIn(self, newIdIn):
+        self.idIn = newIdIn
 
 
 # @package Kaltura
@@ -20224,63 +20356,37 @@ class KalturaTvmGeoRule(KalturaTvmRule):
 
 # @package Kaltura
 # @subpackage Client
-class KalturaPromotion(KalturaObjectBase):
-    """Promotion"""
+class KalturaBasePromotion(KalturaObjectBase):
+    """Base Promotion"""
 
     def __init__(self,
-            discountModuleId=NotImplemented,
-            conditions=NotImplemented,
-            numberOfRecurring=NotImplemented):
+            conditions=NotImplemented):
         KalturaObjectBase.__init__(self)
-
-        # The discount module id that is promoted to the user
-        # @var int
-        self.discountModuleId = discountModuleId
 
         # These conditions define the Promotion that applies on
         # @var array of KalturaCondition
         self.conditions = conditions
 
-        # the numer of recurring for this promotion
-        # @var int
-        self.numberOfRecurring = numberOfRecurring
-
 
     PROPERTY_LOADERS = {
-        'discountModuleId': getXmlNodeInt, 
         'conditions': (KalturaObjectFactory.createArray, 'KalturaCondition'), 
-        'numberOfRecurring': getXmlNodeInt, 
     }
 
     def fromXml(self, node):
         KalturaObjectBase.fromXml(self, node)
-        self.fromXmlImpl(node, KalturaPromotion.PROPERTY_LOADERS)
+        self.fromXmlImpl(node, KalturaBasePromotion.PROPERTY_LOADERS)
 
     def toParams(self):
         kparams = KalturaObjectBase.toParams(self)
-        kparams.put("objectType", "KalturaPromotion")
-        kparams.addIntIfDefined("discountModuleId", self.discountModuleId)
+        kparams.put("objectType", "KalturaBasePromotion")
         kparams.addArrayIfDefined("conditions", self.conditions)
-        kparams.addIntIfDefined("numberOfRecurring", self.numberOfRecurring)
         return kparams
-
-    def getDiscountModuleId(self):
-        return self.discountModuleId
-
-    def setDiscountModuleId(self, newDiscountModuleId):
-        self.discountModuleId = newDiscountModuleId
 
     def getConditions(self):
         return self.conditions
 
     def setConditions(self, newConditions):
         self.conditions = newConditions
-
-    def getNumberOfRecurring(self):
-        return self.numberOfRecurring
-
-    def setNumberOfRecurring(self, newNumberOfRecurring):
-        self.numberOfRecurring = newNumberOfRecurring
 
 
 # @package Kaltura
@@ -20344,7 +20450,7 @@ class KalturaCampaign(KalturaOTTObjectSupportNullable):
         self.state = state
 
         # The Promotion that is promoted to the user
-        # @var KalturaPromotion
+        # @var KalturaBasePromotion
         self.promotion = promotion
 
         # Free text message to the user that gives information about the campaign.
@@ -20366,7 +20472,7 @@ class KalturaCampaign(KalturaOTTObjectSupportNullable):
         'systemName': getXmlNodeText, 
         'description': getXmlNodeText, 
         'state': (KalturaEnumsFactory.createString, "KalturaObjectState"), 
-        'promotion': (KalturaObjectFactory.create, 'KalturaPromotion'), 
+        'promotion': (KalturaObjectFactory.create, 'KalturaBasePromotion'), 
         'message': getXmlNodeText, 
         'collectionIdIn': getXmlNodeText, 
     }
@@ -20591,6 +20697,93 @@ class KalturaTriggerCampaign(KalturaCampaign):
 
     def setTriggerConditions(self, newTriggerConditions):
         self.triggerConditions = newTriggerConditions
+
+
+# @package Kaltura
+# @subpackage Client
+class KalturaCouponPromotion(KalturaBasePromotion):
+    """Coupon promotion"""
+
+    def __init__(self,
+            conditions=NotImplemented,
+            couponGroupId=NotImplemented):
+        KalturaBasePromotion.__init__(self,
+            conditions)
+
+        # CouponGroup identifier
+        # @var int
+        self.couponGroupId = couponGroupId
+
+
+    PROPERTY_LOADERS = {
+        'couponGroupId': getXmlNodeInt, 
+    }
+
+    def fromXml(self, node):
+        KalturaBasePromotion.fromXml(self, node)
+        self.fromXmlImpl(node, KalturaCouponPromotion.PROPERTY_LOADERS)
+
+    def toParams(self):
+        kparams = KalturaBasePromotion.toParams(self)
+        kparams.put("objectType", "KalturaCouponPromotion")
+        kparams.addIntIfDefined("couponGroupId", self.couponGroupId)
+        return kparams
+
+    def getCouponGroupId(self):
+        return self.couponGroupId
+
+    def setCouponGroupId(self, newCouponGroupId):
+        self.couponGroupId = newCouponGroupId
+
+
+# @package Kaltura
+# @subpackage Client
+class KalturaPromotion(KalturaBasePromotion):
+    """Promotion"""
+
+    def __init__(self,
+            conditions=NotImplemented,
+            discountModuleId=NotImplemented,
+            numberOfRecurring=NotImplemented):
+        KalturaBasePromotion.__init__(self,
+            conditions)
+
+        # The discount module id that is promoted to the user
+        # @var int
+        self.discountModuleId = discountModuleId
+
+        # the numer of recurring for this promotion
+        # @var int
+        self.numberOfRecurring = numberOfRecurring
+
+
+    PROPERTY_LOADERS = {
+        'discountModuleId': getXmlNodeInt, 
+        'numberOfRecurring': getXmlNodeInt, 
+    }
+
+    def fromXml(self, node):
+        KalturaBasePromotion.fromXml(self, node)
+        self.fromXmlImpl(node, KalturaPromotion.PROPERTY_LOADERS)
+
+    def toParams(self):
+        kparams = KalturaBasePromotion.toParams(self)
+        kparams.put("objectType", "KalturaPromotion")
+        kparams.addIntIfDefined("discountModuleId", self.discountModuleId)
+        kparams.addIntIfDefined("numberOfRecurring", self.numberOfRecurring)
+        return kparams
+
+    def getDiscountModuleId(self):
+        return self.discountModuleId
+
+    def setDiscountModuleId(self, newDiscountModuleId):
+        self.discountModuleId = newDiscountModuleId
+
+    def getNumberOfRecurring(self):
+        return self.numberOfRecurring
+
+    def setNumberOfRecurring(self, newNumberOfRecurring):
+        self.numberOfRecurring = newNumberOfRecurring
 
 
 # @package Kaltura
@@ -57379,6 +57572,7 @@ class KalturaCoreClient(KalturaClientPlugin):
             'KalturaAssetUserRuleAction': KalturaAssetUserRuleAction,
             'KalturaAssetUserRule': KalturaAssetUserRule,
             'KalturaAssetShopCondition': KalturaAssetShopCondition,
+            'KalturaChannelCondition': KalturaChannelCondition,
             'KalturaNotCondition': KalturaNotCondition,
             'KalturaOrCondition': KalturaOrCondition,
             'KalturaCountryCondition': KalturaCountryCondition,
@@ -57401,6 +57595,7 @@ class KalturaCoreClient(KalturaClientPlugin):
             'KalturaDynamicKeysCondition': KalturaDynamicKeysCondition,
             'KalturaDeviceDynamicDataCondition': KalturaDeviceDynamicDataCondition,
             'KalturaUserSessionProfileCondition': KalturaUserSessionProfileCondition,
+            'KalturaFileTypeCondition': KalturaFileTypeCondition,
             'KalturaIpV6RangeCondition': KalturaIpV6RangeCondition,
             'KalturaAccessControlBlockAction': KalturaAccessControlBlockAction,
             'KalturaAllowPlaybackAction': KalturaAllowPlaybackAction,
@@ -57444,10 +57639,12 @@ class KalturaCoreClient(KalturaClientPlugin):
             'KalturaTvmRule': KalturaTvmRule,
             'KalturaTvmDeviceRule': KalturaTvmDeviceRule,
             'KalturaTvmGeoRule': KalturaTvmGeoRule,
-            'KalturaPromotion': KalturaPromotion,
+            'KalturaBasePromotion': KalturaBasePromotion,
             'KalturaCampaign': KalturaCampaign,
             'KalturaBatchCampaign': KalturaBatchCampaign,
             'KalturaTriggerCampaign': KalturaTriggerCampaign,
+            'KalturaCouponPromotion': KalturaCouponPromotion,
+            'KalturaPromotion': KalturaPromotion,
             'KalturaEventNotification': KalturaEventNotification,
             'KalturaIot': KalturaIot,
             'KalturaIotProfileAws': KalturaIotProfileAws,
