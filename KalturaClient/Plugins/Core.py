@@ -42,7 +42,7 @@ from ..Base import (
     KalturaServiceBase,
 )
 
-API_VERSION = '7.7.0.29917'
+API_VERSION = '7.8.0.29937'
 
 ########## enums ##########
 # @package Kaltura
@@ -13559,18 +13559,22 @@ class KalturaUsageModule(KalturaObjectBase):
 
         # Usage module name
         # @var string
+        # @insertonly
         self.name = name
 
         # The maximum number of times an item in this usage module can be viewed
         # @var int
+        # @insertonly
         self.maxViewsNumber = maxViewsNumber
 
         # The amount time an item is available for viewing since a user started watching the item
         # @var int
+        # @insertonly
         self.viewLifeCycle = viewLifeCycle
 
         # The amount time an item is available for viewing
         # @var int
+        # @insertonly
         self.fullLifeCycle = fullLifeCycle
 
         # Identifies a specific coupon linked to this object
