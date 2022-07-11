@@ -42,7 +42,7 @@ from ..Base import (
     KalturaServiceBase,
 )
 
-API_VERSION = '7.7.0.29928'
+API_VERSION = '7.8.0.30000'
 
 ########## enums ##########
 # @package Kaltura
@@ -594,6 +594,11 @@ class KalturaBundleType(object):
 # @subpackage Client
 class KalturaCampaignOrderBy(object):
     START_DATE_DESC = "START_DATE_DESC"
+    START_DATE_ASC = "START_DATE_ASC"
+    UPDATE_DATE_DESC = "UPDATE_DATE_DESC"
+    UPDATE_DATE_ASC = "UPDATE_DATE_ASC"
+    END_DATE_DESC = "END_DATE_DESC"
+    END_DATE_ASC = "END_DATE_ASC"
 
     def __init__(self, value):
         self.value = value
@@ -9754,7 +9759,8 @@ class KalturaBookmark(KalturaSlimAsset):
             finishedWatching=NotImplemented,
             playerData=NotImplemented,
             programId=NotImplemented,
-            isReportingMode=NotImplemented):
+            isReportingMode=NotImplemented,
+            context=NotImplemented):
         KalturaSlimAsset.__init__(self,
             id,
             type)
@@ -9791,6 +9797,10 @@ class KalturaBookmark(KalturaSlimAsset):
         # @var bool
         self.isReportingMode = isReportingMode
 
+        # Playback context type
+        # @var KalturaPlaybackContextType
+        self.context = context
+
 
     PROPERTY_LOADERS = {
         'userId': getXmlNodeText, 
@@ -9800,6 +9810,7 @@ class KalturaBookmark(KalturaSlimAsset):
         'playerData': (KalturaObjectFactory.create, 'KalturaBookmarkPlayerData'), 
         'programId': getXmlNodeInt, 
         'isReportingMode': getXmlNodeBool, 
+        'context': (KalturaEnumsFactory.createString, "KalturaPlaybackContextType"), 
     }
 
     def fromXml(self, node):
@@ -9813,6 +9824,7 @@ class KalturaBookmark(KalturaSlimAsset):
         kparams.addObjectIfDefined("playerData", self.playerData)
         kparams.addIntIfDefined("programId", self.programId)
         kparams.addBoolIfDefined("isReportingMode", self.isReportingMode)
+        kparams.addStringEnumIfDefined("context", self.context)
         return kparams
 
     def getUserId(self):
@@ -9847,6 +9859,12 @@ class KalturaBookmark(KalturaSlimAsset):
 
     def setIsReportingMode(self, newIsReportingMode):
         self.isReportingMode = newIsReportingMode
+
+    def getContext(self):
+        return self.context
+
+    def setContext(self, newContext):
+        self.context = newContext
 
 
 # @package Kaltura
@@ -10937,7 +10955,10 @@ class KalturaCampaignSearchFilter(KalturaCampaignFilter):
             startDateGreaterThanOrEqual=NotImplemented,
             endDateLessThanOrEqual=NotImplemented,
             stateEqual=NotImplemented,
-            hasPromotion=NotImplemented):
+            hasPromotion=NotImplemented,
+            nameEqual=NotImplemented,
+            nameContains=NotImplemented,
+            stateIn=NotImplemented):
         KalturaCampaignFilter.__init__(self,
             orderBy)
 
@@ -10957,12 +10978,27 @@ class KalturaCampaignSearchFilter(KalturaCampaignFilter):
         # @var bool
         self.hasPromotion = hasPromotion
 
+        # Filter the Campaign with this name.
+        # @var string
+        self.nameEqual = nameEqual
+
+        # A string that is included in the Campaign name
+        # @var string
+        self.nameContains = nameContains
+
+        # Comma separated Campaign State list
+        # @var string
+        self.stateIn = stateIn
+
 
     PROPERTY_LOADERS = {
         'startDateGreaterThanOrEqual': getXmlNodeInt, 
         'endDateLessThanOrEqual': getXmlNodeInt, 
         'stateEqual': (KalturaEnumsFactory.createString, "KalturaObjectState"), 
         'hasPromotion': getXmlNodeBool, 
+        'nameEqual': getXmlNodeText, 
+        'nameContains': getXmlNodeText, 
+        'stateIn': getXmlNodeText, 
     }
 
     def fromXml(self, node):
@@ -10976,6 +11012,9 @@ class KalturaCampaignSearchFilter(KalturaCampaignFilter):
         kparams.addIntIfDefined("endDateLessThanOrEqual", self.endDateLessThanOrEqual)
         kparams.addStringEnumIfDefined("stateEqual", self.stateEqual)
         kparams.addBoolIfDefined("hasPromotion", self.hasPromotion)
+        kparams.addStringIfDefined("nameEqual", self.nameEqual)
+        kparams.addStringIfDefined("nameContains", self.nameContains)
+        kparams.addStringIfDefined("stateIn", self.stateIn)
         return kparams
 
     def getStartDateGreaterThanOrEqual(self):
@@ -11002,6 +11041,24 @@ class KalturaCampaignSearchFilter(KalturaCampaignFilter):
     def setHasPromotion(self, newHasPromotion):
         self.hasPromotion = newHasPromotion
 
+    def getNameEqual(self):
+        return self.nameEqual
+
+    def setNameEqual(self, newNameEqual):
+        self.nameEqual = newNameEqual
+
+    def getNameContains(self):
+        return self.nameContains
+
+    def setNameContains(self, newNameContains):
+        self.nameContains = newNameContains
+
+    def getStateIn(self):
+        return self.stateIn
+
+    def setStateIn(self, newStateIn):
+        self.stateIn = newStateIn
+
 
 # @package Kaltura
 # @subpackage Client
@@ -11011,13 +11068,19 @@ class KalturaBatchCampaignSearchFilter(KalturaCampaignSearchFilter):
             startDateGreaterThanOrEqual=NotImplemented,
             endDateLessThanOrEqual=NotImplemented,
             stateEqual=NotImplemented,
-            hasPromotion=NotImplemented):
+            hasPromotion=NotImplemented,
+            nameEqual=NotImplemented,
+            nameContains=NotImplemented,
+            stateIn=NotImplemented):
         KalturaCampaignSearchFilter.__init__(self,
             orderBy,
             startDateGreaterThanOrEqual,
             endDateLessThanOrEqual,
             stateEqual,
-            hasPromotion)
+            hasPromotion,
+            nameEqual,
+            nameContains,
+            stateIn)
 
 
     PROPERTY_LOADERS = {
@@ -11076,13 +11139,19 @@ class KalturaTriggerCampaignSearchFilter(KalturaCampaignSearchFilter):
             startDateGreaterThanOrEqual=NotImplemented,
             endDateLessThanOrEqual=NotImplemented,
             stateEqual=NotImplemented,
-            hasPromotion=NotImplemented):
+            hasPromotion=NotImplemented,
+            nameEqual=NotImplemented,
+            nameContains=NotImplemented,
+            stateIn=NotImplemented):
         KalturaCampaignSearchFilter.__init__(self,
             orderBy,
             startDateGreaterThanOrEqual,
             endDateLessThanOrEqual,
             stateEqual,
-            hasPromotion)
+            hasPromotion,
+            nameEqual,
+            nameContains,
+            stateIn)
 
 
     PROPERTY_LOADERS = {
@@ -13561,18 +13630,22 @@ class KalturaUsageModule(KalturaObjectBase):
 
         # Usage module name
         # @var string
+        # @insertonly
         self.name = name
 
         # The maximum number of times an item in this usage module can be viewed
         # @var int
+        # @insertonly
         self.maxViewsNumber = maxViewsNumber
 
         # The amount time an item is available for viewing since a user started watching the item
         # @var int
+        # @insertonly
         self.viewLifeCycle = viewLifeCycle
 
         # The amount time an item is available for viewing
         # @var int
+        # @insertonly
         self.fullLifeCycle = fullLifeCycle
 
         # Identifies a specific coupon linked to this object
@@ -20301,7 +20374,7 @@ class KalturaTvmGeoRule(KalturaTvmRule):
 # @package Kaltura
 # @subpackage Client
 class KalturaBasePromotion(KalturaObjectBase):
-    """Promotion"""
+    """Base Promotion"""
 
     def __init__(self,
             conditions=NotImplemented):
@@ -35305,6 +35378,130 @@ class KalturaAssetListResponse(KalturaListResponse):
 
 # @package Kaltura
 # @subpackage Client
+class KalturaLiveToVodInfoAsset(KalturaObjectBase):
+    def __init__(self,
+            linearAssetId=NotImplemented,
+            epgId=NotImplemented,
+            epgChannelId=NotImplemented,
+            crid=NotImplemented,
+            originalStartDate=NotImplemented,
+            originalEndDate=NotImplemented,
+            paddingBeforeProgramStarts=NotImplemented,
+            paddingAfterProgramEnds=NotImplemented):
+        KalturaObjectBase.__init__(self)
+
+        # Linear Asset Id
+        # @var int
+        self.linearAssetId = linearAssetId
+
+        # EPG Id
+        # @var string
+        self.epgId = epgId
+
+        # EPG Channel Id
+        # @var int
+        self.epgChannelId = epgChannelId
+
+        # Crid
+        # @var string
+        self.crid = crid
+
+        # Original Start Date
+        # @var int
+        self.originalStartDate = originalStartDate
+
+        # Original End Date
+        # @var int
+        self.originalEndDate = originalEndDate
+
+        # Padding before program starts
+        # @var int
+        self.paddingBeforeProgramStarts = paddingBeforeProgramStarts
+
+        # Padding after program ends
+        # @var int
+        self.paddingAfterProgramEnds = paddingAfterProgramEnds
+
+
+    PROPERTY_LOADERS = {
+        'linearAssetId': getXmlNodeInt, 
+        'epgId': getXmlNodeText, 
+        'epgChannelId': getXmlNodeInt, 
+        'crid': getXmlNodeText, 
+        'originalStartDate': getXmlNodeInt, 
+        'originalEndDate': getXmlNodeInt, 
+        'paddingBeforeProgramStarts': getXmlNodeInt, 
+        'paddingAfterProgramEnds': getXmlNodeInt, 
+    }
+
+    def fromXml(self, node):
+        KalturaObjectBase.fromXml(self, node)
+        self.fromXmlImpl(node, KalturaLiveToVodInfoAsset.PROPERTY_LOADERS)
+
+    def toParams(self):
+        kparams = KalturaObjectBase.toParams(self)
+        kparams.put("objectType", "KalturaLiveToVodInfoAsset")
+        kparams.addIntIfDefined("linearAssetId", self.linearAssetId)
+        kparams.addStringIfDefined("epgId", self.epgId)
+        kparams.addIntIfDefined("epgChannelId", self.epgChannelId)
+        kparams.addStringIfDefined("crid", self.crid)
+        kparams.addIntIfDefined("originalStartDate", self.originalStartDate)
+        kparams.addIntIfDefined("originalEndDate", self.originalEndDate)
+        kparams.addIntIfDefined("paddingBeforeProgramStarts", self.paddingBeforeProgramStarts)
+        kparams.addIntIfDefined("paddingAfterProgramEnds", self.paddingAfterProgramEnds)
+        return kparams
+
+    def getLinearAssetId(self):
+        return self.linearAssetId
+
+    def setLinearAssetId(self, newLinearAssetId):
+        self.linearAssetId = newLinearAssetId
+
+    def getEpgId(self):
+        return self.epgId
+
+    def setEpgId(self, newEpgId):
+        self.epgId = newEpgId
+
+    def getEpgChannelId(self):
+        return self.epgChannelId
+
+    def setEpgChannelId(self, newEpgChannelId):
+        self.epgChannelId = newEpgChannelId
+
+    def getCrid(self):
+        return self.crid
+
+    def setCrid(self, newCrid):
+        self.crid = newCrid
+
+    def getOriginalStartDate(self):
+        return self.originalStartDate
+
+    def setOriginalStartDate(self, newOriginalStartDate):
+        self.originalStartDate = newOriginalStartDate
+
+    def getOriginalEndDate(self):
+        return self.originalEndDate
+
+    def setOriginalEndDate(self, newOriginalEndDate):
+        self.originalEndDate = newOriginalEndDate
+
+    def getPaddingBeforeProgramStarts(self):
+        return self.paddingBeforeProgramStarts
+
+    def setPaddingBeforeProgramStarts(self, newPaddingBeforeProgramStarts):
+        self.paddingBeforeProgramStarts = newPaddingBeforeProgramStarts
+
+    def getPaddingAfterProgramEnds(self):
+        return self.paddingAfterProgramEnds
+
+    def setPaddingAfterProgramEnds(self, newPaddingAfterProgramEnds):
+        self.paddingAfterProgramEnds = newPaddingAfterProgramEnds
+
+
+# @package Kaltura
+# @subpackage Client
 class KalturaMediaAsset(KalturaAsset):
     """Media-asset info"""
 
@@ -35331,7 +35528,8 @@ class KalturaMediaAsset(KalturaAsset):
             deviceRuleId=NotImplemented,
             geoBlockRuleId=NotImplemented,
             status=NotImplemented,
-            inheritancePolicy=NotImplemented):
+            inheritancePolicy=NotImplemented,
+            liveToVod=NotImplemented):
         KalturaAsset.__init__(self,
             id,
             type,
@@ -35375,6 +35573,10 @@ class KalturaMediaAsset(KalturaAsset):
         # @var KalturaAssetInheritancePolicy
         self.inheritancePolicy = inheritancePolicy
 
+        # Live to VOD (if present)
+        # @var KalturaLiveToVodInfoAsset
+        self.liveToVod = liveToVod
+
 
     PROPERTY_LOADERS = {
         'externalIds': getXmlNodeText, 
@@ -35383,6 +35585,7 @@ class KalturaMediaAsset(KalturaAsset):
         'geoBlockRuleId': getXmlNodeInt, 
         'status': getXmlNodeBool, 
         'inheritancePolicy': (KalturaEnumsFactory.createString, "KalturaAssetInheritancePolicy"), 
+        'liveToVod': (KalturaObjectFactory.create, 'KalturaLiveToVodInfoAsset'), 
     }
 
     def fromXml(self, node):
@@ -35398,6 +35601,7 @@ class KalturaMediaAsset(KalturaAsset):
         kparams.addIntIfDefined("geoBlockRuleId", self.geoBlockRuleId)
         kparams.addBoolIfDefined("status", self.status)
         kparams.addStringEnumIfDefined("inheritancePolicy", self.inheritancePolicy)
+        kparams.addObjectIfDefined("liveToVod", self.liveToVod)
         return kparams
 
     def getExternalIds(self):
@@ -35436,6 +35640,12 @@ class KalturaMediaAsset(KalturaAsset):
     def setInheritancePolicy(self, newInheritancePolicy):
         self.inheritancePolicy = newInheritancePolicy
 
+    def getLiveToVod(self):
+        return self.liveToVod
+
+    def setLiveToVod(self, newLiveToVod):
+        self.liveToVod = newLiveToVod
+
 
 # @package Kaltura
 # @subpackage Client
@@ -35466,6 +35676,7 @@ class KalturaLiveAsset(KalturaMediaAsset):
             geoBlockRuleId=NotImplemented,
             status=NotImplemented,
             inheritancePolicy=NotImplemented,
+            liveToVod=NotImplemented,
             enableCdvrState=NotImplemented,
             enableCatchUpState=NotImplemented,
             enableStartOverState=NotImplemented,
@@ -35508,7 +35719,8 @@ class KalturaLiveAsset(KalturaMediaAsset):
             deviceRuleId,
             geoBlockRuleId,
             status,
-            inheritancePolicy)
+            inheritancePolicy,
+            liveToVod)
 
         # Enable CDVR, configuration only
         # @var KalturaTimeShiftedTvState
@@ -35770,6 +35982,7 @@ class KalturaLineupChannelAsset(KalturaLiveAsset):
             geoBlockRuleId=NotImplemented,
             status=NotImplemented,
             inheritancePolicy=NotImplemented,
+            liveToVod=NotImplemented,
             enableCdvrState=NotImplemented,
             enableCatchUpState=NotImplemented,
             enableStartOverState=NotImplemented,
@@ -35814,6 +36027,7 @@ class KalturaLineupChannelAsset(KalturaLiveAsset):
             geoBlockRuleId,
             status,
             inheritancePolicy,
+            liveToVod,
             enableCdvrState,
             enableCatchUpState,
             enableStartOverState,
@@ -57691,6 +57905,7 @@ class KalturaCoreClient(KalturaClientPlugin):
             'KalturaRelatedEntityArray': KalturaRelatedEntityArray,
             'KalturaAsset': KalturaAsset,
             'KalturaAssetListResponse': KalturaAssetListResponse,
+            'KalturaLiveToVodInfoAsset': KalturaLiveToVodInfoAsset,
             'KalturaMediaAsset': KalturaMediaAsset,
             'KalturaLiveAsset': KalturaLiveAsset,
             'KalturaLineupChannelAsset': KalturaLineupChannelAsset,
