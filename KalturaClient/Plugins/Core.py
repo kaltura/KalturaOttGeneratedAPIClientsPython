@@ -42,7 +42,7 @@ from ..Base import (
     KalturaServiceBase,
 )
 
-API_VERSION = '7.7.0.29917'
+API_VERSION = '7.8.0.29957'
 
 ########## enums ##########
 # @package Kaltura
@@ -13559,18 +13559,22 @@ class KalturaUsageModule(KalturaObjectBase):
 
         # Usage module name
         # @var string
+        # @insertonly
         self.name = name
 
         # The maximum number of times an item in this usage module can be viewed
         # @var int
+        # @insertonly
         self.maxViewsNumber = maxViewsNumber
 
         # The amount time an item is available for viewing since a user started watching the item
         # @var int
+        # @insertonly
         self.viewLifeCycle = viewLifeCycle
 
         # The amount time an item is available for viewing
         # @var int
+        # @insertonly
         self.fullLifeCycle = fullLifeCycle
 
         # Identifies a specific coupon linked to this object
@@ -27487,7 +27491,8 @@ class KalturaConcurrencyPartnerConfig(KalturaPartnerConfiguration):
             deviceFamilyIds=NotImplemented,
             evictionPolicy=NotImplemented,
             concurrencyThresholdInSeconds=NotImplemented,
-            revokeOnDeviceDelete=NotImplemented):
+            revokeOnDeviceDelete=NotImplemented,
+            excludeFreeContentFromConcurrency=NotImplemented):
         KalturaPartnerConfiguration.__init__(self)
 
         # Comma separated list of device Family Ids order by their priority.
@@ -27506,12 +27511,17 @@ class KalturaConcurrencyPartnerConfig(KalturaPartnerConfiguration):
         # @var bool
         self.revokeOnDeviceDelete = revokeOnDeviceDelete
 
+        # If set to true then for all concurrency checks in all APIs, system shall exclude free content from counting towards the use of a concurrency slot
+        # @var bool
+        self.excludeFreeContentFromConcurrency = excludeFreeContentFromConcurrency
+
 
     PROPERTY_LOADERS = {
         'deviceFamilyIds': getXmlNodeText, 
         'evictionPolicy': (KalturaEnumsFactory.createString, "KalturaEvictionPolicyType"), 
         'concurrencyThresholdInSeconds': getXmlNodeInt, 
         'revokeOnDeviceDelete': getXmlNodeBool, 
+        'excludeFreeContentFromConcurrency': getXmlNodeBool, 
     }
 
     def fromXml(self, node):
@@ -27525,6 +27535,7 @@ class KalturaConcurrencyPartnerConfig(KalturaPartnerConfiguration):
         kparams.addStringEnumIfDefined("evictionPolicy", self.evictionPolicy)
         kparams.addIntIfDefined("concurrencyThresholdInSeconds", self.concurrencyThresholdInSeconds)
         kparams.addBoolIfDefined("revokeOnDeviceDelete", self.revokeOnDeviceDelete)
+        kparams.addBoolIfDefined("excludeFreeContentFromConcurrency", self.excludeFreeContentFromConcurrency)
         return kparams
 
     def getDeviceFamilyIds(self):
@@ -27550,6 +27561,12 @@ class KalturaConcurrencyPartnerConfig(KalturaPartnerConfiguration):
 
     def setRevokeOnDeviceDelete(self, newRevokeOnDeviceDelete):
         self.revokeOnDeviceDelete = newRevokeOnDeviceDelete
+
+    def getExcludeFreeContentFromConcurrency(self):
+        return self.excludeFreeContentFromConcurrency
+
+    def setExcludeFreeContentFromConcurrency(self, newExcludeFreeContentFromConcurrency):
+        self.excludeFreeContentFromConcurrency = newExcludeFreeContentFromConcurrency
 
 
 # @package Kaltura
@@ -48505,57 +48522,6 @@ class KalturaPurchase(KalturaPurchaseBase):
 
 # @package Kaltura
 # @subpackage Client
-class KalturaPurchaseSession(KalturaPurchase):
-    def __init__(self,
-            productId=NotImplemented,
-            contentId=NotImplemented,
-            productType=NotImplemented,
-            adapterData=NotImplemented,
-            currency=NotImplemented,
-            price=NotImplemented,
-            paymentMethodId=NotImplemented,
-            paymentGatewayId=NotImplemented,
-            coupon=NotImplemented,
-            previewModuleId=NotImplemented):
-        KalturaPurchase.__init__(self,
-            productId,
-            contentId,
-            productType,
-            adapterData,
-            currency,
-            price,
-            paymentMethodId,
-            paymentGatewayId,
-            coupon)
-
-        # Preview module identifier (relevant only for subscription)
-        # @var int
-        self.previewModuleId = previewModuleId
-
-
-    PROPERTY_LOADERS = {
-        'previewModuleId': getXmlNodeInt, 
-    }
-
-    def fromXml(self, node):
-        KalturaPurchase.fromXml(self, node)
-        self.fromXmlImpl(node, KalturaPurchaseSession.PROPERTY_LOADERS)
-
-    def toParams(self):
-        kparams = KalturaPurchase.toParams(self)
-        kparams.put("objectType", "KalturaPurchaseSession")
-        kparams.addIntIfDefined("previewModuleId", self.previewModuleId)
-        return kparams
-
-    def getPreviewModuleId(self):
-        return self.previewModuleId
-
-    def setPreviewModuleId(self, newPreviewModuleId):
-        self.previewModuleId = newPreviewModuleId
-
-
-# @package Kaltura
-# @subpackage Client
 class KalturaExternalReceipt(KalturaPurchaseBase):
     def __init__(self,
             productId=NotImplemented,
@@ -48606,6 +48572,57 @@ class KalturaExternalReceipt(KalturaPurchaseBase):
 
     def setPaymentGatewayName(self, newPaymentGatewayName):
         self.paymentGatewayName = newPaymentGatewayName
+
+
+# @package Kaltura
+# @subpackage Client
+class KalturaPurchaseSession(KalturaPurchase):
+    def __init__(self,
+            productId=NotImplemented,
+            contentId=NotImplemented,
+            productType=NotImplemented,
+            adapterData=NotImplemented,
+            currency=NotImplemented,
+            price=NotImplemented,
+            paymentMethodId=NotImplemented,
+            paymentGatewayId=NotImplemented,
+            coupon=NotImplemented,
+            previewModuleId=NotImplemented):
+        KalturaPurchase.__init__(self,
+            productId,
+            contentId,
+            productType,
+            adapterData,
+            currency,
+            price,
+            paymentMethodId,
+            paymentGatewayId,
+            coupon)
+
+        # Preview module identifier (relevant only for subscription)
+        # @var int
+        self.previewModuleId = previewModuleId
+
+
+    PROPERTY_LOADERS = {
+        'previewModuleId': getXmlNodeInt, 
+    }
+
+    def fromXml(self, node):
+        KalturaPurchase.fromXml(self, node)
+        self.fromXmlImpl(node, KalturaPurchaseSession.PROPERTY_LOADERS)
+
+    def toParams(self):
+        kparams = KalturaPurchase.toParams(self)
+        kparams.put("objectType", "KalturaPurchaseSession")
+        kparams.addIntIfDefined("previewModuleId", self.previewModuleId)
+        return kparams
+
+    def getPreviewModuleId(self):
+        return self.previewModuleId
+
+    def setPreviewModuleId(self, newPreviewModuleId):
+        self.previewModuleId = newPreviewModuleId
 
 
 # @package Kaltura
@@ -55691,6 +55708,19 @@ class KalturaStreamingDeviceService(KalturaServiceBase):
     def __init__(self, client = None):
         KalturaServiceBase.__init__(self, client)
 
+    def bookPlaybackSession(self, mediaFileId, assetId, assetType):
+        """Reserves a concurrency slot for the given asset-device combination"""
+
+        kparams = KalturaParams()
+        kparams.addStringIfDefined("mediaFileId", mediaFileId)
+        kparams.addStringIfDefined("assetId", assetId)
+        kparams.addStringIfDefined("assetType", assetType)
+        self.client.queueServiceActionCall("streamingdevice", "bookPlaybackSession", "None", kparams)
+        if self.client.isMultiRequest():
+            return self.client.getMultiRequestResult()
+        resultNode = self.client.doQueue()
+        return getXmlNodeBool(resultNode)
+
     def list(self, filter = NotImplemented):
         """Lists of devices that are streaming at that moment"""
 
@@ -57897,8 +57927,8 @@ class KalturaCoreClient(KalturaClientPlugin):
             'KalturaTimeShiftedTvPartnerSettings': KalturaTimeShiftedTvPartnerSettings,
             'KalturaPurchaseBase': KalturaPurchaseBase,
             'KalturaPurchase': KalturaPurchase,
-            'KalturaPurchaseSession': KalturaPurchaseSession,
             'KalturaExternalReceipt': KalturaExternalReceipt,
+            'KalturaPurchaseSession': KalturaPurchaseSession,
             'KalturaTransaction': KalturaTransaction,
             'KalturaTransactionStatus': KalturaTransactionStatus,
             'KalturaEntitlementRenewalBase': KalturaEntitlementRenewalBase,
