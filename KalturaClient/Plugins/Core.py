@@ -42,7 +42,7 @@ from ..Base import (
     KalturaServiceBase,
 )
 
-API_VERSION = '7.7.0.29917'
+API_VERSION = '7.8.1.29970'
 
 ########## enums ##########
 # @package Kaltura
@@ -9752,7 +9752,8 @@ class KalturaBookmark(KalturaSlimAsset):
             finishedWatching=NotImplemented,
             playerData=NotImplemented,
             programId=NotImplemented,
-            isReportingMode=NotImplemented):
+            isReportingMode=NotImplemented,
+            context=NotImplemented):
         KalturaSlimAsset.__init__(self,
             id,
             type)
@@ -9789,6 +9790,10 @@ class KalturaBookmark(KalturaSlimAsset):
         # @var bool
         self.isReportingMode = isReportingMode
 
+        # Playback context type
+        # @var KalturaPlaybackContextType
+        self.context = context
+
 
     PROPERTY_LOADERS = {
         'userId': getXmlNodeText, 
@@ -9798,6 +9803,7 @@ class KalturaBookmark(KalturaSlimAsset):
         'playerData': (KalturaObjectFactory.create, 'KalturaBookmarkPlayerData'), 
         'programId': getXmlNodeInt, 
         'isReportingMode': getXmlNodeBool, 
+        'context': (KalturaEnumsFactory.createString, "KalturaPlaybackContextType"), 
     }
 
     def fromXml(self, node):
@@ -9811,6 +9817,7 @@ class KalturaBookmark(KalturaSlimAsset):
         kparams.addObjectIfDefined("playerData", self.playerData)
         kparams.addIntIfDefined("programId", self.programId)
         kparams.addBoolIfDefined("isReportingMode", self.isReportingMode)
+        kparams.addStringEnumIfDefined("context", self.context)
         return kparams
 
     def getUserId(self):
@@ -9845,6 +9852,12 @@ class KalturaBookmark(KalturaSlimAsset):
 
     def setIsReportingMode(self, newIsReportingMode):
         self.isReportingMode = newIsReportingMode
+
+    def getContext(self):
+        return self.context
+
+    def setContext(self, newContext):
+        self.context = newContext
 
 
 # @package Kaltura
@@ -13559,18 +13572,22 @@ class KalturaUsageModule(KalturaObjectBase):
 
         # Usage module name
         # @var string
+        # @insertonly
         self.name = name
 
         # The maximum number of times an item in this usage module can be viewed
         # @var int
+        # @insertonly
         self.maxViewsNumber = maxViewsNumber
 
         # The amount time an item is available for viewing since a user started watching the item
         # @var int
+        # @insertonly
         self.viewLifeCycle = viewLifeCycle
 
         # The amount time an item is available for viewing
         # @var int
+        # @insertonly
         self.fullLifeCycle = fullLifeCycle
 
         # Identifies a specific coupon linked to this object
@@ -16183,12 +16200,12 @@ class KalturaDiscount(KalturaPrice):
             countryId)
 
         # The discount percentage
-        # @var int
+        # @var float
         self.percentage = percentage
 
 
     PROPERTY_LOADERS = {
-        'percentage': getXmlNodeInt, 
+        'percentage': getXmlNodeFloat, 
     }
 
     def fromXml(self, node):
@@ -16198,7 +16215,7 @@ class KalturaDiscount(KalturaPrice):
     def toParams(self):
         kparams = KalturaPrice.toParams(self)
         kparams.put("objectType", "KalturaDiscount")
-        kparams.addIntIfDefined("percentage", self.percentage)
+        kparams.addFloatIfDefined("percentage", self.percentage)
         return kparams
 
     def getPercentage(self):
@@ -48505,57 +48522,6 @@ class KalturaPurchase(KalturaPurchaseBase):
 
 # @package Kaltura
 # @subpackage Client
-class KalturaPurchaseSession(KalturaPurchase):
-    def __init__(self,
-            productId=NotImplemented,
-            contentId=NotImplemented,
-            productType=NotImplemented,
-            adapterData=NotImplemented,
-            currency=NotImplemented,
-            price=NotImplemented,
-            paymentMethodId=NotImplemented,
-            paymentGatewayId=NotImplemented,
-            coupon=NotImplemented,
-            previewModuleId=NotImplemented):
-        KalturaPurchase.__init__(self,
-            productId,
-            contentId,
-            productType,
-            adapterData,
-            currency,
-            price,
-            paymentMethodId,
-            paymentGatewayId,
-            coupon)
-
-        # Preview module identifier (relevant only for subscription)
-        # @var int
-        self.previewModuleId = previewModuleId
-
-
-    PROPERTY_LOADERS = {
-        'previewModuleId': getXmlNodeInt, 
-    }
-
-    def fromXml(self, node):
-        KalturaPurchase.fromXml(self, node)
-        self.fromXmlImpl(node, KalturaPurchaseSession.PROPERTY_LOADERS)
-
-    def toParams(self):
-        kparams = KalturaPurchase.toParams(self)
-        kparams.put("objectType", "KalturaPurchaseSession")
-        kparams.addIntIfDefined("previewModuleId", self.previewModuleId)
-        return kparams
-
-    def getPreviewModuleId(self):
-        return self.previewModuleId
-
-    def setPreviewModuleId(self, newPreviewModuleId):
-        self.previewModuleId = newPreviewModuleId
-
-
-# @package Kaltura
-# @subpackage Client
 class KalturaExternalReceipt(KalturaPurchaseBase):
     def __init__(self,
             productId=NotImplemented,
@@ -48606,6 +48572,57 @@ class KalturaExternalReceipt(KalturaPurchaseBase):
 
     def setPaymentGatewayName(self, newPaymentGatewayName):
         self.paymentGatewayName = newPaymentGatewayName
+
+
+# @package Kaltura
+# @subpackage Client
+class KalturaPurchaseSession(KalturaPurchase):
+    def __init__(self,
+            productId=NotImplemented,
+            contentId=NotImplemented,
+            productType=NotImplemented,
+            adapterData=NotImplemented,
+            currency=NotImplemented,
+            price=NotImplemented,
+            paymentMethodId=NotImplemented,
+            paymentGatewayId=NotImplemented,
+            coupon=NotImplemented,
+            previewModuleId=NotImplemented):
+        KalturaPurchase.__init__(self,
+            productId,
+            contentId,
+            productType,
+            adapterData,
+            currency,
+            price,
+            paymentMethodId,
+            paymentGatewayId,
+            coupon)
+
+        # Preview module identifier (relevant only for subscription)
+        # @var int
+        self.previewModuleId = previewModuleId
+
+
+    PROPERTY_LOADERS = {
+        'previewModuleId': getXmlNodeInt, 
+    }
+
+    def fromXml(self, node):
+        KalturaPurchase.fromXml(self, node)
+        self.fromXmlImpl(node, KalturaPurchaseSession.PROPERTY_LOADERS)
+
+    def toParams(self):
+        kparams = KalturaPurchase.toParams(self)
+        kparams.put("objectType", "KalturaPurchaseSession")
+        kparams.addIntIfDefined("previewModuleId", self.previewModuleId)
+        return kparams
+
+    def getPreviewModuleId(self):
+        return self.previewModuleId
+
+    def setPreviewModuleId(self, newPreviewModuleId):
+        self.previewModuleId = newPreviewModuleId
 
 
 # @package Kaltura
@@ -57897,8 +57914,8 @@ class KalturaCoreClient(KalturaClientPlugin):
             'KalturaTimeShiftedTvPartnerSettings': KalturaTimeShiftedTvPartnerSettings,
             'KalturaPurchaseBase': KalturaPurchaseBase,
             'KalturaPurchase': KalturaPurchase,
-            'KalturaPurchaseSession': KalturaPurchaseSession,
             'KalturaExternalReceipt': KalturaExternalReceipt,
+            'KalturaPurchaseSession': KalturaPurchaseSession,
             'KalturaTransaction': KalturaTransaction,
             'KalturaTransactionStatus': KalturaTransactionStatus,
             'KalturaEntitlementRenewalBase': KalturaEntitlementRenewalBase,
