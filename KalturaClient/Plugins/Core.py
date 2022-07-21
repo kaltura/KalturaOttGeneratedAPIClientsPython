@@ -42,7 +42,7 @@ from ..Base import (
     KalturaServiceBase,
 )
 
-API_VERSION = '7.8.0.29957'
+API_VERSION = '7.8.1.29972'
 
 ########## enums ##########
 # @package Kaltura
@@ -9752,7 +9752,8 @@ class KalturaBookmark(KalturaSlimAsset):
             finishedWatching=NotImplemented,
             playerData=NotImplemented,
             programId=NotImplemented,
-            isReportingMode=NotImplemented):
+            isReportingMode=NotImplemented,
+            context=NotImplemented):
         KalturaSlimAsset.__init__(self,
             id,
             type)
@@ -9789,6 +9790,10 @@ class KalturaBookmark(KalturaSlimAsset):
         # @var bool
         self.isReportingMode = isReportingMode
 
+        # Playback context type
+        # @var KalturaPlaybackContextType
+        self.context = context
+
 
     PROPERTY_LOADERS = {
         'userId': getXmlNodeText, 
@@ -9798,6 +9803,7 @@ class KalturaBookmark(KalturaSlimAsset):
         'playerData': (KalturaObjectFactory.create, 'KalturaBookmarkPlayerData'), 
         'programId': getXmlNodeInt, 
         'isReportingMode': getXmlNodeBool, 
+        'context': (KalturaEnumsFactory.createString, "KalturaPlaybackContextType"), 
     }
 
     def fromXml(self, node):
@@ -9811,6 +9817,7 @@ class KalturaBookmark(KalturaSlimAsset):
         kparams.addObjectIfDefined("playerData", self.playerData)
         kparams.addIntIfDefined("programId", self.programId)
         kparams.addBoolIfDefined("isReportingMode", self.isReportingMode)
+        kparams.addStringEnumIfDefined("context", self.context)
         return kparams
 
     def getUserId(self):
@@ -9845,6 +9852,12 @@ class KalturaBookmark(KalturaSlimAsset):
 
     def setIsReportingMode(self, newIsReportingMode):
         self.isReportingMode = newIsReportingMode
+
+    def getContext(self):
+        return self.context
+
+    def setContext(self, newContext):
+        self.context = newContext
 
 
 # @package Kaltura
@@ -16187,12 +16200,12 @@ class KalturaDiscount(KalturaPrice):
             countryId)
 
         # The discount percentage
-        # @var int
+        # @var float
         self.percentage = percentage
 
 
     PROPERTY_LOADERS = {
-        'percentage': getXmlNodeInt, 
+        'percentage': getXmlNodeFloat, 
     }
 
     def fromXml(self, node):
@@ -16202,7 +16215,7 @@ class KalturaDiscount(KalturaPrice):
     def toParams(self):
         kparams = KalturaPrice.toParams(self)
         kparams.put("objectType", "KalturaDiscount")
-        kparams.addIntIfDefined("percentage", self.percentage)
+        kparams.addFloatIfDefined("percentage", self.percentage)
         return kparams
 
     def getPercentage(self):
@@ -27491,8 +27504,7 @@ class KalturaConcurrencyPartnerConfig(KalturaPartnerConfiguration):
             deviceFamilyIds=NotImplemented,
             evictionPolicy=NotImplemented,
             concurrencyThresholdInSeconds=NotImplemented,
-            revokeOnDeviceDelete=NotImplemented,
-            excludeFreeContentFromConcurrency=NotImplemented):
+            revokeOnDeviceDelete=NotImplemented):
         KalturaPartnerConfiguration.__init__(self)
 
         # Comma separated list of device Family Ids order by their priority.
@@ -27511,17 +27523,12 @@ class KalturaConcurrencyPartnerConfig(KalturaPartnerConfiguration):
         # @var bool
         self.revokeOnDeviceDelete = revokeOnDeviceDelete
 
-        # If set to true then for all concurrency checks in all APIs, system shall exclude free content from counting towards the use of a concurrency slot
-        # @var bool
-        self.excludeFreeContentFromConcurrency = excludeFreeContentFromConcurrency
-
 
     PROPERTY_LOADERS = {
         'deviceFamilyIds': getXmlNodeText, 
         'evictionPolicy': (KalturaEnumsFactory.createString, "KalturaEvictionPolicyType"), 
         'concurrencyThresholdInSeconds': getXmlNodeInt, 
         'revokeOnDeviceDelete': getXmlNodeBool, 
-        'excludeFreeContentFromConcurrency': getXmlNodeBool, 
     }
 
     def fromXml(self, node):
@@ -27535,7 +27542,6 @@ class KalturaConcurrencyPartnerConfig(KalturaPartnerConfiguration):
         kparams.addStringEnumIfDefined("evictionPolicy", self.evictionPolicy)
         kparams.addIntIfDefined("concurrencyThresholdInSeconds", self.concurrencyThresholdInSeconds)
         kparams.addBoolIfDefined("revokeOnDeviceDelete", self.revokeOnDeviceDelete)
-        kparams.addBoolIfDefined("excludeFreeContentFromConcurrency", self.excludeFreeContentFromConcurrency)
         return kparams
 
     def getDeviceFamilyIds(self):
@@ -27561,12 +27567,6 @@ class KalturaConcurrencyPartnerConfig(KalturaPartnerConfiguration):
 
     def setRevokeOnDeviceDelete(self, newRevokeOnDeviceDelete):
         self.revokeOnDeviceDelete = newRevokeOnDeviceDelete
-
-    def getExcludeFreeContentFromConcurrency(self):
-        return self.excludeFreeContentFromConcurrency
-
-    def setExcludeFreeContentFromConcurrency(self, newExcludeFreeContentFromConcurrency):
-        self.excludeFreeContentFromConcurrency = newExcludeFreeContentFromConcurrency
 
 
 # @package Kaltura
@@ -55707,19 +55707,6 @@ class KalturaSsoAdapterProfileService(KalturaServiceBase):
 class KalturaStreamingDeviceService(KalturaServiceBase):
     def __init__(self, client = None):
         KalturaServiceBase.__init__(self, client)
-
-    def bookPlaybackSession(self, mediaFileId, assetId, assetType):
-        """Reserves a concurrency slot for the given asset-device combination"""
-
-        kparams = KalturaParams()
-        kparams.addStringIfDefined("mediaFileId", mediaFileId)
-        kparams.addStringIfDefined("assetId", assetId)
-        kparams.addStringIfDefined("assetType", assetType)
-        self.client.queueServiceActionCall("streamingdevice", "bookPlaybackSession", "None", kparams)
-        if self.client.isMultiRequest():
-            return self.client.getMultiRequestResult()
-        resultNode = self.client.doQueue()
-        return getXmlNodeBool(resultNode)
 
     def list(self, filter = NotImplemented):
         """Lists of devices that are streaming at that moment"""
