@@ -42,7 +42,7 @@ from ..Base import (
     KalturaServiceBase,
 )
 
-API_VERSION = '7.8.1.29972'
+API_VERSION = '7.8.0.29941'
 
 ########## enums ##########
 # @package Kaltura
@@ -9752,8 +9752,7 @@ class KalturaBookmark(KalturaSlimAsset):
             finishedWatching=NotImplemented,
             playerData=NotImplemented,
             programId=NotImplemented,
-            isReportingMode=NotImplemented,
-            context=NotImplemented):
+            isReportingMode=NotImplemented):
         KalturaSlimAsset.__init__(self,
             id,
             type)
@@ -9790,10 +9789,6 @@ class KalturaBookmark(KalturaSlimAsset):
         # @var bool
         self.isReportingMode = isReportingMode
 
-        # Playback context type
-        # @var KalturaPlaybackContextType
-        self.context = context
-
 
     PROPERTY_LOADERS = {
         'userId': getXmlNodeText, 
@@ -9803,7 +9798,6 @@ class KalturaBookmark(KalturaSlimAsset):
         'playerData': (KalturaObjectFactory.create, 'KalturaBookmarkPlayerData'), 
         'programId': getXmlNodeInt, 
         'isReportingMode': getXmlNodeBool, 
-        'context': (KalturaEnumsFactory.createString, "KalturaPlaybackContextType"), 
     }
 
     def fromXml(self, node):
@@ -9817,7 +9811,6 @@ class KalturaBookmark(KalturaSlimAsset):
         kparams.addObjectIfDefined("playerData", self.playerData)
         kparams.addIntIfDefined("programId", self.programId)
         kparams.addBoolIfDefined("isReportingMode", self.isReportingMode)
-        kparams.addStringEnumIfDefined("context", self.context)
         return kparams
 
     def getUserId(self):
@@ -9852,12 +9845,6 @@ class KalturaBookmark(KalturaSlimAsset):
 
     def setIsReportingMode(self, newIsReportingMode):
         self.isReportingMode = newIsReportingMode
-
-    def getContext(self):
-        return self.context
-
-    def setContext(self, newContext):
-        self.context = newContext
 
 
 # @package Kaltura
@@ -13964,7 +13951,9 @@ class KalturaCollection(KalturaOTTObjectSupportNullable):
             isActive=NotImplemented,
             createDate=NotImplemented,
             updateDate=NotImplemented,
-            virtualAssetId=NotImplemented):
+            virtualAssetId=NotImplemented,
+            fileTypes=NotImplemented,
+            fileTypesIds=NotImplemented):
         KalturaOTTObjectSupportNullable.__init__(self)
 
         # Collection identifier
@@ -14068,6 +14057,15 @@ class KalturaCollection(KalturaOTTObjectSupportNullable):
         # @readonly
         self.virtualAssetId = virtualAssetId
 
+        # A list of file types identifiers that are supported in this collection
+        # @var array of KalturaIntegerValue
+        # @readonly
+        self.fileTypes = fileTypes
+
+        # Comma separated file types identifiers that are supported in this collection
+        # @var string
+        self.fileTypesIds = fileTypesIds
+
 
     PROPERTY_LOADERS = {
         'id': getXmlNodeText, 
@@ -14092,6 +14090,8 @@ class KalturaCollection(KalturaOTTObjectSupportNullable):
         'createDate': getXmlNodeInt, 
         'updateDate': getXmlNodeInt, 
         'virtualAssetId': getXmlNodeInt, 
+        'fileTypes': (KalturaObjectFactory.createArray, 'KalturaIntegerValue'), 
+        'fileTypesIds': getXmlNodeText, 
     }
 
     def fromXml(self, node):
@@ -14114,6 +14114,7 @@ class KalturaCollection(KalturaOTTObjectSupportNullable):
         kparams.addArrayIfDefined("productCodes", self.productCodes)
         kparams.addIntIfDefined("priceDetailsId", self.priceDetailsId)
         kparams.addBoolIfDefined("isActive", self.isActive)
+        kparams.addStringIfDefined("fileTypesIds", self.fileTypesIds)
         return kparams
 
     def getId(self):
@@ -14220,6 +14221,15 @@ class KalturaCollection(KalturaOTTObjectSupportNullable):
 
     def getVirtualAssetId(self):
         return self.virtualAssetId
+
+    def getFileTypes(self):
+        return self.fileTypes
+
+    def getFileTypesIds(self):
+        return self.fileTypesIds
+
+    def setFileTypesIds(self, newFileTypesIds):
+        self.fileTypesIds = newFileTypesIds
 
 
 # @package Kaltura
@@ -16200,12 +16210,12 @@ class KalturaDiscount(KalturaPrice):
             countryId)
 
         # The discount percentage
-        # @var float
+        # @var int
         self.percentage = percentage
 
 
     PROPERTY_LOADERS = {
-        'percentage': getXmlNodeFloat, 
+        'percentage': getXmlNodeInt, 
     }
 
     def fromXml(self, node):
@@ -16215,7 +16225,7 @@ class KalturaDiscount(KalturaPrice):
     def toParams(self):
         kparams = KalturaPrice.toParams(self)
         kparams.put("objectType", "KalturaDiscount")
-        kparams.addFloatIfDefined("percentage", self.percentage)
+        kparams.addIntIfDefined("percentage", self.percentage)
         return kparams
 
     def getPercentage(self):
