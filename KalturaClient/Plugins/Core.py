@@ -42,7 +42,7 @@ from ..Base import (
     KalturaServiceBase,
 )
 
-API_VERSION = '7.8.0.29957'
+API_VERSION = '7.8.1.29994'
 
 ########## enums ##########
 # @package Kaltura
@@ -9752,7 +9752,8 @@ class KalturaBookmark(KalturaSlimAsset):
             finishedWatching=NotImplemented,
             playerData=NotImplemented,
             programId=NotImplemented,
-            isReportingMode=NotImplemented):
+            isReportingMode=NotImplemented,
+            context=NotImplemented):
         KalturaSlimAsset.__init__(self,
             id,
             type)
@@ -9789,6 +9790,10 @@ class KalturaBookmark(KalturaSlimAsset):
         # @var bool
         self.isReportingMode = isReportingMode
 
+        # Playback context type
+        # @var KalturaPlaybackContextType
+        self.context = context
+
 
     PROPERTY_LOADERS = {
         'userId': getXmlNodeText, 
@@ -9798,6 +9803,7 @@ class KalturaBookmark(KalturaSlimAsset):
         'playerData': (KalturaObjectFactory.create, 'KalturaBookmarkPlayerData'), 
         'programId': getXmlNodeInt, 
         'isReportingMode': getXmlNodeBool, 
+        'context': (KalturaEnumsFactory.createString, "KalturaPlaybackContextType"), 
     }
 
     def fromXml(self, node):
@@ -9811,6 +9817,7 @@ class KalturaBookmark(KalturaSlimAsset):
         kparams.addObjectIfDefined("playerData", self.playerData)
         kparams.addIntIfDefined("programId", self.programId)
         kparams.addBoolIfDefined("isReportingMode", self.isReportingMode)
+        kparams.addStringEnumIfDefined("context", self.context)
         return kparams
 
     def getUserId(self):
@@ -9845,6 +9852,12 @@ class KalturaBookmark(KalturaSlimAsset):
 
     def setIsReportingMode(self, newIsReportingMode):
         self.isReportingMode = newIsReportingMode
+
+    def getContext(self):
+        return self.context
+
+    def setContext(self, newContext):
+        self.context = newContext
 
 
 # @package Kaltura
@@ -16187,12 +16200,12 @@ class KalturaDiscount(KalturaPrice):
             countryId)
 
         # The discount percentage
-        # @var int
+        # @var float
         self.percentage = percentage
 
 
     PROPERTY_LOADERS = {
-        'percentage': getXmlNodeInt, 
+        'percentage': getXmlNodeFloat, 
     }
 
     def fromXml(self, node):
@@ -16202,7 +16215,7 @@ class KalturaDiscount(KalturaPrice):
     def toParams(self):
         kparams = KalturaPrice.toParams(self)
         kparams.put("objectType", "KalturaDiscount")
-        kparams.addIntIfDefined("percentage", self.percentage)
+        kparams.addFloatIfDefined("percentage", self.percentage)
         return kparams
 
     def getPercentage(self):
