@@ -42,7 +42,7 @@ from ..Base import (
     KalturaServiceBase,
 )
 
-API_VERSION = '7.8.1.29994'
+API_VERSION = '7.8.1.29998'
 
 ########## enums ##########
 # @package Kaltura
@@ -55721,11 +55721,11 @@ class KalturaStreamingDeviceService(KalturaServiceBase):
     def __init__(self, client = None):
         KalturaServiceBase.__init__(self, client)
 
-    def bookPlaybackSession(self, mediaFileId, assetId, assetType):
+    def bookPlaybackSession(self, fileId, assetId, assetType):
         """Reserves a concurrency slot for the given asset-device combination"""
 
         kparams = KalturaParams()
-        kparams.addStringIfDefined("mediaFileId", mediaFileId)
+        kparams.addStringIfDefined("fileId", fileId)
         kparams.addStringIfDefined("assetId", assetId)
         kparams.addStringIfDefined("assetType", assetType)
         self.client.queueServiceActionCall("streamingdevice", "bookPlaybackSession", "None", kparams)
