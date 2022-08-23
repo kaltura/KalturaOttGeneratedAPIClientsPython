@@ -42,7 +42,7 @@ from ..Base import (
     KalturaServiceBase,
 )
 
-API_VERSION = '7.9.0.29981'
+API_VERSION = '7.9.0.30000'
 
 ########## enums ##########
 # @package Kaltura
@@ -512,18 +512,6 @@ class KalturaBookmarkActionType(object):
 class KalturaBookmarkOrderBy(object):
     POSITION_ASC = "POSITION_ASC"
     POSITION_DESC = "POSITION_DESC"
-
-    def __init__(self, value):
-        self.value = value
-
-    def getValue(self):
-        return self.value
-
-# @package Kaltura
-# @subpackage Client
-class KalturaBooleanOperator(object):
-    AND = "And"
-    OR = "Or"
 
     def __init__(self, value):
         self.value = value
@@ -4495,8 +4483,7 @@ class KalturaSegmentationTypeFilter(KalturaBaseSegmentationTypeFilter):
     def __init__(self,
             orderBy=NotImplemented,
             idIn=NotImplemented,
-            kSql=NotImplemented,
-            nameContain=NotImplemented):
+            kSql=NotImplemented):
         KalturaBaseSegmentationTypeFilter.__init__(self,
             orderBy)
 
@@ -4508,15 +4495,10 @@ class KalturaSegmentationTypeFilter(KalturaBaseSegmentationTypeFilter):
         # @var string
         self.kSql = kSql
 
-        # Name of segment contains specific string value
-        # @var string
-        self.nameContain = nameContain
-
 
     PROPERTY_LOADERS = {
         'idIn': getXmlNodeText, 
         'kSql': getXmlNodeText, 
-        'nameContain': getXmlNodeText, 
     }
 
     def fromXml(self, node):
@@ -4528,7 +4510,6 @@ class KalturaSegmentationTypeFilter(KalturaBaseSegmentationTypeFilter):
         kparams.put("objectType", "KalturaSegmentationTypeFilter")
         kparams.addStringIfDefined("idIn", self.idIn)
         kparams.addStringIfDefined("kSql", self.kSql)
-        kparams.addStringIfDefined("nameContain", self.nameContain)
         return kparams
 
     def getIdIn(self):
@@ -4543,20 +4524,13 @@ class KalturaSegmentationTypeFilter(KalturaBaseSegmentationTypeFilter):
     def setKSql(self, newKSql):
         self.kSql = newKSql
 
-    def getNameContain(self):
-        return self.nameContain
-
-    def setNameContain(self, newNameContain):
-        self.nameContain = newNameContain
-
 
 # @package Kaltura
 # @subpackage Client
 class KalturaSegmentValueFilter(KalturaBaseSegmentationTypeFilter):
     def __init__(self,
             orderBy=NotImplemented,
-            idIn=NotImplemented,
-            nameContain=NotImplemented):
+            idIn=NotImplemented):
         KalturaBaseSegmentationTypeFilter.__init__(self,
             orderBy)
 
@@ -4564,14 +4538,9 @@ class KalturaSegmentValueFilter(KalturaBaseSegmentationTypeFilter):
         # @var string
         self.idIn = idIn
 
-        # Name of segment contains specific string value
-        # @var string
-        self.nameContain = nameContain
-
 
     PROPERTY_LOADERS = {
         'idIn': getXmlNodeText, 
-        'nameContain': getXmlNodeText, 
     }
 
     def fromXml(self, node):
@@ -4582,7 +4551,6 @@ class KalturaSegmentValueFilter(KalturaBaseSegmentationTypeFilter):
         kparams = KalturaBaseSegmentationTypeFilter.toParams(self)
         kparams.put("objectType", "KalturaSegmentValueFilter")
         kparams.addStringIfDefined("idIn", self.idIn)
-        kparams.addStringIfDefined("nameContain", self.nameContain)
         return kparams
 
     def getIdIn(self):
@@ -4590,12 +4558,6 @@ class KalturaSegmentValueFilter(KalturaBaseSegmentationTypeFilter):
 
     def setIdIn(self, newIdIn):
         self.idIn = newIdIn
-
-    def getNameContain(self):
-        return self.nameContain
-
-    def setNameContain(self, newNameContain):
-        self.nameContain = newNameContain
 
 
 # @package Kaltura
@@ -21290,54 +21252,6 @@ class KalturaIotProfileAws(KalturaOTTObjectSupportNullable):
 
 # @package Kaltura
 # @subpackage Client
-class KalturaIotProfile(KalturaOTTObjectSupportNullable):
-    """IOT PROFILE"""
-
-    def __init__(self,
-            adapterUrl=NotImplemented,
-            iotProfileAws=NotImplemented):
-        KalturaOTTObjectSupportNullable.__init__(self)
-
-        # adapterUrl
-        # @var string
-        self.adapterUrl = adapterUrl
-
-        # kalturaIotProfileAws
-        # @var KalturaIotProfileAws
-        self.iotProfileAws = iotProfileAws
-
-
-    PROPERTY_LOADERS = {
-        'adapterUrl': getXmlNodeText, 
-        'iotProfileAws': (KalturaObjectFactory.create, 'KalturaIotProfileAws'), 
-    }
-
-    def fromXml(self, node):
-        KalturaOTTObjectSupportNullable.fromXml(self, node)
-        self.fromXmlImpl(node, KalturaIotProfile.PROPERTY_LOADERS)
-
-    def toParams(self):
-        kparams = KalturaOTTObjectSupportNullable.toParams(self)
-        kparams.put("objectType", "KalturaIotProfile")
-        kparams.addStringIfDefined("adapterUrl", self.adapterUrl)
-        kparams.addObjectIfDefined("iotProfileAws", self.iotProfileAws)
-        return kparams
-
-    def getAdapterUrl(self):
-        return self.adapterUrl
-
-    def setAdapterUrl(self, newAdapterUrl):
-        self.adapterUrl = newAdapterUrl
-
-    def getIotProfileAws(self):
-        return self.iotProfileAws
-
-    def setIotProfileAws(self, newIotProfileAws):
-        self.iotProfileAws = newIotProfileAws
-
-
-# @package Kaltura
-# @subpackage Client
 class KalturaAssetFile(KalturaObjectBase):
     """Asset file details"""
 
@@ -24315,12 +24229,9 @@ class KalturaSegmentationType(KalturaObjectBase):
             name=NotImplemented,
             description=NotImplemented,
             conditions=NotImplemented,
-            conditionsOperator=NotImplemented,
             actions=NotImplemented,
             value=NotImplemented,
             createDate=NotImplemented,
-            updateDate=NotImplemented,
-            executeDate=NotImplemented,
             version=NotImplemented):
         KalturaObjectBase.__init__(self)
 
@@ -24341,10 +24252,6 @@ class KalturaSegmentationType(KalturaObjectBase):
         # @var array of KalturaBaseSegmentCondition
         self.conditions = conditions
 
-        # Boolean operator between segmentation type&#39;s conditions - defaults to &quot;And&quot;
-        # @var KalturaBooleanOperator
-        self.conditionsOperator = conditionsOperator
-
         # Segmentation conditions - can be empty
         # @var array of KalturaBaseSegmentAction
         self.actions = actions
@@ -24358,16 +24265,6 @@ class KalturaSegmentationType(KalturaObjectBase):
         # @readonly
         self.createDate = createDate
 
-        # Update date of segmentation type
-        # @var int
-        # @readonly
-        self.updateDate = updateDate
-
-        # Last date of execution of segmentation type
-        # @var int
-        # @readonly
-        self.executeDate = executeDate
-
         # Segmentation type version
         # @var int
         # @readonly
@@ -24379,12 +24276,9 @@ class KalturaSegmentationType(KalturaObjectBase):
         'name': getXmlNodeText, 
         'description': getXmlNodeText, 
         'conditions': (KalturaObjectFactory.createArray, 'KalturaBaseSegmentCondition'), 
-        'conditionsOperator': (KalturaEnumsFactory.createString, "KalturaBooleanOperator"), 
         'actions': (KalturaObjectFactory.createArray, 'KalturaBaseSegmentAction'), 
         'value': (KalturaObjectFactory.create, 'KalturaBaseSegmentValue'), 
         'createDate': getXmlNodeInt, 
-        'updateDate': getXmlNodeInt, 
-        'executeDate': getXmlNodeInt, 
         'version': getXmlNodeInt, 
     }
 
@@ -24398,7 +24292,6 @@ class KalturaSegmentationType(KalturaObjectBase):
         kparams.addStringIfDefined("name", self.name)
         kparams.addStringIfDefined("description", self.description)
         kparams.addArrayIfDefined("conditions", self.conditions)
-        kparams.addStringEnumIfDefined("conditionsOperator", self.conditionsOperator)
         kparams.addArrayIfDefined("actions", self.actions)
         kparams.addObjectIfDefined("value", self.value)
         return kparams
@@ -24424,12 +24317,6 @@ class KalturaSegmentationType(KalturaObjectBase):
     def setConditions(self, newConditions):
         self.conditions = newConditions
 
-    def getConditionsOperator(self):
-        return self.conditionsOperator
-
-    def setConditionsOperator(self, newConditionsOperator):
-        self.conditionsOperator = newConditionsOperator
-
     def getActions(self):
         return self.actions
 
@@ -24444,12 +24331,6 @@ class KalturaSegmentationType(KalturaObjectBase):
 
     def getCreateDate(self):
         return self.createDate
-
-    def getUpdateDate(self):
-        return self.updateDate
-
-    def getExecuteDate(self):
-        return self.executeDate
 
     def getVersion(self):
         return self.version
@@ -24678,8 +24559,7 @@ class KalturaMonetizationCondition(KalturaBaseSegmentCondition):
             days=NotImplemented,
             type=NotImplemented,
             operator=NotImplemented,
-            businessModuleIdIn=NotImplemented,
-            currencyCode=NotImplemented):
+            businessModuleIdIn=NotImplemented):
         KalturaBaseSegmentCondition.__init__(self)
 
         # The minimum value to be met
@@ -24706,10 +24586,6 @@ class KalturaMonetizationCondition(KalturaBaseSegmentCondition):
         # @var string
         self.businessModuleIdIn = businessModuleIdIn
 
-        # Which currency code should be taken into consideration
-        # @var string
-        self.currencyCode = currencyCode
-
 
     PROPERTY_LOADERS = {
         'minValue': getXmlNodeInt, 
@@ -24718,7 +24594,6 @@ class KalturaMonetizationCondition(KalturaBaseSegmentCondition):
         'type': (KalturaEnumsFactory.createString, "KalturaMonetizationType"), 
         'operator': (KalturaEnumsFactory.createString, "KalturaMathemticalOperatorType"), 
         'businessModuleIdIn': getXmlNodeText, 
-        'currencyCode': getXmlNodeText, 
     }
 
     def fromXml(self, node):
@@ -24734,7 +24609,6 @@ class KalturaMonetizationCondition(KalturaBaseSegmentCondition):
         kparams.addStringEnumIfDefined("type", self.type)
         kparams.addStringEnumIfDefined("operator", self.operator)
         kparams.addStringIfDefined("businessModuleIdIn", self.businessModuleIdIn)
-        kparams.addStringIfDefined("currencyCode", self.currencyCode)
         return kparams
 
     def getMinValue(self):
@@ -24772,12 +24646,6 @@ class KalturaMonetizationCondition(KalturaBaseSegmentCondition):
 
     def setBusinessModuleIdIn(self, newBusinessModuleIdIn):
         self.businessModuleIdIn = newBusinessModuleIdIn
-
-    def getCurrencyCode(self):
-        return self.currencyCode
-
-    def setCurrencyCode(self, newCurrencyCode):
-        self.currencyCode = newCurrencyCode
 
 
 # @package Kaltura
@@ -25566,8 +25434,7 @@ class KalturaSegmentRanges(KalturaBaseSegmentValue):
 class KalturaSingleSegmentValue(KalturaBaseSegmentValue):
     def __init__(self,
             id=NotImplemented,
-            affectedUsers=NotImplemented,
-            affectedHouseholds=NotImplemented):
+            affectedUsers=NotImplemented):
         KalturaBaseSegmentValue.__init__(self)
 
         # Id of segment
@@ -25580,16 +25447,10 @@ class KalturaSingleSegmentValue(KalturaBaseSegmentValue):
         # @readonly
         self.affectedUsers = affectedUsers
 
-        # The amount of households that are being affected by this Segmentation type
-        # @var int
-        # @readonly
-        self.affectedHouseholds = affectedHouseholds
-
 
     PROPERTY_LOADERS = {
         'id': getXmlNodeInt, 
         'affectedUsers': getXmlNodeInt, 
-        'affectedHouseholds': getXmlNodeInt, 
     }
 
     def fromXml(self, node):
@@ -25606,9 +25467,6 @@ class KalturaSingleSegmentValue(KalturaBaseSegmentValue):
 
     def getAffectedUsers(self):
         return self.affectedUsers
-
-    def getAffectedHouseholds(self):
-        return self.affectedHouseholds
 
 
 # @package Kaltura
@@ -40552,41 +40410,6 @@ class KalturaIotListResponse(KalturaListResponse):
 
 # @package Kaltura
 # @subpackage Client
-class KalturaIotProfileListResponse(KalturaListResponse):
-    def __init__(self,
-            totalCount=NotImplemented,
-            objects=NotImplemented):
-        KalturaListResponse.__init__(self,
-            totalCount)
-
-        # A list of objects
-        # @var array of KalturaIotProfile
-        self.objects = objects
-
-
-    PROPERTY_LOADERS = {
-        'objects': (KalturaObjectFactory.createArray, 'KalturaIotProfile'), 
-    }
-
-    def fromXml(self, node):
-        KalturaListResponse.fromXml(self, node)
-        self.fromXmlImpl(node, KalturaIotProfileListResponse.PROPERTY_LOADERS)
-
-    def toParams(self):
-        kparams = KalturaListResponse.toParams(self)
-        kparams.put("objectType", "KalturaIotProfileListResponse")
-        kparams.addArrayIfDefined("objects", self.objects)
-        return kparams
-
-    def getObjects(self):
-        return self.objects
-
-    def setObjects(self, newObjects):
-        self.objects = newObjects
-
-
-# @package Kaltura
-# @subpackage Client
 class KalturaLanguage(KalturaObjectBase):
     """Language details"""
 
@@ -45965,202 +45788,98 @@ class KalturaIngestStatusPartnerConfiguration(KalturaObjectBase):
 
 # @package Kaltura
 # @subpackage Client
-class KalturaIotDefault(KalturaObjectBase):
-    def __init__(self,
-            poolId=NotImplemented,
-            region=NotImplemented,
-            appClientId=NotImplemented):
-        KalturaObjectBase.__init__(self)
-
-        # PoolId
-        # @var string
-        self.poolId = poolId
-
-        # Region
-        # @var string
-        self.region = region
-
-        # AppClientId
-        # @var string
-        self.appClientId = appClientId
-
-
-    PROPERTY_LOADERS = {
-        'poolId': getXmlNodeText, 
-        'region': getXmlNodeText, 
-        'appClientId': getXmlNodeText, 
-    }
-
-    def fromXml(self, node):
-        KalturaObjectBase.fromXml(self, node)
-        self.fromXmlImpl(node, KalturaIotDefault.PROPERTY_LOADERS)
-
-    def toParams(self):
-        kparams = KalturaObjectBase.toParams(self)
-        kparams.put("objectType", "KalturaIotDefault")
-        kparams.addStringIfDefined("poolId", self.poolId)
-        kparams.addStringIfDefined("region", self.region)
-        kparams.addStringIfDefined("appClientId", self.appClientId)
-        return kparams
-
-    def getPoolId(self):
-        return self.poolId
-
-    def setPoolId(self, newPoolId):
-        self.poolId = newPoolId
-
-    def getRegion(self):
-        return self.region
-
-    def setRegion(self, newRegion):
-        self.region = newRegion
-
-    def getAppClientId(self):
-        return self.appClientId
-
-    def setAppClientId(self, newAppClientId):
-        self.appClientId = newAppClientId
-
-
-# @package Kaltura
-# @subpackage Client
-class KalturaCognitoIdentity(KalturaObjectBase):
-    def __init__(self,
-            iotDefault=NotImplemented):
-        KalturaObjectBase.__init__(self)
-
-        # Default
-        # @var KalturaIotDefault
-        self.iotDefault = iotDefault
-
-
-    PROPERTY_LOADERS = {
-        'iotDefault': (KalturaObjectFactory.create, 'KalturaIotDefault'), 
-    }
-
-    def fromXml(self, node):
-        KalturaObjectBase.fromXml(self, node)
-        self.fromXmlImpl(node, KalturaCognitoIdentity.PROPERTY_LOADERS)
-
-    def toParams(self):
-        kparams = KalturaObjectBase.toParams(self)
-        kparams.put("objectType", "KalturaCognitoIdentity")
-        kparams.addObjectIfDefined("iotDefault", self.iotDefault)
-        return kparams
-
-    def getIotDefault(self):
-        return self.iotDefault
-
-    def setIotDefault(self, newIotDefault):
-        self.iotDefault = newIotDefault
-
-
-# @package Kaltura
-# @subpackage Client
-class KalturaCredentialsProvider(KalturaObjectBase):
-    def __init__(self,
-            cognitoIdentity=NotImplemented):
-        KalturaObjectBase.__init__(self)
-
-        # KalturaCognitoIdentity
-        # @var KalturaCognitoIdentity
-        self.cognitoIdentity = cognitoIdentity
-
-
-    PROPERTY_LOADERS = {
-        'cognitoIdentity': (KalturaObjectFactory.create, 'KalturaCognitoIdentity'), 
-    }
-
-    def fromXml(self, node):
-        KalturaObjectBase.fromXml(self, node)
-        self.fromXmlImpl(node, KalturaCredentialsProvider.PROPERTY_LOADERS)
-
-    def toParams(self):
-        kparams = KalturaObjectBase.toParams(self)
-        kparams.put("objectType", "KalturaCredentialsProvider")
-        kparams.addObjectIfDefined("cognitoIdentity", self.cognitoIdentity)
-        return kparams
-
-    def getCognitoIdentity(self):
-        return self.cognitoIdentity
-
-    def setCognitoIdentity(self, newCognitoIdentity):
-        self.cognitoIdentity = newCognitoIdentity
-
-
-# @package Kaltura
-# @subpackage Client
-class KalturaCognitoUserPool(KalturaObjectBase):
-    def __init__(self,
-            iotDefault=NotImplemented):
-        KalturaObjectBase.__init__(self)
-
-        # Default
-        # @var KalturaIotDefault
-        self.iotDefault = iotDefault
-
-
-    PROPERTY_LOADERS = {
-        'iotDefault': (KalturaObjectFactory.create, 'KalturaIotDefault'), 
-    }
-
-    def fromXml(self, node):
-        KalturaObjectBase.fromXml(self, node)
-        self.fromXmlImpl(node, KalturaCognitoUserPool.PROPERTY_LOADERS)
-
-    def toParams(self):
-        kparams = KalturaObjectBase.toParams(self)
-        kparams.put("objectType", "KalturaCognitoUserPool")
-        kparams.addObjectIfDefined("iotDefault", self.iotDefault)
-        return kparams
-
-    def getIotDefault(self):
-        return self.iotDefault
-
-    def setIotDefault(self, newIotDefault):
-        self.iotDefault = newIotDefault
-
-
-# @package Kaltura
-# @subpackage Client
 class KalturaIotClientConfiguration(KalturaObjectBase):
     """Iot client Configuration"""
 
     def __init__(self,
-            announcementTopic=NotImplemented,
-            credentialsProvider=NotImplemented,
-            cognitoUserPool=NotImplemented,
-            json=NotImplemented,
-            topics=NotImplemented):
+            identityPoolId=NotImplemented,
+            userPoolId=NotImplemented,
+            awsRegion=NotImplemented,
+            appClientId=NotImplemented,
+            legacyEndPoint=NotImplemented,
+            endPoint=NotImplemented,
+            thingName=NotImplemented,
+            thingArn=NotImplemented,
+            thingId=NotImplemented,
+            username=NotImplemented,
+            password=NotImplemented,
+            topics=NotImplemented,
+            status=NotImplemented,
+            message=NotImplemented):
         KalturaObjectBase.__init__(self)
 
-        # announcementTopic
+        # IdentityPoolId
         # @var string
-        self.announcementTopic = announcementTopic
+        self.identityPoolId = identityPoolId
 
-        # KalturaCredentialsProvider
-        # @var KalturaCredentialsProvider
-        self.credentialsProvider = credentialsProvider
-
-        # CognitoUserPool
-        # @var KalturaCognitoUserPool
-        self.cognitoUserPool = cognitoUserPool
-
-        # json
+        # UserPoolId
         # @var string
-        self.json = json
+        self.userPoolId = userPoolId
+
+        # AwsRegion
+        # @var string
+        self.awsRegion = awsRegion
+
+        # appClientId
+        # @var string
+        self.appClientId = appClientId
+
+        # legacyEndPoint
+        # @var string
+        self.legacyEndPoint = legacyEndPoint
+
+        # endPoint
+        # @var string
+        self.endPoint = endPoint
+
+        # thingName
+        # @var string
+        self.thingName = thingName
+
+        # thingArn
+        # @var string
+        self.thingArn = thingArn
+
+        # thingId
+        # @var string
+        self.thingId = thingId
+
+        # username
+        # @var string
+        self.username = username
+
+        # password
+        # @var string
+        self.password = password
 
         # topics
-        # @var string
+        # @var array of KalturaStringValue
         self.topics = topics
+
+        # status
+        # @var string
+        self.status = status
+
+        # message
+        # @var string
+        self.message = message
 
 
     PROPERTY_LOADERS = {
-        'announcementTopic': getXmlNodeText, 
-        'credentialsProvider': (KalturaObjectFactory.create, 'KalturaCredentialsProvider'), 
-        'cognitoUserPool': (KalturaObjectFactory.create, 'KalturaCognitoUserPool'), 
-        'json': getXmlNodeText, 
-        'topics': getXmlNodeText, 
+        'identityPoolId': getXmlNodeText, 
+        'userPoolId': getXmlNodeText, 
+        'awsRegion': getXmlNodeText, 
+        'appClientId': getXmlNodeText, 
+        'legacyEndPoint': getXmlNodeText, 
+        'endPoint': getXmlNodeText, 
+        'thingName': getXmlNodeText, 
+        'thingArn': getXmlNodeText, 
+        'thingId': getXmlNodeText, 
+        'username': getXmlNodeText, 
+        'password': getXmlNodeText, 
+        'topics': (KalturaObjectFactory.createArray, 'KalturaStringValue'), 
+        'status': getXmlNodeText, 
+        'message': getXmlNodeText, 
     }
 
     def fromXml(self, node):
@@ -46170,42 +45889,105 @@ class KalturaIotClientConfiguration(KalturaObjectBase):
     def toParams(self):
         kparams = KalturaObjectBase.toParams(self)
         kparams.put("objectType", "KalturaIotClientConfiguration")
-        kparams.addStringIfDefined("announcementTopic", self.announcementTopic)
-        kparams.addObjectIfDefined("credentialsProvider", self.credentialsProvider)
-        kparams.addObjectIfDefined("cognitoUserPool", self.cognitoUserPool)
-        kparams.addStringIfDefined("json", self.json)
-        kparams.addStringIfDefined("topics", self.topics)
+        kparams.addStringIfDefined("identityPoolId", self.identityPoolId)
+        kparams.addStringIfDefined("userPoolId", self.userPoolId)
+        kparams.addStringIfDefined("awsRegion", self.awsRegion)
+        kparams.addStringIfDefined("appClientId", self.appClientId)
+        kparams.addStringIfDefined("legacyEndPoint", self.legacyEndPoint)
+        kparams.addStringIfDefined("endPoint", self.endPoint)
+        kparams.addStringIfDefined("thingName", self.thingName)
+        kparams.addStringIfDefined("thingArn", self.thingArn)
+        kparams.addStringIfDefined("thingId", self.thingId)
+        kparams.addStringIfDefined("username", self.username)
+        kparams.addStringIfDefined("password", self.password)
+        kparams.addArrayIfDefined("topics", self.topics)
+        kparams.addStringIfDefined("status", self.status)
+        kparams.addStringIfDefined("message", self.message)
         return kparams
 
-    def getAnnouncementTopic(self):
-        return self.announcementTopic
+    def getIdentityPoolId(self):
+        return self.identityPoolId
 
-    def setAnnouncementTopic(self, newAnnouncementTopic):
-        self.announcementTopic = newAnnouncementTopic
+    def setIdentityPoolId(self, newIdentityPoolId):
+        self.identityPoolId = newIdentityPoolId
 
-    def getCredentialsProvider(self):
-        return self.credentialsProvider
+    def getUserPoolId(self):
+        return self.userPoolId
 
-    def setCredentialsProvider(self, newCredentialsProvider):
-        self.credentialsProvider = newCredentialsProvider
+    def setUserPoolId(self, newUserPoolId):
+        self.userPoolId = newUserPoolId
 
-    def getCognitoUserPool(self):
-        return self.cognitoUserPool
+    def getAwsRegion(self):
+        return self.awsRegion
 
-    def setCognitoUserPool(self, newCognitoUserPool):
-        self.cognitoUserPool = newCognitoUserPool
+    def setAwsRegion(self, newAwsRegion):
+        self.awsRegion = newAwsRegion
 
-    def getJson(self):
-        return self.json
+    def getAppClientId(self):
+        return self.appClientId
 
-    def setJson(self, newJson):
-        self.json = newJson
+    def setAppClientId(self, newAppClientId):
+        self.appClientId = newAppClientId
+
+    def getLegacyEndPoint(self):
+        return self.legacyEndPoint
+
+    def setLegacyEndPoint(self, newLegacyEndPoint):
+        self.legacyEndPoint = newLegacyEndPoint
+
+    def getEndPoint(self):
+        return self.endPoint
+
+    def setEndPoint(self, newEndPoint):
+        self.endPoint = newEndPoint
+
+    def getThingName(self):
+        return self.thingName
+
+    def setThingName(self, newThingName):
+        self.thingName = newThingName
+
+    def getThingArn(self):
+        return self.thingArn
+
+    def setThingArn(self, newThingArn):
+        self.thingArn = newThingArn
+
+    def getThingId(self):
+        return self.thingId
+
+    def setThingId(self, newThingId):
+        self.thingId = newThingId
+
+    def getUsername(self):
+        return self.username
+
+    def setUsername(self, newUsername):
+        self.username = newUsername
+
+    def getPassword(self):
+        return self.password
+
+    def setPassword(self, newPassword):
+        self.password = newPassword
 
     def getTopics(self):
         return self.topics
 
     def setTopics(self, newTopics):
         self.topics = newTopics
+
+    def getStatus(self):
+        return self.status
+
+    def setStatus(self, newStatus):
+        self.status = newStatus
+
+    def getMessage(self):
+        return self.message
+
+    def setMessage(self, newMessage):
+        self.message = newMessage
 
 
 # @package Kaltura
@@ -53120,11 +52902,11 @@ class KalturaIotService(KalturaServiceBase):
         """Register IOT device"""
 
         kparams = KalturaParams()
-        self.client.queueServiceActionCall("iot", "register", "KalturaIot", kparams)
+        self.client.queueServiceActionCall("iot", "register", "None", kparams)
         if self.client.isMultiRequest():
             return self.client.getMultiRequestResult()
         resultNode = self.client.doQueue()
-        return KalturaObjectFactory.create(resultNode, 'KalturaIot')
+        return getXmlNodeBool(resultNode)
 
 
 # @package Kaltura
@@ -53133,39 +52915,15 @@ class KalturaIotProfileService(KalturaServiceBase):
     def __init__(self, client = None):
         KalturaServiceBase.__init__(self, client)
 
-    def add(self, objectToAdd):
-        """Add new KalturaIotProfile"""
+    def add(self):
+        """Add new environment in aws"""
 
         kparams = KalturaParams()
-        kparams.addObjectIfDefined("objectToAdd", objectToAdd)
-        self.client.queueServiceActionCall("iotprofile", "add", "KalturaIotProfile", kparams)
+        self.client.queueServiceActionCall("iotprofile", "add", "None", kparams)
         if self.client.isMultiRequest():
             return self.client.getMultiRequestResult()
         resultNode = self.client.doQueue()
-        return KalturaObjectFactory.create(resultNode, 'KalturaIotProfile')
-
-    def get(self, id):
-        """Get existing KalturaIotProfile"""
-
-        kparams = KalturaParams()
-        kparams.addIntIfDefined("id", id);
-        self.client.queueServiceActionCall("iotprofile", "get", "KalturaIotProfile", kparams)
-        if self.client.isMultiRequest():
-            return self.client.getMultiRequestResult()
-        resultNode = self.client.doQueue()
-        return KalturaObjectFactory.create(resultNode, 'KalturaIotProfile')
-
-    def update(self, id, objectToUpdate):
-        """Update existing KalturaIotProfile"""
-
-        kparams = KalturaParams()
-        kparams.addIntIfDefined("id", id);
-        kparams.addObjectIfDefined("objectToUpdate", objectToUpdate)
-        self.client.queueServiceActionCall("iotprofile", "update", "KalturaIotProfile", kparams)
-        if self.client.isMultiRequest():
-            return self.client.getMultiRequestResult()
-        resultNode = self.client.doQueue()
-        return KalturaObjectFactory.create(resultNode, 'KalturaIotProfile')
+        return getXmlNodeBool(resultNode)
 
 
 # @package Kaltura
@@ -57275,7 +57033,6 @@ class KalturaCoreClient(KalturaClientPlugin):
             'KalturaBillingPriceType': KalturaBillingPriceType,
             'KalturaBookmarkActionType': KalturaBookmarkActionType,
             'KalturaBookmarkOrderBy': KalturaBookmarkOrderBy,
-            'KalturaBooleanOperator': KalturaBooleanOperator,
             'KalturaBulkUploadJobAction': KalturaBulkUploadJobAction,
             'KalturaBulkUploadJobStatus': KalturaBulkUploadJobStatus,
             'KalturaBulkUploadOrderBy': KalturaBulkUploadOrderBy,
@@ -57809,7 +57566,6 @@ class KalturaCoreClient(KalturaClientPlugin):
             'KalturaEventNotification': KalturaEventNotification,
             'KalturaIot': KalturaIot,
             'KalturaIotProfileAws': KalturaIotProfileAws,
-            'KalturaIotProfile': KalturaIotProfile,
             'KalturaAssetFile': KalturaAssetFile,
             'KalturaStringValueArray': KalturaStringValueArray,
             'KalturaBusinessModuleDetails': KalturaBusinessModuleDetails,
@@ -58120,7 +57876,6 @@ class KalturaCoreClient(KalturaClientPlugin):
             'KalturaIngestProfile': KalturaIngestProfile,
             'KalturaIngestProfileListResponse': KalturaIngestProfileListResponse,
             'KalturaIotListResponse': KalturaIotListResponse,
-            'KalturaIotProfileListResponse': KalturaIotProfileListResponse,
             'KalturaLanguage': KalturaLanguage,
             'KalturaLanguageListResponse': KalturaLanguageListResponse,
             'KalturaMediaConcurrencyRule': KalturaMediaConcurrencyRule,
@@ -58213,10 +57968,6 @@ class KalturaCoreClient(KalturaClientPlugin):
             'KalturaUrlResource': KalturaUrlResource,
             'KalturaIngestStatusEpgConfiguration': KalturaIngestStatusEpgConfiguration,
             'KalturaIngestStatusPartnerConfiguration': KalturaIngestStatusPartnerConfiguration,
-            'KalturaIotDefault': KalturaIotDefault,
-            'KalturaCognitoIdentity': KalturaCognitoIdentity,
-            'KalturaCredentialsProvider': KalturaCredentialsProvider,
-            'KalturaCognitoUserPool': KalturaCognitoUserPool,
             'KalturaIotClientConfiguration': KalturaIotClientConfiguration,
             'KalturaLicensedUrl': KalturaLicensedUrl,
             'KalturaLicensedUrlBaseRequest': KalturaLicensedUrlBaseRequest,
