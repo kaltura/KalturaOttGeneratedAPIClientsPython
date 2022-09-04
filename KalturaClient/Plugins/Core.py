@@ -42,7 +42,7 @@ from ..Base import (
     KalturaServiceBase,
 )
 
-API_VERSION = '7.9.0.30000'
+API_VERSION = '8.0.0.30023'
 
 ########## enums ##########
 # @package Kaltura
@@ -512,6 +512,18 @@ class KalturaBookmarkActionType(object):
 class KalturaBookmarkOrderBy(object):
     POSITION_ASC = "POSITION_ASC"
     POSITION_DESC = "POSITION_DESC"
+
+    def __init__(self, value):
+        self.value = value
+
+    def getValue(self):
+        return self.value
+
+# @package Kaltura
+# @subpackage Client
+class KalturaBooleanOperator(object):
+    AND = "And"
+    OR = "Or"
 
     def __init__(self, value):
         self.value = value
@@ -1815,6 +1827,8 @@ class KalturaMonetizationType(object):
     PPV = "ppv"
     SUBSCRIPTION = "subscription"
     BOXSET = "boxset"
+    ANY = "any"
+    PPV_LIVE = "ppv_live"
 
     def __init__(self, value):
         self.value = value
@@ -2536,6 +2550,24 @@ class KalturaSearchPriorityGroupOrderBy(object):
     PRIORITY_DESC = "PRIORITY_DESC"
     NAME_ASC = "NAME_ASC"
     NAME_DESC = "NAME_DESC"
+
+    def __init__(self, value):
+        self.value = value
+
+    def getValue(self):
+        return self.value
+
+# @package Kaltura
+# @subpackage Client
+class KalturaSegmentationTypeOrderBy(object):
+    UPDATE_DATE_DESC = "UPDATE_DATE_DESC"
+    UPDATE_DATE_ASC = "UPDATE_DATE_ASC"
+    CREATE_DATE_DESC = "CREATE_DATE_DESC"
+    CREATE_DATE_ASC = "CREATE_DATE_ASC"
+    EXECUTE_DATE_DESC = "EXECUTE_DATE_DESC"
+    EXECUTE_DATE_ASC = "EXECUTE_DATE_ASC"
+    AFFECTED_USERS_DESC = "AFFECTED_USERS_DESC"
+    AFFECTED_USERS_ASC = "AFFECTED_USERS_ASC"
 
     def __init__(self, value):
         self.value = value
@@ -4483,7 +4515,8 @@ class KalturaSegmentationTypeFilter(KalturaBaseSegmentationTypeFilter):
     def __init__(self,
             orderBy=NotImplemented,
             idIn=NotImplemented,
-            kSql=NotImplemented):
+            kSql=NotImplemented,
+            nameContain=NotImplemented):
         KalturaBaseSegmentationTypeFilter.__init__(self,
             orderBy)
 
@@ -4495,10 +4528,15 @@ class KalturaSegmentationTypeFilter(KalturaBaseSegmentationTypeFilter):
         # @var string
         self.kSql = kSql
 
+        # Name of segment contains specific string value
+        # @var string
+        self.nameContain = nameContain
+
 
     PROPERTY_LOADERS = {
         'idIn': getXmlNodeText, 
         'kSql': getXmlNodeText, 
+        'nameContain': getXmlNodeText, 
     }
 
     def fromXml(self, node):
@@ -4510,6 +4548,7 @@ class KalturaSegmentationTypeFilter(KalturaBaseSegmentationTypeFilter):
         kparams.put("objectType", "KalturaSegmentationTypeFilter")
         kparams.addStringIfDefined("idIn", self.idIn)
         kparams.addStringIfDefined("kSql", self.kSql)
+        kparams.addStringIfDefined("nameContain", self.nameContain)
         return kparams
 
     def getIdIn(self):
@@ -4523,6 +4562,12 @@ class KalturaSegmentationTypeFilter(KalturaBaseSegmentationTypeFilter):
 
     def setKSql(self, newKSql):
         self.kSql = newKSql
+
+    def getNameContain(self):
+        return self.nameContain
+
+    def setNameContain(self, newNameContain):
+        self.nameContain = newNameContain
 
 
 # @package Kaltura
@@ -11129,6 +11174,55 @@ class KalturaCampaignIdInFilter(KalturaCampaignFilter):
 
     def setIdIn(self, newIdIn):
         self.idIn = newIdIn
+
+
+# @package Kaltura
+# @subpackage Client
+class KalturaCampaignSegmentFilter(KalturaCampaignSearchFilter):
+    def __init__(self,
+            orderBy=NotImplemented,
+            startDateGreaterThanOrEqual=NotImplemented,
+            endDateLessThanOrEqual=NotImplemented,
+            stateEqual=NotImplemented,
+            hasPromotion=NotImplemented,
+            nameEqual=NotImplemented,
+            nameContains=NotImplemented,
+            stateIn=NotImplemented,
+            segmentIdIn=NotImplemented):
+        KalturaCampaignSearchFilter.__init__(self,
+            orderBy,
+            startDateGreaterThanOrEqual,
+            endDateLessThanOrEqual,
+            stateEqual,
+            hasPromotion,
+            nameEqual,
+            nameContains,
+            stateIn)
+
+        # comma separeted segment ids to be searched inside campaigns
+        # @var string
+        self.segmentIdIn = segmentIdIn
+
+
+    PROPERTY_LOADERS = {
+        'segmentIdIn': getXmlNodeText, 
+    }
+
+    def fromXml(self, node):
+        KalturaCampaignSearchFilter.fromXml(self, node)
+        self.fromXmlImpl(node, KalturaCampaignSegmentFilter.PROPERTY_LOADERS)
+
+    def toParams(self):
+        kparams = KalturaCampaignSearchFilter.toParams(self)
+        kparams.put("objectType", "KalturaCampaignSegmentFilter")
+        kparams.addStringIfDefined("segmentIdIn", self.segmentIdIn)
+        return kparams
+
+    def getSegmentIdIn(self):
+        return self.segmentIdIn
+
+    def setSegmentIdIn(self, newSegmentIdIn):
+        self.segmentIdIn = newSegmentIdIn
 
 
 # @package Kaltura
@@ -23257,6 +23351,119 @@ class KalturaBulkUploadListResponse(KalturaListResponse):
 
 # @package Kaltura
 # @subpackage Client
+class KalturaBaseBulkUploadSegmentsResult(KalturaBulkUploadResult):
+    def __init__(self,
+            objectId=NotImplemented,
+            index=NotImplemented,
+            bulkUploadId=NotImplemented,
+            status=NotImplemented,
+            errors=NotImplemented,
+            warnings=NotImplemented,
+            segmentId=NotImplemented):
+        KalturaBulkUploadResult.__init__(self,
+            objectId,
+            index,
+            bulkUploadId,
+            status,
+            errors,
+            warnings)
+
+        # Segment Id
+        # @var int
+        self.segmentId = segmentId
+
+
+    PROPERTY_LOADERS = {
+        'segmentId': getXmlNodeInt, 
+    }
+
+    def fromXml(self, node):
+        KalturaBulkUploadResult.fromXml(self, node)
+        self.fromXmlImpl(node, KalturaBaseBulkUploadSegmentsResult.PROPERTY_LOADERS)
+
+    def toParams(self):
+        kparams = KalturaBulkUploadResult.toParams(self)
+        kparams.put("objectType", "KalturaBaseBulkUploadSegmentsResult")
+        kparams.addIntIfDefined("segmentId", self.segmentId)
+        return kparams
+
+    def getSegmentId(self):
+        return self.segmentId
+
+    def setSegmentId(self, newSegmentId):
+        self.segmentId = newSegmentId
+
+
+# @package Kaltura
+# @subpackage Client
+class KalturaBulkSegmentedHouseholdsResult(KalturaBaseBulkUploadSegmentsResult):
+    def __init__(self,
+            objectId=NotImplemented,
+            index=NotImplemented,
+            bulkUploadId=NotImplemented,
+            status=NotImplemented,
+            errors=NotImplemented,
+            warnings=NotImplemented,
+            segmentId=NotImplemented):
+        KalturaBaseBulkUploadSegmentsResult.__init__(self,
+            objectId,
+            index,
+            bulkUploadId,
+            status,
+            errors,
+            warnings,
+            segmentId)
+
+
+    PROPERTY_LOADERS = {
+    }
+
+    def fromXml(self, node):
+        KalturaBaseBulkUploadSegmentsResult.fromXml(self, node)
+        self.fromXmlImpl(node, KalturaBulkSegmentedHouseholdsResult.PROPERTY_LOADERS)
+
+    def toParams(self):
+        kparams = KalturaBaseBulkUploadSegmentsResult.toParams(self)
+        kparams.put("objectType", "KalturaBulkSegmentedHouseholdsResult")
+        return kparams
+
+
+# @package Kaltura
+# @subpackage Client
+class KalturaBulkSegmentedUsersResult(KalturaBaseBulkUploadSegmentsResult):
+    def __init__(self,
+            objectId=NotImplemented,
+            index=NotImplemented,
+            bulkUploadId=NotImplemented,
+            status=NotImplemented,
+            errors=NotImplemented,
+            warnings=NotImplemented,
+            segmentId=NotImplemented):
+        KalturaBaseBulkUploadSegmentsResult.__init__(self,
+            objectId,
+            index,
+            bulkUploadId,
+            status,
+            errors,
+            warnings,
+            segmentId)
+
+
+    PROPERTY_LOADERS = {
+    }
+
+    def fromXml(self, node):
+        KalturaBaseBulkUploadSegmentsResult.fromXml(self, node)
+        self.fromXmlImpl(node, KalturaBulkSegmentedUsersResult.PROPERTY_LOADERS)
+
+    def toParams(self):
+        kparams = KalturaBaseBulkUploadSegmentsResult.toParams(self)
+        kparams.put("objectType", "KalturaBulkSegmentedUsersResult")
+        return kparams
+
+
+# @package Kaltura
+# @subpackage Client
 class KalturaBulkUploadAssetResult(KalturaBulkUploadResult):
     def __init__(self,
             objectId=NotImplemented,
@@ -24229,9 +24436,12 @@ class KalturaSegmentationType(KalturaObjectBase):
             name=NotImplemented,
             description=NotImplemented,
             conditions=NotImplemented,
+            conditionsOperator=NotImplemented,
             actions=NotImplemented,
             value=NotImplemented,
             createDate=NotImplemented,
+            updateDate=NotImplemented,
+            executeDate=NotImplemented,
             version=NotImplemented):
         KalturaObjectBase.__init__(self)
 
@@ -24252,6 +24462,10 @@ class KalturaSegmentationType(KalturaObjectBase):
         # @var array of KalturaBaseSegmentCondition
         self.conditions = conditions
 
+        # Boolean operator between segmentation type&#39;s conditions - defaults to &quot;And&quot;
+        # @var KalturaBooleanOperator
+        self.conditionsOperator = conditionsOperator
+
         # Segmentation conditions - can be empty
         # @var array of KalturaBaseSegmentAction
         self.actions = actions
@@ -24265,6 +24479,16 @@ class KalturaSegmentationType(KalturaObjectBase):
         # @readonly
         self.createDate = createDate
 
+        # Update date of segmentation type
+        # @var int
+        # @readonly
+        self.updateDate = updateDate
+
+        # Last date of execution of segmentation type
+        # @var int
+        # @readonly
+        self.executeDate = executeDate
+
         # Segmentation type version
         # @var int
         # @readonly
@@ -24276,9 +24500,12 @@ class KalturaSegmentationType(KalturaObjectBase):
         'name': getXmlNodeText, 
         'description': getXmlNodeText, 
         'conditions': (KalturaObjectFactory.createArray, 'KalturaBaseSegmentCondition'), 
+        'conditionsOperator': (KalturaEnumsFactory.createString, "KalturaBooleanOperator"), 
         'actions': (KalturaObjectFactory.createArray, 'KalturaBaseSegmentAction'), 
         'value': (KalturaObjectFactory.create, 'KalturaBaseSegmentValue'), 
         'createDate': getXmlNodeInt, 
+        'updateDate': getXmlNodeInt, 
+        'executeDate': getXmlNodeInt, 
         'version': getXmlNodeInt, 
     }
 
@@ -24292,6 +24519,7 @@ class KalturaSegmentationType(KalturaObjectBase):
         kparams.addStringIfDefined("name", self.name)
         kparams.addStringIfDefined("description", self.description)
         kparams.addArrayIfDefined("conditions", self.conditions)
+        kparams.addStringEnumIfDefined("conditionsOperator", self.conditionsOperator)
         kparams.addArrayIfDefined("actions", self.actions)
         kparams.addObjectIfDefined("value", self.value)
         return kparams
@@ -24317,6 +24545,12 @@ class KalturaSegmentationType(KalturaObjectBase):
     def setConditions(self, newConditions):
         self.conditions = newConditions
 
+    def getConditionsOperator(self):
+        return self.conditionsOperator
+
+    def setConditionsOperator(self, newConditionsOperator):
+        self.conditionsOperator = newConditionsOperator
+
     def getActions(self):
         return self.actions
 
@@ -24331,6 +24565,12 @@ class KalturaSegmentationType(KalturaObjectBase):
 
     def getCreateDate(self):
         return self.createDate
+
+    def getUpdateDate(self):
+        return self.updateDate
+
+    def getExecuteDate(self):
+        return self.executeDate
 
     def getVersion(self):
         return self.version
@@ -24559,7 +24799,8 @@ class KalturaMonetizationCondition(KalturaBaseSegmentCondition):
             days=NotImplemented,
             type=NotImplemented,
             operator=NotImplemented,
-            businessModuleIdIn=NotImplemented):
+            businessModuleIdIn=NotImplemented,
+            currencyCode=NotImplemented):
         KalturaBaseSegmentCondition.__init__(self)
 
         # The minimum value to be met
@@ -24586,6 +24827,10 @@ class KalturaMonetizationCondition(KalturaBaseSegmentCondition):
         # @var string
         self.businessModuleIdIn = businessModuleIdIn
 
+        # Which currency code should be taken into consideration
+        # @var string
+        self.currencyCode = currencyCode
+
 
     PROPERTY_LOADERS = {
         'minValue': getXmlNodeInt, 
@@ -24594,6 +24839,7 @@ class KalturaMonetizationCondition(KalturaBaseSegmentCondition):
         'type': (KalturaEnumsFactory.createString, "KalturaMonetizationType"), 
         'operator': (KalturaEnumsFactory.createString, "KalturaMathemticalOperatorType"), 
         'businessModuleIdIn': getXmlNodeText, 
+        'currencyCode': getXmlNodeText, 
     }
 
     def fromXml(self, node):
@@ -24609,6 +24855,7 @@ class KalturaMonetizationCondition(KalturaBaseSegmentCondition):
         kparams.addStringEnumIfDefined("type", self.type)
         kparams.addStringEnumIfDefined("operator", self.operator)
         kparams.addStringIfDefined("businessModuleIdIn", self.businessModuleIdIn)
+        kparams.addStringIfDefined("currencyCode", self.currencyCode)
         return kparams
 
     def getMinValue(self):
@@ -24646,6 +24893,12 @@ class KalturaMonetizationCondition(KalturaBaseSegmentCondition):
 
     def setBusinessModuleIdIn(self, newBusinessModuleIdIn):
         self.businessModuleIdIn = newBusinessModuleIdIn
+
+    def getCurrencyCode(self):
+        return self.currencyCode
+
+    def setCurrencyCode(self, newCurrencyCode):
+        self.currencyCode = newCurrencyCode
 
 
 # @package Kaltura
@@ -25434,7 +25687,8 @@ class KalturaSegmentRanges(KalturaBaseSegmentValue):
 class KalturaSingleSegmentValue(KalturaBaseSegmentValue):
     def __init__(self,
             id=NotImplemented,
-            affectedUsers=NotImplemented):
+            affectedUsers=NotImplemented,
+            affectedHouseholds=NotImplemented):
         KalturaBaseSegmentValue.__init__(self)
 
         # Id of segment
@@ -25447,10 +25701,16 @@ class KalturaSingleSegmentValue(KalturaBaseSegmentValue):
         # @readonly
         self.affectedUsers = affectedUsers
 
+        # The amount of households that are being affected by this Segmentation type
+        # @var int
+        # @readonly
+        self.affectedHouseholds = affectedHouseholds
+
 
     PROPERTY_LOADERS = {
         'id': getXmlNodeInt, 
         'affectedUsers': getXmlNodeInt, 
+        'affectedHouseholds': getXmlNodeInt, 
     }
 
     def fromXml(self, node):
@@ -25467,6 +25727,9 @@ class KalturaSingleSegmentValue(KalturaBaseSegmentValue):
 
     def getAffectedUsers(self):
         return self.affectedUsers
+
+    def getAffectedHouseholds(self):
+        return self.affectedHouseholds
 
 
 # @package Kaltura
@@ -43662,11 +43925,17 @@ class KalturaBulkUploadIngestJobData(KalturaBulkUploadJobData):
 class KalturaBulkUploadObjectData(KalturaObjectBase):
     """indicates the object type in the bulk file"""
 
-    def __init__(self):
+    def __init__(self,
+            action=NotImplemented):
         KalturaObjectBase.__init__(self)
+
+        # defaults to upsert
+        # @var KalturaBulkUploadJobAction
+        self.action = action
 
 
     PROPERTY_LOADERS = {
+        'action': (KalturaEnumsFactory.createString, "KalturaBulkUploadJobAction"), 
     }
 
     def fromXml(self, node):
@@ -43676,7 +43945,14 @@ class KalturaBulkUploadObjectData(KalturaObjectBase):
     def toParams(self):
         kparams = KalturaObjectBase.toParams(self)
         kparams.put("objectType", "KalturaBulkUploadObjectData")
+        kparams.addStringEnumIfDefined("action", self.action)
         return kparams
+
+    def getAction(self):
+        return self.action
+
+    def setAction(self, newAction):
+        self.action = newAction
 
 
 # @package Kaltura
@@ -43685,8 +43961,10 @@ class KalturaBulkUploadAssetData(KalturaBulkUploadObjectData):
     """indicates the asset object type in the bulk file"""
 
     def __init__(self,
+            action=NotImplemented,
             typeId=NotImplemented):
-        KalturaBulkUploadObjectData.__init__(self)
+        KalturaBulkUploadObjectData.__init__(self,
+            action)
 
         # Identifies the asset type (EPG, Recording, Movie, TV Series, etc). 
         #             Possible values: 0 - EPG linear programs, 1 - Recording; or any asset type ID according to the asset types IDs defined in the system.
@@ -43717,12 +43995,103 @@ class KalturaBulkUploadAssetData(KalturaBulkUploadObjectData):
 
 # @package Kaltura
 # @subpackage Client
+class KalturaBaseBulkSegments(KalturaBulkUploadObjectData):
+    """Base object for bulk updating segment data"""
+
+    def __init__(self,
+            action=NotImplemented,
+            segmentId=NotImplemented):
+        KalturaBulkUploadObjectData.__init__(self,
+            action)
+
+        # Segment Id to update
+        # @var int
+        self.segmentId = segmentId
+
+
+    PROPERTY_LOADERS = {
+        'segmentId': getXmlNodeInt, 
+    }
+
+    def fromXml(self, node):
+        KalturaBulkUploadObjectData.fromXml(self, node)
+        self.fromXmlImpl(node, KalturaBaseBulkSegments.PROPERTY_LOADERS)
+
+    def toParams(self):
+        kparams = KalturaBulkUploadObjectData.toParams(self)
+        kparams.put("objectType", "KalturaBaseBulkSegments")
+        kparams.addIntIfDefined("segmentId", self.segmentId)
+        return kparams
+
+    def getSegmentId(self):
+        return self.segmentId
+
+    def setSegmentId(self, newSegmentId):
+        self.segmentId = newSegmentId
+
+
+# @package Kaltura
+# @subpackage Client
+class KalturaBulkSegmentedHouseholdsData(KalturaBaseBulkSegments):
+    """Bulk updating segment data for households"""
+
+    def __init__(self,
+            action=NotImplemented,
+            segmentId=NotImplemented):
+        KalturaBaseBulkSegments.__init__(self,
+            action,
+            segmentId)
+
+
+    PROPERTY_LOADERS = {
+    }
+
+    def fromXml(self, node):
+        KalturaBaseBulkSegments.fromXml(self, node)
+        self.fromXmlImpl(node, KalturaBulkSegmentedHouseholdsData.PROPERTY_LOADERS)
+
+    def toParams(self):
+        kparams = KalturaBaseBulkSegments.toParams(self)
+        kparams.put("objectType", "KalturaBulkSegmentedHouseholdsData")
+        return kparams
+
+
+# @package Kaltura
+# @subpackage Client
+class KalturaBulkSegmentedusersData(KalturaBaseBulkSegments):
+    """Bulk updating segment data for users"""
+
+    def __init__(self,
+            action=NotImplemented,
+            segmentId=NotImplemented):
+        KalturaBaseBulkSegments.__init__(self,
+            action,
+            segmentId)
+
+
+    PROPERTY_LOADERS = {
+    }
+
+    def fromXml(self, node):
+        KalturaBaseBulkSegments.fromXml(self, node)
+        self.fromXmlImpl(node, KalturaBulkSegmentedusersData.PROPERTY_LOADERS)
+
+    def toParams(self):
+        kparams = KalturaBaseBulkSegments.toParams(self)
+        kparams.put("objectType", "KalturaBulkSegmentedusersData")
+        return kparams
+
+
+# @package Kaltura
+# @subpackage Client
 class KalturaBulkUploadDynamicListData(KalturaBulkUploadObjectData):
     """indicates the DynamicList object type in the bulk file"""
 
     def __init__(self,
+            action=NotImplemented,
             dynamicListId=NotImplemented):
-        KalturaBulkUploadObjectData.__init__(self)
+        KalturaBulkUploadObjectData.__init__(self,
+            action)
 
         # Identifies the dynamicList Id
         # @var int
@@ -43756,8 +44125,10 @@ class KalturaBulkUploadUdidDynamicListData(KalturaBulkUploadDynamicListData):
     """indicates the UDID DynamicList object type in the bulk file"""
 
     def __init__(self,
+            action=NotImplemented,
             dynamicListId=NotImplemented):
         KalturaBulkUploadDynamicListData.__init__(self,
+            action,
             dynamicListId)
 
 
@@ -43780,8 +44151,10 @@ class KalturaBulkUploadMediaAssetData(KalturaBulkUploadAssetData):
     """indicates the media asset object type in the bulk file"""
 
     def __init__(self,
+            action=NotImplemented,
             typeId=NotImplemented):
         KalturaBulkUploadAssetData.__init__(self,
+            action,
             typeId)
 
 
@@ -43804,8 +44177,10 @@ class KalturaBulkUploadLiveAssetData(KalturaBulkUploadMediaAssetData):
     """indicates the media asset object type in the bulk file"""
 
     def __init__(self,
+            action=NotImplemented,
             typeId=NotImplemented):
         KalturaBulkUploadMediaAssetData.__init__(self,
+            action,
             typeId)
 
 
@@ -43828,8 +44203,10 @@ class KalturaBulkUploadProgramAssetData(KalturaBulkUploadAssetData):
     """indicates the epg asset object type in the bulk file"""
 
     def __init__(self,
+            action=NotImplemented,
             typeId=NotImplemented):
         KalturaBulkUploadAssetData.__init__(self,
+            action,
             typeId)
 
 
@@ -47631,6 +48008,54 @@ class KalturaSearchPriorityGroupOrderedIdsSet(KalturaObjectBase):
 
     def setPriorityGroupIds(self, newPriorityGroupIds):
         self.priorityGroupIds = newPriorityGroupIds
+
+
+# @package Kaltura
+# @subpackage Client
+class KalturaSegmentationPartnerConfiguration(KalturaObjectBase):
+    """Partner configuration for segments configuration"""
+
+    def __init__(self,
+            maxCalculatedPeriod=NotImplemented,
+            maxDynamicSegments=NotImplemented):
+        KalturaObjectBase.__init__(self)
+
+        # The maximum number of past days to be calculated for dynamic segments
+        # @var int
+        self.maxCalculatedPeriod = maxCalculatedPeriod
+
+        # How many dynamic segments (segments with conditions) the operator is allowed to have
+        # @var int
+        self.maxDynamicSegments = maxDynamicSegments
+
+
+    PROPERTY_LOADERS = {
+        'maxCalculatedPeriod': getXmlNodeInt, 
+        'maxDynamicSegments': getXmlNodeInt, 
+    }
+
+    def fromXml(self, node):
+        KalturaObjectBase.fromXml(self, node)
+        self.fromXmlImpl(node, KalturaSegmentationPartnerConfiguration.PROPERTY_LOADERS)
+
+    def toParams(self):
+        kparams = KalturaObjectBase.toParams(self)
+        kparams.put("objectType", "KalturaSegmentationPartnerConfiguration")
+        kparams.addIntIfDefined("maxCalculatedPeriod", self.maxCalculatedPeriod)
+        kparams.addIntIfDefined("maxDynamicSegments", self.maxDynamicSegments)
+        return kparams
+
+    def getMaxCalculatedPeriod(self):
+        return self.maxCalculatedPeriod
+
+    def setMaxCalculatedPeriod(self, newMaxCalculatedPeriod):
+        self.maxCalculatedPeriod = newMaxCalculatedPeriod
+
+    def getMaxDynamicSegments(self):
+        return self.maxDynamicSegments
+
+    def setMaxDynamicSegments(self, newMaxDynamicSegments):
+        self.maxDynamicSegments = newMaxDynamicSegments
 
 
 # @package Kaltura
@@ -55290,6 +55715,16 @@ class KalturaSegmentationTypeService(KalturaServiceBase):
         resultNode = self.client.doQueue()
         return getXmlNodeBool(resultNode)
 
+    def getPartnerConfiguration(self):
+        """Get existing segmentation partner configuration"""
+
+        kparams = KalturaParams()
+        self.client.queueServiceActionCall("segmentationtype", "getPartnerConfiguration", "KalturaSegmentationPartnerConfiguration", kparams)
+        if self.client.isMultiRequest():
+            return self.client.getMultiRequestResult()
+        resultNode = self.client.doQueue()
+        return KalturaObjectFactory.create(resultNode, 'KalturaSegmentationPartnerConfiguration')
+
     def list(self, filter = NotImplemented, pager = NotImplemented):
         """Lists all segmentation types in group"""
 
@@ -55313,6 +55748,17 @@ class KalturaSegmentationTypeService(KalturaServiceBase):
             return self.client.getMultiRequestResult()
         resultNode = self.client.doQueue()
         return KalturaObjectFactory.create(resultNode, 'KalturaSegmentationType')
+
+    def updatePartnerConfiguration(self, configuration):
+        """Set segmentation configuration on partner level"""
+
+        kparams = KalturaParams()
+        kparams.addObjectIfDefined("configuration", configuration)
+        self.client.queueServiceActionCall("segmentationtype", "updatePartnerConfiguration", "KalturaSegmentationPartnerConfiguration", kparams)
+        if self.client.isMultiRequest():
+            return self.client.getMultiRequestResult()
+        resultNode = self.client.doQueue()
+        return KalturaObjectFactory.create(resultNode, 'KalturaSegmentationPartnerConfiguration')
 
 
 # @package Kaltura
@@ -57033,6 +57479,7 @@ class KalturaCoreClient(KalturaClientPlugin):
             'KalturaBillingPriceType': KalturaBillingPriceType,
             'KalturaBookmarkActionType': KalturaBookmarkActionType,
             'KalturaBookmarkOrderBy': KalturaBookmarkOrderBy,
+            'KalturaBooleanOperator': KalturaBooleanOperator,
             'KalturaBulkUploadJobAction': KalturaBulkUploadJobAction,
             'KalturaBulkUploadJobStatus': KalturaBulkUploadJobStatus,
             'KalturaBulkUploadOrderBy': KalturaBulkUploadOrderBy,
@@ -57182,6 +57629,7 @@ class KalturaCoreClient(KalturaClientPlugin):
             'KalturaSearchHistoryOrderBy': KalturaSearchHistoryOrderBy,
             'KalturaSearchPriorityCriteriaType': KalturaSearchPriorityCriteriaType,
             'KalturaSearchPriorityGroupOrderBy': KalturaSearchPriorityGroupOrderBy,
+            'KalturaSegmentationTypeOrderBy': KalturaSegmentationTypeOrderBy,
             'KalturaSeriesRecordingOrderBy': KalturaSeriesRecordingOrderBy,
             'KalturaSeriesReminderOrderBy': KalturaSeriesReminderOrderBy,
             'KalturaSkipOperators': KalturaSkipOperators,
@@ -57391,6 +57839,7 @@ class KalturaCoreClient(KalturaClientPlugin):
             'KalturaCampaignSearchFilter': KalturaCampaignSearchFilter,
             'KalturaBatchCampaignSearchFilter': KalturaBatchCampaignSearchFilter,
             'KalturaCampaignIdInFilter': KalturaCampaignIdInFilter,
+            'KalturaCampaignSegmentFilter': KalturaCampaignSegmentFilter,
             'KalturaTriggerCampaignSearchFilter': KalturaTriggerCampaignSearchFilter,
             'KalturaBusinessModuleRuleFilter': KalturaBusinessModuleRuleFilter,
             'KalturaCountryFilter': KalturaCountryFilter,
@@ -57597,6 +58046,9 @@ class KalturaCoreClient(KalturaClientPlugin):
             'KalturaBulkUploadResult': KalturaBulkUploadResult,
             'KalturaBulkUpload': KalturaBulkUpload,
             'KalturaBulkUploadListResponse': KalturaBulkUploadListResponse,
+            'KalturaBaseBulkUploadSegmentsResult': KalturaBaseBulkUploadSegmentsResult,
+            'KalturaBulkSegmentedHouseholdsResult': KalturaBulkSegmentedHouseholdsResult,
+            'KalturaBulkSegmentedUsersResult': KalturaBulkSegmentedUsersResult,
             'KalturaBulkUploadAssetResult': KalturaBulkUploadAssetResult,
             'KalturaBulkUploadMediaAssetResult': KalturaBulkUploadMediaAssetResult,
             'KalturaBulkUploadLiveAssetResult': KalturaBulkUploadLiveAssetResult,
@@ -57930,6 +58382,9 @@ class KalturaCoreClient(KalturaClientPlugin):
             'KalturaBulkUploadIngestJobData': KalturaBulkUploadIngestJobData,
             'KalturaBulkUploadObjectData': KalturaBulkUploadObjectData,
             'KalturaBulkUploadAssetData': KalturaBulkUploadAssetData,
+            'KalturaBaseBulkSegments': KalturaBaseBulkSegments,
+            'KalturaBulkSegmentedHouseholdsData': KalturaBulkSegmentedHouseholdsData,
+            'KalturaBulkSegmentedusersData': KalturaBulkSegmentedusersData,
             'KalturaBulkUploadDynamicListData': KalturaBulkUploadDynamicListData,
             'KalturaBulkUploadUdidDynamicListData': KalturaBulkUploadUdidDynamicListData,
             'KalturaBulkUploadMediaAssetData': KalturaBulkUploadMediaAssetData,
@@ -57994,6 +58449,7 @@ class KalturaCoreClient(KalturaClientPlugin):
             'KalturaRegionChannelNumber': KalturaRegionChannelNumber,
             'KalturaRegionChannelNumberMultiLcns': KalturaRegionChannelNumberMultiLcns,
             'KalturaSearchPriorityGroupOrderedIdsSet': KalturaSearchPriorityGroupOrderedIdsSet,
+            'KalturaSegmentationPartnerConfiguration': KalturaSegmentationPartnerConfiguration,
             'KalturaNetworkActionStatus': KalturaNetworkActionStatus,
             'KalturaUserSocialActionResponse': KalturaUserSocialActionResponse,
             'KalturaSocial': KalturaSocial,
