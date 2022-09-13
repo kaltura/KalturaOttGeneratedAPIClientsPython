@@ -42,7 +42,7 @@ from ..Base import (
     KalturaServiceBase,
 )
 
-API_VERSION = '8.0.0.30023'
+API_VERSION = '8.0.0.30032'
 
 ########## enums ##########
 # @package Kaltura
@@ -2568,6 +2568,8 @@ class KalturaSegmentationTypeOrderBy(object):
     EXECUTE_DATE_ASC = "EXECUTE_DATE_ASC"
     AFFECTED_USERS_DESC = "AFFECTED_USERS_DESC"
     AFFECTED_USERS_ASC = "AFFECTED_USERS_ASC"
+    AFFECTED_HOUSEHOLDS_DESC = "AFFECTED_HOUSEHOLDS_DESC"
+    AFFECTED_HOUSEHOLDS_ASC = "AFFECTED_HOUSEHOLDS_ASC"
 
     def __init__(self, value):
         self.value = value
