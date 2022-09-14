@@ -42,7 +42,7 @@ from ..Base import (
     KalturaServiceBase,
 )
 
-API_VERSION = '8.0.0.30032'
+API_VERSION = '8.0.0.30035'
 
 ########## enums ##########
 # @package Kaltura
@@ -11190,7 +11190,7 @@ class KalturaCampaignSegmentFilter(KalturaCampaignSearchFilter):
             nameEqual=NotImplemented,
             nameContains=NotImplemented,
             stateIn=NotImplemented,
-            segmentIdIn=NotImplemented):
+            segmentIdEqual=NotImplemented):
         KalturaCampaignSearchFilter.__init__(self,
             orderBy,
             startDateGreaterThanOrEqual,
@@ -11201,13 +11201,13 @@ class KalturaCampaignSegmentFilter(KalturaCampaignSearchFilter):
             nameContains,
             stateIn)
 
-        # comma separeted segment ids to be searched inside campaigns
-        # @var string
-        self.segmentIdIn = segmentIdIn
+        # segment id to be searched inside campaigns
+        # @var int
+        self.segmentIdEqual = segmentIdEqual
 
 
     PROPERTY_LOADERS = {
-        'segmentIdIn': getXmlNodeText, 
+        'segmentIdEqual': getXmlNodeInt, 
     }
 
     def fromXml(self, node):
@@ -11217,14 +11217,14 @@ class KalturaCampaignSegmentFilter(KalturaCampaignSearchFilter):
     def toParams(self):
         kparams = KalturaCampaignSearchFilter.toParams(self)
         kparams.put("objectType", "KalturaCampaignSegmentFilter")
-        kparams.addStringIfDefined("segmentIdIn", self.segmentIdIn)
+        kparams.addIntIfDefined("segmentIdEqual", self.segmentIdEqual)
         return kparams
 
-    def getSegmentIdIn(self):
-        return self.segmentIdIn
+    def getSegmentIdEqual(self):
+        return self.segmentIdEqual
 
-    def setSegmentIdIn(self, newSegmentIdIn):
-        self.segmentIdIn = newSegmentIdIn
+    def setSegmentIdEqual(self, newSegmentIdEqual):
+        self.segmentIdEqual = newSegmentIdEqual
 
 
 # @package Kaltura
