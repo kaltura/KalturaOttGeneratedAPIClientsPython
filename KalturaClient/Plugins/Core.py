@@ -42,7 +42,7 @@ from ..Base import (
     KalturaServiceBase,
 )
 
-API_VERSION = '7.9.0.30000'
+API_VERSION = '8.0.0.30024'
 
 ########## enums ##########
 # @package Kaltura
@@ -45853,7 +45853,7 @@ class KalturaIotClientConfiguration(KalturaObjectBase):
         self.password = password
 
         # topics
-        # @var array of KalturaStringValue
+        # @var string
         self.topics = topics
 
         # status
@@ -45877,7 +45877,7 @@ class KalturaIotClientConfiguration(KalturaObjectBase):
         'thingId': getXmlNodeText, 
         'username': getXmlNodeText, 
         'password': getXmlNodeText, 
-        'topics': (KalturaObjectFactory.createArray, 'KalturaStringValue'), 
+        'topics': getXmlNodeText, 
         'status': getXmlNodeText, 
         'message': getXmlNodeText, 
     }
@@ -45900,7 +45900,7 @@ class KalturaIotClientConfiguration(KalturaObjectBase):
         kparams.addStringIfDefined("thingId", self.thingId)
         kparams.addStringIfDefined("username", self.username)
         kparams.addStringIfDefined("password", self.password)
-        kparams.addArrayIfDefined("topics", self.topics)
+        kparams.addStringIfDefined("topics", self.topics)
         kparams.addStringIfDefined("status", self.status)
         kparams.addStringIfDefined("message", self.message)
         return kparams
