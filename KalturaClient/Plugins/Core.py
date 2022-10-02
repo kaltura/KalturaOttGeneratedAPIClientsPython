@@ -42,7 +42,7 @@ from ..Base import (
     KalturaServiceBase,
 )
 
-API_VERSION = '8.0.0.30035'
+API_VERSION = '8.0.0.30045'
 
 ########## enums ##########
 # @package Kaltura
@@ -48022,11 +48022,11 @@ class KalturaSegmentationPartnerConfiguration(KalturaObjectBase):
             maxDynamicSegments=NotImplemented):
         KalturaObjectBase.__init__(self)
 
-        # The maximum number of past days to be calculated for dynamic segments
+        # The maximum number of past days to be calculated for dynamic segments, default=180
         # @var int
         self.maxCalculatedPeriod = maxCalculatedPeriod
 
-        # How many dynamic segments (segments with conditions) the operator is allowed to have
+        # How many dynamic segments (segments with conditions) the operator is allowed to have, default=50
         # @var int
         self.maxDynamicSegments = maxDynamicSegments
 
@@ -55718,7 +55718,7 @@ class KalturaSegmentationTypeService(KalturaServiceBase):
         return getXmlNodeBool(resultNode)
 
     def getPartnerConfiguration(self):
-        """Get existing segmentation partner configuration"""
+        """Gets existing partner segmentation configuration"""
 
         kparams = KalturaParams()
         self.client.queueServiceActionCall("segmentationtype", "getPartnerConfiguration", "KalturaSegmentationPartnerConfiguration", kparams)
@@ -55752,7 +55752,7 @@ class KalturaSegmentationTypeService(KalturaServiceBase):
         return KalturaObjectFactory.create(resultNode, 'KalturaSegmentationType')
 
     def updatePartnerConfiguration(self, configuration):
-        """Set segmentation configuration on partner level"""
+        """Sets partner configuration for segments configuration"""
 
         kparams = KalturaParams()
         kparams.addObjectIfDefined("configuration", configuration)
