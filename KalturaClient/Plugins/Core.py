@@ -42,7 +42,7 @@ from ..Base import (
     KalturaServiceBase,
 )
 
-API_VERSION = '8.1.0.30026'
+API_VERSION = '8.0.12.30028'
 
 ########## enums ##########
 # @package Kaltura
@@ -27247,8 +27247,7 @@ class KalturaBasePartnerConfiguration(KalturaPartnerConfiguration):
             appTokenMaxExpirySeconds=NotImplemented,
             autoRefreshAppToken=NotImplemented,
             uploadTokenExpirySeconds=NotImplemented,
-            apptokenUserValidationDisabled=NotImplemented,
-            epgFeatureVersion=NotImplemented):
+            apptokenUserValidationDisabled=NotImplemented):
         KalturaPartnerConfiguration.__init__(self)
 
         # KSExpirationSeconds
@@ -27283,12 +27282,6 @@ class KalturaBasePartnerConfiguration(KalturaPartnerConfiguration):
         # @var bool
         self.apptokenUserValidationDisabled = apptokenUserValidationDisabled
 
-        # epgFeatureVersion
-        #             defines the epg feature version from version 1 to version 3
-        #             if not provided v2 will be used
-        # @var int
-        self.epgFeatureVersion = epgFeatureVersion
-
 
     PROPERTY_LOADERS = {
         'ksExpirationSeconds': getXmlNodeInt, 
@@ -27299,7 +27292,6 @@ class KalturaBasePartnerConfiguration(KalturaPartnerConfiguration):
         'autoRefreshAppToken': getXmlNodeBool, 
         'uploadTokenExpirySeconds': getXmlNodeInt, 
         'apptokenUserValidationDisabled': getXmlNodeBool, 
-        'epgFeatureVersion': getXmlNodeInt, 
     }
 
     def fromXml(self, node):
@@ -27317,7 +27309,6 @@ class KalturaBasePartnerConfiguration(KalturaPartnerConfiguration):
         kparams.addBoolIfDefined("autoRefreshAppToken", self.autoRefreshAppToken)
         kparams.addIntIfDefined("uploadTokenExpirySeconds", self.uploadTokenExpirySeconds)
         kparams.addBoolIfDefined("apptokenUserValidationDisabled", self.apptokenUserValidationDisabled)
-        kparams.addIntIfDefined("epgFeatureVersion", self.epgFeatureVersion)
         return kparams
 
     def getKsExpirationSeconds(self):
@@ -27367,12 +27358,6 @@ class KalturaBasePartnerConfiguration(KalturaPartnerConfiguration):
 
     def setApptokenUserValidationDisabled(self, newApptokenUserValidationDisabled):
         self.apptokenUserValidationDisabled = newApptokenUserValidationDisabled
-
-    def getEpgFeatureVersion(self):
-        return self.epgFeatureVersion
-
-    def setEpgFeatureVersion(self, newEpgFeatureVersion):
-        self.epgFeatureVersion = newEpgFeatureVersion
 
 
 # @package Kaltura
@@ -45868,7 +45853,7 @@ class KalturaIotClientConfiguration(KalturaObjectBase):
         self.password = password
 
         # topics
-        # @var array of KalturaStringValue
+        # @var array of KalturaKeyValue
         self.topics = topics
 
         # status
@@ -45892,7 +45877,7 @@ class KalturaIotClientConfiguration(KalturaObjectBase):
         'thingId': getXmlNodeText, 
         'username': getXmlNodeText, 
         'password': getXmlNodeText, 
-        'topics': (KalturaObjectFactory.createArray, 'KalturaStringValue'), 
+        'topics': (KalturaObjectFactory.createArray, 'KalturaKeyValue'), 
         'status': getXmlNodeText, 
         'message': getXmlNodeText, 
     }
