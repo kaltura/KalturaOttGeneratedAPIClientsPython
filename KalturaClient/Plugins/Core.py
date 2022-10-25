@@ -42,7 +42,7 @@ from ..Base import (
     KalturaServiceBase,
 )
 
-API_VERSION = '8.1.0.30026'
+API_VERSION = '8.0.1.30022'
 
 ########## enums ##########
 # @package Kaltura
@@ -1682,6 +1682,17 @@ class KalturaLinearChannelType(object):
 
 # @package Kaltura
 # @subpackage Client
+class KalturaListGroupsRepresentativesOrderBy(object):
+    NONE = "None"
+
+    def __init__(self, value):
+        self.value = value
+
+    def getValue(self):
+        return self.value
+
+# @package Kaltura
+# @subpackage Client
 class KalturaManualCollectionAssetType(object):
     MEDIA = "media"
     EPG = "epg"
@@ -2960,6 +2971,19 @@ class KalturaTvmRuleOrderBy(object):
 class KalturaTvmRuleType(object):
     GEO = "Geo"
     DEVICE = "Device"
+
+    def __init__(self, value):
+        self.value = value
+
+    def getValue(self):
+        return self.value
+
+# @package Kaltura
+# @subpackage Client
+class KalturaUnmatchedItemsPolicy(object):
+    OMIT = "Omit"
+    GROUP = "Group"
+    INCLUDE = "Include"
 
     def __init__(self, value):
         self.value = value
@@ -10709,6 +10733,41 @@ class KalturaSearchPriorityGroupFilter(KalturaFilter):
 
     def setIdEqual(self, newIdEqual):
         self.idEqual = newIdEqual
+
+
+# @package Kaltura
+# @subpackage Client
+class KalturaListGroupsRepresentativesFilter(KalturaFilter):
+    def __init__(self,
+            orderBy=NotImplemented,
+            kSql=NotImplemented):
+        KalturaFilter.__init__(self,
+            orderBy)
+
+        # Search assets using dynamic criteria. Provided collection of nested expressions with key, comparison operators, value, and logical conjunction.
+        # @var string
+        self.kSql = kSql
+
+
+    PROPERTY_LOADERS = {
+        'kSql': getXmlNodeText, 
+    }
+
+    def fromXml(self, node):
+        KalturaFilter.fromXml(self, node)
+        self.fromXmlImpl(node, KalturaListGroupsRepresentativesFilter.PROPERTY_LOADERS)
+
+    def toParams(self):
+        kparams = KalturaFilter.toParams(self)
+        kparams.put("objectType", "KalturaListGroupsRepresentativesFilter")
+        kparams.addStringIfDefined("kSql", self.kSql)
+        return kparams
+
+    def getKSql(self):
+        return self.kSql
+
+    def setKSql(self, newKSql):
+        self.kSql = newKSql
 
 
 # @package Kaltura
@@ -27247,8 +27306,7 @@ class KalturaBasePartnerConfiguration(KalturaPartnerConfiguration):
             appTokenMaxExpirySeconds=NotImplemented,
             autoRefreshAppToken=NotImplemented,
             uploadTokenExpirySeconds=NotImplemented,
-            apptokenUserValidationDisabled=NotImplemented,
-            epgFeatureVersion=NotImplemented):
+            apptokenUserValidationDisabled=NotImplemented):
         KalturaPartnerConfiguration.__init__(self)
 
         # KSExpirationSeconds
@@ -27283,12 +27341,6 @@ class KalturaBasePartnerConfiguration(KalturaPartnerConfiguration):
         # @var bool
         self.apptokenUserValidationDisabled = apptokenUserValidationDisabled
 
-        # epgFeatureVersion
-        #             defines the epg feature version from version 1 to version 3
-        #             if not provided v2 will be used
-        # @var int
-        self.epgFeatureVersion = epgFeatureVersion
-
 
     PROPERTY_LOADERS = {
         'ksExpirationSeconds': getXmlNodeInt, 
@@ -27299,7 +27351,6 @@ class KalturaBasePartnerConfiguration(KalturaPartnerConfiguration):
         'autoRefreshAppToken': getXmlNodeBool, 
         'uploadTokenExpirySeconds': getXmlNodeInt, 
         'apptokenUserValidationDisabled': getXmlNodeBool, 
-        'epgFeatureVersion': getXmlNodeInt, 
     }
 
     def fromXml(self, node):
@@ -27317,7 +27368,6 @@ class KalturaBasePartnerConfiguration(KalturaPartnerConfiguration):
         kparams.addBoolIfDefined("autoRefreshAppToken", self.autoRefreshAppToken)
         kparams.addIntIfDefined("uploadTokenExpirySeconds", self.uploadTokenExpirySeconds)
         kparams.addBoolIfDefined("apptokenUserValidationDisabled", self.apptokenUserValidationDisabled)
-        kparams.addIntIfDefined("epgFeatureVersion", self.epgFeatureVersion)
         return kparams
 
     def getKsExpirationSeconds(self):
@@ -27367,12 +27417,6 @@ class KalturaBasePartnerConfiguration(KalturaPartnerConfiguration):
 
     def setApptokenUserValidationDisabled(self, newApptokenUserValidationDisabled):
         self.apptokenUserValidationDisabled = newApptokenUserValidationDisabled
-
-    def getEpgFeatureVersion(self):
-        return self.epgFeatureVersion
-
-    def setEpgFeatureVersion(self, newEpgFeatureVersion):
-        self.epgFeatureVersion = newEpgFeatureVersion
 
 
 # @package Kaltura
@@ -43111,6 +43155,92 @@ class KalturaSessionInfo(KalturaSession):
 
 # @package Kaltura
 # @subpackage Client
+class KalturaRepresentativeSelectionPolicy(KalturaObjectBase):
+    def __init__(self):
+        KalturaObjectBase.__init__(self)
+
+
+    PROPERTY_LOADERS = {
+    }
+
+    def fromXml(self, node):
+        KalturaObjectBase.fromXml(self, node)
+        self.fromXmlImpl(node, KalturaRepresentativeSelectionPolicy.PROPERTY_LOADERS)
+
+    def toParams(self):
+        kparams = KalturaObjectBase.toParams(self)
+        kparams.put("objectType", "KalturaRepresentativeSelectionPolicy")
+        return kparams
+
+
+# @package Kaltura
+# @subpackage Client
+class KalturaTopRsp(KalturaRepresentativeSelectionPolicy):
+    def __init__(self,
+            orderBy=NotImplemented):
+        KalturaRepresentativeSelectionPolicy.__init__(self)
+
+        # order by
+        # @var KalturaBaseAssetOrder
+        self.orderBy = orderBy
+
+
+    PROPERTY_LOADERS = {
+        'orderBy': (KalturaObjectFactory.create, 'KalturaBaseAssetOrder'), 
+    }
+
+    def fromXml(self, node):
+        KalturaRepresentativeSelectionPolicy.fromXml(self, node)
+        self.fromXmlImpl(node, KalturaTopRsp.PROPERTY_LOADERS)
+
+    def toParams(self):
+        kparams = KalturaRepresentativeSelectionPolicy.toParams(self)
+        kparams.put("objectType", "KalturaTopRsp")
+        kparams.addObjectIfDefined("orderBy", self.orderBy)
+        return kparams
+
+    def getOrderBy(self):
+        return self.orderBy
+
+    def setOrderBy(self, newOrderBy):
+        self.orderBy = newOrderBy
+
+
+# @package Kaltura
+# @subpackage Client
+class KalturaTopSubscriptionEntitledRsp(KalturaRepresentativeSelectionPolicy):
+    def __init__(self,
+            orderBy=NotImplemented):
+        KalturaRepresentativeSelectionPolicy.__init__(self)
+
+        # order by
+        # @var KalturaBaseAssetOrder
+        self.orderBy = orderBy
+
+
+    PROPERTY_LOADERS = {
+        'orderBy': (KalturaObjectFactory.create, 'KalturaBaseAssetOrder'), 
+    }
+
+    def fromXml(self, node):
+        KalturaRepresentativeSelectionPolicy.fromXml(self, node)
+        self.fromXmlImpl(node, KalturaTopSubscriptionEntitledRsp.PROPERTY_LOADERS)
+
+    def toParams(self):
+        kparams = KalturaRepresentativeSelectionPolicy.toParams(self)
+        kparams.put("objectType", "KalturaTopSubscriptionEntitledRsp")
+        kparams.addObjectIfDefined("orderBy", self.orderBy)
+        return kparams
+
+    def getOrderBy(self):
+        return self.orderBy
+
+    def setOrderBy(self, newOrderBy):
+        self.orderBy = newOrderBy
+
+
+# @package Kaltura
+# @subpackage Client
 class KalturaPlaybackContextOptions(KalturaObjectBase):
     def __init__(self,
             mediaProtocol=NotImplemented,
@@ -49556,6 +49686,22 @@ class KalturaAssetService(KalturaServiceBase):
             return self.client.getMultiRequestResult()
         resultNode = self.client.doQueue()
         return KalturaObjectFactory.create(resultNode, 'KalturaPlaybackContext')
+
+    def groupRepresentativeList(self, groupBy, unmatchedItemsPolicy, orderBy = NotImplemented, filter = NotImplemented, selectionPolicy = NotImplemented, pager = NotImplemented):
+        """Returns assets deduplicated by asset metadata (or supported asset&#39;s property)."""
+
+        kparams = KalturaParams()
+        kparams.addObjectIfDefined("groupBy", groupBy)
+        kparams.addStringIfDefined("unmatchedItemsPolicy", unmatchedItemsPolicy)
+        kparams.addObjectIfDefined("orderBy", orderBy)
+        kparams.addObjectIfDefined("filter", filter)
+        kparams.addObjectIfDefined("selectionPolicy", selectionPolicy)
+        kparams.addObjectIfDefined("pager", pager)
+        self.client.queueServiceActionCall("asset", "groupRepresentativeList", "KalturaAssetListResponse", kparams)
+        if self.client.isMultiRequest():
+            return self.client.getMultiRequestResult()
+        resultNode = self.client.doQueue()
+        return KalturaObjectFactory.create(resultNode, 'KalturaAssetListResponse')
 
     def list(self, filter = NotImplemented, pager = NotImplemented):
         """Returns media or EPG assets. Filters by media identifiers or by EPG internal or external identifier."""
@@ -57137,6 +57283,7 @@ class KalturaCoreClient(KalturaClientPlugin):
             'KalturaLabelOrderBy': KalturaLabelOrderBy,
             'KalturaLanguageOrderBy': KalturaLanguageOrderBy,
             'KalturaLinearChannelType': KalturaLinearChannelType,
+            'KalturaListGroupsRepresentativesOrderBy': KalturaListGroupsRepresentativesOrderBy,
             'KalturaManualCollectionAssetType': KalturaManualCollectionAssetType,
             'KalturaMathemticalOperatorType': KalturaMathemticalOperatorType,
             'KalturaMediaFileOrderBy': KalturaMediaFileOrderBy,
@@ -57230,6 +57377,7 @@ class KalturaCoreClient(KalturaClientPlugin):
             'KalturaTransactionType': KalturaTransactionType,
             'KalturaTvmRuleOrderBy': KalturaTvmRuleOrderBy,
             'KalturaTvmRuleType': KalturaTvmRuleType,
+            'KalturaUnmatchedItemsPolicy': KalturaUnmatchedItemsPolicy,
             'KalturaUploadTokenStatus': KalturaUploadTokenStatus,
             'KalturaUrlType': KalturaUrlType,
             'KalturaUserAssetRuleOrderBy': KalturaUserAssetRuleOrderBy,
@@ -57398,6 +57546,7 @@ class KalturaCoreClient(KalturaClientPlugin):
             'KalturaStreamingDeviceFilter': KalturaStreamingDeviceFilter,
             'KalturaTagFilter': KalturaTagFilter,
             'KalturaSearchPriorityGroupFilter': KalturaSearchPriorityGroupFilter,
+            'KalturaListGroupsRepresentativesFilter': KalturaListGroupsRepresentativesFilter,
             'KalturaPaymentMethodProfileFilter': KalturaPaymentMethodProfileFilter,
             'KalturaAssetPersonalMarkupSearchFilter': KalturaAssetPersonalMarkupSearchFilter,
             'KalturaAssetRuleFilter': KalturaAssetRuleFilter,
@@ -57932,6 +58081,9 @@ class KalturaCoreClient(KalturaClientPlugin):
             'KalturaAppToken': KalturaAppToken,
             'KalturaSession': KalturaSession,
             'KalturaSessionInfo': KalturaSessionInfo,
+            'KalturaRepresentativeSelectionPolicy': KalturaRepresentativeSelectionPolicy,
+            'KalturaTopRsp': KalturaTopRsp,
+            'KalturaTopSubscriptionEntitledRsp': KalturaTopSubscriptionEntitledRsp,
             'KalturaPlaybackContextOptions': KalturaPlaybackContextOptions,
             'KalturaAccessControlMessage': KalturaAccessControlMessage,
             'KalturaCaptionPlaybackPluginData': KalturaCaptionPlaybackPluginData,
