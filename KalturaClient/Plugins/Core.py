@@ -42,7 +42,7 @@ from ..Base import (
     KalturaServiceBase,
 )
 
-API_VERSION = '8.1.0.30026'
+API_VERSION = '8.0.1.30034'
 
 ########## enums ##########
 # @package Kaltura
@@ -17816,11 +17816,45 @@ class KalturaAssetUserRule(KalturaAssetRuleBase):
 
 # @package Kaltura
 # @subpackage Client
+class KalturaStringValueArray(KalturaObjectBase):
+    def __init__(self,
+            objects=NotImplemented):
+        KalturaObjectBase.__init__(self)
+
+        # List of string values
+        # @var array of KalturaStringValue
+        self.objects = objects
+
+
+    PROPERTY_LOADERS = {
+        'objects': (KalturaObjectFactory.createArray, 'KalturaStringValue'), 
+    }
+
+    def fromXml(self, node):
+        KalturaObjectBase.fromXml(self, node)
+        self.fromXmlImpl(node, KalturaStringValueArray.PROPERTY_LOADERS)
+
+    def toParams(self):
+        kparams = KalturaObjectBase.toParams(self)
+        kparams.put("objectType", "KalturaStringValueArray")
+        kparams.addArrayIfDefined("objects", self.objects)
+        return kparams
+
+    def getObjects(self):
+        return self.objects
+
+    def setObjects(self, newObjects):
+        self.objects = newObjects
+
+
+# @package Kaltura
+# @subpackage Client
 class KalturaAssetShopCondition(KalturaAssetConditionBase):
     def __init__(self,
             type=NotImplemented,
             description=NotImplemented,
-            value=NotImplemented):
+            value=NotImplemented,
+            values=NotImplemented):
         KalturaAssetConditionBase.__init__(self,
             type,
             description)
@@ -17829,9 +17863,14 @@ class KalturaAssetShopCondition(KalturaAssetConditionBase):
         # @var string
         self.value = value
 
+        # Shop marker&#39;s values
+        # @var KalturaStringValueArray
+        self.values = values
+
 
     PROPERTY_LOADERS = {
         'value': getXmlNodeText, 
+        'values': (KalturaObjectFactory.create, 'KalturaStringValueArray'), 
     }
 
     def fromXml(self, node):
@@ -17842,6 +17881,7 @@ class KalturaAssetShopCondition(KalturaAssetConditionBase):
         kparams = KalturaAssetConditionBase.toParams(self)
         kparams.put("objectType", "KalturaAssetShopCondition")
         kparams.addStringIfDefined("value", self.value)
+        kparams.addObjectIfDefined("values", self.values)
         return kparams
 
     def getValue(self):
@@ -17849,6 +17889,12 @@ class KalturaAssetShopCondition(KalturaAssetConditionBase):
 
     def setValue(self, newValue):
         self.value = newValue
+
+    def getValues(self):
+        return self.values
+
+    def setValues(self, newValues):
+        self.values = newValues
 
 
 # @package Kaltura
@@ -21283,39 +21329,6 @@ class KalturaAssetFile(KalturaObjectBase):
 
     def setUrl(self, newUrl):
         self.url = newUrl
-
-
-# @package Kaltura
-# @subpackage Client
-class KalturaStringValueArray(KalturaObjectBase):
-    def __init__(self,
-            objects=NotImplemented):
-        KalturaObjectBase.__init__(self)
-
-        # List of string values
-        # @var array of KalturaStringValue
-        self.objects = objects
-
-
-    PROPERTY_LOADERS = {
-        'objects': (KalturaObjectFactory.createArray, 'KalturaStringValue'), 
-    }
-
-    def fromXml(self, node):
-        KalturaObjectBase.fromXml(self, node)
-        self.fromXmlImpl(node, KalturaStringValueArray.PROPERTY_LOADERS)
-
-    def toParams(self):
-        kparams = KalturaObjectBase.toParams(self)
-        kparams.put("objectType", "KalturaStringValueArray")
-        kparams.addArrayIfDefined("objects", self.objects)
-        return kparams
-
-    def getObjects(self):
-        return self.objects
-
-    def setObjects(self, newObjects):
-        self.objects = newObjects
 
 
 # @package Kaltura
@@ -27247,8 +27260,7 @@ class KalturaBasePartnerConfiguration(KalturaPartnerConfiguration):
             appTokenMaxExpirySeconds=NotImplemented,
             autoRefreshAppToken=NotImplemented,
             uploadTokenExpirySeconds=NotImplemented,
-            apptokenUserValidationDisabled=NotImplemented,
-            epgFeatureVersion=NotImplemented):
+            apptokenUserValidationDisabled=NotImplemented):
         KalturaPartnerConfiguration.__init__(self)
 
         # KSExpirationSeconds
@@ -27283,12 +27295,6 @@ class KalturaBasePartnerConfiguration(KalturaPartnerConfiguration):
         # @var bool
         self.apptokenUserValidationDisabled = apptokenUserValidationDisabled
 
-        # epgFeatureVersion
-        #             defines the epg feature version from version 1 to version 3
-        #             if not provided v2 will be used
-        # @var int
-        self.epgFeatureVersion = epgFeatureVersion
-
 
     PROPERTY_LOADERS = {
         'ksExpirationSeconds': getXmlNodeInt, 
@@ -27299,7 +27305,6 @@ class KalturaBasePartnerConfiguration(KalturaPartnerConfiguration):
         'autoRefreshAppToken': getXmlNodeBool, 
         'uploadTokenExpirySeconds': getXmlNodeInt, 
         'apptokenUserValidationDisabled': getXmlNodeBool, 
-        'epgFeatureVersion': getXmlNodeInt, 
     }
 
     def fromXml(self, node):
@@ -27317,7 +27322,6 @@ class KalturaBasePartnerConfiguration(KalturaPartnerConfiguration):
         kparams.addBoolIfDefined("autoRefreshAppToken", self.autoRefreshAppToken)
         kparams.addIntIfDefined("uploadTokenExpirySeconds", self.uploadTokenExpirySeconds)
         kparams.addBoolIfDefined("apptokenUserValidationDisabled", self.apptokenUserValidationDisabled)
-        kparams.addIntIfDefined("epgFeatureVersion", self.epgFeatureVersion)
         return kparams
 
     def getKsExpirationSeconds(self):
@@ -27367,12 +27371,6 @@ class KalturaBasePartnerConfiguration(KalturaPartnerConfiguration):
 
     def setApptokenUserValidationDisabled(self, newApptokenUserValidationDisabled):
         self.apptokenUserValidationDisabled = newApptokenUserValidationDisabled
-
-    def getEpgFeatureVersion(self):
-        return self.epgFeatureVersion
-
-    def setEpgFeatureVersion(self, newEpgFeatureVersion):
-        self.epgFeatureVersion = newEpgFeatureVersion
 
 
 # @package Kaltura
@@ -57504,6 +57502,7 @@ class KalturaCoreClient(KalturaClientPlugin):
             'KalturaAssetConditionBase': KalturaAssetConditionBase,
             'KalturaAssetUserRuleAction': KalturaAssetUserRuleAction,
             'KalturaAssetUserRule': KalturaAssetUserRule,
+            'KalturaStringValueArray': KalturaStringValueArray,
             'KalturaAssetShopCondition': KalturaAssetShopCondition,
             'KalturaChannelCondition': KalturaChannelCondition,
             'KalturaNotCondition': KalturaNotCondition,
@@ -57582,7 +57581,6 @@ class KalturaCoreClient(KalturaClientPlugin):
             'KalturaIot': KalturaIot,
             'KalturaIotProfileAws': KalturaIotProfileAws,
             'KalturaAssetFile': KalturaAssetFile,
-            'KalturaStringValueArray': KalturaStringValueArray,
             'KalturaBusinessModuleDetails': KalturaBusinessModuleDetails,
             'KalturaMediaFile': KalturaMediaFile,
             'KalturaBuzzScore': KalturaBuzzScore,
