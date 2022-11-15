@@ -42,7 +42,7 @@ from ..Base import (
     KalturaServiceBase,
 )
 
-API_VERSION = '8.1.0.30026'
+API_VERSION = '8.2.0.30058'
 
 ########## enums ##########
 # @package Kaltura
@@ -512,6 +512,18 @@ class KalturaBookmarkActionType(object):
 class KalturaBookmarkOrderBy(object):
     POSITION_ASC = "POSITION_ASC"
     POSITION_DESC = "POSITION_DESC"
+
+    def __init__(self, value):
+        self.value = value
+
+    def getValue(self):
+        return self.value
+
+# @package Kaltura
+# @subpackage Client
+class KalturaBooleanOperator(object):
+    AND = "And"
+    OR = "Or"
 
     def __init__(self, value):
         self.value = value
@@ -1815,6 +1827,8 @@ class KalturaMonetizationType(object):
     PPV = "ppv"
     SUBSCRIPTION = "subscription"
     BOXSET = "boxset"
+    ANY = "any"
+    PPV_LIVE = "ppv_live"
 
     def __init__(self, value):
         self.value = value
@@ -2536,6 +2550,26 @@ class KalturaSearchPriorityGroupOrderBy(object):
     PRIORITY_DESC = "PRIORITY_DESC"
     NAME_ASC = "NAME_ASC"
     NAME_DESC = "NAME_DESC"
+
+    def __init__(self, value):
+        self.value = value
+
+    def getValue(self):
+        return self.value
+
+# @package Kaltura
+# @subpackage Client
+class KalturaSegmentationTypeOrderBy(object):
+    UPDATE_DATE_DESC = "UPDATE_DATE_DESC"
+    UPDATE_DATE_ASC = "UPDATE_DATE_ASC"
+    CREATE_DATE_DESC = "CREATE_DATE_DESC"
+    CREATE_DATE_ASC = "CREATE_DATE_ASC"
+    EXECUTE_DATE_DESC = "EXECUTE_DATE_DESC"
+    EXECUTE_DATE_ASC = "EXECUTE_DATE_ASC"
+    AFFECTED_USERS_DESC = "AFFECTED_USERS_DESC"
+    AFFECTED_USERS_ASC = "AFFECTED_USERS_ASC"
+    AFFECTED_HOUSEHOLDS_DESC = "AFFECTED_HOUSEHOLDS_DESC"
+    AFFECTED_HOUSEHOLDS_ASC = "AFFECTED_HOUSEHOLDS_ASC"
 
     def __init__(self, value):
         self.value = value
@@ -4483,7 +4517,8 @@ class KalturaSegmentationTypeFilter(KalturaBaseSegmentationTypeFilter):
     def __init__(self,
             orderBy=NotImplemented,
             idIn=NotImplemented,
-            kSql=NotImplemented):
+            kSql=NotImplemented,
+            nameContain=NotImplemented):
         KalturaBaseSegmentationTypeFilter.__init__(self,
             orderBy)
 
@@ -4495,10 +4530,15 @@ class KalturaSegmentationTypeFilter(KalturaBaseSegmentationTypeFilter):
         # @var string
         self.kSql = kSql
 
+        # Name of segment contains specific string value
+        # @var string
+        self.nameContain = nameContain
+
 
     PROPERTY_LOADERS = {
         'idIn': getXmlNodeText, 
         'kSql': getXmlNodeText, 
+        'nameContain': getXmlNodeText, 
     }
 
     def fromXml(self, node):
@@ -4510,6 +4550,7 @@ class KalturaSegmentationTypeFilter(KalturaBaseSegmentationTypeFilter):
         kparams.put("objectType", "KalturaSegmentationTypeFilter")
         kparams.addStringIfDefined("idIn", self.idIn)
         kparams.addStringIfDefined("kSql", self.kSql)
+        kparams.addStringIfDefined("nameContain", self.nameContain)
         return kparams
 
     def getIdIn(self):
@@ -4523,6 +4564,12 @@ class KalturaSegmentationTypeFilter(KalturaBaseSegmentationTypeFilter):
 
     def setKSql(self, newKSql):
         self.kSql = newKSql
+
+    def getNameContain(self):
+        return self.nameContain
+
+    def setNameContain(self, newNameContain):
+        self.nameContain = newNameContain
 
 
 # @package Kaltura
@@ -9771,6 +9818,7 @@ class KalturaBookmark(KalturaSlimAsset):
         self.userId = userId
 
         # The position of the user in the specific asset (in seconds)
+        #             For external recordings will always be &#39;0&#39;
         # @var int
         # @insertonly
         self.position = position
@@ -9781,6 +9829,7 @@ class KalturaBookmark(KalturaSlimAsset):
         self.positionOwner = positionOwner
 
         # Specifies whether the user&#39;s current position exceeded 95% of the duration
+        #             For external recordings will always be &#39;True&#39;
         # @var bool
         # @readonly
         self.finishedWatching = finishedWatching
@@ -11129,6 +11178,55 @@ class KalturaCampaignIdInFilter(KalturaCampaignFilter):
 
     def setIdIn(self, newIdIn):
         self.idIn = newIdIn
+
+
+# @package Kaltura
+# @subpackage Client
+class KalturaCampaignSegmentFilter(KalturaCampaignSearchFilter):
+    def __init__(self,
+            orderBy=NotImplemented,
+            startDateGreaterThanOrEqual=NotImplemented,
+            endDateLessThanOrEqual=NotImplemented,
+            stateEqual=NotImplemented,
+            hasPromotion=NotImplemented,
+            nameEqual=NotImplemented,
+            nameContains=NotImplemented,
+            stateIn=NotImplemented,
+            segmentIdEqual=NotImplemented):
+        KalturaCampaignSearchFilter.__init__(self,
+            orderBy,
+            startDateGreaterThanOrEqual,
+            endDateLessThanOrEqual,
+            stateEqual,
+            hasPromotion,
+            nameEqual,
+            nameContains,
+            stateIn)
+
+        # segment id to be searched inside campaigns
+        # @var int
+        self.segmentIdEqual = segmentIdEqual
+
+
+    PROPERTY_LOADERS = {
+        'segmentIdEqual': getXmlNodeInt, 
+    }
+
+    def fromXml(self, node):
+        KalturaCampaignSearchFilter.fromXml(self, node)
+        self.fromXmlImpl(node, KalturaCampaignSegmentFilter.PROPERTY_LOADERS)
+
+    def toParams(self):
+        kparams = KalturaCampaignSearchFilter.toParams(self)
+        kparams.put("objectType", "KalturaCampaignSegmentFilter")
+        kparams.addIntIfDefined("segmentIdEqual", self.segmentIdEqual)
+        return kparams
+
+    def getSegmentIdEqual(self):
+        return self.segmentIdEqual
+
+    def setSegmentIdEqual(self, newSegmentIdEqual):
+        self.segmentIdEqual = newSegmentIdEqual
 
 
 # @package Kaltura
@@ -13640,12 +13738,10 @@ class KalturaUsageModule(KalturaObjectBase):
 
         # The amount time an item is available for viewing since a user started watching the item
         # @var int
-        # @insertonly
         self.viewLifeCycle = viewLifeCycle
 
         # The amount time an item is available for viewing
         # @var int
-        # @insertonly
         self.fullLifeCycle = fullLifeCycle
 
         # Identifies a specific coupon linked to this object
@@ -24229,9 +24325,12 @@ class KalturaSegmentationType(KalturaObjectBase):
             name=NotImplemented,
             description=NotImplemented,
             conditions=NotImplemented,
+            conditionsOperator=NotImplemented,
             actions=NotImplemented,
             value=NotImplemented,
             createDate=NotImplemented,
+            updateDate=NotImplemented,
+            executeDate=NotImplemented,
             version=NotImplemented):
         KalturaObjectBase.__init__(self)
 
@@ -24252,6 +24351,10 @@ class KalturaSegmentationType(KalturaObjectBase):
         # @var array of KalturaBaseSegmentCondition
         self.conditions = conditions
 
+        # Boolean operator between segmentation type&#39;s conditions - defaults to &quot;And&quot;
+        # @var KalturaBooleanOperator
+        self.conditionsOperator = conditionsOperator
+
         # Segmentation conditions - can be empty
         # @var array of KalturaBaseSegmentAction
         self.actions = actions
@@ -24265,6 +24368,16 @@ class KalturaSegmentationType(KalturaObjectBase):
         # @readonly
         self.createDate = createDate
 
+        # Update date of segmentation type
+        # @var int
+        # @readonly
+        self.updateDate = updateDate
+
+        # Last date of execution of segmentation type
+        # @var int
+        # @readonly
+        self.executeDate = executeDate
+
         # Segmentation type version
         # @var int
         # @readonly
@@ -24276,9 +24389,12 @@ class KalturaSegmentationType(KalturaObjectBase):
         'name': getXmlNodeText, 
         'description': getXmlNodeText, 
         'conditions': (KalturaObjectFactory.createArray, 'KalturaBaseSegmentCondition'), 
+        'conditionsOperator': (KalturaEnumsFactory.createString, "KalturaBooleanOperator"), 
         'actions': (KalturaObjectFactory.createArray, 'KalturaBaseSegmentAction'), 
         'value': (KalturaObjectFactory.create, 'KalturaBaseSegmentValue'), 
         'createDate': getXmlNodeInt, 
+        'updateDate': getXmlNodeInt, 
+        'executeDate': getXmlNodeInt, 
         'version': getXmlNodeInt, 
     }
 
@@ -24292,6 +24408,7 @@ class KalturaSegmentationType(KalturaObjectBase):
         kparams.addStringIfDefined("name", self.name)
         kparams.addStringIfDefined("description", self.description)
         kparams.addArrayIfDefined("conditions", self.conditions)
+        kparams.addStringEnumIfDefined("conditionsOperator", self.conditionsOperator)
         kparams.addArrayIfDefined("actions", self.actions)
         kparams.addObjectIfDefined("value", self.value)
         return kparams
@@ -24317,6 +24434,12 @@ class KalturaSegmentationType(KalturaObjectBase):
     def setConditions(self, newConditions):
         self.conditions = newConditions
 
+    def getConditionsOperator(self):
+        return self.conditionsOperator
+
+    def setConditionsOperator(self, newConditionsOperator):
+        self.conditionsOperator = newConditionsOperator
+
     def getActions(self):
         return self.actions
 
@@ -24331,6 +24454,12 @@ class KalturaSegmentationType(KalturaObjectBase):
 
     def getCreateDate(self):
         return self.createDate
+
+    def getUpdateDate(self):
+        return self.updateDate
+
+    def getExecuteDate(self):
+        return self.executeDate
 
     def getVersion(self):
         return self.version
@@ -24559,7 +24688,8 @@ class KalturaMonetizationCondition(KalturaBaseSegmentCondition):
             days=NotImplemented,
             type=NotImplemented,
             operator=NotImplemented,
-            businessModuleIdIn=NotImplemented):
+            businessModuleIdIn=NotImplemented,
+            currencyCode=NotImplemented):
         KalturaBaseSegmentCondition.__init__(self)
 
         # The minimum value to be met
@@ -24586,6 +24716,10 @@ class KalturaMonetizationCondition(KalturaBaseSegmentCondition):
         # @var string
         self.businessModuleIdIn = businessModuleIdIn
 
+        # Which currency code should be taken into consideration
+        # @var string
+        self.currencyCode = currencyCode
+
 
     PROPERTY_LOADERS = {
         'minValue': getXmlNodeInt, 
@@ -24594,6 +24728,7 @@ class KalturaMonetizationCondition(KalturaBaseSegmentCondition):
         'type': (KalturaEnumsFactory.createString, "KalturaMonetizationType"), 
         'operator': (KalturaEnumsFactory.createString, "KalturaMathemticalOperatorType"), 
         'businessModuleIdIn': getXmlNodeText, 
+        'currencyCode': getXmlNodeText, 
     }
 
     def fromXml(self, node):
@@ -24609,6 +24744,7 @@ class KalturaMonetizationCondition(KalturaBaseSegmentCondition):
         kparams.addStringEnumIfDefined("type", self.type)
         kparams.addStringEnumIfDefined("operator", self.operator)
         kparams.addStringIfDefined("businessModuleIdIn", self.businessModuleIdIn)
+        kparams.addStringIfDefined("currencyCode", self.currencyCode)
         return kparams
 
     def getMinValue(self):
@@ -24646,6 +24782,12 @@ class KalturaMonetizationCondition(KalturaBaseSegmentCondition):
 
     def setBusinessModuleIdIn(self, newBusinessModuleIdIn):
         self.businessModuleIdIn = newBusinessModuleIdIn
+
+    def getCurrencyCode(self):
+        return self.currencyCode
+
+    def setCurrencyCode(self, newCurrencyCode):
+        self.currencyCode = newCurrencyCode
 
 
 # @package Kaltura
@@ -25434,7 +25576,8 @@ class KalturaSegmentRanges(KalturaBaseSegmentValue):
 class KalturaSingleSegmentValue(KalturaBaseSegmentValue):
     def __init__(self,
             id=NotImplemented,
-            affectedUsers=NotImplemented):
+            affectedUsers=NotImplemented,
+            affectedHouseholds=NotImplemented):
         KalturaBaseSegmentValue.__init__(self)
 
         # Id of segment
@@ -25447,10 +25590,16 @@ class KalturaSingleSegmentValue(KalturaBaseSegmentValue):
         # @readonly
         self.affectedUsers = affectedUsers
 
+        # The amount of households that are being affected by this Segmentation type
+        # @var int
+        # @readonly
+        self.affectedHouseholds = affectedHouseholds
+
 
     PROPERTY_LOADERS = {
         'id': getXmlNodeInt, 
         'affectedUsers': getXmlNodeInt, 
+        'affectedHouseholds': getXmlNodeInt, 
     }
 
     def fromXml(self, node):
@@ -25467,6 +25616,9 @@ class KalturaSingleSegmentValue(KalturaBaseSegmentValue):
 
     def getAffectedUsers(self):
         return self.affectedUsers
+
+    def getAffectedHouseholds(self):
+        return self.affectedHouseholds
 
 
 # @package Kaltura
@@ -44047,6 +44199,158 @@ class KalturaAssetStatisticsQuery(KalturaObjectBase):
 
 # @package Kaltura
 # @subpackage Client
+class KalturaBulkUploadStatistics(KalturaObjectBase):
+    """Bulk Upload Statistics"""
+
+    def __init__(self,
+            pending=NotImplemented,
+            uploaded=NotImplemented,
+            queued=NotImplemented,
+            parsing=NotImplemented,
+            processing=NotImplemented,
+            processed=NotImplemented,
+            success=NotImplemented,
+            partial=NotImplemented,
+            failed=NotImplemented,
+            fatal=NotImplemented):
+        KalturaObjectBase.__init__(self)
+
+        # count of bulk upload in pending status
+        # @var int
+        self.pending = pending
+
+        # count of bulk Uploaded in uploaded status
+        # @var int
+        self.uploaded = uploaded
+
+        # count of bulk upload in queued status
+        # @var int
+        self.queued = queued
+
+        # count of bulk upload in parsing status
+        # @var int
+        self.parsing = parsing
+
+        # count of bulk upload in processing status
+        # @var int
+        self.processing = processing
+
+        # count of bulk upload in processed status
+        # @var int
+        self.processed = processed
+
+        # count of bulk upload in success status
+        # @var int
+        self.success = success
+
+        # count of bulk upload in partial status
+        # @var int
+        self.partial = partial
+
+        # count of bulk upload in failed status
+        # @var int
+        self.failed = failed
+
+        # count of bulk upload in fatal status
+        # @var int
+        self.fatal = fatal
+
+
+    PROPERTY_LOADERS = {
+        'pending': getXmlNodeInt, 
+        'uploaded': getXmlNodeInt, 
+        'queued': getXmlNodeInt, 
+        'parsing': getXmlNodeInt, 
+        'processing': getXmlNodeInt, 
+        'processed': getXmlNodeInt, 
+        'success': getXmlNodeInt, 
+        'partial': getXmlNodeInt, 
+        'failed': getXmlNodeInt, 
+        'fatal': getXmlNodeInt, 
+    }
+
+    def fromXml(self, node):
+        KalturaObjectBase.fromXml(self, node)
+        self.fromXmlImpl(node, KalturaBulkUploadStatistics.PROPERTY_LOADERS)
+
+    def toParams(self):
+        kparams = KalturaObjectBase.toParams(self)
+        kparams.put("objectType", "KalturaBulkUploadStatistics")
+        kparams.addIntIfDefined("pending", self.pending)
+        kparams.addIntIfDefined("uploaded", self.uploaded)
+        kparams.addIntIfDefined("queued", self.queued)
+        kparams.addIntIfDefined("parsing", self.parsing)
+        kparams.addIntIfDefined("processing", self.processing)
+        kparams.addIntIfDefined("processed", self.processed)
+        kparams.addIntIfDefined("success", self.success)
+        kparams.addIntIfDefined("partial", self.partial)
+        kparams.addIntIfDefined("failed", self.failed)
+        kparams.addIntIfDefined("fatal", self.fatal)
+        return kparams
+
+    def getPending(self):
+        return self.pending
+
+    def setPending(self, newPending):
+        self.pending = newPending
+
+    def getUploaded(self):
+        return self.uploaded
+
+    def setUploaded(self, newUploaded):
+        self.uploaded = newUploaded
+
+    def getQueued(self):
+        return self.queued
+
+    def setQueued(self, newQueued):
+        self.queued = newQueued
+
+    def getParsing(self):
+        return self.parsing
+
+    def setParsing(self, newParsing):
+        self.parsing = newParsing
+
+    def getProcessing(self):
+        return self.processing
+
+    def setProcessing(self, newProcessing):
+        self.processing = newProcessing
+
+    def getProcessed(self):
+        return self.processed
+
+    def setProcessed(self, newProcessed):
+        self.processed = newProcessed
+
+    def getSuccess(self):
+        return self.success
+
+    def setSuccess(self, newSuccess):
+        self.success = newSuccess
+
+    def getPartial(self):
+        return self.partial
+
+    def setPartial(self, newPartial):
+        self.partial = newPartial
+
+    def getFailed(self):
+        return self.failed
+
+    def setFailed(self, newFailed):
+        self.failed = newFailed
+
+    def getFatal(self):
+        return self.fatal
+
+    def setFatal(self, newFatal):
+        self.fatal = newFatal
+
+
+# @package Kaltura
+# @subpackage Client
 class KalturaOTTCategory(KalturaObjectBase):
     """Category details"""
 
@@ -45868,7 +46172,7 @@ class KalturaIotClientConfiguration(KalturaObjectBase):
         self.password = password
 
         # topics
-        # @var array of KalturaStringValue
+        # @var array of KalturaKeyValue
         self.topics = topics
 
         # status
@@ -45892,7 +46196,7 @@ class KalturaIotClientConfiguration(KalturaObjectBase):
         'thingId': getXmlNodeText, 
         'username': getXmlNodeText, 
         'password': getXmlNodeText, 
-        'topics': (KalturaObjectFactory.createArray, 'KalturaStringValue'), 
+        'topics': (KalturaObjectFactory.createArray, 'KalturaKeyValue'), 
         'status': getXmlNodeText, 
         'message': getXmlNodeText, 
     }
@@ -47646,6 +47950,54 @@ class KalturaSearchPriorityGroupOrderedIdsSet(KalturaObjectBase):
 
     def setPriorityGroupIds(self, newPriorityGroupIds):
         self.priorityGroupIds = newPriorityGroupIds
+
+
+# @package Kaltura
+# @subpackage Client
+class KalturaSegmentationPartnerConfiguration(KalturaObjectBase):
+    """Partner configuration for segments configuration"""
+
+    def __init__(self,
+            maxCalculatedPeriod=NotImplemented,
+            maxDynamicSegments=NotImplemented):
+        KalturaObjectBase.__init__(self)
+
+        # The maximum number of past days to be calculated for dynamic segments, default=180
+        # @var int
+        self.maxCalculatedPeriod = maxCalculatedPeriod
+
+        # How many dynamic segments (segments with conditions) the operator is allowed to have, default=50
+        # @var int
+        self.maxDynamicSegments = maxDynamicSegments
+
+
+    PROPERTY_LOADERS = {
+        'maxCalculatedPeriod': getXmlNodeInt, 
+        'maxDynamicSegments': getXmlNodeInt, 
+    }
+
+    def fromXml(self, node):
+        KalturaObjectBase.fromXml(self, node)
+        self.fromXmlImpl(node, KalturaSegmentationPartnerConfiguration.PROPERTY_LOADERS)
+
+    def toParams(self):
+        kparams = KalturaObjectBase.toParams(self)
+        kparams.put("objectType", "KalturaSegmentationPartnerConfiguration")
+        kparams.addIntIfDefined("maxCalculatedPeriod", self.maxCalculatedPeriod)
+        kparams.addIntIfDefined("maxDynamicSegments", self.maxDynamicSegments)
+        return kparams
+
+    def getMaxCalculatedPeriod(self):
+        return self.maxCalculatedPeriod
+
+    def setMaxCalculatedPeriod(self, newMaxCalculatedPeriod):
+        self.maxCalculatedPeriod = newMaxCalculatedPeriod
+
+    def getMaxDynamicSegments(self):
+        return self.maxDynamicSegments
+
+    def setMaxDynamicSegments(self, newMaxDynamicSegments):
+        self.maxDynamicSegments = newMaxDynamicSegments
 
 
 # @package Kaltura
@@ -50092,6 +50444,25 @@ class KalturaBulkUploadService(KalturaServiceBase):
             return self.client.getMultiRequestResult()
         resultNode = self.client.doQueue()
         return KalturaObjectFactory.create(resultNode, 'KalturaBulkUploadListResponse')
+
+
+# @package Kaltura
+# @subpackage Client
+class KalturaBulkUploadStatisticsService(KalturaServiceBase):
+    def __init__(self, client = None):
+        KalturaServiceBase.__init__(self, client)
+
+    def get(self, bulkObjectTypeEqual, createDateGreaterThanOrEqual):
+        """Get BulkUploadStatistics count summary by status"""
+
+        kparams = KalturaParams()
+        kparams.addStringIfDefined("bulkObjectTypeEqual", bulkObjectTypeEqual)
+        kparams.addIntIfDefined("createDateGreaterThanOrEqual", createDateGreaterThanOrEqual);
+        self.client.queueServiceActionCall("bulkuploadstatistics", "get", "KalturaBulkUploadStatistics", kparams)
+        if self.client.isMultiRequest():
+            return self.client.getMultiRequestResult()
+        resultNode = self.client.doQueue()
+        return KalturaObjectFactory.create(resultNode, 'KalturaBulkUploadStatistics')
 
 
 # @package Kaltura
@@ -55305,6 +55676,16 @@ class KalturaSegmentationTypeService(KalturaServiceBase):
         resultNode = self.client.doQueue()
         return getXmlNodeBool(resultNode)
 
+    def getPartnerConfiguration(self):
+        """Gets existing partner segmentation configuration"""
+
+        kparams = KalturaParams()
+        self.client.queueServiceActionCall("segmentationtype", "getPartnerConfiguration", "KalturaSegmentationPartnerConfiguration", kparams)
+        if self.client.isMultiRequest():
+            return self.client.getMultiRequestResult()
+        resultNode = self.client.doQueue()
+        return KalturaObjectFactory.create(resultNode, 'KalturaSegmentationPartnerConfiguration')
+
     def list(self, filter = NotImplemented, pager = NotImplemented):
         """Lists all segmentation types in group"""
 
@@ -55328,6 +55709,17 @@ class KalturaSegmentationTypeService(KalturaServiceBase):
             return self.client.getMultiRequestResult()
         resultNode = self.client.doQueue()
         return KalturaObjectFactory.create(resultNode, 'KalturaSegmentationType')
+
+    def updatePartnerConfiguration(self, configuration):
+        """Sets partner configuration for segments configuration"""
+
+        kparams = KalturaParams()
+        kparams.addObjectIfDefined("configuration", configuration)
+        self.client.queueServiceActionCall("segmentationtype", "updatePartnerConfiguration", "None", kparams)
+        if self.client.isMultiRequest():
+            return self.client.getMultiRequestResult()
+        resultNode = self.client.doQueue()
+        return getXmlNodeBool(resultNode)
 
 
 # @package Kaltura
@@ -56876,6 +57268,7 @@ class KalturaCoreClient(KalturaClientPlugin):
             'assetUserRule': KalturaAssetUserRuleService,
             'bookmark': KalturaBookmarkService,
             'bulkUpload': KalturaBulkUploadService,
+            'bulkUploadStatistics': KalturaBulkUploadStatisticsService,
             'businessModuleRule': KalturaBusinessModuleRuleService,
             'campaign': KalturaCampaignService,
             'categoryItem': KalturaCategoryItemService,
@@ -57048,6 +57441,7 @@ class KalturaCoreClient(KalturaClientPlugin):
             'KalturaBillingPriceType': KalturaBillingPriceType,
             'KalturaBookmarkActionType': KalturaBookmarkActionType,
             'KalturaBookmarkOrderBy': KalturaBookmarkOrderBy,
+            'KalturaBooleanOperator': KalturaBooleanOperator,
             'KalturaBulkUploadJobAction': KalturaBulkUploadJobAction,
             'KalturaBulkUploadJobStatus': KalturaBulkUploadJobStatus,
             'KalturaBulkUploadOrderBy': KalturaBulkUploadOrderBy,
@@ -57197,6 +57591,7 @@ class KalturaCoreClient(KalturaClientPlugin):
             'KalturaSearchHistoryOrderBy': KalturaSearchHistoryOrderBy,
             'KalturaSearchPriorityCriteriaType': KalturaSearchPriorityCriteriaType,
             'KalturaSearchPriorityGroupOrderBy': KalturaSearchPriorityGroupOrderBy,
+            'KalturaSegmentationTypeOrderBy': KalturaSegmentationTypeOrderBy,
             'KalturaSeriesRecordingOrderBy': KalturaSeriesRecordingOrderBy,
             'KalturaSeriesReminderOrderBy': KalturaSeriesReminderOrderBy,
             'KalturaSkipOperators': KalturaSkipOperators,
@@ -57406,6 +57801,7 @@ class KalturaCoreClient(KalturaClientPlugin):
             'KalturaCampaignSearchFilter': KalturaCampaignSearchFilter,
             'KalturaBatchCampaignSearchFilter': KalturaBatchCampaignSearchFilter,
             'KalturaCampaignIdInFilter': KalturaCampaignIdInFilter,
+            'KalturaCampaignSegmentFilter': KalturaCampaignSegmentFilter,
             'KalturaTriggerCampaignSearchFilter': KalturaTriggerCampaignSearchFilter,
             'KalturaBusinessModuleRuleFilter': KalturaBusinessModuleRuleFilter,
             'KalturaCountryFilter': KalturaCountryFilter,
@@ -57953,6 +58349,7 @@ class KalturaCoreClient(KalturaClientPlugin):
             'KalturaAssetFileContext': KalturaAssetFileContext,
             'KalturaAssetPersonalSelection': KalturaAssetPersonalSelection,
             'KalturaAssetStatisticsQuery': KalturaAssetStatisticsQuery,
+            'KalturaBulkUploadStatistics': KalturaBulkUploadStatistics,
             'KalturaOTTCategory': KalturaOTTCategory,
             'KalturaCategoryTree': KalturaCategoryTree,
             'KalturaCDNPartnerSettings': KalturaCDNPartnerSettings,
@@ -58009,6 +58406,7 @@ class KalturaCoreClient(KalturaClientPlugin):
             'KalturaRegionChannelNumber': KalturaRegionChannelNumber,
             'KalturaRegionChannelNumberMultiLcns': KalturaRegionChannelNumberMultiLcns,
             'KalturaSearchPriorityGroupOrderedIdsSet': KalturaSearchPriorityGroupOrderedIdsSet,
+            'KalturaSegmentationPartnerConfiguration': KalturaSegmentationPartnerConfiguration,
             'KalturaNetworkActionStatus': KalturaNetworkActionStatus,
             'KalturaUserSocialActionResponse': KalturaUserSocialActionResponse,
             'KalturaSocial': KalturaSocial,
