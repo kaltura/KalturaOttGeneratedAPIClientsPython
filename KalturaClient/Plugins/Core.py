@@ -42,7 +42,7 @@ from ..Base import (
     KalturaServiceBase,
 )
 
-API_VERSION = '8.2.0.30085'
+API_VERSION = '8.2.0.30097'
 
 ########## enums ##########
 # @package Kaltura
@@ -3016,9 +3016,9 @@ class KalturaTvmRuleType(object):
 # @package Kaltura
 # @subpackage Client
 class KalturaUnmatchedItemsPolicy(object):
-    OMIT = "Omit"
-    GROUP = "Group"
-    INCLUDEANDMERGE = "IncludeAndMerge"
+    OMIT = "OMIT"
+    GROUP = "GROUP"
+    INCLUDE_AND_MERGE = "INCLUDE_AND_MERGE"
 
     def __init__(self, value):
         self.value = value
@@ -14180,7 +14180,8 @@ class KalturaCollection(KalturaOTTObjectSupportNullable):
             updateDate=NotImplemented,
             virtualAssetId=NotImplemented,
             fileTypes=NotImplemented,
-            fileTypesIds=NotImplemented):
+            fileTypesIds=NotImplemented,
+            assetUserRuleId=NotImplemented):
         KalturaOTTObjectSupportNullable.__init__(self)
 
         # Collection identifier
@@ -14293,6 +14294,10 @@ class KalturaCollection(KalturaOTTObjectSupportNullable):
         # @var string
         self.fileTypesIds = fileTypesIds
 
+        # Asset user rule identifier
+        # @var int
+        self.assetUserRuleId = assetUserRuleId
+
 
     PROPERTY_LOADERS = {
         'id': getXmlNodeText, 
@@ -14319,6 +14324,7 @@ class KalturaCollection(KalturaOTTObjectSupportNullable):
         'virtualAssetId': getXmlNodeInt, 
         'fileTypes': (KalturaObjectFactory.createArray, 'KalturaIntegerValue'), 
         'fileTypesIds': getXmlNodeText, 
+        'assetUserRuleId': getXmlNodeInt, 
     }
 
     def fromXml(self, node):
@@ -14342,6 +14348,7 @@ class KalturaCollection(KalturaOTTObjectSupportNullable):
         kparams.addIntIfDefined("priceDetailsId", self.priceDetailsId)
         kparams.addBoolIfDefined("isActive", self.isActive)
         kparams.addStringIfDefined("fileTypesIds", self.fileTypesIds)
+        kparams.addIntIfDefined("assetUserRuleId", self.assetUserRuleId)
         return kparams
 
     def getId(self):
@@ -14457,6 +14464,12 @@ class KalturaCollection(KalturaOTTObjectSupportNullable):
 
     def setFileTypesIds(self, newFileTypesIds):
         self.fileTypesIds = newFileTypesIds
+
+    def getAssetUserRuleId(self):
+        return self.assetUserRuleId
+
+    def setAssetUserRuleId(self, newAssetUserRuleId):
+        self.assetUserRuleId = newAssetUserRuleId
 
 
 # @package Kaltura
@@ -17972,11 +17985,45 @@ class KalturaAssetUserRule(KalturaAssetRuleBase):
 
 # @package Kaltura
 # @subpackage Client
+class KalturaStringValueArray(KalturaObjectBase):
+    def __init__(self,
+            objects=NotImplemented):
+        KalturaObjectBase.__init__(self)
+
+        # List of string values
+        # @var array of KalturaStringValue
+        self.objects = objects
+
+
+    PROPERTY_LOADERS = {
+        'objects': (KalturaObjectFactory.createArray, 'KalturaStringValue'), 
+    }
+
+    def fromXml(self, node):
+        KalturaObjectBase.fromXml(self, node)
+        self.fromXmlImpl(node, KalturaStringValueArray.PROPERTY_LOADERS)
+
+    def toParams(self):
+        kparams = KalturaObjectBase.toParams(self)
+        kparams.put("objectType", "KalturaStringValueArray")
+        kparams.addArrayIfDefined("objects", self.objects)
+        return kparams
+
+    def getObjects(self):
+        return self.objects
+
+    def setObjects(self, newObjects):
+        self.objects = newObjects
+
+
+# @package Kaltura
+# @subpackage Client
 class KalturaAssetShopCondition(KalturaAssetConditionBase):
     def __init__(self,
             type=NotImplemented,
             description=NotImplemented,
-            value=NotImplemented):
+            value=NotImplemented,
+            values=NotImplemented):
         KalturaAssetConditionBase.__init__(self,
             type,
             description)
@@ -17985,9 +18032,14 @@ class KalturaAssetShopCondition(KalturaAssetConditionBase):
         # @var string
         self.value = value
 
+        # Shop marker&#39;s values
+        # @var KalturaStringValueArray
+        self.values = values
+
 
     PROPERTY_LOADERS = {
         'value': getXmlNodeText, 
+        'values': (KalturaObjectFactory.create, 'KalturaStringValueArray'), 
     }
 
     def fromXml(self, node):
@@ -17998,6 +18050,7 @@ class KalturaAssetShopCondition(KalturaAssetConditionBase):
         kparams = KalturaAssetConditionBase.toParams(self)
         kparams.put("objectType", "KalturaAssetShopCondition")
         kparams.addStringIfDefined("value", self.value)
+        kparams.addObjectIfDefined("values", self.values)
         return kparams
 
     def getValue(self):
@@ -18005,6 +18058,12 @@ class KalturaAssetShopCondition(KalturaAssetConditionBase):
 
     def setValue(self, newValue):
         self.value = newValue
+
+    def getValues(self):
+        return self.values
+
+    def setValues(self, newValues):
+        self.values = newValues
 
 
 # @package Kaltura
@@ -21439,39 +21498,6 @@ class KalturaAssetFile(KalturaObjectBase):
 
     def setUrl(self, newUrl):
         self.url = newUrl
-
-
-# @package Kaltura
-# @subpackage Client
-class KalturaStringValueArray(KalturaObjectBase):
-    def __init__(self,
-            objects=NotImplemented):
-        KalturaObjectBase.__init__(self)
-
-        # List of string values
-        # @var array of KalturaStringValue
-        self.objects = objects
-
-
-    PROPERTY_LOADERS = {
-        'objects': (KalturaObjectFactory.createArray, 'KalturaStringValue'), 
-    }
-
-    def fromXml(self, node):
-        KalturaObjectBase.fromXml(self, node)
-        self.fromXmlImpl(node, KalturaStringValueArray.PROPERTY_LOADERS)
-
-    def toParams(self):
-        kparams = KalturaObjectBase.toParams(self)
-        kparams.put("objectType", "KalturaStringValueArray")
-        kparams.addArrayIfDefined("objects", self.objects)
-        return kparams
-
-    def getObjects(self):
-        return self.objects
-
-    def setObjects(self, newObjects):
-        self.objects = newObjects
 
 
 # @package Kaltura
@@ -26643,7 +26669,8 @@ class KalturaPpv(KalturaObjectBase):
             isActive=NotImplemented,
             updateDate=NotImplemented,
             createDate=NotImplemented,
-            virtualAssetId=NotImplemented):
+            virtualAssetId=NotImplemented,
+            assetUserRuleId=NotImplemented):
         KalturaObjectBase.__init__(self)
 
         # PPV identifier
@@ -26738,6 +26765,10 @@ class KalturaPpv(KalturaObjectBase):
         # @readonly
         self.virtualAssetId = virtualAssetId
 
+        # Asset user rule identifier
+        # @var int
+        self.assetUserRuleId = assetUserRuleId
+
 
     PROPERTY_LOADERS = {
         'id': getXmlNodeText, 
@@ -26761,6 +26792,7 @@ class KalturaPpv(KalturaObjectBase):
         'updateDate': getXmlNodeInt, 
         'createDate': getXmlNodeInt, 
         'virtualAssetId': getXmlNodeInt, 
+        'assetUserRuleId': getXmlNodeInt, 
     }
 
     def fromXml(self, node):
@@ -26783,6 +26815,7 @@ class KalturaPpv(KalturaObjectBase):
         kparams.addIntIfDefined("usageModuleId", self.usageModuleId)
         kparams.addStringEnumIfDefined("adsPolicy", self.adsPolicy)
         kparams.addBoolIfDefined("isActive", self.isActive)
+        kparams.addIntIfDefined("assetUserRuleId", self.assetUserRuleId)
         return kparams
 
     def getId(self):
@@ -26886,6 +26919,12 @@ class KalturaPpv(KalturaObjectBase):
 
     def getVirtualAssetId(self):
         return self.virtualAssetId
+
+    def getAssetUserRuleId(self):
+        return self.assetUserRuleId
+
+    def setAssetUserRuleId(self, newAssetUserRuleId):
+        self.assetUserRuleId = newAssetUserRuleId
 
 
 # @package Kaltura
@@ -58065,6 +58104,7 @@ class KalturaCoreClient(KalturaClientPlugin):
             'KalturaAssetConditionBase': KalturaAssetConditionBase,
             'KalturaAssetUserRuleAction': KalturaAssetUserRuleAction,
             'KalturaAssetUserRule': KalturaAssetUserRule,
+            'KalturaStringValueArray': KalturaStringValueArray,
             'KalturaAssetShopCondition': KalturaAssetShopCondition,
             'KalturaChannelCondition': KalturaChannelCondition,
             'KalturaNotCondition': KalturaNotCondition,
@@ -58143,7 +58183,6 @@ class KalturaCoreClient(KalturaClientPlugin):
             'KalturaIot': KalturaIot,
             'KalturaIotProfileAws': KalturaIotProfileAws,
             'KalturaAssetFile': KalturaAssetFile,
-            'KalturaStringValueArray': KalturaStringValueArray,
             'KalturaBusinessModuleDetails': KalturaBusinessModuleDetails,
             'KalturaMediaFile': KalturaMediaFile,
             'KalturaBuzzScore': KalturaBuzzScore,
