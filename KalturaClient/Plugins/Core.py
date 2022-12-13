@@ -42,7 +42,7 @@ from ..Base import (
     KalturaServiceBase,
 )
 
-API_VERSION = '8.2.0.30126'
+API_VERSION = '8.3.0.30156'
 
 ########## enums ##########
 # @package Kaltura
@@ -1295,6 +1295,7 @@ class KalturaGroupByField(object):
     SUPPRESSED = "suppressed"
     CRID = "crid"
     LINEAR_MEDIA_ID = "linear_media_id"
+    NAME = "name"
 
     def __init__(self, value):
         self.value = value
@@ -1685,6 +1686,17 @@ class KalturaLinearChannelType(object):
     OTT = "OTT"
     DTT_AND_OTT = "DTT_AND_OTT"
     VRM_EXPORT = "VRM_EXPORT"
+
+    def __init__(self, value):
+        self.value = value
+
+    def getValue(self):
+        return self.value
+
+# @package Kaltura
+# @subpackage Client
+class KalturaListGroupsRepresentativesOrderBy(object):
+    NONE = "None"
 
     def __init__(self, value):
         self.value = value
@@ -2994,6 +3006,19 @@ class KalturaTvmRuleOrderBy(object):
 class KalturaTvmRuleType(object):
     GEO = "Geo"
     DEVICE = "Device"
+
+    def __init__(self, value):
+        self.value = value
+
+    def getValue(self):
+        return self.value
+
+# @package Kaltura
+# @subpackage Client
+class KalturaUnmatchedItemsPolicy(object):
+    OMIT = "OMIT"
+    GROUP = "GROUP"
+    INCLUDE_AND_MERGE = "INCLUDE_AND_MERGE"
 
     def __init__(self, value):
         self.value = value
@@ -10758,6 +10783,41 @@ class KalturaSearchPriorityGroupFilter(KalturaFilter):
 
     def setIdEqual(self, newIdEqual):
         self.idEqual = newIdEqual
+
+
+# @package Kaltura
+# @subpackage Client
+class KalturaListGroupsRepresentativesFilter(KalturaFilter):
+    def __init__(self,
+            orderBy=NotImplemented,
+            kSql=NotImplemented):
+        KalturaFilter.__init__(self,
+            orderBy)
+
+        # Search assets using dynamic criteria. Provided collection of nested expressions with key, comparison operators, value, and logical conjunction.
+        # @var string
+        self.kSql = kSql
+
+
+    PROPERTY_LOADERS = {
+        'kSql': getXmlNodeText, 
+    }
+
+    def fromXml(self, node):
+        KalturaFilter.fromXml(self, node)
+        self.fromXmlImpl(node, KalturaListGroupsRepresentativesFilter.PROPERTY_LOADERS)
+
+    def toParams(self):
+        kparams = KalturaFilter.toParams(self)
+        kparams.put("objectType", "KalturaListGroupsRepresentativesFilter")
+        kparams.addStringIfDefined("kSql", self.kSql)
+        return kparams
+
+    def getKSql(self):
+        return self.kSql
+
+    def setKSql(self, newKSql):
+        self.kSql = newKSql
 
 
 # @package Kaltura
@@ -34418,9 +34478,7 @@ class KalturaRecording(KalturaObjectBase):
             viewableUntilDate=NotImplemented,
             isProtected=NotImplemented,
             createDate=NotImplemented,
-            updateDate=NotImplemented,
-            householdSpecificStartTimeOffset=NotImplemented,
-            householdSpecificEndTimeOffset=NotImplemented):
+            updateDate=NotImplemented):
         KalturaObjectBase.__init__(self)
 
         # Kaltura unique ID representing the recording identifier
@@ -34461,14 +34519,6 @@ class KalturaRecording(KalturaObjectBase):
         # @readonly
         self.updateDate = updateDate
 
-        # Household specific start time of the recording
-        # @var int
-        self.householdSpecificStartTimeOffset = householdSpecificStartTimeOffset
-
-        # Household specific end time of the recording
-        # @var int
-        self.householdSpecificEndTimeOffset = householdSpecificEndTimeOffset
-
 
     PROPERTY_LOADERS = {
         'id': getXmlNodeInt, 
@@ -34479,8 +34529,6 @@ class KalturaRecording(KalturaObjectBase):
         'isProtected': getXmlNodeBool, 
         'createDate': getXmlNodeInt, 
         'updateDate': getXmlNodeInt, 
-        'householdSpecificStartTimeOffset': getXmlNodeInt, 
-        'householdSpecificEndTimeOffset': getXmlNodeInt, 
     }
 
     def fromXml(self, node):
@@ -34494,8 +34542,6 @@ class KalturaRecording(KalturaObjectBase):
         kparams.addStringEnumIfDefined("type", self.type)
         kparams.addIntIfDefined("viewableUntilDate", self.viewableUntilDate)
         kparams.addBoolIfDefined("isProtected", self.isProtected)
-        kparams.addIntIfDefined("householdSpecificStartTimeOffset", self.householdSpecificStartTimeOffset)
-        kparams.addIntIfDefined("householdSpecificEndTimeOffset", self.householdSpecificEndTimeOffset)
         return kparams
 
     def getId(self):
@@ -34534,18 +34580,6 @@ class KalturaRecording(KalturaObjectBase):
     def getUpdateDate(self):
         return self.updateDate
 
-    def getHouseholdSpecificStartTimeOffset(self):
-        return self.householdSpecificStartTimeOffset
-
-    def setHouseholdSpecificStartTimeOffset(self, newHouseholdSpecificStartTimeOffset):
-        self.householdSpecificStartTimeOffset = newHouseholdSpecificStartTimeOffset
-
-    def getHouseholdSpecificEndTimeOffset(self):
-        return self.householdSpecificEndTimeOffset
-
-    def setHouseholdSpecificEndTimeOffset(self, newHouseholdSpecificEndTimeOffset):
-        self.householdSpecificEndTimeOffset = newHouseholdSpecificEndTimeOffset
-
 
 # @package Kaltura
 # @subpackage Client
@@ -34559,8 +34593,6 @@ class KalturaExternalRecording(KalturaRecording):
             isProtected=NotImplemented,
             createDate=NotImplemented,
             updateDate=NotImplemented,
-            householdSpecificStartTimeOffset=NotImplemented,
-            householdSpecificEndTimeOffset=NotImplemented,
             externalId=NotImplemented,
             metaData=NotImplemented,
             expiryDate=NotImplemented):
@@ -34572,9 +34604,7 @@ class KalturaExternalRecording(KalturaRecording):
             viewableUntilDate,
             isProtected,
             createDate,
-            updateDate,
-            householdSpecificStartTimeOffset,
-            householdSpecificEndTimeOffset)
+            updateDate)
 
         # External identifier for the recording
         # @var string
@@ -34622,6 +34652,130 @@ class KalturaExternalRecording(KalturaRecording):
 
     def getExpiryDate(self):
         return self.expiryDate
+
+
+# @package Kaltura
+# @subpackage Client
+class KalturaImmediateRecording(KalturaRecording):
+    def __init__(self,
+            id=NotImplemented,
+            status=NotImplemented,
+            assetId=NotImplemented,
+            type=NotImplemented,
+            viewableUntilDate=NotImplemented,
+            isProtected=NotImplemented,
+            createDate=NotImplemented,
+            updateDate=NotImplemented,
+            endPadding=NotImplemented,
+            absoluteStart=NotImplemented):
+        KalturaRecording.__init__(self,
+            id,
+            status,
+            assetId,
+            type,
+            viewableUntilDate,
+            isProtected,
+            createDate,
+            updateDate)
+
+        # Household specific end padding of the recording
+        # @var int
+        self.endPadding = endPadding
+
+        # Household absolute start time of the immediate recording
+        # @var int
+        self.absoluteStart = absoluteStart
+
+
+    PROPERTY_LOADERS = {
+        'endPadding': getXmlNodeInt, 
+        'absoluteStart': getXmlNodeInt, 
+    }
+
+    def fromXml(self, node):
+        KalturaRecording.fromXml(self, node)
+        self.fromXmlImpl(node, KalturaImmediateRecording.PROPERTY_LOADERS)
+
+    def toParams(self):
+        kparams = KalturaRecording.toParams(self)
+        kparams.put("objectType", "KalturaImmediateRecording")
+        kparams.addIntIfDefined("endPadding", self.endPadding)
+        kparams.addIntIfDefined("absoluteStart", self.absoluteStart)
+        return kparams
+
+    def getEndPadding(self):
+        return self.endPadding
+
+    def setEndPadding(self, newEndPadding):
+        self.endPadding = newEndPadding
+
+    def getAbsoluteStart(self):
+        return self.absoluteStart
+
+    def setAbsoluteStart(self, newAbsoluteStart):
+        self.absoluteStart = newAbsoluteStart
+
+
+# @package Kaltura
+# @subpackage Client
+class KalturaPaddedRecording(KalturaRecording):
+    def __init__(self,
+            id=NotImplemented,
+            status=NotImplemented,
+            assetId=NotImplemented,
+            type=NotImplemented,
+            viewableUntilDate=NotImplemented,
+            isProtected=NotImplemented,
+            createDate=NotImplemented,
+            updateDate=NotImplemented,
+            startPadding=NotImplemented,
+            endPadding=NotImplemented):
+        KalturaRecording.__init__(self,
+            id,
+            status,
+            assetId,
+            type,
+            viewableUntilDate,
+            isProtected,
+            createDate,
+            updateDate)
+
+        # Household specific start padding of the recording
+        # @var int
+        self.startPadding = startPadding
+
+        # Household specific end padding of the recording
+        # @var int
+        self.endPadding = endPadding
+
+
+    PROPERTY_LOADERS = {
+        'startPadding': getXmlNodeInt, 
+        'endPadding': getXmlNodeInt, 
+    }
+
+    def fromXml(self, node):
+        KalturaRecording.fromXml(self, node)
+        self.fromXmlImpl(node, KalturaPaddedRecording.PROPERTY_LOADERS)
+
+    def toParams(self):
+        kparams = KalturaRecording.toParams(self)
+        kparams.put("objectType", "KalturaPaddedRecording")
+        kparams.addIntIfDefined("startPadding", self.startPadding)
+        kparams.addIntIfDefined("endPadding", self.endPadding)
+        return kparams
+
+    def getStartPadding(self):
+        return self.startPadding
+
+    def setStartPadding(self, newStartPadding):
+        self.startPadding = newStartPadding
+
+    def getEndPadding(self):
+        return self.endPadding
+
+    def setEndPadding(self, newEndPadding):
+        self.endPadding = newEndPadding
 
 
 # @package Kaltura
@@ -43362,6 +43516,92 @@ class KalturaSessionInfo(KalturaSession):
 
 # @package Kaltura
 # @subpackage Client
+class KalturaRepresentativeSelectionPolicy(KalturaObjectBase):
+    def __init__(self):
+        KalturaObjectBase.__init__(self)
+
+
+    PROPERTY_LOADERS = {
+    }
+
+    def fromXml(self, node):
+        KalturaObjectBase.fromXml(self, node)
+        self.fromXmlImpl(node, KalturaRepresentativeSelectionPolicy.PROPERTY_LOADERS)
+
+    def toParams(self):
+        kparams = KalturaObjectBase.toParams(self)
+        kparams.put("objectType", "KalturaRepresentativeSelectionPolicy")
+        return kparams
+
+
+# @package Kaltura
+# @subpackage Client
+class KalturaTopRsp(KalturaRepresentativeSelectionPolicy):
+    def __init__(self,
+            orderBy=NotImplemented):
+        KalturaRepresentativeSelectionPolicy.__init__(self)
+
+        # order by
+        # @var KalturaBaseAssetOrder
+        self.orderBy = orderBy
+
+
+    PROPERTY_LOADERS = {
+        'orderBy': (KalturaObjectFactory.create, 'KalturaBaseAssetOrder'), 
+    }
+
+    def fromXml(self, node):
+        KalturaRepresentativeSelectionPolicy.fromXml(self, node)
+        self.fromXmlImpl(node, KalturaTopRsp.PROPERTY_LOADERS)
+
+    def toParams(self):
+        kparams = KalturaRepresentativeSelectionPolicy.toParams(self)
+        kparams.put("objectType", "KalturaTopRsp")
+        kparams.addObjectIfDefined("orderBy", self.orderBy)
+        return kparams
+
+    def getOrderBy(self):
+        return self.orderBy
+
+    def setOrderBy(self, newOrderBy):
+        self.orderBy = newOrderBy
+
+
+# @package Kaltura
+# @subpackage Client
+class KalturaTopSubscriptionEntitledRsp(KalturaRepresentativeSelectionPolicy):
+    def __init__(self,
+            orderBy=NotImplemented):
+        KalturaRepresentativeSelectionPolicy.__init__(self)
+
+        # order by
+        # @var KalturaBaseAssetOrder
+        self.orderBy = orderBy
+
+
+    PROPERTY_LOADERS = {
+        'orderBy': (KalturaObjectFactory.create, 'KalturaBaseAssetOrder'), 
+    }
+
+    def fromXml(self, node):
+        KalturaRepresentativeSelectionPolicy.fromXml(self, node)
+        self.fromXmlImpl(node, KalturaTopSubscriptionEntitledRsp.PROPERTY_LOADERS)
+
+    def toParams(self):
+        kparams = KalturaRepresentativeSelectionPolicy.toParams(self)
+        kparams.put("objectType", "KalturaTopSubscriptionEntitledRsp")
+        kparams.addObjectIfDefined("orderBy", self.orderBy)
+        return kparams
+
+    def getOrderBy(self):
+        return self.orderBy
+
+    def setOrderBy(self, newOrderBy):
+        self.orderBy = newOrderBy
+
+
+# @package Kaltura
+# @subpackage Client
 class KalturaPlaybackContextOptions(KalturaObjectBase):
     def __init__(self,
             mediaProtocol=NotImplemented,
@@ -50033,6 +50273,22 @@ class KalturaAssetService(KalturaServiceBase):
             return self.client.getMultiRequestResult()
         resultNode = self.client.doQueue()
         return KalturaObjectFactory.create(resultNode, 'KalturaPlaybackContext')
+
+    def groupRepresentativeList(self, groupBy, unmatchedItemsPolicy, orderBy = NotImplemented, filter = NotImplemented, selectionPolicy = NotImplemented, pager = NotImplemented):
+        """Returns assets deduplicated by asset metadata (or supported asset&#39;s property)."""
+
+        kparams = KalturaParams()
+        kparams.addObjectIfDefined("groupBy", groupBy)
+        kparams.addStringIfDefined("unmatchedItemsPolicy", unmatchedItemsPolicy)
+        kparams.addObjectIfDefined("orderBy", orderBy)
+        kparams.addObjectIfDefined("filter", filter)
+        kparams.addObjectIfDefined("selectionPolicy", selectionPolicy)
+        kparams.addObjectIfDefined("pager", pager)
+        self.client.queueServiceActionCall("asset", "groupRepresentativeList", "KalturaAssetListResponse", kparams)
+        if self.client.isMultiRequest():
+            return self.client.getMultiRequestResult()
+        resultNode = self.client.doQueue()
+        return KalturaObjectFactory.create(resultNode, 'KalturaAssetListResponse')
 
     def list(self, filter = NotImplemented, pager = NotImplemented):
         """Returns media or EPG assets. Filters by media identifiers or by EPG internal or external identifier."""
@@ -57669,6 +57925,7 @@ class KalturaCoreClient(KalturaClientPlugin):
             'KalturaLabelOrderBy': KalturaLabelOrderBy,
             'KalturaLanguageOrderBy': KalturaLanguageOrderBy,
             'KalturaLinearChannelType': KalturaLinearChannelType,
+            'KalturaListGroupsRepresentativesOrderBy': KalturaListGroupsRepresentativesOrderBy,
             'KalturaManualCollectionAssetType': KalturaManualCollectionAssetType,
             'KalturaMathemticalOperatorType': KalturaMathemticalOperatorType,
             'KalturaMediaFileOrderBy': KalturaMediaFileOrderBy,
@@ -57763,6 +58020,7 @@ class KalturaCoreClient(KalturaClientPlugin):
             'KalturaTransactionType': KalturaTransactionType,
             'KalturaTvmRuleOrderBy': KalturaTvmRuleOrderBy,
             'KalturaTvmRuleType': KalturaTvmRuleType,
+            'KalturaUnmatchedItemsPolicy': KalturaUnmatchedItemsPolicy,
             'KalturaUploadTokenStatus': KalturaUploadTokenStatus,
             'KalturaUrlType': KalturaUrlType,
             'KalturaUserAssetRuleOrderBy': KalturaUserAssetRuleOrderBy,
@@ -57931,6 +58189,7 @@ class KalturaCoreClient(KalturaClientPlugin):
             'KalturaStreamingDeviceFilter': KalturaStreamingDeviceFilter,
             'KalturaTagFilter': KalturaTagFilter,
             'KalturaSearchPriorityGroupFilter': KalturaSearchPriorityGroupFilter,
+            'KalturaListGroupsRepresentativesFilter': KalturaListGroupsRepresentativesFilter,
             'KalturaPaymentMethodProfileFilter': KalturaPaymentMethodProfileFilter,
             'KalturaAssetPersonalMarkupSearchFilter': KalturaAssetPersonalMarkupSearchFilter,
             'KalturaAssetRuleFilter': KalturaAssetRuleFilter,
@@ -58339,6 +58598,8 @@ class KalturaCoreClient(KalturaClientPlugin):
             'KalturaHouseholdPremiumServiceListResponse': KalturaHouseholdPremiumServiceListResponse,
             'KalturaRecording': KalturaRecording,
             'KalturaExternalRecording': KalturaExternalRecording,
+            'KalturaImmediateRecording': KalturaImmediateRecording,
+            'KalturaPaddedRecording': KalturaPaddedRecording,
             'KalturaRecordingListResponse': KalturaRecordingListResponse,
             'KalturaSeriesRecordingOption': KalturaSeriesRecordingOption,
             'KalturaSeriesRecording': KalturaSeriesRecording,
@@ -58466,6 +58727,9 @@ class KalturaCoreClient(KalturaClientPlugin):
             'KalturaAppToken': KalturaAppToken,
             'KalturaSession': KalturaSession,
             'KalturaSessionInfo': KalturaSessionInfo,
+            'KalturaRepresentativeSelectionPolicy': KalturaRepresentativeSelectionPolicy,
+            'KalturaTopRsp': KalturaTopRsp,
+            'KalturaTopSubscriptionEntitledRsp': KalturaTopSubscriptionEntitledRsp,
             'KalturaPlaybackContextOptions': KalturaPlaybackContextOptions,
             'KalturaAccessControlMessage': KalturaAccessControlMessage,
             'KalturaCaptionPlaybackPluginData': KalturaCaptionPlaybackPluginData,
