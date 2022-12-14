@@ -42,7 +42,7 @@ from ..Base import (
     KalturaServiceBase,
 )
 
-API_VERSION = '8.3.0.30156'
+API_VERSION = '8.3.0.30166'
 
 ########## enums ##########
 # @package Kaltura
@@ -34667,7 +34667,8 @@ class KalturaImmediateRecording(KalturaRecording):
             createDate=NotImplemented,
             updateDate=NotImplemented,
             endPadding=NotImplemented,
-            absoluteStart=NotImplemented):
+            absoluteStart=NotImplemented,
+            absoluteEnd=NotImplemented):
         KalturaRecording.__init__(self,
             id,
             status,
@@ -34686,10 +34687,15 @@ class KalturaImmediateRecording(KalturaRecording):
         # @var int
         self.absoluteStart = absoluteStart
 
+        # Household absolute end time of the immediate recording, empty if till end of program
+        # @var int
+        self.absoluteEnd = absoluteEnd
+
 
     PROPERTY_LOADERS = {
         'endPadding': getXmlNodeInt, 
         'absoluteStart': getXmlNodeInt, 
+        'absoluteEnd': getXmlNodeInt, 
     }
 
     def fromXml(self, node):
@@ -34701,6 +34707,7 @@ class KalturaImmediateRecording(KalturaRecording):
         kparams.put("objectType", "KalturaImmediateRecording")
         kparams.addIntIfDefined("endPadding", self.endPadding)
         kparams.addIntIfDefined("absoluteStart", self.absoluteStart)
+        kparams.addIntIfDefined("absoluteEnd", self.absoluteEnd)
         return kparams
 
     def getEndPadding(self):
@@ -34714,6 +34721,12 @@ class KalturaImmediateRecording(KalturaRecording):
 
     def setAbsoluteStart(self, newAbsoluteStart):
         self.absoluteStart = newAbsoluteStart
+
+    def getAbsoluteEnd(self):
+        return self.absoluteEnd
+
+    def setAbsoluteEnd(self, newAbsoluteEnd):
+        self.absoluteEnd = newAbsoluteEnd
 
 
 # @package Kaltura
@@ -48875,7 +48888,8 @@ class KalturaTimeShiftedTvPartnerSettings(KalturaObjectBase):
             privateCopyEnabled=NotImplemented,
             defaultQuota=NotImplemented,
             personalizedRecording=NotImplemented,
-            maxRecordingConcurrency=NotImplemented):
+            maxRecordingConcurrency=NotImplemented,
+            maxConcurrencyMargin=NotImplemented):
         KalturaObjectBase.__init__(self)
 
         # Is catch-up enabled
@@ -48978,6 +48992,10 @@ class KalturaTimeShiftedTvPartnerSettings(KalturaObjectBase):
         # @var int
         self.maxRecordingConcurrency = maxRecordingConcurrency
 
+        # Define the max grace margin time for overlapping recording. Default NULL 0 margin
+        # @var int
+        self.maxConcurrencyMargin = maxConcurrencyMargin
+
 
     PROPERTY_LOADERS = {
         'catchUpEnabled': getXmlNodeBool, 
@@ -49005,6 +49023,7 @@ class KalturaTimeShiftedTvPartnerSettings(KalturaObjectBase):
         'defaultQuota': getXmlNodeInt, 
         'personalizedRecording': getXmlNodeBool, 
         'maxRecordingConcurrency': getXmlNodeInt, 
+        'maxConcurrencyMargin': getXmlNodeInt, 
     }
 
     def fromXml(self, node):
@@ -49039,6 +49058,7 @@ class KalturaTimeShiftedTvPartnerSettings(KalturaObjectBase):
         kparams.addIntIfDefined("defaultQuota", self.defaultQuota)
         kparams.addBoolIfDefined("personalizedRecording", self.personalizedRecording)
         kparams.addIntIfDefined("maxRecordingConcurrency", self.maxRecordingConcurrency)
+        kparams.addIntIfDefined("maxConcurrencyMargin", self.maxConcurrencyMargin)
         return kparams
 
     def getCatchUpEnabled(self):
@@ -49190,6 +49210,12 @@ class KalturaTimeShiftedTvPartnerSettings(KalturaObjectBase):
 
     def setMaxRecordingConcurrency(self, newMaxRecordingConcurrency):
         self.maxRecordingConcurrency = newMaxRecordingConcurrency
+
+    def getMaxConcurrencyMargin(self):
+        return self.maxConcurrencyMargin
+
+    def setMaxConcurrencyMargin(self, newMaxConcurrencyMargin):
+        self.maxConcurrencyMargin = newMaxConcurrencyMargin
 
 
 # @package Kaltura
