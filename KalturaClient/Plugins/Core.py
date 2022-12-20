@@ -42,7 +42,7 @@ from ..Base import (
     KalturaServiceBase,
 )
 
-API_VERSION = '8.3.0.30174'
+API_VERSION = '8.3.0.30197'
 
 ########## enums ##########
 # @package Kaltura
@@ -36719,7 +36719,8 @@ class KalturaRecordingAsset(KalturaProgramAsset):
             externalOfferIds=NotImplemented,
             recordingId=NotImplemented,
             recordingType=NotImplemented,
-            viewableUntilDate=NotImplemented):
+            viewableUntilDate=NotImplemented,
+            multiRecord=NotImplemented):
         KalturaProgramAsset.__init__(self,
             id,
             type,
@@ -36761,11 +36762,16 @@ class KalturaRecordingAsset(KalturaProgramAsset):
         # @var int
         self.viewableUntilDate = viewableUntilDate
 
+        # When TRUE indicates that there are multiple KalturaImmediateRecording instances for the event.
+        # @var bool
+        self.multiRecord = multiRecord
+
 
     PROPERTY_LOADERS = {
         'recordingId': getXmlNodeText, 
         'recordingType': (KalturaEnumsFactory.createString, "KalturaRecordingType"), 
         'viewableUntilDate': getXmlNodeInt, 
+        'multiRecord': getXmlNodeBool, 
     }
 
     def fromXml(self, node):
@@ -36778,6 +36784,7 @@ class KalturaRecordingAsset(KalturaProgramAsset):
         kparams.addStringIfDefined("recordingId", self.recordingId)
         kparams.addStringEnumIfDefined("recordingType", self.recordingType)
         kparams.addIntIfDefined("viewableUntilDate", self.viewableUntilDate)
+        kparams.addBoolIfDefined("multiRecord", self.multiRecord)
         return kparams
 
     def getRecordingId(self):
@@ -36797,6 +36804,12 @@ class KalturaRecordingAsset(KalturaProgramAsset):
 
     def setViewableUntilDate(self, newViewableUntilDate):
         self.viewableUntilDate = newViewableUntilDate
+
+    def getMultiRecord(self):
+        return self.multiRecord
+
+    def setMultiRecord(self, newMultiRecord):
+        self.multiRecord = newMultiRecord
 
 
 # @package Kaltura
@@ -55716,6 +55729,19 @@ class KalturaRecordingService(KalturaServiceBase):
             return self.client.getMultiRequestResult()
         resultNode = self.client.doQueue()
         return KalturaObjectFactory.create(resultNode, 'KalturaRecording')
+
+    def immediateRecord(self, programId, epgChannelId, endPadding):
+        """Immediate Record"""
+
+        kparams = KalturaParams()
+        kparams.addIntIfDefined("programId", programId);
+        kparams.addIntIfDefined("epgChannelId", epgChannelId);
+        kparams.addIntIfDefined("endPadding", endPadding);
+        self.client.queueServiceActionCall("recording", "immediateRecord", "KalturaImmediateRecording", kparams)
+        if self.client.isMultiRequest():
+            return self.client.getMultiRequestResult()
+        resultNode = self.client.doQueue()
+        return KalturaObjectFactory.create(resultNode, 'KalturaImmediateRecording')
 
     def list(self, filter = NotImplemented, pager = NotImplemented):
         """Return a list of recordings for the household with optional filter by status and KSQL."""
