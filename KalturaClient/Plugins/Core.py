@@ -42,7 +42,7 @@ from ..Base import (
     KalturaServiceBase,
 )
 
-API_VERSION = '8.3.0.30197'
+API_VERSION = '8.3.0.30198'
 
 ########## enums ##########
 # @package Kaltura
@@ -34681,14 +34681,17 @@ class KalturaImmediateRecording(KalturaRecording):
 
         # Household specific end padding of the recording
         # @var int
+        # @readonly
         self.endPadding = endPadding
 
         # Household absolute start time of the immediate recording
         # @var int
+        # @readonly
         self.absoluteStart = absoluteStart
 
         # Household absolute end time of the immediate recording, empty if till end of program
         # @var int
+        # @readonly
         self.absoluteEnd = absoluteEnd
 
 
@@ -34705,28 +34708,16 @@ class KalturaImmediateRecording(KalturaRecording):
     def toParams(self):
         kparams = KalturaRecording.toParams(self)
         kparams.put("objectType", "KalturaImmediateRecording")
-        kparams.addIntIfDefined("endPadding", self.endPadding)
-        kparams.addIntIfDefined("absoluteStart", self.absoluteStart)
-        kparams.addIntIfDefined("absoluteEnd", self.absoluteEnd)
         return kparams
 
     def getEndPadding(self):
         return self.endPadding
 
-    def setEndPadding(self, newEndPadding):
-        self.endPadding = newEndPadding
-
     def getAbsoluteStart(self):
         return self.absoluteStart
 
-    def setAbsoluteStart(self, newAbsoluteStart):
-        self.absoluteStart = newAbsoluteStart
-
     def getAbsoluteEnd(self):
         return self.absoluteEnd
-
-    def setAbsoluteEnd(self, newAbsoluteEnd):
-        self.absoluteEnd = newAbsoluteEnd
 
 
 # @package Kaltura
