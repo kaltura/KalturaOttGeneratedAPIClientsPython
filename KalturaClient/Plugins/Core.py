@@ -42,7 +42,7 @@ from ..Base import (
     KalturaServiceBase,
 )
 
-API_VERSION = '8.3.0.30198'
+API_VERSION = '8.3.1.30229'
 
 ########## enums ##########
 # @package Kaltura
@@ -4841,41 +4841,6 @@ class KalturaCollectionFilter(KalturaFilter):
 
     def setAlsoInactive(self, newAlsoInactive):
         self.alsoInactive = newAlsoInactive
-
-
-# @package Kaltura
-# @subpackage Client
-class KalturaCouponFilter(KalturaFilter):
-    def __init__(self,
-            orderBy=NotImplemented,
-            couponCodesIn=NotImplemented):
-        KalturaFilter.__init__(self,
-            orderBy)
-
-        # Comma separated list of coupon codes.
-        # @var string
-        self.couponCodesIn = couponCodesIn
-
-
-    PROPERTY_LOADERS = {
-        'couponCodesIn': getXmlNodeText, 
-    }
-
-    def fromXml(self, node):
-        KalturaFilter.fromXml(self, node)
-        self.fromXmlImpl(node, KalturaCouponFilter.PROPERTY_LOADERS)
-
-    def toParams(self):
-        kparams = KalturaFilter.toParams(self)
-        kparams.put("objectType", "KalturaCouponFilter")
-        kparams.addStringIfDefined("couponCodesIn", self.couponCodesIn)
-        return kparams
-
-    def getCouponCodesIn(self):
-        return self.couponCodesIn
-
-    def setCouponCodesIn(self, newCouponCodesIn):
-        self.couponCodesIn = newCouponCodesIn
 
 
 # @package Kaltura
@@ -55721,11 +55686,11 @@ class KalturaRecordingService(KalturaServiceBase):
         resultNode = self.client.doQueue()
         return KalturaObjectFactory.create(resultNode, 'KalturaRecording')
 
-    def immediateRecord(self, programId, epgChannelId, endPadding):
+    def immediateRecord(self, assetId, epgChannelId, endPadding):
         """Immediate Record"""
 
         kparams = KalturaParams()
-        kparams.addIntIfDefined("programId", programId);
+        kparams.addIntIfDefined("assetId", assetId);
         kparams.addIntIfDefined("epgChannelId", epgChannelId);
         kparams.addIntIfDefined("endPadding", endPadding);
         self.client.queueServiceActionCall("recording", "immediateRecord", "KalturaImmediateRecording", kparams)
@@ -55758,11 +55723,11 @@ class KalturaRecordingService(KalturaServiceBase):
         resultNode = self.client.doQueue()
         return KalturaObjectFactory.create(resultNode, 'KalturaRecording')
 
-    def stop(self, programId, epgChannelId, householdRecordingId):
+    def stop(self, assetId, epgChannelId, householdRecordingId):
         """Stop current recording"""
 
         kparams = KalturaParams()
-        kparams.addIntIfDefined("programId", programId);
+        kparams.addIntIfDefined("assetId", assetId);
         kparams.addIntIfDefined("epgChannelId", epgChannelId);
         kparams.addIntIfDefined("householdRecordingId", householdRecordingId);
         self.client.queueServiceActionCall("recording", "stop", "KalturaRecording", kparams)
@@ -58113,7 +58078,6 @@ class KalturaCoreClient(KalturaClientPlugin):
             'KalturaUserSegmentFilter': KalturaUserSegmentFilter,
             'KalturaAssetFilePpvFilter': KalturaAssetFilePpvFilter,
             'KalturaCollectionFilter': KalturaCollectionFilter,
-            'KalturaCouponFilter': KalturaCouponFilter,
             'KalturaDiscountDetailsFilter': KalturaDiscountDetailsFilter,
             'KalturaPpvFilter': KalturaPpvFilter,
             'KalturaPreviewModuleFilter': KalturaPreviewModuleFilter,
