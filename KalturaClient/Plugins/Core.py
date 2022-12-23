@@ -42,7 +42,7 @@ from ..Base import (
     KalturaServiceBase,
 )
 
-API_VERSION = '8.3.1.30231'
+API_VERSION = '8.3.1.30102'
 
 ########## enums ##########
 # @package Kaltura
@@ -34621,134 +34621,6 @@ class KalturaExternalRecording(KalturaRecording):
 
 # @package Kaltura
 # @subpackage Client
-class KalturaImmediateRecording(KalturaRecording):
-    def __init__(self,
-            id=NotImplemented,
-            status=NotImplemented,
-            assetId=NotImplemented,
-            type=NotImplemented,
-            viewableUntilDate=NotImplemented,
-            isProtected=NotImplemented,
-            createDate=NotImplemented,
-            updateDate=NotImplemented,
-            endPadding=NotImplemented,
-            absoluteStart=NotImplemented,
-            absoluteEnd=NotImplemented):
-        KalturaRecording.__init__(self,
-            id,
-            status,
-            assetId,
-            type,
-            viewableUntilDate,
-            isProtected,
-            createDate,
-            updateDate)
-
-        # Household specific end padding of the recording
-        # @var int
-        # @readonly
-        self.endPadding = endPadding
-
-        # Household absolute start time of the immediate recording
-        # @var int
-        # @readonly
-        self.absoluteStart = absoluteStart
-
-        # Household absolute end time of the immediate recording, empty if till end of program
-        # @var int
-        # @readonly
-        self.absoluteEnd = absoluteEnd
-
-
-    PROPERTY_LOADERS = {
-        'endPadding': getXmlNodeInt, 
-        'absoluteStart': getXmlNodeInt, 
-        'absoluteEnd': getXmlNodeInt, 
-    }
-
-    def fromXml(self, node):
-        KalturaRecording.fromXml(self, node)
-        self.fromXmlImpl(node, KalturaImmediateRecording.PROPERTY_LOADERS)
-
-    def toParams(self):
-        kparams = KalturaRecording.toParams(self)
-        kparams.put("objectType", "KalturaImmediateRecording")
-        return kparams
-
-    def getEndPadding(self):
-        return self.endPadding
-
-    def getAbsoluteStart(self):
-        return self.absoluteStart
-
-    def getAbsoluteEnd(self):
-        return self.absoluteEnd
-
-
-# @package Kaltura
-# @subpackage Client
-class KalturaPaddedRecording(KalturaRecording):
-    def __init__(self,
-            id=NotImplemented,
-            status=NotImplemented,
-            assetId=NotImplemented,
-            type=NotImplemented,
-            viewableUntilDate=NotImplemented,
-            isProtected=NotImplemented,
-            createDate=NotImplemented,
-            updateDate=NotImplemented,
-            startPadding=NotImplemented,
-            endPadding=NotImplemented):
-        KalturaRecording.__init__(self,
-            id,
-            status,
-            assetId,
-            type,
-            viewableUntilDate,
-            isProtected,
-            createDate,
-            updateDate)
-
-        # Household specific start padding of the recording
-        # @var int
-        self.startPadding = startPadding
-
-        # Household specific end padding of the recording
-        # @var int
-        self.endPadding = endPadding
-
-
-    PROPERTY_LOADERS = {
-        'startPadding': getXmlNodeInt, 
-        'endPadding': getXmlNodeInt, 
-    }
-
-    def fromXml(self, node):
-        KalturaRecording.fromXml(self, node)
-        self.fromXmlImpl(node, KalturaPaddedRecording.PROPERTY_LOADERS)
-
-    def toParams(self):
-        kparams = KalturaRecording.toParams(self)
-        kparams.put("objectType", "KalturaPaddedRecording")
-        kparams.addIntIfDefined("startPadding", self.startPadding)
-        kparams.addIntIfDefined("endPadding", self.endPadding)
-        return kparams
-
-    def getStartPadding(self):
-        return self.startPadding
-
-    def setStartPadding(self, newStartPadding):
-        self.startPadding = newStartPadding
-
-    def getEndPadding(self):
-        return self.endPadding
-
-    def setEndPadding(self, newEndPadding):
-        self.endPadding = newEndPadding
-
-
-# @package Kaltura
-# @subpackage Client
 class KalturaRecordingListResponse(KalturaListResponse):
     """Recordings info wrapper"""
 
@@ -34856,9 +34728,7 @@ class KalturaSeriesRecording(KalturaObjectBase):
             createDate=NotImplemented,
             updateDate=NotImplemented,
             excludedSeasons=NotImplemented,
-            seriesRecordingOption=NotImplemented,
-            householdSpecificSeriesStartTimeOffset=NotImplemented,
-            householdSpecificSeriesEndTimeOffset=NotImplemented):
+            seriesRecordingOption=NotImplemented):
         KalturaObjectBase.__init__(self)
 
         # Kaltura unique ID representing the series recording identifier
@@ -34905,14 +34775,6 @@ class KalturaSeriesRecording(KalturaObjectBase):
         # @var KalturaSeriesRecordingOption
         self.seriesRecordingOption = seriesRecordingOption
 
-        # Household specific start time of the recording
-        # @var int
-        self.householdSpecificSeriesStartTimeOffset = householdSpecificSeriesStartTimeOffset
-
-        # Household specific end time of the recording
-        # @var int
-        self.householdSpecificSeriesEndTimeOffset = householdSpecificSeriesEndTimeOffset
-
 
     PROPERTY_LOADERS = {
         'id': getXmlNodeInt, 
@@ -34925,8 +34787,6 @@ class KalturaSeriesRecording(KalturaObjectBase):
         'updateDate': getXmlNodeInt, 
         'excludedSeasons': (KalturaObjectFactory.createArray, 'KalturaIntegerValue'), 
         'seriesRecordingOption': (KalturaObjectFactory.create, 'KalturaSeriesRecordingOption'), 
-        'householdSpecificSeriesStartTimeOffset': getXmlNodeInt, 
-        'householdSpecificSeriesEndTimeOffset': getXmlNodeInt, 
     }
 
     def fromXml(self, node):
@@ -34942,8 +34802,6 @@ class KalturaSeriesRecording(KalturaObjectBase):
         kparams.addIntIfDefined("seasonNumber", self.seasonNumber)
         kparams.addStringEnumIfDefined("type", self.type)
         kparams.addObjectIfDefined("seriesRecordingOption", self.seriesRecordingOption)
-        kparams.addIntIfDefined("householdSpecificSeriesStartTimeOffset", self.householdSpecificSeriesStartTimeOffset)
-        kparams.addIntIfDefined("householdSpecificSeriesEndTimeOffset", self.householdSpecificSeriesEndTimeOffset)
         return kparams
 
     def getId(self):
@@ -34993,18 +34851,6 @@ class KalturaSeriesRecording(KalturaObjectBase):
 
     def setSeriesRecordingOption(self, newSeriesRecordingOption):
         self.seriesRecordingOption = newSeriesRecordingOption
-
-    def getHouseholdSpecificSeriesStartTimeOffset(self):
-        return self.householdSpecificSeriesStartTimeOffset
-
-    def setHouseholdSpecificSeriesStartTimeOffset(self, newHouseholdSpecificSeriesStartTimeOffset):
-        self.householdSpecificSeriesStartTimeOffset = newHouseholdSpecificSeriesStartTimeOffset
-
-    def getHouseholdSpecificSeriesEndTimeOffset(self):
-        return self.householdSpecificSeriesEndTimeOffset
-
-    def setHouseholdSpecificSeriesEndTimeOffset(self, newHouseholdSpecificSeriesEndTimeOffset):
-        self.householdSpecificSeriesEndTimeOffset = newHouseholdSpecificSeriesEndTimeOffset
 
 
 # @package Kaltura
@@ -35058,8 +34904,6 @@ class KalturaExternalSeriesRecording(KalturaSeriesRecording):
             updateDate=NotImplemented,
             excludedSeasons=NotImplemented,
             seriesRecordingOption=NotImplemented,
-            householdSpecificSeriesStartTimeOffset=NotImplemented,
-            householdSpecificSeriesEndTimeOffset=NotImplemented,
             metaData=NotImplemented):
         KalturaSeriesRecording.__init__(self,
             id,
@@ -35071,9 +34915,7 @@ class KalturaExternalSeriesRecording(KalturaSeriesRecording):
             createDate,
             updateDate,
             excludedSeasons,
-            seriesRecordingOption,
-            householdSpecificSeriesStartTimeOffset,
-            householdSpecificSeriesEndTimeOffset)
+            seriesRecordingOption)
 
         # MetaData filtering
         # @var map
@@ -36675,8 +36517,7 @@ class KalturaRecordingAsset(KalturaProgramAsset):
             externalOfferIds=NotImplemented,
             recordingId=NotImplemented,
             recordingType=NotImplemented,
-            viewableUntilDate=NotImplemented,
-            multiRecord=NotImplemented):
+            viewableUntilDate=NotImplemented):
         KalturaProgramAsset.__init__(self,
             id,
             type,
@@ -36718,16 +36559,11 @@ class KalturaRecordingAsset(KalturaProgramAsset):
         # @var int
         self.viewableUntilDate = viewableUntilDate
 
-        # When TRUE indicates that there are multiple KalturaImmediateRecording instances for the event.
-        # @var bool
-        self.multiRecord = multiRecord
-
 
     PROPERTY_LOADERS = {
         'recordingId': getXmlNodeText, 
         'recordingType': (KalturaEnumsFactory.createString, "KalturaRecordingType"), 
         'viewableUntilDate': getXmlNodeInt, 
-        'multiRecord': getXmlNodeBool, 
     }
 
     def fromXml(self, node):
@@ -36740,7 +36576,6 @@ class KalturaRecordingAsset(KalturaProgramAsset):
         kparams.addStringIfDefined("recordingId", self.recordingId)
         kparams.addStringEnumIfDefined("recordingType", self.recordingType)
         kparams.addIntIfDefined("viewableUntilDate", self.viewableUntilDate)
-        kparams.addBoolIfDefined("multiRecord", self.multiRecord)
         return kparams
 
     def getRecordingId(self):
@@ -36760,12 +36595,6 @@ class KalturaRecordingAsset(KalturaProgramAsset):
 
     def setViewableUntilDate(self, newViewableUntilDate):
         self.viewableUntilDate = newViewableUntilDate
-
-    def getMultiRecord(self):
-        return self.multiRecord
-
-    def setMultiRecord(self, newMultiRecord):
-        self.multiRecord = newMultiRecord
 
 
 # @package Kaltura
@@ -48855,10 +48684,7 @@ class KalturaTimeShiftedTvPartnerSettings(KalturaObjectBase):
             protectionPolicy=NotImplemented,
             recoveryGracePeriod=NotImplemented,
             privateCopyEnabled=NotImplemented,
-            defaultQuota=NotImplemented,
-            personalizedRecording=NotImplemented,
-            maxRecordingConcurrency=NotImplemented,
-            maxConcurrencyMargin=NotImplemented):
+            defaultQuota=NotImplemented):
         KalturaObjectBase.__init__(self)
 
         # Is catch-up enabled
@@ -48953,18 +48779,6 @@ class KalturaTimeShiftedTvPartnerSettings(KalturaObjectBase):
         # @var int
         self.defaultQuota = defaultQuota
 
-        # Define whatever the partner enables the Personal Padding and Immediate / Stop recording services to the partner. Default value should be FALSE
-        # @var bool
-        self.personalizedRecording = personalizedRecording
-
-        # Define the max allowed number of parallel recordings. Default NULL unlimited
-        # @var int
-        self.maxRecordingConcurrency = maxRecordingConcurrency
-
-        # Define the max grace margin time for overlapping recording. Default NULL 0 margin
-        # @var int
-        self.maxConcurrencyMargin = maxConcurrencyMargin
-
 
     PROPERTY_LOADERS = {
         'catchUpEnabled': getXmlNodeBool, 
@@ -48990,9 +48804,6 @@ class KalturaTimeShiftedTvPartnerSettings(KalturaObjectBase):
         'recoveryGracePeriod': getXmlNodeInt, 
         'privateCopyEnabled': getXmlNodeBool, 
         'defaultQuota': getXmlNodeInt, 
-        'personalizedRecording': getXmlNodeBool, 
-        'maxRecordingConcurrency': getXmlNodeInt, 
-        'maxConcurrencyMargin': getXmlNodeInt, 
     }
 
     def fromXml(self, node):
@@ -49025,9 +48836,6 @@ class KalturaTimeShiftedTvPartnerSettings(KalturaObjectBase):
         kparams.addIntIfDefined("recoveryGracePeriod", self.recoveryGracePeriod)
         kparams.addBoolIfDefined("privateCopyEnabled", self.privateCopyEnabled)
         kparams.addIntIfDefined("defaultQuota", self.defaultQuota)
-        kparams.addBoolIfDefined("personalizedRecording", self.personalizedRecording)
-        kparams.addIntIfDefined("maxRecordingConcurrency", self.maxRecordingConcurrency)
-        kparams.addIntIfDefined("maxConcurrencyMargin", self.maxConcurrencyMargin)
         return kparams
 
     def getCatchUpEnabled(self):
@@ -49167,24 +48975,6 @@ class KalturaTimeShiftedTvPartnerSettings(KalturaObjectBase):
 
     def setDefaultQuota(self, newDefaultQuota):
         self.defaultQuota = newDefaultQuota
-
-    def getPersonalizedRecording(self):
-        return self.personalizedRecording
-
-    def setPersonalizedRecording(self, newPersonalizedRecording):
-        self.personalizedRecording = newPersonalizedRecording
-
-    def getMaxRecordingConcurrency(self):
-        return self.maxRecordingConcurrency
-
-    def setMaxRecordingConcurrency(self, newMaxRecordingConcurrency):
-        self.maxRecordingConcurrency = newMaxRecordingConcurrency
-
-    def getMaxConcurrencyMargin(self):
-        return self.maxConcurrencyMargin
-
-    def setMaxConcurrencyMargin(self, newMaxConcurrencyMargin):
-        self.maxConcurrencyMargin = newMaxConcurrencyMargin
 
 
 # @package Kaltura
@@ -55686,19 +55476,6 @@ class KalturaRecordingService(KalturaServiceBase):
         resultNode = self.client.doQueue()
         return KalturaObjectFactory.create(resultNode, 'KalturaRecording')
 
-    def immediateRecord(self, assetId, epgChannelId, endPadding):
-        """Immediate Record"""
-
-        kparams = KalturaParams()
-        kparams.addIntIfDefined("assetId", assetId);
-        kparams.addIntIfDefined("epgChannelId", epgChannelId);
-        kparams.addIntIfDefined("endPadding", endPadding);
-        self.client.queueServiceActionCall("recording", "immediateRecord", "KalturaImmediateRecording", kparams)
-        if self.client.isMultiRequest():
-            return self.client.getMultiRequestResult()
-        resultNode = self.client.doQueue()
-        return KalturaObjectFactory.create(resultNode, 'KalturaImmediateRecording')
-
     def list(self, filter = NotImplemented, pager = NotImplemented):
         """Return a list of recordings for the household with optional filter by status and KSQL."""
 
@@ -55718,19 +55495,6 @@ class KalturaRecordingService(KalturaServiceBase):
         kparams = KalturaParams()
         kparams.addIntIfDefined("id", id);
         self.client.queueServiceActionCall("recording", "protect", "KalturaRecording", kparams)
-        if self.client.isMultiRequest():
-            return self.client.getMultiRequestResult()
-        resultNode = self.client.doQueue()
-        return KalturaObjectFactory.create(resultNode, 'KalturaRecording')
-
-    def stop(self, assetId, epgChannelId, householdRecordingId):
-        """Stop current recording"""
-
-        kparams = KalturaParams()
-        kparams.addIntIfDefined("assetId", assetId);
-        kparams.addIntIfDefined("epgChannelId", epgChannelId);
-        kparams.addIntIfDefined("householdRecordingId", householdRecordingId);
-        self.client.queueServiceActionCall("recording", "stop", "KalturaRecording", kparams)
         if self.client.isMultiRequest():
             return self.client.getMultiRequestResult()
         resultNode = self.client.doQueue()
@@ -58605,8 +58369,6 @@ class KalturaCoreClient(KalturaClientPlugin):
             'KalturaHouseholdPremiumServiceListResponse': KalturaHouseholdPremiumServiceListResponse,
             'KalturaRecording': KalturaRecording,
             'KalturaExternalRecording': KalturaExternalRecording,
-            'KalturaImmediateRecording': KalturaImmediateRecording,
-            'KalturaPaddedRecording': KalturaPaddedRecording,
             'KalturaRecordingListResponse': KalturaRecordingListResponse,
             'KalturaSeriesRecordingOption': KalturaSeriesRecordingOption,
             'KalturaSeriesRecording': KalturaSeriesRecording,
