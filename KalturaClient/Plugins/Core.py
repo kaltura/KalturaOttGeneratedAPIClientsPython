@@ -42,7 +42,7 @@ from ..Base import (
     KalturaServiceBase,
 )
 
-API_VERSION = '8.3.1.30102'
+API_VERSION = '8.3.1.30104'
 
 ########## enums ##########
 # @package Kaltura
@@ -1864,6 +1864,18 @@ class KalturaNotificationType(object):
 
 # @package Kaltura
 # @subpackage Client
+class KalturaNotWatchedReturnStrategy(object):
+    RETURN_NO_NEXT_EPISODE = "RETURN_NO_NEXT_EPISODE"
+    RETURN_FIRST_EPISODE = "RETURN_FIRST_EPISODE"
+
+    def __init__(self, value):
+        self.value = value
+
+    def getValue(self):
+        return self.value
+
+# @package Kaltura
+# @subpackage Client
 class KalturaObjectState(object):
     INACTIVE = "INACTIVE"
     ACTIVE = "ACTIVE"
@@ -3133,6 +3145,19 @@ class KalturaUserState(object):
     USER_WITH_NO_HOUSEHOLD = "user_with_no_household"
     USER_CREATED_WITH_NO_ROLE = "user_created_with_no_role"
     USER_NOT_ACTIVATED = "user_not_activated"
+
+    def __init__(self, value):
+        self.value = value
+
+    def getValue(self):
+        return self.value
+
+# @package Kaltura
+# @subpackage Client
+class KalturaWatchedAllReturnStrategy(object):
+    RETURN_NO_NEXT_EPISODE = "RETURN_NO_NEXT_EPISODE"
+    RETURN_FIRST_EPISODE = "RETURN_FIRST_EPISODE"
+    RETURN_LAST_EPISODE = "RETURN_LAST_EPISODE"
 
     def __init__(self, value):
         self.value = value
@@ -44225,6 +44250,91 @@ class KalturaAssetFileContext(KalturaObjectBase):
 
 # @package Kaltura
 # @subpackage Client
+class KalturaSeriesIdArguments(KalturaObjectBase):
+    def __init__(self,
+            assetTypeIdIn=NotImplemented,
+            seriesId=NotImplemented,
+            seriesIdMetaName=NotImplemented,
+            seasonNumberMetaName=NotImplemented,
+            episodeNumberMetaName=NotImplemented):
+        KalturaObjectBase.__init__(self)
+
+        # Comma separated asset type IDs
+        # @var string
+        self.assetTypeIdIn = assetTypeIdIn
+
+        # Series ID
+        # @var string
+        self.seriesId = seriesId
+
+        # Series ID meta name.
+        # @var string
+        self.seriesIdMetaName = seriesIdMetaName
+
+        # Season number meta name
+        # @var string
+        self.seasonNumberMetaName = seasonNumberMetaName
+
+        # Episode number meta name
+        # @var string
+        self.episodeNumberMetaName = episodeNumberMetaName
+
+
+    PROPERTY_LOADERS = {
+        'assetTypeIdIn': getXmlNodeText, 
+        'seriesId': getXmlNodeText, 
+        'seriesIdMetaName': getXmlNodeText, 
+        'seasonNumberMetaName': getXmlNodeText, 
+        'episodeNumberMetaName': getXmlNodeText, 
+    }
+
+    def fromXml(self, node):
+        KalturaObjectBase.fromXml(self, node)
+        self.fromXmlImpl(node, KalturaSeriesIdArguments.PROPERTY_LOADERS)
+
+    def toParams(self):
+        kparams = KalturaObjectBase.toParams(self)
+        kparams.put("objectType", "KalturaSeriesIdArguments")
+        kparams.addStringIfDefined("assetTypeIdIn", self.assetTypeIdIn)
+        kparams.addStringIfDefined("seriesId", self.seriesId)
+        kparams.addStringIfDefined("seriesIdMetaName", self.seriesIdMetaName)
+        kparams.addStringIfDefined("seasonNumberMetaName", self.seasonNumberMetaName)
+        kparams.addStringIfDefined("episodeNumberMetaName", self.episodeNumberMetaName)
+        return kparams
+
+    def getAssetTypeIdIn(self):
+        return self.assetTypeIdIn
+
+    def setAssetTypeIdIn(self, newAssetTypeIdIn):
+        self.assetTypeIdIn = newAssetTypeIdIn
+
+    def getSeriesId(self):
+        return self.seriesId
+
+    def setSeriesId(self, newSeriesId):
+        self.seriesId = newSeriesId
+
+    def getSeriesIdMetaName(self):
+        return self.seriesIdMetaName
+
+    def setSeriesIdMetaName(self, newSeriesIdMetaName):
+        self.seriesIdMetaName = newSeriesIdMetaName
+
+    def getSeasonNumberMetaName(self):
+        return self.seasonNumberMetaName
+
+    def setSeasonNumberMetaName(self, newSeasonNumberMetaName):
+        self.seasonNumberMetaName = newSeasonNumberMetaName
+
+    def getEpisodeNumberMetaName(self):
+        return self.episodeNumberMetaName
+
+    def setEpisodeNumberMetaName(self, newEpisodeNumberMetaName):
+        self.episodeNumberMetaName = newEpisodeNumberMetaName
+
+
+# @package Kaltura
+# @subpackage Client
 class KalturaAssetPersonalSelection(KalturaObjectBase):
     """Asset personal selection"""
 
@@ -50232,11 +50342,14 @@ class KalturaAssetHistoryService(KalturaServiceBase):
             return self.client.getMultiRequestResult()
         resultNode = self.client.doQueue()
 
-    def getNextEpisode(self, assetId):
+    def getNextEpisode(self, assetId = NotImplemented, seriesIdArguments = NotImplemented, notWatchedReturnStrategy = NotImplemented, watchedAllReturnStrategy = NotImplemented):
         """Get next episode by last watch asset in given assetId"""
 
         kparams = KalturaParams()
         kparams.addIntIfDefined("assetId", assetId);
+        kparams.addObjectIfDefined("seriesIdArguments", seriesIdArguments)
+        kparams.addStringIfDefined("notWatchedReturnStrategy", notWatchedReturnStrategy)
+        kparams.addStringIfDefined("watchedAllReturnStrategy", watchedAllReturnStrategy)
         self.client.queueServiceActionCall("assethistory", "getNextEpisode", "KalturaAssetHistory", kparams)
         if self.client.isMultiRequest():
             return self.client.getMultiRequestResult()
@@ -57709,6 +57822,7 @@ class KalturaCoreClient(KalturaClientPlugin):
             'KalturaMetaTagOrderBy': KalturaMetaTagOrderBy,
             'KalturaMonetizationType': KalturaMonetizationType,
             'KalturaNotificationType': KalturaNotificationType,
+            'KalturaNotWatchedReturnStrategy': KalturaNotWatchedReturnStrategy,
             'KalturaObjectState': KalturaObjectState,
             'KalturaObjectVirtualAssetInfoType': KalturaObjectVirtualAssetInfoType,
             'KalturaOTTUserOrderBy': KalturaOTTUserOrderBy,
@@ -57802,6 +57916,7 @@ class KalturaCoreClient(KalturaClientPlugin):
             'KalturaUserRoleProfile': KalturaUserRoleProfile,
             'KalturaUserRoleType': KalturaUserRoleType,
             'KalturaUserState': KalturaUserState,
+            'KalturaWatchedAllReturnStrategy': KalturaWatchedAllReturnStrategy,
             'KalturaWatchStatus': KalturaWatchStatus,
         }
 
@@ -58518,6 +58633,7 @@ class KalturaCoreClient(KalturaClientPlugin):
             'KalturaBulkUploadLiveAssetData': KalturaBulkUploadLiveAssetData,
             'KalturaBulkUploadProgramAssetData': KalturaBulkUploadProgramAssetData,
             'KalturaAssetFileContext': KalturaAssetFileContext,
+            'KalturaSeriesIdArguments': KalturaSeriesIdArguments,
             'KalturaAssetPersonalSelection': KalturaAssetPersonalSelection,
             'KalturaAssetStatisticsQuery': KalturaAssetStatisticsQuery,
             'KalturaBulkUploadStatistics': KalturaBulkUploadStatistics,
