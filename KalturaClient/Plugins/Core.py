@@ -42,7 +42,7 @@ from ..Base import (
     KalturaServiceBase,
 )
 
-API_VERSION = '8.3.0.30102'
+API_VERSION = '8.3.0.30104'
 
 ########## enums ##########
 # @package Kaltura
@@ -42051,6 +42051,7 @@ class KalturaPlaybackProfile(KalturaObjectBase):
             id=NotImplemented,
             name=NotImplemented,
             isActive=NotImplemented,
+            adapterGrpcAddress=NotImplemented,
             adapterUrl=NotImplemented,
             settings=NotImplemented,
             systemName=NotImplemented,
@@ -42069,6 +42070,10 @@ class KalturaPlaybackProfile(KalturaObjectBase):
         # Playback profile active status
         # @var bool
         self.isActive = isActive
+
+        # Playback profile Grpc address
+        # @var string
+        self.adapterGrpcAddress = adapterGrpcAddress
 
         # Playback profile URL
         # @var string
@@ -42092,6 +42097,7 @@ class KalturaPlaybackProfile(KalturaObjectBase):
         'id': getXmlNodeInt, 
         'name': getXmlNodeText, 
         'isActive': getXmlNodeBool, 
+        'adapterGrpcAddress': getXmlNodeText, 
         'adapterUrl': getXmlNodeText, 
         'settings': getXmlNodeText, 
         'systemName': getXmlNodeText, 
@@ -42107,6 +42113,7 @@ class KalturaPlaybackProfile(KalturaObjectBase):
         kparams.put("objectType", "KalturaPlaybackProfile")
         kparams.addStringIfDefined("name", self.name)
         kparams.addBoolIfDefined("isActive", self.isActive)
+        kparams.addStringIfDefined("adapterGrpcAddress", self.adapterGrpcAddress)
         kparams.addStringIfDefined("adapterUrl", self.adapterUrl)
         kparams.addStringIfDefined("settings", self.settings)
         kparams.addStringIfDefined("systemName", self.systemName)
@@ -42126,6 +42133,12 @@ class KalturaPlaybackProfile(KalturaObjectBase):
 
     def setIsActive(self, newIsActive):
         self.isActive = newIsActive
+
+    def getAdapterGrpcAddress(self):
+        return self.adapterGrpcAddress
+
+    def setAdapterGrpcAddress(self, newAdapterGrpcAddress):
+        self.adapterGrpcAddress = newAdapterGrpcAddress
 
     def getAdapterUrl(self):
         return self.adapterUrl
