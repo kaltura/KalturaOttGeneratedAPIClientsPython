@@ -42,7 +42,7 @@ from ..Base import (
     KalturaServiceBase,
 )
 
-API_VERSION = '8.4.3.30140'
+API_VERSION = '8.4.3.30143'
 
 ########## enums ##########
 # @package Kaltura
@@ -5237,7 +5237,8 @@ class KalturaSubscriptionFilter(KalturaFilter):
             pricePlanIdEqual=NotImplemented,
             channelIdEqual=NotImplemented,
             kSql=NotImplemented,
-            alsoInactive=NotImplemented):
+            alsoInactive=NotImplemented,
+            dependencyTypeEqual=NotImplemented):
         KalturaFilter.__init__(self,
             orderBy)
 
@@ -5277,6 +5278,10 @@ class KalturaSubscriptionFilter(KalturaFilter):
         # @var bool
         self.alsoInactive = alsoInactive
 
+        # return subscriptions associated by their subscription sets dependency Type
+        # @var KalturaSubscriptionDependencyType
+        self.dependencyTypeEqual = dependencyTypeEqual
+
 
     PROPERTY_LOADERS = {
         'subscriptionIdIn': getXmlNodeText, 
@@ -5288,6 +5293,7 @@ class KalturaSubscriptionFilter(KalturaFilter):
         'channelIdEqual': getXmlNodeInt, 
         'kSql': getXmlNodeText, 
         'alsoInactive': getXmlNodeBool, 
+        'dependencyTypeEqual': (KalturaEnumsFactory.createString, "KalturaSubscriptionDependencyType"), 
     }
 
     def fromXml(self, node):
@@ -5306,6 +5312,7 @@ class KalturaSubscriptionFilter(KalturaFilter):
         kparams.addIntIfDefined("channelIdEqual", self.channelIdEqual)
         kparams.addStringIfDefined("kSql", self.kSql)
         kparams.addBoolIfDefined("alsoInactive", self.alsoInactive)
+        kparams.addStringEnumIfDefined("dependencyTypeEqual", self.dependencyTypeEqual)
         return kparams
 
     def getSubscriptionIdIn(self):
@@ -5361,6 +5368,12 @@ class KalturaSubscriptionFilter(KalturaFilter):
 
     def setAlsoInactive(self, newAlsoInactive):
         self.alsoInactive = newAlsoInactive
+
+    def getDependencyTypeEqual(self):
+        return self.dependencyTypeEqual
+
+    def setDependencyTypeEqual(self, newDependencyTypeEqual):
+        self.dependencyTypeEqual = newDependencyTypeEqual
 
 
 # @package Kaltura
