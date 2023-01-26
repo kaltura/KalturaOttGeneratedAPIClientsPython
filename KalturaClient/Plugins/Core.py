@@ -8,7 +8,7 @@
 # to do with audio, video, and animation what Wiki platforms allow them to do with
 # text.
 #
-# Copyright (C) 2006-2022  Kaltura Inc.
+# Copyright (C) 2006-2023  Kaltura Inc.
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU Affero General Public License as
@@ -42,7 +42,7 @@ from ..Base import (
     KalturaServiceBase,
 )
 
-API_VERSION = '8.3.1.30102'
+API_VERSION = '8.3.11.30100'
 
 ########## enums ##########
 # @package Kaltura
@@ -4841,6 +4841,41 @@ class KalturaCollectionFilter(KalturaFilter):
 
     def setAlsoInactive(self, newAlsoInactive):
         self.alsoInactive = newAlsoInactive
+
+
+# @package Kaltura
+# @subpackage Client
+class KalturaCouponFilter(KalturaFilter):
+    def __init__(self,
+            orderBy=NotImplemented,
+            couponCodesIn=NotImplemented):
+        KalturaFilter.__init__(self,
+            orderBy)
+
+        # Comma separated list of coupon codes.
+        # @var string
+        self.couponCodesIn = couponCodesIn
+
+
+    PROPERTY_LOADERS = {
+        'couponCodesIn': getXmlNodeText, 
+    }
+
+    def fromXml(self, node):
+        KalturaFilter.fromXml(self, node)
+        self.fromXmlImpl(node, KalturaCouponFilter.PROPERTY_LOADERS)
+
+    def toParams(self):
+        kparams = KalturaFilter.toParams(self)
+        kparams.put("objectType", "KalturaCouponFilter")
+        kparams.addStringIfDefined("couponCodesIn", self.couponCodesIn)
+        return kparams
+
+    def getCouponCodesIn(self):
+        return self.couponCodesIn
+
+    def setCouponCodesIn(self, newCouponCodesIn):
+        self.couponCodesIn = newCouponCodesIn
 
 
 # @package Kaltura
@@ -57842,6 +57877,7 @@ class KalturaCoreClient(KalturaClientPlugin):
             'KalturaUserSegmentFilter': KalturaUserSegmentFilter,
             'KalturaAssetFilePpvFilter': KalturaAssetFilePpvFilter,
             'KalturaCollectionFilter': KalturaCollectionFilter,
+            'KalturaCouponFilter': KalturaCouponFilter,
             'KalturaDiscountDetailsFilter': KalturaDiscountDetailsFilter,
             'KalturaPpvFilter': KalturaPpvFilter,
             'KalturaPreviewModuleFilter': KalturaPreviewModuleFilter,
