@@ -42,7 +42,7 @@ from ..Base import (
     KalturaServiceBase,
 )
 
-API_VERSION = '8.4.3.30143'
+API_VERSION = '8.5.0.30173'
 
 ########## enums ##########
 # @package Kaltura
@@ -1864,6 +1864,18 @@ class KalturaNotificationType(object):
 
 # @package Kaltura
 # @subpackage Client
+class KalturaNotWatchedReturnStrategy(object):
+    RETURN_NO_NEXT_EPISODE = "RETURN_NO_NEXT_EPISODE"
+    RETURN_FIRST_EPISODE = "RETURN_FIRST_EPISODE"
+
+    def __init__(self, value):
+        self.value = value
+
+    def getValue(self):
+        return self.value
+
+# @package Kaltura
+# @subpackage Client
 class KalturaObjectState(object):
     INACTIVE = "INACTIVE"
     ACTIVE = "ACTIVE"
@@ -3133,6 +3145,19 @@ class KalturaUserState(object):
     USER_WITH_NO_HOUSEHOLD = "user_with_no_household"
     USER_CREATED_WITH_NO_ROLE = "user_created_with_no_role"
     USER_NOT_ACTIVATED = "user_not_activated"
+
+    def __init__(self, value):
+        self.value = value
+
+    def getValue(self):
+        return self.value
+
+# @package Kaltura
+# @subpackage Client
+class KalturaWatchedAllReturnStrategy(object):
+    RETURN_NO_NEXT_EPISODE = "RETURN_NO_NEXT_EPISODE"
+    RETURN_FIRST_EPISODE = "RETURN_FIRST_EPISODE"
+    RETURN_LAST_EPISODE = "RETURN_LAST_EPISODE"
 
     def __init__(self, value):
         self.value = value
@@ -5238,7 +5263,7 @@ class KalturaSubscriptionFilter(KalturaFilter):
             channelIdEqual=NotImplemented,
             kSql=NotImplemented,
             alsoInactive=NotImplemented,
-            dependencyTypeEqual=NotImplemented):
+            dependencyTypeIn=NotImplemented):
         KalturaFilter.__init__(self,
             orderBy)
 
@@ -5278,9 +5303,10 @@ class KalturaSubscriptionFilter(KalturaFilter):
         # @var bool
         self.alsoInactive = alsoInactive
 
-        # return subscriptions associated by their subscription sets dependency Type
-        # @var KalturaSubscriptionDependencyType
-        self.dependencyTypeEqual = dependencyTypeEqual
+        # comma separated values of KalturaSubscriptionDependencyType 
+        #             return subscriptions associated by their subscription sets dependency Type
+        # @var string
+        self.dependencyTypeIn = dependencyTypeIn
 
 
     PROPERTY_LOADERS = {
@@ -5293,7 +5319,7 @@ class KalturaSubscriptionFilter(KalturaFilter):
         'channelIdEqual': getXmlNodeInt, 
         'kSql': getXmlNodeText, 
         'alsoInactive': getXmlNodeBool, 
-        'dependencyTypeEqual': (KalturaEnumsFactory.createString, "KalturaSubscriptionDependencyType"), 
+        'dependencyTypeIn': getXmlNodeText, 
     }
 
     def fromXml(self, node):
@@ -5312,7 +5338,7 @@ class KalturaSubscriptionFilter(KalturaFilter):
         kparams.addIntIfDefined("channelIdEqual", self.channelIdEqual)
         kparams.addStringIfDefined("kSql", self.kSql)
         kparams.addBoolIfDefined("alsoInactive", self.alsoInactive)
-        kparams.addStringEnumIfDefined("dependencyTypeEqual", self.dependencyTypeEqual)
+        kparams.addStringIfDefined("dependencyTypeIn", self.dependencyTypeIn)
         return kparams
 
     def getSubscriptionIdIn(self):
@@ -5369,11 +5395,11 @@ class KalturaSubscriptionFilter(KalturaFilter):
     def setAlsoInactive(self, newAlsoInactive):
         self.alsoInactive = newAlsoInactive
 
-    def getDependencyTypeEqual(self):
-        return self.dependencyTypeEqual
+    def getDependencyTypeIn(self):
+        return self.dependencyTypeIn
 
-    def setDependencyTypeEqual(self, newDependencyTypeEqual):
-        self.dependencyTypeEqual = newDependencyTypeEqual
+    def setDependencyTypeIn(self, newDependencyTypeIn):
+        self.dependencyTypeIn = newDependencyTypeIn
 
 
 # @package Kaltura
@@ -34648,6 +34674,137 @@ class KalturaExternalRecording(KalturaRecording):
 
 # @package Kaltura
 # @subpackage Client
+class KalturaImmediateRecording(KalturaRecording):
+    def __init__(self,
+            id=NotImplemented,
+            status=NotImplemented,
+            assetId=NotImplemented,
+            type=NotImplemented,
+            viewableUntilDate=NotImplemented,
+            isProtected=NotImplemented,
+            createDate=NotImplemented,
+            updateDate=NotImplemented,
+            endPadding=NotImplemented,
+            absoluteStart=NotImplemented,
+            absoluteEnd=NotImplemented):
+        KalturaRecording.__init__(self,
+            id,
+            status,
+            assetId,
+            type,
+            viewableUntilDate,
+            isProtected,
+            createDate,
+            updateDate)
+
+        # Household specific end padding of the recording
+        # @var int
+        self.endPadding = endPadding
+
+        # Household absolute start time of the immediate recording
+        # @var int
+        # @readonly
+        self.absoluteStart = absoluteStart
+
+        # Household absolute end time of the immediate recording, empty if till end of program
+        # @var int
+        # @readonly
+        self.absoluteEnd = absoluteEnd
+
+
+    PROPERTY_LOADERS = {
+        'endPadding': getXmlNodeInt, 
+        'absoluteStart': getXmlNodeInt, 
+        'absoluteEnd': getXmlNodeInt, 
+    }
+
+    def fromXml(self, node):
+        KalturaRecording.fromXml(self, node)
+        self.fromXmlImpl(node, KalturaImmediateRecording.PROPERTY_LOADERS)
+
+    def toParams(self):
+        kparams = KalturaRecording.toParams(self)
+        kparams.put("objectType", "KalturaImmediateRecording")
+        kparams.addIntIfDefined("endPadding", self.endPadding)
+        return kparams
+
+    def getEndPadding(self):
+        return self.endPadding
+
+    def setEndPadding(self, newEndPadding):
+        self.endPadding = newEndPadding
+
+    def getAbsoluteStart(self):
+        return self.absoluteStart
+
+    def getAbsoluteEnd(self):
+        return self.absoluteEnd
+
+
+# @package Kaltura
+# @subpackage Client
+class KalturaPaddedRecording(KalturaRecording):
+    def __init__(self,
+            id=NotImplemented,
+            status=NotImplemented,
+            assetId=NotImplemented,
+            type=NotImplemented,
+            viewableUntilDate=NotImplemented,
+            isProtected=NotImplemented,
+            createDate=NotImplemented,
+            updateDate=NotImplemented,
+            startPadding=NotImplemented,
+            endPadding=NotImplemented):
+        KalturaRecording.__init__(self,
+            id,
+            status,
+            assetId,
+            type,
+            viewableUntilDate,
+            isProtected,
+            createDate,
+            updateDate)
+
+        # Household specific start padding of the recording
+        # @var int
+        self.startPadding = startPadding
+
+        # Household specific end padding of the recording
+        # @var int
+        self.endPadding = endPadding
+
+
+    PROPERTY_LOADERS = {
+        'startPadding': getXmlNodeInt, 
+        'endPadding': getXmlNodeInt, 
+    }
+
+    def fromXml(self, node):
+        KalturaRecording.fromXml(self, node)
+        self.fromXmlImpl(node, KalturaPaddedRecording.PROPERTY_LOADERS)
+
+    def toParams(self):
+        kparams = KalturaRecording.toParams(self)
+        kparams.put("objectType", "KalturaPaddedRecording")
+        kparams.addIntIfDefined("startPadding", self.startPadding)
+        kparams.addIntIfDefined("endPadding", self.endPadding)
+        return kparams
+
+    def getStartPadding(self):
+        return self.startPadding
+
+    def setStartPadding(self, newStartPadding):
+        self.startPadding = newStartPadding
+
+    def getEndPadding(self):
+        return self.endPadding
+
+    def setEndPadding(self, newEndPadding):
+        self.endPadding = newEndPadding
+
+
+# @package Kaltura
+# @subpackage Client
 class KalturaRecordingListResponse(KalturaListResponse):
     """Recordings info wrapper"""
 
@@ -36544,7 +36701,8 @@ class KalturaRecordingAsset(KalturaProgramAsset):
             externalOfferIds=NotImplemented,
             recordingId=NotImplemented,
             recordingType=NotImplemented,
-            viewableUntilDate=NotImplemented):
+            viewableUntilDate=NotImplemented,
+            multiRecord=NotImplemented):
         KalturaProgramAsset.__init__(self,
             id,
             type,
@@ -36586,11 +36744,16 @@ class KalturaRecordingAsset(KalturaProgramAsset):
         # @var int
         self.viewableUntilDate = viewableUntilDate
 
+        # When TRUE indicates that there are multiple KalturaImmediateRecording instances for the event.
+        # @var bool
+        self.multiRecord = multiRecord
+
 
     PROPERTY_LOADERS = {
         'recordingId': getXmlNodeText, 
         'recordingType': (KalturaEnumsFactory.createString, "KalturaRecordingType"), 
         'viewableUntilDate': getXmlNodeInt, 
+        'multiRecord': getXmlNodeBool, 
     }
 
     def fromXml(self, node):
@@ -36603,6 +36766,7 @@ class KalturaRecordingAsset(KalturaProgramAsset):
         kparams.addStringIfDefined("recordingId", self.recordingId)
         kparams.addStringEnumIfDefined("recordingType", self.recordingType)
         kparams.addIntIfDefined("viewableUntilDate", self.viewableUntilDate)
+        kparams.addBoolIfDefined("multiRecord", self.multiRecord)
         return kparams
 
     def getRecordingId(self):
@@ -36622,6 +36786,12 @@ class KalturaRecordingAsset(KalturaProgramAsset):
 
     def setViewableUntilDate(self, newViewableUntilDate):
         self.viewableUntilDate = newViewableUntilDate
+
+    def getMultiRecord(self):
+        return self.multiRecord
+
+    def setMultiRecord(self, newMultiRecord):
+        self.multiRecord = newMultiRecord
 
 
 # @package Kaltura
@@ -42043,6 +42213,7 @@ class KalturaPlaybackProfile(KalturaObjectBase):
             id=NotImplemented,
             name=NotImplemented,
             isActive=NotImplemented,
+            adapterGrpcAddress=NotImplemented,
             adapterUrl=NotImplemented,
             settings=NotImplemented,
             systemName=NotImplemented,
@@ -42061,6 +42232,10 @@ class KalturaPlaybackProfile(KalturaObjectBase):
         # Playback profile active status
         # @var bool
         self.isActive = isActive
+
+        # Playback profile Grpc address
+        # @var string
+        self.adapterGrpcAddress = adapterGrpcAddress
 
         # Playback profile URL
         # @var string
@@ -42084,6 +42259,7 @@ class KalturaPlaybackProfile(KalturaObjectBase):
         'id': getXmlNodeInt, 
         'name': getXmlNodeText, 
         'isActive': getXmlNodeBool, 
+        'adapterGrpcAddress': getXmlNodeText, 
         'adapterUrl': getXmlNodeText, 
         'settings': getXmlNodeText, 
         'systemName': getXmlNodeText, 
@@ -42099,6 +42275,7 @@ class KalturaPlaybackProfile(KalturaObjectBase):
         kparams.put("objectType", "KalturaPlaybackProfile")
         kparams.addStringIfDefined("name", self.name)
         kparams.addBoolIfDefined("isActive", self.isActive)
+        kparams.addStringIfDefined("adapterGrpcAddress", self.adapterGrpcAddress)
         kparams.addStringIfDefined("adapterUrl", self.adapterUrl)
         kparams.addStringIfDefined("settings", self.settings)
         kparams.addStringIfDefined("systemName", self.systemName)
@@ -42118,6 +42295,12 @@ class KalturaPlaybackProfile(KalturaObjectBase):
 
     def setIsActive(self, newIsActive):
         self.isActive = newIsActive
+
+    def getAdapterGrpcAddress(self):
+        return self.adapterGrpcAddress
+
+    def setAdapterGrpcAddress(self, newAdapterGrpcAddress):
+        self.adapterGrpcAddress = newAdapterGrpcAddress
 
     def getAdapterUrl(self):
         return self.adapterUrl
@@ -44248,6 +44431,91 @@ class KalturaAssetFileContext(KalturaObjectBase):
 
     def getIsLivePlayBack(self):
         return self.isLivePlayBack
+
+
+# @package Kaltura
+# @subpackage Client
+class KalturaSeriesIdArguments(KalturaObjectBase):
+    def __init__(self,
+            assetTypeIdIn=NotImplemented,
+            seriesId=NotImplemented,
+            seriesIdMetaName=NotImplemented,
+            seasonNumberMetaName=NotImplemented,
+            episodeNumberMetaName=NotImplemented):
+        KalturaObjectBase.__init__(self)
+
+        # Comma separated asset type IDs
+        # @var string
+        self.assetTypeIdIn = assetTypeIdIn
+
+        # Series ID
+        # @var string
+        self.seriesId = seriesId
+
+        # Series ID meta name.
+        # @var string
+        self.seriesIdMetaName = seriesIdMetaName
+
+        # Season number meta name
+        # @var string
+        self.seasonNumberMetaName = seasonNumberMetaName
+
+        # Episode number meta name
+        # @var string
+        self.episodeNumberMetaName = episodeNumberMetaName
+
+
+    PROPERTY_LOADERS = {
+        'assetTypeIdIn': getXmlNodeText, 
+        'seriesId': getXmlNodeText, 
+        'seriesIdMetaName': getXmlNodeText, 
+        'seasonNumberMetaName': getXmlNodeText, 
+        'episodeNumberMetaName': getXmlNodeText, 
+    }
+
+    def fromXml(self, node):
+        KalturaObjectBase.fromXml(self, node)
+        self.fromXmlImpl(node, KalturaSeriesIdArguments.PROPERTY_LOADERS)
+
+    def toParams(self):
+        kparams = KalturaObjectBase.toParams(self)
+        kparams.put("objectType", "KalturaSeriesIdArguments")
+        kparams.addStringIfDefined("assetTypeIdIn", self.assetTypeIdIn)
+        kparams.addStringIfDefined("seriesId", self.seriesId)
+        kparams.addStringIfDefined("seriesIdMetaName", self.seriesIdMetaName)
+        kparams.addStringIfDefined("seasonNumberMetaName", self.seasonNumberMetaName)
+        kparams.addStringIfDefined("episodeNumberMetaName", self.episodeNumberMetaName)
+        return kparams
+
+    def getAssetTypeIdIn(self):
+        return self.assetTypeIdIn
+
+    def setAssetTypeIdIn(self, newAssetTypeIdIn):
+        self.assetTypeIdIn = newAssetTypeIdIn
+
+    def getSeriesId(self):
+        return self.seriesId
+
+    def setSeriesId(self, newSeriesId):
+        self.seriesId = newSeriesId
+
+    def getSeriesIdMetaName(self):
+        return self.seriesIdMetaName
+
+    def setSeriesIdMetaName(self, newSeriesIdMetaName):
+        self.seriesIdMetaName = newSeriesIdMetaName
+
+    def getSeasonNumberMetaName(self):
+        return self.seasonNumberMetaName
+
+    def setSeasonNumberMetaName(self, newSeasonNumberMetaName):
+        self.seasonNumberMetaName = newSeasonNumberMetaName
+
+    def getEpisodeNumberMetaName(self):
+        return self.episodeNumberMetaName
+
+    def setEpisodeNumberMetaName(self, newEpisodeNumberMetaName):
+        self.episodeNumberMetaName = newEpisodeNumberMetaName
 
 
 # @package Kaltura
@@ -50298,11 +50566,14 @@ class KalturaAssetHistoryService(KalturaServiceBase):
             return self.client.getMultiRequestResult()
         resultNode = self.client.doQueue()
 
-    def getNextEpisode(self, assetId):
+    def getNextEpisode(self, assetId = NotImplemented, seriesIdArguments = NotImplemented, notWatchedReturnStrategy = NotImplemented, watchedAllReturnStrategy = NotImplemented):
         """Get next episode by last watch asset in given assetId"""
 
         kparams = KalturaParams()
         kparams.addIntIfDefined("assetId", assetId);
+        kparams.addObjectIfDefined("seriesIdArguments", seriesIdArguments)
+        kparams.addStringIfDefined("notWatchedReturnStrategy", notWatchedReturnStrategy)
+        kparams.addStringIfDefined("watchedAllReturnStrategy", watchedAllReturnStrategy)
         self.client.queueServiceActionCall("assethistory", "getNextEpisode", "KalturaAssetHistory", kparams)
         if self.client.isMultiRequest():
             return self.client.getMultiRequestResult()
@@ -55542,6 +55813,19 @@ class KalturaRecordingService(KalturaServiceBase):
         resultNode = self.client.doQueue()
         return KalturaObjectFactory.create(resultNode, 'KalturaRecording')
 
+    def immediateRecord(self, assetId, epgChannelId, endPadding):
+        """Immediate Record"""
+
+        kparams = KalturaParams()
+        kparams.addIntIfDefined("assetId", assetId);
+        kparams.addIntIfDefined("epgChannelId", epgChannelId);
+        kparams.addIntIfDefined("endPadding", endPadding);
+        self.client.queueServiceActionCall("recording", "immediateRecord", "KalturaImmediateRecording", kparams)
+        if self.client.isMultiRequest():
+            return self.client.getMultiRequestResult()
+        resultNode = self.client.doQueue()
+        return KalturaObjectFactory.create(resultNode, 'KalturaImmediateRecording')
+
     def list(self, filter = NotImplemented, pager = NotImplemented):
         """Return a list of recordings for the household with optional filter by status and KSQL."""
 
@@ -55561,6 +55845,19 @@ class KalturaRecordingService(KalturaServiceBase):
         kparams = KalturaParams()
         kparams.addIntIfDefined("id", id);
         self.client.queueServiceActionCall("recording", "protect", "KalturaRecording", kparams)
+        if self.client.isMultiRequest():
+            return self.client.getMultiRequestResult()
+        resultNode = self.client.doQueue()
+        return KalturaObjectFactory.create(resultNode, 'KalturaRecording')
+
+    def stop(self, assetId, epgChannelId, householdRecordingId):
+        """Stop ongoing household recording"""
+
+        kparams = KalturaParams()
+        kparams.addIntIfDefined("assetId", assetId);
+        kparams.addIntIfDefined("epgChannelId", epgChannelId);
+        kparams.addIntIfDefined("householdRecordingId", householdRecordingId);
+        self.client.queueServiceActionCall("recording", "stop", "KalturaRecording", kparams)
         if self.client.isMultiRequest():
             return self.client.getMultiRequestResult()
         resultNode = self.client.doQueue()
@@ -57775,6 +58072,7 @@ class KalturaCoreClient(KalturaClientPlugin):
             'KalturaMetaTagOrderBy': KalturaMetaTagOrderBy,
             'KalturaMonetizationType': KalturaMonetizationType,
             'KalturaNotificationType': KalturaNotificationType,
+            'KalturaNotWatchedReturnStrategy': KalturaNotWatchedReturnStrategy,
             'KalturaObjectState': KalturaObjectState,
             'KalturaObjectVirtualAssetInfoType': KalturaObjectVirtualAssetInfoType,
             'KalturaOTTUserOrderBy': KalturaOTTUserOrderBy,
@@ -57868,6 +58166,7 @@ class KalturaCoreClient(KalturaClientPlugin):
             'KalturaUserRoleProfile': KalturaUserRoleProfile,
             'KalturaUserRoleType': KalturaUserRoleType,
             'KalturaUserState': KalturaUserState,
+            'KalturaWatchedAllReturnStrategy': KalturaWatchedAllReturnStrategy,
             'KalturaWatchStatus': KalturaWatchStatus,
         }
 
@@ -58435,6 +58734,8 @@ class KalturaCoreClient(KalturaClientPlugin):
             'KalturaHouseholdPremiumServiceListResponse': KalturaHouseholdPremiumServiceListResponse,
             'KalturaRecording': KalturaRecording,
             'KalturaExternalRecording': KalturaExternalRecording,
+            'KalturaImmediateRecording': KalturaImmediateRecording,
+            'KalturaPaddedRecording': KalturaPaddedRecording,
             'KalturaRecordingListResponse': KalturaRecordingListResponse,
             'KalturaSeriesRecordingOption': KalturaSeriesRecordingOption,
             'KalturaSeriesRecording': KalturaSeriesRecording,
@@ -58584,6 +58885,7 @@ class KalturaCoreClient(KalturaClientPlugin):
             'KalturaBulkUploadLiveAssetData': KalturaBulkUploadLiveAssetData,
             'KalturaBulkUploadProgramAssetData': KalturaBulkUploadProgramAssetData,
             'KalturaAssetFileContext': KalturaAssetFileContext,
+            'KalturaSeriesIdArguments': KalturaSeriesIdArguments,
             'KalturaAssetPersonalSelection': KalturaAssetPersonalSelection,
             'KalturaAssetStatisticsQuery': KalturaAssetStatisticsQuery,
             'KalturaBulkUploadStatistics': KalturaBulkUploadStatistics,
