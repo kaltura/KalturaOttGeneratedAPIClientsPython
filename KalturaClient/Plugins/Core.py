@@ -42,7 +42,7 @@ from ..Base import (
     KalturaServiceBase,
 )
 
-API_VERSION = '8.4.0.30114'
+API_VERSION = '8.4.0.30115'
 
 ########## enums ##########
 # @package Kaltura
@@ -2450,6 +2450,8 @@ class KalturaRuleActionType(object):
     FILTERFILEBYSTREAMERTYPEINPLAYBACK = "FilterFileByStreamerTypeInPlayback"
     FILTERFILEBYLABELINDISCOVERY = "FilterFileByLabelInDiscovery"
     FILTERFILEBYLABELINPLAYBACK = "FilterFileByLabelInPlayback"
+    FILTERFILEBYDYNAMICDATAINDISCOVERY = "FilterFileByDynamicDataInDiscovery"
+    FILTERFILEBYDYNAMICDATAINPLAYBACK = "FilterFileByDynamicDataInPlayback"
 
     def __init__(self, value):
         self.value = value
@@ -19551,6 +19553,114 @@ class KalturaFilterFileByAudioCodecInPlaybackAction(KalturaFilterFileByAudioCode
     def toParams(self):
         kparams = KalturaFilterFileByAudioCodecAction.toParams(self)
         kparams.put("objectType", "KalturaFilterFileByAudioCodecInPlaybackAction")
+        return kparams
+
+
+# @package Kaltura
+# @subpackage Client
+class KalturaFilterFileByDynamicDataAction(KalturaFilterAction):
+    """Filter File By Dynamic Data"""
+
+    def __init__(self,
+            type=NotImplemented,
+            description=NotImplemented,
+            key=NotImplemented,
+            values=NotImplemented):
+        KalturaFilterAction.__init__(self,
+            type,
+            description)
+
+        # Key to be searched
+        # @var string
+        self.key = key
+
+        # Comma separated values to be searched
+        # @var string
+        self.values = values
+
+
+    PROPERTY_LOADERS = {
+        'key': getXmlNodeText, 
+        'values': getXmlNodeText, 
+    }
+
+    def fromXml(self, node):
+        KalturaFilterAction.fromXml(self, node)
+        self.fromXmlImpl(node, KalturaFilterFileByDynamicDataAction.PROPERTY_LOADERS)
+
+    def toParams(self):
+        kparams = KalturaFilterAction.toParams(self)
+        kparams.put("objectType", "KalturaFilterFileByDynamicDataAction")
+        kparams.addStringIfDefined("key", self.key)
+        kparams.addStringIfDefined("values", self.values)
+        return kparams
+
+    def getKey(self):
+        return self.key
+
+    def setKey(self, newKey):
+        self.key = newKey
+
+    def getValues(self):
+        return self.values
+
+    def setValues(self, newValues):
+        self.values = newValues
+
+
+# @package Kaltura
+# @subpackage Client
+class KalturaFilterFileByDynamicDataInDiscoveryAction(KalturaFilterFileByDynamicDataAction):
+    def __init__(self,
+            type=NotImplemented,
+            description=NotImplemented,
+            key=NotImplemented,
+            values=NotImplemented):
+        KalturaFilterFileByDynamicDataAction.__init__(self,
+            type,
+            description,
+            key,
+            values)
+
+
+    PROPERTY_LOADERS = {
+    }
+
+    def fromXml(self, node):
+        KalturaFilterFileByDynamicDataAction.fromXml(self, node)
+        self.fromXmlImpl(node, KalturaFilterFileByDynamicDataInDiscoveryAction.PROPERTY_LOADERS)
+
+    def toParams(self):
+        kparams = KalturaFilterFileByDynamicDataAction.toParams(self)
+        kparams.put("objectType", "KalturaFilterFileByDynamicDataInDiscoveryAction")
+        return kparams
+
+
+# @package Kaltura
+# @subpackage Client
+class KalturaFilterFileByDynamicDataInPlaybackAction(KalturaFilterFileByDynamicDataAction):
+    def __init__(self,
+            type=NotImplemented,
+            description=NotImplemented,
+            key=NotImplemented,
+            values=NotImplemented):
+        KalturaFilterFileByDynamicDataAction.__init__(self,
+            type,
+            description,
+            key,
+            values)
+
+
+    PROPERTY_LOADERS = {
+    }
+
+    def fromXml(self, node):
+        KalturaFilterFileByDynamicDataAction.fromXml(self, node)
+        self.fromXmlImpl(node, KalturaFilterFileByDynamicDataInPlaybackAction.PROPERTY_LOADERS)
+
+    def toParams(self):
+        kparams = KalturaFilterFileByDynamicDataAction.toParams(self)
+        kparams.put("objectType", "KalturaFilterFileByDynamicDataInPlaybackAction")
         return kparams
 
 
@@ -58192,6 +58302,9 @@ class KalturaCoreClient(KalturaClientPlugin):
             'KalturaFilterFileByAudioCodecAction': KalturaFilterFileByAudioCodecAction,
             'KalturaFilterFileByAudioCodecInDiscoveryAction': KalturaFilterFileByAudioCodecInDiscoveryAction,
             'KalturaFilterFileByAudioCodecInPlaybackAction': KalturaFilterFileByAudioCodecInPlaybackAction,
+            'KalturaFilterFileByDynamicDataAction': KalturaFilterFileByDynamicDataAction,
+            'KalturaFilterFileByDynamicDataInDiscoveryAction': KalturaFilterFileByDynamicDataInDiscoveryAction,
+            'KalturaFilterFileByDynamicDataInPlaybackAction': KalturaFilterFileByDynamicDataInPlaybackAction,
             'KalturaFilterFileByFileTypeIdAction': KalturaFilterFileByFileTypeIdAction,
             'KalturaFilterFileByFileTypeIdForAssetTypeAction': KalturaFilterFileByFileTypeIdForAssetTypeAction,
             'KalturaFilterFileByFileTypeIdForAssetTypeInDiscoveryAction': KalturaFilterFileByFileTypeIdForAssetTypeInDiscoveryAction,
