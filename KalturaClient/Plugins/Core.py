@@ -42,7 +42,7 @@ from ..Base import (
     KalturaServiceBase,
 )
 
-API_VERSION = '8.4.12.30135'
+API_VERSION = '8.4.12.30136'
 
 ########## enums ##########
 # @package Kaltura
@@ -55815,7 +55815,7 @@ class KalturaRecordingService(KalturaServiceBase):
         resultNode = self.client.doQueue()
         return KalturaObjectFactory.create(resultNode, 'KalturaRecording')
 
-    def immediateRecord(self, assetId, epgChannelId, endPadding):
+    def immediateRecord(self, assetId, epgChannelId, endPadding = NotImplemented):
         """Immediate Record"""
 
         kparams = KalturaParams()
