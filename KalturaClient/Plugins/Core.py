@@ -42,7 +42,7 @@ from ..Base import (
     KalturaServiceBase,
 )
 
-API_VERSION = '8.5.0.30174'
+API_VERSION = '8.5.0.30179'
 
 ########## enums ##########
 # @package Kaltura
@@ -8164,117 +8164,6 @@ class KalturaConfigurationsFilter(KalturaFilter):
 
 # @package Kaltura
 # @subpackage Client
-class KalturaBaseEntitlementFilter(KalturaFilter):
-    """Entitlements filter"""
-
-    def __init__(self,
-            orderBy=NotImplemented):
-        KalturaFilter.__init__(self,
-            orderBy)
-
-
-    PROPERTY_LOADERS = {
-    }
-
-    def fromXml(self, node):
-        KalturaFilter.fromXml(self, node)
-        self.fromXmlImpl(node, KalturaBaseEntitlementFilter.PROPERTY_LOADERS)
-
-    def toParams(self):
-        kparams = KalturaFilter.toParams(self)
-        kparams.put("objectType", "KalturaBaseEntitlementFilter")
-        return kparams
-
-
-# @package Kaltura
-# @subpackage Client
-class KalturaEntitlementFilter(KalturaBaseEntitlementFilter):
-    """Entitlements filter"""
-
-    def __init__(self,
-            orderBy=NotImplemented,
-            productTypeEqual=NotImplemented,
-            entityReferenceEqual=NotImplemented,
-            isExpiredEqual=NotImplemented):
-        KalturaBaseEntitlementFilter.__init__(self,
-            orderBy)
-
-        # The type of the entitlements to return
-        # @var KalturaTransactionType
-        self.productTypeEqual = productTypeEqual
-
-        # Reference type to filter by
-        # @var KalturaEntityReferenceBy
-        self.entityReferenceEqual = entityReferenceEqual
-
-        # Is expired
-        # @var bool
-        self.isExpiredEqual = isExpiredEqual
-
-
-    PROPERTY_LOADERS = {
-        'productTypeEqual': (KalturaEnumsFactory.createString, "KalturaTransactionType"), 
-        'entityReferenceEqual': (KalturaEnumsFactory.createString, "KalturaEntityReferenceBy"), 
-        'isExpiredEqual': getXmlNodeBool, 
-    }
-
-    def fromXml(self, node):
-        KalturaBaseEntitlementFilter.fromXml(self, node)
-        self.fromXmlImpl(node, KalturaEntitlementFilter.PROPERTY_LOADERS)
-
-    def toParams(self):
-        kparams = KalturaBaseEntitlementFilter.toParams(self)
-        kparams.put("objectType", "KalturaEntitlementFilter")
-        kparams.addStringEnumIfDefined("productTypeEqual", self.productTypeEqual)
-        kparams.addStringEnumIfDefined("entityReferenceEqual", self.entityReferenceEqual)
-        kparams.addBoolIfDefined("isExpiredEqual", self.isExpiredEqual)
-        return kparams
-
-    def getProductTypeEqual(self):
-        return self.productTypeEqual
-
-    def setProductTypeEqual(self, newProductTypeEqual):
-        self.productTypeEqual = newProductTypeEqual
-
-    def getEntityReferenceEqual(self):
-        return self.entityReferenceEqual
-
-    def setEntityReferenceEqual(self, newEntityReferenceEqual):
-        self.entityReferenceEqual = newEntityReferenceEqual
-
-    def getIsExpiredEqual(self):
-        return self.isExpiredEqual
-
-    def setIsExpiredEqual(self, newIsExpiredEqual):
-        self.isExpiredEqual = newIsExpiredEqual
-
-
-# @package Kaltura
-# @subpackage Client
-class KalturaProgramAssetGroupOfferEntitlementFilter(KalturaBaseEntitlementFilter):
-    """Program asset group offer Entitlements filter"""
-
-    def __init__(self,
-            orderBy=NotImplemented):
-        KalturaBaseEntitlementFilter.__init__(self,
-            orderBy)
-
-
-    PROPERTY_LOADERS = {
-    }
-
-    def fromXml(self, node):
-        KalturaBaseEntitlementFilter.fromXml(self, node)
-        self.fromXmlImpl(node, KalturaProgramAssetGroupOfferEntitlementFilter.PROPERTY_LOADERS)
-
-    def toParams(self):
-        kparams = KalturaBaseEntitlementFilter.toParams(self)
-        kparams.put("objectType", "KalturaProgramAssetGroupOfferEntitlementFilter")
-        return kparams
-
-
-# @package Kaltura
-# @subpackage Client
 class KalturaRecordingFilter(KalturaFilter):
     """Filtering recordings"""
 
@@ -8483,6 +8372,99 @@ class KalturaCloudSeriesRecordingFilter(KalturaSeriesRecordingFilter):
 
     def setAdapterData(self, newAdapterData):
         self.adapterData = newAdapterData
+
+
+# @package Kaltura
+# @subpackage Client
+class KalturaEntitlementFilter(KalturaFilter):
+    """Entitlements filter"""
+
+    def __init__(self,
+            orderBy=NotImplemented,
+            productTypeEqual=NotImplemented,
+            entityReferenceEqual=NotImplemented,
+            isExpiredEqual=NotImplemented):
+        KalturaFilter.__init__(self,
+            orderBy)
+
+        # The type of the entitlements to return
+        # @var KalturaTransactionType
+        self.productTypeEqual = productTypeEqual
+
+        # Reference type to filter by
+        # @var KalturaEntityReferenceBy
+        self.entityReferenceEqual = entityReferenceEqual
+
+        # Is expired
+        # @var bool
+        self.isExpiredEqual = isExpiredEqual
+
+
+    PROPERTY_LOADERS = {
+        'productTypeEqual': (KalturaEnumsFactory.createString, "KalturaTransactionType"), 
+        'entityReferenceEqual': (KalturaEnumsFactory.createString, "KalturaEntityReferenceBy"), 
+        'isExpiredEqual': getXmlNodeBool, 
+    }
+
+    def fromXml(self, node):
+        KalturaFilter.fromXml(self, node)
+        self.fromXmlImpl(node, KalturaEntitlementFilter.PROPERTY_LOADERS)
+
+    def toParams(self):
+        kparams = KalturaFilter.toParams(self)
+        kparams.put("objectType", "KalturaEntitlementFilter")
+        kparams.addStringEnumIfDefined("productTypeEqual", self.productTypeEqual)
+        kparams.addStringEnumIfDefined("entityReferenceEqual", self.entityReferenceEqual)
+        kparams.addBoolIfDefined("isExpiredEqual", self.isExpiredEqual)
+        return kparams
+
+    def getProductTypeEqual(self):
+        return self.productTypeEqual
+
+    def setProductTypeEqual(self, newProductTypeEqual):
+        self.productTypeEqual = newProductTypeEqual
+
+    def getEntityReferenceEqual(self):
+        return self.entityReferenceEqual
+
+    def setEntityReferenceEqual(self, newEntityReferenceEqual):
+        self.entityReferenceEqual = newEntityReferenceEqual
+
+    def getIsExpiredEqual(self):
+        return self.isExpiredEqual
+
+    def setIsExpiredEqual(self, newIsExpiredEqual):
+        self.isExpiredEqual = newIsExpiredEqual
+
+
+# @package Kaltura
+# @subpackage Client
+class KalturaProgramAssetGroupOfferEntitlementFilter(KalturaEntitlementFilter):
+    """Program asset group offer Entitlements filter"""
+
+    def __init__(self,
+            orderBy=NotImplemented,
+            productTypeEqual=NotImplemented,
+            entityReferenceEqual=NotImplemented,
+            isExpiredEqual=NotImplemented):
+        KalturaEntitlementFilter.__init__(self,
+            orderBy,
+            productTypeEqual,
+            entityReferenceEqual,
+            isExpiredEqual)
+
+
+    PROPERTY_LOADERS = {
+    }
+
+    def fromXml(self, node):
+        KalturaEntitlementFilter.fromXml(self, node)
+        self.fromXmlImpl(node, KalturaProgramAssetGroupOfferEntitlementFilter.PROPERTY_LOADERS)
+
+    def toParams(self):
+        kparams = KalturaEntitlementFilter.toParams(self)
+        kparams.put("objectType", "KalturaProgramAssetGroupOfferEntitlementFilter")
+        return kparams
 
 
 # @package Kaltura
@@ -58282,14 +58264,13 @@ class KalturaCoreClient(KalturaClientPlugin):
             'KalturaConfigurationGroupDeviceFilter': KalturaConfigurationGroupDeviceFilter,
             'KalturaConfigurationGroupTagFilter': KalturaConfigurationGroupTagFilter,
             'KalturaConfigurationsFilter': KalturaConfigurationsFilter,
-            'KalturaBaseEntitlementFilter': KalturaBaseEntitlementFilter,
-            'KalturaEntitlementFilter': KalturaEntitlementFilter,
-            'KalturaProgramAssetGroupOfferEntitlementFilter': KalturaProgramAssetGroupOfferEntitlementFilter,
             'KalturaRecordingFilter': KalturaRecordingFilter,
             'KalturaExternalRecordingFilter': KalturaExternalRecordingFilter,
             'KalturaCloudRecordingFilter': KalturaCloudRecordingFilter,
             'KalturaSeriesRecordingFilter': KalturaSeriesRecordingFilter,
             'KalturaCloudSeriesRecordingFilter': KalturaCloudSeriesRecordingFilter,
+            'KalturaEntitlementFilter': KalturaEntitlementFilter,
+            'KalturaProgramAssetGroupOfferEntitlementFilter': KalturaProgramAssetGroupOfferEntitlementFilter,
             'KalturaExternalRecordingResponseProfileFilter': KalturaExternalRecordingResponseProfileFilter,
             'KalturaProductPriceFilter': KalturaProductPriceFilter,
             'KalturaRecordingContextFilter': KalturaRecordingContextFilter,
