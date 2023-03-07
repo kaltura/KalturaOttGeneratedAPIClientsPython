@@ -42,7 +42,7 @@ from ..Base import (
     KalturaServiceBase,
 )
 
-API_VERSION = '8.5.1.30301'
+API_VERSION = '8.5.1.30303'
 
 ########## enums ##########
 # @package Kaltura
@@ -4568,7 +4568,8 @@ class KalturaSegmentationTypeFilter(KalturaBaseSegmentationTypeFilter):
             orderBy=NotImplemented,
             idIn=NotImplemented,
             kSql=NotImplemented,
-            nameContain=NotImplemented):
+            nameContain=NotImplemented,
+            assetUserRuleIdIn=NotImplemented):
         KalturaBaseSegmentationTypeFilter.__init__(self,
             orderBy)
 
@@ -4584,11 +4585,16 @@ class KalturaSegmentationTypeFilter(KalturaBaseSegmentationTypeFilter):
         # @var string
         self.nameContain = nameContain
 
+        # comma-separated list of KalturaSegmentationType.assetUserRuleId values
+        # @var string
+        self.assetUserRuleIdIn = assetUserRuleIdIn
+
 
     PROPERTY_LOADERS = {
         'idIn': getXmlNodeText, 
         'kSql': getXmlNodeText, 
         'nameContain': getXmlNodeText, 
+        'assetUserRuleIdIn': getXmlNodeText, 
     }
 
     def fromXml(self, node):
@@ -4601,6 +4607,7 @@ class KalturaSegmentationTypeFilter(KalturaBaseSegmentationTypeFilter):
         kparams.addStringIfDefined("idIn", self.idIn)
         kparams.addStringIfDefined("kSql", self.kSql)
         kparams.addStringIfDefined("nameContain", self.nameContain)
+        kparams.addStringIfDefined("assetUserRuleIdIn", self.assetUserRuleIdIn)
         return kparams
 
     def getIdIn(self):
@@ -4621,44 +4628,11 @@ class KalturaSegmentationTypeFilter(KalturaBaseSegmentationTypeFilter):
     def setNameContain(self, newNameContain):
         self.nameContain = newNameContain
 
+    def getAssetUserRuleIdIn(self):
+        return self.assetUserRuleIdIn
 
-# @package Kaltura
-# @subpackage Client
-class KalturaSegmentationTypeShopFilter(KalturaBaseSegmentationTypeFilter):
-    """allows return of all the KalturaSegmentationType objects that satisfy at least one of the following conditions:
-                KalturaSegmentationType is associated to one of a set of specified(input) Shop Roles
-                KalturaSegmentationType is associated to no Shop Role(KalturaSegmentationType.assetUserRuleId is null)"""
-
-    def __init__(self,
-            orderBy=NotImplemented,
-            idIn=NotImplemented):
-        KalturaBaseSegmentationTypeFilter.__init__(self,
-            orderBy)
-
-        # comma-separated list of KalturaSegmentationType.assetUserRuleId values
-        # @var string
-        self.idIn = idIn
-
-
-    PROPERTY_LOADERS = {
-        'idIn': getXmlNodeText, 
-    }
-
-    def fromXml(self, node):
-        KalturaBaseSegmentationTypeFilter.fromXml(self, node)
-        self.fromXmlImpl(node, KalturaSegmentationTypeShopFilter.PROPERTY_LOADERS)
-
-    def toParams(self):
-        kparams = KalturaBaseSegmentationTypeFilter.toParams(self)
-        kparams.put("objectType", "KalturaSegmentationTypeShopFilter")
-        kparams.addStringIfDefined("idIn", self.idIn)
-        return kparams
-
-    def getIdIn(self):
-        return self.idIn
-
-    def setIdIn(self, newIdIn):
-        self.idIn = newIdIn
+    def setAssetUserRuleIdIn(self, newAssetUserRuleIdIn):
+        self.assetUserRuleIdIn = newAssetUserRuleIdIn
 
 
 # @package Kaltura
@@ -58327,7 +58301,6 @@ class KalturaCoreClient(KalturaClientPlugin):
             'KalturaSocialFriendActivityFilter': KalturaSocialFriendActivityFilter,
             'KalturaBaseSegmentationTypeFilter': KalturaBaseSegmentationTypeFilter,
             'KalturaSegmentationTypeFilter': KalturaSegmentationTypeFilter,
-            'KalturaSegmentationTypeShopFilter': KalturaSegmentationTypeShopFilter,
             'KalturaSegmentValueFilter': KalturaSegmentValueFilter,
             'KalturaHouseholdSegmentFilter': KalturaHouseholdSegmentFilter,
             'KalturaUserSegmentFilter': KalturaUserSegmentFilter,
