@@ -42,7 +42,7 @@ from ..Base import (
     KalturaServiceBase,
 )
 
-API_VERSION = '8.6.0.30250'
+API_VERSION = '8.6.1.30255'
 
 ########## enums ##########
 # @package Kaltura
@@ -56199,12 +56199,11 @@ class KalturaRecordingService(KalturaServiceBase):
         resultNode = self.client.doQueue()
         return KalturaObjectFactory.create(resultNode, 'KalturaRecording')
 
-    def immediateRecord(self, assetId, epgChannelId, endPadding = NotImplemented):
+    def immediateRecord(self, assetId, endPadding = NotImplemented):
         """Immediate Record"""
 
         kparams = KalturaParams()
         kparams.addIntIfDefined("assetId", assetId);
-        kparams.addIntIfDefined("epgChannelId", epgChannelId);
         kparams.addIntIfDefined("endPadding", endPadding);
         self.client.queueServiceActionCall("recording", "immediateRecord", "KalturaImmediateRecording", kparams)
         if self.client.isMultiRequest():
@@ -56236,13 +56235,12 @@ class KalturaRecordingService(KalturaServiceBase):
         resultNode = self.client.doQueue()
         return KalturaObjectFactory.create(resultNode, 'KalturaRecording')
 
-    def stop(self, assetId, epgChannelId, householdRecordingId):
+    def stop(self, assetId, id):
         """Stop ongoing household recording"""
 
         kparams = KalturaParams()
         kparams.addIntIfDefined("assetId", assetId);
-        kparams.addIntIfDefined("epgChannelId", epgChannelId);
-        kparams.addIntIfDefined("householdRecordingId", householdRecordingId);
+        kparams.addIntIfDefined("id", id);
         self.client.queueServiceActionCall("recording", "stop", "KalturaRecording", kparams)
         if self.client.isMultiRequest():
             return self.client.getMultiRequestResult()
