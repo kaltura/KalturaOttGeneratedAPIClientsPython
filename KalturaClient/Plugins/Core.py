@@ -42,7 +42,7 @@ from ..Base import (
     KalturaServiceBase,
 )
 
-API_VERSION = '8.5.1.30231'
+API_VERSION = '8.6.2.30269'
 
 ########## enums ##########
 # @package Kaltura
@@ -1733,6 +1733,17 @@ class KalturaMathemticalOperatorType(object):
 
 # @package Kaltura
 # @subpackage Client
+class KalturaMediaFileDynamicDataOrderBy(object):
+    NONE = "NONE"
+
+    def __init__(self, value):
+        self.value = value
+
+    def getValue(self):
+        return self.value
+
+# @package Kaltura
+# @subpackage Client
 class KalturaMediaFileOrderBy(object):
     NONE = "NONE"
 
@@ -2464,6 +2475,8 @@ class KalturaRuleActionType(object):
     FILTERFILEBYSTREAMERTYPEINPLAYBACK = "FilterFileByStreamerTypeInPlayback"
     FILTERFILEBYLABELINDISCOVERY = "FilterFileByLabelInDiscovery"
     FILTERFILEBYLABELINPLAYBACK = "FilterFileByLabelInPlayback"
+    FILTERFILEBYDYNAMICDATAINDISCOVERY = "FilterFileByDynamicDataInDiscovery"
+    FILTERFILEBYDYNAMICDATAINPLAYBACK = "FilterFileByDynamicDataInPlayback"
 
     def __init__(self, value):
         self.value = value
@@ -11907,6 +11920,94 @@ class KalturaLanguageFilter(KalturaFilter):
 
 # @package Kaltura
 # @subpackage Client
+class KalturaMediaFileDynamicDataFilter(KalturaFilter):
+    def __init__(self,
+            orderBy=NotImplemented,
+            idIn=NotImplemented,
+            mediaFileTypeId=NotImplemented,
+            mediaFileTypeKeyName=NotImplemented,
+            valueEqual=NotImplemented,
+            valueStartsWith=NotImplemented):
+        KalturaFilter.__init__(self,
+            orderBy)
+
+        # A comma-separated list of KalturaMediaFileDynamicData.Id to be searched.
+        # @var string
+        self.idIn = idIn
+
+        # An integer representing the the mediaFileType holding the keys for which the values should be stored.
+        # @var int
+        self.mediaFileTypeId = mediaFileTypeId
+
+        # A string representing the key name within the mediaFileType that identifies the list corresponding
+        #             to that key name.
+        # @var string
+        self.mediaFileTypeKeyName = mediaFileTypeKeyName
+
+        # A string representing a specific value to be searched.
+        # @var string
+        self.valueEqual = valueEqual
+
+        # A string representing the beginning of multiple (zero or more) matching values.
+        # @var string
+        self.valueStartsWith = valueStartsWith
+
+
+    PROPERTY_LOADERS = {
+        'idIn': getXmlNodeText, 
+        'mediaFileTypeId': getXmlNodeInt, 
+        'mediaFileTypeKeyName': getXmlNodeText, 
+        'valueEqual': getXmlNodeText, 
+        'valueStartsWith': getXmlNodeText, 
+    }
+
+    def fromXml(self, node):
+        KalturaFilter.fromXml(self, node)
+        self.fromXmlImpl(node, KalturaMediaFileDynamicDataFilter.PROPERTY_LOADERS)
+
+    def toParams(self):
+        kparams = KalturaFilter.toParams(self)
+        kparams.put("objectType", "KalturaMediaFileDynamicDataFilter")
+        kparams.addStringIfDefined("idIn", self.idIn)
+        kparams.addIntIfDefined("mediaFileTypeId", self.mediaFileTypeId)
+        kparams.addStringIfDefined("mediaFileTypeKeyName", self.mediaFileTypeKeyName)
+        kparams.addStringIfDefined("valueEqual", self.valueEqual)
+        kparams.addStringIfDefined("valueStartsWith", self.valueStartsWith)
+        return kparams
+
+    def getIdIn(self):
+        return self.idIn
+
+    def setIdIn(self, newIdIn):
+        self.idIn = newIdIn
+
+    def getMediaFileTypeId(self):
+        return self.mediaFileTypeId
+
+    def setMediaFileTypeId(self, newMediaFileTypeId):
+        self.mediaFileTypeId = newMediaFileTypeId
+
+    def getMediaFileTypeKeyName(self):
+        return self.mediaFileTypeKeyName
+
+    def setMediaFileTypeKeyName(self, newMediaFileTypeKeyName):
+        self.mediaFileTypeKeyName = newMediaFileTypeKeyName
+
+    def getValueEqual(self):
+        return self.valueEqual
+
+    def setValueEqual(self, newValueEqual):
+        self.valueEqual = newValueEqual
+
+    def getValueStartsWith(self):
+        return self.valueStartsWith
+
+    def setValueStartsWith(self, newValueStartsWith):
+        self.valueStartsWith = newValueStartsWith
+
+
+# @package Kaltura
+# @subpackage Client
 class KalturaMetaFilter(KalturaFilter):
     """Meta filter"""
 
@@ -19631,6 +19732,120 @@ class KalturaFilterFileByAudioCodecInPlaybackAction(KalturaFilterFileByAudioCode
 
 # @package Kaltura
 # @subpackage Client
+class KalturaFilterFileByDynamicDataAction(KalturaFilterAction):
+    """Filter File By Dynamic Data"""
+
+    def __init__(self,
+            type=NotImplemented,
+            description=NotImplemented,
+            preActionCondition=NotImplemented,
+            key=NotImplemented,
+            values=NotImplemented):
+        KalturaFilterAction.__init__(self,
+            type,
+            description,
+            preActionCondition)
+
+        # Key to be searched
+        # @var string
+        self.key = key
+
+        # Comma separated values to be searched
+        # @var string
+        self.values = values
+
+
+    PROPERTY_LOADERS = {
+        'key': getXmlNodeText, 
+        'values': getXmlNodeText, 
+    }
+
+    def fromXml(self, node):
+        KalturaFilterAction.fromXml(self, node)
+        self.fromXmlImpl(node, KalturaFilterFileByDynamicDataAction.PROPERTY_LOADERS)
+
+    def toParams(self):
+        kparams = KalturaFilterAction.toParams(self)
+        kparams.put("objectType", "KalturaFilterFileByDynamicDataAction")
+        kparams.addStringIfDefined("key", self.key)
+        kparams.addStringIfDefined("values", self.values)
+        return kparams
+
+    def getKey(self):
+        return self.key
+
+    def setKey(self, newKey):
+        self.key = newKey
+
+    def getValues(self):
+        return self.values
+
+    def setValues(self, newValues):
+        self.values = newValues
+
+
+# @package Kaltura
+# @subpackage Client
+class KalturaFilterFileByDynamicDataInDiscoveryAction(KalturaFilterFileByDynamicDataAction):
+    def __init__(self,
+            type=NotImplemented,
+            description=NotImplemented,
+            preActionCondition=NotImplemented,
+            key=NotImplemented,
+            values=NotImplemented):
+        KalturaFilterFileByDynamicDataAction.__init__(self,
+            type,
+            description,
+            preActionCondition,
+            key,
+            values)
+
+
+    PROPERTY_LOADERS = {
+    }
+
+    def fromXml(self, node):
+        KalturaFilterFileByDynamicDataAction.fromXml(self, node)
+        self.fromXmlImpl(node, KalturaFilterFileByDynamicDataInDiscoveryAction.PROPERTY_LOADERS)
+
+    def toParams(self):
+        kparams = KalturaFilterFileByDynamicDataAction.toParams(self)
+        kparams.put("objectType", "KalturaFilterFileByDynamicDataInDiscoveryAction")
+        return kparams
+
+
+# @package Kaltura
+# @subpackage Client
+class KalturaFilterFileByDynamicDataInPlaybackAction(KalturaFilterFileByDynamicDataAction):
+    def __init__(self,
+            type=NotImplemented,
+            description=NotImplemented,
+            preActionCondition=NotImplemented,
+            key=NotImplemented,
+            values=NotImplemented):
+        KalturaFilterFileByDynamicDataAction.__init__(self,
+            type,
+            description,
+            preActionCondition,
+            key,
+            values)
+
+
+    PROPERTY_LOADERS = {
+    }
+
+    def fromXml(self, node):
+        KalturaFilterFileByDynamicDataAction.fromXml(self, node)
+        self.fromXmlImpl(node, KalturaFilterFileByDynamicDataInPlaybackAction.PROPERTY_LOADERS)
+
+    def toParams(self):
+        kparams = KalturaFilterFileByDynamicDataAction.toParams(self)
+        kparams.put("objectType", "KalturaFilterFileByDynamicDataInPlaybackAction")
+        return kparams
+
+
+# @package Kaltura
+# @subpackage Client
 class KalturaFilterFileByFileTypeIdAction(KalturaFilterAction):
     """FilterFile By FileType"""
 
@@ -21722,7 +21937,8 @@ class KalturaMediaFile(KalturaAssetFile):
             catalogEndDate=NotImplemented,
             opl=NotImplemented,
             businessModuleDetails=NotImplemented,
-            labels=NotImplemented):
+            labels=NotImplemented,
+            dynamicData=NotImplemented):
         KalturaAssetFile.__init__(self,
             url)
 
@@ -21828,6 +22044,10 @@ class KalturaMediaFile(KalturaAssetFile):
         # @var string
         self.labels = labels
 
+        # List of KalturaMediaFile&#39;s dynamic data keys
+        # @var map
+        self.dynamicData = dynamicData
+
 
     PROPERTY_LOADERS = {
         'assetId': getXmlNodeInt, 
@@ -21855,6 +22075,7 @@ class KalturaMediaFile(KalturaAssetFile):
         'opl': getXmlNodeText, 
         'businessModuleDetails': (KalturaObjectFactory.create, 'KalturaBusinessModuleDetails'), 
         'labels': getXmlNodeText, 
+        'dynamicData': (KalturaObjectFactory.createMap, 'KalturaStringValueArray'), 
     }
 
     def fromXml(self, node):
@@ -21887,6 +22108,7 @@ class KalturaMediaFile(KalturaAssetFile):
         kparams.addStringIfDefined("opl", self.opl)
         kparams.addObjectIfDefined("businessModuleDetails", self.businessModuleDetails)
         kparams.addStringIfDefined("labels", self.labels)
+        kparams.addMapIfDefined("dynamicData", self.dynamicData)
         return kparams
 
     def getAssetId(self):
@@ -22032,6 +22254,12 @@ class KalturaMediaFile(KalturaAssetFile):
 
     def setLabels(self, newLabels):
         self.labels = newLabels
+
+    def getDynamicData(self):
+        return self.dynamicData
+
+    def setDynamicData(self, newDynamicData):
+        self.dynamicData = newDynamicData
 
 
 # @package Kaltura
@@ -22355,6 +22583,7 @@ class KalturaPlaybackSource(KalturaMediaFile):
             opl=NotImplemented,
             businessModuleDetails=NotImplemented,
             labels=NotImplemented,
+            dynamicData=NotImplemented,
             format=NotImplemented,
             protocols=NotImplemented,
             drm=NotImplemented,
@@ -22387,7 +22616,8 @@ class KalturaPlaybackSource(KalturaMediaFile):
             catalogEndDate,
             opl,
             businessModuleDetails,
-            labels)
+            labels,
+            dynamicData)
 
         # Source format according to delivery profile streamer type (applehttp, mpegdash etc.)
         # @var string
@@ -22501,6 +22731,7 @@ class KalturaDiscoveryMediaFile(KalturaMediaFile):
             opl=NotImplemented,
             businessModuleDetails=NotImplemented,
             labels=NotImplemented,
+            dynamicData=NotImplemented,
             isPlaybackable=NotImplemented):
         KalturaMediaFile.__init__(self,
             url,
@@ -22528,7 +22759,8 @@ class KalturaDiscoveryMediaFile(KalturaMediaFile):
             catalogEndDate,
             opl,
             businessModuleDetails,
-            labels)
+            labels,
+            dynamicData)
 
         # show, if file could be played
         # @var bool
@@ -38035,6 +38267,114 @@ class KalturaLineupChannelAssetListResponse(KalturaListResponse):
 
 # @package Kaltura
 # @subpackage Client
+class KalturaMediaFileDynamicData(KalturaObjectBase):
+    def __init__(self,
+            id=NotImplemented,
+            mediaFileTypeId=NotImplemented,
+            mediaFileTypeKeyName=NotImplemented,
+            value=NotImplemented):
+        KalturaObjectBase.__init__(self)
+
+        # An integer representing the identifier of the value.
+        # @var int
+        self.id = id
+
+        # An integer representing the the mediaFileType holding the keys for which the values should be stored.
+        # @var int
+        self.mediaFileTypeId = mediaFileTypeId
+
+        # A string representing the key name within the mediaFileType that identifies the list corresponding
+        #             to that key name.
+        # @var string
+        self.mediaFileTypeKeyName = mediaFileTypeKeyName
+
+        # Dynamic data value
+        # @var string
+        self.value = value
+
+
+    PROPERTY_LOADERS = {
+        'id': getXmlNodeInt, 
+        'mediaFileTypeId': getXmlNodeInt, 
+        'mediaFileTypeKeyName': getXmlNodeText, 
+        'value': getXmlNodeText, 
+    }
+
+    def fromXml(self, node):
+        KalturaObjectBase.fromXml(self, node)
+        self.fromXmlImpl(node, KalturaMediaFileDynamicData.PROPERTY_LOADERS)
+
+    def toParams(self):
+        kparams = KalturaObjectBase.toParams(self)
+        kparams.put("objectType", "KalturaMediaFileDynamicData")
+        kparams.addIntIfDefined("id", self.id)
+        kparams.addIntIfDefined("mediaFileTypeId", self.mediaFileTypeId)
+        kparams.addStringIfDefined("mediaFileTypeKeyName", self.mediaFileTypeKeyName)
+        kparams.addStringIfDefined("value", self.value)
+        return kparams
+
+    def getId(self):
+        return self.id
+
+    def setId(self, newId):
+        self.id = newId
+
+    def getMediaFileTypeId(self):
+        return self.mediaFileTypeId
+
+    def setMediaFileTypeId(self, newMediaFileTypeId):
+        self.mediaFileTypeId = newMediaFileTypeId
+
+    def getMediaFileTypeKeyName(self):
+        return self.mediaFileTypeKeyName
+
+    def setMediaFileTypeKeyName(self, newMediaFileTypeKeyName):
+        self.mediaFileTypeKeyName = newMediaFileTypeKeyName
+
+    def getValue(self):
+        return self.value
+
+    def setValue(self, newValue):
+        self.value = newValue
+
+
+# @package Kaltura
+# @subpackage Client
+class KalturaMediaFileDynamicDataListResponse(KalturaListResponse):
+    def __init__(self,
+            totalCount=NotImplemented,
+            objects=NotImplemented):
+        KalturaListResponse.__init__(self,
+            totalCount)
+
+        # A list of media-file types
+        # @var array of KalturaMediaFileDynamicData
+        self.objects = objects
+
+
+    PROPERTY_LOADERS = {
+        'objects': (KalturaObjectFactory.createArray, 'KalturaMediaFileDynamicData'), 
+    }
+
+    def fromXml(self, node):
+        KalturaListResponse.fromXml(self, node)
+        self.fromXmlImpl(node, KalturaMediaFileDynamicDataListResponse.PROPERTY_LOADERS)
+
+    def toParams(self):
+        kparams = KalturaListResponse.toParams(self)
+        kparams.put("objectType", "KalturaMediaFileDynamicDataListResponse")
+        kparams.addArrayIfDefined("objects", self.objects)
+        return kparams
+
+    def getObjects(self):
+        return self.objects
+
+    def setObjects(self, newObjects):
+        self.objects = newObjects
+
+
+# @package Kaltura
+# @subpackage Client
 class KalturaMediaFileListResponse(KalturaListResponse):
     """Media-file list"""
 
@@ -38087,7 +38427,8 @@ class KalturaMediaFileType(KalturaObjectBase):
             drmProfileId=NotImplemented,
             quality=NotImplemented,
             videoCodecs=NotImplemented,
-            audioCodecs=NotImplemented):
+            audioCodecs=NotImplemented,
+            dynamicDataKeys=NotImplemented):
         KalturaObjectBase.__init__(self)
 
         # Unique identifier
@@ -38144,6 +38485,10 @@ class KalturaMediaFileType(KalturaObjectBase):
         # @var string
         self.audioCodecs = audioCodecs
 
+        # List of comma separated keys allowed to be used as KalturaMediaFile&#39;s dynamic data keys
+        # @var string
+        self.dynamicDataKeys = dynamicDataKeys
+
 
     PROPERTY_LOADERS = {
         'id': getXmlNodeInt, 
@@ -38158,6 +38503,7 @@ class KalturaMediaFileType(KalturaObjectBase):
         'quality': (KalturaEnumsFactory.createString, "KalturaMediaFileTypeQuality"), 
         'videoCodecs': getXmlNodeText, 
         'audioCodecs': getXmlNodeText, 
+        'dynamicDataKeys': getXmlNodeText, 
     }
 
     def fromXml(self, node):
@@ -38176,6 +38522,7 @@ class KalturaMediaFileType(KalturaObjectBase):
         kparams.addStringEnumIfDefined("quality", self.quality)
         kparams.addStringIfDefined("videoCodecs", self.videoCodecs)
         kparams.addStringIfDefined("audioCodecs", self.audioCodecs)
+        kparams.addStringIfDefined("dynamicDataKeys", self.dynamicDataKeys)
         return kparams
 
     def getId(self):
@@ -38240,6 +38587,12 @@ class KalturaMediaFileType(KalturaObjectBase):
 
     def setAudioCodecs(self, newAudioCodecs):
         self.audioCodecs = newAudioCodecs
+
+    def getDynamicDataKeys(self):
+        return self.dynamicDataKeys
+
+    def setDynamicDataKeys(self, newDynamicDataKeys):
+        self.dynamicDataKeys = newDynamicDataKeys
 
 
 # @package Kaltura
@@ -54208,6 +54561,47 @@ class KalturaMediaFileService(KalturaServiceBase):
 
 # @package Kaltura
 # @subpackage Client
+class KalturaMediaFileDynamicDataService(KalturaServiceBase):
+    def __init__(self, client = None):
+        KalturaServiceBase.__init__(self, client)
+
+    def add(self, dynamicData):
+        """Add a dynamicData value to the values list of a specific key name in a specific mediaFileTypeId"""
+
+        kparams = KalturaParams()
+        kparams.addObjectIfDefined("dynamicData", dynamicData)
+        self.client.queueServiceActionCall("mediafiledynamicdata", "add", "KalturaMediaFileDynamicData", kparams)
+        if self.client.isMultiRequest():
+            return self.client.getMultiRequestResult()
+        resultNode = self.client.doQueue()
+        return KalturaObjectFactory.create(resultNode, 'KalturaMediaFileDynamicData')
+
+    def delete(self, id):
+        """Delete an existing DynamicData value"""
+
+        kparams = KalturaParams()
+        kparams.addIntIfDefined("id", id);
+        self.client.queueServiceActionCall("mediafiledynamicdata", "delete", "None", kparams)
+        if self.client.isMultiRequest():
+            return self.client.getMultiRequestResult()
+        resultNode = self.client.doQueue()
+        return getXmlNodeBool(resultNode)
+
+    def list(self, filter, pager = NotImplemented):
+        """List and filter existing mediaFile dynamicData values"""
+
+        kparams = KalturaParams()
+        kparams.addObjectIfDefined("filter", filter)
+        kparams.addObjectIfDefined("pager", pager)
+        self.client.queueServiceActionCall("mediafiledynamicdata", "list", "KalturaMediaFileDynamicDataListResponse", kparams)
+        if self.client.isMultiRequest():
+            return self.client.getMultiRequestResult()
+        resultNode = self.client.doQueue()
+        return KalturaObjectFactory.create(resultNode, 'KalturaMediaFileDynamicDataListResponse')
+
+
+# @package Kaltura
+# @subpackage Client
 class KalturaMediaFileTypeService(KalturaServiceBase):
     def __init__(self, client = None):
         KalturaServiceBase.__init__(self, client)
@@ -55956,12 +56350,11 @@ class KalturaRecordingService(KalturaServiceBase):
         resultNode = self.client.doQueue()
         return KalturaObjectFactory.create(resultNode, 'KalturaRecording')
 
-    def immediateRecord(self, assetId, epgChannelId, endPadding = NotImplemented):
+    def immediateRecord(self, assetId, endPadding = NotImplemented):
         """Immediate Record"""
 
         kparams = KalturaParams()
         kparams.addIntIfDefined("assetId", assetId);
-        kparams.addIntIfDefined("epgChannelId", epgChannelId);
         kparams.addIntIfDefined("endPadding", endPadding);
         self.client.queueServiceActionCall("recording", "immediateRecord", "KalturaImmediateRecording", kparams)
         if self.client.isMultiRequest():
@@ -55993,13 +56386,12 @@ class KalturaRecordingService(KalturaServiceBase):
         resultNode = self.client.doQueue()
         return KalturaObjectFactory.create(resultNode, 'KalturaRecording')
 
-    def stop(self, assetId, epgChannelId, householdRecordingId):
+    def stop(self, assetId, id):
         """Stop ongoing household recording"""
 
         kparams = KalturaParams()
         kparams.addIntIfDefined("assetId", assetId);
-        kparams.addIntIfDefined("epgChannelId", epgChannelId);
-        kparams.addIntIfDefined("householdRecordingId", householdRecordingId);
+        kparams.addIntIfDefined("id", id);
         self.client.queueServiceActionCall("recording", "stop", "KalturaRecording", kparams)
         if self.client.isMultiRequest():
             return self.client.getMultiRequestResult()
@@ -58004,6 +58396,7 @@ class KalturaCoreClient(KalturaClientPlugin):
             'liveToVod': KalturaLiveToVodService,
             'mediaConcurrencyRule': KalturaMediaConcurrencyRuleService,
             'mediaFile': KalturaMediaFileService,
+            'mediaFileDynamicData': KalturaMediaFileDynamicDataService,
             'mediaFileType': KalturaMediaFileTypeService,
             'messageTemplate': KalturaMessageTemplateService,
             'meta': KalturaMetaService,
@@ -58206,6 +58599,7 @@ class KalturaCoreClient(KalturaClientPlugin):
             'KalturaListGroupsRepresentativesOrderBy': KalturaListGroupsRepresentativesOrderBy,
             'KalturaManualCollectionAssetType': KalturaManualCollectionAssetType,
             'KalturaMathemticalOperatorType': KalturaMathemticalOperatorType,
+            'KalturaMediaFileDynamicDataOrderBy': KalturaMediaFileDynamicDataOrderBy,
             'KalturaMediaFileOrderBy': KalturaMediaFileOrderBy,
             'KalturaMediaFileStreamerType': KalturaMediaFileStreamerType,
             'KalturaMediaFileTypeQuality': KalturaMediaFileTypeQuality,
@@ -58490,6 +58884,7 @@ class KalturaCoreClient(KalturaClientPlugin):
             'KalturaIotFilter': KalturaIotFilter,
             'KalturaIotProfileFilter': KalturaIotProfileFilter,
             'KalturaLanguageFilter': KalturaLanguageFilter,
+            'KalturaMediaFileDynamicDataFilter': KalturaMediaFileDynamicDataFilter,
             'KalturaMetaFilter': KalturaMetaFilter,
             'KalturaParentalRuleFilter': KalturaParentalRuleFilter,
             'KalturaBasePermissionFilter': KalturaBasePermissionFilter,
@@ -58617,6 +59012,9 @@ class KalturaCoreClient(KalturaClientPlugin):
             'KalturaFilterFileByAudioCodecAction': KalturaFilterFileByAudioCodecAction,
             'KalturaFilterFileByAudioCodecInDiscoveryAction': KalturaFilterFileByAudioCodecInDiscoveryAction,
             'KalturaFilterFileByAudioCodecInPlaybackAction': KalturaFilterFileByAudioCodecInPlaybackAction,
+            'KalturaFilterFileByDynamicDataAction': KalturaFilterFileByDynamicDataAction,
+            'KalturaFilterFileByDynamicDataInDiscoveryAction': KalturaFilterFileByDynamicDataInDiscoveryAction,
+            'KalturaFilterFileByDynamicDataInPlaybackAction': KalturaFilterFileByDynamicDataInPlaybackAction,
             'KalturaFilterFileByFileTypeIdAction': KalturaFilterFileByFileTypeIdAction,
             'KalturaFilterFileByFileTypeIdForAssetTypeAction': KalturaFilterFileByFileTypeIdForAssetTypeAction,
             'KalturaFilterFileByFileTypeIdForAssetTypeInDiscoveryAction': KalturaFilterFileByFileTypeIdForAssetTypeInDiscoveryAction,
@@ -58919,6 +59317,8 @@ class KalturaCoreClient(KalturaClientPlugin):
             'KalturaLabel': KalturaLabel,
             'KalturaLabelListResponse': KalturaLabelListResponse,
             'KalturaLineupChannelAssetListResponse': KalturaLineupChannelAssetListResponse,
+            'KalturaMediaFileDynamicData': KalturaMediaFileDynamicData,
+            'KalturaMediaFileDynamicDataListResponse': KalturaMediaFileDynamicDataListResponse,
             'KalturaMediaFileListResponse': KalturaMediaFileListResponse,
             'KalturaMediaFileType': KalturaMediaFileType,
             'KalturaMediaFileTypeListResponse': KalturaMediaFileTypeListResponse,
