@@ -42,7 +42,7 @@ from ..Base import (
     KalturaServiceBase,
 )
 
-API_VERSION = '8.7.0.30290'
+API_VERSION = '8.7.1.30294'
 
 ########## enums ##########
 # @package Kaltura
@@ -48891,6 +48891,39 @@ class KalturaPartnerPremiumServices(KalturaObjectBase):
 
 # @package Kaltura
 # @subpackage Client
+class KalturaPersonalActivityCleanupConfiguration(KalturaObjectBase):
+    def __init__(self,
+            retentionPeriodDays=NotImplemented):
+        KalturaObjectBase.__init__(self)
+
+        # Retention Period Days
+        # @var int
+        self.retentionPeriodDays = retentionPeriodDays
+
+
+    PROPERTY_LOADERS = {
+        'retentionPeriodDays': getXmlNodeInt, 
+    }
+
+    def fromXml(self, node):
+        KalturaObjectBase.fromXml(self, node)
+        self.fromXmlImpl(node, KalturaPersonalActivityCleanupConfiguration.PROPERTY_LOADERS)
+
+    def toParams(self):
+        kparams = KalturaObjectBase.toParams(self)
+        kparams.put("objectType", "KalturaPersonalActivityCleanupConfiguration")
+        kparams.addIntIfDefined("retentionPeriodDays", self.retentionPeriodDays)
+        return kparams
+
+    def getRetentionPeriodDays(self):
+        return self.retentionPeriodDays
+
+    def setRetentionPeriodDays(self, newRetentionPeriodDays):
+        self.retentionPeriodDays = newRetentionPeriodDays
+
+
+# @package Kaltura
+# @subpackage Client
 class KalturaPin(KalturaObjectBase):
     """PIN and its origin of definition"""
 
@@ -55964,6 +55997,34 @@ class KalturaPermissionItemService(KalturaServiceBase):
 
 # @package Kaltura
 # @subpackage Client
+class KalturaPersonalActivityCleanupService(KalturaServiceBase):
+    def __init__(self, client = None):
+        KalturaServiceBase.__init__(self, client)
+
+    def getPartnerConfiguration(self):
+        """PersonalActivityCleanupConfiguration get"""
+
+        kparams = KalturaParams()
+        self.client.queueServiceActionCall("personalactivitycleanup", "getPartnerConfiguration", "KalturaPersonalActivityCleanupConfiguration", kparams)
+        if self.client.isMultiRequest():
+            return self.client.getMultiRequestResult()
+        resultNode = self.client.doQueue()
+        return KalturaObjectFactory.create(resultNode, 'KalturaPersonalActivityCleanupConfiguration')
+
+    def updatePartnerConfiguration(self, personalActivityCleanupConfiguration):
+        """PersonalActivityCleanupConfiguration Update"""
+
+        kparams = KalturaParams()
+        kparams.addObjectIfDefined("personalActivityCleanupConfiguration", personalActivityCleanupConfiguration)
+        self.client.queueServiceActionCall("personalactivitycleanup", "updatePartnerConfiguration", "KalturaPersonalActivityCleanupConfiguration", kparams)
+        if self.client.isMultiRequest():
+            return self.client.getMultiRequestResult()
+        resultNode = self.client.doQueue()
+        return KalturaObjectFactory.create(resultNode, 'KalturaPersonalActivityCleanupConfiguration')
+
+
+# @package Kaltura
+# @subpackage Client
 class KalturaPersonalFeedService(KalturaServiceBase):
     def __init__(self, client = None):
         KalturaServiceBase.__init__(self, client)
@@ -58684,6 +58745,7 @@ class KalturaCoreClient(KalturaClientPlugin):
             'paymentMethodProfile': KalturaPaymentMethodProfileService,
             'permission': KalturaPermissionService,
             'permissionItem': KalturaPermissionItemService,
+            'personalActivityCleanup': KalturaPersonalActivityCleanupService,
             'personalFeed': KalturaPersonalFeedService,
             'personalList': KalturaPersonalListService,
             'pin': KalturaPinService,
@@ -59755,6 +59817,7 @@ class KalturaCoreClient(KalturaClientPlugin):
             'KalturaPartnerSetup': KalturaPartnerSetup,
             'KalturaPartnerPremiumService': KalturaPartnerPremiumService,
             'KalturaPartnerPremiumServices': KalturaPartnerPremiumServices,
+            'KalturaPersonalActivityCleanupConfiguration': KalturaPersonalActivityCleanupConfiguration,
             'KalturaPin': KalturaPin,
             'KalturaPurchaseSettings': KalturaPurchaseSettings,
             'KalturaActionResult': KalturaActionResult,
