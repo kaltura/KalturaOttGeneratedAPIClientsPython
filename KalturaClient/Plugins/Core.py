@@ -42,7 +42,7 @@ from ..Base import (
     KalturaServiceBase,
 )
 
-API_VERSION = '8.9.1.30414'
+API_VERSION = '9.0.0.30430'
 
 ########## enums ##########
 # @package Kaltura
@@ -35754,7 +35754,9 @@ class KalturaPaddedRecording(KalturaRecording):
             updateDate=NotImplemented,
             duration=NotImplemented,
             startPadding=NotImplemented,
-            endPadding=NotImplemented):
+            endPadding=NotImplemented,
+            startPaddingIsPersonal=NotImplemented,
+            endPaddingIsPersonal=NotImplemented):
         KalturaRecording.__init__(self,
             id,
             status,
@@ -35774,10 +35776,22 @@ class KalturaPaddedRecording(KalturaRecording):
         # @var int
         self.endPadding = endPadding
 
+        # Indicates whether startPadding value is personal padding (counts towards HH quota) or system padding (does not count towards HH quota).
+        # @var bool
+        # @readonly
+        self.startPaddingIsPersonal = startPaddingIsPersonal
+
+        # Indicates whether endPadding value is personal padding (counts towards HH quota) or system padding (does not count towards HH quota).
+        # @var bool
+        # @readonly
+        self.endPaddingIsPersonal = endPaddingIsPersonal
+
 
     PROPERTY_LOADERS = {
         'startPadding': getXmlNodeInt, 
         'endPadding': getXmlNodeInt, 
+        'startPaddingIsPersonal': getXmlNodeBool, 
+        'endPaddingIsPersonal': getXmlNodeBool, 
     }
 
     def fromXml(self, node):
@@ -35802,6 +35816,12 @@ class KalturaPaddedRecording(KalturaRecording):
 
     def setEndPadding(self, newEndPadding):
         self.endPadding = newEndPadding
+
+    def getStartPaddingIsPersonal(self):
+        return self.startPaddingIsPersonal
+
+    def getEndPaddingIsPersonal(self):
+        return self.endPaddingIsPersonal
 
 
 # @package Kaltura
