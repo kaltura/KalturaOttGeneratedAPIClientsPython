@@ -42,7 +42,7 @@ from ..Base import (
     KalturaServiceBase,
 )
 
-API_VERSION = '9.3.0.0'
+API_VERSION = '9.4.0.0'
 
 ########## enums ##########
 # @package Kaltura
@@ -23381,7 +23381,8 @@ class KalturaSSOAdapterProfile(KalturaObjectBase):
             adapterUrl=NotImplemented,
             settings=NotImplemented,
             externalIdentifier=NotImplemented,
-            sharedSecret=NotImplemented):
+            sharedSecret=NotImplemented,
+            adapterGrpcAddress=NotImplemented):
         KalturaObjectBase.__init__(self)
 
         # SSO Adapter id
@@ -23413,6 +23414,10 @@ class KalturaSSOAdapterProfile(KalturaObjectBase):
         # @var string
         self.sharedSecret = sharedSecret
 
+        # Adapter GRPC Address, without protocol, i.e: &#39;adapter-hostname:9090&#39;
+        # @var string
+        self.adapterGrpcAddress = adapterGrpcAddress
+
 
     PROPERTY_LOADERS = {
         'id': getXmlNodeInt, 
@@ -23422,6 +23427,7 @@ class KalturaSSOAdapterProfile(KalturaObjectBase):
         'settings': (KalturaObjectFactory.createMap, 'KalturaStringValue'), 
         'externalIdentifier': getXmlNodeText, 
         'sharedSecret': getXmlNodeText, 
+        'adapterGrpcAddress': getXmlNodeText, 
     }
 
     def fromXml(self, node):
@@ -23437,6 +23443,7 @@ class KalturaSSOAdapterProfile(KalturaObjectBase):
         kparams.addMapIfDefined("settings", self.settings)
         kparams.addStringIfDefined("externalIdentifier", self.externalIdentifier)
         kparams.addStringIfDefined("sharedSecret", self.sharedSecret)
+        kparams.addStringIfDefined("adapterGrpcAddress", self.adapterGrpcAddress)
         return kparams
 
     def getId(self):
@@ -23477,6 +23484,12 @@ class KalturaSSOAdapterProfile(KalturaObjectBase):
 
     def setSharedSecret(self, newSharedSecret):
         self.sharedSecret = newSharedSecret
+
+    def getAdapterGrpcAddress(self):
+        return self.adapterGrpcAddress
+
+    def setAdapterGrpcAddress(self, newAdapterGrpcAddress):
+        self.adapterGrpcAddress = newAdapterGrpcAddress
 
 
 # @package Kaltura
