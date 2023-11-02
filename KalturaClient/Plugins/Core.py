@@ -42,7 +42,7 @@ from ..Base import (
     KalturaServiceBase,
 )
 
-API_VERSION = '9.2.0.1'
+API_VERSION = '9.4.0.0'
 
 ########## enums ##########
 # @package Kaltura
@@ -1994,6 +1994,7 @@ class KalturaPartnerConfigurationType(object):
     BASE = "Base"
     CUSTOMFIELDS = "CustomFields"
     DEFAULTPARENTALSETTINGS = "DefaultParentalSettings"
+    UPLOADSETTINGS = "UploadSettings"
 
     def __init__(self, value):
         self.value = value
@@ -29842,6 +29843,39 @@ class KalturaSecurityPartnerConfig(KalturaPartnerConfiguration):
 
     def setEncryption(self, newEncryption):
         self.encryption = newEncryption
+
+
+# @package Kaltura
+# @subpackage Client
+class KalturaUploadSettingsConfiguration(KalturaPartnerConfiguration):
+    def __init__(self,
+            allowedFileExtensions=NotImplemented):
+        KalturaPartnerConfiguration.__init__(self)
+
+        # comma separated Allowed File Extensions
+        # @var string
+        self.allowedFileExtensions = allowedFileExtensions
+
+
+    PROPERTY_LOADERS = {
+        'allowedFileExtensions': getXmlNodeText, 
+    }
+
+    def fromXml(self, node):
+        KalturaPartnerConfiguration.fromXml(self, node)
+        self.fromXmlImpl(node, KalturaUploadSettingsConfiguration.PROPERTY_LOADERS)
+
+    def toParams(self):
+        kparams = KalturaPartnerConfiguration.toParams(self)
+        kparams.put("objectType", "KalturaUploadSettingsConfiguration")
+        kparams.addStringIfDefined("allowedFileExtensions", self.allowedFileExtensions)
+        return kparams
+
+    def getAllowedFileExtensions(self):
+        return self.allowedFileExtensions
+
+    def setAllowedFileExtensions(self, newAllowedFileExtensions):
+        self.allowedFileExtensions = newAllowedFileExtensions
 
 
 # @package Kaltura
@@ -60165,6 +60199,7 @@ class KalturaCoreClient(KalturaClientPlugin):
             'KalturaEncryption': KalturaEncryption,
             'KalturaDataEncryption': KalturaDataEncryption,
             'KalturaSecurityPartnerConfig': KalturaSecurityPartnerConfig,
+            'KalturaUploadSettingsConfiguration': KalturaUploadSettingsConfiguration,
             'KalturaPersonalList': KalturaPersonalList,
             'KalturaPersonalListListResponse': KalturaPersonalListListResponse,
             'KalturaEngagementAdapterBase': KalturaEngagementAdapterBase,
