@@ -42,7 +42,7 @@ from ..Base import (
     KalturaServiceBase,
 )
 
-API_VERSION = '9.2.0.1'
+API_VERSION = '9.4.1.0'
 
 ########## enums ##########
 # @package Kaltura
@@ -23381,7 +23381,8 @@ class KalturaSSOAdapterProfile(KalturaObjectBase):
             adapterUrl=NotImplemented,
             settings=NotImplemented,
             externalIdentifier=NotImplemented,
-            sharedSecret=NotImplemented):
+            sharedSecret=NotImplemented,
+            adapterGrpcAddress=NotImplemented):
         KalturaObjectBase.__init__(self)
 
         # SSO Adapter id
@@ -23413,6 +23414,10 @@ class KalturaSSOAdapterProfile(KalturaObjectBase):
         # @var string
         self.sharedSecret = sharedSecret
 
+        # Adapter GRPC Address, without protocol, i.e: &#39;adapter-hostname:9090&#39;
+        # @var string
+        self.adapterGrpcAddress = adapterGrpcAddress
+
 
     PROPERTY_LOADERS = {
         'id': getXmlNodeInt, 
@@ -23422,6 +23427,7 @@ class KalturaSSOAdapterProfile(KalturaObjectBase):
         'settings': (KalturaObjectFactory.createMap, 'KalturaStringValue'), 
         'externalIdentifier': getXmlNodeText, 
         'sharedSecret': getXmlNodeText, 
+        'adapterGrpcAddress': getXmlNodeText, 
     }
 
     def fromXml(self, node):
@@ -23437,6 +23443,7 @@ class KalturaSSOAdapterProfile(KalturaObjectBase):
         kparams.addMapIfDefined("settings", self.settings)
         kparams.addStringIfDefined("externalIdentifier", self.externalIdentifier)
         kparams.addStringIfDefined("sharedSecret", self.sharedSecret)
+        kparams.addStringIfDefined("adapterGrpcAddress", self.adapterGrpcAddress)
         return kparams
 
     def getId(self):
@@ -23477,6 +23484,12 @@ class KalturaSSOAdapterProfile(KalturaObjectBase):
 
     def setSharedSecret(self, newSharedSecret):
         self.sharedSecret = newSharedSecret
+
+    def getAdapterGrpcAddress(self):
+        return self.adapterGrpcAddress
+
+    def setAdapterGrpcAddress(self, newAdapterGrpcAddress):
+        self.adapterGrpcAddress = newAdapterGrpcAddress
 
 
 # @package Kaltura
@@ -26648,6 +26661,43 @@ class KalturaCollectionListResponse(KalturaListResponse):
     def toParams(self):
         kparams = KalturaListResponse.toParams(self)
         kparams.put("objectType", "KalturaCollectionListResponse")
+        kparams.addArrayIfDefined("objects", self.objects)
+        return kparams
+
+    def getObjects(self):
+        return self.objects
+
+    def setObjects(self, newObjects):
+        self.objects = newObjects
+
+
+# @package Kaltura
+# @subpackage Client
+class KalturaCouponFilesLinks(KalturaListResponse):
+    """An object holding all the URLs (links) to files which contain coupon codes"""
+
+    def __init__(self,
+            totalCount=NotImplemented,
+            objects=NotImplemented):
+        KalturaListResponse.__init__(self,
+            totalCount)
+
+        # A pre-signed URL pointing to a coupon codes file
+        # @var array of KalturaStringValue
+        self.objects = objects
+
+
+    PROPERTY_LOADERS = {
+        'objects': (KalturaObjectFactory.createArray, 'KalturaStringValue'), 
+    }
+
+    def fromXml(self, node):
+        KalturaListResponse.fromXml(self, node)
+        self.fromXmlImpl(node, KalturaCouponFilesLinks.PROPERTY_LOADERS)
+
+    def toParams(self):
+        kparams = KalturaListResponse.toParams(self)
+        kparams.put("objectType", "KalturaCouponFilesLinks")
         kparams.addArrayIfDefined("objects", self.objects)
         return kparams
 
@@ -53264,6 +53314,17 @@ class KalturaCouponService(KalturaServiceBase):
         resultNode = self.client.doQueue()
         return KalturaObjectFactory.create(resultNode, 'KalturaCoupon')
 
+    def getFilesLinks(self, couponsGroupId):
+        """get all coupon codes of a specific couponGroup"""
+
+        kparams = KalturaParams()
+        kparams.addIntIfDefined("couponsGroupId", couponsGroupId);
+        self.client.queueServiceActionCall("coupon", "getFilesLinks", "KalturaCouponFilesLinks", kparams)
+        if self.client.isMultiRequest():
+            return self.client.getMultiRequestResult()
+        resultNode = self.client.doQueue()
+        return KalturaObjectFactory.create(resultNode, 'KalturaCouponFilesLinks')
+
 
 # @package Kaltura
 # @subpackage Client
@@ -60114,6 +60175,7 @@ class KalturaCoreClient(KalturaClientPlugin):
             'KalturaUserSegmentListResponse': KalturaUserSegmentListResponse,
             'KalturaAssetFilePpvListResponse': KalturaAssetFilePpvListResponse,
             'KalturaCollectionListResponse': KalturaCollectionListResponse,
+            'KalturaCouponFilesLinks': KalturaCouponFilesLinks,
             'KalturaCoupon': KalturaCoupon,
             'KalturaCouponListResponse': KalturaCouponListResponse,
             'KalturaCouponsGroupListResponse': KalturaCouponsGroupListResponse,
