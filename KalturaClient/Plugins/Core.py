@@ -26673,43 +26673,6 @@ class KalturaCollectionListResponse(KalturaListResponse):
 
 # @package Kaltura
 # @subpackage Client
-class KalturaCouponFilesLinks(KalturaListResponse):
-    """An object holding all the URLs (links) to files which contain coupon codes"""
-
-    def __init__(self,
-            totalCount=NotImplemented,
-            objects=NotImplemented):
-        KalturaListResponse.__init__(self,
-            totalCount)
-
-        # A pre-signed URL pointing to a coupon codes file
-        # @var array of KalturaStringValue
-        self.objects = objects
-
-
-    PROPERTY_LOADERS = {
-        'objects': (KalturaObjectFactory.createArray, 'KalturaStringValue'), 
-    }
-
-    def fromXml(self, node):
-        KalturaListResponse.fromXml(self, node)
-        self.fromXmlImpl(node, KalturaCouponFilesLinks.PROPERTY_LOADERS)
-
-    def toParams(self):
-        kparams = KalturaListResponse.toParams(self)
-        kparams.put("objectType", "KalturaCouponFilesLinks")
-        kparams.addArrayIfDefined("objects", self.objects)
-        return kparams
-
-    def getObjects(self):
-        return self.objects
-
-    def setObjects(self, newObjects):
-        self.objects = newObjects
-
-
-# @package Kaltura
-# @subpackage Client
 class KalturaCoupon(KalturaObjectBase):
     """Coupon details container"""
 
@@ -46237,6 +46200,54 @@ class KalturaCompensation(KalturaObjectBase):
 
 # @package Kaltura
 # @subpackage Client
+class KalturaCouponFilesLinks(KalturaObjectBase):
+    """An object holding all the URLs (links) to files which contain coupon codes"""
+
+    def __init__(self,
+            totalCount=NotImplemented,
+            objects=NotImplemented):
+        KalturaObjectBase.__init__(self)
+
+        # Total count of coupons code files
+        # @var int
+        self.totalCount = totalCount
+
+        # A pre-signed URL pointing to a coupon codes file
+        # @var array of KalturaStringValue
+        self.objects = objects
+
+
+    PROPERTY_LOADERS = {
+        'totalCount': getXmlNodeInt, 
+        'objects': (KalturaObjectFactory.createArray, 'KalturaStringValue'), 
+    }
+
+    def fromXml(self, node):
+        KalturaObjectBase.fromXml(self, node)
+        self.fromXmlImpl(node, KalturaCouponFilesLinks.PROPERTY_LOADERS)
+
+    def toParams(self):
+        kparams = KalturaObjectBase.toParams(self)
+        kparams.put("objectType", "KalturaCouponFilesLinks")
+        kparams.addIntIfDefined("totalCount", self.totalCount)
+        kparams.addArrayIfDefined("objects", self.objects)
+        return kparams
+
+    def getTotalCount(self):
+        return self.totalCount
+
+    def setTotalCount(self, newTotalCount):
+        self.totalCount = newTotalCount
+
+    def getObjects(self):
+        return self.objects
+
+    def setObjects(self, newObjects):
+        self.objects = newObjects
+
+
+# @package Kaltura
+# @subpackage Client
 class KalturaCouponGenerationOptions(KalturaObjectBase):
     """Coupon generation options"""
 
@@ -60175,7 +60186,6 @@ class KalturaCoreClient(KalturaClientPlugin):
             'KalturaUserSegmentListResponse': KalturaUserSegmentListResponse,
             'KalturaAssetFilePpvListResponse': KalturaAssetFilePpvListResponse,
             'KalturaCollectionListResponse': KalturaCollectionListResponse,
-            'KalturaCouponFilesLinks': KalturaCouponFilesLinks,
             'KalturaCoupon': KalturaCoupon,
             'KalturaCouponListResponse': KalturaCouponListResponse,
             'KalturaCouponsGroupListResponse': KalturaCouponsGroupListResponse,
@@ -60480,6 +60490,7 @@ class KalturaCoreClient(KalturaClientPlugin):
             'KalturaCategoryTree': KalturaCategoryTree,
             'KalturaCDNPartnerSettings': KalturaCDNPartnerSettings,
             'KalturaCompensation': KalturaCompensation,
+            'KalturaCouponFilesLinks': KalturaCouponFilesLinks,
             'KalturaCouponGenerationOptions': KalturaCouponGenerationOptions,
             'KalturaPublicCouponGenerationOptions': KalturaPublicCouponGenerationOptions,
             'KalturaRandomCouponGenerationOptions': KalturaRandomCouponGenerationOptions,
