@@ -42,7 +42,7 @@ from ..Base import (
     KalturaServiceBase,
 )
 
-API_VERSION = '9.2.0.1'
+API_VERSION = '9.0.0.12'
 
 ########## enums ##########
 # @package Kaltura
@@ -32141,6 +32141,217 @@ class KalturaIngestStatusEpgProgramResultListResponse(KalturaListResponse):
 
 # @package Kaltura
 # @subpackage Client
+class KalturaVodIngestAssetResultErrorMessage(KalturaObjectBase):
+    """A Kaltura error message"""
+
+    def __init__(self,
+            message=NotImplemented,
+            code=NotImplemented):
+        KalturaObjectBase.__init__(self)
+
+        # The message description with arguments place holders
+        # @var string
+        self.message = message
+
+        # The message code
+        # @var string
+        self.code = code
+
+
+    PROPERTY_LOADERS = {
+        'message': getXmlNodeText, 
+        'code': getXmlNodeText, 
+    }
+
+    def fromXml(self, node):
+        KalturaObjectBase.fromXml(self, node)
+        self.fromXmlImpl(node, KalturaVodIngestAssetResultErrorMessage.PROPERTY_LOADERS)
+
+    def toParams(self):
+        kparams = KalturaObjectBase.toParams(self)
+        kparams.put("objectType", "KalturaVodIngestAssetResultErrorMessage")
+        kparams.addStringIfDefined("message", self.message)
+        kparams.addStringIfDefined("code", self.code)
+        return kparams
+
+    def getMessage(self):
+        return self.message
+
+    def setMessage(self, newMessage):
+        self.message = newMessage
+
+    def getCode(self):
+        return self.code
+
+    def setCode(self, newCode):
+        self.code = newCode
+
+
+# @package Kaltura
+# @subpackage Client
+class KalturaVodIngestAssetResult(KalturaObjectBase):
+    def __init__(self,
+            assetName=NotImplemented,
+            shopAssetUserRuleId=NotImplemented,
+            fileName=NotImplemented,
+            ingestDate=NotImplemented,
+            status=NotImplemented,
+            vodTypeSystemName=NotImplemented,
+            errors=NotImplemented,
+            warnings=NotImplemented):
+        KalturaObjectBase.__init__(self)
+
+        # Ingested asset name. Absent only in case of NameRequired error
+        # @var string
+        self.assetName = assetName
+
+        # The shop ID the asset is assigned to. Omitted if the asset is not associated to any shop.
+        # @var int
+        self.shopAssetUserRuleId = shopAssetUserRuleId
+
+        # The XML file name used at the ingest gateway. Referred to as process name
+        # @var string
+        self.fileName = fileName
+
+        # Date and time the asset was ingested. Date and time represented as epoch.
+        # @var int
+        self.ingestDate = ingestDate
+
+        # The status result for the asset ingest.
+        #             FAILURE - the asset ingest was failed after the ingest process started, specify the error for it.
+        #             SUCCESS - the asset was succeeded to be ingested.
+        #             SUCCESS_WARNING - the asset was succeeded to be ingested with warnings that do not prevent the ingest.
+        #             EXTERNAL_FAILURE - the asset ingest was failed before the ingest process started, specify the error for it.
+        # @var KalturaVodIngestAssetResultStatus
+        self.status = status
+
+        # VOD asset type (assetStruct.systemName).
+        # @var string
+        self.vodTypeSystemName = vodTypeSystemName
+
+        # Errors which prevent the asset from being ingested
+        # @var array of KalturaVodIngestAssetResultErrorMessage
+        self.errors = errors
+
+        # Errors which do not prevent the asset from being ingested
+        # @var array of KalturaVodIngestAssetResultErrorMessage
+        self.warnings = warnings
+
+
+    PROPERTY_LOADERS = {
+        'assetName': getXmlNodeText, 
+        'shopAssetUserRuleId': getXmlNodeInt, 
+        'fileName': getXmlNodeText, 
+        'ingestDate': getXmlNodeInt, 
+        'status': (KalturaEnumsFactory.createString, "KalturaVodIngestAssetResultStatus"), 
+        'vodTypeSystemName': getXmlNodeText, 
+        'errors': (KalturaObjectFactory.createArray, 'KalturaVodIngestAssetResultErrorMessage'), 
+        'warnings': (KalturaObjectFactory.createArray, 'KalturaVodIngestAssetResultErrorMessage'), 
+    }
+
+    def fromXml(self, node):
+        KalturaObjectBase.fromXml(self, node)
+        self.fromXmlImpl(node, KalturaVodIngestAssetResult.PROPERTY_LOADERS)
+
+    def toParams(self):
+        kparams = KalturaObjectBase.toParams(self)
+        kparams.put("objectType", "KalturaVodIngestAssetResult")
+        kparams.addStringIfDefined("assetName", self.assetName)
+        kparams.addIntIfDefined("shopAssetUserRuleId", self.shopAssetUserRuleId)
+        kparams.addStringIfDefined("fileName", self.fileName)
+        kparams.addIntIfDefined("ingestDate", self.ingestDate)
+        kparams.addStringEnumIfDefined("status", self.status)
+        kparams.addStringIfDefined("vodTypeSystemName", self.vodTypeSystemName)
+        kparams.addArrayIfDefined("errors", self.errors)
+        kparams.addArrayIfDefined("warnings", self.warnings)
+        return kparams
+
+    def getAssetName(self):
+        return self.assetName
+
+    def setAssetName(self, newAssetName):
+        self.assetName = newAssetName
+
+    def getShopAssetUserRuleId(self):
+        return self.shopAssetUserRuleId
+
+    def setShopAssetUserRuleId(self, newShopAssetUserRuleId):
+        self.shopAssetUserRuleId = newShopAssetUserRuleId
+
+    def getFileName(self):
+        return self.fileName
+
+    def setFileName(self, newFileName):
+        self.fileName = newFileName
+
+    def getIngestDate(self):
+        return self.ingestDate
+
+    def setIngestDate(self, newIngestDate):
+        self.ingestDate = newIngestDate
+
+    def getStatus(self):
+        return self.status
+
+    def setStatus(self, newStatus):
+        self.status = newStatus
+
+    def getVodTypeSystemName(self):
+        return self.vodTypeSystemName
+
+    def setVodTypeSystemName(self, newVodTypeSystemName):
+        self.vodTypeSystemName = newVodTypeSystemName
+
+    def getErrors(self):
+        return self.errors
+
+    def setErrors(self, newErrors):
+        self.errors = newErrors
+
+    def getWarnings(self):
+        return self.warnings
+
+    def setWarnings(self, newWarnings):
+        self.warnings = newWarnings
+
+
+# @package Kaltura
+# @subpackage Client
+class KalturaVodIngestAssetResultListResponse(KalturaListResponse):
+    def __init__(self,
+            totalCount=NotImplemented,
+            objects=NotImplemented):
+        KalturaListResponse.__init__(self,
+            totalCount)
+
+        # list of KalturaVodIngestAssetResult
+        # @var array of KalturaVodIngestAssetResult
+        self.objects = objects
+
+
+    PROPERTY_LOADERS = {
+        'objects': (KalturaObjectFactory.createArray, 'KalturaVodIngestAssetResult'), 
+    }
+
+    def fromXml(self, node):
+        KalturaListResponse.fromXml(self, node)
+        self.fromXmlImpl(node, KalturaVodIngestAssetResultListResponse.PROPERTY_LOADERS)
+
+    def toParams(self):
+        kparams = KalturaListResponse.toParams(self)
+        kparams.put("objectType", "KalturaVodIngestAssetResultListResponse")
+        kparams.addArrayIfDefined("objects", self.objects)
+        return kparams
+
+    def getObjects(self):
+        return self.objects
+
+    def setObjects(self, newObjects):
+        self.objects = newObjects
+
+
+# @package Kaltura
+# @subpackage Client
 class KalturaDurationListResponse(KalturaListResponse):
     def __init__(self,
             totalCount=NotImplemented,
@@ -38670,9 +38881,7 @@ class KalturaLabelListResponse(KalturaListResponse):
 class KalturaLineupChannelAssetListResponse(KalturaListResponse):
     def __init__(self,
             totalCount=NotImplemented,
-            objects=NotImplemented,
-            lineupExternalId=NotImplemented,
-            parentLineupExternalId=NotImplemented):
+            objects=NotImplemented):
         KalturaListResponse.__init__(self,
             totalCount)
 
@@ -38680,19 +38889,9 @@ class KalturaLineupChannelAssetListResponse(KalturaListResponse):
         # @var array of KalturaLineupChannelAsset
         self.objects = objects
 
-        # Lineup External Id
-        # @var string
-        self.lineupExternalId = lineupExternalId
-
-        # Parent Lineup External Id
-        # @var string
-        self.parentLineupExternalId = parentLineupExternalId
-
 
     PROPERTY_LOADERS = {
         'objects': (KalturaObjectFactory.createArray, 'KalturaLineupChannelAsset'), 
-        'lineupExternalId': getXmlNodeText, 
-        'parentLineupExternalId': getXmlNodeText, 
     }
 
     def fromXml(self, node):
@@ -38703,8 +38902,6 @@ class KalturaLineupChannelAssetListResponse(KalturaListResponse):
         kparams = KalturaListResponse.toParams(self)
         kparams.put("objectType", "KalturaLineupChannelAssetListResponse")
         kparams.addArrayIfDefined("objects", self.objects)
-        kparams.addStringIfDefined("lineupExternalId", self.lineupExternalId)
-        kparams.addStringIfDefined("parentLineupExternalId", self.parentLineupExternalId)
         return kparams
 
     def getObjects(self):
@@ -38712,18 +38909,6 @@ class KalturaLineupChannelAssetListResponse(KalturaListResponse):
 
     def setObjects(self, newObjects):
         self.objects = newObjects
-
-    def getLineupExternalId(self):
-        return self.lineupExternalId
-
-    def setLineupExternalId(self, newLineupExternalId):
-        self.lineupExternalId = newLineupExternalId
-
-    def getParentLineupExternalId(self):
-        return self.parentLineupExternalId
-
-    def setParentLineupExternalId(self, newParentLineupExternalId):
-        self.parentLineupExternalId = newParentLineupExternalId
 
 
 # @package Kaltura
@@ -47568,228 +47753,6 @@ class KalturaIngestStatusPartnerConfiguration(KalturaObjectBase):
 
 # @package Kaltura
 # @subpackage Client
-class KalturaVodIngestAssetResultErrorMessage(KalturaObjectBase):
-    """A Kaltura error message"""
-
-    def __init__(self,
-            message=NotImplemented,
-            code=NotImplemented):
-        KalturaObjectBase.__init__(self)
-
-        # The message description with arguments place holders
-        # @var string
-        self.message = message
-
-        # The message code
-        # @var string
-        self.code = code
-
-
-    PROPERTY_LOADERS = {
-        'message': getXmlNodeText, 
-        'code': getXmlNodeText, 
-    }
-
-    def fromXml(self, node):
-        KalturaObjectBase.fromXml(self, node)
-        self.fromXmlImpl(node, KalturaVodIngestAssetResultErrorMessage.PROPERTY_LOADERS)
-
-    def toParams(self):
-        kparams = KalturaObjectBase.toParams(self)
-        kparams.put("objectType", "KalturaVodIngestAssetResultErrorMessage")
-        kparams.addStringIfDefined("message", self.message)
-        kparams.addStringIfDefined("code", self.code)
-        return kparams
-
-    def getMessage(self):
-        return self.message
-
-    def setMessage(self, newMessage):
-        self.message = newMessage
-
-    def getCode(self):
-        return self.code
-
-    def setCode(self, newCode):
-        self.code = newCode
-
-
-# @package Kaltura
-# @subpackage Client
-class KalturaVodIngestAssetResult(KalturaObjectBase):
-    def __init__(self,
-            assetName=NotImplemented,
-            shopAssetUserRuleId=NotImplemented,
-            fileName=NotImplemented,
-            ingestDate=NotImplemented,
-            status=NotImplemented,
-            vodTypeSystemName=NotImplemented,
-            errors=NotImplemented,
-            warnings=NotImplemented):
-        KalturaObjectBase.__init__(self)
-
-        # Ingested asset name. Absent only in case of NameRequired error
-        # @var string
-        self.assetName = assetName
-
-        # The shop ID the asset is assigned to. Omitted if the asset is not associated to any shop.
-        # @var int
-        self.shopAssetUserRuleId = shopAssetUserRuleId
-
-        # The XML file name used at the ingest gateway. Referred to as process name
-        # @var string
-        self.fileName = fileName
-
-        # Date and time the asset was ingested. Date and time represented as epoch.
-        # @var int
-        self.ingestDate = ingestDate
-
-        # The status result for the asset ingest.
-        #             FAILURE - the asset ingest was failed after the ingest process started, specify the error for it.
-        #             SUCCESS - the asset was succeeded to be ingested.
-        #             SUCCESS_WARNING - the asset was succeeded to be ingested with warnings that do not prevent the ingest.
-        #             EXTERNAL_FAILURE - the asset ingest was failed before the ingest process started, specify the error for it.
-        # @var KalturaVodIngestAssetResultStatus
-        self.status = status
-
-        # VOD asset type (assetStruct.systemName).
-        # @var string
-        self.vodTypeSystemName = vodTypeSystemName
-
-        # Errors which prevent the asset from being ingested
-        # @var array of KalturaVodIngestAssetResultErrorMessage
-        self.errors = errors
-
-        # Errors which do not prevent the asset from being ingested
-        # @var array of KalturaVodIngestAssetResultErrorMessage
-        self.warnings = warnings
-
-
-    PROPERTY_LOADERS = {
-        'assetName': getXmlNodeText, 
-        'shopAssetUserRuleId': getXmlNodeInt, 
-        'fileName': getXmlNodeText, 
-        'ingestDate': getXmlNodeInt, 
-        'status': (KalturaEnumsFactory.createString, "KalturaVodIngestAssetResultStatus"), 
-        'vodTypeSystemName': getXmlNodeText, 
-        'errors': (KalturaObjectFactory.createArray, 'KalturaVodIngestAssetResultErrorMessage'), 
-        'warnings': (KalturaObjectFactory.createArray, 'KalturaVodIngestAssetResultErrorMessage'), 
-    }
-
-    def fromXml(self, node):
-        KalturaObjectBase.fromXml(self, node)
-        self.fromXmlImpl(node, KalturaVodIngestAssetResult.PROPERTY_LOADERS)
-
-    def toParams(self):
-        kparams = KalturaObjectBase.toParams(self)
-        kparams.put("objectType", "KalturaVodIngestAssetResult")
-        kparams.addStringIfDefined("assetName", self.assetName)
-        kparams.addIntIfDefined("shopAssetUserRuleId", self.shopAssetUserRuleId)
-        kparams.addStringIfDefined("fileName", self.fileName)
-        kparams.addIntIfDefined("ingestDate", self.ingestDate)
-        kparams.addStringEnumIfDefined("status", self.status)
-        kparams.addStringIfDefined("vodTypeSystemName", self.vodTypeSystemName)
-        kparams.addArrayIfDefined("errors", self.errors)
-        kparams.addArrayIfDefined("warnings", self.warnings)
-        return kparams
-
-    def getAssetName(self):
-        return self.assetName
-
-    def setAssetName(self, newAssetName):
-        self.assetName = newAssetName
-
-    def getShopAssetUserRuleId(self):
-        return self.shopAssetUserRuleId
-
-    def setShopAssetUserRuleId(self, newShopAssetUserRuleId):
-        self.shopAssetUserRuleId = newShopAssetUserRuleId
-
-    def getFileName(self):
-        return self.fileName
-
-    def setFileName(self, newFileName):
-        self.fileName = newFileName
-
-    def getIngestDate(self):
-        return self.ingestDate
-
-    def setIngestDate(self, newIngestDate):
-        self.ingestDate = newIngestDate
-
-    def getStatus(self):
-        return self.status
-
-    def setStatus(self, newStatus):
-        self.status = newStatus
-
-    def getVodTypeSystemName(self):
-        return self.vodTypeSystemName
-
-    def setVodTypeSystemName(self, newVodTypeSystemName):
-        self.vodTypeSystemName = newVodTypeSystemName
-
-    def getErrors(self):
-        return self.errors
-
-    def setErrors(self, newErrors):
-        self.errors = newErrors
-
-    def getWarnings(self):
-        return self.warnings
-
-    def setWarnings(self, newWarnings):
-        self.warnings = newWarnings
-
-
-# @package Kaltura
-# @subpackage Client
-class KalturaVodIngestAssetResultList(KalturaObjectBase):
-    def __init__(self,
-            objects=NotImplemented,
-            totalCount=NotImplemented):
-        KalturaObjectBase.__init__(self)
-
-        # list of KalturaVodIngestAssetResult
-        # @var array of KalturaVodIngestAssetResult
-        self.objects = objects
-
-        # Total items
-        # @var int
-        self.totalCount = totalCount
-
-
-    PROPERTY_LOADERS = {
-        'objects': (KalturaObjectFactory.createArray, 'KalturaVodIngestAssetResult'), 
-        'totalCount': getXmlNodeInt, 
-    }
-
-    def fromXml(self, node):
-        KalturaObjectBase.fromXml(self, node)
-        self.fromXmlImpl(node, KalturaVodIngestAssetResultList.PROPERTY_LOADERS)
-
-    def toParams(self):
-        kparams = KalturaObjectBase.toParams(self)
-        kparams.put("objectType", "KalturaVodIngestAssetResultList")
-        kparams.addArrayIfDefined("objects", self.objects)
-        kparams.addIntIfDefined("totalCount", self.totalCount)
-        return kparams
-
-    def getObjects(self):
-        return self.objects
-
-    def setObjects(self, newObjects):
-        self.objects = newObjects
-
-    def getTotalCount(self):
-        return self.totalCount
-
-    def setTotalCount(self, newTotalCount):
-        self.totalCount = newTotalCount
-
-
-# @package Kaltura
-# @subpackage Client
 class KalturaVodIngestAssetResultAggregation(KalturaObjectBase):
     def __init__(self,
             ingestDateFrom=NotImplemented,
@@ -47895,7 +47858,7 @@ class KalturaVodIngestAssetResultResponse(KalturaObjectBase):
         KalturaObjectBase.__init__(self)
 
         # Errors
-        # @var KalturaVodIngestAssetResultList
+        # @var KalturaVodIngestAssetResultListResponse
         self.result = result
 
         # Aggregated counters
@@ -47904,7 +47867,7 @@ class KalturaVodIngestAssetResultResponse(KalturaObjectBase):
 
 
     PROPERTY_LOADERS = {
-        'result': (KalturaObjectFactory.create, 'KalturaVodIngestAssetResultList'), 
+        'result': (KalturaObjectFactory.create, 'KalturaVodIngestAssetResultListResponse'), 
         'aggregations': (KalturaObjectFactory.create, 'KalturaVodIngestAssetResultAggregation'), 
     }
 
@@ -60207,6 +60170,9 @@ class KalturaCoreClient(KalturaClientPlugin):
             'KalturaIngestEpgDetails': KalturaIngestEpgDetails,
             'KalturaIngestEpgProgramResult': KalturaIngestEpgProgramResult,
             'KalturaIngestStatusEpgProgramResultListResponse': KalturaIngestStatusEpgProgramResultListResponse,
+            'KalturaVodIngestAssetResultErrorMessage': KalturaVodIngestAssetResultErrorMessage,
+            'KalturaVodIngestAssetResult': KalturaVodIngestAssetResult,
+            'KalturaVodIngestAssetResultListResponse': KalturaVodIngestAssetResultListResponse,
             'KalturaDurationListResponse': KalturaDurationListResponse,
             'KalturaDynamicListListResponse': KalturaDynamicListListResponse,
             'KalturaIntegerValueListResponse': KalturaIntegerValueListResponse,
@@ -60445,9 +60411,6 @@ class KalturaCoreClient(KalturaClientPlugin):
             'KalturaIngestStatusEpgConfiguration': KalturaIngestStatusEpgConfiguration,
             'KalturaIngestStatusVodConfiguration': KalturaIngestStatusVodConfiguration,
             'KalturaIngestStatusPartnerConfiguration': KalturaIngestStatusPartnerConfiguration,
-            'KalturaVodIngestAssetResultErrorMessage': KalturaVodIngestAssetResultErrorMessage,
-            'KalturaVodIngestAssetResult': KalturaVodIngestAssetResult,
-            'KalturaVodIngestAssetResultList': KalturaVodIngestAssetResultList,
             'KalturaVodIngestAssetResultAggregation': KalturaVodIngestAssetResultAggregation,
             'KalturaVodIngestAssetResultResponse': KalturaVodIngestAssetResultResponse,
             'KalturaIotClientConfiguration': KalturaIotClientConfiguration,
