@@ -42,7 +42,7 @@ from ..Base import (
     KalturaServiceBase,
 )
 
-API_VERSION = '9.4.1.0'
+API_VERSION = '9.5.0.2'
 
 ########## enums ##########
 # @package Kaltura
@@ -1994,6 +1994,7 @@ class KalturaPartnerConfigurationType(object):
     BASE = "Base"
     CUSTOMFIELDS = "CustomFields"
     DEFAULTPARENTALSETTINGS = "DefaultParentalSettings"
+    CLOUDUPLOADSETTINGS = "CloudUploadSettings"
 
     def __init__(self, value):
         self.value = value
@@ -28238,7 +28239,7 @@ class KalturaUsageModuleListResponse(KalturaListResponse):
 # @package Kaltura
 # @subpackage Client
 class KalturaPartnerConfiguration(KalturaObjectBase):
-    """Partner  base configuration"""
+    """Partner base configuration"""
 
     def __init__(self):
         KalturaObjectBase.__init__(self)
@@ -28612,6 +28613,68 @@ class KalturaCatalogPartnerConfig(KalturaPartnerConfiguration):
 
     def setShopMarkerMetaId(self, newShopMarkerMetaId):
         self.shopMarkerMetaId = newShopMarkerMetaId
+
+
+# @package Kaltura
+# @subpackage Client
+class KalturaCloudUploadSettingsConfiguration(KalturaPartnerConfiguration):
+    """A clout upload settings refers to partner configuration with regards to files that are loaded to KTP cloud (e.g. S3)"""
+
+    def __init__(self,
+            defaultAllowedFileExtensions=NotImplemented,
+            customAllowedFileExtensions=NotImplemented):
+        KalturaPartnerConfiguration.__init__(self)
+
+        # Comma seperated list of file extensions that allowed to all partners
+        # @var string
+        # @readonly
+        self.defaultAllowedFileExtensions = defaultAllowedFileExtensions
+
+        # Comma seperated list of file extensions that allowed to partner in question
+        #             {&quot;jpeg&quot;,&quot;image/jpeg&quot;},
+        #             {&quot;jpg&quot;,&quot;image/jpeg&quot;},
+        #             {&quot;png&quot;,&quot;image/png&quot;},
+        #             {&quot;tif&quot;,&quot;image/tiff&quot;},
+        #             {&quot;tiff&quot;,&quot;image/tiff&quot;},
+        #             {&quot;gif&quot;,&quot;image/gif&quot;},
+        #             {&quot;xls&quot;,&quot;application/vnd.ms-excel&quot;},
+        #             {&quot;xlsx&quot;,&quot;application/vnd.openxmlformats-officedocument.spreadsheetml.sheet&quot;},
+        #             {&quot;csv&quot;,&quot;text/csv&quot;},
+        #             {&quot;xml&quot;,&quot;text/xml&quot;},
+        #             {&quot;txt&quot;,&quot;text/plain&quot;},
+        #             {&quot;doc&quot;,&quot;application/msword&quot;},
+        #             {&quot;docx&quot;,&quot;application/vnd.openxmlformats-officedocument.wordprocessingml.document&quot;},
+        #             {&quot;bmp&quot;,&quot;image/bmp&quot;},
+        #             {&quot;ico&quot;,&quot;image/x-icon&quot;},
+        #             {&quot;mp3&quot;,&quot;audio/mpeg&quot;},
+        #             {&quot;pdf&quot;,&quot;application/pdf&quot;}}
+        # @var string
+        self.customAllowedFileExtensions = customAllowedFileExtensions
+
+
+    PROPERTY_LOADERS = {
+        'defaultAllowedFileExtensions': getXmlNodeText, 
+        'customAllowedFileExtensions': getXmlNodeText, 
+    }
+
+    def fromXml(self, node):
+        KalturaPartnerConfiguration.fromXml(self, node)
+        self.fromXmlImpl(node, KalturaCloudUploadSettingsConfiguration.PROPERTY_LOADERS)
+
+    def toParams(self):
+        kparams = KalturaPartnerConfiguration.toParams(self)
+        kparams.put("objectType", "KalturaCloudUploadSettingsConfiguration")
+        kparams.addStringIfDefined("customAllowedFileExtensions", self.customAllowedFileExtensions)
+        return kparams
+
+    def getDefaultAllowedFileExtensions(self):
+        return self.defaultAllowedFileExtensions
+
+    def getCustomAllowedFileExtensions(self):
+        return self.customAllowedFileExtensions
+
+    def setCustomAllowedFileExtensions(self, newCustomAllowedFileExtensions):
+        self.customAllowedFileExtensions = newCustomAllowedFileExtensions
 
 
 # @package Kaltura
@@ -29054,7 +29117,7 @@ class KalturaGeneralPartnerConfig(KalturaPartnerConfiguration):
         # @var string
         self.dateFormat = dateFormat
 
-        # Household limitation&#160;module
+        # Household limitation module
         # @var int
         self.householdLimitationModule = householdLimitationModule
 
@@ -46200,6 +46263,54 @@ class KalturaCompensation(KalturaObjectBase):
 
 # @package Kaltura
 # @subpackage Client
+class KalturaCouponFilesLinks(KalturaObjectBase):
+    """An object holding all the URLs (links) to files which contain coupon codes"""
+
+    def __init__(self,
+            totalCount=NotImplemented,
+            objects=NotImplemented):
+        KalturaObjectBase.__init__(self)
+
+        # Total count of coupons code files
+        # @var int
+        self.totalCount = totalCount
+
+        # A pre-signed URL pointing to a coupon codes file
+        # @var array of KalturaStringValue
+        self.objects = objects
+
+
+    PROPERTY_LOADERS = {
+        'totalCount': getXmlNodeInt, 
+        'objects': (KalturaObjectFactory.createArray, 'KalturaStringValue'), 
+    }
+
+    def fromXml(self, node):
+        KalturaObjectBase.fromXml(self, node)
+        self.fromXmlImpl(node, KalturaCouponFilesLinks.PROPERTY_LOADERS)
+
+    def toParams(self):
+        kparams = KalturaObjectBase.toParams(self)
+        kparams.put("objectType", "KalturaCouponFilesLinks")
+        kparams.addIntIfDefined("totalCount", self.totalCount)
+        kparams.addArrayIfDefined("objects", self.objects)
+        return kparams
+
+    def getTotalCount(self):
+        return self.totalCount
+
+    def setTotalCount(self, newTotalCount):
+        self.totalCount = newTotalCount
+
+    def getObjects(self):
+        return self.objects
+
+    def setObjects(self, newObjects):
+        self.objects = newObjects
+
+
+# @package Kaltura
+# @subpackage Client
 class KalturaCouponGenerationOptions(KalturaObjectBase):
     """Coupon generation options"""
 
@@ -53356,6 +53467,17 @@ class KalturaCouponService(KalturaServiceBase):
         resultNode = self.client.doQueue()
         return KalturaObjectFactory.create(resultNode, 'KalturaCoupon')
 
+    def getFilesLinks(self, couponsGroupId):
+        """get all coupon codes of a specific couponGroup"""
+
+        kparams = KalturaParams()
+        kparams.addIntIfDefined("couponsGroupId", couponsGroupId);
+        self.client.queueServiceActionCall("coupon", "getFilesLinks", "KalturaCouponFilesLinks", kparams)
+        if self.client.isMultiRequest():
+            return self.client.getMultiRequestResult()
+        resultNode = self.client.doQueue()
+        return KalturaObjectFactory.create(resultNode, 'KalturaCouponFilesLinks')
+
 
 # @package Kaltura
 # @subpackage Client
@@ -60287,6 +60409,7 @@ class KalturaCoreClient(KalturaClientPlugin):
             'KalturaBillingPartnerConfig': KalturaBillingPartnerConfig,
             'KalturaCategoryManagement': KalturaCategoryManagement,
             'KalturaCatalogPartnerConfig': KalturaCatalogPartnerConfig,
+            'KalturaCloudUploadSettingsConfiguration': KalturaCloudUploadSettingsConfiguration,
             'KalturaBookmarkEventThreshold': KalturaBookmarkEventThreshold,
             'KalturaCommercePartnerConfig': KalturaCommercePartnerConfig,
             'KalturaConcurrencyPartnerConfig': KalturaConcurrencyPartnerConfig,
@@ -60560,6 +60683,7 @@ class KalturaCoreClient(KalturaClientPlugin):
             'KalturaCategoryTree': KalturaCategoryTree,
             'KalturaCDNPartnerSettings': KalturaCDNPartnerSettings,
             'KalturaCompensation': KalturaCompensation,
+            'KalturaCouponFilesLinks': KalturaCouponFilesLinks,
             'KalturaCouponGenerationOptions': KalturaCouponGenerationOptions,
             'KalturaPublicCouponGenerationOptions': KalturaPublicCouponGenerationOptions,
             'KalturaRandomCouponGenerationOptions': KalturaRandomCouponGenerationOptions,
