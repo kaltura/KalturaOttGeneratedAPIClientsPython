@@ -42,7 +42,7 @@ from ..Base import (
     KalturaServiceBase,
 )
 
-API_VERSION = '9.2.0.1'
+API_VERSION = '9.4.1.0'
 
 ########## enums ##########
 # @package Kaltura
@@ -23381,7 +23381,8 @@ class KalturaSSOAdapterProfile(KalturaObjectBase):
             adapterUrl=NotImplemented,
             settings=NotImplemented,
             externalIdentifier=NotImplemented,
-            sharedSecret=NotImplemented):
+            sharedSecret=NotImplemented,
+            adapterGrpcAddress=NotImplemented):
         KalturaObjectBase.__init__(self)
 
         # SSO Adapter id
@@ -23413,6 +23414,10 @@ class KalturaSSOAdapterProfile(KalturaObjectBase):
         # @var string
         self.sharedSecret = sharedSecret
 
+        # Adapter GRPC Address, without protocol, i.e: &#39;adapter-hostname:9090&#39;
+        # @var string
+        self.adapterGrpcAddress = adapterGrpcAddress
+
 
     PROPERTY_LOADERS = {
         'id': getXmlNodeInt, 
@@ -23422,6 +23427,7 @@ class KalturaSSOAdapterProfile(KalturaObjectBase):
         'settings': (KalturaObjectFactory.createMap, 'KalturaStringValue'), 
         'externalIdentifier': getXmlNodeText, 
         'sharedSecret': getXmlNodeText, 
+        'adapterGrpcAddress': getXmlNodeText, 
     }
 
     def fromXml(self, node):
@@ -23437,6 +23443,7 @@ class KalturaSSOAdapterProfile(KalturaObjectBase):
         kparams.addMapIfDefined("settings", self.settings)
         kparams.addStringIfDefined("externalIdentifier", self.externalIdentifier)
         kparams.addStringIfDefined("sharedSecret", self.sharedSecret)
+        kparams.addStringIfDefined("adapterGrpcAddress", self.adapterGrpcAddress)
         return kparams
 
     def getId(self):
@@ -23477,6 +23484,12 @@ class KalturaSSOAdapterProfile(KalturaObjectBase):
 
     def setSharedSecret(self, newSharedSecret):
         self.sharedSecret = newSharedSecret
+
+    def getAdapterGrpcAddress(self):
+        return self.adapterGrpcAddress
+
+    def setAdapterGrpcAddress(self, newAdapterGrpcAddress):
+        self.adapterGrpcAddress = newAdapterGrpcAddress
 
 
 # @package Kaltura
@@ -47086,6 +47099,85 @@ class KalturaTriggerCampaignEvent(KalturaEventObject):
 
 # @package Kaltura
 # @subpackage Client
+class KalturaRetryDeleteRequest(KalturaObjectBase):
+    def __init__(self,
+            startDate=NotImplemented,
+            endDate=NotImplemented):
+        KalturaObjectBase.__init__(self)
+
+        # The first date (epoch) to start the retryDelete from - by default {now} - {30 days in second}
+        # @var int
+        self.startDate = startDate
+
+        # The last date (epoch) to do the retryDelete - by default {now} (should be greater than startDate)
+        # @var int
+        self.endDate = endDate
+
+
+    PROPERTY_LOADERS = {
+        'startDate': getXmlNodeInt, 
+        'endDate': getXmlNodeInt, 
+    }
+
+    def fromXml(self, node):
+        KalturaObjectBase.fromXml(self, node)
+        self.fromXmlImpl(node, KalturaRetryDeleteRequest.PROPERTY_LOADERS)
+
+    def toParams(self):
+        kparams = KalturaObjectBase.toParams(self)
+        kparams.put("objectType", "KalturaRetryDeleteRequest")
+        kparams.addIntIfDefined("startDate", self.startDate)
+        kparams.addIntIfDefined("endDate", self.endDate)
+        return kparams
+
+    def getStartDate(self):
+        return self.startDate
+
+    def setStartDate(self, newStartDate):
+        self.startDate = newStartDate
+
+    def getEndDate(self):
+        return self.endDate
+
+    def setEndDate(self, newEndDate):
+        self.endDate = newEndDate
+
+
+# @package Kaltura
+# @subpackage Client
+class KalturaHouseholdPartnerConfiguration(KalturaObjectBase):
+    def __init__(self,
+            retentionPeriodDays=NotImplemented):
+        KalturaObjectBase.__init__(self)
+
+        # Retention period in days.
+        # @var int
+        self.retentionPeriodDays = retentionPeriodDays
+
+
+    PROPERTY_LOADERS = {
+        'retentionPeriodDays': getXmlNodeInt, 
+    }
+
+    def fromXml(self, node):
+        KalturaObjectBase.fromXml(self, node)
+        self.fromXmlImpl(node, KalturaHouseholdPartnerConfiguration.PROPERTY_LOADERS)
+
+    def toParams(self):
+        kparams = KalturaObjectBase.toParams(self)
+        kparams.put("objectType", "KalturaHouseholdPartnerConfiguration")
+        kparams.addIntIfDefined("retentionPeriodDays", self.retentionPeriodDays)
+        return kparams
+
+    def getRetentionPeriodDays(self):
+        return self.retentionPeriodDays
+
+    def setRetentionPeriodDays(self, newRetentionPeriodDays):
+        self.retentionPeriodDays = newRetentionPeriodDays
+
+
+# @package Kaltura
+# @subpackage Client
 class KalturaDevicePin(KalturaObjectBase):
     """Device pin"""
 
@@ -54336,6 +54428,16 @@ class KalturaHouseholdService(KalturaServiceBase):
         resultNode = self.client.doQueue()
         return KalturaObjectFactory.create(resultNode, 'KalturaHousehold')
 
+    def getPartnerConfiguration(self):
+        """Get household partner configuration"""
+
+        kparams = KalturaParams()
+        self.client.queueServiceActionCall("household", "getPartnerConfiguration", "KalturaHouseholdPartnerConfiguration", kparams)
+        if self.client.isMultiRequest():
+            return self.client.getMultiRequestResult()
+        resultNode = self.client.doQueue()
+        return KalturaObjectFactory.create(resultNode, 'KalturaHouseholdPartnerConfiguration')
+
     def list(self, filter, pager = NotImplemented):
         """Retrive household for the partner filter by external identifier"""
 
@@ -54380,6 +54482,16 @@ class KalturaHouseholdService(KalturaServiceBase):
         resultNode = self.client.doQueue()
         return getXmlNodeBool(resultNode)
 
+    def retryDelete(self, request):
+        """Retry delete household entities by retention."""
+
+        kparams = KalturaParams()
+        kparams.addObjectIfDefined("request", request)
+        self.client.queueServiceActionCall("household", "retryDelete", "None", kparams)
+        if self.client.isMultiRequest():
+            return self.client.getMultiRequestResult()
+        resultNode = self.client.doQueue()
+
     def suspend(self, roleId = NotImplemented):
         """Suspend a given household service. Sets the household status to "suspended&quot;.The household service settings are maintained for later resume"""
 
@@ -54401,6 +54513,16 @@ class KalturaHouseholdService(KalturaServiceBase):
             return self.client.getMultiRequestResult()
         resultNode = self.client.doQueue()
         return KalturaObjectFactory.create(resultNode, 'KalturaHousehold')
+
+    def updatePartnerConfiguration(self, configuration):
+        """Update household partner configuration"""
+
+        kparams = KalturaParams()
+        kparams.addObjectIfDefined("configuration", configuration)
+        self.client.queueServiceActionCall("household", "updatePartnerConfiguration", "None", kparams)
+        if self.client.isMultiRequest():
+            return self.client.getMultiRequestResult()
+        resultNode = self.client.doQueue()
 
 
 # @package Kaltura
@@ -54541,6 +54663,16 @@ class KalturaHouseholdDeviceService(KalturaServiceBase):
             return self.client.getMultiRequestResult()
         resultNode = self.client.doQueue()
         return KalturaObjectFactory.create(resultNode, 'KalturaLoginResponse')
+
+    def retryDelete(self, request):
+        """Retry delete household device entities by retention."""
+
+        kparams = KalturaParams()
+        kparams.addObjectIfDefined("request", request)
+        self.client.queueServiceActionCall("householddevice", "retryDelete", "None", kparams)
+        if self.client.isMultiRequest():
+            return self.client.getMultiRequestResult()
+        resultNode = self.client.doQueue()
 
     def update(self, udid, device):
         """Update the name of the device by UDID"""
@@ -56066,6 +56198,16 @@ class KalturaOttUserService(KalturaServiceBase):
             return self.client.getMultiRequestResult()
         resultNode = self.client.doQueue()
         return getXmlNodeBool(resultNode)
+
+    def retryDelete(self, request):
+        """Retry delete OTT user entities by retention."""
+
+        kparams = KalturaParams()
+        kparams.addObjectIfDefined("request", request)
+        self.client.queueServiceActionCall("ottuser", "retryDelete", "None", kparams)
+        if self.client.isMultiRequest():
+            return self.client.getMultiRequestResult()
+        resultNode = self.client.doQueue()
 
     def setInitialPassword(self, partnerId, token, password):
         """Renew the user&#39;s password after validating the token that sent as part of URL in e-mail."""
@@ -60433,6 +60575,8 @@ class KalturaCoreClient(KalturaClientPlugin):
             'KalturaBookmarkEvent': KalturaBookmarkEvent,
             'KalturaConcurrencyViolation': KalturaConcurrencyViolation,
             'KalturaTriggerCampaignEvent': KalturaTriggerCampaignEvent,
+            'KalturaRetryDeleteRequest': KalturaRetryDeleteRequest,
+            'KalturaHouseholdPartnerConfiguration': KalturaHouseholdPartnerConfiguration,
             'KalturaDevicePin': KalturaDevicePin,
             'KalturaLoginSession': KalturaLoginSession,
             'KalturaLoginResponse': KalturaLoginResponse,
