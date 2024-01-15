@@ -42,7 +42,7 @@ from ..Base import (
     KalturaServiceBase,
 )
 
-API_VERSION = '9.2.0.1'
+API_VERSION = '9.6.0.0'
 
 ########## enums ##########
 # @package Kaltura
@@ -1994,6 +1994,7 @@ class KalturaPartnerConfigurationType(object):
     BASE = "Base"
     CUSTOMFIELDS = "CustomFields"
     DEFAULTPARENTALSETTINGS = "DefaultParentalSettings"
+    CLOUDUPLOADSETTINGS = "CloudUploadSettings"
 
     def __init__(self, value):
         self.value = value
@@ -23381,7 +23382,8 @@ class KalturaSSOAdapterProfile(KalturaObjectBase):
             adapterUrl=NotImplemented,
             settings=NotImplemented,
             externalIdentifier=NotImplemented,
-            sharedSecret=NotImplemented):
+            sharedSecret=NotImplemented,
+            adapterGrpcAddress=NotImplemented):
         KalturaObjectBase.__init__(self)
 
         # SSO Adapter id
@@ -23413,6 +23415,10 @@ class KalturaSSOAdapterProfile(KalturaObjectBase):
         # @var string
         self.sharedSecret = sharedSecret
 
+        # Adapter GRPC Address, without protocol, i.e: &#39;adapter-hostname:9090&#39;
+        # @var string
+        self.adapterGrpcAddress = adapterGrpcAddress
+
 
     PROPERTY_LOADERS = {
         'id': getXmlNodeInt, 
@@ -23422,6 +23428,7 @@ class KalturaSSOAdapterProfile(KalturaObjectBase):
         'settings': (KalturaObjectFactory.createMap, 'KalturaStringValue'), 
         'externalIdentifier': getXmlNodeText, 
         'sharedSecret': getXmlNodeText, 
+        'adapterGrpcAddress': getXmlNodeText, 
     }
 
     def fromXml(self, node):
@@ -23437,6 +23444,7 @@ class KalturaSSOAdapterProfile(KalturaObjectBase):
         kparams.addMapIfDefined("settings", self.settings)
         kparams.addStringIfDefined("externalIdentifier", self.externalIdentifier)
         kparams.addStringIfDefined("sharedSecret", self.sharedSecret)
+        kparams.addStringIfDefined("adapterGrpcAddress", self.adapterGrpcAddress)
         return kparams
 
     def getId(self):
@@ -23477,6 +23485,12 @@ class KalturaSSOAdapterProfile(KalturaObjectBase):
 
     def setSharedSecret(self, newSharedSecret):
         self.sharedSecret = newSharedSecret
+
+    def getAdapterGrpcAddress(self):
+        return self.adapterGrpcAddress
+
+    def setAdapterGrpcAddress(self, newAdapterGrpcAddress):
+        self.adapterGrpcAddress = newAdapterGrpcAddress
 
 
 # @package Kaltura
@@ -28225,7 +28239,7 @@ class KalturaUsageModuleListResponse(KalturaListResponse):
 # @package Kaltura
 # @subpackage Client
 class KalturaPartnerConfiguration(KalturaObjectBase):
-    """Partner  base configuration"""
+    """Partner base configuration"""
 
     def __init__(self):
         KalturaObjectBase.__init__(self)
@@ -28599,6 +28613,68 @@ class KalturaCatalogPartnerConfig(KalturaPartnerConfiguration):
 
     def setShopMarkerMetaId(self, newShopMarkerMetaId):
         self.shopMarkerMetaId = newShopMarkerMetaId
+
+
+# @package Kaltura
+# @subpackage Client
+class KalturaCloudUploadSettingsConfiguration(KalturaPartnerConfiguration):
+    """A clout upload settings refers to partner configuration with regards to files that are loaded to KTP cloud (e.g. S3)"""
+
+    def __init__(self,
+            defaultAllowedFileExtensions=NotImplemented,
+            customAllowedFileExtensions=NotImplemented):
+        KalturaPartnerConfiguration.__init__(self)
+
+        # Comma seperated list of file extensions that allowed to all partners
+        # @var string
+        # @readonly
+        self.defaultAllowedFileExtensions = defaultAllowedFileExtensions
+
+        # Comma seperated list of file extensions that allowed to partner in question
+        #             {&quot;jpeg&quot;,&quot;image/jpeg&quot;},
+        #             {&quot;jpg&quot;,&quot;image/jpeg&quot;},
+        #             {&quot;png&quot;,&quot;image/png&quot;},
+        #             {&quot;tif&quot;,&quot;image/tiff&quot;},
+        #             {&quot;tiff&quot;,&quot;image/tiff&quot;},
+        #             {&quot;gif&quot;,&quot;image/gif&quot;},
+        #             {&quot;xls&quot;,&quot;application/vnd.ms-excel&quot;},
+        #             {&quot;xlsx&quot;,&quot;application/vnd.openxmlformats-officedocument.spreadsheetml.sheet&quot;},
+        #             {&quot;csv&quot;,&quot;text/csv&quot;},
+        #             {&quot;xml&quot;,&quot;text/xml&quot;},
+        #             {&quot;txt&quot;,&quot;text/plain&quot;},
+        #             {&quot;doc&quot;,&quot;application/msword&quot;},
+        #             {&quot;docx&quot;,&quot;application/vnd.openxmlformats-officedocument.wordprocessingml.document&quot;},
+        #             {&quot;bmp&quot;,&quot;image/bmp&quot;},
+        #             {&quot;ico&quot;,&quot;image/x-icon&quot;},
+        #             {&quot;mp3&quot;,&quot;audio/mpeg&quot;},
+        #             {&quot;pdf&quot;,&quot;application/pdf&quot;}}
+        # @var string
+        self.customAllowedFileExtensions = customAllowedFileExtensions
+
+
+    PROPERTY_LOADERS = {
+        'defaultAllowedFileExtensions': getXmlNodeText, 
+        'customAllowedFileExtensions': getXmlNodeText, 
+    }
+
+    def fromXml(self, node):
+        KalturaPartnerConfiguration.fromXml(self, node)
+        self.fromXmlImpl(node, KalturaCloudUploadSettingsConfiguration.PROPERTY_LOADERS)
+
+    def toParams(self):
+        kparams = KalturaPartnerConfiguration.toParams(self)
+        kparams.put("objectType", "KalturaCloudUploadSettingsConfiguration")
+        kparams.addStringIfDefined("customAllowedFileExtensions", self.customAllowedFileExtensions)
+        return kparams
+
+    def getDefaultAllowedFileExtensions(self):
+        return self.defaultAllowedFileExtensions
+
+    def getCustomAllowedFileExtensions(self):
+        return self.customAllowedFileExtensions
+
+    def setCustomAllowedFileExtensions(self, newCustomAllowedFileExtensions):
+        self.customAllowedFileExtensions = newCustomAllowedFileExtensions
 
 
 # @package Kaltura
@@ -29041,7 +29117,7 @@ class KalturaGeneralPartnerConfig(KalturaPartnerConfiguration):
         # @var string
         self.dateFormat = dateFormat
 
-        # Household limitation&#160;module
+        # Household limitation module
         # @var int
         self.householdLimitationModule = householdLimitationModule
 
@@ -34037,6 +34113,10 @@ class KalturaBillingTransaction(KalturaObjectBase):
         self.itemType = itemType
 
         # Billing Action
+        #             Note: when purchasing subscription that is "ENTITLED_TO_PREVIEW_MODULE":
+        #              the first BillingTransaction.billingAction will be "unknown", 
+        #              the second BillingTransaction.billingAction will be "purchase", 
+        #              and the rest of them will be "renew_payment&quot;.
         # @var KalturaBillingAction
         # @readonly
         self.billingAction = billingAction
@@ -44514,6 +44594,39 @@ class KalturaRepresentativeSelectionPolicy(KalturaObjectBase):
 
 # @package Kaltura
 # @subpackage Client
+class KalturaTopEntitledOrFreeRsp(KalturaRepresentativeSelectionPolicy):
+    def __init__(self,
+            orderBy=NotImplemented):
+        KalturaRepresentativeSelectionPolicy.__init__(self)
+
+        # order by
+        # @var KalturaBaseAssetOrder
+        self.orderBy = orderBy
+
+
+    PROPERTY_LOADERS = {
+        'orderBy': (KalturaObjectFactory.create, 'KalturaBaseAssetOrder'), 
+    }
+
+    def fromXml(self, node):
+        KalturaRepresentativeSelectionPolicy.fromXml(self, node)
+        self.fromXmlImpl(node, KalturaTopEntitledOrFreeRsp.PROPERTY_LOADERS)
+
+    def toParams(self):
+        kparams = KalturaRepresentativeSelectionPolicy.toParams(self)
+        kparams.put("objectType", "KalturaTopEntitledOrFreeRsp")
+        kparams.addObjectIfDefined("orderBy", self.orderBy)
+        return kparams
+
+    def getOrderBy(self):
+        return self.orderBy
+
+    def setOrderBy(self, newOrderBy):
+        self.orderBy = newOrderBy
+
+
+# @package Kaltura
+# @subpackage Client
 class KalturaTopRsp(KalturaRepresentativeSelectionPolicy):
     def __init__(self,
             orderBy=NotImplemented):
@@ -44535,6 +44648,39 @@ class KalturaTopRsp(KalturaRepresentativeSelectionPolicy):
     def toParams(self):
         kparams = KalturaRepresentativeSelectionPolicy.toParams(self)
         kparams.put("objectType", "KalturaTopRsp")
+        kparams.addObjectIfDefined("orderBy", self.orderBy)
+        return kparams
+
+    def getOrderBy(self):
+        return self.orderBy
+
+    def setOrderBy(self, newOrderBy):
+        self.orderBy = newOrderBy
+
+
+# @package Kaltura
+# @subpackage Client
+class KalturaTopSubscriptionEntitledOrFreeRsp(KalturaRepresentativeSelectionPolicy):
+    def __init__(self,
+            orderBy=NotImplemented):
+        KalturaRepresentativeSelectionPolicy.__init__(self)
+
+        # order by
+        # @var KalturaBaseAssetOrder
+        self.orderBy = orderBy
+
+
+    PROPERTY_LOADERS = {
+        'orderBy': (KalturaObjectFactory.create, 'KalturaBaseAssetOrder'), 
+    }
+
+    def fromXml(self, node):
+        KalturaRepresentativeSelectionPolicy.fromXml(self, node)
+        self.fromXmlImpl(node, KalturaTopSubscriptionEntitledOrFreeRsp.PROPERTY_LOADERS)
+
+    def toParams(self):
+        kparams = KalturaRepresentativeSelectionPolicy.toParams(self)
+        kparams.put("objectType", "KalturaTopSubscriptionEntitledOrFreeRsp")
         kparams.addObjectIfDefined("orderBy", self.orderBy)
         return kparams
 
@@ -46187,6 +46333,54 @@ class KalturaCompensation(KalturaObjectBase):
 
 # @package Kaltura
 # @subpackage Client
+class KalturaCouponFilesLinks(KalturaObjectBase):
+    """An object holding all the URLs (links) to files which contain coupon codes"""
+
+    def __init__(self,
+            totalCount=NotImplemented,
+            objects=NotImplemented):
+        KalturaObjectBase.__init__(self)
+
+        # Total count of coupons code files
+        # @var int
+        self.totalCount = totalCount
+
+        # A pre-signed URL pointing to a coupon codes file
+        # @var array of KalturaStringValue
+        self.objects = objects
+
+
+    PROPERTY_LOADERS = {
+        'totalCount': getXmlNodeInt, 
+        'objects': (KalturaObjectFactory.createArray, 'KalturaStringValue'), 
+    }
+
+    def fromXml(self, node):
+        KalturaObjectBase.fromXml(self, node)
+        self.fromXmlImpl(node, KalturaCouponFilesLinks.PROPERTY_LOADERS)
+
+    def toParams(self):
+        kparams = KalturaObjectBase.toParams(self)
+        kparams.put("objectType", "KalturaCouponFilesLinks")
+        kparams.addIntIfDefined("totalCount", self.totalCount)
+        kparams.addArrayIfDefined("objects", self.objects)
+        return kparams
+
+    def getTotalCount(self):
+        return self.totalCount
+
+    def setTotalCount(self, newTotalCount):
+        self.totalCount = newTotalCount
+
+    def getObjects(self):
+        return self.objects
+
+    def setObjects(self, newObjects):
+        self.objects = newObjects
+
+
+# @package Kaltura
+# @subpackage Client
 class KalturaCouponGenerationOptions(KalturaObjectBase):
     """Coupon generation options"""
 
@@ -47082,6 +47276,85 @@ class KalturaTriggerCampaignEvent(KalturaEventObject):
 
     def getHouseholdId(self):
         return self.householdId
+
+
+# @package Kaltura
+# @subpackage Client
+class KalturaRetryDeleteRequest(KalturaObjectBase):
+    def __init__(self,
+            startDate=NotImplemented,
+            endDate=NotImplemented):
+        KalturaObjectBase.__init__(self)
+
+        # The first date (epoch) to start the retryDelete from - by default {now} - {30 days in second}
+        # @var int
+        self.startDate = startDate
+
+        # The last date (epoch) to do the retryDelete - by default {now} (should be greater than startDate)
+        # @var int
+        self.endDate = endDate
+
+
+    PROPERTY_LOADERS = {
+        'startDate': getXmlNodeInt, 
+        'endDate': getXmlNodeInt, 
+    }
+
+    def fromXml(self, node):
+        KalturaObjectBase.fromXml(self, node)
+        self.fromXmlImpl(node, KalturaRetryDeleteRequest.PROPERTY_LOADERS)
+
+    def toParams(self):
+        kparams = KalturaObjectBase.toParams(self)
+        kparams.put("objectType", "KalturaRetryDeleteRequest")
+        kparams.addIntIfDefined("startDate", self.startDate)
+        kparams.addIntIfDefined("endDate", self.endDate)
+        return kparams
+
+    def getStartDate(self):
+        return self.startDate
+
+    def setStartDate(self, newStartDate):
+        self.startDate = newStartDate
+
+    def getEndDate(self):
+        return self.endDate
+
+    def setEndDate(self, newEndDate):
+        self.endDate = newEndDate
+
+
+# @package Kaltura
+# @subpackage Client
+class KalturaHouseholdPartnerConfiguration(KalturaObjectBase):
+    def __init__(self,
+            retentionPeriodDays=NotImplemented):
+        KalturaObjectBase.__init__(self)
+
+        # Retention period in days.
+        # @var int
+        self.retentionPeriodDays = retentionPeriodDays
+
+
+    PROPERTY_LOADERS = {
+        'retentionPeriodDays': getXmlNodeInt, 
+    }
+
+    def fromXml(self, node):
+        KalturaObjectBase.fromXml(self, node)
+        self.fromXmlImpl(node, KalturaHouseholdPartnerConfiguration.PROPERTY_LOADERS)
+
+    def toParams(self):
+        kparams = KalturaObjectBase.toParams(self)
+        kparams.put("objectType", "KalturaHouseholdPartnerConfiguration")
+        kparams.addIntIfDefined("retentionPeriodDays", self.retentionPeriodDays)
+        return kparams
+
+    def getRetentionPeriodDays(self):
+        return self.retentionPeriodDays
+
+    def setRetentionPeriodDays(self, newRetentionPeriodDays):
+        self.retentionPeriodDays = newRetentionPeriodDays
 
 
 # @package Kaltura
@@ -53264,6 +53537,17 @@ class KalturaCouponService(KalturaServiceBase):
         resultNode = self.client.doQueue()
         return KalturaObjectFactory.create(resultNode, 'KalturaCoupon')
 
+    def getFilesLinks(self, couponsGroupId):
+        """get all coupon codes of a specific couponGroup"""
+
+        kparams = KalturaParams()
+        kparams.addIntIfDefined("couponsGroupId", couponsGroupId);
+        self.client.queueServiceActionCall("coupon", "getFilesLinks", "KalturaCouponFilesLinks", kparams)
+        if self.client.isMultiRequest():
+            return self.client.getMultiRequestResult()
+        resultNode = self.client.doQueue()
+        return KalturaObjectFactory.create(resultNode, 'KalturaCouponFilesLinks')
+
 
 # @package Kaltura
 # @subpackage Client
@@ -54336,6 +54620,16 @@ class KalturaHouseholdService(KalturaServiceBase):
         resultNode = self.client.doQueue()
         return KalturaObjectFactory.create(resultNode, 'KalturaHousehold')
 
+    def getPartnerConfiguration(self):
+        """Get household partner configuration"""
+
+        kparams = KalturaParams()
+        self.client.queueServiceActionCall("household", "getPartnerConfiguration", "KalturaHouseholdPartnerConfiguration", kparams)
+        if self.client.isMultiRequest():
+            return self.client.getMultiRequestResult()
+        resultNode = self.client.doQueue()
+        return KalturaObjectFactory.create(resultNode, 'KalturaHouseholdPartnerConfiguration')
+
     def list(self, filter, pager = NotImplemented):
         """Retrive household for the partner filter by external identifier"""
 
@@ -54380,6 +54674,16 @@ class KalturaHouseholdService(KalturaServiceBase):
         resultNode = self.client.doQueue()
         return getXmlNodeBool(resultNode)
 
+    def retryDelete(self, request):
+        """Retry delete household entities by retention."""
+
+        kparams = KalturaParams()
+        kparams.addObjectIfDefined("request", request)
+        self.client.queueServiceActionCall("household", "retryDelete", "None", kparams)
+        if self.client.isMultiRequest():
+            return self.client.getMultiRequestResult()
+        resultNode = self.client.doQueue()
+
     def suspend(self, roleId = NotImplemented):
         """Suspend a given household service. Sets the household status to "suspended&quot;.The household service settings are maintained for later resume"""
 
@@ -54401,6 +54705,16 @@ class KalturaHouseholdService(KalturaServiceBase):
             return self.client.getMultiRequestResult()
         resultNode = self.client.doQueue()
         return KalturaObjectFactory.create(resultNode, 'KalturaHousehold')
+
+    def updatePartnerConfiguration(self, configuration):
+        """Update household partner configuration"""
+
+        kparams = KalturaParams()
+        kparams.addObjectIfDefined("configuration", configuration)
+        self.client.queueServiceActionCall("household", "updatePartnerConfiguration", "None", kparams)
+        if self.client.isMultiRequest():
+            return self.client.getMultiRequestResult()
+        resultNode = self.client.doQueue()
 
 
 # @package Kaltura
@@ -54541,6 +54855,16 @@ class KalturaHouseholdDeviceService(KalturaServiceBase):
             return self.client.getMultiRequestResult()
         resultNode = self.client.doQueue()
         return KalturaObjectFactory.create(resultNode, 'KalturaLoginResponse')
+
+    def retryDelete(self, request):
+        """Retry delete household device entities by retention."""
+
+        kparams = KalturaParams()
+        kparams.addObjectIfDefined("request", request)
+        self.client.queueServiceActionCall("householddevice", "retryDelete", "None", kparams)
+        if self.client.isMultiRequest():
+            return self.client.getMultiRequestResult()
+        resultNode = self.client.doQueue()
 
     def update(self, udid, device):
         """Update the name of the device by UDID"""
@@ -56066,6 +56390,16 @@ class KalturaOttUserService(KalturaServiceBase):
             return self.client.getMultiRequestResult()
         resultNode = self.client.doQueue()
         return getXmlNodeBool(resultNode)
+
+    def retryDelete(self, request):
+        """Retry delete OTT user entities by retention."""
+
+        kparams = KalturaParams()
+        kparams.addObjectIfDefined("request", request)
+        self.client.queueServiceActionCall("ottuser", "retryDelete", "None", kparams)
+        if self.client.isMultiRequest():
+            return self.client.getMultiRequestResult()
+        resultNode = self.client.doQueue()
 
     def setInitialPassword(self, partnerId, token, password):
         """Renew the user&#39;s password after validating the token that sent as part of URL in e-mail."""
@@ -60145,6 +60479,7 @@ class KalturaCoreClient(KalturaClientPlugin):
             'KalturaBillingPartnerConfig': KalturaBillingPartnerConfig,
             'KalturaCategoryManagement': KalturaCategoryManagement,
             'KalturaCatalogPartnerConfig': KalturaCatalogPartnerConfig,
+            'KalturaCloudUploadSettingsConfiguration': KalturaCloudUploadSettingsConfiguration,
             'KalturaBookmarkEventThreshold': KalturaBookmarkEventThreshold,
             'KalturaCommercePartnerConfig': KalturaCommercePartnerConfig,
             'KalturaConcurrencyPartnerConfig': KalturaConcurrencyPartnerConfig,
@@ -60389,7 +60724,9 @@ class KalturaCoreClient(KalturaClientPlugin):
             'KalturaSession': KalturaSession,
             'KalturaSessionInfo': KalturaSessionInfo,
             'KalturaRepresentativeSelectionPolicy': KalturaRepresentativeSelectionPolicy,
+            'KalturaTopEntitledOrFreeRsp': KalturaTopEntitledOrFreeRsp,
             'KalturaTopRsp': KalturaTopRsp,
+            'KalturaTopSubscriptionEntitledOrFreeRsp': KalturaTopSubscriptionEntitledOrFreeRsp,
             'KalturaTopSubscriptionEntitledRsp': KalturaTopSubscriptionEntitledRsp,
             'KalturaPlaybackContextOptions': KalturaPlaybackContextOptions,
             'KalturaAccessControlMessage': KalturaAccessControlMessage,
@@ -60418,6 +60755,7 @@ class KalturaCoreClient(KalturaClientPlugin):
             'KalturaCategoryTree': KalturaCategoryTree,
             'KalturaCDNPartnerSettings': KalturaCDNPartnerSettings,
             'KalturaCompensation': KalturaCompensation,
+            'KalturaCouponFilesLinks': KalturaCouponFilesLinks,
             'KalturaCouponGenerationOptions': KalturaCouponGenerationOptions,
             'KalturaPublicCouponGenerationOptions': KalturaPublicCouponGenerationOptions,
             'KalturaRandomCouponGenerationOptions': KalturaRandomCouponGenerationOptions,
@@ -60433,6 +60771,8 @@ class KalturaCoreClient(KalturaClientPlugin):
             'KalturaBookmarkEvent': KalturaBookmarkEvent,
             'KalturaConcurrencyViolation': KalturaConcurrencyViolation,
             'KalturaTriggerCampaignEvent': KalturaTriggerCampaignEvent,
+            'KalturaRetryDeleteRequest': KalturaRetryDeleteRequest,
+            'KalturaHouseholdPartnerConfiguration': KalturaHouseholdPartnerConfiguration,
             'KalturaDevicePin': KalturaDevicePin,
             'KalturaLoginSession': KalturaLoginSession,
             'KalturaLoginResponse': KalturaLoginResponse,
