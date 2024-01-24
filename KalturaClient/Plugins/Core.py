@@ -42,7 +42,7 @@ from ..Base import (
     KalturaServiceBase,
 )
 
-API_VERSION = '9.6.0.0'
+API_VERSION = '9.7.0.0'
 
 ########## enums ##########
 # @package Kaltura
@@ -5560,10 +5560,60 @@ class KalturaSubscriptionFilter(KalturaFilter):
 
 # @package Kaltura
 # @subpackage Client
+class KalturaAssociatedShopEntities(KalturaObjectBase):
+    """This type will be used in KalturaFilter searches to filter entities by shop"""
+
+    def __init__(self,
+            assetUserRuleIdIn=NotImplemented,
+            includeNullAssetUserRuleId=NotImplemented):
+        KalturaObjectBase.__init__(self)
+
+        # comma-separated list of assetUserRuleId values. Matching entities will be returned by the filter.
+        # @var string
+        self.assetUserRuleIdIn = assetUserRuleIdIn
+
+        # If true, filter will return entities with null/empty assetUserRuleId value, in addition to any entities whose assetUserRuleId value matches the assetUserRuleIdIn parameter.
+        #             If false (or field is not specified) filter will return only entities whose assetUserRuleId value matches the assetUserRuleIdIn parameter.
+        # @var bool
+        self.includeNullAssetUserRuleId = includeNullAssetUserRuleId
+
+
+    PROPERTY_LOADERS = {
+        'assetUserRuleIdIn': getXmlNodeText, 
+        'includeNullAssetUserRuleId': getXmlNodeBool, 
+    }
+
+    def fromXml(self, node):
+        KalturaObjectBase.fromXml(self, node)
+        self.fromXmlImpl(node, KalturaAssociatedShopEntities.PROPERTY_LOADERS)
+
+    def toParams(self):
+        kparams = KalturaObjectBase.toParams(self)
+        kparams.put("objectType", "KalturaAssociatedShopEntities")
+        kparams.addStringIfDefined("assetUserRuleIdIn", self.assetUserRuleIdIn)
+        kparams.addBoolIfDefined("includeNullAssetUserRuleId", self.includeNullAssetUserRuleId)
+        return kparams
+
+    def getAssetUserRuleIdIn(self):
+        return self.assetUserRuleIdIn
+
+    def setAssetUserRuleIdIn(self, newAssetUserRuleIdIn):
+        self.assetUserRuleIdIn = newAssetUserRuleIdIn
+
+    def getIncludeNullAssetUserRuleId(self):
+        return self.includeNullAssetUserRuleId
+
+    def setIncludeNullAssetUserRuleId(self, newIncludeNullAssetUserRuleId):
+        self.includeNullAssetUserRuleId = newIncludeNullAssetUserRuleId
+
+
+# @package Kaltura
+# @subpackage Client
 class KalturaUsageModuleFilter(KalturaFilter):
     def __init__(self,
             orderBy=NotImplemented,
-            idEqual=NotImplemented):
+            idEqual=NotImplemented,
+            associatedShopEntities=NotImplemented):
         KalturaFilter.__init__(self,
             orderBy)
 
@@ -5571,9 +5621,14 @@ class KalturaUsageModuleFilter(KalturaFilter):
         # @var int
         self.idEqual = idEqual
 
+        # filter all usageModules by associate shop entities
+        # @var KalturaAssociatedShopEntities
+        self.associatedShopEntities = associatedShopEntities
+
 
     PROPERTY_LOADERS = {
         'idEqual': getXmlNodeInt, 
+        'associatedShopEntities': (KalturaObjectFactory.create, 'KalturaAssociatedShopEntities'), 
     }
 
     def fromXml(self, node):
@@ -5584,6 +5639,7 @@ class KalturaUsageModuleFilter(KalturaFilter):
         kparams = KalturaFilter.toParams(self)
         kparams.put("objectType", "KalturaUsageModuleFilter")
         kparams.addIntIfDefined("idEqual", self.idEqual)
+        kparams.addObjectIfDefined("associatedShopEntities", self.associatedShopEntities)
         return kparams
 
     def getIdEqual(self):
@@ -5591,6 +5647,12 @@ class KalturaUsageModuleFilter(KalturaFilter):
 
     def setIdEqual(self, newIdEqual):
         self.idEqual = newIdEqual
+
+    def getAssociatedShopEntities(self):
+        return self.associatedShopEntities
+
+    def setAssociatedShopEntities(self, newAssociatedShopEntities):
+        self.associatedShopEntities = newAssociatedShopEntities
 
 
 # @package Kaltura
@@ -14269,7 +14331,8 @@ class KalturaUsageModule(KalturaObjectBase):
             couponId=NotImplemented,
             waiverPeriod=NotImplemented,
             isWaiverEnabled=NotImplemented,
-            isOfflinePlayback=NotImplemented):
+            isOfflinePlayback=NotImplemented,
+            assetUserRuleId=NotImplemented):
         KalturaObjectBase.__init__(self)
 
         # Usage module identifier
@@ -14309,6 +14372,10 @@ class KalturaUsageModule(KalturaObjectBase):
         # @var bool
         self.isOfflinePlayback = isOfflinePlayback
 
+        # Asset user rule identifier
+        # @var int
+        self.assetUserRuleId = assetUserRuleId
+
 
     PROPERTY_LOADERS = {
         'id': getXmlNodeInt, 
@@ -14320,6 +14387,7 @@ class KalturaUsageModule(KalturaObjectBase):
         'waiverPeriod': getXmlNodeInt, 
         'isWaiverEnabled': getXmlNodeBool, 
         'isOfflinePlayback': getXmlNodeBool, 
+        'assetUserRuleId': getXmlNodeInt, 
     }
 
     def fromXml(self, node):
@@ -14337,6 +14405,7 @@ class KalturaUsageModule(KalturaObjectBase):
         kparams.addIntIfDefined("waiverPeriod", self.waiverPeriod)
         kparams.addBoolIfDefined("isWaiverEnabled", self.isWaiverEnabled)
         kparams.addBoolIfDefined("isOfflinePlayback", self.isOfflinePlayback)
+        kparams.addIntIfDefined("assetUserRuleId", self.assetUserRuleId)
         return kparams
 
     def getId(self):
@@ -14389,6 +14458,12 @@ class KalturaUsageModule(KalturaObjectBase):
 
     def setIsOfflinePlayback(self, newIsOfflinePlayback):
         self.isOfflinePlayback = newIsOfflinePlayback
+
+    def getAssetUserRuleId(self):
+        return self.assetUserRuleId
+
+    def setAssetUserRuleId(self, newAssetUserRuleId):
+        self.assetUserRuleId = newAssetUserRuleId
 
 
 # @package Kaltura
@@ -15767,6 +15842,7 @@ class KalturaPricePlan(KalturaUsageModule):
             waiverPeriod=NotImplemented,
             isWaiverEnabled=NotImplemented,
             isOfflinePlayback=NotImplemented,
+            assetUserRuleId=NotImplemented,
             isRenewable=NotImplemented,
             renewalsNumber=NotImplemented,
             discountId=NotImplemented,
@@ -15780,7 +15856,8 @@ class KalturaPricePlan(KalturaUsageModule):
             couponId,
             waiverPeriod,
             isWaiverEnabled,
-            isOfflinePlayback)
+            isOfflinePlayback,
+            assetUserRuleId)
 
         # Denotes whether or not this object can be renewed
         # @var bool
@@ -28631,14 +28708,14 @@ class KalturaCloudUploadSettingsConfiguration(KalturaPartnerConfiguration):
         self.defaultAllowedFileExtensions = defaultAllowedFileExtensions
 
         # Comma seperated list of file extensions that allowed to partner in question
-        #             {&quot;jpeg&quot;,&quot;image/jpeg&quot;},
+        #             {&quot;jpeg&quot;, &quot;image/jpeg&quot; },
         #             {&quot;jpg&quot;,&quot;image/jpeg&quot;},
-        #             {&quot;png&quot;,&quot;image/png&quot;},
-        #             {&quot;tif&quot;,&quot;image/tiff&quot;},
-        #             {&quot;tiff&quot;,&quot;image/tiff&quot;},
-        #             {&quot;gif&quot;,&quot;image/gif&quot;},
-        #             {&quot;xls&quot;,&quot;application/vnd.ms-excel&quot;},
-        #             {&quot;xlsx&quot;,&quot;application/vnd.openxmlformats-officedocument.spreadsheetml.sheet&quot;},
+        #             {&quot;jpg&quot;,&quot;image/png&quot;},
+        #             { &quot;tif&quot;,&quot;image/tiff&quot;},
+        #             { &quot;tiff&quot;, &quot;image/tiff&quot;},
+        #             {&quot;gif&quot;,  &quot;image/gif&quot;},
+        #             {&quot;xls&quot;,  &quot;application/vnd.ms-excel&quot;},
+        #             {&quot;xlsx&quot;,&quot;application/vnd.openxmlformats-officedocument.spreadsheetml.sheet&quot; },
         #             {&quot;csv&quot;,&quot;text/csv&quot;},
         #             {&quot;xml&quot;,&quot;text/xml&quot;},
         #             {&quot;txt&quot;,&quot;text/plain&quot;},
@@ -60000,6 +60077,7 @@ class KalturaCoreClient(KalturaClientPlugin):
             'KalturaSubscriptionSetFilter': KalturaSubscriptionSetFilter,
             'KalturaSubscriptionDependencySetFilter': KalturaSubscriptionDependencySetFilter,
             'KalturaSubscriptionFilter': KalturaSubscriptionFilter,
+            'KalturaAssociatedShopEntities': KalturaAssociatedShopEntities,
             'KalturaUsageModuleFilter': KalturaUsageModuleFilter,
             'KalturaPartnerConfigurationFilter': KalturaPartnerConfigurationFilter,
             'KalturaPersonalListFilter': KalturaPersonalListFilter,
