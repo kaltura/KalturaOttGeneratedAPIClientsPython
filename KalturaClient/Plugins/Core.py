@@ -42,7 +42,7 @@ from ..Base import (
     KalturaServiceBase,
 )
 
-API_VERSION = '9.6.0.0'
+API_VERSION = '9.7.1.1'
 
 ########## enums ##########
 # @package Kaltura
@@ -44594,6 +44594,39 @@ class KalturaRepresentativeSelectionPolicy(KalturaObjectBase):
 
 # @package Kaltura
 # @subpackage Client
+class KalturaTopEntitledOrFreeRsp(KalturaRepresentativeSelectionPolicy):
+    def __init__(self,
+            orderBy=NotImplemented):
+        KalturaRepresentativeSelectionPolicy.__init__(self)
+
+        # order by
+        # @var KalturaBaseAssetOrder
+        self.orderBy = orderBy
+
+
+    PROPERTY_LOADERS = {
+        'orderBy': (KalturaObjectFactory.create, 'KalturaBaseAssetOrder'), 
+    }
+
+    def fromXml(self, node):
+        KalturaRepresentativeSelectionPolicy.fromXml(self, node)
+        self.fromXmlImpl(node, KalturaTopEntitledOrFreeRsp.PROPERTY_LOADERS)
+
+    def toParams(self):
+        kparams = KalturaRepresentativeSelectionPolicy.toParams(self)
+        kparams.put("objectType", "KalturaTopEntitledOrFreeRsp")
+        kparams.addObjectIfDefined("orderBy", self.orderBy)
+        return kparams
+
+    def getOrderBy(self):
+        return self.orderBy
+
+    def setOrderBy(self, newOrderBy):
+        self.orderBy = newOrderBy
+
+
+# @package Kaltura
+# @subpackage Client
 class KalturaTopRsp(KalturaRepresentativeSelectionPolicy):
     def __init__(self,
             orderBy=NotImplemented):
@@ -44615,6 +44648,39 @@ class KalturaTopRsp(KalturaRepresentativeSelectionPolicy):
     def toParams(self):
         kparams = KalturaRepresentativeSelectionPolicy.toParams(self)
         kparams.put("objectType", "KalturaTopRsp")
+        kparams.addObjectIfDefined("orderBy", self.orderBy)
+        return kparams
+
+    def getOrderBy(self):
+        return self.orderBy
+
+    def setOrderBy(self, newOrderBy):
+        self.orderBy = newOrderBy
+
+
+# @package Kaltura
+# @subpackage Client
+class KalturaTopSubscriptionEntitledOrFreeRsp(KalturaRepresentativeSelectionPolicy):
+    def __init__(self,
+            orderBy=NotImplemented):
+        KalturaRepresentativeSelectionPolicy.__init__(self)
+
+        # order by
+        # @var KalturaBaseAssetOrder
+        self.orderBy = orderBy
+
+
+    PROPERTY_LOADERS = {
+        'orderBy': (KalturaObjectFactory.create, 'KalturaBaseAssetOrder'), 
+    }
+
+    def fromXml(self, node):
+        KalturaRepresentativeSelectionPolicy.fromXml(self, node)
+        self.fromXmlImpl(node, KalturaTopSubscriptionEntitledOrFreeRsp.PROPERTY_LOADERS)
+
+    def toParams(self):
+        kparams = KalturaRepresentativeSelectionPolicy.toParams(self)
+        kparams.put("objectType", "KalturaTopSubscriptionEntitledOrFreeRsp")
         kparams.addObjectIfDefined("orderBy", self.orderBy)
         return kparams
 
@@ -60658,7 +60724,9 @@ class KalturaCoreClient(KalturaClientPlugin):
             'KalturaSession': KalturaSession,
             'KalturaSessionInfo': KalturaSessionInfo,
             'KalturaRepresentativeSelectionPolicy': KalturaRepresentativeSelectionPolicy,
+            'KalturaTopEntitledOrFreeRsp': KalturaTopEntitledOrFreeRsp,
             'KalturaTopRsp': KalturaTopRsp,
+            'KalturaTopSubscriptionEntitledOrFreeRsp': KalturaTopSubscriptionEntitledOrFreeRsp,
             'KalturaTopSubscriptionEntitledRsp': KalturaTopSubscriptionEntitledRsp,
             'KalturaPlaybackContextOptions': KalturaPlaybackContextOptions,
             'KalturaAccessControlMessage': KalturaAccessControlMessage,
