@@ -35152,6 +35152,10 @@ class KalturaSubscriptionEntitlement(KalturaEntitlement):
             userId=NotImplemented,
             householdId=NotImplemented,
             isPending=NotImplemented,
+            nextRenewalDate=NotImplemented,
+            isRenewableForPurchase=NotImplemented,
+            isRenewable=NotImplemented,
+            isInGracePeriod=NotImplemented,
             paymentGatewayId=NotImplemented,
             paymentMethodId=NotImplemented,
             scheduledSubscriptionId=NotImplemented,
@@ -35175,6 +35179,26 @@ class KalturaSubscriptionEntitlement(KalturaEntitlement):
             userId,
             householdId,
             isPending)
+
+        # The date of the next renewal (only for subscription)
+        # @var int
+        # @readonly
+        self.nextRenewalDate = nextRenewalDate
+
+        # Indicates whether the subscription is renewable in this purchase (only for subscription)
+        # @var bool
+        # @readonly
+        self.isRenewableForPurchase = isRenewableForPurchase
+
+        # Indicates whether a subscription is renewable (only for subscription)
+        # @var bool
+        # @readonly
+        self.isRenewable = isRenewable
+
+        # Indicates whether the user is currently in his grace period entitlement
+        # @var bool
+        # @readonly
+        self.isInGracePeriod = isInGracePeriod
 
         # Payment Gateway identifier
         # @var int
@@ -35211,6 +35235,10 @@ class KalturaSubscriptionEntitlement(KalturaEntitlement):
 
 
     PROPERTY_LOADERS = {
+        'nextRenewalDate': getXmlNodeInt, 
+        'isRenewableForPurchase': getXmlNodeBool, 
+        'isRenewable': getXmlNodeBool, 
+        'isInGracePeriod': getXmlNodeBool, 
         'paymentGatewayId': getXmlNodeInt, 
         'paymentMethodId': getXmlNodeInt, 
         'scheduledSubscriptionId': getXmlNodeInt, 
@@ -35230,6 +35258,18 @@ class KalturaSubscriptionEntitlement(KalturaEntitlement):
         kparams.addIntIfDefined("paymentGatewayId", self.paymentGatewayId)
         kparams.addIntIfDefined("paymentMethodId", self.paymentMethodId)
         return kparams
+
+    def getNextRenewalDate(self):
+        return self.nextRenewalDate
+
+    def getIsRenewableForPurchase(self):
+        return self.isRenewableForPurchase
+
+    def getIsRenewable(self):
+        return self.isRenewable
+
+    def getIsInGracePeriod(self):
+        return self.isInGracePeriod
 
     def getPaymentGatewayId(self):
         return self.paymentGatewayId
