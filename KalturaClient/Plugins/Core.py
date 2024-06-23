@@ -42,7 +42,7 @@ from ..Base import (
     KalturaServiceBase,
 )
 
-API_VERSION = '10.1.0.0'
+API_VERSION = '10.1.1.0'
 
 ########## enums ##########
 # @package Kaltura
@@ -33025,7 +33025,8 @@ class KalturaHouseholdDeviceFamilyLimitations(KalturaDeviceFamilyBase):
             deviceLimit=NotImplemented,
             concurrentLimit=NotImplemented,
             isDefaultDeviceLimit=NotImplemented,
-            isDefaultConcurrentLimit=NotImplemented):
+            isDefaultConcurrentLimit=NotImplemented,
+            isDefaultFrequencyLimit=NotImplemented):
         KalturaDeviceFamilyBase.__init__(self,
             id,
             name,
@@ -33053,6 +33054,11 @@ class KalturaHouseholdDeviceFamilyLimitations(KalturaDeviceFamilyBase):
         # @readonly
         self.isDefaultConcurrentLimit = isDefaultConcurrentLimit
 
+        # Is the Allowed device change frequency code for this family is default value or not
+        # @var bool
+        # @readonly
+        self.isDefaultFrequencyLimit = isDefaultFrequencyLimit
+
 
     PROPERTY_LOADERS = {
         'frequency': getXmlNodeInt, 
@@ -33060,6 +33066,7 @@ class KalturaHouseholdDeviceFamilyLimitations(KalturaDeviceFamilyBase):
         'concurrentLimit': getXmlNodeInt, 
         'isDefaultDeviceLimit': getXmlNodeBool, 
         'isDefaultConcurrentLimit': getXmlNodeBool, 
+        'isDefaultFrequencyLimit': getXmlNodeBool, 
     }
 
     def fromXml(self, node):
@@ -33097,6 +33104,9 @@ class KalturaHouseholdDeviceFamilyLimitations(KalturaDeviceFamilyBase):
 
     def getIsDefaultConcurrentLimit(self):
         return self.isDefaultConcurrentLimit
+
+    def getIsDefaultFrequencyLimit(self):
+        return self.isDefaultFrequencyLimit
 
 
 # @package Kaltura
@@ -35142,6 +35152,10 @@ class KalturaSubscriptionEntitlement(KalturaEntitlement):
             userId=NotImplemented,
             householdId=NotImplemented,
             isPending=NotImplemented,
+            nextRenewalDate=NotImplemented,
+            isRenewableForPurchase=NotImplemented,
+            isRenewable=NotImplemented,
+            isInGracePeriod=NotImplemented,
             paymentGatewayId=NotImplemented,
             paymentMethodId=NotImplemented,
             scheduledSubscriptionId=NotImplemented,
@@ -35165,6 +35179,26 @@ class KalturaSubscriptionEntitlement(KalturaEntitlement):
             userId,
             householdId,
             isPending)
+
+        # The date of the next renewal (only for subscription)
+        # @var int
+        # @readonly
+        self.nextRenewalDate = nextRenewalDate
+
+        # Indicates whether the subscription is renewable in this purchase (only for subscription)
+        # @var bool
+        # @readonly
+        self.isRenewableForPurchase = isRenewableForPurchase
+
+        # Indicates whether a subscription is renewable (only for subscription)
+        # @var bool
+        # @readonly
+        self.isRenewable = isRenewable
+
+        # Indicates whether the user is currently in his grace period entitlement
+        # @var bool
+        # @readonly
+        self.isInGracePeriod = isInGracePeriod
 
         # Payment Gateway identifier
         # @var int
@@ -35201,6 +35235,10 @@ class KalturaSubscriptionEntitlement(KalturaEntitlement):
 
 
     PROPERTY_LOADERS = {
+        'nextRenewalDate': getXmlNodeInt, 
+        'isRenewableForPurchase': getXmlNodeBool, 
+        'isRenewable': getXmlNodeBool, 
+        'isInGracePeriod': getXmlNodeBool, 
         'paymentGatewayId': getXmlNodeInt, 
         'paymentMethodId': getXmlNodeInt, 
         'scheduledSubscriptionId': getXmlNodeInt, 
@@ -35220,6 +35258,18 @@ class KalturaSubscriptionEntitlement(KalturaEntitlement):
         kparams.addIntIfDefined("paymentGatewayId", self.paymentGatewayId)
         kparams.addIntIfDefined("paymentMethodId", self.paymentMethodId)
         return kparams
+
+    def getNextRenewalDate(self):
+        return self.nextRenewalDate
+
+    def getIsRenewableForPurchase(self):
+        return self.isRenewableForPurchase
+
+    def getIsRenewable(self):
+        return self.isRenewable
+
+    def getIsInGracePeriod(self):
+        return self.isInGracePeriod
 
     def getPaymentGatewayId(self):
         return self.paymentGatewayId
@@ -52144,7 +52194,7 @@ class KalturaAssetService(KalturaServiceBase):
         return KalturaObjectFactory.create(resultNode, 'KalturaAsset')
 
     def addFromBulkUpload(self, fileData, bulkUploadJobData, bulkUploadAssetData):
-        """Add new bulk upload batch job Conversion profile id can be specified in the API."""
+        """Add new bulk upload batch job Conversion profile id can be specified in the API (note that the total request body size is limited to 10MB)."""
 
         kparams = KalturaParams()
         kfiles = {"fileData": fileData}
@@ -54054,7 +54104,7 @@ class KalturaDynamicListService(KalturaServiceBase):
         return KalturaObjectFactory.create(resultNode, 'KalturaDynamicList')
 
     def addFromBulkUpload(self, fileData, jobData, bulkUploadData):
-        """Add new bulk upload batch job Conversion profile id can be specified in the API."""
+        """Add new bulk upload batch job Conversion profile id can be specified in the API (note that the total request body size is limited to 10MB)."""
 
         kparams = KalturaParams()
         kfiles = {"fileData": fileData}
