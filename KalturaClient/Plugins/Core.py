@@ -42,7 +42,7 @@ from ..Base import (
     KalturaServiceBase,
 )
 
-API_VERSION = '10.3.0.0'
+API_VERSION = '10.3.1.1'
 
 ########## enums ##########
 # @package Kaltura
@@ -44517,7 +44517,8 @@ class KalturaAppToken(KalturaObjectBase):
             token=NotImplemented,
             sessionUserId=NotImplemented,
             createDate=NotImplemented,
-            updateDate=NotImplemented):
+            updateDate=NotImplemented,
+            regionId=NotImplemented):
         KalturaObjectBase.__init__(self)
 
         # The id of the application token
@@ -44565,6 +44566,11 @@ class KalturaAppToken(KalturaObjectBase):
         # @readonly
         self.updateDate = updateDate
 
+        # The region identifier of the KS used to create the appToken. Value is presented only for partners with the enabled feature.
+        # @var int
+        # @readonly
+        self.regionId = regionId
+
 
     PROPERTY_LOADERS = {
         'id': getXmlNodeText, 
@@ -44577,6 +44583,7 @@ class KalturaAppToken(KalturaObjectBase):
         'sessionUserId': getXmlNodeText, 
         'createDate': getXmlNodeInt, 
         'updateDate': getXmlNodeInt, 
+        'regionId': getXmlNodeInt, 
     }
 
     def fromXml(self, node):
@@ -44637,6 +44644,9 @@ class KalturaAppToken(KalturaObjectBase):
 
     def getUpdateDate(self):
         return self.updateDate
+
+    def getRegionId(self):
+        return self.regionId
 
 
 # @package Kaltura
@@ -50901,7 +50911,8 @@ class KalturaTimeShiftedTvPartnerSettings(KalturaObjectBase):
             defaultQuota=NotImplemented,
             personalizedRecording=NotImplemented,
             maxRecordingConcurrency=NotImplemented,
-            maxConcurrencyMargin=NotImplemented):
+            maxConcurrencyMargin=NotImplemented,
+            shouldRoundStopRecordingsBySeconds=NotImplemented):
         KalturaObjectBase.__init__(self)
 
         # Is catch-up enabled
@@ -51008,6 +51019,11 @@ class KalturaTimeShiftedTvPartnerSettings(KalturaObjectBase):
         # @var int
         self.maxConcurrencyMargin = maxConcurrencyMargin
 
+        # When using padded and immediate recordings, define if end date of recording should be rounded by the minute or by the second.
+        #             Default by minutes, FALSE.
+        # @var bool
+        self.shouldRoundStopRecordingsBySeconds = shouldRoundStopRecordingsBySeconds
+
 
     PROPERTY_LOADERS = {
         'catchUpEnabled': getXmlNodeBool, 
@@ -51036,6 +51052,7 @@ class KalturaTimeShiftedTvPartnerSettings(KalturaObjectBase):
         'personalizedRecording': getXmlNodeBool, 
         'maxRecordingConcurrency': getXmlNodeInt, 
         'maxConcurrencyMargin': getXmlNodeInt, 
+        'shouldRoundStopRecordingsBySeconds': getXmlNodeBool, 
     }
 
     def fromXml(self, node):
@@ -51071,6 +51088,7 @@ class KalturaTimeShiftedTvPartnerSettings(KalturaObjectBase):
         kparams.addBoolIfDefined("personalizedRecording", self.personalizedRecording)
         kparams.addIntIfDefined("maxRecordingConcurrency", self.maxRecordingConcurrency)
         kparams.addIntIfDefined("maxConcurrencyMargin", self.maxConcurrencyMargin)
+        kparams.addBoolIfDefined("shouldRoundStopRecordingsBySeconds", self.shouldRoundStopRecordingsBySeconds)
         return kparams
 
     def getCatchUpEnabled(self):
@@ -51228,6 +51246,12 @@ class KalturaTimeShiftedTvPartnerSettings(KalturaObjectBase):
 
     def setMaxConcurrencyMargin(self, newMaxConcurrencyMargin):
         self.maxConcurrencyMargin = newMaxConcurrencyMargin
+
+    def getShouldRoundStopRecordingsBySeconds(self):
+        return self.shouldRoundStopRecordingsBySeconds
+
+    def setShouldRoundStopRecordingsBySeconds(self, newShouldRoundStopRecordingsBySeconds):
+        self.shouldRoundStopRecordingsBySeconds = newShouldRoundStopRecordingsBySeconds
 
 
 # @package Kaltura
