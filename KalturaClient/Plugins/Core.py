@@ -42,7 +42,7 @@ from ..Base import (
     KalturaServiceBase,
 )
 
-API_VERSION = '9.6.0.0'
+API_VERSION = '10.7.1.4'
 
 ########## enums ##########
 # @package Kaltura
@@ -1500,7 +1500,6 @@ class KalturaImageOrderBy(object):
 class KalturaImageStatus(object):
     PENDING = "PENDING"
     READY = "READY"
-    FAILED = "FAILED"
 
     def __init__(self, value):
         self.value = value
@@ -2949,6 +2948,18 @@ class KalturaTimeShiftedTvState(object):
 
 # @package Kaltura
 # @subpackage Client
+class KalturaTokenDeliveryMethod(object):
+    EMAIL = "Email"
+    SSO = "Sso"
+
+    def __init__(self, value):
+        self.value = value
+
+    def getValue(self):
+        return self.value
+
+# @package Kaltura
+# @subpackage Client
 class KalturaTopicAutomaticIssueNotification(object):
     INHERIT = "Inherit"
     YES = "Yes"
@@ -3217,6 +3228,17 @@ class KalturaVodIngestAssetResultStatus(object):
 
 # @package Kaltura
 # @subpackage Client
+class KalturaWatchBasedRecommendationsProfileOrderBy(object):
+    NONE = "NONE"
+
+    def __init__(self, value):
+        self.value = value
+
+    def getValue(self):
+        return self.value
+
+# @package Kaltura
+# @subpackage Client
 class KalturaWatchedAllReturnStrategy(object):
     RETURN_NO_NEXT_EPISODE = "RETURN_NO_NEXT_EPISODE"
     RETURN_FIRST_EPISODE = "RETURN_FIRST_EPISODE"
@@ -3246,16 +3268,16 @@ class KalturaWatchStatus(object):
 # @subpackage Client
 class KalturaApiExceptionArg(KalturaObjectBase):
     def __init__(self,
-            name=NotImplemented,
-            value=NotImplemented):
+            name = NotImplemented,
+            value = NotImplemented):
         KalturaObjectBase.__init__(self)
 
         # Argument name
-        # @var string
+        # @var str
         self.name = name
 
         # Argument value
-        # @var string
+        # @var str
         self.value = value
 
 
@@ -3294,16 +3316,16 @@ class KalturaClientConfiguration(KalturaObjectBase):
     """Define client optional configurations"""
 
     def __init__(self,
-            clientTag=NotImplemented,
-            apiVersion=NotImplemented):
+            clientTag = NotImplemented,
+            apiVersion = NotImplemented):
         KalturaObjectBase.__init__(self)
 
         # Client Tag
-        # @var string
+        # @var str
         self.clientTag = clientTag
 
         # API client version
-        # @var string
+        # @var str
         self.apiVersion = apiVersion
 
 
@@ -3386,15 +3408,15 @@ class KalturaRequestConfiguration(KalturaObjectBase):
     """Define client request optional configurations"""
 
     def __init__(self,
-            partnerId=NotImplemented,
-            userId=NotImplemented,
-            language=NotImplemented,
-            currency=NotImplemented,
-            ks=NotImplemented,
-            responseProfile=NotImplemented,
-            abortOnError=NotImplemented,
-            abortAllOnError=NotImplemented,
-            skipCondition=NotImplemented):
+            partnerId = NotImplemented,
+            userId = NotImplemented,
+            language = NotImplemented,
+            currency = NotImplemented,
+            ks = NotImplemented,
+            responseProfile = NotImplemented,
+            abortOnError = NotImplemented,
+            abortAllOnError = NotImplemented,
+            skipCondition = NotImplemented):
         KalturaObjectBase.__init__(self)
 
         # Impersonated partner id
@@ -3406,15 +3428,15 @@ class KalturaRequestConfiguration(KalturaObjectBase):
         self.userId = userId
 
         # Content language
-        # @var string
+        # @var str
         self.language = language
 
         # Currency to be used
-        # @var string
+        # @var str
         self.currency = currency
 
         # Kaltura API session
-        # @var string
+        # @var str
         self.ks = ks
 
         # Kaltura response profile object
@@ -3523,11 +3545,11 @@ class KalturaRequestConfiguration(KalturaObjectBase):
 # @subpackage Client
 class KalturaFilter(KalturaObjectBase):
     def __init__(self,
-            orderBy=NotImplemented):
+            orderBy = NotImplemented):
         KalturaObjectBase.__init__(self)
 
         # order by
-        # @var string
+        # @var str
         self.orderBy = orderBy
 
 
@@ -3558,13 +3580,13 @@ class KalturaDetachedResponseProfile(KalturaBaseResponseProfile):
     """Define specific base profile response"""
 
     def __init__(self,
-            name=NotImplemented,
-            filter=NotImplemented,
-            relatedProfiles=NotImplemented):
+            name = NotImplemented,
+            filter = NotImplemented,
+            relatedProfiles = NotImplemented):
         KalturaBaseResponseProfile.__init__(self)
 
         # name
-        # @var string
+        # @var str
         self.name = name
 
         # filter
@@ -3572,7 +3594,7 @@ class KalturaDetachedResponseProfile(KalturaBaseResponseProfile):
         self.filter = filter
 
         # relatedProfiles
-        # @var array of KalturaDetachedResponseProfile
+        # @var List[KalturaDetachedResponseProfile]
         self.relatedProfiles = relatedProfiles
 
 
@@ -3619,17 +3641,17 @@ class KalturaOnDemandResponseProfile(KalturaDetachedResponseProfile):
     """Define on demand response"""
 
     def __init__(self,
-            name=NotImplemented,
-            filter=NotImplemented,
-            relatedProfiles=NotImplemented,
-            retrievedProperties=NotImplemented):
+            name = NotImplemented,
+            filter = NotImplemented,
+            relatedProfiles = NotImplemented,
+            retrievedProperties = NotImplemented):
         KalturaDetachedResponseProfile.__init__(self,
             name,
             filter,
             relatedProfiles)
 
         # Comma seperated properties names
-        # @var string
+        # @var str
         self.retrievedProperties = retrievedProperties
 
 
@@ -3660,7 +3682,7 @@ class KalturaRelatedObjectFilter(KalturaFilter):
     """Define KalturaRelatedObjectFilter"""
 
     def __init__(self,
-            orderBy=NotImplemented):
+            orderBy = NotImplemented):
         KalturaFilter.__init__(self,
             orderBy)
 
@@ -3684,13 +3706,13 @@ class KalturaDeviceReferenceDataFilter(KalturaFilter):
     """Device Reference Data Filter"""
 
     def __init__(self,
-            orderBy=NotImplemented,
-            idIn=NotImplemented):
+            orderBy = NotImplemented,
+            idIn = NotImplemented):
         KalturaFilter.__init__(self,
             orderBy)
 
         # IdIn
-        # @var string
+        # @var str
         self.idIn = idIn
 
 
@@ -3719,15 +3741,15 @@ class KalturaDeviceReferenceDataFilter(KalturaFilter):
 # @subpackage Client
 class KalturaDeviceManufacturersReferenceDataFilter(KalturaDeviceReferenceDataFilter):
     def __init__(self,
-            orderBy=NotImplemented,
-            idIn=NotImplemented,
-            nameEqual=NotImplemented):
+            orderBy = NotImplemented,
+            idIn = NotImplemented,
+            nameEqual = NotImplemented):
         KalturaDeviceReferenceDataFilter.__init__(self,
             orderBy,
             idIn)
 
         # name equal
-        # @var string
+        # @var str
         self.nameEqual = nameEqual
 
 
@@ -3758,11 +3780,11 @@ class KalturaValue(KalturaObjectBase):
     """A representation to return an array of values"""
 
     def __init__(self,
-            description=NotImplemented):
+            description = NotImplemented):
         KalturaObjectBase.__init__(self)
 
         # Description
-        # @var string
+        # @var str
         self.description = description
 
 
@@ -3793,8 +3815,8 @@ class KalturaIntegerValue(KalturaValue):
     """A string representation to return an array of ints"""
 
     def __init__(self,
-            description=NotImplemented,
-            value=NotImplemented):
+            description = NotImplemented,
+            value = NotImplemented):
         KalturaValue.__init__(self,
             description)
 
@@ -3830,10 +3852,10 @@ class KalturaFavoriteFilter(KalturaFilter):
     """Favorite request filter"""
 
     def __init__(self,
-            orderBy=NotImplemented,
-            mediaTypeEqual=NotImplemented,
-            mediaIdIn=NotImplemented,
-            udidEqualCurrent=NotImplemented):
+            orderBy = NotImplemented,
+            mediaTypeEqual = NotImplemented,
+            mediaIdIn = NotImplemented,
+            udidEqualCurrent = NotImplemented):
         KalturaFilter.__init__(self,
             orderBy)
 
@@ -3842,7 +3864,7 @@ class KalturaFavoriteFilter(KalturaFilter):
         self.mediaTypeEqual = mediaTypeEqual
 
         # Media identifiers from which to filter the favorite assets
-        # @var string
+        # @var str
         self.mediaIdIn = mediaIdIn
 
         # Indicates whether the results should be filtered by origin UDID using the current
@@ -3893,8 +3915,8 @@ class KalturaBooleanValue(KalturaValue):
     """A string representation to return an array of booleans"""
 
     def __init__(self,
-            description=NotImplemented,
-            value=NotImplemented):
+            description = NotImplemented,
+            value = NotImplemented):
         KalturaValue.__init__(self,
             description)
 
@@ -3930,8 +3952,8 @@ class KalturaDoubleValue(KalturaValue):
     """A string representation to return an array of doubles"""
 
     def __init__(self,
-            description=NotImplemented,
-            value=NotImplemented):
+            description = NotImplemented,
+            value = NotImplemented):
         KalturaValue.__init__(self,
             description)
 
@@ -3967,8 +3989,8 @@ class KalturaLongValue(KalturaValue):
     """A string representation to return an array of longs"""
 
     def __init__(self,
-            description=NotImplemented,
-            value=NotImplemented):
+            description = NotImplemented,
+            value = NotImplemented):
         KalturaValue.__init__(self,
             description)
 
@@ -4004,16 +4026,16 @@ class KalturaTranslationToken(KalturaObjectBase):
     """Container for translation"""
 
     def __init__(self,
-            language=NotImplemented,
-            value=NotImplemented):
+            language = NotImplemented,
+            value = NotImplemented):
         KalturaObjectBase.__init__(self)
 
         # Language code
-        # @var string
+        # @var str
         self.language = language
 
         # Translated value
-        # @var string
+        # @var str
         self.value = value
 
 
@@ -4052,19 +4074,19 @@ class KalturaMultilingualStringValue(KalturaValue):
     """Array of translated strings"""
 
     def __init__(self,
-            description=NotImplemented,
-            value=NotImplemented,
-            multilingualValue=NotImplemented):
+            description = NotImplemented,
+            value = NotImplemented,
+            multilingualValue = NotImplemented):
         KalturaValue.__init__(self,
             description)
 
         # Value
-        # @var string
+        # @var str
         # @readonly
         self.value = value
 
         # Value
-        # @var array of KalturaTranslationToken
+        # @var List[KalturaTranslationToken]
         self.multilingualValue = multilingualValue
 
 
@@ -4099,13 +4121,13 @@ class KalturaStringValue(KalturaValue):
     """A string representation to return an array of strings"""
 
     def __init__(self,
-            description=NotImplemented,
-            value=NotImplemented):
+            description = NotImplemented,
+            value = NotImplemented):
         KalturaValue.__init__(self,
             description)
 
         # Value
-        # @var string
+        # @var str
         self.value = value
 
 
@@ -4136,33 +4158,33 @@ class KalturaOTTUserFilter(KalturaFilter):
     """OTT User filter"""
 
     def __init__(self,
-            orderBy=NotImplemented,
-            usernameEqual=NotImplemented,
-            externalIdEqual=NotImplemented,
-            idIn=NotImplemented,
-            roleIdsIn=NotImplemented,
-            emailEqual=NotImplemented):
+            orderBy = NotImplemented,
+            usernameEqual = NotImplemented,
+            externalIdEqual = NotImplemented,
+            idIn = NotImplemented,
+            roleIdsIn = NotImplemented,
+            emailEqual = NotImplemented):
         KalturaFilter.__init__(self,
             orderBy)
 
         # Username
-        # @var string
+        # @var str
         self.usernameEqual = usernameEqual
 
         # User external identifier
-        # @var string
+        # @var str
         self.externalIdEqual = externalIdEqual
 
         # List of user identifiers separated by &#39;,&#39;
-        # @var string
+        # @var str
         self.idIn = idIn
 
         # Comma separated list of role Ids.
-        # @var string
+        # @var str
         self.roleIdsIn = roleIdsIn
 
         # User email
-        # @var string
+        # @var str
         self.emailEqual = emailEqual
 
 
@@ -4223,13 +4245,13 @@ class KalturaOTTUserFilter(KalturaFilter):
 # @subpackage Client
 class KalturaPartnerFilter(KalturaFilter):
     def __init__(self,
-            orderBy=NotImplemented,
-            idIn=NotImplemented):
+            orderBy = NotImplemented,
+            idIn = NotImplemented):
         KalturaFilter.__init__(self,
             orderBy)
 
         # Comma separated discount codes
-        # @var string
+        # @var str
         self.idIn = idIn
 
 
@@ -4260,13 +4282,13 @@ class KalturaPasswordPolicyFilter(KalturaFilter):
     """Password policy settings filter"""
 
     def __init__(self,
-            orderBy=NotImplemented,
-            userRoleIdIn=NotImplemented):
+            orderBy = NotImplemented,
+            userRoleIdIn = NotImplemented):
         KalturaFilter.__init__(self,
             orderBy)
 
         # Comma separated list of role Ids.
-        # @var string
+        # @var str
         self.userRoleIdIn = userRoleIdIn
 
 
@@ -4297,8 +4319,8 @@ class KalturaUserSessionProfileFilter(KalturaFilter):
     """User Session Profile filter"""
 
     def __init__(self,
-            orderBy=NotImplemented,
-            idEqual=NotImplemented):
+            orderBy = NotImplemented,
+            idEqual = NotImplemented):
         KalturaFilter.__init__(self,
             orderBy)
 
@@ -4334,16 +4356,16 @@ class KalturaBulkUploadFilter(KalturaFilter):
     """Bulk Upload Filter"""
 
     def __init__(self,
-            orderBy=NotImplemented,
-            bulkObjectTypeEqual=NotImplemented,
-            createDateGreaterThanOrEqual=NotImplemented,
-            uploadedByUserIdEqualCurrent=NotImplemented,
-            statusIn=NotImplemented):
+            orderBy = NotImplemented,
+            bulkObjectTypeEqual = NotImplemented,
+            createDateGreaterThanOrEqual = NotImplemented,
+            uploadedByUserIdEqualCurrent = NotImplemented,
+            statusIn = NotImplemented):
         KalturaFilter.__init__(self,
             orderBy)
 
         # bulk objects Type name (must be type of KalturaOTTObject)
-        # @var string
+        # @var str
         self.bulkObjectTypeEqual = bulkObjectTypeEqual
 
         # upload date to search within (search in the last 60 days)
@@ -4355,7 +4377,7 @@ class KalturaBulkUploadFilter(KalturaFilter):
         self.uploadedByUserIdEqualCurrent = uploadedByUserIdEqualCurrent
 
         # Comma separated list of BulkUpload Statuses to search\filter
-        # @var string
+        # @var str
         self.statusIn = statusIn
 
 
@@ -4408,15 +4430,15 @@ class KalturaBulkUploadFilter(KalturaFilter):
 # @subpackage Client
 class KalturaSocialActionFilter(KalturaFilter):
     def __init__(self,
-            orderBy=NotImplemented,
-            assetIdIn=NotImplemented,
-            assetTypeEqual=NotImplemented,
-            actionTypeIn=NotImplemented):
+            orderBy = NotImplemented,
+            assetIdIn = NotImplemented,
+            assetTypeEqual = NotImplemented,
+            actionTypeIn = NotImplemented):
         KalturaFilter.__init__(self,
             orderBy)
 
         # Comma separated list of asset identifiers.
-        # @var string
+        # @var str
         self.assetIdIn = assetIdIn
 
         # Asset Type
@@ -4424,7 +4446,7 @@ class KalturaSocialActionFilter(KalturaFilter):
         self.assetTypeEqual = assetTypeEqual
 
         # Comma separated list of social actions to filter by
-        # @var string
+        # @var str
         self.actionTypeIn = actionTypeIn
 
 
@@ -4469,11 +4491,11 @@ class KalturaSocialActionFilter(KalturaFilter):
 # @subpackage Client
 class KalturaSocialCommentFilter(KalturaFilter):
     def __init__(self,
-            orderBy=NotImplemented,
-            assetIdEqual=NotImplemented,
-            assetTypeEqual=NotImplemented,
-            socialPlatformEqual=NotImplemented,
-            createDateGreaterThan=NotImplemented):
+            orderBy = NotImplemented,
+            assetIdEqual = NotImplemented,
+            assetTypeEqual = NotImplemented,
+            socialPlatformEqual = NotImplemented,
+            createDateGreaterThan = NotImplemented):
         KalturaFilter.__init__(self,
             orderBy)
 
@@ -4543,10 +4565,10 @@ class KalturaSocialCommentFilter(KalturaFilter):
 # @subpackage Client
 class KalturaSocialFriendActivityFilter(KalturaFilter):
     def __init__(self,
-            orderBy=NotImplemented,
-            assetIdEqual=NotImplemented,
-            assetTypeEqual=NotImplemented,
-            actionTypeIn=NotImplemented):
+            orderBy = NotImplemented,
+            assetIdEqual = NotImplemented,
+            assetTypeEqual = NotImplemented,
+            actionTypeIn = NotImplemented):
         KalturaFilter.__init__(self,
             orderBy)
 
@@ -4559,7 +4581,7 @@ class KalturaSocialFriendActivityFilter(KalturaFilter):
         self.assetTypeEqual = assetTypeEqual
 
         # Comma separated list of social actions to filter by
-        # @var string
+        # @var str
         self.actionTypeIn = actionTypeIn
 
 
@@ -4604,7 +4626,7 @@ class KalturaSocialFriendActivityFilter(KalturaFilter):
 # @subpackage Client
 class KalturaBaseSegmentationTypeFilter(KalturaFilter):
     def __init__(self,
-            orderBy=NotImplemented):
+            orderBy = NotImplemented):
         KalturaFilter.__init__(self,
             orderBy)
 
@@ -4628,28 +4650,28 @@ class KalturaSegmentationTypeFilter(KalturaBaseSegmentationTypeFilter):
     """Filter for segmentation types"""
 
     def __init__(self,
-            orderBy=NotImplemented,
-            idIn=NotImplemented,
-            kSql=NotImplemented,
-            nameContain=NotImplemented,
-            assetUserRuleIdIn=NotImplemented):
+            orderBy = NotImplemented,
+            idIn = NotImplemented,
+            kSql = NotImplemented,
+            nameContain = NotImplemented,
+            assetUserRuleIdIn = NotImplemented):
         KalturaBaseSegmentationTypeFilter.__init__(self,
             orderBy)
 
         # Comma separated segmentation types identifiers
-        # @var string
+        # @var str
         self.idIn = idIn
 
         # KSQL expression
-        # @var string
+        # @var str
         self.kSql = kSql
 
         # Name of segment contains specific string value
-        # @var string
+        # @var str
         self.nameContain = nameContain
 
         # comma-separated list of KalturaSegmentationType.assetUserRuleId values
-        # @var string
+        # @var str
         self.assetUserRuleIdIn = assetUserRuleIdIn
 
 
@@ -4702,13 +4724,13 @@ class KalturaSegmentationTypeFilter(KalturaBaseSegmentationTypeFilter):
 # @subpackage Client
 class KalturaSegmentValueFilter(KalturaBaseSegmentationTypeFilter):
     def __init__(self,
-            orderBy=NotImplemented,
-            idIn=NotImplemented):
+            orderBy = NotImplemented,
+            idIn = NotImplemented):
         KalturaBaseSegmentationTypeFilter.__init__(self,
             orderBy)
 
         # Comma separated segmentation identifiers
-        # @var string
+        # @var str
         self.idIn = idIn
 
 
@@ -4737,13 +4759,13 @@ class KalturaSegmentValueFilter(KalturaBaseSegmentationTypeFilter):
 # @subpackage Client
 class KalturaHouseholdSegmentFilter(KalturaFilter):
     def __init__(self,
-            orderBy=NotImplemented,
-            kSql=NotImplemented):
+            orderBy = NotImplemented,
+            kSql = NotImplemented):
         KalturaFilter.__init__(self,
             orderBy)
 
         # KSQL expression
-        # @var string
+        # @var str
         self.kSql = kSql
 
 
@@ -4774,18 +4796,18 @@ class KalturaUserSegmentFilter(KalturaFilter):
     """Filter for user segments"""
 
     def __init__(self,
-            orderBy=NotImplemented,
-            userIdEqual=NotImplemented,
-            kSql=NotImplemented):
+            orderBy = NotImplemented,
+            userIdEqual = NotImplemented,
+            kSql = NotImplemented):
         KalturaFilter.__init__(self,
             orderBy)
 
         # User ID
-        # @var string
+        # @var str
         self.userIdEqual = userIdEqual
 
         # KSQL expression
-        # @var string
+        # @var str
         self.kSql = kSql
 
 
@@ -4820,13 +4842,105 @@ class KalturaUserSegmentFilter(KalturaFilter):
 
 # @package Kaltura
 # @subpackage Client
+class KalturaWatchBasedRecommendationsProfileFilter(KalturaFilter):
+    def __init__(self,
+            orderBy = NotImplemented):
+        KalturaFilter.__init__(self,
+            orderBy)
+
+
+    PROPERTY_LOADERS = {
+    }
+
+    def fromXml(self, node):
+        KalturaFilter.fromXml(self, node)
+        self.fromXmlImpl(node, KalturaWatchBasedRecommendationsProfileFilter.PROPERTY_LOADERS)
+
+    def toParams(self):
+        kparams = KalturaFilter.toParams(self)
+        kparams.put("objectType", "KalturaWatchBasedRecommendationsProfileFilter")
+        return kparams
+
+
+# @package Kaltura
+# @subpackage Client
+class KalturaWatchBasedRecommendationsProfileByIdsFilter(KalturaWatchBasedRecommendationsProfileFilter):
+    def __init__(self,
+            orderBy = NotImplemented,
+            idIn = NotImplemented):
+        KalturaWatchBasedRecommendationsProfileFilter.__init__(self,
+            orderBy)
+
+        # Comma seperated watch based recommendation profile ids
+        # @var str
+        self.idIn = idIn
+
+
+    PROPERTY_LOADERS = {
+        'idIn': getXmlNodeText, 
+    }
+
+    def fromXml(self, node):
+        KalturaWatchBasedRecommendationsProfileFilter.fromXml(self, node)
+        self.fromXmlImpl(node, KalturaWatchBasedRecommendationsProfileByIdsFilter.PROPERTY_LOADERS)
+
+    def toParams(self):
+        kparams = KalturaWatchBasedRecommendationsProfileFilter.toParams(self)
+        kparams.put("objectType", "KalturaWatchBasedRecommendationsProfileByIdsFilter")
+        kparams.addStringIfDefined("idIn", self.idIn)
+        return kparams
+
+    def getIdIn(self):
+        return self.idIn
+
+    def setIdIn(self, newIdIn):
+        self.idIn = newIdIn
+
+
+# @package Kaltura
+# @subpackage Client
+class KalturaWatchBasedRecommendationsProfileByNameFilter(KalturaWatchBasedRecommendationsProfileFilter):
+    def __init__(self,
+            orderBy = NotImplemented,
+            nameContains = NotImplemented):
+        KalturaWatchBasedRecommendationsProfileFilter.__init__(self,
+            orderBy)
+
+        # A string that is included in the profile name
+        # @var str
+        self.nameContains = nameContains
+
+
+    PROPERTY_LOADERS = {
+        'nameContains': getXmlNodeText, 
+    }
+
+    def fromXml(self, node):
+        KalturaWatchBasedRecommendationsProfileFilter.fromXml(self, node)
+        self.fromXmlImpl(node, KalturaWatchBasedRecommendationsProfileByNameFilter.PROPERTY_LOADERS)
+
+    def toParams(self):
+        kparams = KalturaWatchBasedRecommendationsProfileFilter.toParams(self)
+        kparams.put("objectType", "KalturaWatchBasedRecommendationsProfileByNameFilter")
+        kparams.addStringIfDefined("nameContains", self.nameContains)
+        return kparams
+
+    def getNameContains(self):
+        return self.nameContains
+
+    def setNameContains(self, newNameContains):
+        self.nameContains = newNameContains
+
+
+# @package Kaltura
+# @subpackage Client
 class KalturaAssetFilePpvFilter(KalturaFilter):
     """Filtering Asset Struct Metas"""
 
     def __init__(self,
-            orderBy=NotImplemented,
-            assetIdEqual=NotImplemented,
-            assetFileIdEqual=NotImplemented):
+            orderBy = NotImplemented,
+            assetIdEqual = NotImplemented,
+            assetFileIdEqual = NotImplemented):
         KalturaFilter.__init__(self,
             orderBy)
 
@@ -4874,18 +4988,18 @@ class KalturaCollectionFilter(KalturaFilter):
     """Collection Filter"""
 
     def __init__(self,
-            orderBy=NotImplemented,
-            collectionIdIn=NotImplemented,
-            mediaFileIdEqual=NotImplemented,
-            couponGroupIdEqual=NotImplemented,
-            alsoInactive=NotImplemented,
-            assetUserRuleIdIn=NotImplemented,
-            nameContains=NotImplemented):
+            orderBy = NotImplemented,
+            collectionIdIn = NotImplemented,
+            mediaFileIdEqual = NotImplemented,
+            couponGroupIdEqual = NotImplemented,
+            alsoInactive = NotImplemented,
+            assetUserRuleIdIn = NotImplemented,
+            nameContains = NotImplemented):
         KalturaFilter.__init__(self,
             orderBy)
 
         # Comma separated collection IDs
-        # @var string
+        # @var str
         self.collectionIdIn = collectionIdIn
 
         # Media-file ID to get the collections by
@@ -4901,11 +5015,11 @@ class KalturaCollectionFilter(KalturaFilter):
         self.alsoInactive = alsoInactive
 
         # comma-separated list of KalturaCollection.assetUserRuleId values.  Matching KalturaCollection objects will be returned by the filter.
-        # @var string
+        # @var str
         self.assetUserRuleIdIn = assetUserRuleIdIn
 
         # A string that is included in the collection name
-        # @var string
+        # @var str
         self.nameContains = nameContains
 
 
@@ -4972,20 +5086,75 @@ class KalturaCollectionFilter(KalturaFilter):
 
 # @package Kaltura
 # @subpackage Client
+class KalturaAssociatedShopEntities(KalturaObjectBase):
+    """This type will be used in KalturaFilter searches to filter entities by shop"""
+
+    def __init__(self,
+            assetUserRuleIdIn = NotImplemented,
+            includeNullAssetUserRuleId = NotImplemented):
+        KalturaObjectBase.__init__(self)
+
+        # comma-separated list of assetUserRuleId values. Matching entities will be returned by the filter.
+        # @var str
+        self.assetUserRuleIdIn = assetUserRuleIdIn
+
+        # If true, filter will return entities with null/empty assetUserRuleId value, in addition to any entities whose assetUserRuleId value matches the assetUserRuleIdIn parameter.
+        #             If false (or field is not specified) filter will return only entities whose assetUserRuleId value matches the assetUserRuleIdIn parameter.
+        # @var bool
+        self.includeNullAssetUserRuleId = includeNullAssetUserRuleId
+
+
+    PROPERTY_LOADERS = {
+        'assetUserRuleIdIn': getXmlNodeText, 
+        'includeNullAssetUserRuleId': getXmlNodeBool, 
+    }
+
+    def fromXml(self, node):
+        KalturaObjectBase.fromXml(self, node)
+        self.fromXmlImpl(node, KalturaAssociatedShopEntities.PROPERTY_LOADERS)
+
+    def toParams(self):
+        kparams = KalturaObjectBase.toParams(self)
+        kparams.put("objectType", "KalturaAssociatedShopEntities")
+        kparams.addStringIfDefined("assetUserRuleIdIn", self.assetUserRuleIdIn)
+        kparams.addBoolIfDefined("includeNullAssetUserRuleId", self.includeNullAssetUserRuleId)
+        return kparams
+
+    def getAssetUserRuleIdIn(self):
+        return self.assetUserRuleIdIn
+
+    def setAssetUserRuleIdIn(self, newAssetUserRuleIdIn):
+        self.assetUserRuleIdIn = newAssetUserRuleIdIn
+
+    def getIncludeNullAssetUserRuleId(self):
+        return self.includeNullAssetUserRuleId
+
+    def setIncludeNullAssetUserRuleId(self, newIncludeNullAssetUserRuleId):
+        self.includeNullAssetUserRuleId = newIncludeNullAssetUserRuleId
+
+
+# @package Kaltura
+# @subpackage Client
 class KalturaDiscountDetailsFilter(KalturaFilter):
     def __init__(self,
-            orderBy=NotImplemented,
-            idIn=NotImplemented):
+            orderBy = NotImplemented,
+            idIn = NotImplemented,
+            associatedShopEntities = NotImplemented):
         KalturaFilter.__init__(self,
             orderBy)
 
         # Comma separated discount codes
-        # @var string
+        # @var str
         self.idIn = idIn
+
+        # filter all discountDetails by associate shop entities
+        # @var KalturaAssociatedShopEntities
+        self.associatedShopEntities = associatedShopEntities
 
 
     PROPERTY_LOADERS = {
         'idIn': getXmlNodeText, 
+        'associatedShopEntities': (KalturaObjectFactory.create, 'KalturaAssociatedShopEntities'), 
     }
 
     def fromXml(self, node):
@@ -4996,6 +5165,7 @@ class KalturaDiscountDetailsFilter(KalturaFilter):
         kparams = KalturaFilter.toParams(self)
         kparams.put("objectType", "KalturaDiscountDetailsFilter")
         kparams.addStringIfDefined("idIn", self.idIn)
+        kparams.addObjectIfDefined("associatedShopEntities", self.associatedShopEntities)
         return kparams
 
     def getIdIn(self):
@@ -5004,6 +5174,12 @@ class KalturaDiscountDetailsFilter(KalturaFilter):
     def setIdIn(self, newIdIn):
         self.idIn = newIdIn
 
+    def getAssociatedShopEntities(self):
+        return self.associatedShopEntities
+
+    def setAssociatedShopEntities(self, newAssociatedShopEntities):
+        self.associatedShopEntities = newAssociatedShopEntities
+
 
 # @package Kaltura
 # @subpackage Client
@@ -5011,17 +5187,17 @@ class KalturaPpvFilter(KalturaFilter):
     """Filtering Asset Struct Metas"""
 
     def __init__(self,
-            orderBy=NotImplemented,
-            idIn=NotImplemented,
-            couponGroupIdEqual=NotImplemented,
-            alsoInactive=NotImplemented,
-            nameContains=NotImplemented,
-            assetUserRuleIdIn=NotImplemented):
+            orderBy = NotImplemented,
+            idIn = NotImplemented,
+            couponGroupIdEqual = NotImplemented,
+            alsoInactive = NotImplemented,
+            nameContains = NotImplemented,
+            assetUserRuleIdIn = NotImplemented):
         KalturaFilter.__init__(self,
             orderBy)
 
         # Comma separated identifiers
-        # @var string
+        # @var str
         self.idIn = idIn
 
         # couponGroupIdEqual
@@ -5033,11 +5209,11 @@ class KalturaPpvFilter(KalturaFilter):
         self.alsoInactive = alsoInactive
 
         # A string that is included in the ppv name
-        # @var string
+        # @var str
         self.nameContains = nameContains
 
         # comma-separated list of KalturaPpv.assetUserRuleId values.  Matching KalturaPpv objects will be returned by the filter.
-        # @var string
+        # @var str
         self.assetUserRuleIdIn = assetUserRuleIdIn
 
 
@@ -5098,13 +5274,13 @@ class KalturaPpvFilter(KalturaFilter):
 # @subpackage Client
 class KalturaPreviewModuleFilter(KalturaFilter):
     def __init__(self,
-            orderBy=NotImplemented,
-            idIn=NotImplemented):
+            orderBy = NotImplemented,
+            idIn = NotImplemented):
         KalturaFilter.__init__(self,
             orderBy)
 
         # Comma separated discount codes
-        # @var string
+        # @var str
         self.idIn = idIn
 
 
@@ -5133,13 +5309,13 @@ class KalturaPreviewModuleFilter(KalturaFilter):
 # @subpackage Client
 class KalturaPriceDetailsFilter(KalturaFilter):
     def __init__(self,
-            orderBy=NotImplemented,
-            idIn=NotImplemented):
+            orderBy = NotImplemented,
+            idIn = NotImplemented):
         KalturaFilter.__init__(self,
             orderBy)
 
         # Comma separated price identifiers
-        # @var string
+        # @var str
         self.idIn = idIn
 
 
@@ -5168,13 +5344,13 @@ class KalturaPriceDetailsFilter(KalturaFilter):
 # @subpackage Client
 class KalturaPricePlanFilter(KalturaFilter):
     def __init__(self,
-            orderBy=NotImplemented,
-            idIn=NotImplemented):
+            orderBy = NotImplemented,
+            idIn = NotImplemented):
         KalturaFilter.__init__(self,
             orderBy)
 
         # Comma separated price plans identifiers
-        # @var string
+        # @var str
         self.idIn = idIn
 
 
@@ -5205,9 +5381,9 @@ class KalturaProgramAssetGroupOfferFilter(KalturaFilter):
     """Program asset group offer filter"""
 
     def __init__(self,
-            orderBy=NotImplemented,
-            alsoInactive=NotImplemented,
-            nameContains=NotImplemented):
+            orderBy = NotImplemented,
+            alsoInactive = NotImplemented,
+            nameContains = NotImplemented):
         KalturaFilter.__init__(self,
             orderBy)
 
@@ -5216,7 +5392,7 @@ class KalturaProgramAssetGroupOfferFilter(KalturaFilter):
         self.alsoInactive = alsoInactive
 
         # A string that is included in the PAGO name
-        # @var string
+        # @var str
         self.nameContains = nameContains
 
 
@@ -5255,17 +5431,17 @@ class KalturaProgramAssetGroupOfferIdInFilter(KalturaProgramAssetGroupOfferFilte
     """Program asset group offer filter"""
 
     def __init__(self,
-            orderBy=NotImplemented,
-            alsoInactive=NotImplemented,
-            nameContains=NotImplemented,
-            idIn=NotImplemented):
+            orderBy = NotImplemented,
+            alsoInactive = NotImplemented,
+            nameContains = NotImplemented,
+            idIn = NotImplemented):
         KalturaProgramAssetGroupOfferFilter.__init__(self,
             orderBy,
             alsoInactive,
             nameContains)
 
         # Comma separated asset group offer identifiers
-        # @var string
+        # @var str
         self.idIn = idIn
 
 
@@ -5294,19 +5470,19 @@ class KalturaProgramAssetGroupOfferIdInFilter(KalturaProgramAssetGroupOfferFilte
 # @subpackage Client
 class KalturaSubscriptionSetFilter(KalturaFilter):
     def __init__(self,
-            orderBy=NotImplemented,
-            idIn=NotImplemented,
-            subscriptionIdContains=NotImplemented,
-            typeEqual=NotImplemented):
+            orderBy = NotImplemented,
+            idIn = NotImplemented,
+            subscriptionIdContains = NotImplemented,
+            typeEqual = NotImplemented):
         KalturaFilter.__init__(self,
             orderBy)
 
         # Comma separated identifiers
-        # @var string
+        # @var str
         self.idIn = idIn
 
         # Comma separated subscription identifiers
-        # @var string
+        # @var str
         self.subscriptionIdContains = subscriptionIdContains
 
         # Subscription Type
@@ -5355,11 +5531,11 @@ class KalturaSubscriptionSetFilter(KalturaFilter):
 # @subpackage Client
 class KalturaSubscriptionDependencySetFilter(KalturaSubscriptionSetFilter):
     def __init__(self,
-            orderBy=NotImplemented,
-            idIn=NotImplemented,
-            subscriptionIdContains=NotImplemented,
-            typeEqual=NotImplemented,
-            baseSubscriptionIdIn=NotImplemented):
+            orderBy = NotImplemented,
+            idIn = NotImplemented,
+            subscriptionIdContains = NotImplemented,
+            typeEqual = NotImplemented,
+            baseSubscriptionIdIn = NotImplemented):
         KalturaSubscriptionSetFilter.__init__(self,
             orderBy,
             idIn,
@@ -5367,7 +5543,7 @@ class KalturaSubscriptionDependencySetFilter(KalturaSubscriptionSetFilter):
             typeEqual)
 
         # Comma separated identifiers
-        # @var string
+        # @var str
         self.baseSubscriptionIdIn = baseSubscriptionIdIn
 
 
@@ -5396,23 +5572,23 @@ class KalturaSubscriptionDependencySetFilter(KalturaSubscriptionSetFilter):
 # @subpackage Client
 class KalturaSubscriptionFilter(KalturaFilter):
     def __init__(self,
-            orderBy=NotImplemented,
-            subscriptionIdIn=NotImplemented,
-            mediaFileIdEqual=NotImplemented,
-            externalIdIn=NotImplemented,
-            couponGroupIdEqual=NotImplemented,
-            previewModuleIdEqual=NotImplemented,
-            pricePlanIdEqual=NotImplemented,
-            channelIdEqual=NotImplemented,
-            kSql=NotImplemented,
-            alsoInactive=NotImplemented,
-            dependencyTypeIn=NotImplemented,
-            nameContains=NotImplemented):
+            orderBy = NotImplemented,
+            subscriptionIdIn = NotImplemented,
+            mediaFileIdEqual = NotImplemented,
+            externalIdIn = NotImplemented,
+            couponGroupIdEqual = NotImplemented,
+            previewModuleIdEqual = NotImplemented,
+            pricePlanIdEqual = NotImplemented,
+            channelIdEqual = NotImplemented,
+            kSql = NotImplemented,
+            alsoInactive = NotImplemented,
+            dependencyTypeIn = NotImplemented,
+            nameContains = NotImplemented):
         KalturaFilter.__init__(self,
             orderBy)
 
         # Comma separated subscription IDs to get the subscriptions by
-        # @var string
+        # @var str
         self.subscriptionIdIn = subscriptionIdIn
 
         # Media-file ID to get the subscriptions by
@@ -5420,7 +5596,7 @@ class KalturaSubscriptionFilter(KalturaFilter):
         self.mediaFileIdEqual = mediaFileIdEqual
 
         # Comma separated subscription external IDs to get the subscriptions by
-        # @var string
+        # @var str
         self.externalIdIn = externalIdIn
 
         # couponGroupIdEqual
@@ -5440,7 +5616,7 @@ class KalturaSubscriptionFilter(KalturaFilter):
         self.channelIdEqual = channelIdEqual
 
         # KSQL expression
-        # @var string
+        # @var str
         self.kSql = kSql
 
         # return also inactive
@@ -5449,11 +5625,11 @@ class KalturaSubscriptionFilter(KalturaFilter):
 
         # comma separated values of KalturaSubscriptionDependencyType 
         #             return subscriptions associated by their subscription sets dependency Type
-        # @var string
+        # @var str
         self.dependencyTypeIn = dependencyTypeIn
 
         # A string that is included in the subscription name
-        # @var string
+        # @var str
         self.nameContains = nameContains
 
 
@@ -5562,8 +5738,9 @@ class KalturaSubscriptionFilter(KalturaFilter):
 # @subpackage Client
 class KalturaUsageModuleFilter(KalturaFilter):
     def __init__(self,
-            orderBy=NotImplemented,
-            idEqual=NotImplemented):
+            orderBy = NotImplemented,
+            idEqual = NotImplemented,
+            associatedShopEntities = NotImplemented):
         KalturaFilter.__init__(self,
             orderBy)
 
@@ -5571,9 +5748,14 @@ class KalturaUsageModuleFilter(KalturaFilter):
         # @var int
         self.idEqual = idEqual
 
+        # filter all usageModules by associate shop entities
+        # @var KalturaAssociatedShopEntities
+        self.associatedShopEntities = associatedShopEntities
+
 
     PROPERTY_LOADERS = {
         'idEqual': getXmlNodeInt, 
+        'associatedShopEntities': (KalturaObjectFactory.create, 'KalturaAssociatedShopEntities'), 
     }
 
     def fromXml(self, node):
@@ -5584,6 +5766,7 @@ class KalturaUsageModuleFilter(KalturaFilter):
         kparams = KalturaFilter.toParams(self)
         kparams.put("objectType", "KalturaUsageModuleFilter")
         kparams.addIntIfDefined("idEqual", self.idEqual)
+        kparams.addObjectIfDefined("associatedShopEntities", self.associatedShopEntities)
         return kparams
 
     def getIdEqual(self):
@@ -5592,6 +5775,12 @@ class KalturaUsageModuleFilter(KalturaFilter):
     def setIdEqual(self, newIdEqual):
         self.idEqual = newIdEqual
 
+    def getAssociatedShopEntities(self):
+        return self.associatedShopEntities
+
+    def setAssociatedShopEntities(self, newAssociatedShopEntities):
+        self.associatedShopEntities = newAssociatedShopEntities
+
 
 # @package Kaltura
 # @subpackage Client
@@ -5599,8 +5788,8 @@ class KalturaPartnerConfigurationFilter(KalturaFilter):
     """Partner configuration filter"""
 
     def __init__(self,
-            orderBy=NotImplemented,
-            partnerConfigurationTypeEqual=NotImplemented):
+            orderBy = NotImplemented,
+            partnerConfigurationTypeEqual = NotImplemented):
         KalturaFilter.__init__(self,
             orderBy)
 
@@ -5634,14 +5823,14 @@ class KalturaPartnerConfigurationFilter(KalturaFilter):
 # @subpackage Client
 class KalturaPersonalListFilter(KalturaFilter):
     def __init__(self,
-            orderBy=NotImplemented,
-            partnerListTypeIn=NotImplemented):
+            orderBy = NotImplemented,
+            partnerListTypeIn = NotImplemented):
         KalturaFilter.__init__(self,
             orderBy)
 
         # Comma separated list of partner list types to search within. 
         #             If omitted - all types should be included.
-        # @var string
+        # @var str
         self.partnerListTypeIn = partnerListTypeIn
 
 
@@ -5672,13 +5861,13 @@ class KalturaAnnouncementFilter(KalturaFilter):
     """order announcements"""
 
     def __init__(self,
-            orderBy=NotImplemented,
-            idIn=NotImplemented):
+            orderBy = NotImplemented,
+            idIn = NotImplemented):
         KalturaFilter.__init__(self,
             orderBy)
 
         # A list of comma separated announcement ids.
-        # @var string
+        # @var str
         self.idIn = idIn
 
 
@@ -5707,7 +5896,7 @@ class KalturaAnnouncementFilter(KalturaFilter):
 # @subpackage Client
 class KalturaReminderFilter(KalturaFilter):
     def __init__(self,
-            orderBy=NotImplemented):
+            orderBy = NotImplemented):
         KalturaFilter.__init__(self,
             orderBy)
 
@@ -5729,7 +5918,7 @@ class KalturaReminderFilter(KalturaFilter):
 # @subpackage Client
 class KalturaAssetReminderFilter(KalturaReminderFilter):
     def __init__(self,
-            orderBy=NotImplemented):
+            orderBy = NotImplemented):
         KalturaReminderFilter.__init__(self,
             orderBy)
 
@@ -5751,19 +5940,19 @@ class KalturaAssetReminderFilter(KalturaReminderFilter):
 # @subpackage Client
 class KalturaSeasonsReminderFilter(KalturaReminderFilter):
     def __init__(self,
-            orderBy=NotImplemented,
-            seriesIdEqual=NotImplemented,
-            seasonNumberIn=NotImplemented,
-            epgChannelIdEqual=NotImplemented):
+            orderBy = NotImplemented,
+            seriesIdEqual = NotImplemented,
+            seasonNumberIn = NotImplemented,
+            epgChannelIdEqual = NotImplemented):
         KalturaReminderFilter.__init__(self,
             orderBy)
 
         # Series ID
-        # @var string
+        # @var str
         self.seriesIdEqual = seriesIdEqual
 
         # Comma separated season numbers
-        # @var string
+        # @var str
         self.seasonNumberIn = seasonNumberIn
 
         # EPG channel ID
@@ -5812,14 +6001,14 @@ class KalturaSeasonsReminderFilter(KalturaReminderFilter):
 # @subpackage Client
 class KalturaSeriesReminderFilter(KalturaReminderFilter):
     def __init__(self,
-            orderBy=NotImplemented,
-            seriesIdIn=NotImplemented,
-            epgChannelIdEqual=NotImplemented):
+            orderBy = NotImplemented,
+            seriesIdIn = NotImplemented,
+            epgChannelIdEqual = NotImplemented):
         KalturaReminderFilter.__init__(self,
             orderBy)
 
         # Comma separated series IDs
-        # @var string
+        # @var str
         self.seriesIdIn = seriesIdIn
 
         # EPG channel ID
@@ -5860,14 +6049,14 @@ class KalturaSeriesReminderFilter(KalturaReminderFilter):
 # @subpackage Client
 class KalturaEngagementFilter(KalturaFilter):
     def __init__(self,
-            orderBy=NotImplemented,
-            typeIn=NotImplemented,
-            sendTimeGreaterThanOrEqual=NotImplemented):
+            orderBy = NotImplemented,
+            typeIn = NotImplemented,
+            sendTimeGreaterThanOrEqual = NotImplemented):
         KalturaFilter.__init__(self,
             orderBy)
 
         # List of inbox message types to search within.
-        # @var string
+        # @var str
         self.typeIn = typeIn
 
         # SendTime GreaterThanOrEqual
@@ -5908,7 +6097,7 @@ class KalturaEngagementFilter(KalturaFilter):
 # @subpackage Client
 class KalturaFollowTvSeriesFilter(KalturaFilter):
     def __init__(self,
-            orderBy=NotImplemented):
+            orderBy = NotImplemented):
         KalturaFilter.__init__(self,
             orderBy)
 
@@ -5930,15 +6119,15 @@ class KalturaFollowTvSeriesFilter(KalturaFilter):
 # @subpackage Client
 class KalturaInboxMessageFilter(KalturaFilter):
     def __init__(self,
-            orderBy=NotImplemented,
-            typeIn=NotImplemented,
-            createdAtGreaterThanOrEqual=NotImplemented,
-            createdAtLessThanOrEqual=NotImplemented):
+            orderBy = NotImplemented,
+            typeIn = NotImplemented,
+            createdAtGreaterThanOrEqual = NotImplemented,
+            createdAtLessThanOrEqual = NotImplemented):
         KalturaFilter.__init__(self,
             orderBy)
 
         # List of inbox message types to search within.
-        # @var string
+        # @var str
         self.typeIn = typeIn
 
         # createdAtGreaterThanOrEqual
@@ -5991,7 +6180,7 @@ class KalturaInboxMessageFilter(KalturaFilter):
 # @subpackage Client
 class KalturaPersonalFeedFilter(KalturaFilter):
     def __init__(self,
-            orderBy=NotImplemented):
+            orderBy = NotImplemented):
         KalturaFilter.__init__(self,
             orderBy)
 
@@ -6013,7 +6202,7 @@ class KalturaPersonalFeedFilter(KalturaFilter):
 # @subpackage Client
 class KalturaSmsAdapterProfileFilter(KalturaFilter):
     def __init__(self,
-            orderBy=NotImplemented):
+            orderBy = NotImplemented):
         KalturaFilter.__init__(self,
             orderBy)
 
@@ -6035,7 +6224,7 @@ class KalturaSmsAdapterProfileFilter(KalturaFilter):
 # @subpackage Client
 class KalturaTopicFilter(KalturaFilter):
     def __init__(self,
-            orderBy=NotImplemented):
+            orderBy = NotImplemented):
         KalturaFilter.__init__(self,
             orderBy)
 
@@ -6077,8 +6266,8 @@ class KalturaSubscribeReference(KalturaObjectBase):
 # @subpackage Client
 class KalturaTopicNotificationFilter(KalturaFilter):
     def __init__(self,
-            orderBy=NotImplemented,
-            subscribeReference=NotImplemented):
+            orderBy = NotImplemented,
+            subscribeReference = NotImplemented):
         KalturaFilter.__init__(self,
             orderBy)
 
@@ -6112,7 +6301,7 @@ class KalturaTopicNotificationFilter(KalturaFilter):
 # @subpackage Client
 class KalturaSubscriptionSubscribeReference(KalturaSubscribeReference):
     def __init__(self,
-            subscriptionId=NotImplemented):
+            subscriptionId = NotImplemented):
         KalturaSubscribeReference.__init__(self)
 
         # Subscription ID
@@ -6145,8 +6334,8 @@ class KalturaSubscriptionSubscribeReference(KalturaSubscribeReference):
 # @subpackage Client
 class KalturaTopicNotificationMessageFilter(KalturaFilter):
     def __init__(self,
-            orderBy=NotImplemented,
-            topicNotificationIdEqual=NotImplemented):
+            orderBy = NotImplemented,
+            topicNotificationIdEqual = NotImplemented):
         KalturaFilter.__init__(self,
             orderBy)
 
@@ -6180,25 +6369,25 @@ class KalturaTopicNotificationMessageFilter(KalturaFilter):
 # @subpackage Client
 class KalturaIngestByCompoundFilter(KalturaFilter):
     def __init__(self,
-            orderBy=NotImplemented,
-            ingestNameContains=NotImplemented,
-            ingestedByUserIdIn=NotImplemented,
-            ingestStatusIn=NotImplemented,
-            createdDateGreaterThan=NotImplemented,
-            createdDateSmallerThan=NotImplemented):
+            orderBy = NotImplemented,
+            ingestNameContains = NotImplemented,
+            ingestedByUserIdIn = NotImplemented,
+            ingestStatusIn = NotImplemented,
+            createdDateGreaterThan = NotImplemented,
+            createdDateSmallerThan = NotImplemented):
         KalturaFilter.__init__(self,
             orderBy)
 
         # A string that is included in the ingest file name
-        # @var string
+        # @var str
         self.ingestNameContains = ingestNameContains
 
         # Comma seperated user ids
-        # @var string
+        # @var str
         self.ingestedByUserIdIn = ingestedByUserIdIn
 
         # Comma seperated valid stutuses
-        # @var string
+        # @var str
         self.ingestStatusIn = ingestStatusIn
 
         # Ingest created date greater then this value. . Date and time represented as epoch.
@@ -6267,13 +6456,13 @@ class KalturaIngestByCompoundFilter(KalturaFilter):
 # @subpackage Client
 class KalturaIngestByIdsFilter(KalturaFilter):
     def __init__(self,
-            orderBy=NotImplemented,
-            ingestIdIn=NotImplemented):
+            orderBy = NotImplemented,
+            ingestIdIn = NotImplemented):
         KalturaFilter.__init__(self,
             orderBy)
 
         # Comma seperated ingest profile ids
-        # @var string
+        # @var str
         self.ingestIdIn = ingestIdIn
 
 
@@ -6302,7 +6491,7 @@ class KalturaIngestByIdsFilter(KalturaFilter):
 # @subpackage Client
 class KalturaIngestEpgProgramResultFilter(KalturaFilter):
     def __init__(self,
-            orderBy=NotImplemented):
+            orderBy = NotImplemented):
         KalturaFilter.__init__(self,
             orderBy)
 
@@ -6324,15 +6513,15 @@ class KalturaIngestEpgProgramResultFilter(KalturaFilter):
 # @subpackage Client
 class KalturaIngestProgramResultsByRefineFilter(KalturaIngestEpgProgramResultFilter):
     def __init__(self,
-            orderBy=NotImplemented,
-            ingestStatusIn=NotImplemented,
-            startDateGreaterThan=NotImplemented,
-            startDateSmallerThan=NotImplemented):
+            orderBy = NotImplemented,
+            ingestStatusIn = NotImplemented,
+            startDateGreaterThan = NotImplemented,
+            startDateSmallerThan = NotImplemented):
         KalturaIngestEpgProgramResultFilter.__init__(self,
             orderBy)
 
         # Comma seperated valid statuses - only &#39;FAILURE&#39;, &#39;WARNING&#39; and &#39;SUCCESS&#39; are valid strings. No repetitions are allowed.
-        # @var string
+        # @var str
         self.ingestStatusIn = ingestStatusIn
 
         # Program EPG start date greater then this value. Date and time represented as epoch.
@@ -6385,11 +6574,11 @@ class KalturaIngestProgramResultsByRefineFilter(KalturaIngestEpgProgramResultFil
 # @subpackage Client
 class KalturaIngestProgramResultsByCombinedFieldsFilter(KalturaIngestProgramResultsByRefineFilter):
     def __init__(self,
-            orderBy=NotImplemented,
-            ingestStatusIn=NotImplemented,
-            startDateGreaterThan=NotImplemented,
-            startDateSmallerThan=NotImplemented,
-            combinedFieldsValue=NotImplemented):
+            orderBy = NotImplemented,
+            ingestStatusIn = NotImplemented,
+            startDateGreaterThan = NotImplemented,
+            startDateSmallerThan = NotImplemented,
+            combinedFieldsValue = NotImplemented):
         KalturaIngestProgramResultsByRefineFilter.__init__(self,
             orderBy,
             ingestStatusIn,
@@ -6398,7 +6587,7 @@ class KalturaIngestProgramResultsByCombinedFieldsFilter(KalturaIngestProgramResu
 
         # String value to substring search by ProgramID or ExternalProgramID or LinearChannelID.
         #             Up to 20 ids are allowed.
-        # @var string
+        # @var str
         self.combinedFieldsValue = combinedFieldsValue
 
 
@@ -6427,11 +6616,11 @@ class KalturaIngestProgramResultsByCombinedFieldsFilter(KalturaIngestProgramResu
 # @subpackage Client
 class KalturaIngestProgramResultsByCompoundFilter(KalturaIngestProgramResultsByRefineFilter):
     def __init__(self,
-            orderBy=NotImplemented,
-            ingestStatusIn=NotImplemented,
-            startDateGreaterThan=NotImplemented,
-            startDateSmallerThan=NotImplemented,
-            linearChannelIdIn=NotImplemented):
+            orderBy = NotImplemented,
+            ingestStatusIn = NotImplemented,
+            startDateGreaterThan = NotImplemented,
+            startDateSmallerThan = NotImplemented,
+            linearChannelIdIn = NotImplemented):
         KalturaIngestProgramResultsByRefineFilter.__init__(self,
             orderBy,
             ingestStatusIn,
@@ -6440,7 +6629,7 @@ class KalturaIngestProgramResultsByCompoundFilter(KalturaIngestProgramResultsByR
 
         # Comma seperated channel id (the id of the linear channel asset that the program belongs to).
         #             Up to 20 ids are allowed.
-        # @var string
+        # @var str
         self.linearChannelIdIn = linearChannelIdIn
 
 
@@ -6469,14 +6658,14 @@ class KalturaIngestProgramResultsByCompoundFilter(KalturaIngestProgramResultsByR
 # @subpackage Client
 class KalturaIngestProgramResultsByExternalIdsFilter(KalturaIngestEpgProgramResultFilter):
     def __init__(self,
-            orderBy=NotImplemented,
-            externalProgramIdIn=NotImplemented):
+            orderBy = NotImplemented,
+            externalProgramIdIn = NotImplemented):
         KalturaIngestEpgProgramResultFilter.__init__(self,
             orderBy)
 
         # Comma seperated external program id.
         #             Up to 20 ids are allowed.
-        # @var string
+        # @var str
         self.externalProgramIdIn = externalProgramIdIn
 
 
@@ -6505,14 +6694,14 @@ class KalturaIngestProgramResultsByExternalIdsFilter(KalturaIngestEpgProgramResu
 # @subpackage Client
 class KalturaIngestProgramResultsByProgramIdsFilter(KalturaIngestEpgProgramResultFilter):
     def __init__(self,
-            orderBy=NotImplemented,
-            programIdIn=NotImplemented):
+            orderBy = NotImplemented,
+            programIdIn = NotImplemented):
         KalturaIngestEpgProgramResultFilter.__init__(self,
             orderBy)
 
         # Comma seperated program id (the unique ingested program id as it determined by Kaltura BE).
         #             Up to 20 ids are allowed.
-        # @var string
+        # @var str
         self.programIdIn = programIdIn
 
 
@@ -6541,27 +6730,27 @@ class KalturaIngestProgramResultsByProgramIdsFilter(KalturaIngestEpgProgramResul
 # @subpackage Client
 class KalturaVodIngestAssetResultFilter(KalturaFilter):
     def __init__(self,
-            orderBy=NotImplemented,
-            fileNameContains=NotImplemented,
-            assetNameContains=NotImplemented,
-            ingestStatusIn=NotImplemented,
-            ingestDateGreaterThan=NotImplemented,
-            ingestDateSmallerThan=NotImplemented,
-            vodTypeSystemNameIn=NotImplemented,
-            shopAssetUserRuleIdIn=NotImplemented):
+            orderBy = NotImplemented,
+            fileNameContains = NotImplemented,
+            assetNameContains = NotImplemented,
+            ingestStatusIn = NotImplemented,
+            ingestDateGreaterThan = NotImplemented,
+            ingestDateSmallerThan = NotImplemented,
+            vodTypeSystemNameIn = NotImplemented,
+            shopAssetUserRuleIdIn = NotImplemented):
         KalturaFilter.__init__(self,
             orderBy)
 
         # Filter KalturaVodIngestAssetResult elements based on the ingest XML file name or partial name.
-        # @var string
+        # @var str
         self.fileNameContains = fileNameContains
 
         # Filter KalturaVodIngestAssetResult elements based on the asset name or partial name.
-        # @var string
+        # @var str
         self.assetNameContains = assetNameContains
 
         # Comma separated values, representing multiple selection of ingest status state (\&quot;SUCCESS\&quot;,\&quot;FAIL\&quot;,\&quot;SUCCESS_WARNING\&quot;EXTERNAL_FAIL\&quot;).
-        # @var string
+        # @var str
         self.ingestStatusIn = ingestStatusIn
 
         # Filter assets ingested after the greater than value. Date and time represented as epoch.
@@ -6573,11 +6762,11 @@ class KalturaVodIngestAssetResultFilter(KalturaFilter):
         self.ingestDateSmallerThan = ingestDateSmallerThan
 
         # Comma separated asset types, representing multiple selection of VOD asset types (e.g. \&quot;MOVIE\&quot;,\&quot;SERIES\&quot;,\&quot;SEASON\&quot;,\&quot;EPISODE\&quot;...).
-        # @var string
+        # @var str
         self.vodTypeSystemNameIn = vodTypeSystemNameIn
 
         # Comma separated Ids, pointing to AssetUserRules which hold the shop markers (shop provider values)
-        # @var string
+        # @var str
         self.shopAssetUserRuleIdIn = shopAssetUserRuleIdIn
 
 
@@ -6656,7 +6845,7 @@ class KalturaAggregationCountFilter(KalturaRelatedObjectFilter):
     """Kaltura Aggregation CountFilter"""
 
     def __init__(self,
-            orderBy=NotImplemented):
+            orderBy = NotImplemented):
         KalturaRelatedObjectFilter.__init__(self,
             orderBy)
 
@@ -6680,7 +6869,7 @@ class KalturaDynamicListFilter(KalturaFilter):
     """DynamicListFilter"""
 
     def __init__(self,
-            orderBy=NotImplemented):
+            orderBy = NotImplemented):
         KalturaFilter.__init__(self,
             orderBy)
 
@@ -6704,13 +6893,13 @@ class KalturaDynamicListIdInFilter(KalturaDynamicListFilter):
     """DynamicListIdInFilter"""
 
     def __init__(self,
-            orderBy=NotImplemented,
-            idIn=NotImplemented):
+            orderBy = NotImplemented,
+            idIn = NotImplemented):
         KalturaDynamicListFilter.__init__(self,
             orderBy)
 
         # DynamicList identifiers
-        # @var string
+        # @var str
         self.idIn = idIn
 
 
@@ -6741,9 +6930,9 @@ class KalturaDynamicListSearchFilter(KalturaDynamicListFilter):
     """DynamicListSearchFilter"""
 
     def __init__(self,
-            orderBy=NotImplemented,
-            idEqual=NotImplemented,
-            valueEqual=NotImplemented):
+            orderBy = NotImplemented,
+            idEqual = NotImplemented,
+            valueEqual = NotImplemented):
         KalturaDynamicListFilter.__init__(self,
             orderBy)
 
@@ -6752,7 +6941,7 @@ class KalturaDynamicListSearchFilter(KalturaDynamicListFilter):
         self.idEqual = idEqual
 
         # udid value that should be in the DynamicList
-        # @var string
+        # @var str
         self.valueEqual = valueEqual
 
 
@@ -6791,9 +6980,9 @@ class KalturaUdidDynamicListSearchFilter(KalturaDynamicListSearchFilter):
     """UdidDynamicListSearchFilter"""
 
     def __init__(self,
-            orderBy=NotImplemented,
-            idEqual=NotImplemented,
-            valueEqual=NotImplemented):
+            orderBy = NotImplemented,
+            idEqual = NotImplemented,
+            valueEqual = NotImplemented):
         KalturaDynamicListSearchFilter.__init__(self,
             orderBy,
             idEqual,
@@ -6817,13 +7006,13 @@ class KalturaUdidDynamicListSearchFilter(KalturaDynamicListSearchFilter):
 # @subpackage Client
 class KalturaPersistedFilter(KalturaFilter):
     def __init__(self,
-            orderBy=NotImplemented,
-            name=NotImplemented):
+            orderBy = NotImplemented,
+            name = NotImplemented):
         KalturaFilter.__init__(self,
             orderBy)
 
         # Name for the presisted filter. If empty, no action will be done. If has value, the filter will be saved and persisted in user&#39;s search history.
-        # @var string
+        # @var str
         self.name = name
 
 
@@ -6854,12 +7043,12 @@ class KalturaDynamicOrderBy(KalturaObjectBase):
     """Kaltura Asset Order"""
 
     def __init__(self,
-            name=NotImplemented,
-            orderBy=NotImplemented):
+            name = NotImplemented,
+            orderBy = NotImplemented):
         KalturaObjectBase.__init__(self)
 
         # order by name
-        # @var string
+        # @var str
         self.name = name
 
         # order by meta asc/desc
@@ -6920,12 +7109,12 @@ class KalturaBaseAssetOrder(KalturaObjectBase):
 # @subpackage Client
 class KalturaAssetFilter(KalturaPersistedFilter):
     def __init__(self,
-            orderBy=NotImplemented,
-            name=NotImplemented,
-            dynamicOrderBy=NotImplemented,
-            orderingParameters=NotImplemented,
-            trendingDaysEqual=NotImplemented,
-            shouldApplyPriorityGroupsEqual=NotImplemented):
+            orderBy = NotImplemented,
+            name = NotImplemented,
+            dynamicOrderBy = NotImplemented,
+            orderingParameters = NotImplemented,
+            trendingDaysEqual = NotImplemented,
+            shouldApplyPriorityGroupsEqual = NotImplemented):
         KalturaPersistedFilter.__init__(self,
             orderBy,
             name)
@@ -6935,7 +7124,7 @@ class KalturaAssetFilter(KalturaPersistedFilter):
         self.dynamicOrderBy = dynamicOrderBy
 
         # Parameters for asset list sorting.
-        # @var array of KalturaBaseAssetOrder
+        # @var List[KalturaBaseAssetOrder]
         self.orderingParameters = orderingParameters
 
         # Trending Days Equal
@@ -7020,16 +7209,16 @@ class KalturaBaseSearchAssetFilter(KalturaAssetFilter):
     """Kaltura Base Search Asset Filter"""
 
     def __init__(self,
-            orderBy=NotImplemented,
-            name=NotImplemented,
-            dynamicOrderBy=NotImplemented,
-            orderingParameters=NotImplemented,
-            trendingDaysEqual=NotImplemented,
-            shouldApplyPriorityGroupsEqual=NotImplemented,
-            kSql=NotImplemented,
-            groupBy=NotImplemented,
-            groupOrderBy=NotImplemented,
-            groupingOptionEqual=NotImplemented):
+            orderBy = NotImplemented,
+            name = NotImplemented,
+            dynamicOrderBy = NotImplemented,
+            orderingParameters = NotImplemented,
+            trendingDaysEqual = NotImplemented,
+            shouldApplyPriorityGroupsEqual = NotImplemented,
+            kSql = NotImplemented,
+            groupBy = NotImplemented,
+            groupOrderBy = NotImplemented,
+            groupingOptionEqual = NotImplemented):
         KalturaAssetFilter.__init__(self,
             orderBy,
             name,
@@ -7052,11 +7241,11 @@ class KalturaBaseSearchAssetFilter(KalturaAssetFilter):
         #             Logical conjunction: and, or. 
         #             Search values are limited to 20 characters each for the next operators: ~, !~, ^, ^=
         #             (maximum length of entire filter is 4096 characters)
-        # @var string
+        # @var str
         self.kSql = kSql
 
         # groupBy
-        # @var array of KalturaAssetGroupBy
+        # @var List[KalturaAssetGroupBy]
         self.groupBy = groupBy
 
         # order by of grouping
@@ -7117,18 +7306,18 @@ class KalturaBaseSearchAssetFilter(KalturaAssetFilter):
 # @subpackage Client
 class KalturaChannelFilter(KalturaBaseSearchAssetFilter):
     def __init__(self,
-            orderBy=NotImplemented,
-            name=NotImplemented,
-            dynamicOrderBy=NotImplemented,
-            orderingParameters=NotImplemented,
-            trendingDaysEqual=NotImplemented,
-            shouldApplyPriorityGroupsEqual=NotImplemented,
-            kSql=NotImplemented,
-            groupBy=NotImplemented,
-            groupOrderBy=NotImplemented,
-            groupingOptionEqual=NotImplemented,
-            idEqual=NotImplemented,
-            excludeWatched=NotImplemented):
+            orderBy = NotImplemented,
+            name = NotImplemented,
+            dynamicOrderBy = NotImplemented,
+            orderingParameters = NotImplemented,
+            trendingDaysEqual = NotImplemented,
+            shouldApplyPriorityGroupsEqual = NotImplemented,
+            kSql = NotImplemented,
+            groupBy = NotImplemented,
+            groupOrderBy = NotImplemented,
+            groupingOptionEqual = NotImplemented,
+            idEqual = NotImplemented,
+            excludeWatched = NotImplemented):
         KalturaBaseSearchAssetFilter.__init__(self,
             orderBy,
             name,
@@ -7183,17 +7372,17 @@ class KalturaChannelFilter(KalturaBaseSearchAssetFilter):
 # @subpackage Client
 class KalturaPersonalListSearchFilter(KalturaBaseSearchAssetFilter):
     def __init__(self,
-            orderBy=NotImplemented,
-            name=NotImplemented,
-            dynamicOrderBy=NotImplemented,
-            orderingParameters=NotImplemented,
-            trendingDaysEqual=NotImplemented,
-            shouldApplyPriorityGroupsEqual=NotImplemented,
-            kSql=NotImplemented,
-            groupBy=NotImplemented,
-            groupOrderBy=NotImplemented,
-            groupingOptionEqual=NotImplemented,
-            partnerListTypeIn=NotImplemented):
+            orderBy = NotImplemented,
+            name = NotImplemented,
+            dynamicOrderBy = NotImplemented,
+            orderingParameters = NotImplemented,
+            trendingDaysEqual = NotImplemented,
+            shouldApplyPriorityGroupsEqual = NotImplemented,
+            kSql = NotImplemented,
+            groupBy = NotImplemented,
+            groupOrderBy = NotImplemented,
+            groupingOptionEqual = NotImplemented,
+            partnerListTypeIn = NotImplemented):
         KalturaBaseSearchAssetFilter.__init__(self,
             orderBy,
             name,
@@ -7208,7 +7397,7 @@ class KalturaPersonalListSearchFilter(KalturaBaseSearchAssetFilter):
 
         # Comma separated list of partner list types to search within. 
         #             If omitted - all types should be included.
-        # @var string
+        # @var str
         self.partnerListTypeIn = partnerListTypeIn
 
 
@@ -7237,19 +7426,19 @@ class KalturaPersonalListSearchFilter(KalturaBaseSearchAssetFilter):
 # @subpackage Client
 class KalturaRelatedFilter(KalturaBaseSearchAssetFilter):
     def __init__(self,
-            orderBy=NotImplemented,
-            name=NotImplemented,
-            dynamicOrderBy=NotImplemented,
-            orderingParameters=NotImplemented,
-            trendingDaysEqual=NotImplemented,
-            shouldApplyPriorityGroupsEqual=NotImplemented,
-            kSql=NotImplemented,
-            groupBy=NotImplemented,
-            groupOrderBy=NotImplemented,
-            groupingOptionEqual=NotImplemented,
-            idEqual=NotImplemented,
-            typeIn=NotImplemented,
-            excludeWatched=NotImplemented):
+            orderBy = NotImplemented,
+            name = NotImplemented,
+            dynamicOrderBy = NotImplemented,
+            orderingParameters = NotImplemented,
+            trendingDaysEqual = NotImplemented,
+            shouldApplyPriorityGroupsEqual = NotImplemented,
+            kSql = NotImplemented,
+            groupBy = NotImplemented,
+            groupOrderBy = NotImplemented,
+            groupingOptionEqual = NotImplemented,
+            idEqual = NotImplemented,
+            typeIn = NotImplemented,
+            excludeWatched = NotImplemented):
         KalturaBaseSearchAssetFilter.__init__(self,
             orderBy,
             name,
@@ -7269,7 +7458,7 @@ class KalturaRelatedFilter(KalturaBaseSearchAssetFilter):
         # Comma separated list of asset types to search within. 
         #             Possible values: any media type ID (according to media type IDs defined dynamically in the system).
         #             If omitted - same type as the provided asset.
-        # @var string
+        # @var str
         self.typeIn = typeIn
 
         # Exclude watched asset.
@@ -7318,17 +7507,17 @@ class KalturaRelatedFilter(KalturaBaseSearchAssetFilter):
 # @subpackage Client
 class KalturaSearchAssetFilter(KalturaBaseSearchAssetFilter):
     def __init__(self,
-            orderBy=NotImplemented,
-            name=NotImplemented,
-            dynamicOrderBy=NotImplemented,
-            orderingParameters=NotImplemented,
-            trendingDaysEqual=NotImplemented,
-            shouldApplyPriorityGroupsEqual=NotImplemented,
-            kSql=NotImplemented,
-            groupBy=NotImplemented,
-            groupOrderBy=NotImplemented,
-            groupingOptionEqual=NotImplemented,
-            typeIn=NotImplemented):
+            orderBy = NotImplemented,
+            name = NotImplemented,
+            dynamicOrderBy = NotImplemented,
+            orderingParameters = NotImplemented,
+            trendingDaysEqual = NotImplemented,
+            shouldApplyPriorityGroupsEqual = NotImplemented,
+            kSql = NotImplemented,
+            groupBy = NotImplemented,
+            groupOrderBy = NotImplemented,
+            groupingOptionEqual = NotImplemented,
+            typeIn = NotImplemented):
         KalturaBaseSearchAssetFilter.__init__(self,
             orderBy,
             name,
@@ -7345,7 +7534,7 @@ class KalturaSearchAssetFilter(KalturaBaseSearchAssetFilter):
         #             Comma separated list of asset types to search within. 
         #             Possible values: 0 - EPG linear programs entries; 1 - Recordings; Any media type ID (according to media type IDs defined dynamically in the system).
         #             If omitted - all types should be included.
-        # @var string
+        # @var str
         self.typeIn = typeIn
 
 
@@ -7374,18 +7563,18 @@ class KalturaSearchAssetFilter(KalturaBaseSearchAssetFilter):
 # @subpackage Client
 class KalturaSearchAssetListFilter(KalturaSearchAssetFilter):
     def __init__(self,
-            orderBy=NotImplemented,
-            name=NotImplemented,
-            dynamicOrderBy=NotImplemented,
-            orderingParameters=NotImplemented,
-            trendingDaysEqual=NotImplemented,
-            shouldApplyPriorityGroupsEqual=NotImplemented,
-            kSql=NotImplemented,
-            groupBy=NotImplemented,
-            groupOrderBy=NotImplemented,
-            groupingOptionEqual=NotImplemented,
-            typeIn=NotImplemented,
-            excludeWatched=NotImplemented):
+            orderBy = NotImplemented,
+            name = NotImplemented,
+            dynamicOrderBy = NotImplemented,
+            orderingParameters = NotImplemented,
+            trendingDaysEqual = NotImplemented,
+            shouldApplyPriorityGroupsEqual = NotImplemented,
+            kSql = NotImplemented,
+            groupBy = NotImplemented,
+            groupOrderBy = NotImplemented,
+            groupingOptionEqual = NotImplemented,
+            typeIn = NotImplemented,
+            excludeWatched = NotImplemented):
         KalturaSearchAssetFilter.__init__(self,
             orderBy,
             name,
@@ -7431,7 +7620,7 @@ class KalturaAssetFieldGroupBy(KalturaAssetGroupBy):
     """Group by a field that is defined in enum"""
 
     def __init__(self,
-            value=NotImplemented):
+            value = NotImplemented):
         KalturaAssetGroupBy.__init__(self)
 
         # Group by a specific field that is defined in enum
@@ -7466,11 +7655,11 @@ class KalturaAssetMetaOrTagGroupBy(KalturaAssetGroupBy):
     """Group by a tag or meta - according to the name that appears in the system (similar to KSQL)"""
 
     def __init__(self,
-            value=NotImplemented):
+            value = NotImplemented):
         KalturaAssetGroupBy.__init__(self)
 
         # Group by a tag or meta - according to the name that appears in the system (similar to KSQL)
-        # @var string
+        # @var str
         self.value = value
 
 
@@ -7499,15 +7688,15 @@ class KalturaAssetMetaOrTagGroupBy(KalturaAssetGroupBy):
 # @subpackage Client
 class KalturaBundleFilter(KalturaAssetFilter):
     def __init__(self,
-            orderBy=NotImplemented,
-            name=NotImplemented,
-            dynamicOrderBy=NotImplemented,
-            orderingParameters=NotImplemented,
-            trendingDaysEqual=NotImplemented,
-            shouldApplyPriorityGroupsEqual=NotImplemented,
-            idEqual=NotImplemented,
-            typeIn=NotImplemented,
-            bundleTypeEqual=NotImplemented):
+            orderBy = NotImplemented,
+            name = NotImplemented,
+            dynamicOrderBy = NotImplemented,
+            orderingParameters = NotImplemented,
+            trendingDaysEqual = NotImplemented,
+            shouldApplyPriorityGroupsEqual = NotImplemented,
+            idEqual = NotImplemented,
+            typeIn = NotImplemented,
+            bundleTypeEqual = NotImplemented):
         KalturaAssetFilter.__init__(self,
             orderBy,
             name,
@@ -7523,7 +7712,7 @@ class KalturaBundleFilter(KalturaAssetFilter):
         # Comma separated list of asset types to search within.
         #             Possible values: 0 - EPG linear programs entries, any media type ID (according to media type IDs defined dynamically in the system).
         #             If omitted - all types should be included.
-        # @var string
+        # @var str
         self.typeIn = typeIn
 
         # bundleType - possible values: Subscription or Collection
@@ -7572,16 +7761,16 @@ class KalturaBundleFilter(KalturaAssetFilter):
 # @subpackage Client
 class KalturaChannelExternalFilter(KalturaAssetFilter):
     def __init__(self,
-            orderBy=NotImplemented,
-            name=NotImplemented,
-            dynamicOrderBy=NotImplemented,
-            orderingParameters=NotImplemented,
-            trendingDaysEqual=NotImplemented,
-            shouldApplyPriorityGroupsEqual=NotImplemented,
-            idEqual=NotImplemented,
-            utcOffsetEqual=NotImplemented,
-            freeText=NotImplemented,
-            alias=NotImplemented):
+            orderBy = NotImplemented,
+            name = NotImplemented,
+            dynamicOrderBy = NotImplemented,
+            orderingParameters = NotImplemented,
+            trendingDaysEqual = NotImplemented,
+            shouldApplyPriorityGroupsEqual = NotImplemented,
+            idEqual = NotImplemented,
+            utcOffsetEqual = NotImplemented,
+            freeText = NotImplemented,
+            alias = NotImplemented):
         KalturaAssetFilter.__init__(self,
             orderBy,
             name,
@@ -7599,11 +7788,11 @@ class KalturaChannelExternalFilter(KalturaAssetFilter):
         self.utcOffsetEqual = utcOffsetEqual
 
         # FreeTextEqual
-        # @var string
+        # @var str
         self.freeText = freeText
 
         # Alias for External Channel Id.
-        # @var string
+        # @var str
         self.alias = alias
 
 
@@ -7654,18 +7843,65 @@ class KalturaChannelExternalFilter(KalturaAssetFilter):
 
 # @package Kaltura
 # @subpackage Client
+class KalturaLiveAssetHasRecordingsFilter(KalturaAssetFilter):
+    """Returns the KalturaLiveAsset object passed as input parameter if there is at least one associated KalturaRecordingAsset object. Returns empty array otherwise."""
+
+    def __init__(self,
+            orderBy = NotImplemented,
+            name = NotImplemented,
+            dynamicOrderBy = NotImplemented,
+            orderingParameters = NotImplemented,
+            trendingDaysEqual = NotImplemented,
+            shouldApplyPriorityGroupsEqual = NotImplemented,
+            liveAssetIdEqual = NotImplemented):
+        KalturaAssetFilter.__init__(self,
+            orderBy,
+            name,
+            dynamicOrderBy,
+            orderingParameters,
+            trendingDaysEqual,
+            shouldApplyPriorityGroupsEqual)
+
+        # KalturaLiveAsset.id value of the live linear channel to be examined for associated recordings
+        # @var int
+        self.liveAssetIdEqual = liveAssetIdEqual
+
+
+    PROPERTY_LOADERS = {
+        'liveAssetIdEqual': getXmlNodeInt, 
+    }
+
+    def fromXml(self, node):
+        KalturaAssetFilter.fromXml(self, node)
+        self.fromXmlImpl(node, KalturaLiveAssetHasRecordingsFilter.PROPERTY_LOADERS)
+
+    def toParams(self):
+        kparams = KalturaAssetFilter.toParams(self)
+        kparams.put("objectType", "KalturaLiveAssetHasRecordingsFilter")
+        kparams.addIntIfDefined("liveAssetIdEqual", self.liveAssetIdEqual)
+        return kparams
+
+    def getLiveAssetIdEqual(self):
+        return self.liveAssetIdEqual
+
+    def setLiveAssetIdEqual(self, newLiveAssetIdEqual):
+        self.liveAssetIdEqual = newLiveAssetIdEqual
+
+
+# @package Kaltura
+# @subpackage Client
 class KalturaRelatedExternalFilter(KalturaAssetFilter):
     def __init__(self,
-            orderBy=NotImplemented,
-            name=NotImplemented,
-            dynamicOrderBy=NotImplemented,
-            orderingParameters=NotImplemented,
-            trendingDaysEqual=NotImplemented,
-            shouldApplyPriorityGroupsEqual=NotImplemented,
-            idEqual=NotImplemented,
-            typeIn=NotImplemented,
-            utcOffsetEqual=NotImplemented,
-            freeText=NotImplemented):
+            orderBy = NotImplemented,
+            name = NotImplemented,
+            dynamicOrderBy = NotImplemented,
+            orderingParameters = NotImplemented,
+            trendingDaysEqual = NotImplemented,
+            shouldApplyPriorityGroupsEqual = NotImplemented,
+            idEqual = NotImplemented,
+            typeIn = NotImplemented,
+            utcOffsetEqual = NotImplemented,
+            freeText = NotImplemented):
         KalturaAssetFilter.__init__(self,
             orderBy,
             name,
@@ -7681,7 +7917,7 @@ class KalturaRelatedExternalFilter(KalturaAssetFilter):
         # Comma separated list of asset types to search within. 
         #             Possible values: 0 - EPG linear programs entries, any media type ID (according to media type IDs defined dynamically in the system).
         #             If omitted - all types should be included.
-        # @var string
+        # @var str
         self.typeIn = typeIn
 
         # UtcOffsetEqual
@@ -7689,7 +7925,7 @@ class KalturaRelatedExternalFilter(KalturaAssetFilter):
         self.utcOffsetEqual = utcOffsetEqual
 
         # FreeText
-        # @var string
+        # @var str
         self.freeText = freeText
 
 
@@ -7742,17 +7978,17 @@ class KalturaRelatedExternalFilter(KalturaAssetFilter):
 # @subpackage Client
 class KalturaScheduledRecordingProgramFilter(KalturaAssetFilter):
     def __init__(self,
-            orderBy=NotImplemented,
-            name=NotImplemented,
-            dynamicOrderBy=NotImplemented,
-            orderingParameters=NotImplemented,
-            trendingDaysEqual=NotImplemented,
-            shouldApplyPriorityGroupsEqual=NotImplemented,
-            recordingTypeEqual=NotImplemented,
-            channelsIn=NotImplemented,
-            startDateGreaterThanOrNull=NotImplemented,
-            endDateLessThanOrNull=NotImplemented,
-            seriesIdsIn=NotImplemented):
+            orderBy = NotImplemented,
+            name = NotImplemented,
+            dynamicOrderBy = NotImplemented,
+            orderingParameters = NotImplemented,
+            trendingDaysEqual = NotImplemented,
+            shouldApplyPriorityGroupsEqual = NotImplemented,
+            recordingTypeEqual = NotImplemented,
+            channelsIn = NotImplemented,
+            startDateGreaterThanOrNull = NotImplemented,
+            endDateLessThanOrNull = NotImplemented,
+            seriesIdsIn = NotImplemented):
         KalturaAssetFilter.__init__(self,
             orderBy,
             name,
@@ -7766,7 +8002,7 @@ class KalturaScheduledRecordingProgramFilter(KalturaAssetFilter):
         self.recordingTypeEqual = recordingTypeEqual
 
         # Channels to filter by
-        # @var string
+        # @var str
         self.channelsIn = channelsIn
 
         # start date
@@ -7778,7 +8014,7 @@ class KalturaScheduledRecordingProgramFilter(KalturaAssetFilter):
         self.endDateLessThanOrNull = endDateLessThanOrNull
 
         # Series to filter by
-        # @var string
+        # @var str
         self.seriesIdsIn = seriesIdsIn
 
 
@@ -7839,15 +8075,15 @@ class KalturaScheduledRecordingProgramFilter(KalturaAssetFilter):
 # @subpackage Client
 class KalturaSearchExternalFilter(KalturaAssetFilter):
     def __init__(self,
-            orderBy=NotImplemented,
-            name=NotImplemented,
-            dynamicOrderBy=NotImplemented,
-            orderingParameters=NotImplemented,
-            trendingDaysEqual=NotImplemented,
-            shouldApplyPriorityGroupsEqual=NotImplemented,
-            query=NotImplemented,
-            utcOffsetEqual=NotImplemented,
-            typeIn=NotImplemented):
+            orderBy = NotImplemented,
+            name = NotImplemented,
+            dynamicOrderBy = NotImplemented,
+            orderingParameters = NotImplemented,
+            trendingDaysEqual = NotImplemented,
+            shouldApplyPriorityGroupsEqual = NotImplemented,
+            query = NotImplemented,
+            utcOffsetEqual = NotImplemented,
+            typeIn = NotImplemented):
         KalturaAssetFilter.__init__(self,
             orderBy,
             name,
@@ -7857,7 +8093,7 @@ class KalturaSearchExternalFilter(KalturaAssetFilter):
             shouldApplyPriorityGroupsEqual)
 
         # Query
-        # @var string
+        # @var str
         self.query = query
 
         # UtcOffsetEqual
@@ -7867,7 +8103,7 @@ class KalturaSearchExternalFilter(KalturaAssetFilter):
         # Comma separated list of asset types to search within. 
         #             Possible values: 0 - EPG linear programs entries, any media type ID (according to media type IDs defined dynamically in the system).
         #             If omitted - all types should be included.
-        # @var string
+        # @var str
         self.typeIn = typeIn
 
 
@@ -7912,12 +8148,12 @@ class KalturaSearchExternalFilter(KalturaAssetFilter):
 # @subpackage Client
 class KalturaAssetDynamicOrder(KalturaBaseAssetOrder):
     def __init__(self,
-            name=NotImplemented,
-            orderBy=NotImplemented):
+            name = NotImplemented,
+            orderBy = NotImplemented):
         KalturaBaseAssetOrder.__init__(self)
 
         # order by name
-        # @var string
+        # @var str
         self.name = name
 
         # order by meta asc/desc
@@ -7958,7 +8194,7 @@ class KalturaAssetDynamicOrder(KalturaBaseAssetOrder):
 # @subpackage Client
 class KalturaAssetOrder(KalturaBaseAssetOrder):
     def __init__(self,
-            orderBy=NotImplemented):
+            orderBy = NotImplemented):
         KalturaBaseAssetOrder.__init__(self)
 
         # Order By
@@ -7991,8 +8227,8 @@ class KalturaAssetOrder(KalturaBaseAssetOrder):
 # @subpackage Client
 class KalturaAssetStatisticsOrder(KalturaBaseAssetOrder):
     def __init__(self,
-            trendingDaysEqual=NotImplemented,
-            orderBy=NotImplemented):
+            trendingDaysEqual = NotImplemented,
+            orderBy = NotImplemented):
         KalturaBaseAssetOrder.__init__(self)
 
         # Trending Days Equal
@@ -8039,7 +8275,7 @@ class KalturaPriorityGroupFilter(KalturaRelatedObjectFilter):
     """It&#39;s just a pure fabrication filter not intended to filter smth."""
 
     def __init__(self,
-            orderBy=NotImplemented):
+            orderBy = NotImplemented):
         KalturaRelatedObjectFilter.__init__(self,
             orderBy)
 
@@ -8063,7 +8299,7 @@ class KalturaReportFilter(KalturaFilter):
     """Report filter"""
 
     def __init__(self,
-            orderBy=NotImplemented):
+            orderBy = NotImplemented):
         KalturaFilter.__init__(self,
             orderBy)
 
@@ -8087,8 +8323,8 @@ class KalturaDeviceReportFilter(KalturaReportFilter):
     """Report filter"""
 
     def __init__(self,
-            orderBy=NotImplemented,
-            lastAccessDateGreaterThanOrEqual=NotImplemented):
+            orderBy = NotImplemented,
+            lastAccessDateGreaterThanOrEqual = NotImplemented):
         KalturaReportFilter.__init__(self,
             orderBy)
 
@@ -8124,7 +8360,7 @@ class KalturaHouseholdCouponCodeFilter(KalturaRelatedObjectFilter):
     """Kaltura Houseold CouponCode Filter"""
 
     def __init__(self,
-            orderBy=NotImplemented):
+            orderBy = NotImplemented):
         KalturaRelatedObjectFilter.__init__(self,
             orderBy)
 
@@ -8146,11 +8382,11 @@ class KalturaHouseholdCouponCodeFilter(KalturaRelatedObjectFilter):
 # @subpackage Client
 class KalturaHouseholdCouponFilter(KalturaFilter):
     def __init__(self,
-            orderBy=NotImplemented,
-            businessModuleTypeEqual=NotImplemented,
-            businessModuleIdEqual=NotImplemented,
-            couponCode=NotImplemented,
-            status=NotImplemented):
+            orderBy = NotImplemented,
+            businessModuleTypeEqual = NotImplemented,
+            businessModuleIdEqual = NotImplemented,
+            couponCode = NotImplemented,
+            status = NotImplemented):
         KalturaFilter.__init__(self,
             orderBy)
 
@@ -8163,7 +8399,7 @@ class KalturaHouseholdCouponFilter(KalturaFilter):
         self.businessModuleIdEqual = businessModuleIdEqual
 
         # Allow clients to inquiry if a specific coupon is part of an HH's wallet or not
-        # @var string
+        # @var str
         self.couponCode = couponCode
 
         # Allow clients to filter out coupons which are valid/invalid
@@ -8220,10 +8456,10 @@ class KalturaHouseholdCouponFilter(KalturaFilter):
 # @subpackage Client
 class KalturaHouseholdDeviceFilter(KalturaFilter):
     def __init__(self,
-            orderBy=NotImplemented,
-            householdIdEqual=NotImplemented,
-            deviceFamilyIdIn=NotImplemented,
-            externalIdEqual=NotImplemented):
+            orderBy = NotImplemented,
+            householdIdEqual = NotImplemented,
+            deviceFamilyIdIn = NotImplemented,
+            externalIdEqual = NotImplemented):
         KalturaFilter.__init__(self,
             orderBy)
 
@@ -8232,11 +8468,11 @@ class KalturaHouseholdDeviceFilter(KalturaFilter):
         self.householdIdEqual = householdIdEqual
 
         # Device family Ids
-        # @var string
+        # @var str
         self.deviceFamilyIdIn = deviceFamilyIdIn
 
         # External Id
-        # @var string
+        # @var str
         self.externalIdEqual = externalIdEqual
 
 
@@ -8283,13 +8519,13 @@ class KalturaHouseholdFilter(KalturaFilter):
     """Household details"""
 
     def __init__(self,
-            orderBy=NotImplemented,
-            externalIdEqual=NotImplemented):
+            orderBy = NotImplemented,
+            externalIdEqual = NotImplemented):
         KalturaFilter.__init__(self,
             orderBy)
 
         # Household external identifier to search by
-        # @var string
+        # @var str
         self.externalIdEqual = externalIdEqual
 
 
@@ -8318,8 +8554,8 @@ class KalturaHouseholdFilter(KalturaFilter):
 # @subpackage Client
 class KalturaHouseholdUserFilter(KalturaFilter):
     def __init__(self,
-            orderBy=NotImplemented,
-            householdIdEqual=NotImplemented):
+            orderBy = NotImplemented,
+            householdIdEqual = NotImplemented):
         KalturaFilter.__init__(self,
             orderBy)
 
@@ -8355,13 +8591,13 @@ class KalturaConfigurationGroupDeviceFilter(KalturaFilter):
     """Configuration group device filter"""
 
     def __init__(self,
-            orderBy=NotImplemented,
-            configurationGroupIdEqual=NotImplemented):
+            orderBy = NotImplemented,
+            configurationGroupIdEqual = NotImplemented):
         KalturaFilter.__init__(self,
             orderBy)
 
         # the ID of the configuration group for which to return related configurations group devices
-        # @var string
+        # @var str
         self.configurationGroupIdEqual = configurationGroupIdEqual
 
 
@@ -8392,13 +8628,13 @@ class KalturaConfigurationGroupTagFilter(KalturaFilter):
     """Configuration group tag filter"""
 
     def __init__(self,
-            orderBy=NotImplemented,
-            configurationGroupIdEqual=NotImplemented):
+            orderBy = NotImplemented,
+            configurationGroupIdEqual = NotImplemented):
         KalturaFilter.__init__(self,
             orderBy)
 
         # the ID of the configuration group for which to return related configurations group tags
-        # @var string
+        # @var str
         self.configurationGroupIdEqual = configurationGroupIdEqual
 
 
@@ -8429,13 +8665,13 @@ class KalturaConfigurationsFilter(KalturaFilter):
     """Configuration filter"""
 
     def __init__(self,
-            orderBy=NotImplemented,
-            configurationGroupIdEqual=NotImplemented):
+            orderBy = NotImplemented,
+            configurationGroupIdEqual = NotImplemented):
         KalturaFilter.__init__(self,
             orderBy)
 
         # the ID of the configuration group for which to return related configurations
-        # @var string
+        # @var str
         self.configurationGroupIdEqual = configurationGroupIdEqual
 
 
@@ -8466,23 +8702,23 @@ class KalturaRecordingFilter(KalturaFilter):
     """Filtering recordings"""
 
     def __init__(self,
-            orderBy=NotImplemented,
-            statusIn=NotImplemented,
-            externalRecordingIdIn=NotImplemented,
-            kSql=NotImplemented):
+            orderBy = NotImplemented,
+            statusIn = NotImplemented,
+            externalRecordingIdIn = NotImplemented,
+            kSql = NotImplemented):
         KalturaFilter.__init__(self,
             orderBy)
 
         # Recording Statuses
-        # @var string
+        # @var str
         self.statusIn = statusIn
 
         # Comma separated external identifiers
-        # @var string
+        # @var str
         self.externalRecordingIdIn = externalRecordingIdIn
 
         # KSQL expression
-        # @var string
+        # @var str
         self.kSql = kSql
 
 
@@ -8529,11 +8765,11 @@ class KalturaExternalRecordingFilter(KalturaRecordingFilter):
     """Filtering external recordings"""
 
     def __init__(self,
-            orderBy=NotImplemented,
-            statusIn=NotImplemented,
-            externalRecordingIdIn=NotImplemented,
-            kSql=NotImplemented,
-            metaData=NotImplemented):
+            orderBy = NotImplemented,
+            statusIn = NotImplemented,
+            externalRecordingIdIn = NotImplemented,
+            kSql = NotImplemented,
+            metaData = NotImplemented):
         KalturaRecordingFilter.__init__(self,
             orderBy,
             statusIn,
@@ -8572,12 +8808,12 @@ class KalturaCloudRecordingFilter(KalturaExternalRecordingFilter):
     """Filtering cloud external recordings"""
 
     def __init__(self,
-            orderBy=NotImplemented,
-            statusIn=NotImplemented,
-            externalRecordingIdIn=NotImplemented,
-            kSql=NotImplemented,
-            metaData=NotImplemented,
-            adapterData=NotImplemented):
+            orderBy = NotImplemented,
+            statusIn = NotImplemented,
+            externalRecordingIdIn = NotImplemented,
+            kSql = NotImplemented,
+            metaData = NotImplemented,
+            adapterData = NotImplemented):
         KalturaExternalRecordingFilter.__init__(self,
             orderBy,
             statusIn,
@@ -8617,7 +8853,7 @@ class KalturaSeriesRecordingFilter(KalturaFilter):
     """Filtering recordings"""
 
     def __init__(self,
-            orderBy=NotImplemented):
+            orderBy = NotImplemented):
         KalturaFilter.__init__(self,
             orderBy)
 
@@ -8641,8 +8877,8 @@ class KalturaCloudSeriesRecordingFilter(KalturaSeriesRecordingFilter):
     """Cloud series filtering recordings"""
 
     def __init__(self,
-            orderBy=NotImplemented,
-            adapterData=NotImplemented):
+            orderBy = NotImplemented,
+            adapterData = NotImplemented):
         KalturaSeriesRecordingFilter.__init__(self,
             orderBy)
 
@@ -8678,10 +8914,10 @@ class KalturaEntitlementFilter(KalturaFilter):
     """Entitlements filter"""
 
     def __init__(self,
-            orderBy=NotImplemented,
-            productTypeEqual=NotImplemented,
-            entityReferenceEqual=NotImplemented,
-            isExpiredEqual=NotImplemented):
+            orderBy = NotImplemented,
+            productTypeEqual = NotImplemented,
+            entityReferenceEqual = NotImplemented,
+            isExpiredEqual = NotImplemented):
         KalturaFilter.__init__(self,
             orderBy)
 
@@ -8741,10 +8977,10 @@ class KalturaProgramAssetGroupOfferEntitlementFilter(KalturaEntitlementFilter):
     """Program asset group offer Entitlements filter"""
 
     def __init__(self,
-            orderBy=NotImplemented,
-            productTypeEqual=NotImplemented,
-            entityReferenceEqual=NotImplemented,
-            isExpiredEqual=NotImplemented):
+            orderBy = NotImplemented,
+            productTypeEqual = NotImplemented,
+            entityReferenceEqual = NotImplemented,
+            isExpiredEqual = NotImplemented):
         KalturaEntitlementFilter.__init__(self,
             orderBy,
             productTypeEqual,
@@ -8771,7 +9007,7 @@ class KalturaExternalRecordingResponseProfileFilter(KalturaRelatedObjectFilter):
     """Kaltura External Recording ResponseProfile Filter"""
 
     def __init__(self,
-            orderBy=NotImplemented):
+            orderBy = NotImplemented):
         KalturaRelatedObjectFilter.__init__(self,
             orderBy)
 
@@ -8793,26 +9029,26 @@ class KalturaExternalRecordingResponseProfileFilter(KalturaRelatedObjectFilter):
 # @subpackage Client
 class KalturaProductPriceFilter(KalturaFilter):
     def __init__(self,
-            orderBy=NotImplemented,
-            subscriptionIdIn=NotImplemented,
-            fileIdIn=NotImplemented,
-            collectionIdIn=NotImplemented,
-            isLowest=NotImplemented,
-            couponCodeEqual=NotImplemented,
-            programAssetGroupOfferIdIn=NotImplemented):
+            orderBy = NotImplemented,
+            subscriptionIdIn = NotImplemented,
+            fileIdIn = NotImplemented,
+            collectionIdIn = NotImplemented,
+            isLowest = NotImplemented,
+            couponCodeEqual = NotImplemented,
+            programAssetGroupOfferIdIn = NotImplemented):
         KalturaFilter.__init__(self,
             orderBy)
 
         # Comma separated subscriptions identifiers
-        # @var string
+        # @var str
         self.subscriptionIdIn = subscriptionIdIn
 
         # Comma separated media files identifiers
-        # @var string
+        # @var str
         self.fileIdIn = fileIdIn
 
         # Comma separated collections identifiers
-        # @var string
+        # @var str
         self.collectionIdIn = collectionIdIn
 
         # A flag that indicates if only the lowest price of an item should return
@@ -8820,11 +9056,11 @@ class KalturaProductPriceFilter(KalturaFilter):
         self.isLowest = isLowest
 
         # Discount coupon code
-        # @var string
+        # @var str
         self.couponCodeEqual = couponCodeEqual
 
         # Comma separated ProgramAssetGroupOffer identifiers
-        # @var string
+        # @var str
         self.programAssetGroupOfferIdIn = programAssetGroupOfferIdIn
 
 
@@ -8895,13 +9131,13 @@ class KalturaRecordingContextFilter(KalturaFilter):
     """Filtering assets"""
 
     def __init__(self,
-            orderBy=NotImplemented,
-            assetIdIn=NotImplemented):
+            orderBy = NotImplemented,
+            assetIdIn = NotImplemented):
         KalturaFilter.__init__(self,
             orderBy)
 
         # Comma separated asset ids
-        # @var string
+        # @var str
         self.assetIdIn = assetIdIn
 
 
@@ -8932,14 +9168,14 @@ class KalturaTransactionHistoryFilter(KalturaFilter):
     """Transactions filter"""
 
     def __init__(self,
-            orderBy=NotImplemented,
-            entityReferenceEqual=NotImplemented,
-            startDateGreaterThanOrEqual=NotImplemented,
-            endDateLessThanOrEqual=NotImplemented,
-            entitlementIdEqual=NotImplemented,
-            externalIdEqual=NotImplemented,
-            billingItemsTypeEqual=NotImplemented,
-            billingActionEqual=NotImplemented):
+            orderBy = NotImplemented,
+            entityReferenceEqual = NotImplemented,
+            startDateGreaterThanOrEqual = NotImplemented,
+            endDateLessThanOrEqual = NotImplemented,
+            entitlementIdEqual = NotImplemented,
+            externalIdEqual = NotImplemented,
+            billingItemsTypeEqual = NotImplemented,
+            billingActionEqual = NotImplemented):
         KalturaFilter.__init__(self,
             orderBy)
 
@@ -8960,7 +9196,7 @@ class KalturaTransactionHistoryFilter(KalturaFilter):
         self.entitlementIdEqual = entitlementIdEqual
 
         # Filter transaction by external Id
-        # @var string
+        # @var str
         self.externalIdEqual = externalIdEqual
 
         # Filter transaction by billing item type
@@ -9045,9 +9281,9 @@ class KalturaTransactionHistoryFilter(KalturaFilter):
 # @subpackage Client
 class KalturaAssetCommentFilter(KalturaFilter):
     def __init__(self,
-            orderBy=NotImplemented,
-            assetIdEqual=NotImplemented,
-            assetTypeEqual=NotImplemented):
+            orderBy = NotImplemented,
+            assetIdEqual = NotImplemented,
+            assetTypeEqual = NotImplemented):
         KalturaFilter.__init__(self,
             orderBy)
 
@@ -9093,23 +9329,23 @@ class KalturaAssetCommentFilter(KalturaFilter):
 # @subpackage Client
 class KalturaAssetHistoryFilter(KalturaFilter):
     def __init__(self,
-            orderBy=NotImplemented,
-            typeIn=NotImplemented,
-            assetIdIn=NotImplemented,
-            statusEqual=NotImplemented,
-            daysLessThanOrEqual=NotImplemented,
-            kSql=NotImplemented):
+            orderBy = NotImplemented,
+            typeIn = NotImplemented,
+            assetIdIn = NotImplemented,
+            statusEqual = NotImplemented,
+            daysLessThanOrEqual = NotImplemented,
+            kSql = NotImplemented):
         KalturaFilter.__init__(self,
             orderBy)
 
         # Comma separated list of asset types to search within.
         #             Possible values: 0 - EPG linear programs entries, any media type ID (according to media type IDs defined dynamically in the system).
         #             If omitted - all types should be included.
-        # @var string
+        # @var str
         self.typeIn = typeIn
 
         # Comma separated list of asset identifiers.
-        # @var string
+        # @var str
         self.assetIdIn = assetIdIn
 
         # Which type of recently watched media to include in the result - those that finished watching, those that are in progress or both.
@@ -9123,7 +9359,7 @@ class KalturaAssetHistoryFilter(KalturaFilter):
         self.daysLessThanOrEqual = daysLessThanOrEqual
 
         # KSQL expression
-        # @var string
+        # @var str
         self.kSql = kSql
 
 
@@ -9186,7 +9422,7 @@ class KalturaAssetHistorySuppressFilter(KalturaRelatedObjectFilter):
     """Kaltura asset image per ratio filter"""
 
     def __init__(self,
-            orderBy=NotImplemented):
+            orderBy = NotImplemented):
         KalturaRelatedObjectFilter.__init__(self,
             orderBy)
 
@@ -9210,7 +9446,7 @@ class KalturaAssetImagePerRatioFilter(KalturaRelatedObjectFilter):
     """Kaltura asset image per ratio filter"""
 
     def __init__(self,
-            orderBy=NotImplemented):
+            orderBy = NotImplemented):
         KalturaRelatedObjectFilter.__init__(self,
             orderBy)
 
@@ -9232,7 +9468,7 @@ class KalturaAssetImagePerRatioFilter(KalturaRelatedObjectFilter):
 # @subpackage Client
 class KalturaBaseAssetStructFilter(KalturaFilter):
     def __init__(self,
-            orderBy=NotImplemented):
+            orderBy = NotImplemented):
         KalturaFilter.__init__(self,
             orderBy)
 
@@ -9256,16 +9492,16 @@ class KalturaAssetStructFilter(KalturaBaseAssetStructFilter):
     """Filtering Asset Structs"""
 
     def __init__(self,
-            orderBy=NotImplemented,
-            idIn=NotImplemented,
-            metaIdEqual=NotImplemented,
-            isProtectedEqual=NotImplemented,
-            objectVirtualAssetInfoTypeEqual=NotImplemented):
+            orderBy = NotImplemented,
+            idIn = NotImplemented,
+            metaIdEqual = NotImplemented,
+            isProtectedEqual = NotImplemented,
+            objectVirtualAssetInfoTypeEqual = NotImplemented):
         KalturaBaseAssetStructFilter.__init__(self,
             orderBy)
 
         # Comma separated identifiers, id = 0 is identified as program AssetStruct
-        # @var string
+        # @var str
         self.idIn = idIn
 
         # Filter Asset Structs that contain a specific meta id
@@ -9330,7 +9566,7 @@ class KalturaAssetStructFilter(KalturaBaseAssetStructFilter):
 # @subpackage Client
 class KalturaLinearAssetStructFilter(KalturaBaseAssetStructFilter):
     def __init__(self,
-            orderBy=NotImplemented):
+            orderBy = NotImplemented):
         KalturaBaseAssetStructFilter.__init__(self,
             orderBy)
 
@@ -9354,9 +9590,9 @@ class KalturaAssetStructMetaFilter(KalturaFilter):
     """Filtering Asset Struct Metas"""
 
     def __init__(self,
-            orderBy=NotImplemented,
-            assetStructIdEqual=NotImplemented,
-            metaIdEqual=NotImplemented):
+            orderBy = NotImplemented,
+            assetStructIdEqual = NotImplemented,
+            metaIdEqual = NotImplemented):
         KalturaFilter.__init__(self,
             orderBy)
 
@@ -9404,12 +9640,12 @@ class KalturaSlimAsset(KalturaObjectBase):
     """Slim Asset Details"""
 
     def __init__(self,
-            id=NotImplemented,
-            type=NotImplemented):
+            id = NotImplemented,
+            type = NotImplemented):
         KalturaObjectBase.__init__(self)
 
         # Internal identifier of the asset
-        # @var string
+        # @var str
         # @insertonly
         self.id = id
 
@@ -9454,14 +9690,14 @@ class KalturaBookmarkFilter(KalturaFilter):
     """Filtering Assets requests"""
 
     def __init__(self,
-            orderBy=NotImplemented,
-            assetIdIn=NotImplemented,
-            assetTypeEqual=NotImplemented):
+            orderBy = NotImplemented,
+            assetIdIn = NotImplemented,
+            assetTypeEqual = NotImplemented):
         KalturaFilter.__init__(self,
             orderBy)
 
         # Comma separated list of assets identifiers
-        # @var string
+        # @var str
         self.assetIdIn = assetIdIn
 
         # Asset type
@@ -9504,27 +9740,27 @@ class KalturaBaseOTTUser(KalturaObjectBase):
     """Slim user data"""
 
     def __init__(self,
-            id=NotImplemented,
-            username=NotImplemented,
-            firstName=NotImplemented,
-            lastName=NotImplemented):
+            id = NotImplemented,
+            username = NotImplemented,
+            firstName = NotImplemented,
+            lastName = NotImplemented):
         KalturaObjectBase.__init__(self)
 
         # User identifier
-        # @var string
+        # @var str
         # @readonly
         self.id = id
 
         # Username
-        # @var string
+        # @var str
         self.username = username
 
         # First name
-        # @var string
+        # @var str
         self.firstName = firstName
 
         # Last name
-        # @var string
+        # @var str
         self.lastName = lastName
 
 
@@ -9575,15 +9811,15 @@ class KalturaCountry(KalturaObjectBase):
     """Country details"""
 
     def __init__(self,
-            id=NotImplemented,
-            name=NotImplemented,
-            code=NotImplemented,
-            mainLanguageCode=NotImplemented,
-            languagesCode=NotImplemented,
-            currency=NotImplemented,
-            currencySign=NotImplemented,
-            vatPercent=NotImplemented,
-            timeZoneId=NotImplemented):
+            id = NotImplemented,
+            name = NotImplemented,
+            code = NotImplemented,
+            mainLanguageCode = NotImplemented,
+            languagesCode = NotImplemented,
+            currency = NotImplemented,
+            currencySign = NotImplemented,
+            vatPercent = NotImplemented,
+            timeZoneId = NotImplemented):
         KalturaObjectBase.__init__(self)
 
         # Country identifier
@@ -9592,27 +9828,27 @@ class KalturaCountry(KalturaObjectBase):
         self.id = id
 
         # Country name
-        # @var string
+        # @var str
         self.name = name
 
         # Country code
-        # @var string
+        # @var str
         self.code = code
 
         # The main language code in the country
-        # @var string
+        # @var str
         self.mainLanguageCode = mainLanguageCode
 
         # All the languages code that are supported in the country
-        # @var string
+        # @var str
         self.languagesCode = languagesCode
 
         # Currency code
-        # @var string
+        # @var str
         self.currency = currency
 
         # Currency Sign
-        # @var string
+        # @var str
         self.currencySign = currencySign
 
         # Vat Percent in the country
@@ -9620,7 +9856,7 @@ class KalturaCountry(KalturaObjectBase):
         self.vatPercent = vatPercent
 
         # Time zone ID
-        # @var string
+        # @var str
         self.timeZoneId = timeZoneId
 
 
@@ -9711,8 +9947,8 @@ class KalturaOTTUserType(KalturaObjectBase):
     """User type"""
 
     def __init__(self,
-            id=NotImplemented,
-            description=NotImplemented):
+            id = NotImplemented,
+            description = NotImplemented):
         KalturaObjectBase.__init__(self)
 
         # User type identifier
@@ -9721,7 +9957,7 @@ class KalturaOTTUserType(KalturaObjectBase):
         self.id = id
 
         # User type description
-        # @var string
+        # @var str
         self.description = description
 
 
@@ -9756,29 +9992,29 @@ class KalturaOTTUser(KalturaBaseOTTUser):
     """User"""
 
     def __init__(self,
-            id=NotImplemented,
-            username=NotImplemented,
-            firstName=NotImplemented,
-            lastName=NotImplemented,
-            householdId=NotImplemented,
-            email=NotImplemented,
-            address=NotImplemented,
-            city=NotImplemented,
-            countryId=NotImplemented,
-            zip=NotImplemented,
-            phone=NotImplemented,
-            affiliateCode=NotImplemented,
-            externalId=NotImplemented,
-            userType=NotImplemented,
-            dynamicData=NotImplemented,
-            isHouseholdMaster=NotImplemented,
-            suspensionState=NotImplemented,
-            userState=NotImplemented,
-            roleIds=NotImplemented,
-            createDate=NotImplemented,
-            updateDate=NotImplemented,
-            lastLoginDate=NotImplemented,
-            failedLoginCount=NotImplemented):
+            id = NotImplemented,
+            username = NotImplemented,
+            firstName = NotImplemented,
+            lastName = NotImplemented,
+            householdId = NotImplemented,
+            email = NotImplemented,
+            address = NotImplemented,
+            city = NotImplemented,
+            countryId = NotImplemented,
+            zip = NotImplemented,
+            phone = NotImplemented,
+            affiliateCode = NotImplemented,
+            externalId = NotImplemented,
+            userType = NotImplemented,
+            dynamicData = NotImplemented,
+            isHouseholdMaster = NotImplemented,
+            suspensionState = NotImplemented,
+            userState = NotImplemented,
+            roleIds = NotImplemented,
+            createDate = NotImplemented,
+            updateDate = NotImplemented,
+            lastLoginDate = NotImplemented,
+            failedLoginCount = NotImplemented):
         KalturaBaseOTTUser.__init__(self,
             id,
             username,
@@ -9791,15 +10027,15 @@ class KalturaOTTUser(KalturaBaseOTTUser):
         self.householdId = householdId
 
         # Email
-        # @var string
+        # @var str
         self.email = email
 
         # Address
-        # @var string
+        # @var str
         self.address = address
 
         # City
-        # @var string
+        # @var str
         self.city = city
 
         # Country identifier
@@ -9807,20 +10043,20 @@ class KalturaOTTUser(KalturaBaseOTTUser):
         self.countryId = countryId
 
         # Zip code
-        # @var string
+        # @var str
         self.zip = zip
 
         # Phone
-        # @var string
+        # @var str
         self.phone = phone
 
         # Affiliate code
-        # @var string
+        # @var str
         # @insertonly
         self.affiliateCode = affiliateCode
 
         # External user identifier
-        # @var string
+        # @var str
         self.externalId = externalId
 
         # User type
@@ -9847,7 +10083,7 @@ class KalturaOTTUser(KalturaBaseOTTUser):
         self.userState = userState
 
         # Comma separated list of role Ids.
-        # @var string
+        # @var str
         self.roleIds = roleIds
 
         # User create date
@@ -10008,11 +10244,11 @@ class KalturaOTTUser(KalturaBaseOTTUser):
 # @subpackage Client
 class KalturaBookmarkPlayerData(KalturaObjectBase):
     def __init__(self,
-            action=NotImplemented,
-            averageBitrate=NotImplemented,
-            totalBitrate=NotImplemented,
-            currentBitrate=NotImplemented,
-            fileId=NotImplemented):
+            action = NotImplemented,
+            averageBitrate = NotImplemented,
+            totalBitrate = NotImplemented,
+            currentBitrate = NotImplemented,
+            fileId = NotImplemented):
         KalturaObjectBase.__init__(self)
 
         # Action
@@ -10093,22 +10329,22 @@ class KalturaBookmarkPlayerData(KalturaObjectBase):
 # @subpackage Client
 class KalturaBookmark(KalturaSlimAsset):
     def __init__(self,
-            id=NotImplemented,
-            type=NotImplemented,
-            userId=NotImplemented,
-            position=NotImplemented,
-            positionOwner=NotImplemented,
-            finishedWatching=NotImplemented,
-            playerData=NotImplemented,
-            programId=NotImplemented,
-            isReportingMode=NotImplemented,
-            context=NotImplemented):
+            id = NotImplemented,
+            type = NotImplemented,
+            userId = NotImplemented,
+            position = NotImplemented,
+            positionOwner = NotImplemented,
+            finishedWatching = NotImplemented,
+            playerData = NotImplemented,
+            programId = NotImplemented,
+            isReportingMode = NotImplemented,
+            context = NotImplemented):
         KalturaSlimAsset.__init__(self,
             id,
             type)
 
         # User identifier
-        # @var string
+        # @var str
         # @readonly
         self.userId = userId
 
@@ -10215,7 +10451,7 @@ class KalturaBookmark(KalturaSlimAsset):
 # @subpackage Client
 class KalturaCategoryItemFilter(KalturaFilter):
     def __init__(self,
-            orderBy=NotImplemented):
+            orderBy = NotImplemented):
         KalturaFilter.__init__(self,
             orderBy)
 
@@ -10237,8 +10473,8 @@ class KalturaCategoryItemFilter(KalturaFilter):
 # @subpackage Client
 class KalturaCategoryItemAncestorsFilter(KalturaCategoryItemFilter):
     def __init__(self,
-            orderBy=NotImplemented,
-            id=NotImplemented):
+            orderBy = NotImplemented,
+            id = NotImplemented):
         KalturaCategoryItemFilter.__init__(self,
             orderBy)
 
@@ -10272,13 +10508,13 @@ class KalturaCategoryItemAncestorsFilter(KalturaCategoryItemFilter):
 # @subpackage Client
 class KalturaCategoryItemByIdInFilter(KalturaCategoryItemFilter):
     def __init__(self,
-            orderBy=NotImplemented,
-            idIn=NotImplemented):
+            orderBy = NotImplemented,
+            idIn = NotImplemented):
         KalturaCategoryItemFilter.__init__(self,
             orderBy)
 
         # Category item identifiers
-        # @var string
+        # @var str
         self.idIn = idIn
 
 
@@ -10307,15 +10543,15 @@ class KalturaCategoryItemByIdInFilter(KalturaCategoryItemFilter):
 # @subpackage Client
 class KalturaCategoryItemSearchFilter(KalturaCategoryItemFilter):
     def __init__(self,
-            orderBy=NotImplemented,
-            kSql=NotImplemented,
-            rootOnly=NotImplemented,
-            typeEqual=NotImplemented):
+            orderBy = NotImplemented,
+            kSql = NotImplemented,
+            rootOnly = NotImplemented,
+            typeEqual = NotImplemented):
         KalturaCategoryItemFilter.__init__(self,
             orderBy)
 
         # KSQL expression
-        # @var string
+        # @var str
         self.kSql = kSql
 
         # Root only
@@ -10323,7 +10559,7 @@ class KalturaCategoryItemSearchFilter(KalturaCategoryItemFilter):
         self.rootOnly = rootOnly
 
         # Indicates which category to return by their type.
-        # @var string
+        # @var str
         self.typeEqual = typeEqual
 
 
@@ -10368,7 +10604,7 @@ class KalturaCategoryItemSearchFilter(KalturaCategoryItemFilter):
 # @subpackage Client
 class KalturaCategoryVersionFilter(KalturaFilter):
     def __init__(self,
-            orderBy=NotImplemented):
+            orderBy = NotImplemented):
         KalturaFilter.__init__(self,
             orderBy)
 
@@ -10390,9 +10626,9 @@ class KalturaCategoryVersionFilter(KalturaFilter):
 # @subpackage Client
 class KalturaCategoryVersionFilterByTree(KalturaCategoryVersionFilter):
     def __init__(self,
-            orderBy=NotImplemented,
-            treeIdEqual=NotImplemented,
-            stateEqual=NotImplemented):
+            orderBy = NotImplemented,
+            treeIdEqual = NotImplemented,
+            stateEqual = NotImplemented):
         KalturaCategoryVersionFilter.__init__(self,
             orderBy)
 
@@ -10438,7 +10674,7 @@ class KalturaCategoryVersionFilterByTree(KalturaCategoryVersionFilter):
 # @subpackage Client
 class KalturaChannelsBaseFilter(KalturaFilter):
     def __init__(self,
-            orderBy=NotImplemented):
+            orderBy = NotImplemented):
         KalturaFilter.__init__(self,
             orderBy)
 
@@ -10460,13 +10696,13 @@ class KalturaChannelsBaseFilter(KalturaFilter):
 # @subpackage Client
 class KalturaChannelsFilter(KalturaChannelsBaseFilter):
     def __init__(self,
-            orderBy=NotImplemented,
-            idEqual=NotImplemented,
-            mediaIdEqual=NotImplemented,
-            nameEqual=NotImplemented,
-            nameStartsWith=NotImplemented,
-            idIn=NotImplemented,
-            assetUserRuleIdIn=NotImplemented):
+            orderBy = NotImplemented,
+            idEqual = NotImplemented,
+            mediaIdEqual = NotImplemented,
+            nameEqual = NotImplemented,
+            nameStartsWith = NotImplemented,
+            idIn = NotImplemented,
+            assetUserRuleIdIn = NotImplemented):
         KalturaChannelsBaseFilter.__init__(self,
             orderBy)
 
@@ -10479,19 +10715,19 @@ class KalturaChannelsFilter(KalturaChannelsBaseFilter):
         self.mediaIdEqual = mediaIdEqual
 
         # Exact channel name to filter by
-        # @var string
+        # @var str
         self.nameEqual = nameEqual
 
         # Channel name starts with (auto-complete)
-        # @var string
+        # @var str
         self.nameStartsWith = nameStartsWith
 
         # Comma separated channel ids
-        # @var string
+        # @var str
         self.idIn = idIn
 
         # comma-separated list of KalturaChannel.assetUserRuleId values.  Matching KalturaChannel objects will be returned by the filter.
-        # @var string
+        # @var str
         self.assetUserRuleIdIn = assetUserRuleIdIn
 
 
@@ -10560,14 +10796,14 @@ class KalturaChannelsFilter(KalturaChannelsBaseFilter):
 # @subpackage Client
 class KalturaChannelSearchByKsqlFilter(KalturaChannelsBaseFilter):
     def __init__(self,
-            orderBy=NotImplemented,
-            kSql=NotImplemented,
-            channelStructEqual=NotImplemented):
+            orderBy = NotImplemented,
+            kSql = NotImplemented,
+            channelStructEqual = NotImplemented):
         KalturaChannelsBaseFilter.__init__(self,
             orderBy)
 
         # KSQL expression
-        # @var string
+        # @var str
         self.kSql = kSql
 
         # channel struct
@@ -10608,17 +10844,17 @@ class KalturaChannelSearchByKsqlFilter(KalturaChannelsBaseFilter):
 # @subpackage Client
 class KalturaImageFilter(KalturaFilter):
     def __init__(self,
-            orderBy=NotImplemented,
-            idIn=NotImplemented,
-            imageObjectIdEqual=NotImplemented,
-            imageObjectTypeEqual=NotImplemented,
-            isDefaultEqual=NotImplemented,
-            imageObjectIdIn=NotImplemented):
+            orderBy = NotImplemented,
+            idIn = NotImplemented,
+            imageObjectIdEqual = NotImplemented,
+            imageObjectTypeEqual = NotImplemented,
+            isDefaultEqual = NotImplemented,
+            imageObjectIdIn = NotImplemented):
         KalturaFilter.__init__(self,
             orderBy)
 
         # IDs to filter by
-        # @var string
+        # @var str
         self.idIn = idIn
 
         # ID of the object the is related to, to filter by
@@ -10634,7 +10870,7 @@ class KalturaImageFilter(KalturaFilter):
         self.isDefaultEqual = isDefaultEqual
 
         # Comma separated imageObject ids list
-        # @var string
+        # @var str
         self.imageObjectIdIn = imageObjectIdIn
 
 
@@ -10695,18 +10931,18 @@ class KalturaImageFilter(KalturaFilter):
 # @subpackage Client
 class KalturaImageTypeFilter(KalturaFilter):
     def __init__(self,
-            orderBy=NotImplemented,
-            idIn=NotImplemented,
-            ratioIdIn=NotImplemented):
+            orderBy = NotImplemented,
+            idIn = NotImplemented,
+            ratioIdIn = NotImplemented):
         KalturaFilter.__init__(self,
             orderBy)
 
         # IDs to filter by
-        # @var string
+        # @var str
         self.idIn = idIn
 
         # Ratio IDs to filter by
-        # @var string
+        # @var str
         self.ratioIdIn = ratioIdIn
 
 
@@ -10743,24 +10979,24 @@ class KalturaImageTypeFilter(KalturaFilter):
 # @subpackage Client
 class KalturaLabelFilter(KalturaFilter):
     def __init__(self,
-            orderBy=NotImplemented,
-            idIn=NotImplemented,
-            labelEqual=NotImplemented,
-            labelStartsWith=NotImplemented,
-            entityAttributeEqual=NotImplemented):
+            orderBy = NotImplemented,
+            idIn = NotImplemented,
+            labelEqual = NotImplemented,
+            labelStartsWith = NotImplemented,
+            entityAttributeEqual = NotImplemented):
         KalturaFilter.__init__(self,
             orderBy)
 
         # Comma-separated identifiers of labels
-        # @var string
+        # @var str
         self.idIn = idIn
 
         # Filter the label with this value
-        # @var string
+        # @var str
         self.labelEqual = labelEqual
 
         # Filter labels which start with this value
-        # @var string
+        # @var str
         self.labelStartsWith = labelStartsWith
 
         # Type of entity that labels are associated with
@@ -10817,9 +11053,9 @@ class KalturaLabelFilter(KalturaFilter):
 # @subpackage Client
 class KalturaMediaFileFilter(KalturaFilter):
     def __init__(self,
-            orderBy=NotImplemented,
-            assetIdEqual=NotImplemented,
-            idEqual=NotImplemented):
+            orderBy = NotImplemented,
+            assetIdEqual = NotImplemented,
+            idEqual = NotImplemented):
         KalturaFilter.__init__(self,
             orderBy)
 
@@ -10865,8 +11101,8 @@ class KalturaMediaFileFilter(KalturaFilter):
 # @subpackage Client
 class KalturaPersonalAssetSelectionFilter(KalturaFilter):
     def __init__(self,
-            orderBy=NotImplemented,
-            slotNumberEqual=NotImplemented):
+            orderBy = NotImplemented,
+            slotNumberEqual = NotImplemented):
         KalturaFilter.__init__(self,
             orderBy)
 
@@ -10902,8 +11138,8 @@ class KalturaStreamingDeviceFilter(KalturaFilter):
     """Filtering streaming devices"""
 
     def __init__(self,
-            orderBy=NotImplemented,
-            assetTypeEqual=NotImplemented):
+            orderBy = NotImplemented,
+            assetTypeEqual = NotImplemented):
         KalturaFilter.__init__(self,
             orderBy)
 
@@ -10937,21 +11173,21 @@ class KalturaStreamingDeviceFilter(KalturaFilter):
 # @subpackage Client
 class KalturaTagFilter(KalturaFilter):
     def __init__(self,
-            orderBy=NotImplemented,
-            tagEqual=NotImplemented,
-            tagStartsWith=NotImplemented,
-            typeEqual=NotImplemented,
-            languageEqual=NotImplemented,
-            idIn=NotImplemented):
+            orderBy = NotImplemented,
+            tagEqual = NotImplemented,
+            tagStartsWith = NotImplemented,
+            typeEqual = NotImplemented,
+            languageEqual = NotImplemented,
+            idIn = NotImplemented):
         KalturaFilter.__init__(self,
             orderBy)
 
         # Tag to filter by
-        # @var string
+        # @var str
         self.tagEqual = tagEqual
 
         # Tag to filter by
-        # @var string
+        # @var str
         self.tagStartsWith = tagStartsWith
 
         # Type identifier
@@ -10959,11 +11195,11 @@ class KalturaTagFilter(KalturaFilter):
         self.typeEqual = typeEqual
 
         # Language to filter by
-        # @var string
+        # @var str
         self.languageEqual = languageEqual
 
         # Comma separated identifiers
-        # @var string
+        # @var str
         self.idIn = idIn
 
 
@@ -11024,9 +11260,9 @@ class KalturaTagFilter(KalturaFilter):
 # @subpackage Client
 class KalturaSearchPriorityGroupFilter(KalturaFilter):
     def __init__(self,
-            orderBy=NotImplemented,
-            activeOnlyEqual=NotImplemented,
-            idEqual=NotImplemented):
+            orderBy = NotImplemented,
+            activeOnlyEqual = NotImplemented,
+            idEqual = NotImplemented):
         KalturaFilter.__init__(self,
             orderBy)
 
@@ -11072,12 +11308,12 @@ class KalturaSearchPriorityGroupFilter(KalturaFilter):
 # @subpackage Client
 class KalturaLineupRegionalChannelFilter(KalturaFilter):
     def __init__(self,
-            orderBy=NotImplemented,
-            regionIdEqual=NotImplemented,
-            parentRegionIncluded=NotImplemented,
-            kSql=NotImplemented,
-            lcnGreaterThanOrEqual=NotImplemented,
-            lcnLessThanOrEqual=NotImplemented):
+            orderBy = NotImplemented,
+            regionIdEqual = NotImplemented,
+            parentRegionIncluded = NotImplemented,
+            kSql = NotImplemented,
+            lcnGreaterThanOrEqual = NotImplemented,
+            lcnLessThanOrEqual = NotImplemented):
         KalturaFilter.__init__(self,
             orderBy)
 
@@ -11090,7 +11326,7 @@ class KalturaLineupRegionalChannelFilter(KalturaFilter):
         self.parentRegionIncluded = parentRegionIncluded
 
         # A valid KSQL statement - Only linear channels that satisfies the KSQL statement will be included in the results
-        # @var string
+        # @var str
         self.kSql = kSql
 
         # Filter only LCNs that greater or equals to the provided number
@@ -11159,13 +11395,13 @@ class KalturaLineupRegionalChannelFilter(KalturaFilter):
 # @subpackage Client
 class KalturaListGroupsRepresentativesFilter(KalturaFilter):
     def __init__(self,
-            orderBy=NotImplemented,
-            kSql=NotImplemented):
+            orderBy = NotImplemented,
+            kSql = NotImplemented):
         KalturaFilter.__init__(self,
             orderBy)
 
         # Search assets using dynamic criteria. Provided collection of nested expressions with key, comparison operators, value, and logical conjunction.
-        # @var string
+        # @var str
         self.kSql = kSql
 
 
@@ -11194,8 +11430,8 @@ class KalturaListGroupsRepresentativesFilter(KalturaFilter):
 # @subpackage Client
 class KalturaPaymentMethodProfileFilter(KalturaFilter):
     def __init__(self,
-            orderBy=NotImplemented,
-            paymentGatewayIdEqual=NotImplemented):
+            orderBy = NotImplemented,
+            paymentGatewayIdEqual = NotImplemented):
         KalturaFilter.__init__(self,
             orderBy)
 
@@ -11231,13 +11467,13 @@ class KalturaAssetPersonalMarkupSearchFilter(KalturaFilter):
     """Asset Personal Markup search filter"""
 
     def __init__(self,
-            orderBy=NotImplemented,
-            assetsIn=NotImplemented):
+            orderBy = NotImplemented,
+            assetsIn = NotImplemented):
         KalturaFilter.__init__(self,
             orderBy)
 
         # all assets to search their personal markups
-        # @var array of KalturaSlimAsset
+        # @var List[KalturaSlimAsset]
         self.assetsIn = assetsIn
 
 
@@ -11268,12 +11504,12 @@ class KalturaAssetRuleFilter(KalturaFilter):
     """Asset rule filter"""
 
     def __init__(self,
-            orderBy=NotImplemented,
-            conditionsContainType=NotImplemented,
-            assetApplied=NotImplemented,
-            actionsContainType=NotImplemented,
-            assetRuleIdEqual=NotImplemented,
-            nameContains=NotImplemented):
+            orderBy = NotImplemented,
+            conditionsContainType = NotImplemented,
+            assetApplied = NotImplemented,
+            actionsContainType = NotImplemented,
+            assetRuleIdEqual = NotImplemented,
+            nameContains = NotImplemented):
         KalturaFilter.__init__(self,
             orderBy)
 
@@ -11295,7 +11531,7 @@ class KalturaAssetRuleFilter(KalturaFilter):
         self.assetRuleIdEqual = assetRuleIdEqual
 
         # Name
-        # @var string
+        # @var str
         self.nameContains = nameContains
 
 
@@ -11358,10 +11594,10 @@ class KalturaAssetUserRuleFilter(KalturaFilter):
     """Asset user rule filter"""
 
     def __init__(self,
-            orderBy=NotImplemented,
-            attachedUserIdEqualCurrent=NotImplemented,
-            actionsContainType=NotImplemented,
-            conditionsContainType=NotImplemented):
+            orderBy = NotImplemented,
+            attachedUserIdEqualCurrent = NotImplemented,
+            actionsContainType = NotImplemented,
+            conditionsContainType = NotImplemented):
         KalturaFilter.__init__(self,
             orderBy)
 
@@ -11421,7 +11657,7 @@ class KalturaCampaignFilter(KalturaFilter):
     """Campaign filter (same as KalturaCampaignSearchFilter with no parameters)"""
 
     def __init__(self,
-            orderBy=NotImplemented):
+            orderBy = NotImplemented):
         KalturaFilter.__init__(self,
             orderBy)
 
@@ -11443,15 +11679,15 @@ class KalturaCampaignFilter(KalturaFilter):
 # @subpackage Client
 class KalturaCampaignSearchFilter(KalturaCampaignFilter):
     def __init__(self,
-            orderBy=NotImplemented,
-            startDateGreaterThanOrEqual=NotImplemented,
-            endDateLessThanOrEqual=NotImplemented,
-            stateEqual=NotImplemented,
-            hasPromotion=NotImplemented,
-            nameEqual=NotImplemented,
-            nameContains=NotImplemented,
-            stateIn=NotImplemented,
-            assetUserRuleIdIn=NotImplemented):
+            orderBy = NotImplemented,
+            startDateGreaterThanOrEqual = NotImplemented,
+            endDateLessThanOrEqual = NotImplemented,
+            stateEqual = NotImplemented,
+            hasPromotion = NotImplemented,
+            nameEqual = NotImplemented,
+            nameContains = NotImplemented,
+            stateIn = NotImplemented,
+            assetUserRuleIdIn = NotImplemented):
         KalturaCampaignFilter.__init__(self,
             orderBy)
 
@@ -11472,19 +11708,19 @@ class KalturaCampaignSearchFilter(KalturaCampaignFilter):
         self.hasPromotion = hasPromotion
 
         # Filter the Campaign with this name.
-        # @var string
+        # @var str
         self.nameEqual = nameEqual
 
         # A string that is included in the Campaign name
-        # @var string
+        # @var str
         self.nameContains = nameContains
 
         # Comma separated Campaign State list
-        # @var string
+        # @var str
         self.stateIn = stateIn
 
         # Comma separated AssetUserRule Ids to filter by
-        # @var string
+        # @var str
         self.assetUserRuleIdIn = assetUserRuleIdIn
 
 
@@ -11569,15 +11805,15 @@ class KalturaCampaignSearchFilter(KalturaCampaignFilter):
 # @subpackage Client
 class KalturaBatchCampaignSearchFilter(KalturaCampaignSearchFilter):
     def __init__(self,
-            orderBy=NotImplemented,
-            startDateGreaterThanOrEqual=NotImplemented,
-            endDateLessThanOrEqual=NotImplemented,
-            stateEqual=NotImplemented,
-            hasPromotion=NotImplemented,
-            nameEqual=NotImplemented,
-            nameContains=NotImplemented,
-            stateIn=NotImplemented,
-            assetUserRuleIdIn=NotImplemented):
+            orderBy = NotImplemented,
+            startDateGreaterThanOrEqual = NotImplemented,
+            endDateLessThanOrEqual = NotImplemented,
+            stateEqual = NotImplemented,
+            hasPromotion = NotImplemented,
+            nameEqual = NotImplemented,
+            nameContains = NotImplemented,
+            stateIn = NotImplemented,
+            assetUserRuleIdIn = NotImplemented):
         KalturaCampaignSearchFilter.__init__(self,
             orderBy,
             startDateGreaterThanOrEqual,
@@ -11607,13 +11843,13 @@ class KalturaBatchCampaignSearchFilter(KalturaCampaignSearchFilter):
 # @subpackage Client
 class KalturaCampaignIdInFilter(KalturaCampaignFilter):
     def __init__(self,
-            orderBy=NotImplemented,
-            idIn=NotImplemented):
+            orderBy = NotImplemented,
+            idIn = NotImplemented):
         KalturaCampaignFilter.__init__(self,
             orderBy)
 
         # campaign identifiers
-        # @var string
+        # @var str
         self.idIn = idIn
 
 
@@ -11642,16 +11878,16 @@ class KalturaCampaignIdInFilter(KalturaCampaignFilter):
 # @subpackage Client
 class KalturaCampaignSegmentFilter(KalturaCampaignSearchFilter):
     def __init__(self,
-            orderBy=NotImplemented,
-            startDateGreaterThanOrEqual=NotImplemented,
-            endDateLessThanOrEqual=NotImplemented,
-            stateEqual=NotImplemented,
-            hasPromotion=NotImplemented,
-            nameEqual=NotImplemented,
-            nameContains=NotImplemented,
-            stateIn=NotImplemented,
-            assetUserRuleIdIn=NotImplemented,
-            segmentIdEqual=NotImplemented):
+            orderBy = NotImplemented,
+            startDateGreaterThanOrEqual = NotImplemented,
+            endDateLessThanOrEqual = NotImplemented,
+            stateEqual = NotImplemented,
+            hasPromotion = NotImplemented,
+            nameEqual = NotImplemented,
+            nameContains = NotImplemented,
+            stateIn = NotImplemented,
+            assetUserRuleIdIn = NotImplemented,
+            segmentIdEqual = NotImplemented):
         KalturaCampaignSearchFilter.__init__(self,
             orderBy,
             startDateGreaterThanOrEqual,
@@ -11693,15 +11929,15 @@ class KalturaCampaignSegmentFilter(KalturaCampaignSearchFilter):
 # @subpackage Client
 class KalturaTriggerCampaignSearchFilter(KalturaCampaignSearchFilter):
     def __init__(self,
-            orderBy=NotImplemented,
-            startDateGreaterThanOrEqual=NotImplemented,
-            endDateLessThanOrEqual=NotImplemented,
-            stateEqual=NotImplemented,
-            hasPromotion=NotImplemented,
-            nameEqual=NotImplemented,
-            nameContains=NotImplemented,
-            stateIn=NotImplemented,
-            assetUserRuleIdIn=NotImplemented):
+            orderBy = NotImplemented,
+            startDateGreaterThanOrEqual = NotImplemented,
+            endDateLessThanOrEqual = NotImplemented,
+            stateEqual = NotImplemented,
+            hasPromotion = NotImplemented,
+            nameEqual = NotImplemented,
+            nameContains = NotImplemented,
+            stateIn = NotImplemented,
+            assetUserRuleIdIn = NotImplemented):
         KalturaCampaignSearchFilter.__init__(self,
             orderBy,
             startDateGreaterThanOrEqual,
@@ -11733,11 +11969,11 @@ class KalturaBusinessModuleRuleFilter(KalturaFilter):
     """Business module rule filter"""
 
     def __init__(self,
-            orderBy=NotImplemented,
-            businessModuleTypeApplied=NotImplemented,
-            businessModuleIdApplied=NotImplemented,
-            segmentIdsApplied=NotImplemented,
-            actionsContainType=NotImplemented):
+            orderBy = NotImplemented,
+            businessModuleTypeApplied = NotImplemented,
+            businessModuleIdApplied = NotImplemented,
+            segmentIdsApplied = NotImplemented,
+            actionsContainType = NotImplemented):
         KalturaFilter.__init__(self,
             orderBy)
 
@@ -11750,7 +11986,7 @@ class KalturaBusinessModuleRuleFilter(KalturaFilter):
         self.businessModuleIdApplied = businessModuleIdApplied
 
         # Comma separated segment IDs the rules applied on
-        # @var string
+        # @var str
         self.segmentIdsApplied = segmentIdsApplied
 
         # Indicates which business module rule list to return by their action.
@@ -11809,19 +12045,19 @@ class KalturaCountryFilter(KalturaFilter):
     """Country filter"""
 
     def __init__(self,
-            orderBy=NotImplemented,
-            idIn=NotImplemented,
-            ipEqual=NotImplemented,
-            ipEqualCurrent=NotImplemented):
+            orderBy = NotImplemented,
+            idIn = NotImplemented,
+            ipEqual = NotImplemented,
+            ipEqualCurrent = NotImplemented):
         KalturaFilter.__init__(self,
             orderBy)
 
         # Country identifiers
-        # @var string
+        # @var str
         self.idIn = idIn
 
         # Ip to identify the country
-        # @var string
+        # @var str
         self.ipEqual = ipEqual
 
         # Indicates if to get the IP from the request
@@ -11872,14 +12108,14 @@ class KalturaCurrencyFilter(KalturaFilter):
     """Currency filter"""
 
     def __init__(self,
-            orderBy=NotImplemented,
-            codeIn=NotImplemented,
-            excludePartner=NotImplemented):
+            orderBy = NotImplemented,
+            codeIn = NotImplemented,
+            excludePartner = NotImplemented):
         KalturaFilter.__init__(self,
             orderBy)
 
         # Currency codes
-        # @var string
+        # @var str
         self.codeIn = codeIn
 
         # Exclude partner
@@ -11920,11 +12156,11 @@ class KalturaCurrencyFilter(KalturaFilter):
 # @subpackage Client
 class KalturaDeviceBrandFilter(KalturaFilter):
     def __init__(self,
-            orderBy=NotImplemented,
-            idEqual=NotImplemented,
-            deviceFamilyIdEqual=NotImplemented,
-            nameEqual=NotImplemented,
-            typeEqual=NotImplemented):
+            orderBy = NotImplemented,
+            idEqual = NotImplemented,
+            deviceFamilyIdEqual = NotImplemented,
+            nameEqual = NotImplemented,
+            typeEqual = NotImplemented):
         KalturaFilter.__init__(self,
             orderBy)
 
@@ -11937,7 +12173,7 @@ class KalturaDeviceBrandFilter(KalturaFilter):
         self.deviceFamilyIdEqual = deviceFamilyIdEqual
 
         # Filter the device brand with this name.
-        # @var string
+        # @var str
         self.nameEqual = nameEqual
 
         # Filter device brands of this type
@@ -11994,10 +12230,10 @@ class KalturaDeviceBrandFilter(KalturaFilter):
 # @subpackage Client
 class KalturaDeviceFamilyFilter(KalturaFilter):
     def __init__(self,
-            orderBy=NotImplemented,
-            idEqual=NotImplemented,
-            nameEqual=NotImplemented,
-            typeEqual=NotImplemented):
+            orderBy = NotImplemented,
+            idEqual = NotImplemented,
+            nameEqual = NotImplemented,
+            typeEqual = NotImplemented):
         KalturaFilter.__init__(self,
             orderBy)
 
@@ -12006,7 +12242,7 @@ class KalturaDeviceFamilyFilter(KalturaFilter):
         self.idEqual = idEqual
 
         # Filter the device family with this name.
-        # @var string
+        # @var str
         self.nameEqual = nameEqual
 
         # Filter device families of this type
@@ -12055,15 +12291,15 @@ class KalturaDeviceFamilyFilter(KalturaFilter):
 # @subpackage Client
 class KalturaEventNotificationFilter(KalturaFilter):
     def __init__(self,
-            orderBy=NotImplemented,
-            idEqual=NotImplemented,
-            objectIdEqual=NotImplemented,
-            eventObjectTypeEqual=NotImplemented):
+            orderBy = NotImplemented,
+            idEqual = NotImplemented,
+            objectIdEqual = NotImplemented,
+            eventObjectTypeEqual = NotImplemented):
         KalturaFilter.__init__(self,
             orderBy)
 
         # Indicates which event notification to return by their event notifications Id.
-        # @var string
+        # @var str
         self.idEqual = idEqual
 
         # Indicates which objectId to return by their event notifications.
@@ -12071,7 +12307,7 @@ class KalturaEventNotificationFilter(KalturaFilter):
         self.objectIdEqual = objectIdEqual
 
         # Indicates which objectType to return by their event notifications.
-        # @var string
+        # @var str
         self.eventObjectTypeEqual = eventObjectTypeEqual
 
 
@@ -12118,13 +12354,13 @@ class KalturaExportTaskFilter(KalturaFilter):
     """Bulk export tasks filter"""
 
     def __init__(self,
-            orderBy=NotImplemented,
-            idIn=NotImplemented):
+            orderBy = NotImplemented,
+            idIn = NotImplemented):
         KalturaFilter.__init__(self,
             orderBy)
 
         # Comma separated tasks identifiers
-        # @var string
+        # @var str
         self.idIn = idIn
 
 
@@ -12155,7 +12391,7 @@ class KalturaExternalChannelProfileFilter(KalturaFilter):
     """External channel profile filter"""
 
     def __init__(self,
-            orderBy=NotImplemented):
+            orderBy = NotImplemented):
         KalturaFilter.__init__(self,
             orderBy)
 
@@ -12177,13 +12413,13 @@ class KalturaExternalChannelProfileFilter(KalturaFilter):
 # @subpackage Client
 class KalturaExternalChannelProfileByIdInFilter(KalturaExternalChannelProfileFilter):
     def __init__(self,
-            orderBy=NotImplemented,
-            idIn=NotImplemented):
+            orderBy = NotImplemented,
+            idIn = NotImplemented):
         KalturaExternalChannelProfileFilter.__init__(self,
             orderBy)
 
         # Comma separated external channel profile ids
-        # @var string
+        # @var str
         self.idIn = idIn
 
 
@@ -12214,7 +12450,7 @@ class KalturaIotFilter(KalturaFilter):
     """Iot settings filter"""
 
     def __init__(self,
-            orderBy=NotImplemented):
+            orderBy = NotImplemented):
         KalturaFilter.__init__(self,
             orderBy)
 
@@ -12238,7 +12474,7 @@ class KalturaIotProfileFilter(KalturaFilter):
     """Iot settings filter"""
 
     def __init__(self,
-            orderBy=NotImplemented):
+            orderBy = NotImplemented):
         KalturaFilter.__init__(self,
             orderBy)
 
@@ -12262,14 +12498,14 @@ class KalturaLanguageFilter(KalturaFilter):
     """Language filter"""
 
     def __init__(self,
-            orderBy=NotImplemented,
-            codeIn=NotImplemented,
-            excludePartner=NotImplemented):
+            orderBy = NotImplemented,
+            codeIn = NotImplemented,
+            excludePartner = NotImplemented):
         KalturaFilter.__init__(self,
             orderBy)
 
         # Language codes
-        # @var string
+        # @var str
         self.codeIn = codeIn
 
         # Exclude partner
@@ -12310,17 +12546,17 @@ class KalturaLanguageFilter(KalturaFilter):
 # @subpackage Client
 class KalturaMediaFileDynamicDataFilter(KalturaFilter):
     def __init__(self,
-            orderBy=NotImplemented,
-            idIn=NotImplemented,
-            mediaFileTypeId=NotImplemented,
-            mediaFileTypeKeyName=NotImplemented,
-            valueEqual=NotImplemented,
-            valueStartsWith=NotImplemented):
+            orderBy = NotImplemented,
+            idIn = NotImplemented,
+            mediaFileTypeId = NotImplemented,
+            mediaFileTypeKeyName = NotImplemented,
+            valueEqual = NotImplemented,
+            valueStartsWith = NotImplemented):
         KalturaFilter.__init__(self,
             orderBy)
 
         # A comma-separated list of KalturaMediaFileDynamicData.Id to be searched.
-        # @var string
+        # @var str
         self.idIn = idIn
 
         # An integer representing the the mediaFileType holding the keys for which the values should be stored.
@@ -12329,15 +12565,15 @@ class KalturaMediaFileDynamicDataFilter(KalturaFilter):
 
         # A string representing the key name within the mediaFileType that identifies the list corresponding
         #             to that key name.
-        # @var string
+        # @var str
         self.mediaFileTypeKeyName = mediaFileTypeKeyName
 
         # A string representing a specific value to be searched.
-        # @var string
+        # @var str
         self.valueEqual = valueEqual
 
         # A string representing the beginning of multiple (zero or more) matching values.
-        # @var string
+        # @var str
         self.valueStartsWith = valueStartsWith
 
 
@@ -12400,16 +12636,16 @@ class KalturaMetaFilter(KalturaFilter):
     """Meta filter"""
 
     def __init__(self,
-            orderBy=NotImplemented,
-            idIn=NotImplemented,
-            assetStructIdEqual=NotImplemented,
-            dataTypeEqual=NotImplemented,
-            multipleValueEqual=NotImplemented):
+            orderBy = NotImplemented,
+            idIn = NotImplemented,
+            assetStructIdEqual = NotImplemented,
+            dataTypeEqual = NotImplemented,
+            multipleValueEqual = NotImplemented):
         KalturaFilter.__init__(self,
             orderBy)
 
         # Comma separated identifiers
-        # @var string
+        # @var str
         self.idIn = idIn
 
         # Filter Metas that are contained in a specific asset struct
@@ -12474,8 +12710,8 @@ class KalturaMetaFilter(KalturaFilter):
 # @subpackage Client
 class KalturaParentalRuleFilter(KalturaFilter):
     def __init__(self,
-            orderBy=NotImplemented,
-            entityReferenceEqual=NotImplemented):
+            orderBy = NotImplemented,
+            entityReferenceEqual = NotImplemented):
         KalturaFilter.__init__(self,
             orderBy)
 
@@ -12509,7 +12745,7 @@ class KalturaParentalRuleFilter(KalturaFilter):
 # @subpackage Client
 class KalturaBasePermissionFilter(KalturaFilter):
     def __init__(self,
-            orderBy=NotImplemented):
+            orderBy = NotImplemented):
         KalturaFilter.__init__(self,
             orderBy)
 
@@ -12533,9 +12769,9 @@ class KalturaPermissionFilter(KalturaBasePermissionFilter):
     """Permissions filter"""
 
     def __init__(self,
-            orderBy=NotImplemented,
-            currentUserPermissionsContains=NotImplemented,
-            roleIdIn=NotImplemented):
+            orderBy = NotImplemented,
+            currentUserPermissionsContains = NotImplemented,
+            roleIdIn = NotImplemented):
         KalturaBasePermissionFilter.__init__(self,
             orderBy)
 
@@ -12581,13 +12817,13 @@ class KalturaPermissionFilter(KalturaBasePermissionFilter):
 # @subpackage Client
 class KalturaPermissionByIdInFilter(KalturaBasePermissionFilter):
     def __init__(self,
-            orderBy=NotImplemented,
-            idIn=NotImplemented):
+            orderBy = NotImplemented,
+            idIn = NotImplemented):
         KalturaBasePermissionFilter.__init__(self,
             orderBy)
 
         # Category item identifiers
-        # @var string
+        # @var str
         self.idIn = idIn
 
 
@@ -12616,7 +12852,7 @@ class KalturaPermissionByIdInFilter(KalturaBasePermissionFilter):
 # @subpackage Client
 class KalturaPermissionItemFilter(KalturaFilter):
     def __init__(self,
-            orderBy=NotImplemented):
+            orderBy = NotImplemented):
         KalturaFilter.__init__(self,
             orderBy)
 
@@ -12638,13 +12874,13 @@ class KalturaPermissionItemFilter(KalturaFilter):
 # @subpackage Client
 class KalturaPermissionItemByIdInFilter(KalturaPermissionItemFilter):
     def __init__(self,
-            orderBy=NotImplemented,
-            idIn=NotImplemented):
+            orderBy = NotImplemented,
+            idIn = NotImplemented):
         KalturaPermissionItemFilter.__init__(self,
             orderBy)
 
         # Permission item identifiers
-        # @var string
+        # @var str
         self.idIn = idIn
 
 
@@ -12675,18 +12911,18 @@ class KalturaPermissionItemByApiActionFilter(KalturaPermissionItemFilter):
     """If filter properties are empty will return all API action type permission items"""
 
     def __init__(self,
-            orderBy=NotImplemented,
-            serviceEqual=NotImplemented,
-            actionEqual=NotImplemented):
+            orderBy = NotImplemented,
+            serviceEqual = NotImplemented,
+            actionEqual = NotImplemented):
         KalturaPermissionItemFilter.__init__(self,
             orderBy)
 
         # API service name
-        # @var string
+        # @var str
         self.serviceEqual = serviceEqual
 
         # API action name
-        # @var string
+        # @var str
         self.actionEqual = actionEqual
 
 
@@ -12725,17 +12961,17 @@ class KalturaPermissionItemByArgumentFilter(KalturaPermissionItemByApiActionFilt
     """If filter properties are empty will return all API argument type permission items"""
 
     def __init__(self,
-            orderBy=NotImplemented,
-            serviceEqual=NotImplemented,
-            actionEqual=NotImplemented,
-            parameterEqual=NotImplemented):
+            orderBy = NotImplemented,
+            serviceEqual = NotImplemented,
+            actionEqual = NotImplemented,
+            parameterEqual = NotImplemented):
         KalturaPermissionItemByApiActionFilter.__init__(self,
             orderBy,
             serviceEqual,
             actionEqual)
 
         # Parameter name
-        # @var string
+        # @var str
         self.parameterEqual = parameterEqual
 
 
@@ -12766,18 +13002,18 @@ class KalturaPermissionItemByParameterFilter(KalturaPermissionItemFilter):
     """If filter properties are empty will return all parameter type permission items"""
 
     def __init__(self,
-            orderBy=NotImplemented,
-            parameterEqual=NotImplemented,
-            objectEqual=NotImplemented):
+            orderBy = NotImplemented,
+            parameterEqual = NotImplemented,
+            objectEqual = NotImplemented):
         KalturaPermissionItemFilter.__init__(self,
             orderBy)
 
         # Parameter name
-        # @var string
+        # @var str
         self.parameterEqual = parameterEqual
 
         # Parameter name
-        # @var string
+        # @var str
         self.objectEqual = objectEqual
 
 
@@ -12816,8 +13052,8 @@ class KalturaPlaybackProfileFilter(KalturaFilter):
     """User asset rule filter"""
 
     def __init__(self,
-            orderBy=NotImplemented,
-            playbackProfileEqual=NotImplemented):
+            orderBy = NotImplemented,
+            playbackProfileEqual = NotImplemented):
         KalturaFilter.__init__(self,
             orderBy)
 
@@ -12851,7 +13087,7 @@ class KalturaPlaybackProfileFilter(KalturaFilter):
 # @subpackage Client
 class KalturaBaseRegionFilter(KalturaFilter):
     def __init__(self,
-            orderBy=NotImplemented):
+            orderBy = NotImplemented):
         KalturaFilter.__init__(self,
             orderBy)
 
@@ -12873,22 +13109,22 @@ class KalturaBaseRegionFilter(KalturaFilter):
 # @subpackage Client
 class KalturaRegionFilter(KalturaBaseRegionFilter):
     def __init__(self,
-            orderBy=NotImplemented,
-            externalIdIn=NotImplemented,
-            idIn=NotImplemented,
-            parentIdEqual=NotImplemented,
-            liveAssetIdEqual=NotImplemented,
-            parentOnly=NotImplemented,
-            exclusiveLcn=NotImplemented):
+            orderBy = NotImplemented,
+            externalIdIn = NotImplemented,
+            idIn = NotImplemented,
+            parentIdEqual = NotImplemented,
+            liveAssetIdEqual = NotImplemented,
+            parentOnly = NotImplemented,
+            exclusiveLcn = NotImplemented):
         KalturaBaseRegionFilter.__init__(self,
             orderBy)
 
         # List of comma separated regions external IDs
-        # @var string
+        # @var str
         self.externalIdIn = externalIdIn
 
         # List of comma separated regions Ids
-        # @var string
+        # @var str
         self.idIn = idIn
 
         # Region parent ID to filter by
@@ -12973,7 +13209,7 @@ class KalturaRegionFilter(KalturaBaseRegionFilter):
 # @subpackage Client
 class KalturaDefaultRegionFilter(KalturaBaseRegionFilter):
     def __init__(self,
-            orderBy=NotImplemented):
+            orderBy = NotImplemented):
         KalturaBaseRegionFilter.__init__(self,
             orderBy)
 
@@ -12997,7 +13233,7 @@ class KalturaAddDefaultIfEmptyResponseProfile(KalturaRelatedObjectFilter):
     """Kaltura add default if empty ResponseProfile Filter"""
 
     def __init__(self,
-            orderBy=NotImplemented):
+            orderBy = NotImplemented):
         KalturaRelatedObjectFilter.__init__(self,
             orderBy)
 
@@ -13019,7 +13255,7 @@ class KalturaAddDefaultIfEmptyResponseProfile(KalturaRelatedObjectFilter):
 # @subpackage Client
 class KalturaSearchHistoryFilter(KalturaFilter):
     def __init__(self,
-            orderBy=NotImplemented):
+            orderBy = NotImplemented):
         KalturaFilter.__init__(self,
             orderBy)
 
@@ -13043,9 +13279,9 @@ class KalturaTvmRuleFilter(KalturaFilter):
     """Asset user rule filter"""
 
     def __init__(self,
-            orderBy=NotImplemented,
-            ruleTypeEqual=NotImplemented,
-            nameEqual=NotImplemented):
+            orderBy = NotImplemented,
+            ruleTypeEqual = NotImplemented,
+            nameEqual = NotImplemented):
         KalturaFilter.__init__(self,
             orderBy)
 
@@ -13054,7 +13290,7 @@ class KalturaTvmRuleFilter(KalturaFilter):
         self.ruleTypeEqual = ruleTypeEqual
 
         # Indicates which tvm rule list to return by their name.
-        # @var string
+        # @var str
         self.nameEqual = nameEqual
 
 
@@ -13093,9 +13329,9 @@ class KalturaUserAssetRuleFilter(KalturaFilter):
     """User asset rule filter"""
 
     def __init__(self,
-            orderBy=NotImplemented,
-            assetIdEqual=NotImplemented,
-            assetTypeEqual=NotImplemented):
+            orderBy = NotImplemented,
+            assetIdEqual = NotImplemented,
+            assetTypeEqual = NotImplemented):
         KalturaFilter.__init__(self,
             orderBy)
 
@@ -13143,16 +13379,16 @@ class KalturaUserRoleFilter(KalturaFilter):
     """User roles filter"""
 
     def __init__(self,
-            orderBy=NotImplemented,
-            idIn=NotImplemented,
-            currentUserRoleIdsContains=NotImplemented,
-            typeEqual=NotImplemented,
-            profileEqual=NotImplemented):
+            orderBy = NotImplemented,
+            idIn = NotImplemented,
+            currentUserRoleIdsContains = NotImplemented,
+            typeEqual = NotImplemented,
+            profileEqual = NotImplemented):
         KalturaFilter.__init__(self,
             orderBy)
 
         # Comma separated roles identifiers
-        # @var string
+        # @var str
         self.idIn = idIn
 
         # Indicates whether the results should be filtered by userId using the current
@@ -13217,9 +13453,9 @@ class KalturaUserRoleFilter(KalturaFilter):
 # @subpackage Client
 class KalturaEpgFilter(KalturaFilter):
     def __init__(self,
-            orderBy=NotImplemented,
-            dateEqual=NotImplemented,
-            liveAssetIdEqual=NotImplemented):
+            orderBy = NotImplemented,
+            dateEqual = NotImplemented,
+            liveAssetIdEqual = NotImplemented):
         KalturaFilter.__init__(self,
             orderBy)
 
@@ -13267,13 +13503,13 @@ class KalturaPropertySkipCondition(KalturaSkipCondition):
     """Skips current request according to condition on given property"""
 
     def __init__(self,
-            propertyPath=NotImplemented,
-            operator=NotImplemented,
-            value=NotImplemented):
+            propertyPath = NotImplemented,
+            operator = NotImplemented,
+            value = NotImplemented):
         KalturaSkipCondition.__init__(self)
 
         # The property path on which the condition is checked
-        # @var string
+        # @var str
         self.propertyPath = propertyPath
 
         # The operator that applies the check to the condition
@@ -13281,7 +13517,7 @@ class KalturaPropertySkipCondition(KalturaSkipCondition):
         self.operator = operator
 
         # The value on which the condition is checked
-        # @var string
+        # @var str
         self.value = value
 
 
@@ -13328,10 +13564,10 @@ class KalturaAggregatedPropertySkipCondition(KalturaPropertySkipCondition):
     """Skips current request according to aggregation condition on given property"""
 
     def __init__(self,
-            propertyPath=NotImplemented,
-            operator=NotImplemented,
-            value=NotImplemented,
-            aggregationType=NotImplemented):
+            propertyPath = NotImplemented,
+            operator = NotImplemented,
+            value = NotImplemented,
+            aggregationType = NotImplemented):
         KalturaPropertySkipCondition.__init__(self,
             propertyPath,
             operator,
@@ -13369,7 +13605,7 @@ class KalturaSkipOnErrorCondition(KalturaSkipCondition):
     """Skips current request if an error occurs according to the selected skip option"""
 
     def __init__(self,
-            condition=NotImplemented):
+            condition = NotImplemented):
         KalturaSkipCondition.__init__(self)
 
         # Indicates which error should be considered to skip the current request
@@ -13402,29 +13638,29 @@ class KalturaSkipOnErrorCondition(KalturaSkipCondition):
 # @subpackage Client
 class KalturaAnnouncement(KalturaObjectBase):
     def __init__(self,
-            name=NotImplemented,
-            message=NotImplemented,
-            enabled=NotImplemented,
-            startTime=NotImplemented,
-            timezone=NotImplemented,
-            status=NotImplemented,
-            recipients=NotImplemented,
-            id=NotImplemented,
-            imageUrl=NotImplemented,
-            includeMail=NotImplemented,
-            mailTemplate=NotImplemented,
-            mailSubject=NotImplemented,
-            includeSms=NotImplemented,
-            includeIot=NotImplemented,
-            includeUserInbox=NotImplemented):
+            name = NotImplemented,
+            message = NotImplemented,
+            enabled = NotImplemented,
+            startTime = NotImplemented,
+            timezone = NotImplemented,
+            status = NotImplemented,
+            recipients = NotImplemented,
+            id = NotImplemented,
+            imageUrl = NotImplemented,
+            includeMail = NotImplemented,
+            mailTemplate = NotImplemented,
+            mailSubject = NotImplemented,
+            includeSms = NotImplemented,
+            includeIot = NotImplemented,
+            includeUserInbox = NotImplemented):
         KalturaObjectBase.__init__(self)
 
         # Announcement name
-        # @var string
+        # @var str
         self.name = name
 
         # Announcement message
-        # @var string
+        # @var str
         self.message = message
 
         # Announcement enabled
@@ -13436,7 +13672,7 @@ class KalturaAnnouncement(KalturaObjectBase):
         self.startTime = startTime
 
         # Announcement time zone
-        # @var string
+        # @var str
         self.timezone = timezone
 
         # Announcement status: NotSent=0/Sending=1/Sent=2/Aborted=3
@@ -13454,7 +13690,7 @@ class KalturaAnnouncement(KalturaObjectBase):
         self.id = id
 
         # Announcement image URL, relevant for system announcements
-        # @var string
+        # @var str
         self.imageUrl = imageUrl
 
         # Include Mail
@@ -13462,11 +13698,11 @@ class KalturaAnnouncement(KalturaObjectBase):
         self.includeMail = includeMail
 
         # Mail Template
-        # @var string
+        # @var str
         self.mailTemplate = mailTemplate
 
         # Mail Subject
-        # @var string
+        # @var str
         self.mailSubject = mailSubject
 
         # Include SMS
@@ -13613,8 +13849,8 @@ class KalturaFilterPager(KalturaObjectBase):
     """The KalturaFilterPager object enables paging management to be applied upon service list actions"""
 
     def __init__(self,
-            pageSize=NotImplemented,
-            pageIndex=NotImplemented):
+            pageSize = NotImplemented,
+            pageIndex = NotImplemented):
         KalturaObjectBase.__init__(self)
 
         # The number of objects to retrieve. Possible range 1 <= value <= 50. If omitted or value &lt; 1 - will be set to 25. If a value &gt; 50 provided - will be set to 50
@@ -13659,7 +13895,7 @@ class KalturaFilterPager(KalturaObjectBase):
 # @subpackage Client
 class KalturaListResponse(KalturaObjectBase):
     def __init__(self,
-            totalCount=NotImplemented):
+            totalCount = NotImplemented):
         KalturaObjectBase.__init__(self)
 
         # Total items
@@ -13694,13 +13930,13 @@ class KalturaAnnouncementListResponse(KalturaListResponse):
     """List of message announcements from DB."""
 
     def __init__(self,
-            totalCount=NotImplemented,
-            objects=NotImplemented):
+            totalCount = NotImplemented,
+            objects = NotImplemented):
         KalturaListResponse.__init__(self,
             totalCount)
 
         # Announcements
-        # @var array of KalturaAnnouncement
+        # @var List[KalturaAnnouncement]
         self.objects = objects
 
 
@@ -13751,9 +13987,9 @@ class KalturaDeviceReferenceData(KalturaOTTObjectSupportNullable):
     """Device Information"""
 
     def __init__(self,
-            id=NotImplemented,
-            name=NotImplemented,
-            status=NotImplemented):
+            id = NotImplemented,
+            name = NotImplemented,
+            status = NotImplemented):
         KalturaOTTObjectSupportNullable.__init__(self)
 
         # id
@@ -13762,7 +13998,7 @@ class KalturaDeviceReferenceData(KalturaOTTObjectSupportNullable):
         self.id = id
 
         # Name
-        # @var string
+        # @var str
         self.name = name
 
         # Status
@@ -13807,13 +14043,13 @@ class KalturaDeviceReferenceData(KalturaOTTObjectSupportNullable):
 # @subpackage Client
 class KalturaDeviceReferenceDataListResponse(KalturaListResponse):
     def __init__(self,
-            totalCount=NotImplemented,
-            objects=NotImplemented):
+            totalCount = NotImplemented,
+            objects = NotImplemented):
         KalturaListResponse.__init__(self,
             totalCount)
 
         # A list of KalturaDeviceReferenceData
-        # @var array of KalturaDeviceReferenceData
+        # @var List[KalturaDeviceReferenceData]
         self.objects = objects
 
 
@@ -13844,9 +14080,9 @@ class KalturaDeviceManufacturerInformation(KalturaDeviceReferenceData):
     """Device Manufacturer Information"""
 
     def __init__(self,
-            id=NotImplemented,
-            name=NotImplemented,
-            status=NotImplemented):
+            id = NotImplemented,
+            name = NotImplemented,
+            status = NotImplemented):
         KalturaDeviceReferenceData.__init__(self,
             id,
             name,
@@ -13872,16 +14108,16 @@ class KalturaRegexExpression(KalturaObjectBase):
     """KalturaRegexExpression"""
 
     def __init__(self,
-            expression=NotImplemented,
-            description=NotImplemented):
+            expression = NotImplemented,
+            description = NotImplemented):
         KalturaObjectBase.__init__(self)
 
         # regex expression
-        # @var string
+        # @var str
         self.expression = expression
 
         # description
-        # @var string
+        # @var str
         self.description = description
 
 
@@ -13920,13 +14156,13 @@ class KalturaPasswordPolicy(KalturaOTTObjectSupportNullable):
     """Password policy settings"""
 
     def __init__(self,
-            id=NotImplemented,
-            name=NotImplemented,
-            userRoleIds=NotImplemented,
-            historyCount=NotImplemented,
-            expiration=NotImplemented,
-            complexities=NotImplemented,
-            lockoutFailuresCount=NotImplemented):
+            id = NotImplemented,
+            name = NotImplemented,
+            userRoleIds = NotImplemented,
+            historyCount = NotImplemented,
+            expiration = NotImplemented,
+            complexities = NotImplemented,
+            lockoutFailuresCount = NotImplemented):
         KalturaOTTObjectSupportNullable.__init__(self)
 
         # id
@@ -13935,11 +14171,11 @@ class KalturaPasswordPolicy(KalturaOTTObjectSupportNullable):
         self.id = id
 
         # Name
-        # @var string
+        # @var str
         self.name = name
 
         # Comma separated UserRole Ids list which the policy is applied on
-        # @var string
+        # @var str
         self.userRoleIds = userRoleIds
 
         # The number of passwords that should be remembered for each user so that they cannot be reused.
@@ -13951,7 +14187,7 @@ class KalturaPasswordPolicy(KalturaOTTObjectSupportNullable):
         self.expiration = expiration
 
         # array of  KalturaRegex
-        # @var array of KalturaRegexExpression
+        # @var List[KalturaRegexExpression]
         self.complexities = complexities
 
         # the number of passwords failures before the account is locked.
@@ -14030,8 +14266,8 @@ class KalturaHouseholdSegment(KalturaOTTObjectSupportNullable):
     """Indicates a segment of a household"""
 
     def __init__(self,
-            segmentId=NotImplemented,
-            householdId=NotImplemented):
+            segmentId = NotImplemented,
+            householdId = NotImplemented):
         KalturaOTTObjectSupportNullable.__init__(self)
 
         # Segment Id
@@ -14078,10 +14314,10 @@ class KalturaAssetFilePpv(KalturaOTTObjectSupportNullable):
     """Asset file ppv"""
 
     def __init__(self,
-            assetFileId=NotImplemented,
-            ppvModuleId=NotImplemented,
-            startDate=NotImplemented,
-            endDate=NotImplemented):
+            assetFileId = NotImplemented,
+            ppvModuleId = NotImplemented,
+            startDate = NotImplemented,
+            endDate = NotImplemented):
         KalturaOTTObjectSupportNullable.__init__(self)
 
         # Asset file identifier
@@ -14152,7 +14388,7 @@ class KalturaBaseChannel(KalturaOTTObjectSupportNullable):
     """Slim channel"""
 
     def __init__(self,
-            id=NotImplemented):
+            id = NotImplemented):
         KalturaOTTObjectSupportNullable.__init__(self)
 
         # Unique identifier for the channel
@@ -14187,10 +14423,11 @@ class KalturaDiscountModule(KalturaObjectBase):
     """Discount module"""
 
     def __init__(self,
-            id=NotImplemented,
-            percent=NotImplemented,
-            startDate=NotImplemented,
-            endDate=NotImplemented):
+            id = NotImplemented,
+            percent = NotImplemented,
+            startDate = NotImplemented,
+            endDate = NotImplemented,
+            assetUserRuleId = NotImplemented):
         KalturaObjectBase.__init__(self)
 
         # Discount module identifier
@@ -14209,12 +14446,17 @@ class KalturaDiscountModule(KalturaObjectBase):
         # @var int
         self.endDate = endDate
 
+        # Asset user rule identifier
+        # @var int
+        self.assetUserRuleId = assetUserRuleId
+
 
     PROPERTY_LOADERS = {
         'id': getXmlNodeInt, 
         'percent': getXmlNodeFloat, 
         'startDate': getXmlNodeInt, 
         'endDate': getXmlNodeInt, 
+        'assetUserRuleId': getXmlNodeInt, 
     }
 
     def fromXml(self, node):
@@ -14228,6 +14470,7 @@ class KalturaDiscountModule(KalturaObjectBase):
         kparams.addFloatIfDefined("percent", self.percent)
         kparams.addIntIfDefined("startDate", self.startDate)
         kparams.addIntIfDefined("endDate", self.endDate)
+        kparams.addIntIfDefined("assetUserRuleId", self.assetUserRuleId)
         return kparams
 
     def getId(self):
@@ -14254,6 +14497,12 @@ class KalturaDiscountModule(KalturaObjectBase):
     def setEndDate(self, newEndDate):
         self.endDate = newEndDate
 
+    def getAssetUserRuleId(self):
+        return self.assetUserRuleId
+
+    def setAssetUserRuleId(self, newAssetUserRuleId):
+        self.assetUserRuleId = newAssetUserRuleId
+
 
 # @package Kaltura
 # @subpackage Client
@@ -14261,15 +14510,16 @@ class KalturaUsageModule(KalturaObjectBase):
     """Pricing usage module"""
 
     def __init__(self,
-            id=NotImplemented,
-            name=NotImplemented,
-            maxViewsNumber=NotImplemented,
-            viewLifeCycle=NotImplemented,
-            fullLifeCycle=NotImplemented,
-            couponId=NotImplemented,
-            waiverPeriod=NotImplemented,
-            isWaiverEnabled=NotImplemented,
-            isOfflinePlayback=NotImplemented):
+            id = NotImplemented,
+            name = NotImplemented,
+            maxViewsNumber = NotImplemented,
+            viewLifeCycle = NotImplemented,
+            fullLifeCycle = NotImplemented,
+            couponId = NotImplemented,
+            waiverPeriod = NotImplemented,
+            isWaiverEnabled = NotImplemented,
+            isOfflinePlayback = NotImplemented,
+            assetUserRuleId = NotImplemented):
         KalturaObjectBase.__init__(self)
 
         # Usage module identifier
@@ -14277,7 +14527,7 @@ class KalturaUsageModule(KalturaObjectBase):
         self.id = id
 
         # Usage module name
-        # @var string
+        # @var str
         self.name = name
 
         # The maximum number of times an item in this usage module can be viewed
@@ -14309,6 +14559,11 @@ class KalturaUsageModule(KalturaObjectBase):
         # @var bool
         self.isOfflinePlayback = isOfflinePlayback
 
+        # Asset user rule identifier
+        # @var int
+        # @insertonly
+        self.assetUserRuleId = assetUserRuleId
+
 
     PROPERTY_LOADERS = {
         'id': getXmlNodeInt, 
@@ -14320,6 +14575,7 @@ class KalturaUsageModule(KalturaObjectBase):
         'waiverPeriod': getXmlNodeInt, 
         'isWaiverEnabled': getXmlNodeBool, 
         'isOfflinePlayback': getXmlNodeBool, 
+        'assetUserRuleId': getXmlNodeInt, 
     }
 
     def fromXml(self, node):
@@ -14337,6 +14593,7 @@ class KalturaUsageModule(KalturaObjectBase):
         kparams.addIntIfDefined("waiverPeriod", self.waiverPeriod)
         kparams.addBoolIfDefined("isWaiverEnabled", self.isWaiverEnabled)
         kparams.addBoolIfDefined("isOfflinePlayback", self.isOfflinePlayback)
+        kparams.addIntIfDefined("assetUserRuleId", self.assetUserRuleId)
         return kparams
 
     def getId(self):
@@ -14390,6 +14647,12 @@ class KalturaUsageModule(KalturaObjectBase):
     def setIsOfflinePlayback(self, newIsOfflinePlayback):
         self.isOfflinePlayback = newIsOfflinePlayback
 
+    def getAssetUserRuleId(self):
+        return self.assetUserRuleId
+
+    def setAssetUserRuleId(self, newAssetUserRuleId):
+        self.assetUserRuleId = newAssetUserRuleId
+
 
 # @package Kaltura
 # @subpackage Client
@@ -14397,23 +14660,23 @@ class KalturaCouponsGroup(KalturaObjectBase):
     """Coupons group details"""
 
     def __init__(self,
-            id=NotImplemented,
-            name=NotImplemented,
-            startDate=NotImplemented,
-            endDate=NotImplemented,
-            maxUsesNumber=NotImplemented,
-            maxUsesNumberOnRenewableSub=NotImplemented,
-            couponGroupType=NotImplemented,
-            maxHouseholdUses=NotImplemented,
-            discountId=NotImplemented):
+            id = NotImplemented,
+            name = NotImplemented,
+            startDate = NotImplemented,
+            endDate = NotImplemented,
+            maxUsesNumber = NotImplemented,
+            maxUsesNumberOnRenewableSub = NotImplemented,
+            couponGroupType = NotImplemented,
+            maxHouseholdUses = NotImplemented,
+            discountId = NotImplemented):
         KalturaObjectBase.__init__(self)
 
         # Coupon group identifier
-        # @var string
+        # @var str
         self.id = id
 
         # Coupon group name
-        # @var string
+        # @var str
         self.name = name
 
         # The first date the coupons in this coupons group are valid
@@ -14536,9 +14799,9 @@ class KalturaCollectionCouponGroup(KalturaObjectBase):
     """Coupons group details"""
 
     def __init__(self,
-            id=NotImplemented,
-            startDate=NotImplemented,
-            endDate=NotImplemented):
+            id = NotImplemented,
+            startDate = NotImplemented,
+            endDate = NotImplemented):
         KalturaObjectBase.__init__(self)
 
         # Coupon group identifier
@@ -14597,16 +14860,16 @@ class KalturaProductCode(KalturaObjectBase):
     """Product Code"""
 
     def __init__(self,
-            inappProvider=NotImplemented,
-            code=NotImplemented):
+            inappProvider = NotImplemented,
+            code = NotImplemented):
         KalturaObjectBase.__init__(self)
 
         # Provider Name
-        # @var string
+        # @var str
         self.inappProvider = inappProvider
 
         # Product Code
-        # @var string
+        # @var str
         self.code = code
 
 
@@ -14645,45 +14908,45 @@ class KalturaCollection(KalturaOTTObjectSupportNullable):
     """Collection"""
 
     def __init__(self,
-            id=NotImplemented,
-            channels=NotImplemented,
-            channelsIds=NotImplemented,
-            startDate=NotImplemented,
-            endDate=NotImplemented,
-            discountModule=NotImplemented,
-            discountModuleId=NotImplemented,
-            name=NotImplemented,
-            multilingualName=NotImplemented,
-            description=NotImplemented,
-            multilingualDescription=NotImplemented,
-            usageModule=NotImplemented,
-            usageModuleId=NotImplemented,
-            couponsGroups=NotImplemented,
-            collectionCouponGroup=NotImplemented,
-            externalId=NotImplemented,
-            productCodes=NotImplemented,
-            priceDetailsId=NotImplemented,
-            isActive=NotImplemented,
-            createDate=NotImplemented,
-            updateDate=NotImplemented,
-            virtualAssetId=NotImplemented,
-            fileTypes=NotImplemented,
-            fileTypesIds=NotImplemented,
-            assetUserRuleId=NotImplemented):
+            id = NotImplemented,
+            channels = NotImplemented,
+            channelsIds = NotImplemented,
+            startDate = NotImplemented,
+            endDate = NotImplemented,
+            discountModule = NotImplemented,
+            discountModuleId = NotImplemented,
+            name = NotImplemented,
+            multilingualName = NotImplemented,
+            description = NotImplemented,
+            multilingualDescription = NotImplemented,
+            usageModule = NotImplemented,
+            usageModuleId = NotImplemented,
+            couponsGroups = NotImplemented,
+            collectionCouponGroup = NotImplemented,
+            externalId = NotImplemented,
+            productCodes = NotImplemented,
+            priceDetailsId = NotImplemented,
+            isActive = NotImplemented,
+            createDate = NotImplemented,
+            updateDate = NotImplemented,
+            virtualAssetId = NotImplemented,
+            fileTypes = NotImplemented,
+            fileTypesIds = NotImplemented,
+            assetUserRuleId = NotImplemented):
         KalturaOTTObjectSupportNullable.__init__(self)
 
         # Collection identifier
-        # @var string
+        # @var str
         self.id = id
 
-        # A list of channels associated with this collection 
+        # A list of channels associated with this collection
         #             This property will deprecated soon. Please use ChannelsIds instead of it.
-        # @var array of KalturaBaseChannel
+        # @var List[KalturaBaseChannel]
         # @readonly
         self.channels = channels
 
         # Comma separated channels Ids associated with this collection
-        # @var string
+        # @var str
         self.channelsIds = channelsIds
 
         # The first date the collection is available for purchasing
@@ -14705,21 +14968,21 @@ class KalturaCollection(KalturaOTTObjectSupportNullable):
         self.discountModuleId = discountModuleId
 
         # Name of the collection
-        # @var string
+        # @var str
         # @readonly
         self.name = name
 
         # Name of the collection
-        # @var array of KalturaTranslationToken
+        # @var List[KalturaTranslationToken]
         self.multilingualName = multilingualName
 
         # description of the collection
-        # @var string
+        # @var str
         # @readonly
         self.description = description
 
         # description of the collection
-        # @var array of KalturaTranslationToken
+        # @var List[KalturaTranslationToken]
         self.multilingualDescription = multilingualDescription
 
         # Collection usage module
@@ -14734,20 +14997,20 @@ class KalturaCollection(KalturaOTTObjectSupportNullable):
 
         # List of Coupons group
         #             This property will deprecated soon. Please use CollectionCouponGroup instead of it.
-        # @var array of KalturaCouponsGroup
+        # @var List[KalturaCouponsGroup]
         # @readonly
         self.couponsGroups = couponsGroups
 
         # List of collection Coupons group
-        # @var array of KalturaCollectionCouponGroup
+        # @var List[KalturaCollectionCouponGroup]
         self.collectionCouponGroup = collectionCouponGroup
 
         # External ID
-        # @var string
+        # @var str
         self.externalId = externalId
 
         # List of Collection product codes
-        # @var array of KalturaProductCode
+        # @var List[KalturaProductCode]
         self.productCodes = productCodes
 
         # The ID of the price details associated with this collection
@@ -14774,16 +15037,17 @@ class KalturaCollection(KalturaOTTObjectSupportNullable):
         self.virtualAssetId = virtualAssetId
 
         # A list of file types identifiers that are supported in this collection
-        # @var array of KalturaIntegerValue
+        # @var List[KalturaIntegerValue]
         # @readonly
         self.fileTypes = fileTypes
 
         # Comma separated file types identifiers that are supported in this collection
-        # @var string
+        # @var str
         self.fileTypesIds = fileTypesIds
 
         # Asset user rule identifier
         # @var int
+        # @insertonly
         self.assetUserRuleId = assetUserRuleId
 
 
@@ -14966,19 +15230,19 @@ class KalturaMediaImage(KalturaObjectBase):
     """Image details"""
 
     def __init__(self,
-            ratio=NotImplemented,
-            width=NotImplemented,
-            height=NotImplemented,
-            url=NotImplemented,
-            version=NotImplemented,
-            id=NotImplemented,
-            isDefault=NotImplemented,
-            imageTypeId=NotImplemented,
-            imageTypeName=NotImplemented):
+            ratio = NotImplemented,
+            width = NotImplemented,
+            height = NotImplemented,
+            url = NotImplemented,
+            version = NotImplemented,
+            id = NotImplemented,
+            isDefault = NotImplemented,
+            imageTypeId = NotImplemented,
+            imageTypeName = NotImplemented):
         KalturaObjectBase.__init__(self)
 
         # Image aspect ratio
-        # @var string
+        # @var str
         self.ratio = ratio
 
         # Image width
@@ -14990,7 +15254,7 @@ class KalturaMediaImage(KalturaObjectBase):
         self.height = height
 
         # Image URL
-        # @var string
+        # @var str
         self.url = url
 
         # Image Version
@@ -14998,7 +15262,7 @@ class KalturaMediaImage(KalturaObjectBase):
         self.version = version
 
         # Image ID
-        # @var string
+        # @var str
         # @readonly
         self.id = id
 
@@ -15011,7 +15275,7 @@ class KalturaMediaImage(KalturaObjectBase):
         self.imageTypeId = imageTypeId
 
         # Image type Name
-        # @var string
+        # @var str
         self.imageTypeName = imageTypeName
 
 
@@ -15102,9 +15366,9 @@ class KalturaChannelOrder(KalturaObjectBase):
     """Channel order details"""
 
     def __init__(self,
-            dynamicOrderBy=NotImplemented,
-            orderBy=NotImplemented,
-            period=NotImplemented):
+            dynamicOrderBy = NotImplemented,
+            orderBy = NotImplemented,
+            period = NotImplemented):
         KalturaObjectBase.__init__(self)
 
         # Channel dynamic order by (meta)
@@ -15183,54 +15447,54 @@ class KalturaChannel(KalturaBaseChannel):
     """Channel details"""
 
     def __init__(self,
-            id=NotImplemented,
-            name=NotImplemented,
-            multilingualName=NotImplemented,
-            oldName=NotImplemented,
-            systemName=NotImplemented,
-            description=NotImplemented,
-            multilingualDescription=NotImplemented,
-            oldDescription=NotImplemented,
-            isActive=NotImplemented,
-            orderBy=NotImplemented,
-            orderingParametersEqual=NotImplemented,
-            createDate=NotImplemented,
-            updateDate=NotImplemented,
-            supportSegmentBasedOrdering=NotImplemented,
-            assetUserRuleId=NotImplemented,
-            metaData=NotImplemented,
-            virtualAssetId=NotImplemented):
+            id = NotImplemented,
+            name = NotImplemented,
+            multilingualName = NotImplemented,
+            oldName = NotImplemented,
+            systemName = NotImplemented,
+            description = NotImplemented,
+            multilingualDescription = NotImplemented,
+            oldDescription = NotImplemented,
+            isActive = NotImplemented,
+            orderBy = NotImplemented,
+            orderingParametersEqual = NotImplemented,
+            createDate = NotImplemented,
+            updateDate = NotImplemented,
+            supportSegmentBasedOrdering = NotImplemented,
+            assetUserRuleId = NotImplemented,
+            metaData = NotImplemented,
+            virtualAssetId = NotImplemented):
         KalturaBaseChannel.__init__(self,
             id)
 
         # Channel name
-        # @var string
+        # @var str
         # @readonly
         self.name = name
 
         # Channel name
-        # @var array of KalturaTranslationToken
+        # @var List[KalturaTranslationToken]
         self.multilingualName = multilingualName
 
         # Channel name
-        # @var string
+        # @var str
         self.oldName = oldName
 
         # Channel system name
-        # @var string
+        # @var str
         self.systemName = systemName
 
         # Cannel description
-        # @var string
+        # @var str
         # @readonly
         self.description = description
 
         # Cannel description
-        # @var array of KalturaTranslationToken
+        # @var List[KalturaTranslationToken]
         self.multilingualDescription = multilingualDescription
 
         # Cannel description
-        # @var string
+        # @var str
         self.oldDescription = oldDescription
 
         # active status
@@ -15242,7 +15506,7 @@ class KalturaChannel(KalturaBaseChannel):
         self.orderBy = orderBy
 
         # Parameters for asset list sorting.
-        # @var array of KalturaBaseChannelOrder
+        # @var List[KalturaBaseChannelOrder]
         self.orderingParametersEqual = orderingParametersEqual
 
         # Specifies when was the Channel was created. Date and time represented as epoch.
@@ -15398,26 +15662,26 @@ class KalturaChannel(KalturaBaseChannel):
 # @subpackage Client
 class KalturaDynamicChannel(KalturaChannel):
     def __init__(self,
-            id=NotImplemented,
-            name=NotImplemented,
-            multilingualName=NotImplemented,
-            oldName=NotImplemented,
-            systemName=NotImplemented,
-            description=NotImplemented,
-            multilingualDescription=NotImplemented,
-            oldDescription=NotImplemented,
-            isActive=NotImplemented,
-            orderBy=NotImplemented,
-            orderingParametersEqual=NotImplemented,
-            createDate=NotImplemented,
-            updateDate=NotImplemented,
-            supportSegmentBasedOrdering=NotImplemented,
-            assetUserRuleId=NotImplemented,
-            metaData=NotImplemented,
-            virtualAssetId=NotImplemented,
-            kSql=NotImplemented,
-            assetTypes=NotImplemented,
-            groupBy=NotImplemented):
+            id = NotImplemented,
+            name = NotImplemented,
+            multilingualName = NotImplemented,
+            oldName = NotImplemented,
+            systemName = NotImplemented,
+            description = NotImplemented,
+            multilingualDescription = NotImplemented,
+            oldDescription = NotImplemented,
+            isActive = NotImplemented,
+            orderBy = NotImplemented,
+            orderingParametersEqual = NotImplemented,
+            createDate = NotImplemented,
+            updateDate = NotImplemented,
+            supportSegmentBasedOrdering = NotImplemented,
+            assetUserRuleId = NotImplemented,
+            metaData = NotImplemented,
+            virtualAssetId = NotImplemented,
+            kSql = NotImplemented,
+            assetTypes = NotImplemented,
+            groupBy = NotImplemented):
         KalturaChannel.__init__(self,
             id,
             name,
@@ -15451,12 +15715,12 @@ class KalturaDynamicChannel(KalturaChannel):
         #             Logical conjunction: and, or. 
         #             Search values are limited to 20 characters each.
         #             (maximum length of entire filter is 4096 characters)
-        # @var string
+        # @var str
         self.kSql = kSql
 
         # Asset types in the channel.
         #             -26 is EPG
-        # @var array of KalturaIntegerValue
+        # @var List[KalturaIntegerValue]
         self.assetTypes = assetTypes
 
         # Channel group by
@@ -15505,12 +15769,12 @@ class KalturaDynamicChannel(KalturaChannel):
 # @subpackage Client
 class KalturaManualCollectionAsset(KalturaObjectBase):
     def __init__(self,
-            id=NotImplemented,
-            type=NotImplemented):
+            id = NotImplemented,
+            type = NotImplemented):
         KalturaObjectBase.__init__(self)
 
         # Internal identifier of the asset
-        # @var string
+        # @var str
         self.id = id
 
         # The type of the asset. Possible values: media, epg
@@ -15551,25 +15815,25 @@ class KalturaManualCollectionAsset(KalturaObjectBase):
 # @subpackage Client
 class KalturaManualChannel(KalturaChannel):
     def __init__(self,
-            id=NotImplemented,
-            name=NotImplemented,
-            multilingualName=NotImplemented,
-            oldName=NotImplemented,
-            systemName=NotImplemented,
-            description=NotImplemented,
-            multilingualDescription=NotImplemented,
-            oldDescription=NotImplemented,
-            isActive=NotImplemented,
-            orderBy=NotImplemented,
-            orderingParametersEqual=NotImplemented,
-            createDate=NotImplemented,
-            updateDate=NotImplemented,
-            supportSegmentBasedOrdering=NotImplemented,
-            assetUserRuleId=NotImplemented,
-            metaData=NotImplemented,
-            virtualAssetId=NotImplemented,
-            mediaIds=NotImplemented,
-            assets=NotImplemented):
+            id = NotImplemented,
+            name = NotImplemented,
+            multilingualName = NotImplemented,
+            oldName = NotImplemented,
+            systemName = NotImplemented,
+            description = NotImplemented,
+            multilingualDescription = NotImplemented,
+            oldDescription = NotImplemented,
+            isActive = NotImplemented,
+            orderBy = NotImplemented,
+            orderingParametersEqual = NotImplemented,
+            createDate = NotImplemented,
+            updateDate = NotImplemented,
+            supportSegmentBasedOrdering = NotImplemented,
+            assetUserRuleId = NotImplemented,
+            metaData = NotImplemented,
+            virtualAssetId = NotImplemented,
+            mediaIds = NotImplemented,
+            assets = NotImplemented):
         KalturaChannel.__init__(self,
             id,
             name,
@@ -15590,11 +15854,11 @@ class KalturaManualChannel(KalturaChannel):
             virtualAssetId)
 
         # A list of comma separated media ids associated with this channel, according to the order of the medias in the channel.
-        # @var string
+        # @var str
         self.mediaIds = mediaIds
 
         # List of assets identifier
-        # @var array of KalturaManualCollectionAsset
+        # @var List[KalturaManualCollectionAsset]
         self.assets = assets
 
 
@@ -15631,12 +15895,12 @@ class KalturaManualChannel(KalturaChannel):
 # @subpackage Client
 class KalturaChannelDynamicOrder(KalturaBaseChannelOrder):
     def __init__(self,
-            name=NotImplemented,
-            orderBy=NotImplemented):
+            name = NotImplemented,
+            orderBy = NotImplemented):
         KalturaBaseChannelOrder.__init__(self)
 
         # Value
-        # @var string
+        # @var str
         self.name = name
 
         # Order By
@@ -15677,7 +15941,7 @@ class KalturaChannelDynamicOrder(KalturaBaseChannelOrder):
 # @subpackage Client
 class KalturaChannelFieldOrder(KalturaBaseChannelOrder):
     def __init__(self,
-            orderBy=NotImplemented):
+            orderBy = NotImplemented):
         KalturaBaseChannelOrder.__init__(self)
 
         # Order By
@@ -15710,8 +15974,8 @@ class KalturaChannelFieldOrder(KalturaBaseChannelOrder):
 # @subpackage Client
 class KalturaChannelSlidingWindowOrder(KalturaBaseChannelOrder):
     def __init__(self,
-            period=NotImplemented,
-            orderBy=NotImplemented):
+            period = NotImplemented,
+            orderBy = NotImplemented):
         KalturaBaseChannelOrder.__init__(self)
 
         # Sliding window period in minutes
@@ -15758,19 +16022,20 @@ class KalturaPricePlan(KalturaUsageModule):
     """Price plan"""
 
     def __init__(self,
-            id=NotImplemented,
-            name=NotImplemented,
-            maxViewsNumber=NotImplemented,
-            viewLifeCycle=NotImplemented,
-            fullLifeCycle=NotImplemented,
-            couponId=NotImplemented,
-            waiverPeriod=NotImplemented,
-            isWaiverEnabled=NotImplemented,
-            isOfflinePlayback=NotImplemented,
-            isRenewable=NotImplemented,
-            renewalsNumber=NotImplemented,
-            discountId=NotImplemented,
-            priceDetailsId=NotImplemented):
+            id = NotImplemented,
+            name = NotImplemented,
+            maxViewsNumber = NotImplemented,
+            viewLifeCycle = NotImplemented,
+            fullLifeCycle = NotImplemented,
+            couponId = NotImplemented,
+            waiverPeriod = NotImplemented,
+            isWaiverEnabled = NotImplemented,
+            isOfflinePlayback = NotImplemented,
+            assetUserRuleId = NotImplemented,
+            isRenewable = NotImplemented,
+            renewalsNumber = NotImplemented,
+            discountId = NotImplemented,
+            priceDetailsId = NotImplemented):
         KalturaUsageModule.__init__(self,
             id,
             name,
@@ -15780,7 +16045,8 @@ class KalturaPricePlan(KalturaUsageModule):
             couponId,
             waiverPeriod,
             isWaiverEnabled,
-            isOfflinePlayback)
+            isOfflinePlayback,
+            assetUserRuleId)
 
         # Denotes whether or not this object can be renewed
         # @var bool
@@ -15850,22 +16116,22 @@ class KalturaProgramAssetGroupOffer(KalturaOTTObjectSupportNullable):
     """Program asset group offer details"""
 
     def __init__(self,
-            id=NotImplemented,
-            name=NotImplemented,
-            multilingualName=NotImplemented,
-            priceDetailsId=NotImplemented,
-            fileTypesIds=NotImplemented,
-            description=NotImplemented,
-            multilingualDescription=NotImplemented,
-            virtualAssetId=NotImplemented,
-            isActive=NotImplemented,
-            createDate=NotImplemented,
-            updateDate=NotImplemented,
-            startDate=NotImplemented,
-            endDate=NotImplemented,
-            expiryDate=NotImplemented,
-            externalId=NotImplemented,
-            externalOfferId=NotImplemented):
+            id = NotImplemented,
+            name = NotImplemented,
+            multilingualName = NotImplemented,
+            priceDetailsId = NotImplemented,
+            fileTypesIds = NotImplemented,
+            description = NotImplemented,
+            multilingualDescription = NotImplemented,
+            virtualAssetId = NotImplemented,
+            isActive = NotImplemented,
+            createDate = NotImplemented,
+            updateDate = NotImplemented,
+            startDate = NotImplemented,
+            endDate = NotImplemented,
+            expiryDate = NotImplemented,
+            externalId = NotImplemented,
+            externalOfferId = NotImplemented):
         KalturaOTTObjectSupportNullable.__init__(self)
 
         # Unique Kaltura internal identifier for the module
@@ -15873,12 +16139,12 @@ class KalturaProgramAssetGroupOffer(KalturaOTTObjectSupportNullable):
         self.id = id
 
         # Name of the Program asset group offer
-        # @var string
+        # @var str
         # @readonly
         self.name = name
 
         # Name of the Program asset group offer
-        # @var array of KalturaTranslationToken
+        # @var List[KalturaTranslationToken]
         self.multilingualName = multilingualName
 
         # ID of the KalturaPriceDetails object which contains details of the price to be paid for purchasing this KalturaProgramAssetGroupOffer.
@@ -15889,16 +16155,16 @@ class KalturaProgramAssetGroupOffer(KalturaOTTObjectSupportNullable):
         #             The subset of KalturaMediaFiles of the live linear channel on which the associated Program Assets are carried to which households entitled to this
         #             Program Asset Group Offer are entitled to view E.g.may be used to restrict entitlement only to HD flavour of the Program Asset(and not the UHD flavour)
         #             If this parameter is empty, the Household shall be entitled to all KalturaMediaFiles associated with the KalturaLiveAsset.
-        # @var string
+        # @var str
         self.fileTypesIds = fileTypesIds
 
         # A list of the descriptions of the Program asset group offer on different languages (language code and translation)
-        # @var string
+        # @var str
         # @readonly
         self.description = description
 
         # A list of the descriptions of the Program asset group offer on different languages (language code and translation)
-        # @var array of KalturaTranslationToken
+        # @var List[KalturaTranslationToken]
         self.multilingualDescription = multilingualDescription
 
         # The id of the paired asset
@@ -15933,11 +16199,11 @@ class KalturaProgramAssetGroupOffer(KalturaOTTObjectSupportNullable):
         self.expiryDate = expiryDate
 
         # External identifier
-        # @var string
+        # @var str
         self.externalId = externalId
 
         # Identifies the Program Assets which will be entitled by Households that purchase this offer. Must be a unique value in the context of an account.
-        # @var string
+        # @var str
         self.externalOfferId = externalOfferId
 
 
@@ -16068,11 +16334,11 @@ class KalturaPrice(KalturaObjectBase):
     """Price"""
 
     def __init__(self,
-            currencyId=NotImplemented,
-            amount=NotImplemented,
-            currency=NotImplemented,
-            currencySign=NotImplemented,
-            countryId=NotImplemented):
+            currencyId = NotImplemented,
+            amount = NotImplemented,
+            currency = NotImplemented,
+            currencySign = NotImplemented,
+            countryId = NotImplemented):
         KalturaObjectBase.__init__(self)
 
         # Currency ID
@@ -16085,11 +16351,11 @@ class KalturaPrice(KalturaObjectBase):
         self.amount = amount
 
         # Currency
-        # @var string
+        # @var str
         self.currency = currency
 
         # Currency Sign
-        # @var string
+        # @var str
         self.currencySign = currencySign
 
         # Country ID
@@ -16152,11 +16418,11 @@ class KalturaPriceDetails(KalturaObjectBase):
     """Price details"""
 
     def __init__(self,
-            id=NotImplemented,
-            name=NotImplemented,
-            price=NotImplemented,
-            multiCurrencyPrice=NotImplemented,
-            descriptions=NotImplemented):
+            id = NotImplemented,
+            name = NotImplemented,
+            price = NotImplemented,
+            multiCurrencyPrice = NotImplemented,
+            descriptions = NotImplemented):
         KalturaObjectBase.__init__(self)
 
         # The price code identifier
@@ -16165,7 +16431,7 @@ class KalturaPriceDetails(KalturaObjectBase):
         self.id = id
 
         # The price code name
-        # @var string
+        # @var str
         self.name = name
 
         # The price
@@ -16174,11 +16440,11 @@ class KalturaPriceDetails(KalturaObjectBase):
         self.price = price
 
         # Multi currency prices for all countries and currencies
-        # @var array of KalturaPrice
+        # @var List[KalturaPrice]
         self.multiCurrencyPrice = multiCurrencyPrice
 
         # A list of the descriptions for this price on different languages (language code and translation)
-        # @var array of KalturaTranslationToken
+        # @var List[KalturaTranslationToken]
         self.descriptions = descriptions
 
 
@@ -16233,10 +16499,10 @@ class KalturaPreviewModule(KalturaObjectBase):
     """Preview module"""
 
     def __init__(self,
-            id=NotImplemented,
-            name=NotImplemented,
-            lifeCycle=NotImplemented,
-            nonRenewablePeriod=NotImplemented):
+            id = NotImplemented,
+            name = NotImplemented,
+            lifeCycle = NotImplemented,
+            nonRenewablePeriod = NotImplemented):
         KalturaObjectBase.__init__(self)
 
         # Preview module identifier
@@ -16245,7 +16511,7 @@ class KalturaPreviewModule(KalturaObjectBase):
         self.id = id
 
         # Preview module name
-        # @var string
+        # @var str
         self.name = name
 
         # Preview module life cycle - for how long the preview module is active
@@ -16304,8 +16570,8 @@ class KalturaPremiumService(KalturaObjectBase):
     """Premium service"""
 
     def __init__(self,
-            id=NotImplemented,
-            name=NotImplemented):
+            id = NotImplemented,
+            name = NotImplemented):
         KalturaObjectBase.__init__(self)
 
         # Service identifier
@@ -16313,7 +16579,7 @@ class KalturaPremiumService(KalturaObjectBase):
         self.id = id
 
         # Service name / description
-        # @var string
+        # @var str
         self.name = name
 
 
@@ -16352,9 +16618,9 @@ class KalturaSubscriptionCouponGroup(KalturaObjectBase):
     """Coupons group details"""
 
     def __init__(self,
-            id=NotImplemented,
-            startDate=NotImplemented,
-            endDate=NotImplemented):
+            id = NotImplemented,
+            startDate = NotImplemented,
+            endDate = NotImplemented):
         KalturaObjectBase.__init__(self)
 
         # Coupon group identifier
@@ -16413,61 +16679,62 @@ class KalturaSubscription(KalturaOTTObjectSupportNullable):
     """Subscription details"""
 
     def __init__(self,
-            id=NotImplemented,
-            channels=NotImplemented,
-            channelsIds=NotImplemented,
-            startDate=NotImplemented,
-            endDate=NotImplemented,
-            fileTypes=NotImplemented,
-            fileTypesIds=NotImplemented,
-            isRenewable=NotImplemented,
-            renewalsNumber=NotImplemented,
-            isInfiniteRenewal=NotImplemented,
-            price=NotImplemented,
-            discountModule=NotImplemented,
-            internalDiscountModuleId=NotImplemented,
-            name=NotImplemented,
-            multilingualName=NotImplemented,
-            description=NotImplemented,
-            multilingualDescription=NotImplemented,
-            mediaId=NotImplemented,
-            prorityInOrder=NotImplemented,
-            pricePlanIds=NotImplemented,
-            previewModule=NotImplemented,
-            previewModuleId=NotImplemented,
-            householdLimitationsId=NotImplemented,
-            gracePeriodMinutes=NotImplemented,
-            premiumServices=NotImplemented,
-            maxViewsNumber=NotImplemented,
-            viewLifeCycle=NotImplemented,
-            waiverPeriod=NotImplemented,
-            isWaiverEnabled=NotImplemented,
-            userTypes=NotImplemented,
-            couponsGroups=NotImplemented,
-            subscriptionCouponGroup=NotImplemented,
-            productCodes=NotImplemented,
-            dependencyType=NotImplemented,
-            externalId=NotImplemented,
-            isCancellationBlocked=NotImplemented,
-            preSaleDate=NotImplemented,
-            adsPolicy=NotImplemented,
-            adsParam=NotImplemented,
-            isActive=NotImplemented,
-            createDate=NotImplemented,
-            updateDate=NotImplemented):
+            id = NotImplemented,
+            channels = NotImplemented,
+            channelsIds = NotImplemented,
+            startDate = NotImplemented,
+            endDate = NotImplemented,
+            fileTypes = NotImplemented,
+            fileTypesIds = NotImplemented,
+            isRenewable = NotImplemented,
+            renewalsNumber = NotImplemented,
+            isInfiniteRenewal = NotImplemented,
+            price = NotImplemented,
+            discountModule = NotImplemented,
+            internalDiscountModuleId = NotImplemented,
+            name = NotImplemented,
+            multilingualName = NotImplemented,
+            description = NotImplemented,
+            multilingualDescription = NotImplemented,
+            mediaId = NotImplemented,
+            prorityInOrder = NotImplemented,
+            pricePlanIds = NotImplemented,
+            flexiblePricePlanId = NotImplemented,
+            previewModule = NotImplemented,
+            previewModuleId = NotImplemented,
+            householdLimitationsId = NotImplemented,
+            gracePeriodMinutes = NotImplemented,
+            premiumServices = NotImplemented,
+            maxViewsNumber = NotImplemented,
+            viewLifeCycle = NotImplemented,
+            waiverPeriod = NotImplemented,
+            isWaiverEnabled = NotImplemented,
+            userTypes = NotImplemented,
+            couponsGroups = NotImplemented,
+            subscriptionCouponGroup = NotImplemented,
+            productCodes = NotImplemented,
+            dependencyType = NotImplemented,
+            externalId = NotImplemented,
+            isCancellationBlocked = NotImplemented,
+            preSaleDate = NotImplemented,
+            adsPolicy = NotImplemented,
+            adsParam = NotImplemented,
+            isActive = NotImplemented,
+            createDate = NotImplemented,
+            updateDate = NotImplemented):
         KalturaOTTObjectSupportNullable.__init__(self)
 
         # Subscription identifier
-        # @var string
+        # @var str
         self.id = id
 
         # A list of channels associated with this subscription
-        # @var array of KalturaBaseChannel
+        # @var List[KalturaBaseChannel]
         # @readonly
         self.channels = channels
 
         # Comma separated channels Ids associated with this subscription
-        # @var string
+        # @var str
         self.channelsIds = channelsIds
 
         # The first date the subscription is available for purchasing
@@ -16479,12 +16746,12 @@ class KalturaSubscription(KalturaOTTObjectSupportNullable):
         self.endDate = endDate
 
         # A list of file types identifiers that are supported in this subscription
-        # @var array of KalturaIntegerValue
+        # @var List[KalturaIntegerValue]
         # @readonly
         self.fileTypes = fileTypes
 
         # Comma separated file types identifiers that are supported in this subscription
-        # @var string
+        # @var str
         self.fileTypesIds = fileTypesIds
 
         # Denotes whether or not this subscription can be renewed
@@ -16517,21 +16784,21 @@ class KalturaSubscription(KalturaOTTObjectSupportNullable):
         self.internalDiscountModuleId = internalDiscountModuleId
 
         # Name of the subscription
-        # @var string
+        # @var str
         # @readonly
         self.name = name
 
         # Name of the subscription
-        # @var array of KalturaTranslationToken
+        # @var List[KalturaTranslationToken]
         self.multilingualName = multilingualName
 
         # description of the subscription
-        # @var string
+        # @var str
         # @readonly
         self.description = description
 
         # description of the subscription
-        # @var array of KalturaTranslationToken
+        # @var List[KalturaTranslationToken]
         self.multilingualDescription = multilingualDescription
 
         # Identifier of the media associated with the subscription
@@ -16544,8 +16811,12 @@ class KalturaSubscription(KalturaOTTObjectSupportNullable):
         self.prorityInOrder = prorityInOrder
 
         # Comma separated subscription price plan IDs
-        # @var string
+        # @var str
         self.pricePlanIds = pricePlanIds
+
+        # Optional: If the subscription has a flexible price plan. Represents an initial none-recurring discounted period which is charged immediately (no unified billing), followed by a recuring price plan which should be aligned with the unified billing cycle
+        # @var int
+        self.flexiblePricePlanId = flexiblePricePlanId
 
         # Subscription preview module
         # @var KalturaPreviewModule
@@ -16565,7 +16836,7 @@ class KalturaSubscription(KalturaOTTObjectSupportNullable):
         self.gracePeriodMinutes = gracePeriodMinutes
 
         # List of premium services included in the subscription
-        # @var array of KalturaPremiumService
+        # @var List[KalturaPremiumService]
         self.premiumServices = premiumServices
 
         # The maximum number of times an item in this usage module can be viewed
@@ -16589,21 +16860,21 @@ class KalturaSubscription(KalturaOTTObjectSupportNullable):
         self.isWaiverEnabled = isWaiverEnabled
 
         # List of permitted user types for the subscription
-        # @var array of KalturaOTTUserType
+        # @var List[KalturaOTTUserType]
         # @readonly
         self.userTypes = userTypes
 
         # List of Coupons group
-        # @var array of KalturaCouponsGroup
+        # @var List[KalturaCouponsGroup]
         # @readonly
         self.couponsGroups = couponsGroups
 
         # List of subscription Coupons group
-        # @var array of KalturaSubscriptionCouponGroup
+        # @var List[KalturaSubscriptionCouponGroup]
         self.subscriptionCouponGroup = subscriptionCouponGroup
 
         # List of Subscription product codes
-        # @var array of KalturaProductCode
+        # @var List[KalturaProductCode]
         self.productCodes = productCodes
 
         # Dependency Type
@@ -16611,7 +16882,7 @@ class KalturaSubscription(KalturaOTTObjectSupportNullable):
         self.dependencyType = dependencyType
 
         # External ID
-        # @var string
+        # @var str
         self.externalId = externalId
 
         # Is cancellation blocked for the subscription
@@ -16627,7 +16898,7 @@ class KalturaSubscription(KalturaOTTObjectSupportNullable):
         self.adsPolicy = adsPolicy
 
         # The parameters to pass to the ads server
-        # @var string
+        # @var str
         self.adsParam = adsParam
 
         # Is active subscription
@@ -16666,6 +16937,7 @@ class KalturaSubscription(KalturaOTTObjectSupportNullable):
         'mediaId': getXmlNodeInt, 
         'prorityInOrder': getXmlNodeInt, 
         'pricePlanIds': getXmlNodeText, 
+        'flexiblePricePlanId': getXmlNodeInt, 
         'previewModule': (KalturaObjectFactory.create, 'KalturaPreviewModule'), 
         'previewModuleId': getXmlNodeInt, 
         'householdLimitationsId': getXmlNodeInt, 
@@ -16707,6 +16979,7 @@ class KalturaSubscription(KalturaOTTObjectSupportNullable):
         kparams.addArrayIfDefined("multilingualDescription", self.multilingualDescription)
         kparams.addIntIfDefined("prorityInOrder", self.prorityInOrder)
         kparams.addStringIfDefined("pricePlanIds", self.pricePlanIds)
+        kparams.addIntIfDefined("flexiblePricePlanId", self.flexiblePricePlanId)
         kparams.addIntIfDefined("previewModuleId", self.previewModuleId)
         kparams.addIntIfDefined("householdLimitationsId", self.householdLimitationsId)
         kparams.addIntIfDefined("gracePeriodMinutes", self.gracePeriodMinutes)
@@ -16811,6 +17084,12 @@ class KalturaSubscription(KalturaOTTObjectSupportNullable):
 
     def setPricePlanIds(self, newPricePlanIds):
         self.pricePlanIds = newPricePlanIds
+
+    def getFlexiblePricePlanId(self):
+        return self.flexiblePricePlanId
+
+    def setFlexiblePricePlanId(self, newFlexiblePricePlanId):
+        self.flexiblePricePlanId = newFlexiblePricePlanId
 
     def getPreviewModule(self):
         return self.previewModule
@@ -16924,12 +17203,12 @@ class KalturaDiscount(KalturaPrice):
     """Discount"""
 
     def __init__(self,
-            currencyId=NotImplemented,
-            amount=NotImplemented,
-            currency=NotImplemented,
-            currencySign=NotImplemented,
-            countryId=NotImplemented,
-            percentage=NotImplemented):
+            currencyId = NotImplemented,
+            amount = NotImplemented,
+            currency = NotImplemented,
+            currencySign = NotImplemented,
+            countryId = NotImplemented,
+            percentage = NotImplemented):
         KalturaPrice.__init__(self,
             currencyId,
             amount,
@@ -16969,8 +17248,8 @@ class KalturaHouseholdPremiumService(KalturaPremiumService):
     """Houshold premium service"""
 
     def __init__(self,
-            id=NotImplemented,
-            name=NotImplemented):
+            id = NotImplemented,
+            name = NotImplemented):
         KalturaPremiumService.__init__(self,
             id,
             name)
@@ -16995,9 +17274,9 @@ class KalturaNpvrPremiumService(KalturaPremiumService):
     """Npvr Premium Service"""
 
     def __init__(self,
-            id=NotImplemented,
-            name=NotImplemented,
-            quotaInMinutes=NotImplemented):
+            id = NotImplemented,
+            name = NotImplemented,
+            quotaInMinutes = NotImplemented):
         KalturaPremiumService.__init__(self,
             id,
             name)
@@ -17034,13 +17313,13 @@ class KalturaSmsAdapterProfile(KalturaOTTObjectSupportNullable):
     """Sms adapter profile"""
 
     def __init__(self,
-            id=NotImplemented,
-            adapterUrl=NotImplemented,
-            sharedSecret=NotImplemented,
-            isActive=NotImplemented,
-            settings=NotImplemented,
-            externalIdentifier=NotImplemented,
-            name=NotImplemented):
+            id = NotImplemented,
+            adapterUrl = NotImplemented,
+            sharedSecret = NotImplemented,
+            isActive = NotImplemented,
+            settings = NotImplemented,
+            externalIdentifier = NotImplemented,
+            name = NotImplemented):
         KalturaOTTObjectSupportNullable.__init__(self)
 
         # id
@@ -17049,11 +17328,11 @@ class KalturaSmsAdapterProfile(KalturaOTTObjectSupportNullable):
         self.id = id
 
         # adapter url
-        # @var string
+        # @var str
         self.adapterUrl = adapterUrl
 
         # Shared Secret
-        # @var string
+        # @var str
         self.sharedSecret = sharedSecret
 
         # SSO Adapter is active status
@@ -17065,11 +17344,11 @@ class KalturaSmsAdapterProfile(KalturaOTTObjectSupportNullable):
         self.settings = settings
 
         # SSO Adapter external identifier
-        # @var string
+        # @var str
         self.externalIdentifier = externalIdentifier
 
         # Name
-        # @var string
+        # @var str
         self.name = name
 
 
@@ -17142,10 +17421,10 @@ class KalturaSmsAdapterProfile(KalturaOTTObjectSupportNullable):
 # @subpackage Client
 class KalturaDynamicList(KalturaOTTObjectSupportNullable):
     def __init__(self,
-            id=NotImplemented,
-            createDate=NotImplemented,
-            updateDate=NotImplemented,
-            name=NotImplemented):
+            id = NotImplemented,
+            createDate = NotImplemented,
+            updateDate = NotImplemented,
+            name = NotImplemented):
         KalturaOTTObjectSupportNullable.__init__(self)
 
         # ID
@@ -17164,7 +17443,7 @@ class KalturaDynamicList(KalturaOTTObjectSupportNullable):
         self.updateDate = updateDate
 
         # Name
-        # @var string
+        # @var str
         self.name = name
 
 
@@ -17205,10 +17484,10 @@ class KalturaDynamicList(KalturaOTTObjectSupportNullable):
 # @subpackage Client
 class KalturaUdidDynamicList(KalturaDynamicList):
     def __init__(self,
-            id=NotImplemented,
-            createDate=NotImplemented,
-            updateDate=NotImplemented,
-            name=NotImplemented):
+            id = NotImplemented,
+            createDate = NotImplemented,
+            updateDate = NotImplemented,
+            name = NotImplemented):
         KalturaDynamicList.__init__(self,
             id,
             createDate,
@@ -17253,9 +17532,9 @@ class KalturaPluginData(KalturaObjectBase):
 # @subpackage Client
 class KalturaDrmPlaybackPluginData(KalturaPluginData):
     def __init__(self,
-            scheme=NotImplemented,
-            licenseURL=NotImplemented,
-            dynamicData=NotImplemented):
+            scheme = NotImplemented,
+            licenseURL = NotImplemented,
+            dynamicData = NotImplemented):
         KalturaPluginData.__init__(self)
 
         # Scheme
@@ -17263,7 +17542,7 @@ class KalturaDrmPlaybackPluginData(KalturaPluginData):
         self.scheme = scheme
 
         # License URL
-        # @var string
+        # @var str
         self.licenseURL = licenseURL
 
         # Dynamic data
@@ -17312,17 +17591,17 @@ class KalturaDrmPlaybackPluginData(KalturaPluginData):
 # @subpackage Client
 class KalturaCustomDrmPlaybackPluginData(KalturaDrmPlaybackPluginData):
     def __init__(self,
-            scheme=NotImplemented,
-            licenseURL=NotImplemented,
-            dynamicData=NotImplemented,
-            data=NotImplemented):
+            scheme = NotImplemented,
+            licenseURL = NotImplemented,
+            dynamicData = NotImplemented,
+            data = NotImplemented):
         KalturaDrmPlaybackPluginData.__init__(self,
             scheme,
             licenseURL,
             dynamicData)
 
         # Custom DRM license data
-        # @var string
+        # @var str
         self.data = data
 
 
@@ -17353,21 +17632,21 @@ class KalturaHouseholdDevice(KalturaOTTObjectSupportNullable):
     """Device details"""
 
     def __init__(self,
-            householdId=NotImplemented,
-            udid=NotImplemented,
-            name=NotImplemented,
-            brandId=NotImplemented,
-            activatedOn=NotImplemented,
-            status=NotImplemented,
-            deviceFamilyId=NotImplemented,
-            drm=NotImplemented,
-            externalId=NotImplemented,
-            macAddress=NotImplemented,
-            dynamicData=NotImplemented,
-            model=NotImplemented,
-            manufacturer=NotImplemented,
-            manufacturerId=NotImplemented,
-            lastActivityTime=NotImplemented):
+            householdId = NotImplemented,
+            udid = NotImplemented,
+            name = NotImplemented,
+            brandId = NotImplemented,
+            activatedOn = NotImplemented,
+            status = NotImplemented,
+            deviceFamilyId = NotImplemented,
+            drm = NotImplemented,
+            externalId = NotImplemented,
+            macAddress = NotImplemented,
+            dynamicData = NotImplemented,
+            model = NotImplemented,
+            manufacturer = NotImplemented,
+            manufacturerId = NotImplemented,
+            lastActivityTime = NotImplemented):
         KalturaOTTObjectSupportNullable.__init__(self)
 
         # Household identifier
@@ -17375,12 +17654,12 @@ class KalturaHouseholdDevice(KalturaOTTObjectSupportNullable):
         self.householdId = householdId
 
         # Device UDID
-        # @var string
+        # @var str
         # @insertonly
         self.udid = udid
 
         # Device name
-        # @var string
+        # @var str
         self.name = name
 
         # Device brand identifier
@@ -17407,11 +17686,11 @@ class KalturaHouseholdDevice(KalturaOTTObjectSupportNullable):
         self.drm = drm
 
         # external Id
-        # @var string
+        # @var str
         self.externalId = externalId
 
         # mac address
-        # @var string
+        # @var str
         self.macAddress = macAddress
 
         # Dynamic data
@@ -17419,11 +17698,11 @@ class KalturaHouseholdDevice(KalturaOTTObjectSupportNullable):
         self.dynamicData = dynamicData
 
         # model
-        # @var string
+        # @var str
         self.model = model
 
         # manufacturer
-        # @var string
+        # @var str
         self.manufacturer = manufacturer
 
         # manufacturer Id, read only
@@ -17554,17 +17833,17 @@ class KalturaHouseholdDevice(KalturaOTTObjectSupportNullable):
 # @subpackage Client
 class KalturaFairPlayPlaybackPluginData(KalturaDrmPlaybackPluginData):
     def __init__(self,
-            scheme=NotImplemented,
-            licenseURL=NotImplemented,
-            dynamicData=NotImplemented,
-            certificate=NotImplemented):
+            scheme = NotImplemented,
+            licenseURL = NotImplemented,
+            dynamicData = NotImplemented,
+            certificate = NotImplemented):
         KalturaDrmPlaybackPluginData.__init__(self,
             scheme,
             licenseURL,
             dynamicData)
 
         # Custom data string
-        # @var string
+        # @var str
         self.certificate = certificate
 
 
@@ -17595,12 +17874,12 @@ class KalturaHouseholdCoupon(KalturaOTTObjectSupportNullable):
     """Household Coupon details"""
 
     def __init__(self,
-            code=NotImplemented,
-            lastUsageDate=NotImplemented):
+            code = NotImplemented,
+            lastUsageDate = NotImplemented):
         KalturaOTTObjectSupportNullable.__init__(self)
 
         # Coupon code
-        # @var string
+        # @var str
         self.code = code
 
         # Last Usage Date
@@ -17641,8 +17920,8 @@ class KalturaHouseholdCoupon(KalturaOTTObjectSupportNullable):
 # @subpackage Client
 class KalturaUnifiedChannel(KalturaOTTObjectSupportNullable):
     def __init__(self,
-            id=NotImplemented,
-            type=NotImplemented):
+            id = NotImplemented,
+            type = NotImplemented):
         KalturaOTTObjectSupportNullable.__init__(self)
 
         # Channel&#160;identifier
@@ -17689,21 +17968,21 @@ class KalturaCategoryItem(KalturaOTTObjectSupportNullable):
     """Category details"""
 
     def __init__(self,
-            id=NotImplemented,
-            name=NotImplemented,
-            multilingualName=NotImplemented,
-            parentId=NotImplemented,
-            childrenIds=NotImplemented,
-            unifiedChannels=NotImplemented,
-            dynamicData=NotImplemented,
-            updateDate=NotImplemented,
-            isActive=NotImplemented,
-            startDateInSeconds=NotImplemented,
-            endDateInSeconds=NotImplemented,
-            type=NotImplemented,
-            versionId=NotImplemented,
-            virtualAssetId=NotImplemented,
-            referenceId=NotImplemented):
+            id = NotImplemented,
+            name = NotImplemented,
+            multilingualName = NotImplemented,
+            parentId = NotImplemented,
+            childrenIds = NotImplemented,
+            unifiedChannels = NotImplemented,
+            dynamicData = NotImplemented,
+            updateDate = NotImplemented,
+            isActive = NotImplemented,
+            startDateInSeconds = NotImplemented,
+            endDateInSeconds = NotImplemented,
+            type = NotImplemented,
+            versionId = NotImplemented,
+            virtualAssetId = NotImplemented,
+            referenceId = NotImplemented):
         KalturaOTTObjectSupportNullable.__init__(self)
 
         # Unique identifier for the category
@@ -17712,12 +17991,12 @@ class KalturaCategoryItem(KalturaOTTObjectSupportNullable):
         self.id = id
 
         # Category name
-        # @var string
+        # @var str
         # @readonly
         self.name = name
 
         # Category name
-        # @var array of KalturaTranslationToken
+        # @var List[KalturaTranslationToken]
         self.multilingualName = multilingualName
 
         # Category parent identifier
@@ -17726,11 +18005,11 @@ class KalturaCategoryItem(KalturaOTTObjectSupportNullable):
         self.parentId = parentId
 
         # Comma separated list of child categories&#39; Ids.
-        # @var string
+        # @var str
         self.childrenIds = childrenIds
 
         # List of unified Channels.
-        # @var array of KalturaUnifiedChannel
+        # @var List[KalturaUnifiedChannel]
         self.unifiedChannels = unifiedChannels
 
         # Dynamic data
@@ -17755,7 +18034,7 @@ class KalturaCategoryItem(KalturaOTTObjectSupportNullable):
         self.endDateInSeconds = endDateInSeconds
 
         # Category type
-        # @var string
+        # @var str
         # @insertonly
         self.type = type
 
@@ -17770,7 +18049,7 @@ class KalturaCategoryItem(KalturaOTTObjectSupportNullable):
         self.virtualAssetId = virtualAssetId
 
         # Category reference identifier
-        # @var string
+        # @var str
         self.referenceId = referenceId
 
 
@@ -17887,17 +18166,17 @@ class KalturaCategoryItem(KalturaOTTObjectSupportNullable):
 # @subpackage Client
 class KalturaUnifiedChannelInfo(KalturaUnifiedChannel):
     def __init__(self,
-            id=NotImplemented,
-            type=NotImplemented,
-            name=NotImplemented,
-            startDateInSeconds=NotImplemented,
-            endDateInSeconds=NotImplemented):
+            id = NotImplemented,
+            type = NotImplemented,
+            name = NotImplemented,
+            startDateInSeconds = NotImplemented,
+            endDateInSeconds = NotImplemented):
         KalturaUnifiedChannel.__init__(self,
             id,
             type)
 
         # Channel&#160;name
-        # @var string
+        # @var str
         self.name = name
 
         # Start date in seconds
@@ -17952,17 +18231,17 @@ class KalturaCategoryVersion(KalturaOTTObjectSupportNullable):
     """Category details"""
 
     def __init__(self,
-            id=NotImplemented,
-            name=NotImplemented,
-            treeId=NotImplemented,
-            state=NotImplemented,
-            baseVersionId=NotImplemented,
-            categoryRootId=NotImplemented,
-            defaultDate=NotImplemented,
-            updaterId=NotImplemented,
-            comment=NotImplemented,
-            createDate=NotImplemented,
-            updateDate=NotImplemented):
+            id = NotImplemented,
+            name = NotImplemented,
+            treeId = NotImplemented,
+            state = NotImplemented,
+            baseVersionId = NotImplemented,
+            categoryRootId = NotImplemented,
+            defaultDate = NotImplemented,
+            updaterId = NotImplemented,
+            comment = NotImplemented,
+            createDate = NotImplemented,
+            updateDate = NotImplemented):
         KalturaOTTObjectSupportNullable.__init__(self)
 
         # Unique identifier for the category version
@@ -17971,7 +18250,7 @@ class KalturaCategoryVersion(KalturaOTTObjectSupportNullable):
         self.id = id
 
         # Category version name
-        # @var string
+        # @var str
         self.name = name
 
         # Category tree identifier
@@ -18005,7 +18284,7 @@ class KalturaCategoryVersion(KalturaOTTObjectSupportNullable):
         self.updaterId = updaterId
 
         # Comment.
-        # @var string
+        # @var str
         self.comment = comment
 
         # The date that this version was created represented as epoch.
@@ -18094,10 +18373,10 @@ class KalturaRule(KalturaOTTObjectSupportNullable):
     """Rule base"""
 
     def __init__(self,
-            id=NotImplemented,
-            name=NotImplemented,
-            description=NotImplemented,
-            label=NotImplemented):
+            id = NotImplemented,
+            name = NotImplemented,
+            description = NotImplemented,
+            label = NotImplemented):
         KalturaOTTObjectSupportNullable.__init__(self)
 
         # ID
@@ -18106,15 +18385,15 @@ class KalturaRule(KalturaOTTObjectSupportNullable):
         self.id = id
 
         # Name
-        # @var string
+        # @var str
         self.name = name
 
         # Description
-        # @var string
+        # @var str
         self.description = description
 
         # Label
-        # @var string
+        # @var str
         self.label = label
 
 
@@ -18165,10 +18444,10 @@ class KalturaAssetRuleBase(KalturaRule):
     """Asset rule base"""
 
     def __init__(self,
-            id=NotImplemented,
-            name=NotImplemented,
-            description=NotImplemented,
-            label=NotImplemented):
+            id = NotImplemented,
+            name = NotImplemented,
+            description = NotImplemented,
+            label = NotImplemented):
         KalturaRule.__init__(self,
             id,
             name,
@@ -18195,8 +18474,8 @@ class KalturaCondition(KalturaObjectBase):
     """Condition"""
 
     def __init__(self,
-            type=NotImplemented,
-            description=NotImplemented):
+            type = NotImplemented,
+            description = NotImplemented):
         KalturaObjectBase.__init__(self)
 
         # The type of the condition
@@ -18205,7 +18484,7 @@ class KalturaCondition(KalturaObjectBase):
         self.type = type
 
         # Description
-        # @var string
+        # @var str
         self.description = description
 
 
@@ -18238,8 +18517,8 @@ class KalturaCondition(KalturaObjectBase):
 # @subpackage Client
 class KalturaRuleAction(KalturaObjectBase):
     def __init__(self,
-            type=NotImplemented,
-            description=NotImplemented):
+            type = NotImplemented,
+            description = NotImplemented):
         KalturaObjectBase.__init__(self)
 
         # The type of the action
@@ -18248,7 +18527,7 @@ class KalturaRuleAction(KalturaObjectBase):
         self.type = type
 
         # Description
-        # @var string
+        # @var str
         self.description = description
 
 
@@ -18281,8 +18560,8 @@ class KalturaRuleAction(KalturaObjectBase):
 # @subpackage Client
 class KalturaAssetRuleAction(KalturaRuleAction):
     def __init__(self,
-            type=NotImplemented,
-            description=NotImplemented):
+            type = NotImplemented,
+            description = NotImplemented):
         KalturaRuleAction.__init__(self,
             type,
             description)
@@ -18307,13 +18586,13 @@ class KalturaAssetRule(KalturaAssetRuleBase):
     """Asset rule"""
 
     def __init__(self,
-            id=NotImplemented,
-            name=NotImplemented,
-            description=NotImplemented,
-            label=NotImplemented,
-            conditions=NotImplemented,
-            actions=NotImplemented,
-            status=NotImplemented):
+            id = NotImplemented,
+            name = NotImplemented,
+            description = NotImplemented,
+            label = NotImplemented,
+            conditions = NotImplemented,
+            actions = NotImplemented,
+            status = NotImplemented):
         KalturaAssetRuleBase.__init__(self,
             id,
             name,
@@ -18321,11 +18600,11 @@ class KalturaAssetRule(KalturaAssetRuleBase):
             label)
 
         # List of conditions for the rule
-        # @var array of KalturaCondition
+        # @var List[KalturaCondition]
         self.conditions = conditions
 
         # List of actions for the rule
-        # @var array of KalturaAssetRuleAction
+        # @var List[KalturaAssetRuleAction]
         self.actions = actions
 
         # List of actions for the rule
@@ -18371,8 +18650,8 @@ class KalturaAssetRule(KalturaAssetRuleBase):
 # @subpackage Client
 class KalturaAssetConditionBase(KalturaCondition):
     def __init__(self,
-            type=NotImplemented,
-            description=NotImplemented):
+            type = NotImplemented,
+            description = NotImplemented):
         KalturaCondition.__init__(self,
             type,
             description)
@@ -18395,8 +18674,8 @@ class KalturaAssetConditionBase(KalturaCondition):
 # @subpackage Client
 class KalturaAssetUserRuleAction(KalturaRuleAction):
     def __init__(self,
-            type=NotImplemented,
-            description=NotImplemented):
+            type = NotImplemented,
+            description = NotImplemented):
         KalturaRuleAction.__init__(self,
             type,
             description)
@@ -18421,12 +18700,12 @@ class KalturaAssetUserRule(KalturaAssetRuleBase):
     """Asset user rule"""
 
     def __init__(self,
-            id=NotImplemented,
-            name=NotImplemented,
-            description=NotImplemented,
-            label=NotImplemented,
-            conditions=NotImplemented,
-            actions=NotImplemented):
+            id = NotImplemented,
+            name = NotImplemented,
+            description = NotImplemented,
+            label = NotImplemented,
+            conditions = NotImplemented,
+            actions = NotImplemented):
         KalturaAssetRuleBase.__init__(self,
             id,
             name,
@@ -18434,11 +18713,11 @@ class KalturaAssetUserRule(KalturaAssetRuleBase):
             label)
 
         # List of conditions for the user rule
-        # @var array of KalturaAssetConditionBase
+        # @var List[KalturaAssetConditionBase]
         self.conditions = conditions
 
         # List of actions for the user rule
-        # @var array of KalturaAssetUserRuleAction
+        # @var List[KalturaAssetUserRuleAction]
         self.actions = actions
 
 
@@ -18477,15 +18756,15 @@ class KalturaAssetCondition(KalturaAssetConditionBase):
     """Asset Condition"""
 
     def __init__(self,
-            type=NotImplemented,
-            description=NotImplemented,
-            ksql=NotImplemented):
+            type = NotImplemented,
+            description = NotImplemented,
+            ksql = NotImplemented):
         KalturaAssetConditionBase.__init__(self,
             type,
             description)
 
         # KSQL
-        # @var string
+        # @var str
         self.ksql = ksql
 
 
@@ -18516,11 +18795,11 @@ class KalturaConcurrencyCondition(KalturaAssetCondition):
     """Asset Condition"""
 
     def __init__(self,
-            type=NotImplemented,
-            description=NotImplemented,
-            ksql=NotImplemented,
-            limit=NotImplemented,
-            concurrencyLimitationType=NotImplemented):
+            type = NotImplemented,
+            description = NotImplemented,
+            ksql = NotImplemented,
+            limit = NotImplemented,
+            concurrencyLimitationType = NotImplemented):
         KalturaAssetCondition.__init__(self,
             type,
             description,
@@ -18568,11 +18847,11 @@ class KalturaConcurrencyCondition(KalturaAssetCondition):
 # @subpackage Client
 class KalturaStringValueArray(KalturaObjectBase):
     def __init__(self,
-            objects=NotImplemented):
+            objects = NotImplemented):
         KalturaObjectBase.__init__(self)
 
         # List of string values
-        # @var array of KalturaStringValue
+        # @var List[KalturaStringValue]
         self.objects = objects
 
 
@@ -18601,16 +18880,16 @@ class KalturaStringValueArray(KalturaObjectBase):
 # @subpackage Client
 class KalturaAssetShopCondition(KalturaAssetConditionBase):
     def __init__(self,
-            type=NotImplemented,
-            description=NotImplemented,
-            value=NotImplemented,
-            values=NotImplemented):
+            type = NotImplemented,
+            description = NotImplemented,
+            value = NotImplemented,
+            values = NotImplemented):
         KalturaAssetConditionBase.__init__(self,
             type,
             description)
 
         # Shop marker&#39;s value
-        # @var string
+        # @var str
         self.value = value
 
         # Shop marker&#39;s values
@@ -18651,15 +18930,15 @@ class KalturaAssetShopCondition(KalturaAssetConditionBase):
 # @subpackage Client
 class KalturaSubscriptionCondition(KalturaCondition):
     def __init__(self,
-            type=NotImplemented,
-            description=NotImplemented,
-            idIn=NotImplemented):
+            type = NotImplemented,
+            description = NotImplemented,
+            idIn = NotImplemented):
         KalturaCondition.__init__(self,
             type,
             description)
 
         # Comma separated subscription IDs list
-        # @var string
+        # @var str
         self.idIn = idIn
 
 
@@ -18690,9 +18969,9 @@ class KalturaAssetSubscriptionCondition(KalturaSubscriptionCondition):
     """AssetSubscription Condition - indicates which assets this rule is applied on by their subscriptions"""
 
     def __init__(self,
-            type=NotImplemented,
-            description=NotImplemented,
-            idIn=NotImplemented):
+            type = NotImplemented,
+            description = NotImplemented,
+            idIn = NotImplemented):
         KalturaSubscriptionCondition.__init__(self,
             type,
             description,
@@ -18718,9 +18997,9 @@ class KalturaUserSubscriptionCondition(KalturaSubscriptionCondition):
     """UserSubscription Condition - indicates which users this rule is applied on by their subscriptions"""
 
     def __init__(self,
-            type=NotImplemented,
-            description=NotImplemented,
-            idIn=NotImplemented):
+            type = NotImplemented,
+            description = NotImplemented,
+            idIn = NotImplemented):
         KalturaSubscriptionCondition.__init__(self,
             type,
             description,
@@ -18746,10 +19025,10 @@ class KalturaBusinessModuleCondition(KalturaCondition):
     """Business module condition"""
 
     def __init__(self,
-            type=NotImplemented,
-            description=NotImplemented,
-            businessModuleType=NotImplemented,
-            businessModuleId=NotImplemented):
+            type = NotImplemented,
+            description = NotImplemented,
+            businessModuleType = NotImplemented,
+            businessModuleId = NotImplemented):
         KalturaCondition.__init__(self,
             type,
             description)
@@ -18796,15 +19075,15 @@ class KalturaBusinessModuleCondition(KalturaCondition):
 # @subpackage Client
 class KalturaChannelCondition(KalturaCondition):
     def __init__(self,
-            type=NotImplemented,
-            description=NotImplemented,
-            idIn=NotImplemented):
+            type = NotImplemented,
+            description = NotImplemented,
+            idIn = NotImplemented):
         KalturaCondition.__init__(self,
             type,
             description)
 
         # Comma separated channel IDs list
-        # @var string
+        # @var str
         self.idIn = idIn
 
 
@@ -18835,9 +19114,9 @@ class KalturaNotCondition(KalturaCondition):
     """Not condition"""
 
     def __init__(self,
-            type=NotImplemented,
-            description=NotImplemented,
-            not_=NotImplemented):
+            type = NotImplemented,
+            description = NotImplemented,
+            not_ = NotImplemented):
         KalturaCondition.__init__(self,
             type,
             description)
@@ -18874,17 +19153,17 @@ class KalturaCountryCondition(KalturaNotCondition):
     """Country condition"""
 
     def __init__(self,
-            type=NotImplemented,
-            description=NotImplemented,
-            not_=NotImplemented,
-            countries=NotImplemented):
+            type = NotImplemented,
+            description = NotImplemented,
+            not_ = NotImplemented,
+            countries = NotImplemented):
         KalturaNotCondition.__init__(self,
             type,
             description,
             not_)
 
         # Comma separated countries IDs list
-        # @var string
+        # @var str
         self.countries = countries
 
 
@@ -18915,11 +19194,11 @@ class KalturaDateCondition(KalturaNotCondition):
     """Date condition"""
 
     def __init__(self,
-            type=NotImplemented,
-            description=NotImplemented,
-            not_=NotImplemented,
-            startDate=NotImplemented,
-            endDate=NotImplemented):
+            type = NotImplemented,
+            description = NotImplemented,
+            not_ = NotImplemented,
+            startDate = NotImplemented,
+            endDate = NotImplemented):
         KalturaNotCondition.__init__(self,
             type,
             description,
@@ -18969,22 +19248,22 @@ class KalturaHeaderCondition(KalturaNotCondition):
     """Header condition"""
 
     def __init__(self,
-            type=NotImplemented,
-            description=NotImplemented,
-            not_=NotImplemented,
-            key=NotImplemented,
-            value=NotImplemented):
+            type = NotImplemented,
+            description = NotImplemented,
+            not_ = NotImplemented,
+            key = NotImplemented,
+            value = NotImplemented):
         KalturaNotCondition.__init__(self,
             type,
             description,
             not_)
 
         # Header key
-        # @var string
+        # @var str
         self.key = key
 
         # Header value
-        # @var string
+        # @var str
         self.value = value
 
 
@@ -19021,17 +19300,17 @@ class KalturaHeaderCondition(KalturaNotCondition):
 # @subpackage Client
 class KalturaOrCondition(KalturaNotCondition):
     def __init__(self,
-            type=NotImplemented,
-            description=NotImplemented,
-            not_=NotImplemented,
-            conditions=NotImplemented):
+            type = NotImplemented,
+            description = NotImplemented,
+            not_ = NotImplemented,
+            conditions = NotImplemented):
         KalturaNotCondition.__init__(self,
             type,
             description,
             not_)
 
         # List of conditions with or between them
-        # @var array of KalturaCondition
+        # @var List[KalturaCondition]
         self.conditions = conditions
 
 
@@ -19060,15 +19339,15 @@ class KalturaOrCondition(KalturaNotCondition):
 # @subpackage Client
 class KalturaDeviceBrandCondition(KalturaCondition):
     def __init__(self,
-            type=NotImplemented,
-            description=NotImplemented,
-            idIn=NotImplemented):
+            type = NotImplemented,
+            description = NotImplemented,
+            idIn = NotImplemented):
         KalturaCondition.__init__(self,
             type,
             description)
 
         # Comma separated Device Brand IDs list
-        # @var string
+        # @var str
         self.idIn = idIn
 
 
@@ -19097,20 +19376,20 @@ class KalturaDeviceBrandCondition(KalturaCondition):
 # @subpackage Client
 class KalturaDeviceDynamicDataCondition(KalturaCondition):
     def __init__(self,
-            type=NotImplemented,
-            description=NotImplemented,
-            key=NotImplemented,
-            value=NotImplemented):
+            type = NotImplemented,
+            description = NotImplemented,
+            key = NotImplemented,
+            value = NotImplemented):
         KalturaCondition.__init__(self,
             type,
             description)
 
         # key
-        # @var string
+        # @var str
         self.key = key
 
         # value
-        # @var string
+        # @var str
         self.value = value
 
 
@@ -19147,15 +19426,15 @@ class KalturaDeviceDynamicDataCondition(KalturaCondition):
 # @subpackage Client
 class KalturaDeviceFamilyCondition(KalturaCondition):
     def __init__(self,
-            type=NotImplemented,
-            description=NotImplemented,
-            idIn=NotImplemented):
+            type = NotImplemented,
+            description = NotImplemented,
+            idIn = NotImplemented):
         KalturaCondition.__init__(self,
             type,
             description)
 
         # Comma separated Device Family IDs list
-        # @var string
+        # @var str
         self.idIn = idIn
 
 
@@ -19184,15 +19463,15 @@ class KalturaDeviceFamilyCondition(KalturaCondition):
 # @subpackage Client
 class KalturaDeviceManufacturerCondition(KalturaCondition):
     def __init__(self,
-            type=NotImplemented,
-            description=NotImplemented,
-            idIn=NotImplemented):
+            type = NotImplemented,
+            description = NotImplemented,
+            idIn = NotImplemented):
         KalturaCondition.__init__(self,
             type,
             description)
 
         # Comma separated Device Manufacturer IDs list
-        # @var string
+        # @var str
         self.idIn = idIn
 
 
@@ -19221,15 +19500,15 @@ class KalturaDeviceManufacturerCondition(KalturaCondition):
 # @subpackage Client
 class KalturaDeviceModelCondition(KalturaCondition):
     def __init__(self,
-            type=NotImplemented,
-            description=NotImplemented,
-            regexEqual=NotImplemented):
+            type = NotImplemented,
+            description = NotImplemented,
+            regexEqual = NotImplemented):
         KalturaCondition.__init__(self,
             type,
             description)
 
         # regex of device model that is compared to
-        # @var string
+        # @var str
         self.regexEqual = regexEqual
 
 
@@ -19258,20 +19537,20 @@ class KalturaDeviceModelCondition(KalturaCondition):
 # @subpackage Client
 class KalturaDynamicKeysCondition(KalturaCondition):
     def __init__(self,
-            type=NotImplemented,
-            description=NotImplemented,
-            key=NotImplemented,
-            values=NotImplemented):
+            type = NotImplemented,
+            description = NotImplemented,
+            key = NotImplemented,
+            values = NotImplemented):
         KalturaCondition.__init__(self,
             type,
             description)
 
         # key
-        # @var string
+        # @var str
         self.key = key
 
         # comma-separated values
-        # @var string
+        # @var str
         self.values = values
 
 
@@ -19308,15 +19587,15 @@ class KalturaDynamicKeysCondition(KalturaCondition):
 # @subpackage Client
 class KalturaFileTypeCondition(KalturaCondition):
     def __init__(self,
-            type=NotImplemented,
-            description=NotImplemented,
-            idIn=NotImplemented):
+            type = NotImplemented,
+            description = NotImplemented,
+            idIn = NotImplemented):
         KalturaCondition.__init__(self,
             type,
             description)
 
         # Comma separated filetype IDs list
-        # @var string
+        # @var str
         self.idIn = idIn
 
 
@@ -19347,20 +19626,20 @@ class KalturaIpRangeCondition(KalturaCondition):
     """IP range condition"""
 
     def __init__(self,
-            type=NotImplemented,
-            description=NotImplemented,
-            fromIP=NotImplemented,
-            toIP=NotImplemented):
+            type = NotImplemented,
+            description = NotImplemented,
+            fromIP = NotImplemented,
+            toIP = NotImplemented):
         KalturaCondition.__init__(self,
             type,
             description)
 
         # From IP address range
-        # @var string
+        # @var str
         self.fromIP = fromIP
 
         # TO IP address range
-        # @var string
+        # @var str
         self.toIP = toIP
 
 
@@ -19399,20 +19678,20 @@ class KalturaIpV6RangeCondition(KalturaCondition):
     """IP V6 range condition"""
 
     def __init__(self,
-            type=NotImplemented,
-            description=NotImplemented,
-            fromIP=NotImplemented,
-            toIP=NotImplemented):
+            type = NotImplemented,
+            description = NotImplemented,
+            fromIP = NotImplemented,
+            toIP = NotImplemented):
         KalturaCondition.__init__(self,
             type,
             description)
 
         # From IP address range
-        # @var string
+        # @var str
         self.fromIP = fromIP
 
         # TO IP address range
-        # @var string
+        # @var str
         self.toIP = toIP
 
 
@@ -19451,15 +19730,15 @@ class KalturaSegmentsCondition(KalturaCondition):
     """Segments condition"""
 
     def __init__(self,
-            type=NotImplemented,
-            description=NotImplemented,
-            segmentsIds=NotImplemented):
+            type = NotImplemented,
+            description = NotImplemented,
+            segmentsIds = NotImplemented):
         KalturaCondition.__init__(self,
             type,
             description)
 
         # Comma separated segments IDs list
-        # @var string
+        # @var str
         self.segmentsIds = segmentsIds
 
 
@@ -19488,9 +19767,9 @@ class KalturaSegmentsCondition(KalturaCondition):
 # @subpackage Client
 class KalturaUdidDynamicListCondition(KalturaCondition):
     def __init__(self,
-            type=NotImplemented,
-            description=NotImplemented,
-            id=NotImplemented):
+            type = NotImplemented,
+            description = NotImplemented,
+            id = NotImplemented):
         KalturaCondition.__init__(self,
             type,
             description)
@@ -19527,15 +19806,15 @@ class KalturaUserRoleCondition(KalturaCondition):
     """UserRole Condition - indicates which users this rule is applied on by their roles"""
 
     def __init__(self,
-            type=NotImplemented,
-            description=NotImplemented,
-            idIn=NotImplemented):
+            type = NotImplemented,
+            description = NotImplemented,
+            idIn = NotImplemented):
         KalturaCondition.__init__(self,
             type,
             description)
 
         # Comma separated user role IDs list
-        # @var string
+        # @var str
         self.idIn = idIn
 
 
@@ -19566,9 +19845,9 @@ class KalturaUserSessionProfileCondition(KalturaCondition):
     """UserSessionProfile Condition"""
 
     def __init__(self,
-            type=NotImplemented,
-            description=NotImplemented,
-            id=NotImplemented):
+            type = NotImplemented,
+            description = NotImplemented,
+            id = NotImplemented):
         KalturaCondition.__init__(self,
             type,
             description)
@@ -19603,8 +19882,8 @@ class KalturaUserSessionProfileCondition(KalturaCondition):
 # @subpackage Client
 class KalturaAccessControlBlockAction(KalturaAssetRuleAction):
     def __init__(self,
-            type=NotImplemented,
-            description=NotImplemented):
+            type = NotImplemented,
+            description = NotImplemented):
         KalturaAssetRuleAction.__init__(self,
             type,
             description)
@@ -19627,8 +19906,8 @@ class KalturaAccessControlBlockAction(KalturaAssetRuleAction):
 # @subpackage Client
 class KalturaAllowPlaybackAction(KalturaAssetRuleAction):
     def __init__(self,
-            type=NotImplemented,
-            description=NotImplemented):
+            type = NotImplemented,
+            description = NotImplemented):
         KalturaAssetRuleAction.__init__(self,
             type,
             description)
@@ -19651,9 +19930,9 @@ class KalturaAllowPlaybackAction(KalturaAssetRuleAction):
 # @subpackage Client
 class KalturaApplyPlaybackAdapterAction(KalturaAssetRuleAction):
     def __init__(self,
-            type=NotImplemented,
-            description=NotImplemented,
-            adapterId=NotImplemented):
+            type = NotImplemented,
+            description = NotImplemented,
+            adapterId = NotImplemented):
         KalturaAssetRuleAction.__init__(self,
             type,
             description)
@@ -19688,10 +19967,10 @@ class KalturaApplyPlaybackAdapterAction(KalturaAssetRuleAction):
 # @subpackage Client
 class KalturaAssetLifeCycleTransitionAction(KalturaAssetRuleAction):
     def __init__(self,
-            type=NotImplemented,
-            description=NotImplemented,
-            assetLifeCycleRuleActionType=NotImplemented,
-            assetLifeCycleRuleTransitionType=NotImplemented):
+            type = NotImplemented,
+            description = NotImplemented,
+            assetLifeCycleRuleActionType = NotImplemented,
+            assetLifeCycleRuleTransitionType = NotImplemented):
         KalturaAssetRuleAction.__init__(self,
             type,
             description)
@@ -19735,12 +20014,12 @@ class KalturaAssetLifeCycleTransitionAction(KalturaAssetRuleAction):
 # @subpackage Client
 class KalturaAssetLifeCycleBuisnessModuleTransitionAction(KalturaAssetLifeCycleTransitionAction):
     def __init__(self,
-            type=NotImplemented,
-            description=NotImplemented,
-            assetLifeCycleRuleActionType=NotImplemented,
-            assetLifeCycleRuleTransitionType=NotImplemented,
-            fileTypeIds=NotImplemented,
-            ppvIds=NotImplemented):
+            type = NotImplemented,
+            description = NotImplemented,
+            assetLifeCycleRuleActionType = NotImplemented,
+            assetLifeCycleRuleTransitionType = NotImplemented,
+            fileTypeIds = NotImplemented,
+            ppvIds = NotImplemented):
         KalturaAssetLifeCycleTransitionAction.__init__(self,
             type,
             description,
@@ -19748,11 +20027,11 @@ class KalturaAssetLifeCycleBuisnessModuleTransitionAction(KalturaAssetLifeCycleT
             assetLifeCycleRuleTransitionType)
 
         # Comma separated list of fileType Ids.
-        # @var string
+        # @var str
         self.fileTypeIds = fileTypeIds
 
         # Comma separated list of ppv Ids.
-        # @var string
+        # @var str
         self.ppvIds = ppvIds
 
 
@@ -19789,11 +20068,11 @@ class KalturaAssetLifeCycleBuisnessModuleTransitionAction(KalturaAssetLifeCycleT
 # @subpackage Client
 class KalturaAssetLifeCycleTagTransitionAction(KalturaAssetLifeCycleTransitionAction):
     def __init__(self,
-            type=NotImplemented,
-            description=NotImplemented,
-            assetLifeCycleRuleActionType=NotImplemented,
-            assetLifeCycleRuleTransitionType=NotImplemented,
-            tagIds=NotImplemented):
+            type = NotImplemented,
+            description = NotImplemented,
+            assetLifeCycleRuleActionType = NotImplemented,
+            assetLifeCycleRuleTransitionType = NotImplemented,
+            tagIds = NotImplemented):
         KalturaAssetLifeCycleTransitionAction.__init__(self,
             type,
             description,
@@ -19801,7 +20080,7 @@ class KalturaAssetLifeCycleTagTransitionAction(KalturaAssetLifeCycleTransitionAc
             assetLifeCycleRuleTransitionType)
 
         # Comma separated list of tag Ids.
-        # @var string
+        # @var str
         self.tagIds = tagIds
 
 
@@ -19830,8 +20109,8 @@ class KalturaAssetLifeCycleTagTransitionAction(KalturaAssetLifeCycleTransitionAc
 # @subpackage Client
 class KalturaBlockPlaybackAction(KalturaAssetRuleAction):
     def __init__(self,
-            type=NotImplemented,
-            description=NotImplemented):
+            type = NotImplemented,
+            description = NotImplemented):
         KalturaAssetRuleAction.__init__(self,
             type,
             description)
@@ -19856,10 +20135,10 @@ class KalturaTimeOffsetRuleAction(KalturaAssetRuleAction):
     """Time offset action"""
 
     def __init__(self,
-            type=NotImplemented,
-            description=NotImplemented,
-            offset=NotImplemented,
-            timeZone=NotImplemented):
+            type = NotImplemented,
+            description = NotImplemented,
+            offset = NotImplemented,
+            timeZone = NotImplemented):
         KalturaAssetRuleAction.__init__(self,
             type,
             description)
@@ -19908,10 +20187,10 @@ class KalturaEndDateOffsetRuleAction(KalturaTimeOffsetRuleAction):
     """End date offset action"""
 
     def __init__(self,
-            type=NotImplemented,
-            description=NotImplemented,
-            offset=NotImplemented,
-            timeZone=NotImplemented):
+            type = NotImplemented,
+            description = NotImplemented,
+            offset = NotImplemented,
+            timeZone = NotImplemented):
         KalturaTimeOffsetRuleAction.__init__(self,
             type,
             description,
@@ -19938,10 +20217,10 @@ class KalturaStartDateOffsetRuleAction(KalturaTimeOffsetRuleAction):
     """Start date offset action"""
 
     def __init__(self,
-            type=NotImplemented,
-            description=NotImplemented,
-            offset=NotImplemented,
-            timeZone=NotImplemented):
+            type = NotImplemented,
+            description = NotImplemented,
+            offset = NotImplemented,
+            timeZone = NotImplemented):
         KalturaTimeOffsetRuleAction.__init__(self,
             type,
             description,
@@ -19986,9 +20265,9 @@ class KalturaBasePreActionCondition(KalturaObjectBase):
 # @subpackage Client
 class KalturaFilterAction(KalturaAssetRuleAction):
     def __init__(self,
-            type=NotImplemented,
-            description=NotImplemented,
-            preActionCondition=NotImplemented):
+            type = NotImplemented,
+            description = NotImplemented,
+            preActionCondition = NotImplemented):
         KalturaAssetRuleAction.__init__(self,
             type,
             description)
@@ -20025,17 +20304,17 @@ class KalturaFilterFileByAudioCodecAction(KalturaFilterAction):
     """FilterFile By AudioCodec"""
 
     def __init__(self,
-            type=NotImplemented,
-            description=NotImplemented,
-            preActionCondition=NotImplemented,
-            audioCodecIn=NotImplemented):
+            type = NotImplemented,
+            description = NotImplemented,
+            preActionCondition = NotImplemented,
+            audioCodecIn = NotImplemented):
         KalturaFilterAction.__init__(self,
             type,
             description,
             preActionCondition)
 
         # List of comma separated audioCodecs
-        # @var string
+        # @var str
         self.audioCodecIn = audioCodecIn
 
 
@@ -20064,10 +20343,10 @@ class KalturaFilterFileByAudioCodecAction(KalturaFilterAction):
 # @subpackage Client
 class KalturaFilterFileByAudioCodecInDiscoveryAction(KalturaFilterFileByAudioCodecAction):
     def __init__(self,
-            type=NotImplemented,
-            description=NotImplemented,
-            preActionCondition=NotImplemented,
-            audioCodecIn=NotImplemented):
+            type = NotImplemented,
+            description = NotImplemented,
+            preActionCondition = NotImplemented,
+            audioCodecIn = NotImplemented):
         KalturaFilterFileByAudioCodecAction.__init__(self,
             type,
             description,
@@ -20092,10 +20371,10 @@ class KalturaFilterFileByAudioCodecInDiscoveryAction(KalturaFilterFileByAudioCod
 # @subpackage Client
 class KalturaFilterFileByAudioCodecInPlaybackAction(KalturaFilterFileByAudioCodecAction):
     def __init__(self,
-            type=NotImplemented,
-            description=NotImplemented,
-            preActionCondition=NotImplemented,
-            audioCodecIn=NotImplemented):
+            type = NotImplemented,
+            description = NotImplemented,
+            preActionCondition = NotImplemented,
+            audioCodecIn = NotImplemented):
         KalturaFilterFileByAudioCodecAction.__init__(self,
             type,
             description,
@@ -20122,22 +20401,22 @@ class KalturaFilterFileByDynamicDataAction(KalturaFilterAction):
     """Filter File By Dynamic Data"""
 
     def __init__(self,
-            type=NotImplemented,
-            description=NotImplemented,
-            preActionCondition=NotImplemented,
-            key=NotImplemented,
-            values=NotImplemented):
+            type = NotImplemented,
+            description = NotImplemented,
+            preActionCondition = NotImplemented,
+            key = NotImplemented,
+            values = NotImplemented):
         KalturaFilterAction.__init__(self,
             type,
             description,
             preActionCondition)
 
         # Key to be searched
-        # @var string
+        # @var str
         self.key = key
 
         # Comma separated values to be searched
-        # @var string
+        # @var str
         self.values = values
 
 
@@ -20174,11 +20453,11 @@ class KalturaFilterFileByDynamicDataAction(KalturaFilterAction):
 # @subpackage Client
 class KalturaFilterFileByDynamicDataInDiscoveryAction(KalturaFilterFileByDynamicDataAction):
     def __init__(self,
-            type=NotImplemented,
-            description=NotImplemented,
-            preActionCondition=NotImplemented,
-            key=NotImplemented,
-            values=NotImplemented):
+            type = NotImplemented,
+            description = NotImplemented,
+            preActionCondition = NotImplemented,
+            key = NotImplemented,
+            values = NotImplemented):
         KalturaFilterFileByDynamicDataAction.__init__(self,
             type,
             description,
@@ -20204,11 +20483,11 @@ class KalturaFilterFileByDynamicDataInDiscoveryAction(KalturaFilterFileByDynamic
 # @subpackage Client
 class KalturaFilterFileByDynamicDataInPlaybackAction(KalturaFilterFileByDynamicDataAction):
     def __init__(self,
-            type=NotImplemented,
-            description=NotImplemented,
-            preActionCondition=NotImplemented,
-            key=NotImplemented,
-            values=NotImplemented):
+            type = NotImplemented,
+            description = NotImplemented,
+            preActionCondition = NotImplemented,
+            key = NotImplemented,
+            values = NotImplemented):
         KalturaFilterFileByDynamicDataAction.__init__(self,
             type,
             description,
@@ -20236,17 +20515,17 @@ class KalturaFilterFileByFileTypeIdAction(KalturaFilterAction):
     """FilterFile By FileType"""
 
     def __init__(self,
-            type=NotImplemented,
-            description=NotImplemented,
-            preActionCondition=NotImplemented,
-            fileTypeIdIn=NotImplemented):
+            type = NotImplemented,
+            description = NotImplemented,
+            preActionCondition = NotImplemented,
+            fileTypeIdIn = NotImplemented):
         KalturaFilterAction.__init__(self,
             type,
             description,
             preActionCondition)
 
         # List of comma separated fileTypesIds
-        # @var string
+        # @var str
         self.fileTypeIdIn = fileTypeIdIn
 
 
@@ -20277,11 +20556,11 @@ class KalturaFilterFileByFileTypeIdForAssetTypeAction(KalturaFilterFileByFileTyp
     """Filter file By FileType For AssetType"""
 
     def __init__(self,
-            type=NotImplemented,
-            description=NotImplemented,
-            preActionCondition=NotImplemented,
-            fileTypeIdIn=NotImplemented,
-            assetTypeIn=NotImplemented):
+            type = NotImplemented,
+            description = NotImplemented,
+            preActionCondition = NotImplemented,
+            fileTypeIdIn = NotImplemented,
+            assetTypeIn = NotImplemented):
         KalturaFilterFileByFileTypeIdAction.__init__(self,
             type,
             description,
@@ -20289,7 +20568,7 @@ class KalturaFilterFileByFileTypeIdForAssetTypeAction(KalturaFilterFileByFileTyp
             fileTypeIdIn)
 
         # List of comma separated assetTypes
-        # @var string
+        # @var str
         self.assetTypeIn = assetTypeIn
 
 
@@ -20318,11 +20597,11 @@ class KalturaFilterFileByFileTypeIdForAssetTypeAction(KalturaFilterFileByFileTyp
 # @subpackage Client
 class KalturaFilterFileByFileTypeIdForAssetTypeInDiscoveryAction(KalturaFilterFileByFileTypeIdForAssetTypeAction):
     def __init__(self,
-            type=NotImplemented,
-            description=NotImplemented,
-            preActionCondition=NotImplemented,
-            fileTypeIdIn=NotImplemented,
-            assetTypeIn=NotImplemented):
+            type = NotImplemented,
+            description = NotImplemented,
+            preActionCondition = NotImplemented,
+            fileTypeIdIn = NotImplemented,
+            assetTypeIn = NotImplemented):
         KalturaFilterFileByFileTypeIdForAssetTypeAction.__init__(self,
             type,
             description,
@@ -20348,11 +20627,11 @@ class KalturaFilterFileByFileTypeIdForAssetTypeInDiscoveryAction(KalturaFilterFi
 # @subpackage Client
 class KalturaFilterFileByFileTypeIdForAssetTypeInPlaybackAction(KalturaFilterFileByFileTypeIdForAssetTypeAction):
     def __init__(self,
-            type=NotImplemented,
-            description=NotImplemented,
-            preActionCondition=NotImplemented,
-            fileTypeIdIn=NotImplemented,
-            assetTypeIn=NotImplemented):
+            type = NotImplemented,
+            description = NotImplemented,
+            preActionCondition = NotImplemented,
+            fileTypeIdIn = NotImplemented,
+            assetTypeIn = NotImplemented):
         KalturaFilterFileByFileTypeIdForAssetTypeAction.__init__(self,
             type,
             description,
@@ -20378,10 +20657,10 @@ class KalturaFilterFileByFileTypeIdForAssetTypeInPlaybackAction(KalturaFilterFil
 # @subpackage Client
 class KalturaFilterFileByFileTypeIdInDiscoveryAction(KalturaFilterFileByFileTypeIdAction):
     def __init__(self,
-            type=NotImplemented,
-            description=NotImplemented,
-            preActionCondition=NotImplemented,
-            fileTypeIdIn=NotImplemented):
+            type = NotImplemented,
+            description = NotImplemented,
+            preActionCondition = NotImplemented,
+            fileTypeIdIn = NotImplemented):
         KalturaFilterFileByFileTypeIdAction.__init__(self,
             type,
             description,
@@ -20406,10 +20685,10 @@ class KalturaFilterFileByFileTypeIdInDiscoveryAction(KalturaFilterFileByFileType
 # @subpackage Client
 class KalturaFilterFileByFileTypeIdInPlaybackAction(KalturaFilterFileByFileTypeIdAction):
     def __init__(self,
-            type=NotImplemented,
-            description=NotImplemented,
-            preActionCondition=NotImplemented,
-            fileTypeIdIn=NotImplemented):
+            type = NotImplemented,
+            description = NotImplemented,
+            preActionCondition = NotImplemented,
+            fileTypeIdIn = NotImplemented):
         KalturaFilterFileByFileTypeIdAction.__init__(self,
             type,
             description,
@@ -20436,17 +20715,17 @@ class KalturaFilterFileByLabelAction(KalturaFilterAction):
     """FilterFile By Label"""
 
     def __init__(self,
-            type=NotImplemented,
-            description=NotImplemented,
-            preActionCondition=NotImplemented,
-            labelIn=NotImplemented):
+            type = NotImplemented,
+            description = NotImplemented,
+            preActionCondition = NotImplemented,
+            labelIn = NotImplemented):
         KalturaFilterAction.__init__(self,
             type,
             description,
             preActionCondition)
 
         # List of comma separated labels
-        # @var string
+        # @var str
         self.labelIn = labelIn
 
 
@@ -20475,10 +20754,10 @@ class KalturaFilterFileByLabelAction(KalturaFilterAction):
 # @subpackage Client
 class KalturaFilterFileByLabelInDiscoveryAction(KalturaFilterFileByLabelAction):
     def __init__(self,
-            type=NotImplemented,
-            description=NotImplemented,
-            preActionCondition=NotImplemented,
-            labelIn=NotImplemented):
+            type = NotImplemented,
+            description = NotImplemented,
+            preActionCondition = NotImplemented,
+            labelIn = NotImplemented):
         KalturaFilterFileByLabelAction.__init__(self,
             type,
             description,
@@ -20503,10 +20782,10 @@ class KalturaFilterFileByLabelInDiscoveryAction(KalturaFilterFileByLabelAction):
 # @subpackage Client
 class KalturaFilterFileByLabelInPlaybackAction(KalturaFilterFileByLabelAction):
     def __init__(self,
-            type=NotImplemented,
-            description=NotImplemented,
-            preActionCondition=NotImplemented,
-            labelIn=NotImplemented):
+            type = NotImplemented,
+            description = NotImplemented,
+            preActionCondition = NotImplemented,
+            labelIn = NotImplemented):
         KalturaFilterFileByLabelAction.__init__(self,
             type,
             description,
@@ -20533,17 +20812,17 @@ class KalturaFilterFileByQualityAction(KalturaFilterAction):
     """Filter Files By their Quality"""
 
     def __init__(self,
-            type=NotImplemented,
-            description=NotImplemented,
-            preActionCondition=NotImplemented,
-            qualityIn=NotImplemented):
+            type = NotImplemented,
+            description = NotImplemented,
+            preActionCondition = NotImplemented,
+            qualityIn = NotImplemented):
         KalturaFilterAction.__init__(self,
             type,
             description,
             preActionCondition)
 
         # List of comma separated qualities
-        # @var string
+        # @var str
         self.qualityIn = qualityIn
 
 
@@ -20572,10 +20851,10 @@ class KalturaFilterFileByQualityAction(KalturaFilterAction):
 # @subpackage Client
 class KalturaFilterFileByQualityInDiscoveryAction(KalturaFilterFileByQualityAction):
     def __init__(self,
-            type=NotImplemented,
-            description=NotImplemented,
-            preActionCondition=NotImplemented,
-            qualityIn=NotImplemented):
+            type = NotImplemented,
+            description = NotImplemented,
+            preActionCondition = NotImplemented,
+            qualityIn = NotImplemented):
         KalturaFilterFileByQualityAction.__init__(self,
             type,
             description,
@@ -20600,10 +20879,10 @@ class KalturaFilterFileByQualityInDiscoveryAction(KalturaFilterFileByQualityActi
 # @subpackage Client
 class KalturaFilterFileByQualityInPlaybackAction(KalturaFilterFileByQualityAction):
     def __init__(self,
-            type=NotImplemented,
-            description=NotImplemented,
-            preActionCondition=NotImplemented,
-            qualityIn=NotImplemented):
+            type = NotImplemented,
+            description = NotImplemented,
+            preActionCondition = NotImplemented,
+            qualityIn = NotImplemented):
         KalturaFilterFileByQualityAction.__init__(self,
             type,
             description,
@@ -20630,17 +20909,17 @@ class KalturaFilterFileByStreamerTypeAction(KalturaFilterAction):
     """FilterFile By StreamerType"""
 
     def __init__(self,
-            type=NotImplemented,
-            description=NotImplemented,
-            preActionCondition=NotImplemented,
-            streamerTypeIn=NotImplemented):
+            type = NotImplemented,
+            description = NotImplemented,
+            preActionCondition = NotImplemented,
+            streamerTypeIn = NotImplemented):
         KalturaFilterAction.__init__(self,
             type,
             description,
             preActionCondition)
 
         # List of comma separated streamerTypes
-        # @var string
+        # @var str
         self.streamerTypeIn = streamerTypeIn
 
 
@@ -20669,10 +20948,10 @@ class KalturaFilterFileByStreamerTypeAction(KalturaFilterAction):
 # @subpackage Client
 class KalturaFilterFileByStreamerTypeInDiscovery(KalturaFilterFileByStreamerTypeAction):
     def __init__(self,
-            type=NotImplemented,
-            description=NotImplemented,
-            preActionCondition=NotImplemented,
-            streamerTypeIn=NotImplemented):
+            type = NotImplemented,
+            description = NotImplemented,
+            preActionCondition = NotImplemented,
+            streamerTypeIn = NotImplemented):
         KalturaFilterFileByStreamerTypeAction.__init__(self,
             type,
             description,
@@ -20697,10 +20976,10 @@ class KalturaFilterFileByStreamerTypeInDiscovery(KalturaFilterFileByStreamerType
 # @subpackage Client
 class KalturaFilterFileByStreamerTypeInPlayback(KalturaFilterFileByStreamerTypeAction):
     def __init__(self,
-            type=NotImplemented,
-            description=NotImplemented,
-            preActionCondition=NotImplemented,
-            streamerTypeIn=NotImplemented):
+            type = NotImplemented,
+            description = NotImplemented,
+            preActionCondition = NotImplemented,
+            streamerTypeIn = NotImplemented):
         KalturaFilterFileByStreamerTypeAction.__init__(self,
             type,
             description,
@@ -20727,17 +21006,17 @@ class KalturaFilterFileByVideoCodecAction(KalturaFilterAction):
     """FilterFile By VideoCode"""
 
     def __init__(self,
-            type=NotImplemented,
-            description=NotImplemented,
-            preActionCondition=NotImplemented,
-            videoCodecIn=NotImplemented):
+            type = NotImplemented,
+            description = NotImplemented,
+            preActionCondition = NotImplemented,
+            videoCodecIn = NotImplemented):
         KalturaFilterAction.__init__(self,
             type,
             description,
             preActionCondition)
 
         # List of comma separated videoCodecs
-        # @var string
+        # @var str
         self.videoCodecIn = videoCodecIn
 
 
@@ -20766,10 +21045,10 @@ class KalturaFilterFileByVideoCodecAction(KalturaFilterAction):
 # @subpackage Client
 class KalturaFilterFileByVideoCodecInDiscoveryAction(KalturaFilterFileByVideoCodecAction):
     def __init__(self,
-            type=NotImplemented,
-            description=NotImplemented,
-            preActionCondition=NotImplemented,
-            videoCodecIn=NotImplemented):
+            type = NotImplemented,
+            description = NotImplemented,
+            preActionCondition = NotImplemented,
+            videoCodecIn = NotImplemented):
         KalturaFilterFileByVideoCodecAction.__init__(self,
             type,
             description,
@@ -20794,10 +21073,10 @@ class KalturaFilterFileByVideoCodecInDiscoveryAction(KalturaFilterFileByVideoCod
 # @subpackage Client
 class KalturaFilterFileByVideoCodecInPlayback(KalturaFilterFileByVideoCodecAction):
     def __init__(self,
-            type=NotImplemented,
-            description=NotImplemented,
-            preActionCondition=NotImplemented,
-            videoCodecIn=NotImplemented):
+            type = NotImplemented,
+            description = NotImplemented,
+            preActionCondition = NotImplemented,
+            videoCodecIn = NotImplemented):
         KalturaFilterFileByVideoCodecAction.__init__(self,
             type,
             description,
@@ -20822,17 +21101,17 @@ class KalturaFilterFileByVideoCodecInPlayback(KalturaFilterFileByVideoCodecActio
 # @subpackage Client
 class KalturaFilterAssetByKsqlAction(KalturaFilterAction):
     def __init__(self,
-            type=NotImplemented,
-            description=NotImplemented,
-            preActionCondition=NotImplemented,
-            ksql=NotImplemented):
+            type = NotImplemented,
+            description = NotImplemented,
+            preActionCondition = NotImplemented,
+            ksql = NotImplemented):
         KalturaFilterAction.__init__(self,
             type,
             description,
             preActionCondition)
 
         # ksql to filter assets by
-        # @var string
+        # @var str
         self.ksql = ksql
 
 
@@ -20881,7 +21160,7 @@ class KalturaNoShopPreActionCondition(KalturaBasePreActionCondition):
 # @subpackage Client
 class KalturaShopPreActionCondition(KalturaBasePreActionCondition):
     def __init__(self,
-            shopAssetUserRuleId=NotImplemented):
+            shopAssetUserRuleId = NotImplemented):
         KalturaBasePreActionCondition.__init__(self)
 
         # Asset user rule ID with shop condition
@@ -20914,8 +21193,8 @@ class KalturaShopPreActionCondition(KalturaBasePreActionCondition):
 # @subpackage Client
 class KalturaBusinessModuleRuleAction(KalturaRuleAction):
     def __init__(self,
-            type=NotImplemented,
-            description=NotImplemented):
+            type = NotImplemented,
+            description = NotImplemented):
         KalturaRuleAction.__init__(self,
             type,
             description)
@@ -20938,9 +21217,9 @@ class KalturaBusinessModuleRuleAction(KalturaRuleAction):
 # @subpackage Client
 class KalturaApplyDiscountModuleAction(KalturaBusinessModuleRuleAction):
     def __init__(self,
-            type=NotImplemented,
-            description=NotImplemented,
-            discountModuleId=NotImplemented):
+            type = NotImplemented,
+            description = NotImplemented,
+            discountModuleId = NotImplemented):
         KalturaBusinessModuleRuleAction.__init__(self,
             type,
             description)
@@ -20975,8 +21254,8 @@ class KalturaApplyDiscountModuleAction(KalturaBusinessModuleRuleAction):
 # @subpackage Client
 class KalturaApplyFreePlaybackAction(KalturaBusinessModuleRuleAction):
     def __init__(self,
-            type=NotImplemented,
-            description=NotImplemented):
+            type = NotImplemented,
+            description = NotImplemented):
         KalturaBusinessModuleRuleAction.__init__(self,
             type,
             description)
@@ -20999,8 +21278,8 @@ class KalturaApplyFreePlaybackAction(KalturaBusinessModuleRuleAction):
 # @subpackage Client
 class KalturaAssetUserRuleBlockAction(KalturaAssetUserRuleAction):
     def __init__(self,
-            type=NotImplemented,
-            description=NotImplemented):
+            type = NotImplemented,
+            description = NotImplemented):
         KalturaAssetUserRuleAction.__init__(self,
             type,
             description)
@@ -21023,9 +21302,9 @@ class KalturaAssetUserRuleBlockAction(KalturaAssetUserRuleAction):
 # @subpackage Client
 class KalturaAssetUserRuleFilterAction(KalturaAssetUserRuleAction):
     def __init__(self,
-            type=NotImplemented,
-            description=NotImplemented,
-            applyOnChannel=NotImplemented):
+            type = NotImplemented,
+            description = NotImplemented,
+            applyOnChannel = NotImplemented):
         KalturaAssetUserRuleAction.__init__(self,
             type,
             description)
@@ -21062,14 +21341,14 @@ class KalturaBusinessModuleRule(KalturaRule):
     """Business module rule"""
 
     def __init__(self,
-            id=NotImplemented,
-            name=NotImplemented,
-            description=NotImplemented,
-            label=NotImplemented,
-            conditions=NotImplemented,
-            actions=NotImplemented,
-            createDate=NotImplemented,
-            updateDate=NotImplemented):
+            id = NotImplemented,
+            name = NotImplemented,
+            description = NotImplemented,
+            label = NotImplemented,
+            conditions = NotImplemented,
+            actions = NotImplemented,
+            createDate = NotImplemented,
+            updateDate = NotImplemented):
         KalturaRule.__init__(self,
             id,
             name,
@@ -21077,11 +21356,11 @@ class KalturaBusinessModuleRule(KalturaRule):
             label)
 
         # List of conditions for the rule
-        # @var array of KalturaCondition
+        # @var List[KalturaCondition]
         self.conditions = conditions
 
         # List of actions for the rule
-        # @var array of KalturaBusinessModuleRuleAction
+        # @var List[KalturaBusinessModuleRuleAction]
         self.actions = actions
 
         # Create date of the rule
@@ -21138,12 +21417,12 @@ class KalturaTvmRule(KalturaRule):
     """TVM rule"""
 
     def __init__(self,
-            id=NotImplemented,
-            name=NotImplemented,
-            description=NotImplemented,
-            label=NotImplemented,
-            createDate=NotImplemented,
-            ruleType=NotImplemented):
+            id = NotImplemented,
+            name = NotImplemented,
+            description = NotImplemented,
+            label = NotImplemented,
+            createDate = NotImplemented,
+            ruleType = NotImplemented):
         KalturaRule.__init__(self,
             id,
             name,
@@ -21188,13 +21467,13 @@ class KalturaTvmDeviceRule(KalturaTvmRule):
     """TVM geo rule"""
 
     def __init__(self,
-            id=NotImplemented,
-            name=NotImplemented,
-            description=NotImplemented,
-            label=NotImplemented,
-            createDate=NotImplemented,
-            ruleType=NotImplemented,
-            deviceBrandIds=NotImplemented):
+            id = NotImplemented,
+            name = NotImplemented,
+            description = NotImplemented,
+            label = NotImplemented,
+            createDate = NotImplemented,
+            ruleType = NotImplemented,
+            deviceBrandIds = NotImplemented):
         KalturaTvmRule.__init__(self,
             id,
             name,
@@ -21204,7 +21483,7 @@ class KalturaTvmDeviceRule(KalturaTvmRule):
             ruleType)
 
         # Comma separated list of country Ids.
-        # @var string
+        # @var str
         self.deviceBrandIds = deviceBrandIds
 
 
@@ -21235,18 +21514,18 @@ class KalturaTvmGeoRule(KalturaTvmRule):
     """TVM geo rule"""
 
     def __init__(self,
-            id=NotImplemented,
-            name=NotImplemented,
-            description=NotImplemented,
-            label=NotImplemented,
-            createDate=NotImplemented,
-            ruleType=NotImplemented,
-            onlyOrBut=NotImplemented,
-            countryIds=NotImplemented,
-            proxyRuleId=NotImplemented,
-            proxyRuleName=NotImplemented,
-            proxyLevelId=NotImplemented,
-            proxyLevelName=NotImplemented):
+            id = NotImplemented,
+            name = NotImplemented,
+            description = NotImplemented,
+            label = NotImplemented,
+            createDate = NotImplemented,
+            ruleType = NotImplemented,
+            onlyOrBut = NotImplemented,
+            countryIds = NotImplemented,
+            proxyRuleId = NotImplemented,
+            proxyRuleName = NotImplemented,
+            proxyLevelId = NotImplemented,
+            proxyLevelName = NotImplemented):
         KalturaTvmRule.__init__(self,
             id,
             name,
@@ -21260,7 +21539,7 @@ class KalturaTvmGeoRule(KalturaTvmRule):
         self.onlyOrBut = onlyOrBut
 
         # Comma separated list of country Ids.
-        # @var string
+        # @var str
         self.countryIds = countryIds
 
         # proxyRuleId - what is that?
@@ -21268,7 +21547,7 @@ class KalturaTvmGeoRule(KalturaTvmRule):
         self.proxyRuleId = proxyRuleId
 
         # proxyRuleName - what is that?
-        # @var string
+        # @var str
         self.proxyRuleName = proxyRuleName
 
         # proxyLevelId - what is that?
@@ -21276,7 +21555,7 @@ class KalturaTvmGeoRule(KalturaTvmRule):
         self.proxyLevelId = proxyLevelId
 
         # proxyLevelName - what is that?
-        # @var string
+        # @var str
         self.proxyLevelName = proxyLevelName
 
 
@@ -21347,11 +21626,11 @@ class KalturaBasePromotion(KalturaObjectBase):
     """Base Promotion"""
 
     def __init__(self,
-            conditions=NotImplemented):
+            conditions = NotImplemented):
         KalturaObjectBase.__init__(self)
 
         # These conditions define the Promotion that applies on
-        # @var array of KalturaCondition
+        # @var List[KalturaCondition]
         self.conditions = conditions
 
 
@@ -21382,19 +21661,19 @@ class KalturaCampaign(KalturaOTTObjectSupportNullable):
     """Campaign"""
 
     def __init__(self,
-            id=NotImplemented,
-            createDate=NotImplemented,
-            updateDate=NotImplemented,
-            startDate=NotImplemented,
-            endDate=NotImplemented,
-            name=NotImplemented,
-            systemName=NotImplemented,
-            description=NotImplemented,
-            state=NotImplemented,
-            promotion=NotImplemented,
-            message=NotImplemented,
-            collectionIdIn=NotImplemented,
-            assetUserRuleId=NotImplemented):
+            id = NotImplemented,
+            createDate = NotImplemented,
+            updateDate = NotImplemented,
+            startDate = NotImplemented,
+            endDate = NotImplemented,
+            name = NotImplemented,
+            systemName = NotImplemented,
+            description = NotImplemented,
+            state = NotImplemented,
+            promotion = NotImplemented,
+            message = NotImplemented,
+            collectionIdIn = NotImplemented,
+            assetUserRuleId = NotImplemented):
         KalturaOTTObjectSupportNullable.__init__(self)
 
         # ID
@@ -21421,15 +21700,15 @@ class KalturaCampaign(KalturaOTTObjectSupportNullable):
         self.endDate = endDate
 
         # Name
-        # @var string
+        # @var str
         self.name = name
 
         # systemName
-        # @var string
+        # @var str
         self.systemName = systemName
 
         # Description
-        # @var string
+        # @var str
         self.description = description
 
         # state
@@ -21442,11 +21721,11 @@ class KalturaCampaign(KalturaOTTObjectSupportNullable):
         self.promotion = promotion
 
         # Free text message to the user that gives information about the campaign.
-        # @var string
+        # @var str
         self.message = message
 
         # Comma separated collection IDs list
-        # @var string
+        # @var str
         self.collectionIdIn = collectionIdIn
 
         # Asset user rule identifier
@@ -21561,20 +21840,20 @@ class KalturaBatchCampaign(KalturaCampaign):
     """Campaign"""
 
     def __init__(self,
-            id=NotImplemented,
-            createDate=NotImplemented,
-            updateDate=NotImplemented,
-            startDate=NotImplemented,
-            endDate=NotImplemented,
-            name=NotImplemented,
-            systemName=NotImplemented,
-            description=NotImplemented,
-            state=NotImplemented,
-            promotion=NotImplemented,
-            message=NotImplemented,
-            collectionIdIn=NotImplemented,
-            assetUserRuleId=NotImplemented,
-            populationConditions=NotImplemented):
+            id = NotImplemented,
+            createDate = NotImplemented,
+            updateDate = NotImplemented,
+            startDate = NotImplemented,
+            endDate = NotImplemented,
+            name = NotImplemented,
+            systemName = NotImplemented,
+            description = NotImplemented,
+            state = NotImplemented,
+            promotion = NotImplemented,
+            message = NotImplemented,
+            collectionIdIn = NotImplemented,
+            assetUserRuleId = NotImplemented,
+            populationConditions = NotImplemented):
         KalturaCampaign.__init__(self,
             id,
             createDate,
@@ -21591,7 +21870,7 @@ class KalturaBatchCampaign(KalturaCampaign):
             assetUserRuleId)
 
         # These conditions define the population that apply one the campaign
-        # @var array of KalturaCondition
+        # @var List[KalturaCondition]
         self.populationConditions = populationConditions
 
 
@@ -21622,22 +21901,22 @@ class KalturaTriggerCampaign(KalturaCampaign):
     """Campaign"""
 
     def __init__(self,
-            id=NotImplemented,
-            createDate=NotImplemented,
-            updateDate=NotImplemented,
-            startDate=NotImplemented,
-            endDate=NotImplemented,
-            name=NotImplemented,
-            systemName=NotImplemented,
-            description=NotImplemented,
-            state=NotImplemented,
-            promotion=NotImplemented,
-            message=NotImplemented,
-            collectionIdIn=NotImplemented,
-            assetUserRuleId=NotImplemented,
-            service=NotImplemented,
-            action=NotImplemented,
-            triggerConditions=NotImplemented):
+            id = NotImplemented,
+            createDate = NotImplemented,
+            updateDate = NotImplemented,
+            startDate = NotImplemented,
+            endDate = NotImplemented,
+            name = NotImplemented,
+            systemName = NotImplemented,
+            description = NotImplemented,
+            state = NotImplemented,
+            promotion = NotImplemented,
+            message = NotImplemented,
+            collectionIdIn = NotImplemented,
+            assetUserRuleId = NotImplemented,
+            service = NotImplemented,
+            action = NotImplemented,
+            triggerConditions = NotImplemented):
         KalturaCampaign.__init__(self,
             id,
             createDate,
@@ -21662,7 +21941,7 @@ class KalturaTriggerCampaign(KalturaCampaign):
         self.action = action
 
         # List of conditions for the trigger (conditions on the object)
-        # @var array of KalturaCondition
+        # @var List[KalturaCondition]
         self.triggerConditions = triggerConditions
 
 
@@ -21709,8 +21988,8 @@ class KalturaCouponPromotion(KalturaBasePromotion):
     """Coupon promotion"""
 
     def __init__(self,
-            conditions=NotImplemented,
-            couponGroupId=NotImplemented):
+            conditions = NotImplemented,
+            couponGroupId = NotImplemented):
         KalturaBasePromotion.__init__(self,
             conditions)
 
@@ -21746,10 +22025,10 @@ class KalturaPromotion(KalturaBasePromotion):
     """Promotion"""
 
     def __init__(self,
-            conditions=NotImplemented,
-            discountModuleId=NotImplemented,
-            numberOfRecurring=NotImplemented,
-            maxDiscountUsages=NotImplemented):
+            conditions = NotImplemented,
+            discountModuleId = NotImplemented,
+            numberOfRecurring = NotImplemented,
+            maxDiscountUsages = NotImplemented):
         KalturaBasePromotion.__init__(self,
             conditions)
 
@@ -21810,18 +22089,18 @@ class KalturaEventNotification(KalturaOTTObjectSupportNullable):
     """Household Coupon details"""
 
     def __init__(self,
-            id=NotImplemented,
-            objectId=NotImplemented,
-            eventObjectType=NotImplemented,
-            message=NotImplemented,
-            status=NotImplemented,
-            actionType=NotImplemented,
-            createDate=NotImplemented,
-            updateDate=NotImplemented):
+            id = NotImplemented,
+            objectId = NotImplemented,
+            eventObjectType = NotImplemented,
+            message = NotImplemented,
+            status = NotImplemented,
+            actionType = NotImplemented,
+            createDate = NotImplemented,
+            updateDate = NotImplemented):
         KalturaOTTObjectSupportNullable.__init__(self)
 
         # Identifier
-        # @var string
+        # @var str
         self.id = id
 
         # Object identifier
@@ -21829,11 +22108,11 @@ class KalturaEventNotification(KalturaOTTObjectSupportNullable):
         self.objectId = objectId
 
         # Event object type
-        # @var string
+        # @var str
         self.eventObjectType = eventObjectType
 
         # Message
-        # @var string
+        # @var str
         self.message = message
 
         # Status
@@ -21841,7 +22120,7 @@ class KalturaEventNotification(KalturaOTTObjectSupportNullable):
         self.status = status
 
         # Action type
-        # @var string
+        # @var str
         self.actionType = actionType
 
         # Create date
@@ -21930,66 +22209,66 @@ class KalturaIot(KalturaOTTObjectSupportNullable):
     """IOT DEVICE"""
 
     def __init__(self,
-            udid=NotImplemented,
-            accessKey=NotImplemented,
-            accessSecretKey=NotImplemented,
-            username=NotImplemented,
-            userPassword=NotImplemented,
-            identityId=NotImplemented,
-            thingArn=NotImplemented,
-            thingId=NotImplemented,
-            principal=NotImplemented,
-            endPoint=NotImplemented,
-            extendedEndPoint=NotImplemented,
-            identityPoolId=NotImplemented):
+            udid = NotImplemented,
+            accessKey = NotImplemented,
+            accessSecretKey = NotImplemented,
+            username = NotImplemented,
+            userPassword = NotImplemented,
+            identityId = NotImplemented,
+            thingArn = NotImplemented,
+            thingId = NotImplemented,
+            principal = NotImplemented,
+            endPoint = NotImplemented,
+            extendedEndPoint = NotImplemented,
+            identityPoolId = NotImplemented):
         KalturaOTTObjectSupportNullable.__init__(self)
 
         # id
-        # @var string
+        # @var str
         self.udid = udid
 
         # accessKey
-        # @var string
+        # @var str
         self.accessKey = accessKey
 
         # accessSecretKey
-        # @var string
+        # @var str
         self.accessSecretKey = accessSecretKey
 
         # Username
-        # @var string
+        # @var str
         self.username = username
 
         # UserPassword
-        # @var string
+        # @var str
         self.userPassword = userPassword
 
         # IdentityId
-        # @var string
+        # @var str
         self.identityId = identityId
 
         # ThingArn
-        # @var string
+        # @var str
         self.thingArn = thingArn
 
         # ThingId
-        # @var string
+        # @var str
         self.thingId = thingId
 
         # Principal
-        # @var string
+        # @var str
         self.principal = principal
 
         # EndPoint
-        # @var string
+        # @var str
         self.endPoint = endPoint
 
         # ExtendedEndPoint
-        # @var string
+        # @var str
         self.extendedEndPoint = extendedEndPoint
 
         # IdentityPoolId
-        # @var string
+        # @var str
         self.identityPoolId = identityPoolId
 
 
@@ -22108,42 +22387,42 @@ class KalturaIotProfileAws(KalturaOTTObjectSupportNullable):
     """kalturaIotProfileAws"""
 
     def __init__(self,
-            iotEndPoint=NotImplemented,
-            accessKeyId=NotImplemented,
-            secretAccessKey=NotImplemented,
-            userPoolId=NotImplemented,
-            clientId=NotImplemented,
-            identityPoolId=NotImplemented,
-            region=NotImplemented,
-            updateDate=NotImplemented):
+            iotEndPoint = NotImplemented,
+            accessKeyId = NotImplemented,
+            secretAccessKey = NotImplemented,
+            userPoolId = NotImplemented,
+            clientId = NotImplemented,
+            identityPoolId = NotImplemented,
+            region = NotImplemented,
+            updateDate = NotImplemented):
         KalturaOTTObjectSupportNullable.__init__(self)
 
         # iotEndPoint
-        # @var string
+        # @var str
         self.iotEndPoint = iotEndPoint
 
         # accessKeyId
-        # @var string
+        # @var str
         self.accessKeyId = accessKeyId
 
         # secretAccessKey
-        # @var string
+        # @var str
         self.secretAccessKey = secretAccessKey
 
         # userPoolId
-        # @var string
+        # @var str
         self.userPoolId = userPoolId
 
         # clientId
-        # @var string
+        # @var str
         self.clientId = clientId
 
         # identityPoolId
-        # @var string
+        # @var str
         self.identityPoolId = identityPoolId
 
         # region
-        # @var string
+        # @var str
         self.region = region
 
         # updateDate
@@ -22234,11 +22513,11 @@ class KalturaAssetFile(KalturaObjectBase):
     """Asset file details"""
 
     def __init__(self,
-            url=NotImplemented):
+            url = NotImplemented):
         KalturaObjectBase.__init__(self)
 
         # URL of the media file to be played
-        # @var string
+        # @var str
         self.url = url
 
 
@@ -22267,8 +22546,8 @@ class KalturaAssetFile(KalturaObjectBase):
 # @subpackage Client
 class KalturaBusinessModuleDetails(KalturaObjectBase):
     def __init__(self,
-            businessModuleId=NotImplemented,
-            businessModuleType=NotImplemented):
+            businessModuleId = NotImplemented,
+            businessModuleType = NotImplemented):
         KalturaObjectBase.__init__(self)
 
         # BusinessModuleId
@@ -22315,33 +22594,33 @@ class KalturaMediaFile(KalturaAssetFile):
     """Media file details"""
 
     def __init__(self,
-            url=NotImplemented,
-            assetId=NotImplemented,
-            id=NotImplemented,
-            type=NotImplemented,
-            typeId=NotImplemented,
-            altUrl=NotImplemented,
-            duration=NotImplemented,
-            externalId=NotImplemented,
-            altExternalId=NotImplemented,
-            fileSize=NotImplemented,
-            additionalData=NotImplemented,
-            altStreamingCode=NotImplemented,
-            alternativeCdnAdapaterProfileId=NotImplemented,
-            endDate=NotImplemented,
-            startDate=NotImplemented,
-            externalStoreId=NotImplemented,
-            isDefaultLanguage=NotImplemented,
-            language=NotImplemented,
-            orderNum=NotImplemented,
-            outputProtecationLevel=NotImplemented,
-            cdnAdapaterProfileId=NotImplemented,
-            status=NotImplemented,
-            catalogEndDate=NotImplemented,
-            opl=NotImplemented,
-            businessModuleDetails=NotImplemented,
-            labels=NotImplemented,
-            dynamicData=NotImplemented):
+            url = NotImplemented,
+            assetId = NotImplemented,
+            id = NotImplemented,
+            type = NotImplemented,
+            typeId = NotImplemented,
+            altUrl = NotImplemented,
+            duration = NotImplemented,
+            externalId = NotImplemented,
+            altExternalId = NotImplemented,
+            fileSize = NotImplemented,
+            additionalData = NotImplemented,
+            altStreamingCode = NotImplemented,
+            alternativeCdnAdapaterProfileId = NotImplemented,
+            endDate = NotImplemented,
+            startDate = NotImplemented,
+            externalStoreId = NotImplemented,
+            isDefaultLanguage = NotImplemented,
+            language = NotImplemented,
+            orderNum = NotImplemented,
+            outputProtecationLevel = NotImplemented,
+            cdnAdapaterProfileId = NotImplemented,
+            status = NotImplemented,
+            catalogEndDate = NotImplemented,
+            opl = NotImplemented,
+            businessModuleDetails = NotImplemented,
+            labels = NotImplemented,
+            dynamicData = NotImplemented):
         KalturaAssetFile.__init__(self,
             url)
 
@@ -22355,7 +22634,7 @@ class KalturaMediaFile(KalturaAssetFile):
         self.id = id
 
         # Deprecated - Device types as defined in the system
-        # @var string
+        # @var str
         # @readonly
         self.type = type
 
@@ -22364,7 +22643,7 @@ class KalturaMediaFile(KalturaAssetFile):
         self.typeId = typeId
 
         # URL of the media file to be played
-        # @var string
+        # @var str
         self.altUrl = altUrl
 
         # Duration of the media file
@@ -22372,11 +22651,11 @@ class KalturaMediaFile(KalturaAssetFile):
         self.duration = duration
 
         # External identifier for the media file
-        # @var string
+        # @var str
         self.externalId = externalId
 
         # Alternative external identifier for the media file
-        # @var string
+        # @var str
         self.altExternalId = altExternalId
 
         # File size
@@ -22384,11 +22663,11 @@ class KalturaMediaFile(KalturaAssetFile):
         self.fileSize = fileSize
 
         # Additional Data
-        # @var string
+        # @var str
         self.additionalData = additionalData
 
         # Alternative streaming code
-        # @var string
+        # @var str
         self.altStreamingCode = altStreamingCode
 
         # Alternative cdn adapter profile identifier
@@ -22404,7 +22683,7 @@ class KalturaMediaFile(KalturaAssetFile):
         self.startDate = startDate
 
         # ExternalStoreId
-        # @var string
+        # @var str
         self.externalStoreId = externalStoreId
 
         # IsDefaultLanguage
@@ -22412,7 +22691,7 @@ class KalturaMediaFile(KalturaAssetFile):
         self.isDefaultLanguage = isDefaultLanguage
 
         # Language
-        # @var string
+        # @var str
         self.language = language
 
         # OrderNum
@@ -22420,7 +22699,7 @@ class KalturaMediaFile(KalturaAssetFile):
         self.orderNum = orderNum
 
         # OutputProtecationLevel
-        # @var string
+        # @var str
         self.outputProtecationLevel = outputProtecationLevel
 
         # cdn adapter profile identifier
@@ -22436,7 +22715,7 @@ class KalturaMediaFile(KalturaAssetFile):
         self.catalogEndDate = catalogEndDate
 
         # OPL
-        # @var string
+        # @var str
         self.opl = opl
 
         # businessModuleDetails
@@ -22444,7 +22723,7 @@ class KalturaMediaFile(KalturaAssetFile):
         self.businessModuleDetails = businessModuleDetails
 
         # Labels associated with the media file
-        # @var string
+        # @var str
         self.labels = labels
 
         # List of KalturaMediaFile&#39;s dynamic data keys
@@ -22671,9 +22950,9 @@ class KalturaBuzzScore(KalturaObjectBase):
     """Buzz score"""
 
     def __init__(self,
-            normalizedAvgScore=NotImplemented,
-            updateDate=NotImplemented,
-            avgScore=NotImplemented):
+            normalizedAvgScore = NotImplemented,
+            updateDate = NotImplemented,
+            avgScore = NotImplemented):
         KalturaObjectBase.__init__(self)
 
         # Normalized average score
@@ -22732,12 +23011,12 @@ class KalturaAssetStatistics(KalturaObjectBase):
     """Asset statistics"""
 
     def __init__(self,
-            assetId=NotImplemented,
-            likes=NotImplemented,
-            views=NotImplemented,
-            ratingCount=NotImplemented,
-            rating=NotImplemented,
-            buzzScore=NotImplemented):
+            assetId = NotImplemented,
+            likes = NotImplemented,
+            views = NotImplemented,
+            ratingCount = NotImplemented,
+            rating = NotImplemented,
+            buzzScore = NotImplemented):
         KalturaObjectBase.__init__(self)
 
         # Unique identifier for the asset
@@ -22832,11 +23111,11 @@ class KalturaMultilingualStringValueArray(KalturaObjectBase):
     """Array of translated strings"""
 
     def __init__(self,
-            objects=NotImplemented):
+            objects = NotImplemented):
         KalturaObjectBase.__init__(self)
 
         # List of string values
-        # @var array of KalturaMultilingualStringValue
+        # @var List[KalturaMultilingualStringValue]
         self.objects = objects
 
 
@@ -22867,9 +23146,9 @@ class KalturaFavorite(KalturaObjectBase):
     """Favorite details"""
 
     def __init__(self,
-            assetId=NotImplemented,
-            extraData=NotImplemented,
-            createDate=NotImplemented):
+            assetId = NotImplemented,
+            extraData = NotImplemented,
+            createDate = NotImplemented):
         KalturaObjectBase.__init__(self)
 
         # AssetInfo Model
@@ -22877,7 +23156,7 @@ class KalturaFavorite(KalturaObjectBase):
         self.assetId = assetId
 
         # Extra Value
-        # @var string
+        # @var str
         self.extraData = extraData
 
         # Specifies when was the favorite created. Date and time represented as epoch.
@@ -22925,13 +23204,13 @@ class KalturaFavoriteListResponse(KalturaListResponse):
     """Favorite list"""
 
     def __init__(self,
-            totalCount=NotImplemented,
-            objects=NotImplemented):
+            totalCount = NotImplemented,
+            objects = NotImplemented):
         KalturaListResponse.__init__(self,
             totalCount)
 
         # A list of favorites
-        # @var array of KalturaFavorite
+        # @var List[KalturaFavorite]
         self.objects = objects
 
 
@@ -22960,39 +23239,39 @@ class KalturaFavoriteListResponse(KalturaListResponse):
 # @subpackage Client
 class KalturaPlaybackSource(KalturaMediaFile):
     def __init__(self,
-            url=NotImplemented,
-            assetId=NotImplemented,
-            id=NotImplemented,
-            type=NotImplemented,
-            typeId=NotImplemented,
-            altUrl=NotImplemented,
-            duration=NotImplemented,
-            externalId=NotImplemented,
-            altExternalId=NotImplemented,
-            fileSize=NotImplemented,
-            additionalData=NotImplemented,
-            altStreamingCode=NotImplemented,
-            alternativeCdnAdapaterProfileId=NotImplemented,
-            endDate=NotImplemented,
-            startDate=NotImplemented,
-            externalStoreId=NotImplemented,
-            isDefaultLanguage=NotImplemented,
-            language=NotImplemented,
-            orderNum=NotImplemented,
-            outputProtecationLevel=NotImplemented,
-            cdnAdapaterProfileId=NotImplemented,
-            status=NotImplemented,
-            catalogEndDate=NotImplemented,
-            opl=NotImplemented,
-            businessModuleDetails=NotImplemented,
-            labels=NotImplemented,
-            dynamicData=NotImplemented,
-            format=NotImplemented,
-            protocols=NotImplemented,
-            drm=NotImplemented,
-            isTokenized=NotImplemented,
-            businessModuleId=NotImplemented,
-            businessModuleType=NotImplemented):
+            url = NotImplemented,
+            assetId = NotImplemented,
+            id = NotImplemented,
+            type = NotImplemented,
+            typeId = NotImplemented,
+            altUrl = NotImplemented,
+            duration = NotImplemented,
+            externalId = NotImplemented,
+            altExternalId = NotImplemented,
+            fileSize = NotImplemented,
+            additionalData = NotImplemented,
+            altStreamingCode = NotImplemented,
+            alternativeCdnAdapaterProfileId = NotImplemented,
+            endDate = NotImplemented,
+            startDate = NotImplemented,
+            externalStoreId = NotImplemented,
+            isDefaultLanguage = NotImplemented,
+            language = NotImplemented,
+            orderNum = NotImplemented,
+            outputProtecationLevel = NotImplemented,
+            cdnAdapaterProfileId = NotImplemented,
+            status = NotImplemented,
+            catalogEndDate = NotImplemented,
+            opl = NotImplemented,
+            businessModuleDetails = NotImplemented,
+            labels = NotImplemented,
+            dynamicData = NotImplemented,
+            format = NotImplemented,
+            protocols = NotImplemented,
+            drm = NotImplemented,
+            isTokenized = NotImplemented,
+            businessModuleId = NotImplemented,
+            businessModuleType = NotImplemented):
         KalturaMediaFile.__init__(self,
             url,
             assetId,
@@ -23023,15 +23302,15 @@ class KalturaPlaybackSource(KalturaMediaFile):
             dynamicData)
 
         # Source format according to delivery profile streamer type (applehttp, mpegdash etc.)
-        # @var string
+        # @var str
         self.format = format
 
         # Comma separated string according to deliveryProfile media protocols (&#39;http,https&#39; etc.)
-        # @var string
+        # @var str
         self.protocols = protocols
 
         # DRM data object containing relevant license URL ,scheme name and certificate
-        # @var array of KalturaDrmPlaybackPluginData
+        # @var List[KalturaDrmPlaybackPluginData]
         self.drm = drm
 
         # Is Tokenized
@@ -23108,34 +23387,34 @@ class KalturaDiscoveryMediaFile(KalturaMediaFile):
     """Media file in discovery context"""
 
     def __init__(self,
-            url=NotImplemented,
-            assetId=NotImplemented,
-            id=NotImplemented,
-            type=NotImplemented,
-            typeId=NotImplemented,
-            altUrl=NotImplemented,
-            duration=NotImplemented,
-            externalId=NotImplemented,
-            altExternalId=NotImplemented,
-            fileSize=NotImplemented,
-            additionalData=NotImplemented,
-            altStreamingCode=NotImplemented,
-            alternativeCdnAdapaterProfileId=NotImplemented,
-            endDate=NotImplemented,
-            startDate=NotImplemented,
-            externalStoreId=NotImplemented,
-            isDefaultLanguage=NotImplemented,
-            language=NotImplemented,
-            orderNum=NotImplemented,
-            outputProtecationLevel=NotImplemented,
-            cdnAdapaterProfileId=NotImplemented,
-            status=NotImplemented,
-            catalogEndDate=NotImplemented,
-            opl=NotImplemented,
-            businessModuleDetails=NotImplemented,
-            labels=NotImplemented,
-            dynamicData=NotImplemented,
-            isPlaybackable=NotImplemented):
+            url = NotImplemented,
+            assetId = NotImplemented,
+            id = NotImplemented,
+            type = NotImplemented,
+            typeId = NotImplemented,
+            altUrl = NotImplemented,
+            duration = NotImplemented,
+            externalId = NotImplemented,
+            altExternalId = NotImplemented,
+            fileSize = NotImplemented,
+            additionalData = NotImplemented,
+            altStreamingCode = NotImplemented,
+            alternativeCdnAdapaterProfileId = NotImplemented,
+            endDate = NotImplemented,
+            startDate = NotImplemented,
+            externalStoreId = NotImplemented,
+            isDefaultLanguage = NotImplemented,
+            language = NotImplemented,
+            orderNum = NotImplemented,
+            outputProtecationLevel = NotImplemented,
+            cdnAdapaterProfileId = NotImplemented,
+            status = NotImplemented,
+            catalogEndDate = NotImplemented,
+            opl = NotImplemented,
+            businessModuleDetails = NotImplemented,
+            labels = NotImplemented,
+            dynamicData = NotImplemented,
+            isPlaybackable = NotImplemented):
         KalturaMediaFile.__init__(self,
             url,
             assetId,
@@ -23197,13 +23476,13 @@ class KalturaOTTUserListResponse(KalturaListResponse):
     """Users list"""
 
     def __init__(self,
-            totalCount=NotImplemented,
-            objects=NotImplemented):
+            totalCount = NotImplemented,
+            objects = NotImplemented):
         KalturaListResponse.__init__(self,
             totalCount)
 
         # A list of users
-        # @var array of KalturaOTTUser
+        # @var List[KalturaOTTUser]
         self.objects = objects
 
 
@@ -23232,10 +23511,10 @@ class KalturaOTTUserListResponse(KalturaListResponse):
 # @subpackage Client
 class KalturaPartner(KalturaObjectBase):
     def __init__(self,
-            id=NotImplemented,
-            name=NotImplemented,
-            createDate=NotImplemented,
-            updateDate=NotImplemented):
+            id = NotImplemented,
+            name = NotImplemented,
+            createDate = NotImplemented,
+            updateDate = NotImplemented):
         KalturaObjectBase.__init__(self)
 
         # PartnerId
@@ -23243,7 +23522,7 @@ class KalturaPartner(KalturaObjectBase):
         self.id = id
 
         # PartnerName
-        # @var string
+        # @var str
         self.name = name
 
         # Creat date represented as epoch
@@ -23304,13 +23583,13 @@ class KalturaPartner(KalturaObjectBase):
 # @subpackage Client
 class KalturaPartnerListResponse(KalturaListResponse):
     def __init__(self,
-            totalCount=NotImplemented,
-            objects=NotImplemented):
+            totalCount = NotImplemented,
+            objects = NotImplemented):
         KalturaListResponse.__init__(self,
             totalCount)
 
         # A list of Partners
-        # @var array of KalturaPartner
+        # @var List[KalturaPartner]
         self.objects = objects
 
 
@@ -23339,13 +23618,13 @@ class KalturaPartnerListResponse(KalturaListResponse):
 # @subpackage Client
 class KalturaPasswordPolicyListResponse(KalturaListResponse):
     def __init__(self,
-            totalCount=NotImplemented,
-            objects=NotImplemented):
+            totalCount = NotImplemented,
+            objects = NotImplemented):
         KalturaListResponse.__init__(self,
             totalCount)
 
         # A list of objects
-        # @var array of KalturaPasswordPolicy
+        # @var List[KalturaPasswordPolicy]
         self.objects = objects
 
 
@@ -23376,14 +23655,14 @@ class KalturaSSOAdapterProfile(KalturaObjectBase):
     """SSO adapter configuration"""
 
     def __init__(self,
-            id=NotImplemented,
-            name=NotImplemented,
-            isActive=NotImplemented,
-            adapterUrl=NotImplemented,
-            settings=NotImplemented,
-            externalIdentifier=NotImplemented,
-            sharedSecret=NotImplemented,
-            adapterGrpcAddress=NotImplemented):
+            id = NotImplemented,
+            name = NotImplemented,
+            isActive = NotImplemented,
+            adapterUrl = NotImplemented,
+            settings = NotImplemented,
+            externalIdentifier = NotImplemented,
+            sharedSecret = NotImplemented,
+            adapterGrpcAddress = NotImplemented):
         KalturaObjectBase.__init__(self)
 
         # SSO Adapter id
@@ -23392,7 +23671,7 @@ class KalturaSSOAdapterProfile(KalturaObjectBase):
         self.id = id
 
         # SSO Adapter name
-        # @var string
+        # @var str
         self.name = name
 
         # SSO Adapter is active status
@@ -23400,7 +23679,7 @@ class KalturaSSOAdapterProfile(KalturaObjectBase):
         self.isActive = isActive
 
         # SSO Adapter URL
-        # @var string
+        # @var str
         self.adapterUrl = adapterUrl
 
         # SSO Adapter extra parameters
@@ -23408,15 +23687,15 @@ class KalturaSSOAdapterProfile(KalturaObjectBase):
         self.settings = settings
 
         # SSO Adapter external identifier
-        # @var string
+        # @var str
         self.externalIdentifier = externalIdentifier
 
         # Shared Secret
-        # @var string
+        # @var str
         self.sharedSecret = sharedSecret
 
         # Adapter GRPC Address, without protocol, i.e: &#39;adapter-hostname:9090&#39;
-        # @var string
+        # @var str
         self.adapterGrpcAddress = adapterGrpcAddress
 
 
@@ -23499,13 +23778,13 @@ class KalturaSSOAdapterProfileListResponse(KalturaListResponse):
     """ssoAdapterProfile list"""
 
     def __init__(self,
-            totalCount=NotImplemented,
-            objects=NotImplemented):
+            totalCount = NotImplemented,
+            objects = NotImplemented):
         KalturaListResponse.__init__(self,
             totalCount)
 
         # A list of payment-gateway profiles
-        # @var array of KalturaSSOAdapterProfile
+        # @var List[KalturaSSOAdapterProfile]
         self.objects = objects
 
 
@@ -23536,17 +23815,17 @@ class KalturaUserInterestTopic(KalturaObjectBase):
     """User interest topic"""
 
     def __init__(self,
-            metaId=NotImplemented,
-            value=NotImplemented,
-            parentTopic=NotImplemented):
+            metaId = NotImplemented,
+            value = NotImplemented,
+            parentTopic = NotImplemented):
         KalturaObjectBase.__init__(self)
 
         # Meta identifier
-        # @var string
+        # @var str
         self.metaId = metaId
 
         # Meta Value
-        # @var string
+        # @var str
         self.value = value
 
         # Parent topic
@@ -23597,12 +23876,12 @@ class KalturaUserInterest(KalturaObjectBase):
     """User Interest"""
 
     def __init__(self,
-            id=NotImplemented,
-            topic=NotImplemented):
+            id = NotImplemented,
+            topic = NotImplemented):
         KalturaObjectBase.__init__(self)
 
         # Identifier
-        # @var string
+        # @var str
         # @readonly
         self.id = id
 
@@ -23642,13 +23921,13 @@ class KalturaUserInterestListResponse(KalturaListResponse):
     """User interest list"""
 
     def __init__(self,
-            totalCount=NotImplemented,
-            objects=NotImplemented):
+            totalCount = NotImplemented,
+            objects = NotImplemented):
         KalturaListResponse.__init__(self,
             totalCount)
 
         # A list of UserInterests
-        # @var array of KalturaUserInterest
+        # @var List[KalturaUserInterest]
         self.objects = objects
 
 
@@ -23701,9 +23980,9 @@ class KalturaUserSessionProfile(KalturaObjectBase):
     """User Session Profile"""
 
     def __init__(self,
-            id=NotImplemented,
-            name=NotImplemented,
-            expression=NotImplemented):
+            id = NotImplemented,
+            name = NotImplemented,
+            expression = NotImplemented):
         KalturaObjectBase.__init__(self)
 
         # The user session profile id.
@@ -23712,7 +23991,7 @@ class KalturaUserSessionProfile(KalturaObjectBase):
         self.id = id
 
         # The user session profile name for presentation.
-        # @var string
+        # @var str
         self.name = name
 
         # expression
@@ -23757,13 +24036,13 @@ class KalturaUserSessionProfile(KalturaObjectBase):
 # @subpackage Client
 class KalturaUserSessionProfileListResponse(KalturaListResponse):
     def __init__(self,
-            totalCount=NotImplemented,
-            objects=NotImplemented):
+            totalCount = NotImplemented,
+            objects = NotImplemented):
         KalturaListResponse.__init__(self,
             totalCount)
 
         # A list of KalturaUserSessionProfile
-        # @var array of KalturaUserSessionProfile
+        # @var List[KalturaUserSessionProfile]
         self.objects = objects
 
 
@@ -23794,11 +24073,11 @@ class KalturaExpressionAnd(KalturaUserSessionProfileExpression):
     """And Expression"""
 
     def __init__(self,
-            expressions=NotImplemented):
+            expressions = NotImplemented):
         KalturaUserSessionProfileExpression.__init__(self)
 
         # expressions with and relation between them
-        # @var array of KalturaUserSessionProfileExpression
+        # @var List[KalturaUserSessionProfileExpression]
         self.expressions = expressions
 
 
@@ -23829,7 +24108,7 @@ class KalturaExpressionNot(KalturaUserSessionProfileExpression):
     """Not Expression"""
 
     def __init__(self,
-            expression=NotImplemented):
+            expression = NotImplemented):
         KalturaUserSessionProfileExpression.__init__(self)
 
         # expression
@@ -23864,11 +24143,11 @@ class KalturaExpressionOr(KalturaUserSessionProfileExpression):
     """Or Expression"""
 
     def __init__(self,
-            expressions=NotImplemented):
+            expressions = NotImplemented):
         KalturaUserSessionProfileExpression.__init__(self)
 
         # expressions with or relation between them
-        # @var array of KalturaUserSessionProfileExpression
+        # @var List[KalturaUserSessionProfileExpression]
         self.expressions = expressions
 
 
@@ -23899,7 +24178,7 @@ class KalturaUserSessionCondition(KalturaUserSessionProfileExpression):
     """SimpleExpression hold single condition"""
 
     def __init__(self,
-            condition=NotImplemented):
+            condition = NotImplemented):
         KalturaUserSessionProfileExpression.__init__(self)
 
         # expression
@@ -23934,9 +24213,9 @@ class KalturaMessage(KalturaObjectBase):
     """Message"""
 
     def __init__(self,
-            code=NotImplemented,
-            message=NotImplemented,
-            args=NotImplemented):
+            code = NotImplemented,
+            message = NotImplemented,
+            args = NotImplemented):
         KalturaObjectBase.__init__(self)
 
         # Massage code
@@ -23944,7 +24223,7 @@ class KalturaMessage(KalturaObjectBase):
         self.code = code
 
         # Message details
-        # @var string
+        # @var str
         self.message = message
 
         # Message args
@@ -23995,12 +24274,12 @@ class KalturaBulkUploadResult(KalturaObjectBase):
     """Bulk Upload Result"""
 
     def __init__(self,
-            objectId=NotImplemented,
-            index=NotImplemented,
-            bulkUploadId=NotImplemented,
-            status=NotImplemented,
-            errors=NotImplemented,
-            warnings=NotImplemented):
+            objectId = NotImplemented,
+            index = NotImplemented,
+            bulkUploadId = NotImplemented,
+            status = NotImplemented,
+            errors = NotImplemented,
+            warnings = NotImplemented):
         KalturaObjectBase.__init__(self)
 
         # the result ObjectId (assetId, userId etc)
@@ -24024,12 +24303,12 @@ class KalturaBulkUploadResult(KalturaObjectBase):
         self.status = status
 
         # A list of errors
-        # @var array of KalturaMessage
+        # @var List[KalturaMessage]
         # @readonly
         self.errors = errors
 
         # A list of warnings
-        # @var array of KalturaMessage
+        # @var List[KalturaMessage]
         # @readonly
         self.warnings = warnings
 
@@ -24077,16 +24356,16 @@ class KalturaBulkUpload(KalturaObjectBase):
     """Bulk Upload"""
 
     def __init__(self,
-            id=NotImplemented,
-            fileName=NotImplemented,
-            status=NotImplemented,
-            action=NotImplemented,
-            numOfObjects=NotImplemented,
-            createDate=NotImplemented,
-            updateDate=NotImplemented,
-            uploadedByUserId=NotImplemented,
-            results=NotImplemented,
-            errors=NotImplemented):
+            id = NotImplemented,
+            fileName = NotImplemented,
+            status = NotImplemented,
+            action = NotImplemented,
+            numOfObjects = NotImplemented,
+            createDate = NotImplemented,
+            updateDate = NotImplemented,
+            uploadedByUserId = NotImplemented,
+            results = NotImplemented,
+            errors = NotImplemented):
         KalturaObjectBase.__init__(self)
 
         # Bulk identifier
@@ -24095,7 +24374,7 @@ class KalturaBulkUpload(KalturaObjectBase):
         self.id = id
 
         # File Name
-        # @var string
+        # @var str
         # @readonly
         self.fileName = fileName
 
@@ -24130,12 +24409,12 @@ class KalturaBulkUpload(KalturaObjectBase):
         self.uploadedByUserId = uploadedByUserId
 
         # A list of results
-        # @var array of KalturaBulkUploadResult
+        # @var List[KalturaBulkUploadResult]
         # @readonly
         self.results = results
 
         # A list of errors
-        # @var array of KalturaMessage
+        # @var List[KalturaMessage]
         # @readonly
         self.errors = errors
 
@@ -24199,13 +24478,13 @@ class KalturaBulkUploadListResponse(KalturaListResponse):
     """Asset wrapper"""
 
     def __init__(self,
-            totalCount=NotImplemented,
-            objects=NotImplemented):
+            totalCount = NotImplemented,
+            objects = NotImplemented):
         KalturaListResponse.__init__(self,
             totalCount)
 
         # bulk upload items
-        # @var array of KalturaBulkUpload
+        # @var List[KalturaBulkUpload]
         self.objects = objects
 
 
@@ -24234,14 +24513,14 @@ class KalturaBulkUploadListResponse(KalturaListResponse):
 # @subpackage Client
 class KalturaBulkUploadAssetResult(KalturaBulkUploadResult):
     def __init__(self,
-            objectId=NotImplemented,
-            index=NotImplemented,
-            bulkUploadId=NotImplemented,
-            status=NotImplemented,
-            errors=NotImplemented,
-            warnings=NotImplemented,
-            type=NotImplemented,
-            externalId=NotImplemented):
+            objectId = NotImplemented,
+            index = NotImplemented,
+            bulkUploadId = NotImplemented,
+            status = NotImplemented,
+            errors = NotImplemented,
+            warnings = NotImplemented,
+            type = NotImplemented,
+            externalId = NotImplemented):
         KalturaBulkUploadResult.__init__(self,
             objectId,
             index,
@@ -24257,7 +24536,7 @@ class KalturaBulkUploadAssetResult(KalturaBulkUploadResult):
         self.type = type
 
         # External identifier for the asset
-        # @var string
+        # @var str
         # @readonly
         self.externalId = externalId
 
@@ -24287,14 +24566,14 @@ class KalturaBulkUploadAssetResult(KalturaBulkUploadResult):
 # @subpackage Client
 class KalturaBulkUploadMediaAssetResult(KalturaBulkUploadAssetResult):
     def __init__(self,
-            objectId=NotImplemented,
-            index=NotImplemented,
-            bulkUploadId=NotImplemented,
-            status=NotImplemented,
-            errors=NotImplemented,
-            warnings=NotImplemented,
-            type=NotImplemented,
-            externalId=NotImplemented):
+            objectId = NotImplemented,
+            index = NotImplemented,
+            bulkUploadId = NotImplemented,
+            status = NotImplemented,
+            errors = NotImplemented,
+            warnings = NotImplemented,
+            type = NotImplemented,
+            externalId = NotImplemented):
         KalturaBulkUploadAssetResult.__init__(self,
             objectId,
             index,
@@ -24323,14 +24602,14 @@ class KalturaBulkUploadMediaAssetResult(KalturaBulkUploadAssetResult):
 # @subpackage Client
 class KalturaBulkUploadLiveAssetResult(KalturaBulkUploadMediaAssetResult):
     def __init__(self,
-            objectId=NotImplemented,
-            index=NotImplemented,
-            bulkUploadId=NotImplemented,
-            status=NotImplemented,
-            errors=NotImplemented,
-            warnings=NotImplemented,
-            type=NotImplemented,
-            externalId=NotImplemented):
+            objectId = NotImplemented,
+            index = NotImplemented,
+            bulkUploadId = NotImplemented,
+            status = NotImplemented,
+            errors = NotImplemented,
+            warnings = NotImplemented,
+            type = NotImplemented,
+            externalId = NotImplemented):
         KalturaBulkUploadMediaAssetResult.__init__(self,
             objectId,
             index,
@@ -24359,12 +24638,12 @@ class KalturaBulkUploadLiveAssetResult(KalturaBulkUploadMediaAssetResult):
 # @subpackage Client
 class KalturaBulkUploadDynamicListResult(KalturaBulkUploadResult):
     def __init__(self,
-            objectId=NotImplemented,
-            index=NotImplemented,
-            bulkUploadId=NotImplemented,
-            status=NotImplemented,
-            errors=NotImplemented,
-            warnings=NotImplemented):
+            objectId = NotImplemented,
+            index = NotImplemented,
+            bulkUploadId = NotImplemented,
+            status = NotImplemented,
+            errors = NotImplemented,
+            warnings = NotImplemented):
         KalturaBulkUploadResult.__init__(self,
             objectId,
             index,
@@ -24391,13 +24670,13 @@ class KalturaBulkUploadDynamicListResult(KalturaBulkUploadResult):
 # @subpackage Client
 class KalturaBulkUploadUdidDynamicListResult(KalturaBulkUploadDynamicListResult):
     def __init__(self,
-            objectId=NotImplemented,
-            index=NotImplemented,
-            bulkUploadId=NotImplemented,
-            status=NotImplemented,
-            errors=NotImplemented,
-            warnings=NotImplemented,
-            udid=NotImplemented):
+            objectId = NotImplemented,
+            index = NotImplemented,
+            bulkUploadId = NotImplemented,
+            status = NotImplemented,
+            errors = NotImplemented,
+            warnings = NotImplemented,
+            udid = NotImplemented):
         KalturaBulkUploadDynamicListResult.__init__(self,
             objectId,
             index,
@@ -24407,7 +24686,7 @@ class KalturaBulkUploadUdidDynamicListResult(KalturaBulkUploadDynamicListResult)
             warnings)
 
         # The udid from the excel to add to DynamicLis values
-        # @var string
+        # @var str
         # @readonly
         self.udid = udid
 
@@ -24433,15 +24712,15 @@ class KalturaBulkUploadUdidDynamicListResult(KalturaBulkUploadDynamicListResult)
 # @subpackage Client
 class KalturaBulkUploadProgramAssetResult(KalturaBulkUploadResult):
     def __init__(self,
-            objectId=NotImplemented,
-            index=NotImplemented,
-            bulkUploadId=NotImplemented,
-            status=NotImplemented,
-            errors=NotImplemented,
-            warnings=NotImplemented,
-            programId=NotImplemented,
-            programExternalId=NotImplemented,
-            liveAssetId=NotImplemented):
+            objectId = NotImplemented,
+            index = NotImplemented,
+            bulkUploadId = NotImplemented,
+            status = NotImplemented,
+            errors = NotImplemented,
+            warnings = NotImplemented,
+            programId = NotImplemented,
+            programExternalId = NotImplemented,
+            liveAssetId = NotImplemented):
         KalturaBulkUploadResult.__init__(self,
             objectId,
             index,
@@ -24456,7 +24735,7 @@ class KalturaBulkUploadProgramAssetResult(KalturaBulkUploadResult):
         self.programId = programId
 
         # The external program Id as was sent in the bulk xml file
-        # @var string
+        # @var str
         # @readonly
         self.programExternalId = programExternalId
 
@@ -24495,16 +24774,16 @@ class KalturaBulkUploadProgramAssetResult(KalturaBulkUploadResult):
 # @subpackage Client
 class KalturaSocialAction(KalturaObjectBase):
     def __init__(self,
-            id=NotImplemented,
-            actionType=NotImplemented,
-            time=NotImplemented,
-            assetId=NotImplemented,
-            assetType=NotImplemented,
-            url=NotImplemented):
+            id = NotImplemented,
+            actionType = NotImplemented,
+            time = NotImplemented,
+            assetId = NotImplemented,
+            assetType = NotImplemented,
+            url = NotImplemented):
         KalturaObjectBase.__init__(self)
 
         # social action document id
-        # @var string
+        # @var str
         # @readonly
         self.id = id
 
@@ -24525,7 +24804,7 @@ class KalturaSocialAction(KalturaObjectBase):
         self.assetType = assetType
 
         # The value of the url
-        # @var string
+        # @var str
         self.url = url
 
 
@@ -24590,13 +24869,13 @@ class KalturaSocialAction(KalturaObjectBase):
 # @subpackage Client
 class KalturaSocialActionListResponse(KalturaListResponse):
     def __init__(self,
-            totalCount=NotImplemented,
-            objects=NotImplemented):
+            totalCount = NotImplemented,
+            objects = NotImplemented):
         KalturaListResponse.__init__(self,
             totalCount)
 
         # The social actions
-        # @var array of KalturaSocialAction
+        # @var List[KalturaSocialAction]
         self.objects = objects
 
 
@@ -24625,13 +24904,13 @@ class KalturaSocialActionListResponse(KalturaListResponse):
 # @subpackage Client
 class KalturaSocialActionRate(KalturaSocialAction):
     def __init__(self,
-            id=NotImplemented,
-            actionType=NotImplemented,
-            time=NotImplemented,
-            assetId=NotImplemented,
-            assetType=NotImplemented,
-            url=NotImplemented,
-            rate=NotImplemented):
+            id = NotImplemented,
+            actionType = NotImplemented,
+            time = NotImplemented,
+            assetId = NotImplemented,
+            assetType = NotImplemented,
+            url = NotImplemented,
+            rate = NotImplemented):
         KalturaSocialAction.__init__(self,
             id,
             actionType,
@@ -24670,18 +24949,18 @@ class KalturaSocialActionRate(KalturaSocialAction):
 # @subpackage Client
 class KalturaSocialComment(KalturaObjectBase):
     def __init__(self,
-            header=NotImplemented,
-            text=NotImplemented,
-            createDate=NotImplemented,
-            writer=NotImplemented):
+            header = NotImplemented,
+            text = NotImplemented,
+            createDate = NotImplemented,
+            writer = NotImplemented):
         KalturaObjectBase.__init__(self)
 
         # Comment header
-        # @var string
+        # @var str
         self.header = header
 
         # Comment body
-        # @var string
+        # @var str
         self.text = text
 
         # Comment creation date
@@ -24689,7 +24968,7 @@ class KalturaSocialComment(KalturaObjectBase):
         self.createDate = createDate
 
         # The writer of the comment
-        # @var string
+        # @var str
         self.writer = writer
 
 
@@ -24742,13 +25021,13 @@ class KalturaSocialComment(KalturaObjectBase):
 # @subpackage Client
 class KalturaSocialCommentListResponse(KalturaListResponse):
     def __init__(self,
-            totalCount=NotImplemented,
-            objects=NotImplemented):
+            totalCount = NotImplemented,
+            objects = NotImplemented):
         KalturaListResponse.__init__(self,
             totalCount)
 
         # Social comments list
-        # @var array of KalturaSocialComment
+        # @var List[KalturaSocialComment]
         self.objects = objects
 
 
@@ -24777,12 +25056,12 @@ class KalturaSocialCommentListResponse(KalturaListResponse):
 # @subpackage Client
 class KalturaSocialNetworkComment(KalturaSocialComment):
     def __init__(self,
-            header=NotImplemented,
-            text=NotImplemented,
-            createDate=NotImplemented,
-            writer=NotImplemented,
-            likeCounter=NotImplemented,
-            authorImageUrl=NotImplemented):
+            header = NotImplemented,
+            text = NotImplemented,
+            createDate = NotImplemented,
+            writer = NotImplemented,
+            likeCounter = NotImplemented,
+            authorImageUrl = NotImplemented):
         KalturaSocialComment.__init__(self,
             header,
             text,
@@ -24790,11 +25069,11 @@ class KalturaSocialNetworkComment(KalturaSocialComment):
             writer)
 
         # Number of likes
-        # @var string
+        # @var str
         self.likeCounter = likeCounter
 
         # The URL of the profile picture of the author of the comment
-        # @var string
+        # @var str
         self.authorImageUrl = authorImageUrl
 
 
@@ -24831,14 +25110,14 @@ class KalturaSocialNetworkComment(KalturaSocialComment):
 # @subpackage Client
 class KalturaFacebookPost(KalturaSocialNetworkComment):
     def __init__(self,
-            header=NotImplemented,
-            text=NotImplemented,
-            createDate=NotImplemented,
-            writer=NotImplemented,
-            likeCounter=NotImplemented,
-            authorImageUrl=NotImplemented,
-            comments=NotImplemented,
-            link=NotImplemented):
+            header = NotImplemented,
+            text = NotImplemented,
+            createDate = NotImplemented,
+            writer = NotImplemented,
+            likeCounter = NotImplemented,
+            authorImageUrl = NotImplemented,
+            comments = NotImplemented,
+            link = NotImplemented):
         KalturaSocialNetworkComment.__init__(self,
             header,
             text,
@@ -24848,11 +25127,11 @@ class KalturaFacebookPost(KalturaSocialNetworkComment):
             authorImageUrl)
 
         # List of comments on the post
-        # @var array of KalturaSocialNetworkComment
+        # @var List[KalturaSocialNetworkComment]
         self.comments = comments
 
         # A link associated to the post
-        # @var string
+        # @var str
         self.link = link
 
 
@@ -24889,12 +25168,12 @@ class KalturaFacebookPost(KalturaSocialNetworkComment):
 # @subpackage Client
 class KalturaTwitterTwit(KalturaSocialNetworkComment):
     def __init__(self,
-            header=NotImplemented,
-            text=NotImplemented,
-            createDate=NotImplemented,
-            writer=NotImplemented,
-            likeCounter=NotImplemented,
-            authorImageUrl=NotImplemented):
+            header = NotImplemented,
+            text = NotImplemented,
+            createDate = NotImplemented,
+            writer = NotImplemented,
+            likeCounter = NotImplemented,
+            authorImageUrl = NotImplemented):
         KalturaSocialNetworkComment.__init__(self,
             header,
             text,
@@ -24923,14 +25202,14 @@ class KalturaAssetComment(KalturaSocialComment):
     """Asset Comment"""
 
     def __init__(self,
-            header=NotImplemented,
-            text=NotImplemented,
-            createDate=NotImplemented,
-            writer=NotImplemented,
-            id=NotImplemented,
-            assetId=NotImplemented,
-            assetType=NotImplemented,
-            subHeader=NotImplemented):
+            header = NotImplemented,
+            text = NotImplemented,
+            createDate = NotImplemented,
+            writer = NotImplemented,
+            id = NotImplemented,
+            assetId = NotImplemented,
+            assetType = NotImplemented,
+            subHeader = NotImplemented):
         KalturaSocialComment.__init__(self,
             header,
             text,
@@ -24950,7 +25229,7 @@ class KalturaAssetComment(KalturaSocialComment):
         self.assetType = assetType
 
         # Sub Header
-        # @var string
+        # @var str
         self.subHeader = subHeader
 
 
@@ -25003,17 +25282,17 @@ class KalturaAssetComment(KalturaSocialComment):
 # @subpackage Client
 class KalturaSocialFriendActivity(KalturaObjectBase):
     def __init__(self,
-            userFullName=NotImplemented,
-            userPictureUrl=NotImplemented,
-            socialAction=NotImplemented):
+            userFullName = NotImplemented,
+            userPictureUrl = NotImplemented,
+            socialAction = NotImplemented):
         KalturaObjectBase.__init__(self)
 
         # The full name of the user who did the social action
-        # @var string
+        # @var str
         self.userFullName = userFullName
 
         # The URL of the profile picture of the user who did the social action
-        # @var string
+        # @var str
         self.userPictureUrl = userPictureUrl
 
         # The social action
@@ -25062,13 +25341,13 @@ class KalturaSocialFriendActivity(KalturaObjectBase):
 # @subpackage Client
 class KalturaSocialFriendActivityListResponse(KalturaListResponse):
     def __init__(self,
-            totalCount=NotImplemented,
-            objects=NotImplemented):
+            totalCount = NotImplemented,
+            objects = NotImplemented):
         KalturaListResponse.__init__(self,
             totalCount)
 
         # Social friends activity
-        # @var array of KalturaSocialFriendActivity
+        # @var List[KalturaSocialFriendActivity]
         self.objects = objects
 
 
@@ -25097,13 +25376,13 @@ class KalturaSocialFriendActivityListResponse(KalturaListResponse):
 # @subpackage Client
 class KalturaHouseholdSegmentListResponse(KalturaListResponse):
     def __init__(self,
-            totalCount=NotImplemented,
-            objects=NotImplemented):
+            totalCount = NotImplemented,
+            objects = NotImplemented):
         KalturaListResponse.__init__(self,
             totalCount)
 
         # A list of objects
-        # @var array of KalturaHouseholdSegment
+        # @var List[KalturaHouseholdSegment]
         self.objects = objects
 
 
@@ -25200,18 +25479,18 @@ class KalturaSegmentationType(KalturaObjectBase):
     """Segmentation type - defines at least one segment"""
 
     def __init__(self,
-            id=NotImplemented,
-            name=NotImplemented,
-            description=NotImplemented,
-            conditions=NotImplemented,
-            conditionsOperator=NotImplemented,
-            actions=NotImplemented,
-            value=NotImplemented,
-            createDate=NotImplemented,
-            updateDate=NotImplemented,
-            executeDate=NotImplemented,
-            version=NotImplemented,
-            assetUserRuleId=NotImplemented):
+            id = NotImplemented,
+            name = NotImplemented,
+            description = NotImplemented,
+            conditions = NotImplemented,
+            conditionsOperator = NotImplemented,
+            actions = NotImplemented,
+            value = NotImplemented,
+            createDate = NotImplemented,
+            updateDate = NotImplemented,
+            executeDate = NotImplemented,
+            version = NotImplemented,
+            assetUserRuleId = NotImplemented):
         KalturaObjectBase.__init__(self)
 
         # Id of segmentation type
@@ -25220,15 +25499,15 @@ class KalturaSegmentationType(KalturaObjectBase):
         self.id = id
 
         # Name of segmentation type
-        # @var string
+        # @var str
         self.name = name
 
         # Description of segmentation type
-        # @var string
+        # @var str
         self.description = description
 
         # Segmentation conditions - can be empty
-        # @var array of KalturaBaseSegmentCondition
+        # @var List[KalturaBaseSegmentCondition]
         self.conditions = conditions
 
         # Boolean operator between segmentation type&#39;s conditions - defaults to &quot;And&quot;
@@ -25236,7 +25515,7 @@ class KalturaSegmentationType(KalturaObjectBase):
         self.conditionsOperator = conditionsOperator
 
         # Segmentation conditions - can be empty
-        # @var array of KalturaBaseSegmentAction
+        # @var List[KalturaBaseSegmentAction]
         self.actions = actions
 
         # Segmentation values - can be empty (so only one segment will be created)
@@ -25265,6 +25544,7 @@ class KalturaSegmentationType(KalturaObjectBase):
 
         # Asset User Rule Id
         # @var int
+        # @insertonly
         self.assetUserRuleId = assetUserRuleId
 
 
@@ -25363,13 +25643,13 @@ class KalturaSegmentationTypeListResponse(KalturaListResponse):
     """List of segmentation types"""
 
     def __init__(self,
-            totalCount=NotImplemented,
-            objects=NotImplemented):
+            totalCount = NotImplemented,
+            objects = NotImplemented):
         KalturaListResponse.__init__(self,
             totalCount)
 
         # Segmentation Types
-        # @var array of KalturaSegmentationType
+        # @var List[KalturaSegmentationType]
         self.objects = objects
 
 
@@ -25400,10 +25680,10 @@ class KalturaContentActionCondition(KalturaObjectBase):
     """Segmentation condition regarding content actions"""
 
     def __init__(self,
-            action=NotImplemented,
-            length=NotImplemented,
-            lengthType=NotImplemented,
-            multiplier=NotImplemented):
+            action = NotImplemented,
+            length = NotImplemented,
+            lengthType = NotImplemented,
+            multiplier = NotImplemented):
         KalturaObjectBase.__init__(self)
 
         # The relevant action to be examined
@@ -25474,12 +25754,12 @@ class KalturaContentScoreCondition(KalturaBaseSegmentCondition):
     """Defines a condition which is essentially a combination of several content-based actions, each has their own score multiplier"""
 
     def __init__(self,
-            minScore=NotImplemented,
-            maxScore=NotImplemented,
-            days=NotImplemented,
-            field=NotImplemented,
-            values=NotImplemented,
-            actions=NotImplemented):
+            minScore = NotImplemented,
+            maxScore = NotImplemented,
+            days = NotImplemented,
+            field = NotImplemented,
+            values = NotImplemented,
+            actions = NotImplemented):
         KalturaBaseSegmentCondition.__init__(self)
 
         # The minimum score to be met
@@ -25495,16 +25775,16 @@ class KalturaContentScoreCondition(KalturaBaseSegmentCondition):
         self.days = days
 
         # If condition should be applied on specific field (and not the one of the segment value)
-        # @var string
+        # @var str
         self.field = field
 
         # If condition should be applied on specific field (and not the one of the segment value) - 
         #             list of values to be considered together
-        # @var array of KalturaStringValue
+        # @var List[KalturaStringValue]
         self.values = values
 
         # List of the actions that consist the condition
-        # @var array of KalturaContentActionCondition
+        # @var List[KalturaContentActionCondition]
         self.actions = actions
 
 
@@ -25575,22 +25855,14 @@ class KalturaMonetizationCondition(KalturaBaseSegmentCondition):
     """Defines a condition which is essentially a combination of several monetization-based actions, each has their own score multiplier"""
 
     def __init__(self,
-            minValue=NotImplemented,
-            maxValue=NotImplemented,
-            days=NotImplemented,
-            type=NotImplemented,
-            operator=NotImplemented,
-            businessModuleIdIn=NotImplemented,
-            currencyCode=NotImplemented):
+            days = NotImplemented,
+            type = NotImplemented,
+            operator = NotImplemented,
+            businessModuleIdIn = NotImplemented,
+            currencyCode = NotImplemented,
+            minValue = NotImplemented,
+            maxValue = NotImplemented):
         KalturaBaseSegmentCondition.__init__(self)
-
-        # The minimum value to be met
-        # @var int
-        self.minValue = minValue
-
-        # The maximum value to be met
-        # @var int
-        self.maxValue = maxValue
 
         # How many days back should the actions be considered
         # @var int
@@ -25605,22 +25877,30 @@ class KalturaMonetizationCondition(KalturaBaseSegmentCondition):
         self.operator = operator
 
         # Comma saperated list of business module IDs
-        # @var string
+        # @var str
         self.businessModuleIdIn = businessModuleIdIn
 
         # Which currency code should be taken into consideration
-        # @var string
+        # @var str
         self.currencyCode = currencyCode
+
+        # The minimum value to be met
+        # @var int
+        self.minValue = minValue
+
+        # The maximum value to be met
+        # @var int
+        self.maxValue = maxValue
 
 
     PROPERTY_LOADERS = {
-        'minValue': getXmlNodeInt, 
-        'maxValue': getXmlNodeInt, 
         'days': getXmlNodeInt, 
         'type': (KalturaEnumsFactory.createString, "KalturaMonetizationType"), 
         'operator': (KalturaEnumsFactory.createString, "KalturaMathemticalOperatorType"), 
         'businessModuleIdIn': getXmlNodeText, 
         'currencyCode': getXmlNodeText, 
+        'minValue': getXmlNodeInt, 
+        'maxValue': getXmlNodeInt, 
     }
 
     def fromXml(self, node):
@@ -25630,26 +25910,14 @@ class KalturaMonetizationCondition(KalturaBaseSegmentCondition):
     def toParams(self):
         kparams = KalturaBaseSegmentCondition.toParams(self)
         kparams.put("objectType", "KalturaMonetizationCondition")
-        kparams.addIntIfDefined("minValue", self.minValue)
-        kparams.addIntIfDefined("maxValue", self.maxValue)
         kparams.addIntIfDefined("days", self.days)
         kparams.addStringEnumIfDefined("type", self.type)
         kparams.addStringEnumIfDefined("operator", self.operator)
         kparams.addStringIfDefined("businessModuleIdIn", self.businessModuleIdIn)
         kparams.addStringIfDefined("currencyCode", self.currencyCode)
+        kparams.addIntIfDefined("minValue", self.minValue)
+        kparams.addIntIfDefined("maxValue", self.maxValue)
         return kparams
-
-    def getMinValue(self):
-        return self.minValue
-
-    def setMinValue(self, newMinValue):
-        self.minValue = newMinValue
-
-    def getMaxValue(self):
-        return self.maxValue
-
-    def setMaxValue(self, newMaxValue):
-        self.maxValue = newMaxValue
 
     def getDays(self):
         return self.days
@@ -25681,6 +25949,18 @@ class KalturaMonetizationCondition(KalturaBaseSegmentCondition):
     def setCurrencyCode(self, newCurrencyCode):
         self.currencyCode = newCurrencyCode
 
+    def getMinValue(self):
+        return self.minValue
+
+    def setMinValue(self, newMinValue):
+        self.minValue = newMinValue
+
+    def getMaxValue(self):
+        return self.maxValue
+
+    def setMaxValue(self, newMaxValue):
+        self.maxValue = newMaxValue
+
 
 # @package Kaltura
 # @subpackage Client
@@ -25688,16 +25968,16 @@ class KalturaUserDataCondition(KalturaBaseSegmentCondition):
     """User data condition for segmentation"""
 
     def __init__(self,
-            field=NotImplemented,
-            value=NotImplemented):
+            field = NotImplemented,
+            value = NotImplemented):
         KalturaBaseSegmentCondition.__init__(self)
 
         # Field name
-        # @var string
+        # @var str
         self.field = field
 
         # Value
-        # @var string
+        # @var str
         self.value = value
 
 
@@ -25736,16 +26016,16 @@ class KalturaAssetOrderSegmentAction(KalturaBaseSegmentAction):
     """Asset order segment action"""
 
     def __init__(self,
-            name=NotImplemented,
-            values=NotImplemented):
+            name = NotImplemented,
+            values = NotImplemented):
         KalturaBaseSegmentAction.__init__(self)
 
         # Action name
-        # @var string
+        # @var str
         self.name = name
 
         # Action values
-        # @var array of KalturaStringValue
+        # @var List[KalturaStringValue]
         self.values = values
 
 
@@ -25784,11 +26064,11 @@ class KalturaKsqlSegmentAction(KalturaBaseSegmentAction):
     """Segment action with ksql"""
 
     def __init__(self,
-            ksql=NotImplemented):
+            ksql = NotImplemented):
         KalturaBaseSegmentAction.__init__(self)
 
         # KSQL
-        # @var string
+        # @var str
         self.ksql = ksql
 
 
@@ -25819,7 +26099,7 @@ class KalturaBlockSubscriptionSegmentAction(KalturaKsqlSegmentAction):
     """segment block subscription action"""
 
     def __init__(self,
-            ksql=NotImplemented):
+            ksql = NotImplemented):
         KalturaKsqlSegmentAction.__init__(self,
             ksql)
 
@@ -25843,7 +26123,7 @@ class KalturaSegmentAssetFilterAction(KalturaKsqlSegmentAction):
     """Asset filter action"""
 
     def __init__(self,
-            ksql=NotImplemented):
+            ksql = NotImplemented):
         KalturaKsqlSegmentAction.__init__(self,
             ksql)
 
@@ -25867,7 +26147,7 @@ class KalturaSegmentAssetFilterSegmentAction(KalturaSegmentAssetFilterAction):
     """segment asset filter for segment action"""
 
     def __init__(self,
-            ksql=NotImplemented):
+            ksql = NotImplemented):
         KalturaSegmentAssetFilterAction.__init__(self,
             ksql)
 
@@ -25891,7 +26171,7 @@ class KalturaSegmentAssetFilterSubscriptionAction(KalturaSegmentAssetFilterActio
     """segment asset filter for subscription action"""
 
     def __init__(self,
-            ksql=NotImplemented):
+            ksql = NotImplemented):
         KalturaSegmentAssetFilterAction.__init__(self,
             ksql)
 
@@ -25915,7 +26195,7 @@ class KalturaSegmentBlockCancelSubscriptionAction(KalturaBlockSubscriptionSegmen
     """segment block subscription for cancel action"""
 
     def __init__(self,
-            ksql=NotImplemented):
+            ksql = NotImplemented):
         KalturaBlockSubscriptionSegmentAction.__init__(self,
             ksql)
 
@@ -25939,7 +26219,7 @@ class KalturaSegmentBlockPlaybackSubscriptionAction(KalturaBlockSubscriptionSegm
     """segment block subscription for playback action"""
 
     def __init__(self,
-            ksql=NotImplemented):
+            ksql = NotImplemented):
         KalturaBlockSubscriptionSegmentAction.__init__(self,
             ksql)
 
@@ -25963,7 +26243,7 @@ class KalturaSegmentBlockPurchaseSubscriptionAction(KalturaBlockSubscriptionSegm
     """segment block subscription for purchase action"""
 
     def __init__(self,
-            ksql=NotImplemented):
+            ksql = NotImplemented):
         KalturaBlockSubscriptionSegmentAction.__init__(self,
             ksql)
 
@@ -26009,10 +26289,10 @@ class KalturaSegmentValue(KalturaObjectBase):
     """Specific segment value"""
 
     def __init__(self,
-            id=NotImplemented,
-            systematicName=NotImplemented,
-            name=NotImplemented,
-            value=NotImplemented):
+            id = NotImplemented,
+            systematicName = NotImplemented,
+            name = NotImplemented,
+            value = NotImplemented):
         KalturaObjectBase.__init__(self)
 
         # Id of segment
@@ -26021,15 +26301,15 @@ class KalturaSegmentValue(KalturaObjectBase):
         self.id = id
 
         # Systematic name of segment
-        # @var string
+        # @var str
         self.systematicName = systematicName
 
         # Name of segment
-        # @var string
+        # @var str
         self.name = name
 
         # The value of the segment
-        # @var string
+        # @var str
         self.value = value
 
 
@@ -26080,8 +26360,8 @@ class KalturaSegmentValues(KalturaBaseSegmentValue):
     """Segmentation type which takes certain values of a tag/meta as segments"""
 
     def __init__(self,
-            source=NotImplemented,
-            values=NotImplemented):
+            source = NotImplemented,
+            values = NotImplemented):
         KalturaBaseSegmentValue.__init__(self)
 
         # Segment values source
@@ -26089,7 +26369,7 @@ class KalturaSegmentValues(KalturaBaseSegmentValue):
         self.source = source
 
         # List of segment values
-        # @var array of KalturaSegmentValue
+        # @var List[KalturaSegmentValue]
         self.values = values
 
 
@@ -26128,15 +26408,15 @@ class KalturaSegmentAllValues(KalturaSegmentValues):
     """Segmentation type which takes all values of a tag/meta as segments"""
 
     def __init__(self,
-            source=NotImplemented,
-            values=NotImplemented,
-            nameFormat=NotImplemented):
+            source = NotImplemented,
+            values = NotImplemented,
+            nameFormat = NotImplemented):
         KalturaSegmentValues.__init__(self,
             source,
             values)
 
         # Segment names&#39; format - they will be automatically generated
-        # @var string
+        # @var str
         self.nameFormat = nameFormat
 
 
@@ -26167,11 +26447,11 @@ class KalturaContentSource(KalturaSegmentSource):
     """Content based source (meta, tag etc.)"""
 
     def __init__(self,
-            field=NotImplemented):
+            field = NotImplemented):
         KalturaSegmentSource.__init__(self)
 
         # Topic (meta or tag) name
-        # @var string
+        # @var str
         self.field = field
 
 
@@ -26202,9 +26482,9 @@ class KalturaMonetizationSource(KalturaSegmentSource):
     """Monetization based source (purchases etc.)"""
 
     def __init__(self,
-            type=NotImplemented,
-            operator=NotImplemented,
-            days=NotImplemented):
+            type = NotImplemented,
+            operator = NotImplemented,
+            days = NotImplemented):
         KalturaSegmentSource.__init__(self)
 
         # Purchase type
@@ -26263,11 +26543,11 @@ class KalturaUserDynamicDataSource(KalturaSegmentSource):
     """User dynamic data source"""
 
     def __init__(self,
-            field=NotImplemented):
+            field = NotImplemented):
         KalturaSegmentSource.__init__(self)
 
         # Field name
-        # @var string
+        # @var str
         self.field = field
 
 
@@ -26298,14 +26578,14 @@ class KalturaSegmentRange(KalturaObjectBase):
     """Segment that is based on a range of values"""
 
     def __init__(self,
-            id=NotImplemented,
-            systematicName=NotImplemented,
-            name=NotImplemented,
-            gte=NotImplemented,
-            gt=NotImplemented,
-            lte=NotImplemented,
-            lt=NotImplemented,
-            equals=NotImplemented):
+            id = NotImplemented,
+            systematicName = NotImplemented,
+            name = NotImplemented,
+            gte = NotImplemented,
+            gt = NotImplemented,
+            lte = NotImplemented,
+            lt = NotImplemented,
+            equals = NotImplemented):
         KalturaObjectBase.__init__(self)
 
         # Id of segment
@@ -26314,11 +26594,11 @@ class KalturaSegmentRange(KalturaObjectBase):
         self.id = id
 
         # Systematic name of segment
-        # @var string
+        # @var str
         self.systematicName = systematicName
 
         # Specific segment name
-        # @var string
+        # @var str
         self.name = name
 
         # Greater than or equals &gt;=
@@ -26421,8 +26701,8 @@ class KalturaSegmentRanges(KalturaBaseSegmentValue):
     """Segmentation type that takes different ranges as segments"""
 
     def __init__(self,
-            source=NotImplemented,
-            ranges=NotImplemented):
+            source = NotImplemented,
+            ranges = NotImplemented):
         KalturaBaseSegmentValue.__init__(self)
 
         # Range source
@@ -26430,7 +26710,7 @@ class KalturaSegmentRanges(KalturaBaseSegmentValue):
         self.source = source
 
         # List of ranges for segmentation
-        # @var array of KalturaSegmentRange
+        # @var List[KalturaSegmentRange]
         self.ranges = ranges
 
 
@@ -26467,9 +26747,9 @@ class KalturaSegmentRanges(KalturaBaseSegmentValue):
 # @subpackage Client
 class KalturaSingleSegmentValue(KalturaBaseSegmentValue):
     def __init__(self,
-            id=NotImplemented,
-            affectedUsers=NotImplemented,
-            affectedHouseholds=NotImplemented):
+            id = NotImplemented,
+            affectedUsers = NotImplemented,
+            affectedHouseholds = NotImplemented):
         KalturaBaseSegmentValue.__init__(self)
 
         # Id of segment
@@ -26519,8 +26799,8 @@ class KalturaUserSegment(KalturaObjectBase):
     """Indicates a segment of a user"""
 
     def __init__(self,
-            segmentId=NotImplemented,
-            userId=NotImplemented):
+            segmentId = NotImplemented,
+            userId = NotImplemented):
         KalturaObjectBase.__init__(self)
 
         # Segment Id
@@ -26528,7 +26808,7 @@ class KalturaUserSegment(KalturaObjectBase):
         self.segmentId = segmentId
 
         # User Id of segment
-        # @var string
+        # @var str
         self.userId = userId
 
 
@@ -26567,13 +26847,13 @@ class KalturaUserSegmentListResponse(KalturaListResponse):
     """List of user segments"""
 
     def __init__(self,
-            totalCount=NotImplemented,
-            objects=NotImplemented):
+            totalCount = NotImplemented,
+            objects = NotImplemented):
         KalturaListResponse.__init__(self,
             totalCount)
 
         # Segmentation Types
-        # @var array of KalturaUserSegment
+        # @var List[KalturaUserSegment]
         self.objects = objects
 
 
@@ -26600,17 +26880,212 @@ class KalturaUserSegmentListResponse(KalturaListResponse):
 
 # @package Kaltura
 # @subpackage Client
+class KalturaWatchBasedRecommendationsProfile(KalturaObjectBase):
+    def __init__(self,
+            id = NotImplemented,
+            name = NotImplemented,
+            topicIds = NotImplemented,
+            analysisMediaTypeIds = NotImplemented,
+            userInterestPlayThresholdInPercentages = NotImplemented,
+            numberOfInterests = NotImplemented,
+            fallbackChannelId = NotImplemented,
+            minPlaybacks = NotImplemented,
+            maxPlaybacks = NotImplemented,
+            allowedRecommendationsKsql = NotImplemented,
+            playbackInterestsCalculationPeriodDays = NotImplemented):
+        KalturaObjectBase.__init__(self)
+
+        # Unique identifier for the profile
+        # @var int
+        # @readonly
+        self.id = id
+
+        # Friendly name for the profile
+        # @var str
+        self.name = name
+
+        # List of comma seperated topic ids considered for recommendations calculation.
+        # @var str
+        self.topicIds = topicIds
+
+        # List of comma seperated type ids considered for recommendations calculation.
+        # @var str
+        self.analysisMediaTypeIds = analysisMediaTypeIds
+
+        # The minimum coverage in percentages that media is considered viewed.
+        # @var int
+        self.userInterestPlayThresholdInPercentages = userInterestPlayThresholdInPercentages
+
+        # The number of interests that will be selected per user.
+        # @var int
+        self.numberOfInterests = numberOfInterests
+
+        # Reference to partner default recommendations (first 30 assets that are included in the referred KalturaChannel).
+        # @var int
+        self.fallbackChannelId = fallbackChannelId
+
+        # Minimum number of media assets that user shall watch to trigger user interests calculation.
+        # @var int
+        self.minPlaybacks = minPlaybacks
+
+        # Maximum number of assets that watched by a user and will be considered for recommendations calculation (the last maxPlaybacks shall be used in the analysis).
+        # @var int
+        self.maxPlaybacks = maxPlaybacks
+
+        # A kSql is used to filter the "user interests" recommendations. Only asset properties, metas, or tags are allowed ti be included in this ksql.
+        # @var str
+        self.allowedRecommendationsKsql = allowedRecommendationsKsql
+
+        # The number of days the user interests are considered to be up-to-date.
+        # @var int
+        self.playbackInterestsCalculationPeriodDays = playbackInterestsCalculationPeriodDays
+
+
+    PROPERTY_LOADERS = {
+        'id': getXmlNodeInt, 
+        'name': getXmlNodeText, 
+        'topicIds': getXmlNodeText, 
+        'analysisMediaTypeIds': getXmlNodeText, 
+        'userInterestPlayThresholdInPercentages': getXmlNodeInt, 
+        'numberOfInterests': getXmlNodeInt, 
+        'fallbackChannelId': getXmlNodeInt, 
+        'minPlaybacks': getXmlNodeInt, 
+        'maxPlaybacks': getXmlNodeInt, 
+        'allowedRecommendationsKsql': getXmlNodeText, 
+        'playbackInterestsCalculationPeriodDays': getXmlNodeInt, 
+    }
+
+    def fromXml(self, node):
+        KalturaObjectBase.fromXml(self, node)
+        self.fromXmlImpl(node, KalturaWatchBasedRecommendationsProfile.PROPERTY_LOADERS)
+
+    def toParams(self):
+        kparams = KalturaObjectBase.toParams(self)
+        kparams.put("objectType", "KalturaWatchBasedRecommendationsProfile")
+        kparams.addStringIfDefined("name", self.name)
+        kparams.addStringIfDefined("topicIds", self.topicIds)
+        kparams.addStringIfDefined("analysisMediaTypeIds", self.analysisMediaTypeIds)
+        kparams.addIntIfDefined("userInterestPlayThresholdInPercentages", self.userInterestPlayThresholdInPercentages)
+        kparams.addIntIfDefined("numberOfInterests", self.numberOfInterests)
+        kparams.addIntIfDefined("fallbackChannelId", self.fallbackChannelId)
+        kparams.addIntIfDefined("minPlaybacks", self.minPlaybacks)
+        kparams.addIntIfDefined("maxPlaybacks", self.maxPlaybacks)
+        kparams.addStringIfDefined("allowedRecommendationsKsql", self.allowedRecommendationsKsql)
+        kparams.addIntIfDefined("playbackInterestsCalculationPeriodDays", self.playbackInterestsCalculationPeriodDays)
+        return kparams
+
+    def getId(self):
+        return self.id
+
+    def getName(self):
+        return self.name
+
+    def setName(self, newName):
+        self.name = newName
+
+    def getTopicIds(self):
+        return self.topicIds
+
+    def setTopicIds(self, newTopicIds):
+        self.topicIds = newTopicIds
+
+    def getAnalysisMediaTypeIds(self):
+        return self.analysisMediaTypeIds
+
+    def setAnalysisMediaTypeIds(self, newAnalysisMediaTypeIds):
+        self.analysisMediaTypeIds = newAnalysisMediaTypeIds
+
+    def getUserInterestPlayThresholdInPercentages(self):
+        return self.userInterestPlayThresholdInPercentages
+
+    def setUserInterestPlayThresholdInPercentages(self, newUserInterestPlayThresholdInPercentages):
+        self.userInterestPlayThresholdInPercentages = newUserInterestPlayThresholdInPercentages
+
+    def getNumberOfInterests(self):
+        return self.numberOfInterests
+
+    def setNumberOfInterests(self, newNumberOfInterests):
+        self.numberOfInterests = newNumberOfInterests
+
+    def getFallbackChannelId(self):
+        return self.fallbackChannelId
+
+    def setFallbackChannelId(self, newFallbackChannelId):
+        self.fallbackChannelId = newFallbackChannelId
+
+    def getMinPlaybacks(self):
+        return self.minPlaybacks
+
+    def setMinPlaybacks(self, newMinPlaybacks):
+        self.minPlaybacks = newMinPlaybacks
+
+    def getMaxPlaybacks(self):
+        return self.maxPlaybacks
+
+    def setMaxPlaybacks(self, newMaxPlaybacks):
+        self.maxPlaybacks = newMaxPlaybacks
+
+    def getAllowedRecommendationsKsql(self):
+        return self.allowedRecommendationsKsql
+
+    def setAllowedRecommendationsKsql(self, newAllowedRecommendationsKsql):
+        self.allowedRecommendationsKsql = newAllowedRecommendationsKsql
+
+    def getPlaybackInterestsCalculationPeriodDays(self):
+        return self.playbackInterestsCalculationPeriodDays
+
+    def setPlaybackInterestsCalculationPeriodDays(self, newPlaybackInterestsCalculationPeriodDays):
+        self.playbackInterestsCalculationPeriodDays = newPlaybackInterestsCalculationPeriodDays
+
+
+# @package Kaltura
+# @subpackage Client
+class KalturaWatchBasedRecommendationsProfileListResponse(KalturaListResponse):
+    def __init__(self,
+            totalCount = NotImplemented,
+            objects = NotImplemented):
+        KalturaListResponse.__init__(self,
+            totalCount)
+
+        # Assets
+        # @var List[KalturaWatchBasedRecommendationsProfile]
+        self.objects = objects
+
+
+    PROPERTY_LOADERS = {
+        'objects': (KalturaObjectFactory.createArray, 'KalturaWatchBasedRecommendationsProfile'), 
+    }
+
+    def fromXml(self, node):
+        KalturaListResponse.fromXml(self, node)
+        self.fromXmlImpl(node, KalturaWatchBasedRecommendationsProfileListResponse.PROPERTY_LOADERS)
+
+    def toParams(self):
+        kparams = KalturaListResponse.toParams(self)
+        kparams.put("objectType", "KalturaWatchBasedRecommendationsProfileListResponse")
+        kparams.addArrayIfDefined("objects", self.objects)
+        return kparams
+
+    def getObjects(self):
+        return self.objects
+
+    def setObjects(self, newObjects):
+        self.objects = newObjects
+
+
+# @package Kaltura
+# @subpackage Client
 class KalturaAssetFilePpvListResponse(KalturaListResponse):
     """Asset file ppv list"""
 
     def __init__(self,
-            totalCount=NotImplemented,
-            objects=NotImplemented):
+            totalCount = NotImplemented,
+            objects = NotImplemented):
         KalturaListResponse.__init__(self,
             totalCount)
 
         # A list of asset files ppvs
-        # @var array of KalturaAssetFilePpv
+        # @var List[KalturaAssetFilePpv]
         self.objects = objects
 
 
@@ -26641,13 +27116,13 @@ class KalturaCollectionListResponse(KalturaListResponse):
     """Collections list"""
 
     def __init__(self,
-            totalCount=NotImplemented,
-            objects=NotImplemented):
+            totalCount = NotImplemented,
+            objects = NotImplemented):
         KalturaListResponse.__init__(self,
             totalCount)
 
         # A list of collections
-        # @var array of KalturaCollection
+        # @var List[KalturaCollection]
         self.objects = objects
 
 
@@ -26678,11 +27153,11 @@ class KalturaCoupon(KalturaObjectBase):
     """Coupon details container"""
 
     def __init__(self,
-            couponsGroup=NotImplemented,
-            status=NotImplemented,
-            totalUses=NotImplemented,
-            leftUses=NotImplemented,
-            couponCode=NotImplemented):
+            couponsGroup = NotImplemented,
+            status = NotImplemented,
+            totalUses = NotImplemented,
+            leftUses = NotImplemented,
+            couponCode = NotImplemented):
         KalturaObjectBase.__init__(self)
 
         # Coupons group details
@@ -26706,7 +27181,7 @@ class KalturaCoupon(KalturaObjectBase):
         self.leftUses = leftUses
 
         # Coupon code
-        # @var string
+        # @var str
         # @readonly
         self.couponCode = couponCode
 
@@ -26748,13 +27223,13 @@ class KalturaCoupon(KalturaObjectBase):
 # @subpackage Client
 class KalturaCouponListResponse(KalturaListResponse):
     def __init__(self,
-            totalCount=NotImplemented,
-            objects=NotImplemented):
+            totalCount = NotImplemented,
+            objects = NotImplemented):
         KalturaListResponse.__init__(self,
             totalCount)
 
         # A list of Coupons
-        # @var array of KalturaCoupon
+        # @var List[KalturaCoupon]
         self.objects = objects
 
 
@@ -26785,13 +27260,13 @@ class KalturaCouponsGroupListResponse(KalturaListResponse):
     """Coupons group list"""
 
     def __init__(self,
-            totalCount=NotImplemented,
-            objects=NotImplemented):
+            totalCount = NotImplemented,
+            objects = NotImplemented):
         KalturaListResponse.__init__(self,
             totalCount)
 
         # A list of coupons groups
-        # @var array of KalturaCouponsGroup
+        # @var List[KalturaCouponsGroup]
         self.objects = objects
 
 
@@ -26822,13 +27297,14 @@ class KalturaDiscountDetails(KalturaObjectBase):
     """Discount details"""
 
     def __init__(self,
-            id=NotImplemented,
-            name=NotImplemented,
-            multiCurrencyDiscount=NotImplemented,
-            startDate=NotImplemented,
-            endDate=NotImplemented,
-            whenAlgoTimes=NotImplemented,
-            whenAlgoType=NotImplemented):
+            id = NotImplemented,
+            name = NotImplemented,
+            multiCurrencyDiscount = NotImplemented,
+            startDate = NotImplemented,
+            endDate = NotImplemented,
+            whenAlgoTimes = NotImplemented,
+            whenAlgoType = NotImplemented,
+            assetUserRuleId = NotImplemented):
         KalturaObjectBase.__init__(self)
 
         # The discount ID
@@ -26837,11 +27313,11 @@ class KalturaDiscountDetails(KalturaObjectBase):
         self.id = id
 
         # The price code name
-        # @var string
+        # @var str
         self.name = name
 
         # Multi currency discounts for all countries and currencies
-        # @var array of KalturaDiscount
+        # @var List[KalturaDiscount]
         self.multiCurrencyDiscount = multiCurrencyDiscount
 
         # Start date represented as epoch
@@ -26860,6 +27336,11 @@ class KalturaDiscountDetails(KalturaObjectBase):
         # @var int
         self.whenAlgoType = whenAlgoType
 
+        # Asset user rule identifier
+        # @var int
+        # @insertonly
+        self.assetUserRuleId = assetUserRuleId
+
 
     PROPERTY_LOADERS = {
         'id': getXmlNodeInt, 
@@ -26869,6 +27350,7 @@ class KalturaDiscountDetails(KalturaObjectBase):
         'endDate': getXmlNodeInt, 
         'whenAlgoTimes': getXmlNodeInt, 
         'whenAlgoType': getXmlNodeInt, 
+        'assetUserRuleId': getXmlNodeInt, 
     }
 
     def fromXml(self, node):
@@ -26884,6 +27366,7 @@ class KalturaDiscountDetails(KalturaObjectBase):
         kparams.addIntIfDefined("endDate", self.endDate)
         kparams.addIntIfDefined("whenAlgoTimes", self.whenAlgoTimes)
         kparams.addIntIfDefined("whenAlgoType", self.whenAlgoType)
+        kparams.addIntIfDefined("assetUserRuleId", self.assetUserRuleId)
         return kparams
 
     def getId(self):
@@ -26925,18 +27408,24 @@ class KalturaDiscountDetails(KalturaObjectBase):
     def setWhenAlgoType(self, newWhenAlgoType):
         self.whenAlgoType = newWhenAlgoType
 
+    def getAssetUserRuleId(self):
+        return self.assetUserRuleId
+
+    def setAssetUserRuleId(self, newAssetUserRuleId):
+        self.assetUserRuleId = newAssetUserRuleId
+
 
 # @package Kaltura
 # @subpackage Client
 class KalturaDiscountDetailsListResponse(KalturaListResponse):
     def __init__(self,
-            totalCount=NotImplemented,
-            objects=NotImplemented):
+            totalCount = NotImplemented,
+            objects = NotImplemented):
         KalturaListResponse.__init__(self,
             totalCount)
 
         # A list of discount details
-        # @var array of KalturaDiscountDetails
+        # @var List[KalturaDiscountDetails]
         self.objects = objects
 
 
@@ -26965,7 +27454,7 @@ class KalturaDiscountDetailsListResponse(KalturaListResponse):
 # @subpackage Client
 class KalturaPromotionInfo(KalturaObjectBase):
     def __init__(self,
-            campaignId=NotImplemented):
+            campaignId = NotImplemented):
         KalturaObjectBase.__init__(self)
 
         # Campaign Id
@@ -26998,16 +27487,16 @@ class KalturaPromotionInfo(KalturaObjectBase):
 # @subpackage Client
 class KalturaProductPrice(KalturaObjectBase):
     def __init__(self,
-            productId=NotImplemented,
-            productType=NotImplemented,
-            price=NotImplemented,
-            fullPrice=NotImplemented,
-            purchaseStatus=NotImplemented,
-            promotionInfo=NotImplemented):
+            productId = NotImplemented,
+            productType = NotImplemented,
+            price = NotImplemented,
+            fullPrice = NotImplemented,
+            purchaseStatus = NotImplemented,
+            promotionInfo = NotImplemented):
         KalturaObjectBase.__init__(self)
 
         # Product identifier
-        # @var string
+        # @var str
         self.productId = productId
 
         # Product Type
@@ -27098,12 +27587,12 @@ class KalturaCollectionPrice(KalturaProductPrice):
     """Collection price details"""
 
     def __init__(self,
-            productId=NotImplemented,
-            productType=NotImplemented,
-            price=NotImplemented,
-            fullPrice=NotImplemented,
-            purchaseStatus=NotImplemented,
-            promotionInfo=NotImplemented):
+            productId = NotImplemented,
+            productType = NotImplemented,
+            price = NotImplemented,
+            fullPrice = NotImplemented,
+            purchaseStatus = NotImplemented,
+            promotionInfo = NotImplemented):
         KalturaProductPrice.__init__(self,
             productId,
             productType,
@@ -27132,28 +27621,28 @@ class KalturaPpvPrice(KalturaProductPrice):
     """PPV price details"""
 
     def __init__(self,
-            productId=NotImplemented,
-            productType=NotImplemented,
-            price=NotImplemented,
-            fullPrice=NotImplemented,
-            purchaseStatus=NotImplemented,
-            promotionInfo=NotImplemented,
-            fileId=NotImplemented,
-            ppvModuleId=NotImplemented,
-            isSubscriptionOnly=NotImplemented,
-            subscriptionId=NotImplemented,
-            collectionId=NotImplemented,
-            prePaidId=NotImplemented,
-            ppvDescriptions=NotImplemented,
-            purchaseUserId=NotImplemented,
-            purchasedMediaFileId=NotImplemented,
-            relatedMediaFileIds=NotImplemented,
-            startDate=NotImplemented,
-            endDate=NotImplemented,
-            discountEndDate=NotImplemented,
-            firstDeviceName=NotImplemented,
-            isInCancelationPeriod=NotImplemented,
-            ppvProductCode=NotImplemented):
+            productId = NotImplemented,
+            productType = NotImplemented,
+            price = NotImplemented,
+            fullPrice = NotImplemented,
+            purchaseStatus = NotImplemented,
+            promotionInfo = NotImplemented,
+            fileId = NotImplemented,
+            ppvModuleId = NotImplemented,
+            isSubscriptionOnly = NotImplemented,
+            subscriptionId = NotImplemented,
+            collectionId = NotImplemented,
+            prePaidId = NotImplemented,
+            ppvDescriptions = NotImplemented,
+            purchaseUserId = NotImplemented,
+            purchasedMediaFileId = NotImplemented,
+            relatedMediaFileIds = NotImplemented,
+            startDate = NotImplemented,
+            endDate = NotImplemented,
+            discountEndDate = NotImplemented,
+            firstDeviceName = NotImplemented,
+            isInCancelationPeriod = NotImplemented,
+            ppvProductCode = NotImplemented):
         KalturaProductPrice.__init__(self,
             productId,
             productType,
@@ -27167,7 +27656,7 @@ class KalturaPpvPrice(KalturaProductPrice):
         self.fileId = fileId
 
         # The associated PPV module identifier
-        # @var string
+        # @var str
         self.ppvModuleId = ppvModuleId
 
         # Denotes whether this object is available only as part of a subscription or can be sold separately
@@ -27175,23 +27664,23 @@ class KalturaPpvPrice(KalturaProductPrice):
         self.isSubscriptionOnly = isSubscriptionOnly
 
         # The identifier of the relevant subscription
-        # @var string
+        # @var str
         self.subscriptionId = subscriptionId
 
         # The identifier of the relevant collection
-        # @var string
+        # @var str
         self.collectionId = collectionId
 
         # The identifier of the relevant pre paid
-        # @var string
+        # @var str
         self.prePaidId = prePaidId
 
         # A list of the descriptions of the PPV module on different languages (language code and translation)
-        # @var array of KalturaTranslationToken
+        # @var List[KalturaTranslationToken]
         self.ppvDescriptions = ppvDescriptions
 
         # If the item already purchased - the identifier of the user (in the household) who purchased this item
-        # @var string
+        # @var str
         self.purchaseUserId = purchaseUserId
 
         # If the item already purchased - the identifier of the purchased file
@@ -27199,7 +27688,7 @@ class KalturaPpvPrice(KalturaProductPrice):
         self.purchasedMediaFileId = purchasedMediaFileId
 
         # Related media files identifiers (different types)
-        # @var array of KalturaIntegerValue
+        # @var List[KalturaIntegerValue]
         self.relatedMediaFileIds = relatedMediaFileIds
 
         # If the item already purchased - since when the user can start watching the item
@@ -27215,7 +27704,7 @@ class KalturaPpvPrice(KalturaProductPrice):
         self.discountEndDate = discountEndDate
 
         # If the item already purchased and played - the name of the device on which it was first played
-        # @var string
+        # @var str
         self.firstDeviceName = firstDeviceName
 
         # If waiver period is enabled - donates whether the user is still in the cancelation window
@@ -27223,7 +27712,7 @@ class KalturaPpvPrice(KalturaProductPrice):
         self.isInCancelationPeriod = isInCancelationPeriod
 
         # The PPV product code
-        # @var string
+        # @var str
         self.ppvProductCode = ppvProductCode
 
 
@@ -27374,12 +27863,12 @@ class KalturaProgramAssetGroupOfferPrice(KalturaProductPrice):
     """ProgramAssetGroupOffer price details"""
 
     def __init__(self,
-            productId=NotImplemented,
-            productType=NotImplemented,
-            price=NotImplemented,
-            fullPrice=NotImplemented,
-            purchaseStatus=NotImplemented,
-            promotionInfo=NotImplemented):
+            productId = NotImplemented,
+            productType = NotImplemented,
+            price = NotImplemented,
+            fullPrice = NotImplemented,
+            purchaseStatus = NotImplemented,
+            promotionInfo = NotImplemented):
         KalturaProductPrice.__init__(self,
             productId,
             productType,
@@ -27408,13 +27897,13 @@ class KalturaSubscriptionPrice(KalturaProductPrice):
     """Subscription price details"""
 
     def __init__(self,
-            productId=NotImplemented,
-            productType=NotImplemented,
-            price=NotImplemented,
-            fullPrice=NotImplemented,
-            purchaseStatus=NotImplemented,
-            promotionInfo=NotImplemented,
-            endDate=NotImplemented):
+            productId = NotImplemented,
+            productType = NotImplemented,
+            price = NotImplemented,
+            fullPrice = NotImplemented,
+            purchaseStatus = NotImplemented,
+            promotionInfo = NotImplemented,
+            endDate = NotImplemented):
         KalturaProductPrice.__init__(self,
             productId,
             productType,
@@ -27455,36 +27944,36 @@ class KalturaPpv(KalturaObjectBase):
     """PPV details"""
 
     def __init__(self,
-            id=NotImplemented,
-            name=NotImplemented,
-            price=NotImplemented,
-            priceDetailsId=NotImplemented,
-            fileTypes=NotImplemented,
-            fileTypesIds=NotImplemented,
-            discountModule=NotImplemented,
-            discountId=NotImplemented,
-            couponsGroup=NotImplemented,
-            couponsGroupId=NotImplemented,
-            descriptions=NotImplemented,
-            productCode=NotImplemented,
-            isSubscriptionOnly=NotImplemented,
-            firstDeviceLimitation=NotImplemented,
-            usageModule=NotImplemented,
-            usageModuleId=NotImplemented,
-            adsPolicy=NotImplemented,
-            isActive=NotImplemented,
-            updateDate=NotImplemented,
-            createDate=NotImplemented,
-            virtualAssetId=NotImplemented,
-            assetUserRuleId=NotImplemented):
+            id = NotImplemented,
+            name = NotImplemented,
+            price = NotImplemented,
+            priceDetailsId = NotImplemented,
+            fileTypes = NotImplemented,
+            fileTypesIds = NotImplemented,
+            discountModule = NotImplemented,
+            discountId = NotImplemented,
+            couponsGroup = NotImplemented,
+            couponsGroupId = NotImplemented,
+            descriptions = NotImplemented,
+            productCode = NotImplemented,
+            isSubscriptionOnly = NotImplemented,
+            firstDeviceLimitation = NotImplemented,
+            usageModule = NotImplemented,
+            usageModuleId = NotImplemented,
+            adsPolicy = NotImplemented,
+            isActive = NotImplemented,
+            updateDate = NotImplemented,
+            createDate = NotImplemented,
+            virtualAssetId = NotImplemented,
+            assetUserRuleId = NotImplemented):
         KalturaObjectBase.__init__(self)
 
         # PPV identifier
-        # @var string
+        # @var str
         self.id = id
 
         # the name for the ppv
-        # @var string
+        # @var str
         self.name = name
 
         # This property will deprecated soon. Please use PriceId instead of it.
@@ -27497,12 +27986,12 @@ class KalturaPpv(KalturaObjectBase):
         self.priceDetailsId = priceDetailsId
 
         # This property will deprecated soon. Please use fileTypesIds instead of it.
-        # @var array of KalturaIntegerValue
+        # @var List[KalturaIntegerValue]
         # @readonly
         self.fileTypes = fileTypes
 
         # Comma separated file types identifiers that are supported in this subscription
-        # @var string
+        # @var str
         self.fileTypesIds = fileTypesIds
 
         # This property will deprecated soon. Please use DiscountId instead of it.
@@ -27524,11 +28013,11 @@ class KalturaPpv(KalturaObjectBase):
         self.couponsGroupId = couponsGroupId
 
         # A list of the descriptions of the ppv on different languages (language code and translation)
-        # @var array of KalturaTranslationToken
+        # @var List[KalturaTranslationToken]
         self.descriptions = descriptions
 
         # Product code for the ppv
-        # @var string
+        # @var str
         self.productCode = productCode
 
         # Indicates whether or not this ppv can be purchased standalone or only as part of a subscription
@@ -27573,6 +28062,7 @@ class KalturaPpv(KalturaObjectBase):
 
         # Asset user rule identifier
         # @var int
+        # @insertonly
         self.assetUserRuleId = assetUserRuleId
 
 
@@ -27739,13 +28229,13 @@ class KalturaPpvListResponse(KalturaListResponse):
     """Prices list"""
 
     def __init__(self,
-            totalCount=NotImplemented,
-            objects=NotImplemented):
+            totalCount = NotImplemented,
+            objects = NotImplemented):
         KalturaListResponse.__init__(self,
             totalCount)
 
         # A list of PPV
-        # @var array of KalturaPpv
+        # @var List[KalturaPpv]
         self.objects = objects
 
 
@@ -27774,13 +28264,13 @@ class KalturaPpvListResponse(KalturaListResponse):
 # @subpackage Client
 class KalturaPreviewModuleListResponse(KalturaListResponse):
     def __init__(self,
-            totalCount=NotImplemented,
-            objects=NotImplemented):
+            totalCount = NotImplemented,
+            objects = NotImplemented):
         KalturaListResponse.__init__(self,
             totalCount)
 
         # A list of Preview Module
-        # @var array of KalturaPreviewModule
+        # @var List[KalturaPreviewModule]
         self.objects = objects
 
 
@@ -27809,13 +28299,13 @@ class KalturaPreviewModuleListResponse(KalturaListResponse):
 # @subpackage Client
 class KalturaPriceDetailsListResponse(KalturaListResponse):
     def __init__(self,
-            totalCount=NotImplemented,
-            objects=NotImplemented):
+            totalCount = NotImplemented,
+            objects = NotImplemented):
         KalturaListResponse.__init__(self,
             totalCount)
 
         # A list of price details
-        # @var array of KalturaPriceDetails
+        # @var List[KalturaPriceDetails]
         self.objects = objects
 
 
@@ -27844,13 +28334,13 @@ class KalturaPriceDetailsListResponse(KalturaListResponse):
 # @subpackage Client
 class KalturaPricePlanListResponse(KalturaListResponse):
     def __init__(self,
-            totalCount=NotImplemented,
-            objects=NotImplemented):
+            totalCount = NotImplemented,
+            objects = NotImplemented):
         KalturaListResponse.__init__(self,
             totalCount)
 
         # A list of price plans
-        # @var array of KalturaPricePlan
+        # @var List[KalturaPricePlan]
         self.objects = objects
 
 
@@ -27881,13 +28371,13 @@ class KalturaProductPriceListResponse(KalturaListResponse):
     """Prices list"""
 
     def __init__(self,
-            totalCount=NotImplemented,
-            objects=NotImplemented):
+            totalCount = NotImplemented,
+            objects = NotImplemented):
         KalturaListResponse.__init__(self,
             totalCount)
 
         # A list of prices
-        # @var array of KalturaProductPrice
+        # @var List[KalturaProductPrice]
         self.objects = objects
 
 
@@ -27918,13 +28408,13 @@ class KalturaProductsPriceListResponse(KalturaListResponse):
     """Prices list"""
 
     def __init__(self,
-            totalCount=NotImplemented,
-            objects=NotImplemented):
+            totalCount = NotImplemented,
+            objects = NotImplemented):
         KalturaListResponse.__init__(self,
             totalCount)
 
         # A list of prices
-        # @var array of KalturaProductPrice
+        # @var List[KalturaProductPrice]
         self.objects = objects
 
 
@@ -27955,13 +28445,13 @@ class KalturaProgramAssetGroupOfferListResponse(KalturaListResponse):
     """ProgramAssetGroupOffer list"""
 
     def __init__(self,
-            totalCount=NotImplemented,
-            objects=NotImplemented):
+            totalCount = NotImplemented,
+            objects = NotImplemented):
         KalturaListResponse.__init__(self,
             totalCount)
 
         # A list of collections
-        # @var array of KalturaProgramAssetGroupOffer
+        # @var List[KalturaProgramAssetGroupOffer]
         self.objects = objects
 
 
@@ -27992,13 +28482,13 @@ class KalturaSubscriptionListResponse(KalturaListResponse):
     """Subscriptions list"""
 
     def __init__(self,
-            totalCount=NotImplemented,
-            objects=NotImplemented):
+            totalCount = NotImplemented,
+            objects = NotImplemented):
         KalturaListResponse.__init__(self,
             totalCount)
 
         # A list of subscriptions
-        # @var array of KalturaSubscription
+        # @var List[KalturaSubscription]
         self.objects = objects
 
 
@@ -28029,10 +28519,10 @@ class KalturaSubscriptionSet(KalturaObjectBase):
     """Subscription details"""
 
     def __init__(self,
-            id=NotImplemented,
-            name=NotImplemented,
-            type=NotImplemented,
-            subscriptionIds=NotImplemented):
+            id = NotImplemented,
+            name = NotImplemented,
+            type = NotImplemented,
+            subscriptionIds = NotImplemented):
         KalturaObjectBase.__init__(self)
 
         # SubscriptionSet identifier
@@ -28041,7 +28531,7 @@ class KalturaSubscriptionSet(KalturaObjectBase):
         self.id = id
 
         # SubscriptionSet name
-        # @var string
+        # @var str
         self.name = name
 
         # Type of the Subscription Set
@@ -28050,7 +28540,7 @@ class KalturaSubscriptionSet(KalturaObjectBase):
         self.type = type
 
         # A list of comma separated subscription ids associated with this set ordered by priority ascending
-        # @var string
+        # @var str
         self.subscriptionIds = subscriptionIds
 
 
@@ -28097,13 +28587,13 @@ class KalturaSubscriptionSetListResponse(KalturaListResponse):
     """SubscriptionSets list"""
 
     def __init__(self,
-            totalCount=NotImplemented,
-            objects=NotImplemented):
+            totalCount = NotImplemented,
+            objects = NotImplemented):
         KalturaListResponse.__init__(self,
             totalCount)
 
         # A list of subscriptionSets
-        # @var array of KalturaSubscriptionSet
+        # @var List[KalturaSubscriptionSet]
         self.objects = objects
 
 
@@ -28134,11 +28624,11 @@ class KalturaSubscriptionDependencySet(KalturaSubscriptionSet):
     """Subscription Dependency Set"""
 
     def __init__(self,
-            id=NotImplemented,
-            name=NotImplemented,
-            type=NotImplemented,
-            subscriptionIds=NotImplemented,
-            baseSubscriptionId=NotImplemented):
+            id = NotImplemented,
+            name = NotImplemented,
+            type = NotImplemented,
+            subscriptionIds = NotImplemented,
+            baseSubscriptionId = NotImplemented):
         KalturaSubscriptionSet.__init__(self,
             id,
             name,
@@ -28177,10 +28667,10 @@ class KalturaSubscriptionSwitchSet(KalturaSubscriptionSet):
     """Subscription details"""
 
     def __init__(self,
-            id=NotImplemented,
-            name=NotImplemented,
-            type=NotImplemented,
-            subscriptionIds=NotImplemented):
+            id = NotImplemented,
+            name = NotImplemented,
+            type = NotImplemented,
+            subscriptionIds = NotImplemented):
         KalturaSubscriptionSet.__init__(self,
             id,
             name,
@@ -28205,13 +28695,13 @@ class KalturaSubscriptionSwitchSet(KalturaSubscriptionSet):
 # @subpackage Client
 class KalturaUsageModuleListResponse(KalturaListResponse):
     def __init__(self,
-            totalCount=NotImplemented,
-            objects=NotImplemented):
+            totalCount = NotImplemented,
+            objects = NotImplemented):
         KalturaListResponse.__init__(self,
             totalCount)
 
         # A list of usage modules
-        # @var array of KalturaUsageModule
+        # @var List[KalturaUsageModule]
         self.objects = objects
 
 
@@ -28262,13 +28752,13 @@ class KalturaPartnerConfiguration(KalturaObjectBase):
 # @subpackage Client
 class KalturaPartnerConfigurationListResponse(KalturaListResponse):
     def __init__(self,
-            totalCount=NotImplemented,
-            objects=NotImplemented):
+            totalCount = NotImplemented,
+            objects = NotImplemented):
         KalturaListResponse.__init__(self,
             totalCount)
 
         # Partner Configurations
-        # @var array of KalturaPartnerConfiguration
+        # @var List[KalturaPartnerConfiguration]
         self.objects = objects
 
 
@@ -28297,15 +28787,15 @@ class KalturaPartnerConfigurationListResponse(KalturaListResponse):
 # @subpackage Client
 class KalturaBasePartnerConfiguration(KalturaPartnerConfiguration):
     def __init__(self,
-            ksExpirationSeconds=NotImplemented,
-            appTokenSessionMaxDurationSeconds=NotImplemented,
-            anonymousKSExpirationSeconds=NotImplemented,
-            refreshExpirationForPinLoginSeconds=NotImplemented,
-            appTokenMaxExpirySeconds=NotImplemented,
-            autoRefreshAppToken=NotImplemented,
-            uploadTokenExpirySeconds=NotImplemented,
-            apptokenUserValidationDisabled=NotImplemented,
-            epgFeatureVersion=NotImplemented):
+            ksExpirationSeconds = NotImplemented,
+            appTokenSessionMaxDurationSeconds = NotImplemented,
+            anonymousKSExpirationSeconds = NotImplemented,
+            refreshExpirationForPinLoginSeconds = NotImplemented,
+            appTokenMaxExpirySeconds = NotImplemented,
+            autoRefreshAppToken = NotImplemented,
+            uploadTokenExpirySeconds = NotImplemented,
+            apptokenUserValidationDisabled = NotImplemented,
+            epgFeatureVersion = NotImplemented):
         KalturaPartnerConfiguration.__init__(self)
 
         # KSExpirationSeconds
@@ -28438,12 +28928,12 @@ class KalturaBillingPartnerConfig(KalturaPartnerConfiguration):
     """Partner billing configuration"""
 
     def __init__(self,
-            value=NotImplemented,
-            type=NotImplemented):
+            value = NotImplemented,
+            type = NotImplemented):
         KalturaPartnerConfiguration.__init__(self)
 
         # configuration value
-        # @var string
+        # @var str
         self.value = value
 
         # partner configuration type
@@ -28486,8 +28976,8 @@ class KalturaCategoryManagement(KalturaObjectBase):
     """Category management"""
 
     def __init__(self,
-            defaultTreeId=NotImplemented,
-            deviceFamilyToCategoryTree=NotImplemented):
+            defaultTreeId = NotImplemented,
+            deviceFamilyToCategoryTree = NotImplemented):
         KalturaObjectBase.__init__(self)
 
         # Default CategoryVersion tree id
@@ -28534,11 +29024,11 @@ class KalturaCatalogPartnerConfig(KalturaPartnerConfiguration):
     """Partner catalog configuration"""
 
     def __init__(self,
-            singleMultilingualMode=NotImplemented,
-            categoryManagement=NotImplemented,
-            epgMultilingualFallbackSupport=NotImplemented,
-            uploadExportDatalake=NotImplemented,
-            shopMarkerMetaId=NotImplemented):
+            singleMultilingualMode = NotImplemented,
+            categoryManagement = NotImplemented,
+            epgMultilingualFallbackSupport = NotImplemented,
+            uploadExportDatalake = NotImplemented,
+            shopMarkerMetaId = NotImplemented):
         KalturaPartnerConfiguration.__init__(self)
 
         # Single multilingual mode
@@ -28621,24 +29111,24 @@ class KalturaCloudUploadSettingsConfiguration(KalturaPartnerConfiguration):
     """A clout upload settings refers to partner configuration with regards to files that are loaded to KTP cloud (e.g. S3)"""
 
     def __init__(self,
-            defaultAllowedFileExtensions=NotImplemented,
-            customAllowedFileExtensions=NotImplemented):
+            defaultAllowedFileExtensions = NotImplemented,
+            customAllowedFileExtensions = NotImplemented):
         KalturaPartnerConfiguration.__init__(self)
 
         # Comma seperated list of file extensions that allowed to all partners
-        # @var string
+        # @var str
         # @readonly
         self.defaultAllowedFileExtensions = defaultAllowedFileExtensions
 
         # Comma seperated list of file extensions that allowed to partner in question
-        #             {&quot;jpeg&quot;,&quot;image/jpeg&quot;},
+        #             {&quot;jpeg&quot;, &quot;image/jpeg&quot; },
         #             {&quot;jpg&quot;,&quot;image/jpeg&quot;},
-        #             {&quot;png&quot;,&quot;image/png&quot;},
-        #             {&quot;tif&quot;,&quot;image/tiff&quot;},
-        #             {&quot;tiff&quot;,&quot;image/tiff&quot;},
-        #             {&quot;gif&quot;,&quot;image/gif&quot;},
-        #             {&quot;xls&quot;,&quot;application/vnd.ms-excel&quot;},
-        #             {&quot;xlsx&quot;,&quot;application/vnd.openxmlformats-officedocument.spreadsheetml.sheet&quot;},
+        #             {&quot;jpg&quot;,&quot;image/png&quot;},
+        #             { &quot;tif&quot;,&quot;image/tiff&quot;},
+        #             { &quot;tiff&quot;, &quot;image/tiff&quot;},
+        #             {&quot;gif&quot;,  &quot;image/gif&quot;},
+        #             {&quot;xls&quot;,  &quot;application/vnd.ms-excel&quot;},
+        #             {&quot;xlsx&quot;,&quot;application/vnd.openxmlformats-officedocument.spreadsheetml.sheet&quot; },
         #             {&quot;csv&quot;,&quot;text/csv&quot;},
         #             {&quot;xml&quot;,&quot;text/xml&quot;},
         #             {&quot;txt&quot;,&quot;text/plain&quot;},
@@ -28648,7 +29138,7 @@ class KalturaCloudUploadSettingsConfiguration(KalturaPartnerConfiguration):
         #             {&quot;ico&quot;,&quot;image/x-icon&quot;},
         #             {&quot;mp3&quot;,&quot;audio/mpeg&quot;},
         #             {&quot;pdf&quot;,&quot;application/pdf&quot;}}
-        # @var string
+        # @var str
         self.customAllowedFileExtensions = customAllowedFileExtensions
 
 
@@ -28681,8 +29171,8 @@ class KalturaCloudUploadSettingsConfiguration(KalturaPartnerConfiguration):
 # @subpackage Client
 class KalturaBookmarkEventThreshold(KalturaObjectBase):
     def __init__(self,
-            transactionType=NotImplemented,
-            threshold=NotImplemented):
+            transactionType = NotImplemented,
+            threshold = NotImplemented):
         KalturaObjectBase.__init__(self)
 
         # bookmark transaction type
@@ -28729,14 +29219,14 @@ class KalturaCommercePartnerConfig(KalturaPartnerConfiguration):
     """partner configuration for commerce"""
 
     def __init__(self,
-            bookmarkEventThresholds=NotImplemented,
-            keepSubscriptionAddOns=NotImplemented,
-            programAssetEntitlementPaddingStart=NotImplemented,
-            programAssetEntitlementPaddingEnd=NotImplemented):
+            bookmarkEventThresholds = NotImplemented,
+            keepSubscriptionAddOns = NotImplemented,
+            programAssetEntitlementPaddingStart = NotImplemented,
+            programAssetEntitlementPaddingEnd = NotImplemented):
         KalturaPartnerConfiguration.__init__(self)
 
         # configuration for bookmark event threshold (when to dispatch the event) in seconds.
-        # @var array of KalturaBookmarkEventThreshold
+        # @var List[KalturaBookmarkEventThreshold]
         self.bookmarkEventThresholds = bookmarkEventThresholds
 
         # configuration for keep add-ons after subscription deletion
@@ -28803,15 +29293,15 @@ class KalturaConcurrencyPartnerConfig(KalturaPartnerConfiguration):
     """Partner concurrency configuration"""
 
     def __init__(self,
-            deviceFamilyIds=NotImplemented,
-            evictionPolicy=NotImplemented,
-            concurrencyThresholdInSeconds=NotImplemented,
-            revokeOnDeviceDelete=NotImplemented,
-            excludeFreeContentFromConcurrency=NotImplemented):
+            deviceFamilyIds = NotImplemented,
+            evictionPolicy = NotImplemented,
+            concurrencyThresholdInSeconds = NotImplemented,
+            revokeOnDeviceDelete = NotImplemented,
+            excludeFreeContentFromConcurrency = NotImplemented):
         KalturaPartnerConfiguration.__init__(self)
 
         # Comma separated list of device Family Ids order by their priority.
-        # @var string
+        # @var str
         self.deviceFamilyIds = deviceFamilyIds
 
         # Policy of eviction devices
@@ -28890,11 +29380,11 @@ class KalturaCustomFieldsPartnerConfiguration(KalturaPartnerConfiguration):
     """Custom Fields Partner Configuration"""
 
     def __init__(self,
-            metaSystemNameInsteadOfAliasList=NotImplemented):
+            metaSystemNameInsteadOfAliasList = NotImplemented):
         KalturaPartnerConfiguration.__init__(self)
 
         # Array of clientTag values
-        # @var string
+        # @var str
         self.metaSystemNameInsteadOfAliasList = metaSystemNameInsteadOfAliasList
 
 
@@ -28923,11 +29413,11 @@ class KalturaCustomFieldsPartnerConfiguration(KalturaPartnerConfiguration):
 # @subpackage Client
 class KalturaDefaultParentalSettingsPartnerConfig(KalturaPartnerConfiguration):
     def __init__(self,
-            defaultMoviesParentalRuleId=NotImplemented,
-            defaultTvSeriesParentalRuleId=NotImplemented,
-            defaultParentalPin=NotImplemented,
-            defaultPurchasePin=NotImplemented,
-            defaultPurchaseSettings=NotImplemented):
+            defaultMoviesParentalRuleId = NotImplemented,
+            defaultTvSeriesParentalRuleId = NotImplemented,
+            defaultParentalPin = NotImplemented,
+            defaultPurchasePin = NotImplemented,
+            defaultPurchaseSettings = NotImplemented):
         KalturaPartnerConfiguration.__init__(self)
 
         # defaultTvSeriesParentalRuleId
@@ -28939,11 +29429,11 @@ class KalturaDefaultParentalSettingsPartnerConfig(KalturaPartnerConfiguration):
         self.defaultTvSeriesParentalRuleId = defaultTvSeriesParentalRuleId
 
         # defaultParentalPin
-        # @var string
+        # @var str
         self.defaultParentalPin = defaultParentalPin
 
         # defaultPurchasePin
-        # @var string
+        # @var str
         self.defaultPurchasePin = defaultPurchasePin
 
         # defaultPurchaseSettings
@@ -29008,8 +29498,8 @@ class KalturaDefaultParentalSettingsPartnerConfig(KalturaPartnerConfiguration):
 # @subpackage Client
 class KalturaRollingDeviceRemovalData(KalturaObjectBase):
     def __init__(self,
-            rollingDeviceRemovalPolicy=NotImplemented,
-            rollingDeviceRemovalFamilyIds=NotImplemented):
+            rollingDeviceRemovalPolicy = NotImplemented,
+            rollingDeviceRemovalFamilyIds = NotImplemented):
         KalturaObjectBase.__init__(self)
 
         # Rolling Device Policy
@@ -29017,7 +29507,7 @@ class KalturaRollingDeviceRemovalData(KalturaObjectBase):
         self.rollingDeviceRemovalPolicy = rollingDeviceRemovalPolicy
 
         # Rolling Device Policy in a CSV style
-        # @var string
+        # @var str
         self.rollingDeviceRemovalFamilyIds = rollingDeviceRemovalFamilyIds
 
 
@@ -29056,29 +29546,29 @@ class KalturaGeneralPartnerConfig(KalturaPartnerConfiguration):
     """Partner General configuration"""
 
     def __init__(self,
-            partnerName=NotImplemented,
-            mainLanguage=NotImplemented,
-            secondaryLanguages=NotImplemented,
-            deleteMediaPolicy=NotImplemented,
-            mainCurrency=NotImplemented,
-            secondaryCurrencies=NotImplemented,
-            downgradePolicy=NotImplemented,
-            downgradePriorityFamilyIds=NotImplemented,
-            mailSettings=NotImplemented,
-            dateFormat=NotImplemented,
-            householdLimitationModule=NotImplemented,
-            enableRegionFiltering=NotImplemented,
-            defaultRegion=NotImplemented,
-            rollingDeviceData=NotImplemented,
-            linearWatchHistoryThreshold=NotImplemented,
-            finishedPercentThreshold=NotImplemented,
-            suspensionProfileInheritanceType=NotImplemented,
-            allowDeviceMobility=NotImplemented,
-            enableMultiLcns=NotImplemented):
+            partnerName = NotImplemented,
+            mainLanguage = NotImplemented,
+            secondaryLanguages = NotImplemented,
+            deleteMediaPolicy = NotImplemented,
+            mainCurrency = NotImplemented,
+            secondaryCurrencies = NotImplemented,
+            downgradePolicy = NotImplemented,
+            downgradePriorityFamilyIds = NotImplemented,
+            mailSettings = NotImplemented,
+            dateFormat = NotImplemented,
+            householdLimitationModule = NotImplemented,
+            enableRegionFiltering = NotImplemented,
+            defaultRegion = NotImplemented,
+            rollingDeviceData = NotImplemented,
+            linearWatchHistoryThreshold = NotImplemented,
+            finishedPercentThreshold = NotImplemented,
+            suspensionProfileInheritanceType = NotImplemented,
+            allowDeviceMobility = NotImplemented,
+            enableMultiLcns = NotImplemented):
         KalturaPartnerConfiguration.__init__(self)
 
         # Partner name
-        # @var string
+        # @var str
         self.partnerName = partnerName
 
         # Main metadata language
@@ -29086,7 +29576,7 @@ class KalturaGeneralPartnerConfig(KalturaPartnerConfiguration):
         self.mainLanguage = mainLanguage
 
         # A list of comma separated languages ids.
-        # @var string
+        # @var str
         self.secondaryLanguages = secondaryLanguages
 
         # Delete media policy
@@ -29098,7 +29588,7 @@ class KalturaGeneralPartnerConfig(KalturaPartnerConfiguration):
         self.mainCurrency = mainCurrency
 
         # A list of comma separated currency ids.
-        # @var string
+        # @var str
         self.secondaryCurrencies = secondaryCurrencies
 
         # Downgrade policy
@@ -29106,15 +29596,15 @@ class KalturaGeneralPartnerConfig(KalturaPartnerConfiguration):
         self.downgradePolicy = downgradePolicy
 
         # Priority Family Ids to remove devices on downgrade (first in the list first to remove)
-        # @var string
+        # @var str
         self.downgradePriorityFamilyIds = downgradePriorityFamilyIds
 
         # Mail settings
-        # @var string
+        # @var str
         self.mailSettings = mailSettings
 
         # Default Date Format for Email notifications (default should be: DD Month YYYY)
-        # @var string
+        # @var str
         self.dateFormat = dateFormat
 
         # Household limitation module
@@ -29323,10 +29813,10 @@ class KalturaGeneralPartnerConfig(KalturaPartnerConfiguration):
 # @subpackage Client
 class KalturaObjectVirtualAssetInfo(KalturaObjectBase):
     def __init__(self,
-            assetStructId=NotImplemented,
-            metaId=NotImplemented,
-            type=NotImplemented,
-            extendedTypes=NotImplemented):
+            assetStructId = NotImplemented,
+            metaId = NotImplemented,
+            type = NotImplemented,
+            extendedTypes = NotImplemented):
         KalturaObjectBase.__init__(self)
 
         # Asset struct identifier
@@ -29395,11 +29885,11 @@ class KalturaObjectVirtualAssetInfo(KalturaObjectBase):
 # @subpackage Client
 class KalturaObjectVirtualAssetPartnerConfig(KalturaPartnerConfiguration):
     def __init__(self,
-            objectVirtualAssets=NotImplemented):
+            objectVirtualAssets = NotImplemented):
         KalturaPartnerConfiguration.__init__(self)
 
         # List of object virtual asset info
-        # @var array of KalturaObjectVirtualAssetInfo
+        # @var List[KalturaObjectVirtualAssetInfo]
         self.objectVirtualAssets = objectVirtualAssets
 
 
@@ -29428,17 +29918,17 @@ class KalturaObjectVirtualAssetPartnerConfig(KalturaPartnerConfiguration):
 # @subpackage Client
 class KalturaResetPasswordPartnerConfigTemplate(KalturaObjectBase):
     def __init__(self,
-            id=NotImplemented,
-            label=NotImplemented,
-            isDefault=NotImplemented):
+            id = NotImplemented,
+            label = NotImplemented,
+            isDefault = NotImplemented):
         KalturaObjectBase.__init__(self)
 
         # id
-        # @var string
+        # @var str
         self.id = id
 
         # label
-        # @var string
+        # @var str
         self.label = label
 
         # is Default
@@ -29487,16 +29977,16 @@ class KalturaResetPasswordPartnerConfigTemplate(KalturaObjectBase):
 # @subpackage Client
 class KalturaResetPasswordPartnerConfig(KalturaObjectBase):
     def __init__(self,
-            templateListLabel=NotImplemented,
-            templates=NotImplemented):
+            templateListLabel = NotImplemented,
+            templates = NotImplemented):
         KalturaObjectBase.__init__(self)
 
         # template List Label
-        # @var string
+        # @var str
         self.templateListLabel = templateListLabel
 
         # templates
-        # @var array of KalturaResetPasswordPartnerConfigTemplate
+        # @var List[KalturaResetPasswordPartnerConfigTemplate]
         self.templates = templates
 
 
@@ -29533,7 +30023,7 @@ class KalturaResetPasswordPartnerConfig(KalturaObjectBase):
 # @subpackage Client
 class KalturaOpcPartnerConfiguration(KalturaPartnerConfiguration):
     def __init__(self,
-            resetPassword=NotImplemented):
+            resetPassword = NotImplemented):
         KalturaPartnerConfiguration.__init__(self)
 
         # Reset Password
@@ -29568,9 +30058,9 @@ class KalturaDuration(KalturaObjectBase):
     """representation of duration time unit and value"""
 
     def __init__(self,
-            unit=NotImplemented,
-            value=NotImplemented,
-            code=NotImplemented):
+            unit = NotImplemented,
+            value = NotImplemented,
+            code = NotImplemented):
         KalturaObjectBase.__init__(self)
 
         # duration unit
@@ -29624,14 +30114,14 @@ class KalturaDuration(KalturaObjectBase):
 # @subpackage Client
 class KalturaUnifiedBillingCycle(KalturaObjectBase):
     def __init__(self,
-            name=NotImplemented,
-            duration=NotImplemented,
-            paymentGatewayId=NotImplemented,
-            ignorePartialBilling=NotImplemented):
+            name = NotImplemented,
+            duration = NotImplemented,
+            paymentGatewayId = NotImplemented,
+            ignorePartialBilling = NotImplemented):
         KalturaObjectBase.__init__(self)
 
         # UnifiedBillingCycle name
-        # @var string
+        # @var str
         self.name = name
 
         # cycle duration
@@ -29698,11 +30188,11 @@ class KalturaPaymentPartnerConfig(KalturaPartnerConfiguration):
     """Partner billing configuration"""
 
     def __init__(self,
-            unifiedBillingCycles=NotImplemented):
+            unifiedBillingCycles = NotImplemented):
         KalturaPartnerConfiguration.__init__(self)
 
         # configuration for unified billing cycles.
-        # @var array of KalturaUnifiedBillingCycle
+        # @var List[KalturaUnifiedBillingCycle]
         self.unifiedBillingCycles = unifiedBillingCycles
 
 
@@ -29731,9 +30221,9 @@ class KalturaPaymentPartnerConfig(KalturaPartnerConfiguration):
 # @subpackage Client
 class KalturaDefaultPlaybackAdapters(KalturaObjectBase):
     def __init__(self,
-            mediaAdapterId=NotImplemented,
-            epgAdapterId=NotImplemented,
-            recordingAdapterId=NotImplemented):
+            mediaAdapterId = NotImplemented,
+            epgAdapterId = NotImplemented,
+            recordingAdapterId = NotImplemented):
         KalturaObjectBase.__init__(self)
 
         # Default adapter identifier for media
@@ -29792,7 +30282,7 @@ class KalturaPlaybackPartnerConfig(KalturaPartnerConfiguration):
     """Playback adapter partner configuration"""
 
     def __init__(self,
-            defaultAdapters=NotImplemented):
+            defaultAdapters = NotImplemented):
         KalturaPartnerConfiguration.__init__(self)
 
         # default adapter configuration for: media, epg,recording.
@@ -29825,7 +30315,7 @@ class KalturaPlaybackPartnerConfig(KalturaPartnerConfiguration):
 # @subpackage Client
 class KalturaEncryption(KalturaObjectBase):
     def __init__(self,
-            encryptionType=NotImplemented):
+            encryptionType = NotImplemented):
         KalturaObjectBase.__init__(self)
 
         # Encryption type
@@ -29858,7 +30348,7 @@ class KalturaEncryption(KalturaObjectBase):
 # @subpackage Client
 class KalturaDataEncryption(KalturaObjectBase):
     def __init__(self,
-            username=NotImplemented):
+            username = NotImplemented):
         KalturaObjectBase.__init__(self)
 
         # Username encryption config
@@ -29891,7 +30381,7 @@ class KalturaDataEncryption(KalturaObjectBase):
 # @subpackage Client
 class KalturaSecurityPartnerConfig(KalturaPartnerConfiguration):
     def __init__(self,
-            encryption=NotImplemented):
+            encryption = NotImplemented):
         KalturaPartnerConfiguration.__init__(self)
 
         # Encryption config
@@ -29924,11 +30414,11 @@ class KalturaSecurityPartnerConfig(KalturaPartnerConfiguration):
 # @subpackage Client
 class KalturaPersonalList(KalturaObjectBase):
     def __init__(self,
-            id=NotImplemented,
-            name=NotImplemented,
-            createDate=NotImplemented,
-            ksql=NotImplemented,
-            partnerListType=NotImplemented):
+            id = NotImplemented,
+            name = NotImplemented,
+            createDate = NotImplemented,
+            ksql = NotImplemented,
+            partnerListType = NotImplemented):
         KalturaObjectBase.__init__(self)
 
         # Id
@@ -29937,7 +30427,7 @@ class KalturaPersonalList(KalturaObjectBase):
         self.id = id
 
         # Name
-        # @var string
+        # @var str
         self.name = name
 
         # Create Date
@@ -29959,7 +30449,7 @@ class KalturaPersonalList(KalturaObjectBase):
         #             Logical conjunction: and, or. 
         #             Search values are limited to 20 characters each for the next operators: ~, !~, ^, ^=
         #             (maximum length of entire filter is 4096 characters)
-        # @var string
+        # @var str
         self.ksql = ksql
 
         # Partner List Type (optional)
@@ -30018,13 +30508,13 @@ class KalturaPersonalListListResponse(KalturaListResponse):
     """List of KalturaPersonalList."""
 
     def __init__(self,
-            totalCount=NotImplemented,
-            objects=NotImplemented):
+            totalCount = NotImplemented,
+            objects = NotImplemented):
         KalturaListResponse.__init__(self,
             totalCount)
 
         # Follow data list
-        # @var array of KalturaPersonalList
+        # @var List[KalturaPersonalList]
         self.objects = objects
 
 
@@ -30055,8 +30545,8 @@ class KalturaEngagementAdapterBase(KalturaObjectBase):
     """Engagement adapter basic"""
 
     def __init__(self,
-            id=NotImplemented,
-            name=NotImplemented):
+            id = NotImplemented,
+            name = NotImplemented):
         KalturaObjectBase.__init__(self)
 
         # Engagement adapter id
@@ -30065,7 +30555,7 @@ class KalturaEngagementAdapterBase(KalturaObjectBase):
         self.id = id
 
         # Engagement adapter name
-        # @var string
+        # @var str
         self.name = name
 
 
@@ -30100,13 +30590,13 @@ class KalturaEngagementAdapter(KalturaEngagementAdapterBase):
     """Engagement Adapter"""
 
     def __init__(self,
-            id=NotImplemented,
-            name=NotImplemented,
-            isActive=NotImplemented,
-            adapterUrl=NotImplemented,
-            providerUrl=NotImplemented,
-            engagementAdapterSettings=NotImplemented,
-            sharedSecret=NotImplemented):
+            id = NotImplemented,
+            name = NotImplemented,
+            isActive = NotImplemented,
+            adapterUrl = NotImplemented,
+            providerUrl = NotImplemented,
+            engagementAdapterSettings = NotImplemented,
+            sharedSecret = NotImplemented):
         KalturaEngagementAdapterBase.__init__(self,
             id,
             name)
@@ -30116,11 +30606,11 @@ class KalturaEngagementAdapter(KalturaEngagementAdapterBase):
         self.isActive = isActive
 
         # Engagement adapter adapter URL
-        # @var string
+        # @var str
         self.adapterUrl = adapterUrl
 
         # Engagement provider adapter URL
-        # @var string
+        # @var str
         self.providerUrl = providerUrl
 
         # Engagement adapter extra parameters
@@ -30128,7 +30618,7 @@ class KalturaEngagementAdapter(KalturaEngagementAdapterBase):
         self.engagementAdapterSettings = engagementAdapterSettings
 
         # Shared Secret
-        # @var string
+        # @var str
         # @readonly
         self.sharedSecret = sharedSecret
 
@@ -30188,13 +30678,13 @@ class KalturaEngagementAdapterListResponse(KalturaListResponse):
     """Engagement adapter list"""
 
     def __init__(self,
-            totalCount=NotImplemented,
-            objects=NotImplemented):
+            totalCount = NotImplemented,
+            objects = NotImplemented):
         KalturaListResponse.__init__(self,
             totalCount)
 
         # A list of Engagement adapter
-        # @var array of KalturaEngagementAdapter
+        # @var List[KalturaEngagementAdapter]
         self.objects = objects
 
 
@@ -30225,15 +30715,15 @@ class KalturaEngagement(KalturaObjectBase):
     """Engagement"""
 
     def __init__(self,
-            id=NotImplemented,
-            totalNumberOfRecipients=NotImplemented,
-            type=NotImplemented,
-            adapterId=NotImplemented,
-            adapterDynamicData=NotImplemented,
-            intervalSeconds=NotImplemented,
-            userList=NotImplemented,
-            sendTimeInSeconds=NotImplemented,
-            couponGroupId=NotImplemented):
+            id = NotImplemented,
+            totalNumberOfRecipients = NotImplemented,
+            type = NotImplemented,
+            adapterId = NotImplemented,
+            adapterDynamicData = NotImplemented,
+            intervalSeconds = NotImplemented,
+            userList = NotImplemented,
+            sendTimeInSeconds = NotImplemented,
+            couponGroupId = NotImplemented):
         KalturaObjectBase.__init__(self)
 
         # Engagement id
@@ -30255,7 +30745,7 @@ class KalturaEngagement(KalturaObjectBase):
         self.adapterId = adapterId
 
         # Engagement adapter dynamic data
-        # @var string
+        # @var str
         self.adapterDynamicData = adapterDynamicData
 
         # Interval (seconds)
@@ -30263,7 +30753,7 @@ class KalturaEngagement(KalturaObjectBase):
         self.intervalSeconds = intervalSeconds
 
         # Manual User list
-        # @var string
+        # @var str
         self.userList = userList
 
         # Send time (seconds)
@@ -30358,13 +30848,13 @@ class KalturaEngagementListResponse(KalturaListResponse):
     """Engagement adapter list"""
 
     def __init__(self,
-            totalCount=NotImplemented,
-            objects=NotImplemented):
+            totalCount = NotImplemented,
+            objects = NotImplemented):
         KalturaListResponse.__init__(self,
             totalCount)
 
         # A list of Engagement
-        # @var array of KalturaEngagement
+        # @var List[KalturaEngagement]
         self.objects = objects
 
 
@@ -30393,11 +30883,11 @@ class KalturaEngagementListResponse(KalturaListResponse):
 # @subpackage Client
 class KalturaFollowDataBase(KalturaObjectBase):
     def __init__(self,
-            announcementId=NotImplemented,
-            status=NotImplemented,
-            title=NotImplemented,
-            timestamp=NotImplemented,
-            followPhrase=NotImplemented):
+            announcementId = NotImplemented,
+            status = NotImplemented,
+            title = NotImplemented,
+            timestamp = NotImplemented,
+            followPhrase = NotImplemented):
         KalturaObjectBase.__init__(self)
 
         # Announcement Id
@@ -30411,7 +30901,7 @@ class KalturaFollowDataBase(KalturaObjectBase):
         self.status = status
 
         # Title
-        # @var string
+        # @var str
         # @readonly
         self.title = title
 
@@ -30421,7 +30911,7 @@ class KalturaFollowDataBase(KalturaObjectBase):
         self.timestamp = timestamp
 
         # Follow Phrase
-        # @var string
+        # @var str
         # @readonly
         self.followPhrase = followPhrase
 
@@ -30463,12 +30953,12 @@ class KalturaFollowDataBase(KalturaObjectBase):
 # @subpackage Client
 class KalturaFollowTvSeries(KalturaFollowDataBase):
     def __init__(self,
-            announcementId=NotImplemented,
-            status=NotImplemented,
-            title=NotImplemented,
-            timestamp=NotImplemented,
-            followPhrase=NotImplemented,
-            assetId=NotImplemented):
+            announcementId = NotImplemented,
+            status = NotImplemented,
+            title = NotImplemented,
+            timestamp = NotImplemented,
+            followPhrase = NotImplemented,
+            assetId = NotImplemented):
         KalturaFollowDataBase.__init__(self,
             announcementId,
             status,
@@ -30508,13 +30998,13 @@ class KalturaFollowTvSeriesListResponse(KalturaListResponse):
     """List of message follow data."""
 
     def __init__(self,
-            totalCount=NotImplemented,
-            objects=NotImplemented):
+            totalCount = NotImplemented,
+            objects = NotImplemented):
         KalturaListResponse.__init__(self,
             totalCount)
 
         # Follow data list
-        # @var array of KalturaFollowTvSeries
+        # @var List[KalturaFollowTvSeries]
         self.objects = objects
 
 
@@ -30543,22 +31033,22 @@ class KalturaFollowTvSeriesListResponse(KalturaListResponse):
 # @subpackage Client
 class KalturaInboxMessage(KalturaObjectBase):
     def __init__(self,
-            id=NotImplemented,
-            message=NotImplemented,
-            status=NotImplemented,
-            type=NotImplemented,
-            createdAt=NotImplemented,
-            url=NotImplemented,
-            campaignId=NotImplemented):
+            id = NotImplemented,
+            message = NotImplemented,
+            status = NotImplemented,
+            type = NotImplemented,
+            createdAt = NotImplemented,
+            url = NotImplemented,
+            campaignId = NotImplemented):
         KalturaObjectBase.__init__(self)
 
         # message id
-        # @var string
+        # @var str
         # @readonly
         self.id = id
 
         # message
-        # @var string
+        # @var str
         self.message = message
 
         # Status
@@ -30576,7 +31066,7 @@ class KalturaInboxMessage(KalturaObjectBase):
         self.createdAt = createdAt
 
         # url
-        # @var string
+        # @var str
         self.url = url
 
         # campaignId
@@ -30644,13 +31134,13 @@ class KalturaInboxMessageListResponse(KalturaListResponse):
     """List of inbox message."""
 
     def __init__(self,
-            totalCount=NotImplemented,
-            objects=NotImplemented):
+            totalCount = NotImplemented,
+            objects = NotImplemented):
         KalturaListResponse.__init__(self,
             totalCount)
 
         # Follow data list
-        # @var array of KalturaInboxMessage
+        # @var List[KalturaInboxMessage]
         self.objects = objects
 
 
@@ -30679,7 +31169,7 @@ class KalturaInboxMessageListResponse(KalturaListResponse):
 # @subpackage Client
 class KalturaFeed(KalturaObjectBase):
     def __init__(self,
-            assetId=NotImplemented):
+            assetId = NotImplemented):
         KalturaObjectBase.__init__(self)
 
         # Asset identifier
@@ -30709,7 +31199,7 @@ class KalturaFeed(KalturaObjectBase):
 # @subpackage Client
 class KalturaPersonalFeed(KalturaFeed):
     def __init__(self,
-            assetId=NotImplemented):
+            assetId = NotImplemented):
         KalturaFeed.__init__(self,
             assetId)
 
@@ -30733,13 +31223,13 @@ class KalturaPersonalFeedListResponse(KalturaListResponse):
     """List of message follow data."""
 
     def __init__(self,
-            totalCount=NotImplemented,
-            objects=NotImplemented):
+            totalCount = NotImplemented,
+            objects = NotImplemented):
         KalturaListResponse.__init__(self,
             totalCount)
 
         # Follow data list
-        # @var array of KalturaPersonalFeed
+        # @var List[KalturaPersonalFeed]
         self.objects = objects
 
 
@@ -30768,13 +31258,13 @@ class KalturaPersonalFeedListResponse(KalturaListResponse):
 # @subpackage Client
 class KalturaReminder(KalturaObjectBase):
     def __init__(self,
-            name=NotImplemented,
-            id=NotImplemented,
-            type=NotImplemented):
+            name = NotImplemented,
+            id = NotImplemented,
+            type = NotImplemented):
         KalturaObjectBase.__init__(self)
 
         # Reminder name
-        # @var string
+        # @var str
         # @readonly
         self.name = name
 
@@ -30823,13 +31313,13 @@ class KalturaReminderListResponse(KalturaListResponse):
     """List of reminders from DB."""
 
     def __init__(self,
-            totalCount=NotImplemented,
-            objects=NotImplemented):
+            totalCount = NotImplemented,
+            objects = NotImplemented):
         KalturaListResponse.__init__(self,
             totalCount)
 
         # Reminders
-        # @var array of KalturaReminder
+        # @var List[KalturaReminder]
         self.objects = objects
 
 
@@ -30858,10 +31348,10 @@ class KalturaReminderListResponse(KalturaListResponse):
 # @subpackage Client
 class KalturaAssetReminder(KalturaReminder):
     def __init__(self,
-            name=NotImplemented,
-            id=NotImplemented,
-            type=NotImplemented,
-            assetId=NotImplemented):
+            name = NotImplemented,
+            id = NotImplemented,
+            type = NotImplemented,
+            assetId = NotImplemented):
         KalturaReminder.__init__(self,
             name,
             id,
@@ -30897,19 +31387,19 @@ class KalturaAssetReminder(KalturaReminder):
 # @subpackage Client
 class KalturaSeriesReminder(KalturaReminder):
     def __init__(self,
-            name=NotImplemented,
-            id=NotImplemented,
-            type=NotImplemented,
-            seriesId=NotImplemented,
-            seasonNumber=NotImplemented,
-            epgChannelId=NotImplemented):
+            name = NotImplemented,
+            id = NotImplemented,
+            type = NotImplemented,
+            seriesId = NotImplemented,
+            seasonNumber = NotImplemented,
+            epgChannelId = NotImplemented):
         KalturaReminder.__init__(self,
             name,
             id,
             type)
 
         # Series identifier
-        # @var string
+        # @var str
         self.seriesId = seriesId
 
         # Season number
@@ -30962,13 +31452,13 @@ class KalturaSeriesReminder(KalturaReminder):
 # @subpackage Client
 class KalturaSmsAdapterProfileListResponse(KalturaListResponse):
     def __init__(self,
-            totalCount=NotImplemented,
-            objects=NotImplemented):
+            totalCount = NotImplemented,
+            objects = NotImplemented):
         KalturaListResponse.__init__(self,
             totalCount)
 
         # A list of objects
-        # @var array of KalturaSmsAdapterProfile
+        # @var List[KalturaSmsAdapterProfile]
         self.objects = objects
 
 
@@ -30997,24 +31487,24 @@ class KalturaSmsAdapterProfileListResponse(KalturaListResponse):
 # @subpackage Client
 class KalturaTopic(KalturaObjectBase):
     def __init__(self,
-            id=NotImplemented,
-            name=NotImplemented,
-            subscribersAmount=NotImplemented,
-            automaticIssueNotification=NotImplemented,
-            lastMessageSentDateSec=NotImplemented):
+            id = NotImplemented,
+            name = NotImplemented,
+            subscribersAmount = NotImplemented,
+            automaticIssueNotification = NotImplemented,
+            lastMessageSentDateSec = NotImplemented):
         KalturaObjectBase.__init__(self)
 
         # message id
-        # @var string
+        # @var str
         # @readonly
         self.id = id
 
         # message
-        # @var string
+        # @var str
         self.name = name
 
         # message
-        # @var string
+        # @var str
         self.subscribersAmount = subscribersAmount
 
         # automaticIssueNotification
@@ -31081,13 +31571,13 @@ class KalturaTopicListResponse(KalturaListResponse):
     """List of Topics."""
 
     def __init__(self,
-            totalCount=NotImplemented,
-            objects=NotImplemented):
+            totalCount = NotImplemented,
+            objects = NotImplemented):
         KalturaListResponse.__init__(self,
             totalCount)
 
         # List of Topics
-        # @var array of KalturaTopic
+        # @var List[KalturaTopic]
         self.objects = objects
 
 
@@ -31116,10 +31606,10 @@ class KalturaTopicListResponse(KalturaListResponse):
 # @subpackage Client
 class KalturaTopicNotification(KalturaObjectBase):
     def __init__(self,
-            id=NotImplemented,
-            name=NotImplemented,
-            description=NotImplemented,
-            subscribeReference=NotImplemented):
+            id = NotImplemented,
+            name = NotImplemented,
+            description = NotImplemented,
+            subscribeReference = NotImplemented):
         KalturaObjectBase.__init__(self)
 
         # Topic notification ID
@@ -31128,11 +31618,11 @@ class KalturaTopicNotification(KalturaObjectBase):
         self.id = id
 
         # Topic notification name
-        # @var string
+        # @var str
         self.name = name
 
         # Topic notification description
-        # @var string
+        # @var str
         self.description = description
 
         # Announcement enabled
@@ -31185,13 +31675,13 @@ class KalturaTopicNotification(KalturaObjectBase):
 # @subpackage Client
 class KalturaTopicNotificationListResponse(KalturaListResponse):
     def __init__(self,
-            totalCount=NotImplemented,
-            objects=NotImplemented):
+            totalCount = NotImplemented,
+            objects = NotImplemented):
         KalturaListResponse.__init__(self,
             totalCount)
 
         # Topic notifications
-        # @var array of KalturaTopicNotification
+        # @var List[KalturaTopicNotification]
         self.objects = objects
 
 
@@ -31260,13 +31750,13 @@ class KalturaDispatcher(KalturaObjectBase):
 # @subpackage Client
 class KalturaTopicNotificationMessage(KalturaObjectBase):
     def __init__(self,
-            id=NotImplemented,
-            message=NotImplemented,
-            imageUrl=NotImplemented,
-            topicNotificationId=NotImplemented,
-            trigger=NotImplemented,
-            dispatchers=NotImplemented,
-            status=NotImplemented):
+            id = NotImplemented,
+            message = NotImplemented,
+            imageUrl = NotImplemented,
+            topicNotificationId = NotImplemented,
+            trigger = NotImplemented,
+            dispatchers = NotImplemented,
+            status = NotImplemented):
         KalturaObjectBase.__init__(self)
 
         # Topic notification message ID
@@ -31275,11 +31765,11 @@ class KalturaTopicNotificationMessage(KalturaObjectBase):
         self.id = id
 
         # Topic notification message
-        # @var string
+        # @var str
         self.message = message
 
         # Topic notification message image URL
-        # @var string
+        # @var str
         self.imageUrl = imageUrl
 
         # Topic notification ID
@@ -31291,7 +31781,7 @@ class KalturaTopicNotificationMessage(KalturaObjectBase):
         self.trigger = trigger
 
         # Topic notification message dispatchers
-        # @var array of KalturaDispatcher
+        # @var List[KalturaDispatcher]
         self.dispatchers = dispatchers
 
         # Message status
@@ -31365,13 +31855,13 @@ class KalturaTopicNotificationMessage(KalturaObjectBase):
 # @subpackage Client
 class KalturaTopicNotificationMessageListResponse(KalturaListResponse):
     def __init__(self,
-            totalCount=NotImplemented,
-            objects=NotImplemented):
+            totalCount = NotImplemented,
+            objects = NotImplemented):
         KalturaListResponse.__init__(self,
             totalCount)
 
         # Topic notification messages
-        # @var array of KalturaTopicNotificationMessage
+        # @var List[KalturaTopicNotificationMessage]
         self.objects = objects
 
 
@@ -31400,7 +31890,7 @@ class KalturaTopicNotificationMessageListResponse(KalturaListResponse):
 # @subpackage Client
 class KalturaDateTrigger(KalturaTrigger):
     def __init__(self,
-            date=NotImplemented):
+            date = NotImplemented):
         KalturaTrigger.__init__(self)
 
         # Trigger date
@@ -31433,8 +31923,8 @@ class KalturaDateTrigger(KalturaTrigger):
 # @subpackage Client
 class KalturaSubscriptionTrigger(KalturaTrigger):
     def __init__(self,
-            type=NotImplemented,
-            offset=NotImplemented):
+            type = NotImplemented,
+            offset = NotImplemented):
         KalturaTrigger.__init__(self)
 
         # Subscription trigger type
@@ -31499,16 +31989,16 @@ class KalturaSmsDispatcher(KalturaDispatcher):
 # @subpackage Client
 class KalturaMailDispatcher(KalturaDispatcher):
     def __init__(self,
-            bodyTemplate=NotImplemented,
-            subjectTemplate=NotImplemented):
+            bodyTemplate = NotImplemented,
+            subjectTemplate = NotImplemented):
         KalturaDispatcher.__init__(self)
 
         # Mail body template
-        # @var string
+        # @var str
         self.bodyTemplate = bodyTemplate
 
         # Mail subjsct template
-        # @var string
+        # @var str
         self.subjectTemplate = subjectTemplate
 
 
@@ -31545,14 +32035,14 @@ class KalturaMailDispatcher(KalturaDispatcher):
 # @subpackage Client
 class KalturaIngestEpg(KalturaObjectBase):
     def __init__(self,
-            ingestId=NotImplemented,
-            ingestName=NotImplemented,
-            ingestFilenameExtension=NotImplemented,
-            createdDate=NotImplemented,
-            ingestedByUserId=NotImplemented,
-            completedDate=NotImplemented,
-            ingestProfileId=NotImplemented,
-            status=NotImplemented):
+            ingestId = NotImplemented,
+            ingestName = NotImplemented,
+            ingestFilenameExtension = NotImplemented,
+            createdDate = NotImplemented,
+            ingestedByUserId = NotImplemented,
+            completedDate = NotImplemented,
+            ingestProfileId = NotImplemented,
+            status = NotImplemented):
         KalturaObjectBase.__init__(self)
 
         # Unique id of the ingest job in question
@@ -31561,11 +32051,11 @@ class KalturaIngestEpg(KalturaObjectBase):
         self.ingestId = ingestId
 
         # The ingested file name without its extention
-        # @var string
+        # @var str
         self.ingestName = ingestName
 
         # The ingested file name extention
-        # @var string
+        # @var str
         self.ingestFilenameExtension = ingestFilenameExtension
 
         # The ingest job created date and time. Date and time represented as epoch.
@@ -31666,13 +32156,13 @@ class KalturaIngestEpg(KalturaObjectBase):
 # @subpackage Client
 class KalturaIngestStatusEpgListResponse(KalturaListResponse):
     def __init__(self,
-            totalCount=NotImplemented,
-            objects=NotImplemented):
+            totalCount = NotImplemented,
+            objects = NotImplemented):
         KalturaListResponse.__init__(self,
             totalCount)
 
         # A list of IngestStatus
-        # @var array of KalturaIngestEpg
+        # @var List[KalturaIngestEpg]
         self.objects = objects
 
 
@@ -31703,17 +32193,17 @@ class KalturaEpgIngestErrorMessage(KalturaObjectBase):
     """A Kaltura error message"""
 
     def __init__(self,
-            message=NotImplemented,
-            code=NotImplemented,
-            args=NotImplemented):
+            message = NotImplemented,
+            code = NotImplemented,
+            args = NotImplemented):
         KalturaObjectBase.__init__(self)
 
         # The message description with arguments place holders
-        # @var string
+        # @var str
         self.message = message
 
         # The message code
-        # @var string
+        # @var str
         self.code = code
 
         # Message args
@@ -31762,10 +32252,10 @@ class KalturaEpgIngestErrorMessage(KalturaObjectBase):
 # @subpackage Client
 class KalturaAggregatedIngestInfo(KalturaObjectBase):
     def __init__(self,
-            resultsCount=NotImplemented,
-            totalFailureCount=NotImplemented,
-            partialFailureCount=NotImplemented,
-            warningsCount=NotImplemented):
+            resultsCount = NotImplemented,
+            totalFailureCount = NotImplemented,
+            partialFailureCount = NotImplemented,
+            warningsCount = NotImplemented):
         KalturaObjectBase.__init__(self)
 
         # Number of results
@@ -31834,8 +32324,8 @@ class KalturaAggregatedIngestInfo(KalturaObjectBase):
 # @subpackage Client
 class KalturaChannelAggregatedIngestInfo(KalturaObjectBase):
     def __init__(self,
-            linearChannelId=NotImplemented,
-            aggregatedErrors=NotImplemented):
+            linearChannelId = NotImplemented,
+            aggregatedErrors = NotImplemented):
         KalturaObjectBase.__init__(self)
 
         # The linear channel asset id
@@ -31880,8 +32370,8 @@ class KalturaChannelAggregatedIngestInfo(KalturaObjectBase):
 # @subpackage Client
 class KalturaDateAggregatedIngestInfo(KalturaObjectBase):
     def __init__(self,
-            date=NotImplemented,
-            aggregatedErrors=NotImplemented):
+            date = NotImplemented,
+            aggregatedErrors = NotImplemented):
         KalturaObjectBase.__init__(self)
 
         # 00:00 UTC of the date in question
@@ -31926,17 +32416,17 @@ class KalturaDateAggregatedIngestInfo(KalturaObjectBase):
 # @subpackage Client
 class KalturaIngestEpgDetailsAggregation(KalturaObjectBase):
     def __init__(self,
-            linearChannels=NotImplemented,
-            dates=NotImplemented,
-            all=NotImplemented):
+            linearChannels = NotImplemented,
+            dates = NotImplemented,
+            all = NotImplemented):
         KalturaObjectBase.__init__(self)
 
         # Array of aggregated information per channel that included in the ingest job in question
-        # @var array of KalturaChannelAggregatedIngestInfo
+        # @var List[KalturaChannelAggregatedIngestInfo]
         self.linearChannels = linearChannels
 
         # Array of aggregated information per date that included in the ingest job in question
-        # @var array of KalturaDateAggregatedIngestInfo
+        # @var List[KalturaDateAggregatedIngestInfo]
         self.dates = dates
 
         # All aggregated counters
@@ -31985,16 +32475,16 @@ class KalturaIngestEpgDetailsAggregation(KalturaObjectBase):
 # @subpackage Client
 class KalturaIngestEpgDetails(KalturaIngestEpg):
     def __init__(self,
-            ingestId=NotImplemented,
-            ingestName=NotImplemented,
-            ingestFilenameExtension=NotImplemented,
-            createdDate=NotImplemented,
-            ingestedByUserId=NotImplemented,
-            completedDate=NotImplemented,
-            ingestProfileId=NotImplemented,
-            status=NotImplemented,
-            errors=NotImplemented,
-            aggregations=NotImplemented):
+            ingestId = NotImplemented,
+            ingestName = NotImplemented,
+            ingestFilenameExtension = NotImplemented,
+            createdDate = NotImplemented,
+            ingestedByUserId = NotImplemented,
+            completedDate = NotImplemented,
+            ingestProfileId = NotImplemented,
+            status = NotImplemented,
+            errors = NotImplemented,
+            aggregations = NotImplemented):
         KalturaIngestEpg.__init__(self,
             ingestId,
             ingestName,
@@ -32006,7 +32496,7 @@ class KalturaIngestEpgDetails(KalturaIngestEpg):
             status)
 
         # Errors
-        # @var array of KalturaEpgIngestErrorMessage
+        # @var List[KalturaEpgIngestErrorMessage]
         self.errors = errors
 
         # Aggregated counters
@@ -32047,15 +32537,15 @@ class KalturaIngestEpgDetails(KalturaIngestEpg):
 # @subpackage Client
 class KalturaIngestEpgProgramResult(KalturaObjectBase):
     def __init__(self,
-            programId=NotImplemented,
-            externalProgramId=NotImplemented,
-            linearChannelId=NotImplemented,
-            indexInFile=NotImplemented,
-            startDate=NotImplemented,
-            endDate=NotImplemented,
-            status=NotImplemented,
-            errors=NotImplemented,
-            warnings=NotImplemented):
+            programId = NotImplemented,
+            externalProgramId = NotImplemented,
+            linearChannelId = NotImplemented,
+            indexInFile = NotImplemented,
+            startDate = NotImplemented,
+            endDate = NotImplemented,
+            status = NotImplemented,
+            errors = NotImplemented,
+            warnings = NotImplemented):
         KalturaObjectBase.__init__(self)
 
         # The unique ingested program id
@@ -32063,7 +32553,7 @@ class KalturaIngestEpgProgramResult(KalturaObjectBase):
         self.programId = programId
 
         # An external program id
-        # @var string
+        # @var str
         self.externalProgramId = externalProgramId
 
         # The id of the linear channel asset that the program belongs to
@@ -32087,11 +32577,11 @@ class KalturaIngestEpgProgramResult(KalturaObjectBase):
         self.status = status
 
         # List of errors. Note: error cause the data in question or the whole ingest to fail
-        # @var array of KalturaEpgIngestErrorMessage
+        # @var List[KalturaEpgIngestErrorMessage]
         self.errors = errors
 
         # List of warnings. Note: warning cause no failure
-        # @var array of KalturaMessage
+        # @var List[KalturaMessage]
         self.warnings = warnings
 
 
@@ -32184,13 +32674,13 @@ class KalturaIngestEpgProgramResult(KalturaObjectBase):
 # @subpackage Client
 class KalturaIngestStatusEpgProgramResultListResponse(KalturaListResponse):
     def __init__(self,
-            totalCount=NotImplemented,
-            objects=NotImplemented):
+            totalCount = NotImplemented,
+            objects = NotImplemented):
         KalturaListResponse.__init__(self,
             totalCount)
 
         # list of KalturaIngestEpgProgramResult
-        # @var array of KalturaIngestEpgProgramResult
+        # @var List[KalturaIngestEpgProgramResult]
         self.objects = objects
 
 
@@ -32219,13 +32709,13 @@ class KalturaIngestStatusEpgProgramResultListResponse(KalturaListResponse):
 # @subpackage Client
 class KalturaDurationListResponse(KalturaListResponse):
     def __init__(self,
-            totalCount=NotImplemented,
-            objects=NotImplemented):
+            totalCount = NotImplemented,
+            objects = NotImplemented):
         KalturaListResponse.__init__(self,
             totalCount)
 
         # Durations
-        # @var array of KalturaDuration
+        # @var List[KalturaDuration]
         self.objects = objects
 
 
@@ -32254,13 +32744,13 @@ class KalturaDurationListResponse(KalturaListResponse):
 # @subpackage Client
 class KalturaDynamicListListResponse(KalturaListResponse):
     def __init__(self,
-            totalCount=NotImplemented,
-            objects=NotImplemented):
+            totalCount = NotImplemented,
+            objects = NotImplemented):
         KalturaListResponse.__init__(self,
             totalCount)
 
         # A list of KalturaDynamicList
-        # @var array of KalturaDynamicList
+        # @var List[KalturaDynamicList]
         self.objects = objects
 
 
@@ -32291,13 +32781,13 @@ class KalturaIntegerValueListResponse(KalturaListResponse):
     """Integer list wrapper"""
 
     def __init__(self,
-            totalCount=NotImplemented,
-            objects=NotImplemented):
+            totalCount = NotImplemented,
+            objects = NotImplemented):
         KalturaListResponse.__init__(self,
             totalCount)
 
         # Interger value items
-        # @var array of KalturaIntegerValue
+        # @var List[KalturaIntegerValue]
         self.objects = objects
 
 
@@ -32348,13 +32838,13 @@ class KalturaReportListResponse(KalturaListResponse):
     """Reports info wrapper"""
 
     def __init__(self,
-            totalCount=NotImplemented,
-            objects=NotImplemented):
+            totalCount = NotImplemented,
+            objects = NotImplemented):
         KalturaListResponse.__init__(self,
             totalCount)
 
         # Reports
-        # @var array of KalturaReport
+        # @var List[KalturaReport]
         self.objects = objects
 
 
@@ -32383,16 +32873,16 @@ class KalturaReportListResponse(KalturaListResponse):
 # @subpackage Client
 class KalturaPushParams(KalturaObjectBase):
     def __init__(self,
-            token=NotImplemented,
-            externalToken=NotImplemented):
+            token = NotImplemented,
+            externalToken = NotImplemented):
         KalturaObjectBase.__init__(self)
 
         # Device-Application push token
-        # @var string
+        # @var str
         self.token = token
 
         # External device token as received from external push provider in exchange for the device token
-        # @var string
+        # @var str
         self.externalToken = externalToken
 
 
@@ -32429,17 +32919,17 @@ class KalturaPushParams(KalturaObjectBase):
 # @subpackage Client
 class KalturaDeviceReport(KalturaReport):
     def __init__(self,
-            partnerId=NotImplemented,
-            configurationGroupId=NotImplemented,
-            udid=NotImplemented,
-            pushParameters=NotImplemented,
-            versionNumber=NotImplemented,
-            versionPlatform=NotImplemented,
-            versionAppName=NotImplemented,
-            lastAccessIP=NotImplemented,
-            lastAccessDate=NotImplemented,
-            userAgent=NotImplemented,
-            operationSystem=NotImplemented):
+            partnerId = NotImplemented,
+            configurationGroupId = NotImplemented,
+            udid = NotImplemented,
+            pushParameters = NotImplemented,
+            versionNumber = NotImplemented,
+            versionPlatform = NotImplemented,
+            versionAppName = NotImplemented,
+            lastAccessIP = NotImplemented,
+            lastAccessDate = NotImplemented,
+            userAgent = NotImplemented,
+            operationSystem = NotImplemented):
         KalturaReport.__init__(self)
 
         # Partner unique identifier
@@ -32447,11 +32937,11 @@ class KalturaDeviceReport(KalturaReport):
         self.partnerId = partnerId
 
         # Configuration group identifier which the version configuration the device last received belongs to
-        # @var string
+        # @var str
         self.configurationGroupId = configurationGroupId
 
         # Device unique identifier
-        # @var string
+        # @var str
         self.udid = udid
 
         # Device-Application push parameters
@@ -32459,7 +32949,7 @@ class KalturaDeviceReport(KalturaReport):
         self.pushParameters = pushParameters
 
         # Application version number
-        # @var string
+        # @var str
         self.versionNumber = versionNumber
 
         # Application version type
@@ -32467,11 +32957,11 @@ class KalturaDeviceReport(KalturaReport):
         self.versionPlatform = versionPlatform
 
         # Application version name
-        # @var string
+        # @var str
         self.versionAppName = versionAppName
 
         # Last access IP
-        # @var string
+        # @var str
         self.lastAccessIP = lastAccessIP
 
         # Last device configuration request date
@@ -32479,12 +32969,12 @@ class KalturaDeviceReport(KalturaReport):
         self.lastAccessDate = lastAccessDate
 
         # request header property
-        # @var string
+        # @var str
         self.userAgent = userAgent
 
         # Request header property
         #             Incase value cannot be found - returns &quot;Unknown 0.0&quot;
-        # @var string
+        # @var str
         self.operationSystem = operationSystem
 
 
@@ -32595,23 +33085,23 @@ class KalturaHomeNetwork(KalturaObjectBase):
     """Home network details"""
 
     def __init__(self,
-            externalId=NotImplemented,
-            name=NotImplemented,
-            description=NotImplemented,
-            isActive=NotImplemented):
+            externalId = NotImplemented,
+            name = NotImplemented,
+            description = NotImplemented,
+            isActive = NotImplemented):
         KalturaObjectBase.__init__(self)
 
         # Home network identifier
-        # @var string
+        # @var str
         # @insertonly
         self.externalId = externalId
 
         # Home network name
-        # @var string
+        # @var str
         self.name = name
 
         # Home network description
-        # @var string
+        # @var str
         self.description = description
 
         # Is home network is active
@@ -32670,13 +33160,13 @@ class KalturaHomeNetworkListResponse(KalturaListResponse):
     """Home networks"""
 
     def __init__(self,
-            totalCount=NotImplemented,
-            objects=NotImplemented):
+            totalCount = NotImplemented,
+            objects = NotImplemented):
         KalturaListResponse.__init__(self,
             totalCount)
 
         # Home networks
-        # @var array of KalturaHomeNetwork
+        # @var List[KalturaHomeNetwork]
         self.objects = objects
 
 
@@ -32705,13 +33195,13 @@ class KalturaHomeNetworkListResponse(KalturaListResponse):
 # @subpackage Client
 class KalturaHouseholdCouponListResponse(KalturaListResponse):
     def __init__(self,
-            totalCount=NotImplemented,
-            objects=NotImplemented):
+            totalCount = NotImplemented,
+            objects = NotImplemented):
         KalturaListResponse.__init__(self,
             totalCount)
 
         # A list of objects
-        # @var array of KalturaHouseholdCoupon
+        # @var List[KalturaHouseholdCoupon]
         self.objects = objects
 
 
@@ -32740,13 +33230,13 @@ class KalturaHouseholdCouponListResponse(KalturaListResponse):
 # @subpackage Client
 class KalturaHouseholdDeviceListResponse(KalturaListResponse):
     def __init__(self,
-            totalCount=NotImplemented,
-            objects=NotImplemented):
+            totalCount = NotImplemented,
+            objects = NotImplemented):
         KalturaListResponse.__init__(self,
             totalCount)
 
         # Household devices
-        # @var array of KalturaHouseholdDevice
+        # @var List[KalturaHouseholdDevice]
         self.objects = objects
 
 
@@ -32777,9 +33267,9 @@ class KalturaDeviceFamilyBase(KalturaObjectBase):
     """Device family details"""
 
     def __init__(self,
-            id=NotImplemented,
-            name=NotImplemented,
-            type=NotImplemented):
+            id = NotImplemented,
+            name = NotImplemented,
+            type = NotImplemented):
         KalturaObjectBase.__init__(self)
 
         # Device family identifier
@@ -32787,7 +33277,7 @@ class KalturaDeviceFamilyBase(KalturaObjectBase):
         self.id = id
 
         # Device family name
-        # @var string
+        # @var str
         self.name = name
 
         # Type of device family.
@@ -32837,14 +33327,15 @@ class KalturaHouseholdDeviceFamilyLimitations(KalturaDeviceFamilyBase):
     """Device family limitations details"""
 
     def __init__(self,
-            id=NotImplemented,
-            name=NotImplemented,
-            type=NotImplemented,
-            frequency=NotImplemented,
-            deviceLimit=NotImplemented,
-            concurrentLimit=NotImplemented,
-            isDefaultDeviceLimit=NotImplemented,
-            isDefaultConcurrentLimit=NotImplemented):
+            id = NotImplemented,
+            name = NotImplemented,
+            type = NotImplemented,
+            frequency = NotImplemented,
+            deviceLimit = NotImplemented,
+            concurrentLimit = NotImplemented,
+            isDefaultDeviceLimit = NotImplemented,
+            isDefaultConcurrentLimit = NotImplemented,
+            isDefaultFrequencyLimit = NotImplemented):
         KalturaDeviceFamilyBase.__init__(self,
             id,
             name,
@@ -32872,6 +33363,11 @@ class KalturaHouseholdDeviceFamilyLimitations(KalturaDeviceFamilyBase):
         # @readonly
         self.isDefaultConcurrentLimit = isDefaultConcurrentLimit
 
+        # Is the Allowed device change frequency code for this family is default value or not
+        # @var bool
+        # @readonly
+        self.isDefaultFrequencyLimit = isDefaultFrequencyLimit
+
 
     PROPERTY_LOADERS = {
         'frequency': getXmlNodeInt, 
@@ -32879,6 +33375,7 @@ class KalturaHouseholdDeviceFamilyLimitations(KalturaDeviceFamilyBase):
         'concurrentLimit': getXmlNodeInt, 
         'isDefaultDeviceLimit': getXmlNodeBool, 
         'isDefaultConcurrentLimit': getXmlNodeBool, 
+        'isDefaultFrequencyLimit': getXmlNodeBool, 
     }
 
     def fromXml(self, node):
@@ -32917,6 +33414,9 @@ class KalturaHouseholdDeviceFamilyLimitations(KalturaDeviceFamilyBase):
     def getIsDefaultConcurrentLimit(self):
         return self.isDefaultConcurrentLimit
 
+    def getIsDefaultFrequencyLimit(self):
+        return self.isDefaultFrequencyLimit
+
 
 # @package Kaltura
 # @subpackage Client
@@ -32924,19 +33424,19 @@ class KalturaHouseholdLimitations(KalturaObjectBase):
     """Household limitations details"""
 
     def __init__(self,
-            id=NotImplemented,
-            name=NotImplemented,
-            concurrentLimit=NotImplemented,
-            deviceLimit=NotImplemented,
-            deviceFrequency=NotImplemented,
-            deviceFrequencyDescription=NotImplemented,
-            userFrequency=NotImplemented,
-            userFrequencyDescription=NotImplemented,
-            npvrQuotaInSeconds=NotImplemented,
-            usersLimit=NotImplemented,
-            deviceFamiliesLimitations=NotImplemented,
-            description=NotImplemented,
-            associatedDeviceFamiliesIdsIn=NotImplemented):
+            id = NotImplemented,
+            name = NotImplemented,
+            concurrentLimit = NotImplemented,
+            deviceLimit = NotImplemented,
+            deviceFrequency = NotImplemented,
+            deviceFrequencyDescription = NotImplemented,
+            userFrequency = NotImplemented,
+            userFrequencyDescription = NotImplemented,
+            npvrQuotaInSeconds = NotImplemented,
+            usersLimit = NotImplemented,
+            deviceFamiliesLimitations = NotImplemented,
+            description = NotImplemented,
+            associatedDeviceFamiliesIdsIn = NotImplemented):
         KalturaObjectBase.__init__(self)
 
         # Household limitation module identifier
@@ -32945,7 +33445,7 @@ class KalturaHouseholdLimitations(KalturaObjectBase):
         self.id = id
 
         # Household limitation module name
-        # @var string
+        # @var str
         self.name = name
 
         # Max number of streams allowed for the household
@@ -32961,7 +33461,7 @@ class KalturaHouseholdLimitations(KalturaObjectBase):
         self.deviceFrequency = deviceFrequency
 
         # Allowed device change frequency description
-        # @var string
+        # @var str
         # @readonly
         self.deviceFrequencyDescription = deviceFrequencyDescription
 
@@ -32970,7 +33470,7 @@ class KalturaHouseholdLimitations(KalturaObjectBase):
         self.userFrequency = userFrequency
 
         # Allowed user change frequency description
-        # @var string
+        # @var str
         # @readonly
         self.userFrequencyDescription = userFrequencyDescription
 
@@ -32984,15 +33484,15 @@ class KalturaHouseholdLimitations(KalturaObjectBase):
         self.usersLimit = usersLimit
 
         # Device families limitations
-        # @var array of KalturaHouseholdDeviceFamilyLimitations
+        # @var List[KalturaHouseholdDeviceFamilyLimitations]
         self.deviceFamiliesLimitations = deviceFamiliesLimitations
 
         # Allowed device change frequency description
-        # @var string
+        # @var str
         self.description = description
 
         # Associated Device Families ids
-        # @var string
+        # @var str
         self.associatedDeviceFamiliesIdsIn = associatedDeviceFamiliesIdsIn
 
 
@@ -33103,13 +33603,13 @@ class KalturaHouseholdLimitationsListResponse(KalturaListResponse):
     """Household limitations details"""
 
     def __init__(self,
-            totalCount=NotImplemented,
-            objects=NotImplemented):
+            totalCount = NotImplemented,
+            objects = NotImplemented):
         KalturaListResponse.__init__(self,
             totalCount)
 
         # Household limitations
-        # @var array of KalturaHouseholdLimitations
+        # @var List[KalturaHouseholdLimitations]
         self.objects = objects
 
 
@@ -33140,9 +33640,9 @@ class KalturaDeviceFamily(KalturaDeviceFamilyBase):
     """Device family details"""
 
     def __init__(self,
-            id=NotImplemented,
-            name=NotImplemented,
-            type=NotImplemented):
+            id = NotImplemented,
+            name = NotImplemented,
+            type = NotImplemented):
         KalturaDeviceFamilyBase.__init__(self,
             id,
             name,
@@ -33168,23 +33668,23 @@ class KalturaHousehold(KalturaObjectBase):
     """Household details"""
 
     def __init__(self,
-            id=NotImplemented,
-            name=NotImplemented,
-            description=NotImplemented,
-            externalId=NotImplemented,
-            householdLimitationsId=NotImplemented,
-            devicesLimit=NotImplemented,
-            usersLimit=NotImplemented,
-            concurrentLimit=NotImplemented,
-            regionId=NotImplemented,
-            state=NotImplemented,
-            isFrequencyEnabled=NotImplemented,
-            frequencyNextDeviceAction=NotImplemented,
-            frequencyNextUserAction=NotImplemented,
-            restriction=NotImplemented,
-            roleId=NotImplemented,
-            createDate=NotImplemented,
-            updateDate=NotImplemented):
+            id = NotImplemented,
+            name = NotImplemented,
+            description = NotImplemented,
+            externalId = NotImplemented,
+            householdLimitationsId = NotImplemented,
+            devicesLimit = NotImplemented,
+            usersLimit = NotImplemented,
+            concurrentLimit = NotImplemented,
+            regionId = NotImplemented,
+            state = NotImplemented,
+            isFrequencyEnabled = NotImplemented,
+            frequencyNextDeviceAction = NotImplemented,
+            frequencyNextUserAction = NotImplemented,
+            restriction = NotImplemented,
+            roleId = NotImplemented,
+            createDate = NotImplemented,
+            updateDate = NotImplemented):
         KalturaObjectBase.__init__(self)
 
         # Household identifier
@@ -33193,15 +33693,15 @@ class KalturaHousehold(KalturaObjectBase):
         self.id = id
 
         # Household name
-        # @var string
+        # @var str
         self.name = name
 
         # Household description
-        # @var string
+        # @var str
         self.description = description
 
         # Household external identifier
-        # @var string
+        # @var str
         self.externalId = externalId
 
         # Household limitation module identifier
@@ -33370,13 +33870,13 @@ class KalturaHousehold(KalturaObjectBase):
 # @subpackage Client
 class KalturaHouseholdListResponse(KalturaListResponse):
     def __init__(self,
-            totalCount=NotImplemented,
-            objects=NotImplemented):
+            totalCount = NotImplemented,
+            objects = NotImplemented):
         KalturaListResponse.__init__(self,
             totalCount)
 
         # A list of objects
-        # @var array of KalturaHousehold
+        # @var List[KalturaHousehold]
         self.objects = objects
 
 
@@ -33407,12 +33907,12 @@ class KalturaHouseholdUser(KalturaObjectBase):
     """Household user"""
 
     def __init__(self,
-            householdId=NotImplemented,
-            userId=NotImplemented,
-            isMaster=NotImplemented,
-            householdMasterUsername=NotImplemented,
-            status=NotImplemented,
-            isDefault=NotImplemented):
+            householdId = NotImplemented,
+            userId = NotImplemented,
+            isMaster = NotImplemented,
+            householdMasterUsername = NotImplemented,
+            status = NotImplemented,
+            isDefault = NotImplemented):
         KalturaObjectBase.__init__(self)
 
         # The identifier of the household
@@ -33420,7 +33920,7 @@ class KalturaHouseholdUser(KalturaObjectBase):
         self.householdId = householdId
 
         # The identifier of the user
-        # @var string
+        # @var str
         self.userId = userId
 
         # True if the user added as master use
@@ -33428,7 +33928,7 @@ class KalturaHouseholdUser(KalturaObjectBase):
         self.isMaster = isMaster
 
         # The username of the household master for adding a user in status pending for the household master to approve
-        # @var string
+        # @var str
         # @insertonly
         self.householdMasterUsername = householdMasterUsername
 
@@ -33502,13 +34002,13 @@ class KalturaHouseholdUserListResponse(KalturaListResponse):
     """Household users list"""
 
     def __init__(self,
-            totalCount=NotImplemented,
-            objects=NotImplemented):
+            totalCount = NotImplemented,
+            objects = NotImplemented):
         KalturaListResponse.__init__(self,
             totalCount)
 
         # Household users
-        # @var array of KalturaHouseholdUser
+        # @var List[KalturaHouseholdUser]
         self.objects = objects
 
 
@@ -33537,13 +34037,13 @@ class KalturaHouseholdUserListResponse(KalturaListResponse):
 # @subpackage Client
 class KalturaConfigurationGroupDevice(KalturaObjectBase):
     def __init__(self,
-            configurationGroupId=NotImplemented,
-            partnerId=NotImplemented,
-            udid=NotImplemented):
+            configurationGroupId = NotImplemented,
+            partnerId = NotImplemented,
+            udid = NotImplemented):
         KalturaObjectBase.__init__(self)
 
         # Configuration group id
-        # @var string
+        # @var str
         self.configurationGroupId = configurationGroupId
 
         # Partner id
@@ -33552,7 +34052,7 @@ class KalturaConfigurationGroupDevice(KalturaObjectBase):
         self.partnerId = partnerId
 
         # Device UDID
-        # @var string
+        # @var str
         self.udid = udid
 
 
@@ -33595,13 +34095,13 @@ class KalturaConfigurationGroupDeviceListResponse(KalturaListResponse):
     """Configuration group devices info wrapper"""
 
     def __init__(self,
-            totalCount=NotImplemented,
-            objects=NotImplemented):
+            totalCount = NotImplemented,
+            objects = NotImplemented):
         KalturaListResponse.__init__(self,
             totalCount)
 
         # Configuration group devices
-        # @var array of KalturaConfigurationGroupDevice
+        # @var List[KalturaConfigurationGroupDevice]
         self.objects = objects
 
 
@@ -33630,16 +34130,16 @@ class KalturaConfigurationGroupDeviceListResponse(KalturaListResponse):
 # @subpackage Client
 class KalturaConfigurationIdentifier(KalturaObjectBase):
     def __init__(self,
-            id=NotImplemented,
-            name=NotImplemented):
+            id = NotImplemented,
+            name = NotImplemented):
         KalturaObjectBase.__init__(self)
 
         # Identifier
-        # @var string
+        # @var str
         self.id = id
 
         # Name
-        # @var string
+        # @var str
         self.name = name
 
 
@@ -33676,22 +34176,22 @@ class KalturaConfigurationIdentifier(KalturaObjectBase):
 # @subpackage Client
 class KalturaConfigurationGroup(KalturaObjectBase):
     def __init__(self,
-            id=NotImplemented,
-            name=NotImplemented,
-            partnerId=NotImplemented,
-            isDefault=NotImplemented,
-            tags=NotImplemented,
-            numberOfDevices=NotImplemented,
-            configurationIdentifiers=NotImplemented):
+            id = NotImplemented,
+            name = NotImplemented,
+            partnerId = NotImplemented,
+            isDefault = NotImplemented,
+            tags = NotImplemented,
+            numberOfDevices = NotImplemented,
+            configurationIdentifiers = NotImplemented):
         KalturaObjectBase.__init__(self)
 
         # Configuration group identifier
-        # @var string
+        # @var str
         # @readonly
         self.id = id
 
         # Configuration group name
-        # @var string
+        # @var str
         self.name = name
 
         # Partner id
@@ -33705,7 +34205,7 @@ class KalturaConfigurationGroup(KalturaObjectBase):
         self.isDefault = isDefault
 
         # tags
-        # @var array of KalturaStringValue
+        # @var List[KalturaStringValue]
         # @readonly
         self.tags = tags
 
@@ -33715,7 +34215,7 @@ class KalturaConfigurationGroup(KalturaObjectBase):
         self.numberOfDevices = numberOfDevices
 
         # Configuration identifiers
-        # @var array of KalturaConfigurationIdentifier
+        # @var List[KalturaConfigurationIdentifier]
         # @readonly
         self.configurationIdentifiers = configurationIdentifiers
 
@@ -33775,13 +34275,13 @@ class KalturaConfigurationGroupListResponse(KalturaListResponse):
     """Configuration groups info wrapper"""
 
     def __init__(self,
-            totalCount=NotImplemented,
-            objects=NotImplemented):
+            totalCount = NotImplemented,
+            objects = NotImplemented):
         KalturaListResponse.__init__(self,
             totalCount)
 
         # Configuration groups
-        # @var array of KalturaConfigurationGroup
+        # @var List[KalturaConfigurationGroup]
         self.objects = objects
 
 
@@ -33810,13 +34310,13 @@ class KalturaConfigurationGroupListResponse(KalturaListResponse):
 # @subpackage Client
 class KalturaConfigurationGroupTag(KalturaObjectBase):
     def __init__(self,
-            configurationGroupId=NotImplemented,
-            partnerId=NotImplemented,
-            tag=NotImplemented):
+            configurationGroupId = NotImplemented,
+            partnerId = NotImplemented,
+            tag = NotImplemented):
         KalturaObjectBase.__init__(self)
 
         # Configuration group identifier
-        # @var string
+        # @var str
         self.configurationGroupId = configurationGroupId
 
         # Partner identifier
@@ -33825,7 +34325,7 @@ class KalturaConfigurationGroupTag(KalturaObjectBase):
         self.partnerId = partnerId
 
         # Tag
-        # @var string
+        # @var str
         self.tag = tag
 
 
@@ -33868,13 +34368,13 @@ class KalturaConfigurationGroupTagListResponse(KalturaListResponse):
     """Configurations group tags info wrapper"""
 
     def __init__(self,
-            totalCount=NotImplemented,
-            objects=NotImplemented):
+            totalCount = NotImplemented,
+            objects = NotImplemented):
         KalturaListResponse.__init__(self,
             totalCount)
 
         # Configuration group tags
-        # @var array of KalturaConfigurationGroupTag
+        # @var List[KalturaConfigurationGroupTag]
         self.objects = objects
 
 
@@ -33903,19 +34403,19 @@ class KalturaConfigurationGroupTagListResponse(KalturaListResponse):
 # @subpackage Client
 class KalturaConfigurations(KalturaObjectBase):
     def __init__(self,
-            id=NotImplemented,
-            partnerId=NotImplemented,
-            configurationGroupId=NotImplemented,
-            appName=NotImplemented,
-            clientVersion=NotImplemented,
-            platform=NotImplemented,
-            externalPushId=NotImplemented,
-            isForceUpdate=NotImplemented,
-            content=NotImplemented):
+            id = NotImplemented,
+            partnerId = NotImplemented,
+            configurationGroupId = NotImplemented,
+            appName = NotImplemented,
+            clientVersion = NotImplemented,
+            platform = NotImplemented,
+            externalPushId = NotImplemented,
+            isForceUpdate = NotImplemented,
+            content = NotImplemented):
         KalturaObjectBase.__init__(self)
 
         # Configuration id
-        # @var string
+        # @var str
         # @readonly
         self.id = id
 
@@ -33925,15 +34425,15 @@ class KalturaConfigurations(KalturaObjectBase):
         self.partnerId = partnerId
 
         # Configuration group id
-        # @var string
+        # @var str
         self.configurationGroupId = configurationGroupId
 
         # Application name
-        # @var string
+        # @var str
         self.appName = appName
 
         # Client version
-        # @var string
+        # @var str
         self.clientVersion = clientVersion
 
         # Platform: Android/iOS/WindowsPhone/Blackberry/STB/CTV/Other
@@ -33941,7 +34441,7 @@ class KalturaConfigurations(KalturaObjectBase):
         self.platform = platform
 
         # External push id
-        # @var string
+        # @var str
         self.externalPushId = externalPushId
 
         # The default value for &quot;isForceUpdate&quot; is &quot;FALSE&quot;. When &quot;isForceUpdate&quot; is not populated it will revert to its default value.
@@ -33949,7 +34449,7 @@ class KalturaConfigurations(KalturaObjectBase):
         self.isForceUpdate = isForceUpdate
 
         # Content
-        # @var string
+        # @var str
         self.content = content
 
 
@@ -34036,13 +34536,13 @@ class KalturaConfigurationsListResponse(KalturaListResponse):
     """Configurations info wrapper"""
 
     def __init__(self,
-            totalCount=NotImplemented,
-            objects=NotImplemented):
+            totalCount = NotImplemented,
+            objects = NotImplemented):
         KalturaListResponse.__init__(self,
             totalCount)
 
         # Configurations
-        # @var array of KalturaConfigurations
+        # @var List[KalturaConfigurations]
         self.objects = objects
 
 
@@ -34073,37 +34573,37 @@ class KalturaBillingTransaction(KalturaObjectBase):
     """Billing Transaction"""
 
     def __init__(self,
-            recieptCode=NotImplemented,
-            purchasedItemName=NotImplemented,
-            purchasedItemCode=NotImplemented,
-            itemType=NotImplemented,
-            billingAction=NotImplemented,
-            price=NotImplemented,
-            actionDate=NotImplemented,
-            startDate=NotImplemented,
-            endDate=NotImplemented,
-            paymentMethod=NotImplemented,
-            paymentMethodExtraDetails=NotImplemented,
-            isRecurring=NotImplemented,
-            billingProviderRef=NotImplemented,
-            purchaseId=NotImplemented,
-            remarks=NotImplemented,
-            billingPriceType=NotImplemented,
-            externalTransactionId=NotImplemented):
+            recieptCode = NotImplemented,
+            purchasedItemName = NotImplemented,
+            purchasedItemCode = NotImplemented,
+            itemType = NotImplemented,
+            billingAction = NotImplemented,
+            price = NotImplemented,
+            actionDate = NotImplemented,
+            startDate = NotImplemented,
+            endDate = NotImplemented,
+            paymentMethod = NotImplemented,
+            paymentMethodExtraDetails = NotImplemented,
+            isRecurring = NotImplemented,
+            billingProviderRef = NotImplemented,
+            purchaseId = NotImplemented,
+            remarks = NotImplemented,
+            billingPriceType = NotImplemented,
+            externalTransactionId = NotImplemented):
         KalturaObjectBase.__init__(self)
 
         # Reciept Code
-        # @var string
+        # @var str
         # @readonly
         self.recieptCode = recieptCode
 
         # Purchased Item Name
-        # @var string
+        # @var str
         # @readonly
         self.purchasedItemName = purchasedItemName
 
         # Purchased Item Code
-        # @var string
+        # @var str
         # @readonly
         self.purchasedItemCode = purchasedItemCode
 
@@ -34147,7 +34647,7 @@ class KalturaBillingTransaction(KalturaObjectBase):
         self.paymentMethod = paymentMethod
 
         # Payment Method Extra Details
-        # @var string
+        # @var str
         # @readonly
         self.paymentMethodExtraDetails = paymentMethodExtraDetails
 
@@ -34167,7 +34667,7 @@ class KalturaBillingTransaction(KalturaObjectBase):
         self.purchaseId = purchaseId
 
         # Remarks
-        # @var string
+        # @var str
         # @readonly
         self.remarks = remarks
 
@@ -34177,7 +34677,7 @@ class KalturaBillingTransaction(KalturaObjectBase):
         self.billingPriceType = billingPriceType
 
         # External Transaction Id
-        # @var string
+        # @var str
         # @readonly
         self.externalTransactionId = externalTransactionId
 
@@ -34269,13 +34769,13 @@ class KalturaBillingTransactionListResponse(KalturaListResponse):
     """Billing Transactions"""
 
     def __init__(self,
-            totalCount=NotImplemented,
-            objects=NotImplemented):
+            totalCount = NotImplemented,
+            objects = NotImplemented):
         KalturaListResponse.__init__(self,
             totalCount)
 
         # Transactions
-        # @var array of KalturaBillingTransaction
+        # @var List[KalturaBillingTransaction]
         self.objects = objects
 
 
@@ -34306,14 +34806,14 @@ class KalturaCDVRAdapterProfile(KalturaObjectBase):
     """C-DVR Adapter"""
 
     def __init__(self,
-            id=NotImplemented,
-            name=NotImplemented,
-            isActive=NotImplemented,
-            adapterUrl=NotImplemented,
-            settings=NotImplemented,
-            externalIdentifier=NotImplemented,
-            sharedSecret=NotImplemented,
-            dynamicLinksSupport=NotImplemented):
+            id = NotImplemented,
+            name = NotImplemented,
+            isActive = NotImplemented,
+            adapterUrl = NotImplemented,
+            settings = NotImplemented,
+            externalIdentifier = NotImplemented,
+            sharedSecret = NotImplemented,
+            dynamicLinksSupport = NotImplemented):
         KalturaObjectBase.__init__(self)
 
         # C-DVR adapter identifier
@@ -34322,7 +34822,7 @@ class KalturaCDVRAdapterProfile(KalturaObjectBase):
         self.id = id
 
         # C-DVR adapter name
-        # @var string
+        # @var str
         self.name = name
 
         # C-DVR adapter active status
@@ -34330,7 +34830,7 @@ class KalturaCDVRAdapterProfile(KalturaObjectBase):
         self.isActive = isActive
 
         # C-DVR adapter adapter URL
-        # @var string
+        # @var str
         self.adapterUrl = adapterUrl
 
         # C-DVR adapter extra parameters
@@ -34338,11 +34838,11 @@ class KalturaCDVRAdapterProfile(KalturaObjectBase):
         self.settings = settings
 
         # C-DVR adapter external identifier
-        # @var string
+        # @var str
         self.externalIdentifier = externalIdentifier
 
         # C-DVR shared secret
-        # @var string
+        # @var str
         # @readonly
         self.sharedSecret = sharedSecret
 
@@ -34426,13 +34926,13 @@ class KalturaCDVRAdapterProfileListResponse(KalturaListResponse):
     """C-DVR adapter profiles"""
 
     def __init__(self,
-            totalCount=NotImplemented,
-            objects=NotImplemented):
+            totalCount = NotImplemented,
+            objects = NotImplemented):
         KalturaListResponse.__init__(self,
             totalCount)
 
         # C-DVR adapter profiles
-        # @var array of KalturaCDVRAdapterProfile
+        # @var List[KalturaCDVRAdapterProfile]
         self.objects = objects
 
 
@@ -34463,21 +34963,21 @@ class KalturaEntitlement(KalturaObjectBase):
     """Entitlement"""
 
     def __init__(self,
-            id=NotImplemented,
-            productId=NotImplemented,
-            currentUses=NotImplemented,
-            endDate=NotImplemented,
-            currentDate=NotImplemented,
-            lastViewDate=NotImplemented,
-            purchaseDate=NotImplemented,
-            paymentMethod=NotImplemented,
-            deviceUdid=NotImplemented,
-            deviceName=NotImplemented,
-            isCancelationWindowEnabled=NotImplemented,
-            maxUses=NotImplemented,
-            userId=NotImplemented,
-            householdId=NotImplemented,
-            isPending=NotImplemented):
+            id = NotImplemented,
+            productId = NotImplemented,
+            currentUses = NotImplemented,
+            endDate = NotImplemented,
+            currentDate = NotImplemented,
+            lastViewDate = NotImplemented,
+            purchaseDate = NotImplemented,
+            paymentMethod = NotImplemented,
+            deviceUdid = NotImplemented,
+            deviceName = NotImplemented,
+            isCancelationWindowEnabled = NotImplemented,
+            maxUses = NotImplemented,
+            userId = NotImplemented,
+            householdId = NotImplemented,
+            isPending = NotImplemented):
         KalturaObjectBase.__init__(self)
 
         # Purchase identifier (for subscriptions and collections only)
@@ -34486,7 +34986,7 @@ class KalturaEntitlement(KalturaObjectBase):
         self.id = id
 
         # Product identifier
-        # @var string
+        # @var str
         # @readonly
         self.productId = productId
 
@@ -34520,12 +35020,12 @@ class KalturaEntitlement(KalturaObjectBase):
         self.paymentMethod = paymentMethod
 
         # The UDID of the device from which the purchase was made
-        # @var string
+        # @var str
         # @readonly
         self.deviceUdid = deviceUdid
 
         # The name of the device from which the purchase was made
-        # @var string
+        # @var str
         # @readonly
         self.deviceName = deviceName
 
@@ -34540,7 +35040,7 @@ class KalturaEntitlement(KalturaObjectBase):
         self.maxUses = maxUses
 
         # The Identifier of the purchasing user
-        # @var string
+        # @var str
         # @readonly
         self.userId = userId
 
@@ -34641,13 +35141,13 @@ class KalturaEntitlementListResponse(KalturaListResponse):
     """Entitlements list"""
 
     def __init__(self,
-            totalCount=NotImplemented,
-            objects=NotImplemented):
+            totalCount = NotImplemented,
+            objects = NotImplemented):
         KalturaListResponse.__init__(self,
             totalCount)
 
         # A list of entitlements
-        # @var array of KalturaEntitlement
+        # @var List[KalturaEntitlement]
         self.objects = objects
 
 
@@ -34676,21 +35176,21 @@ class KalturaEntitlementListResponse(KalturaListResponse):
 # @subpackage Client
 class KalturaCollectionEntitlement(KalturaEntitlement):
     def __init__(self,
-            id=NotImplemented,
-            productId=NotImplemented,
-            currentUses=NotImplemented,
-            endDate=NotImplemented,
-            currentDate=NotImplemented,
-            lastViewDate=NotImplemented,
-            purchaseDate=NotImplemented,
-            paymentMethod=NotImplemented,
-            deviceUdid=NotImplemented,
-            deviceName=NotImplemented,
-            isCancelationWindowEnabled=NotImplemented,
-            maxUses=NotImplemented,
-            userId=NotImplemented,
-            householdId=NotImplemented,
-            isPending=NotImplemented):
+            id = NotImplemented,
+            productId = NotImplemented,
+            currentUses = NotImplemented,
+            endDate = NotImplemented,
+            currentDate = NotImplemented,
+            lastViewDate = NotImplemented,
+            purchaseDate = NotImplemented,
+            paymentMethod = NotImplemented,
+            deviceUdid = NotImplemented,
+            deviceName = NotImplemented,
+            isCancelationWindowEnabled = NotImplemented,
+            maxUses = NotImplemented,
+            userId = NotImplemented,
+            householdId = NotImplemented,
+            isPending = NotImplemented):
         KalturaEntitlement.__init__(self,
             id,
             productId,
@@ -34728,23 +35228,23 @@ class KalturaPpvEntitlement(KalturaEntitlement):
     """KalturaPpvEntitlement"""
 
     def __init__(self,
-            id=NotImplemented,
-            productId=NotImplemented,
-            currentUses=NotImplemented,
-            endDate=NotImplemented,
-            currentDate=NotImplemented,
-            lastViewDate=NotImplemented,
-            purchaseDate=NotImplemented,
-            paymentMethod=NotImplemented,
-            deviceUdid=NotImplemented,
-            deviceName=NotImplemented,
-            isCancelationWindowEnabled=NotImplemented,
-            maxUses=NotImplemented,
-            userId=NotImplemented,
-            householdId=NotImplemented,
-            isPending=NotImplemented,
-            mediaFileId=NotImplemented,
-            mediaId=NotImplemented):
+            id = NotImplemented,
+            productId = NotImplemented,
+            currentUses = NotImplemented,
+            endDate = NotImplemented,
+            currentDate = NotImplemented,
+            lastViewDate = NotImplemented,
+            purchaseDate = NotImplemented,
+            paymentMethod = NotImplemented,
+            deviceUdid = NotImplemented,
+            deviceName = NotImplemented,
+            isCancelationWindowEnabled = NotImplemented,
+            maxUses = NotImplemented,
+            userId = NotImplemented,
+            householdId = NotImplemented,
+            isPending = NotImplemented,
+            mediaFileId = NotImplemented,
+            mediaId = NotImplemented):
         KalturaEntitlement.__init__(self,
             id,
             productId,
@@ -34800,21 +35300,21 @@ class KalturaProgramAssetGroupOfferEntitlement(KalturaEntitlement):
     """ProgramAssetGroupOfferEntitlement"""
 
     def __init__(self,
-            id=NotImplemented,
-            productId=NotImplemented,
-            currentUses=NotImplemented,
-            endDate=NotImplemented,
-            currentDate=NotImplemented,
-            lastViewDate=NotImplemented,
-            purchaseDate=NotImplemented,
-            paymentMethod=NotImplemented,
-            deviceUdid=NotImplemented,
-            deviceName=NotImplemented,
-            isCancelationWindowEnabled=NotImplemented,
-            maxUses=NotImplemented,
-            userId=NotImplemented,
-            householdId=NotImplemented,
-            isPending=NotImplemented):
+            id = NotImplemented,
+            productId = NotImplemented,
+            currentUses = NotImplemented,
+            endDate = NotImplemented,
+            currentDate = NotImplemented,
+            lastViewDate = NotImplemented,
+            purchaseDate = NotImplemented,
+            paymentMethod = NotImplemented,
+            deviceUdid = NotImplemented,
+            deviceName = NotImplemented,
+            isCancelationWindowEnabled = NotImplemented,
+            maxUses = NotImplemented,
+            userId = NotImplemented,
+            householdId = NotImplemented,
+            isPending = NotImplemented):
         KalturaEntitlement.__init__(self,
             id,
             productId,
@@ -34852,9 +35352,9 @@ class KalturaEntitlementDiscountDetails(KalturaObjectBase):
     """Entitlement discount details"""
 
     def __init__(self,
-            amount=NotImplemented,
-            startDate=NotImplemented,
-            endDate=NotImplemented):
+            amount = NotImplemented,
+            startDate = NotImplemented,
+            endDate = NotImplemented):
         KalturaObjectBase.__init__(self)
 
         # Amount
@@ -34904,8 +35404,8 @@ class KalturaEntitlementPriceDetails(KalturaObjectBase):
     """Entitlement price details"""
 
     def __init__(self,
-            fullPrice=NotImplemented,
-            discountDetails=NotImplemented):
+            fullPrice = NotImplemented,
+            discountDetails = NotImplemented):
         KalturaObjectBase.__init__(self)
 
         # Full price
@@ -34914,7 +35414,7 @@ class KalturaEntitlementPriceDetails(KalturaObjectBase):
         self.fullPrice = fullPrice
 
         # List of the season numbers to exclude.
-        # @var array of KalturaEntitlementDiscountDetails
+        # @var List[KalturaEntitlementDiscountDetails]
         # @readonly
         self.discountDetails = discountDetails
 
@@ -34946,31 +35446,32 @@ class KalturaSubscriptionEntitlement(KalturaEntitlement):
     """KalturaSubscriptionEntitlement"""
 
     def __init__(self,
-            id=NotImplemented,
-            productId=NotImplemented,
-            currentUses=NotImplemented,
-            endDate=NotImplemented,
-            currentDate=NotImplemented,
-            lastViewDate=NotImplemented,
-            purchaseDate=NotImplemented,
-            paymentMethod=NotImplemented,
-            deviceUdid=NotImplemented,
-            deviceName=NotImplemented,
-            isCancelationWindowEnabled=NotImplemented,
-            maxUses=NotImplemented,
-            userId=NotImplemented,
-            householdId=NotImplemented,
-            isPending=NotImplemented,
-            nextRenewalDate=NotImplemented,
-            isRenewableForPurchase=NotImplemented,
-            isRenewable=NotImplemented,
-            isInGracePeriod=NotImplemented,
-            paymentGatewayId=NotImplemented,
-            paymentMethodId=NotImplemented,
-            scheduledSubscriptionId=NotImplemented,
-            unifiedPaymentId=NotImplemented,
-            isSuspended=NotImplemented,
-            priceDetails=NotImplemented):
+            id = NotImplemented,
+            productId = NotImplemented,
+            currentUses = NotImplemented,
+            endDate = NotImplemented,
+            currentDate = NotImplemented,
+            lastViewDate = NotImplemented,
+            purchaseDate = NotImplemented,
+            paymentMethod = NotImplemented,
+            deviceUdid = NotImplemented,
+            deviceName = NotImplemented,
+            isCancelationWindowEnabled = NotImplemented,
+            maxUses = NotImplemented,
+            userId = NotImplemented,
+            householdId = NotImplemented,
+            isPending = NotImplemented,
+            nextRenewalDate = NotImplemented,
+            isRenewableForPurchase = NotImplemented,
+            isRenewable = NotImplemented,
+            isInGracePeriod = NotImplemented,
+            paymentGatewayId = NotImplemented,
+            paymentMethodId = NotImplemented,
+            scheduledSubscriptionId = NotImplemented,
+            unifiedPaymentId = NotImplemented,
+            isSuspended = NotImplemented,
+            priceDetails = NotImplemented,
+            isFlexiblePricePlan = NotImplemented):
         KalturaEntitlement.__init__(self,
             id,
             productId,
@@ -35036,6 +35537,11 @@ class KalturaSubscriptionEntitlement(KalturaEntitlement):
         # @readonly
         self.priceDetails = priceDetails
 
+        # Indicates whether the subscription is now within the flexible price plan lifecycle or not
+        # @var bool
+        # @readonly
+        self.isFlexiblePricePlan = isFlexiblePricePlan
+
 
     PROPERTY_LOADERS = {
         'nextRenewalDate': getXmlNodeInt, 
@@ -35048,6 +35554,7 @@ class KalturaSubscriptionEntitlement(KalturaEntitlement):
         'unifiedPaymentId': getXmlNodeInt, 
         'isSuspended': getXmlNodeBool, 
         'priceDetails': (KalturaObjectFactory.create, 'KalturaEntitlementPriceDetails'), 
+        'isFlexiblePricePlan': getXmlNodeBool, 
     }
 
     def fromXml(self, node):
@@ -35097,15 +35604,18 @@ class KalturaSubscriptionEntitlement(KalturaEntitlement):
     def getPriceDetails(self):
         return self.priceDetails
 
+    def getIsFlexiblePricePlan(self):
+        return self.isFlexiblePricePlan
+
 
 # @package Kaltura
 # @subpackage Client
 class KalturaEntitlementDiscountDetailsIdentifier(KalturaEntitlementDiscountDetails):
     def __init__(self,
-            amount=NotImplemented,
-            startDate=NotImplemented,
-            endDate=NotImplemented,
-            id=NotImplemented):
+            amount = NotImplemented,
+            startDate = NotImplemented,
+            endDate = NotImplemented,
+            id = NotImplemented):
         KalturaEntitlementDiscountDetails.__init__(self,
             amount,
             startDate,
@@ -35140,10 +35650,10 @@ class KalturaCampaignEntitlementDiscountDetails(KalturaEntitlementDiscountDetail
     """Campaign entitlement discount details"""
 
     def __init__(self,
-            amount=NotImplemented,
-            startDate=NotImplemented,
-            endDate=NotImplemented,
-            id=NotImplemented):
+            amount = NotImplemented,
+            startDate = NotImplemented,
+            endDate = NotImplemented,
+            id = NotImplemented):
         KalturaEntitlementDiscountDetailsIdentifier.__init__(self,
             amount,
             startDate,
@@ -35170,10 +35680,10 @@ class KalturaCompensationEntitlementDiscountDetails(KalturaEntitlementDiscountDe
     """Compensation entitlement discount details"""
 
     def __init__(self,
-            amount=NotImplemented,
-            startDate=NotImplemented,
-            endDate=NotImplemented,
-            id=NotImplemented):
+            amount = NotImplemented,
+            startDate = NotImplemented,
+            endDate = NotImplemented,
+            id = NotImplemented):
         KalturaEntitlementDiscountDetailsIdentifier.__init__(self,
             amount,
             startDate,
@@ -35200,10 +35710,10 @@ class KalturaDiscountEntitlementDiscountDetails(KalturaEntitlementDiscountDetail
     """Discount entitlement discount details"""
 
     def __init__(self,
-            amount=NotImplemented,
-            startDate=NotImplemented,
-            endDate=NotImplemented,
-            id=NotImplemented):
+            amount = NotImplemented,
+            startDate = NotImplemented,
+            endDate = NotImplemented,
+            id = NotImplemented):
         KalturaEntitlementDiscountDetailsIdentifier.__init__(self,
             amount,
             startDate,
@@ -35230,10 +35740,10 @@ class KalturaTrailEntitlementDiscountDetails(KalturaEntitlementDiscountDetailsId
     """Trail entitlement discount details"""
 
     def __init__(self,
-            amount=NotImplemented,
-            startDate=NotImplemented,
-            endDate=NotImplemented,
-            id=NotImplemented):
+            amount = NotImplemented,
+            startDate = NotImplemented,
+            endDate = NotImplemented,
+            id = NotImplemented):
         KalturaEntitlementDiscountDetailsIdentifier.__init__(self,
             amount,
             startDate,
@@ -35260,18 +35770,18 @@ class KalturaCouponEntitlementDiscountDetails(KalturaEntitlementDiscountDetails)
     """Coupon discount details"""
 
     def __init__(self,
-            amount=NotImplemented,
-            startDate=NotImplemented,
-            endDate=NotImplemented,
-            couponCode=NotImplemented,
-            endlessCoupon=NotImplemented):
+            amount = NotImplemented,
+            startDate = NotImplemented,
+            endDate = NotImplemented,
+            couponCode = NotImplemented,
+            endlessCoupon = NotImplemented):
         KalturaEntitlementDiscountDetails.__init__(self,
             amount,
             startDate,
             endDate)
 
         # Coupon Code
-        # @var string
+        # @var str
         # @readonly
         self.couponCode = couponCode
 
@@ -35308,13 +35818,13 @@ class KalturaHouseholdPremiumServiceListResponse(KalturaListResponse):
     """Premium services list"""
 
     def __init__(self,
-            totalCount=NotImplemented,
-            objects=NotImplemented):
+            totalCount = NotImplemented,
+            objects = NotImplemented):
         KalturaListResponse.__init__(self,
             totalCount)
 
         # A list of premium services
-        # @var array of KalturaHouseholdPremiumService
+        # @var List[KalturaHouseholdPremiumService]
         self.objects = objects
 
 
@@ -35343,15 +35853,15 @@ class KalturaHouseholdPremiumServiceListResponse(KalturaListResponse):
 # @subpackage Client
 class KalturaRecording(KalturaObjectBase):
     def __init__(self,
-            id=NotImplemented,
-            status=NotImplemented,
-            assetId=NotImplemented,
-            type=NotImplemented,
-            viewableUntilDate=NotImplemented,
-            isProtected=NotImplemented,
-            createDate=NotImplemented,
-            updateDate=NotImplemented,
-            duration=NotImplemented):
+            id = NotImplemented,
+            status = NotImplemented,
+            assetId = NotImplemented,
+            type = NotImplemented,
+            viewableUntilDate = NotImplemented,
+            isProtected = NotImplemented,
+            createDate = NotImplemented,
+            updateDate = NotImplemented,
+            duration = NotImplemented):
         KalturaObjectBase.__init__(self)
 
         # Kaltura unique ID representing the recording identifier
@@ -35467,18 +35977,18 @@ class KalturaRecording(KalturaObjectBase):
 # @subpackage Client
 class KalturaExternalRecording(KalturaRecording):
     def __init__(self,
-            id=NotImplemented,
-            status=NotImplemented,
-            assetId=NotImplemented,
-            type=NotImplemented,
-            viewableUntilDate=NotImplemented,
-            isProtected=NotImplemented,
-            createDate=NotImplemented,
-            updateDate=NotImplemented,
-            duration=NotImplemented,
-            externalId=NotImplemented,
-            metaData=NotImplemented,
-            expiryDate=NotImplemented):
+            id = NotImplemented,
+            status = NotImplemented,
+            assetId = NotImplemented,
+            type = NotImplemented,
+            viewableUntilDate = NotImplemented,
+            isProtected = NotImplemented,
+            createDate = NotImplemented,
+            updateDate = NotImplemented,
+            duration = NotImplemented,
+            externalId = NotImplemented,
+            metaData = NotImplemented,
+            expiryDate = NotImplemented):
         KalturaRecording.__init__(self,
             id,
             status,
@@ -35491,7 +36001,7 @@ class KalturaExternalRecording(KalturaRecording):
             duration)
 
         # External identifier for the recording
-        # @var string
+        # @var str
         # @insertonly
         self.externalId = externalId
 
@@ -35542,18 +36052,18 @@ class KalturaExternalRecording(KalturaRecording):
 # @subpackage Client
 class KalturaImmediateRecording(KalturaRecording):
     def __init__(self,
-            id=NotImplemented,
-            status=NotImplemented,
-            assetId=NotImplemented,
-            type=NotImplemented,
-            viewableUntilDate=NotImplemented,
-            isProtected=NotImplemented,
-            createDate=NotImplemented,
-            updateDate=NotImplemented,
-            duration=NotImplemented,
-            endPadding=NotImplemented,
-            absoluteStart=NotImplemented,
-            absoluteEnd=NotImplemented):
+            id = NotImplemented,
+            status = NotImplemented,
+            assetId = NotImplemented,
+            type = NotImplemented,
+            viewableUntilDate = NotImplemented,
+            isProtected = NotImplemented,
+            createDate = NotImplemented,
+            updateDate = NotImplemented,
+            duration = NotImplemented,
+            endPadding = NotImplemented,
+            absoluteStart = NotImplemented,
+            absoluteEnd = NotImplemented):
         KalturaRecording.__init__(self,
             id,
             status,
@@ -35613,19 +36123,19 @@ class KalturaImmediateRecording(KalturaRecording):
 # @subpackage Client
 class KalturaPaddedRecording(KalturaRecording):
     def __init__(self,
-            id=NotImplemented,
-            status=NotImplemented,
-            assetId=NotImplemented,
-            type=NotImplemented,
-            viewableUntilDate=NotImplemented,
-            isProtected=NotImplemented,
-            createDate=NotImplemented,
-            updateDate=NotImplemented,
-            duration=NotImplemented,
-            startPadding=NotImplemented,
-            endPadding=NotImplemented,
-            startPaddingIsPersonal=NotImplemented,
-            endPaddingIsPersonal=NotImplemented):
+            id = NotImplemented,
+            status = NotImplemented,
+            assetId = NotImplemented,
+            type = NotImplemented,
+            viewableUntilDate = NotImplemented,
+            isProtected = NotImplemented,
+            createDate = NotImplemented,
+            updateDate = NotImplemented,
+            duration = NotImplemented,
+            startPadding = NotImplemented,
+            endPadding = NotImplemented,
+            startPaddingIsPersonal = NotImplemented,
+            endPaddingIsPersonal = NotImplemented):
         KalturaRecording.__init__(self,
             id,
             status,
@@ -35699,13 +36209,13 @@ class KalturaRecordingListResponse(KalturaListResponse):
     """Recordings info wrapper"""
 
     def __init__(self,
-            totalCount=NotImplemented,
-            objects=NotImplemented):
+            totalCount = NotImplemented,
+            objects = NotImplemented):
         KalturaListResponse.__init__(self,
             totalCount)
 
         # Recordings
-        # @var array of KalturaRecording
+        # @var List[KalturaRecording]
         self.objects = objects
 
 
@@ -35734,9 +36244,9 @@ class KalturaRecordingListResponse(KalturaListResponse):
 # @subpackage Client
 class KalturaSeriesRecordingOption(KalturaObjectBase):
     def __init__(self,
-            minSeasonNumber=NotImplemented,
-            minEpisodeNumber=NotImplemented,
-            chronologicalRecordStartTime=NotImplemented):
+            minSeasonNumber = NotImplemented,
+            minEpisodeNumber = NotImplemented,
+            chronologicalRecordStartTime = NotImplemented):
         KalturaObjectBase.__init__(self)
 
         # min Season Number
@@ -35793,16 +36303,16 @@ class KalturaSeriesRecordingOption(KalturaObjectBase):
 # @subpackage Client
 class KalturaSeriesRecording(KalturaObjectBase):
     def __init__(self,
-            id=NotImplemented,
-            epgId=NotImplemented,
-            channelId=NotImplemented,
-            seriesId=NotImplemented,
-            seasonNumber=NotImplemented,
-            type=NotImplemented,
-            createDate=NotImplemented,
-            updateDate=NotImplemented,
-            excludedSeasons=NotImplemented,
-            seriesRecordingOption=NotImplemented):
+            id = NotImplemented,
+            epgId = NotImplemented,
+            channelId = NotImplemented,
+            seriesId = NotImplemented,
+            seasonNumber = NotImplemented,
+            type = NotImplemented,
+            createDate = NotImplemented,
+            updateDate = NotImplemented,
+            excludedSeasons = NotImplemented,
+            seriesRecordingOption = NotImplemented):
         KalturaObjectBase.__init__(self)
 
         # Kaltura unique ID representing the series recording identifier
@@ -35819,7 +36329,7 @@ class KalturaSeriesRecording(KalturaObjectBase):
         self.channelId = channelId
 
         # Kaltura SeriesId
-        # @var string
+        # @var str
         self.seriesId = seriesId
 
         # Kaltura SeasonNumber
@@ -35841,7 +36351,7 @@ class KalturaSeriesRecording(KalturaObjectBase):
         self.updateDate = updateDate
 
         # List of the season numbers to exclude.
-        # @var array of KalturaIntegerValue
+        # @var List[KalturaIntegerValue]
         # @readonly
         self.excludedSeasons = excludedSeasons
 
@@ -35933,13 +36443,13 @@ class KalturaSeriesRecordingListResponse(KalturaListResponse):
     """Series Recordings info wrapper"""
 
     def __init__(self,
-            totalCount=NotImplemented,
-            objects=NotImplemented):
+            totalCount = NotImplemented,
+            objects = NotImplemented):
         KalturaListResponse.__init__(self,
             totalCount)
 
         # Series Recordings
-        # @var array of KalturaSeriesRecording
+        # @var List[KalturaSeriesRecording]
         self.objects = objects
 
 
@@ -35968,17 +36478,17 @@ class KalturaSeriesRecordingListResponse(KalturaListResponse):
 # @subpackage Client
 class KalturaExternalSeriesRecording(KalturaSeriesRecording):
     def __init__(self,
-            id=NotImplemented,
-            epgId=NotImplemented,
-            channelId=NotImplemented,
-            seriesId=NotImplemented,
-            seasonNumber=NotImplemented,
-            type=NotImplemented,
-            createDate=NotImplemented,
-            updateDate=NotImplemented,
-            excludedSeasons=NotImplemented,
-            seriesRecordingOption=NotImplemented,
-            metaData=NotImplemented):
+            id = NotImplemented,
+            epgId = NotImplemented,
+            channelId = NotImplemented,
+            seriesId = NotImplemented,
+            seasonNumber = NotImplemented,
+            type = NotImplemented,
+            createDate = NotImplemented,
+            updateDate = NotImplemented,
+            excludedSeasons = NotImplemented,
+            seriesRecordingOption = NotImplemented,
+            metaData = NotImplemented):
         KalturaSeriesRecording.__init__(self,
             id,
             epgId,
@@ -36023,13 +36533,13 @@ class KalturaAssetCommentListResponse(KalturaListResponse):
     """Asset Comment Response"""
 
     def __init__(self,
-            totalCount=NotImplemented,
-            objects=NotImplemented):
+            totalCount = NotImplemented,
+            objects = NotImplemented):
         KalturaListResponse.__init__(self,
             totalCount)
 
         # Assets
-        # @var array of KalturaAssetComment
+        # @var List[KalturaAssetComment]
         self.objects = objects
 
 
@@ -36060,13 +36570,13 @@ class KalturaAssetCount(KalturaObjectBase):
     """Asset count - represents a specific value of the field, its count and its sub groups."""
 
     def __init__(self,
-            value=NotImplemented,
-            count=NotImplemented,
-            subs=NotImplemented):
+            value = NotImplemented,
+            count = NotImplemented,
+            subs = NotImplemented):
         KalturaObjectBase.__init__(self)
 
         # Value
-        # @var string
+        # @var str
         self.value = value
 
         # Count
@@ -36074,7 +36584,7 @@ class KalturaAssetCount(KalturaObjectBase):
         self.count = count
 
         # Sub groups
-        # @var array of KalturaAssetsCount
+        # @var List[KalturaAssetsCount]
         self.subs = subs
 
 
@@ -36121,16 +36631,16 @@ class KalturaAssetsCount(KalturaObjectBase):
     """Single aggregation objects"""
 
     def __init__(self,
-            field=NotImplemented,
-            objects=NotImplemented):
+            field = NotImplemented,
+            objects = NotImplemented):
         KalturaObjectBase.__init__(self)
 
         # Field name
-        # @var string
+        # @var str
         self.field = field
 
         # Values, their count and sub groups
-        # @var array of KalturaAssetCount
+        # @var List[KalturaAssetCount]
         self.objects = objects
 
 
@@ -36169,9 +36679,9 @@ class KalturaAssetCountListResponse(KalturaListResponse):
     """Asset counts wrapper - represents a group"""
 
     def __init__(self,
-            totalCount=NotImplemented,
-            assetsCount=NotImplemented,
-            objects=NotImplemented):
+            totalCount = NotImplemented,
+            assetsCount = NotImplemented,
+            objects = NotImplemented):
         KalturaListResponse.__init__(self,
             totalCount)
 
@@ -36180,7 +36690,7 @@ class KalturaAssetCountListResponse(KalturaListResponse):
         self.assetsCount = assetsCount
 
         # List of groupings (field name and sub-list of values and their counts)
-        # @var array of KalturaAssetsCount
+        # @var List[KalturaAssetsCount]
         self.objects = objects
 
 
@@ -36219,12 +36729,12 @@ class KalturaAssetHistory(KalturaObjectBase):
     """Watch history asset info"""
 
     def __init__(self,
-            assetId=NotImplemented,
-            assetType=NotImplemented,
-            position=NotImplemented,
-            duration=NotImplemented,
-            watchedDate=NotImplemented,
-            finishedWatching=NotImplemented):
+            assetId = NotImplemented,
+            assetType = NotImplemented,
+            position = NotImplemented,
+            duration = NotImplemented,
+            watchedDate = NotImplemented,
+            finishedWatching = NotImplemented):
         KalturaObjectBase.__init__(self)
 
         # Asset identifier
@@ -36301,13 +36811,13 @@ class KalturaAssetHistoryListResponse(KalturaListResponse):
     """Watch history asset wrapper"""
 
     def __init__(self,
-            totalCount=NotImplemented,
-            objects=NotImplemented):
+            totalCount = NotImplemented,
+            objects = NotImplemented):
         KalturaListResponse.__init__(self,
             totalCount)
 
         # WatchHistoryAssets Models
-        # @var array of KalturaAssetHistory
+        # @var List[KalturaAssetHistory]
         self.objects = objects
 
 
@@ -36336,12 +36846,12 @@ class KalturaAssetHistoryListResponse(KalturaListResponse):
 # @subpackage Client
 class KalturaRelatedEntity(KalturaObjectBase):
     def __init__(self,
-            id=NotImplemented,
-            type=NotImplemented):
+            id = NotImplemented,
+            type = NotImplemented):
         KalturaObjectBase.__init__(self)
 
         # Unique identifier for the related entry
-        # @var string
+        # @var str
         self.id = id
 
         # Defines related entry type
@@ -36382,11 +36892,11 @@ class KalturaRelatedEntity(KalturaObjectBase):
 # @subpackage Client
 class KalturaRelatedEntityArray(KalturaObjectBase):
     def __init__(self,
-            objects=NotImplemented):
+            objects = NotImplemented):
         KalturaObjectBase.__init__(self)
 
         # List of related entities
-        # @var array of KalturaRelatedEntity
+        # @var List[KalturaRelatedEntity]
         self.objects = objects
 
 
@@ -36417,23 +36927,23 @@ class KalturaAsset(KalturaObjectBase):
     """Asset info"""
 
     def __init__(self,
-            id=NotImplemented,
-            type=NotImplemented,
-            name=NotImplemented,
-            multilingualName=NotImplemented,
-            description=NotImplemented,
-            multilingualDescription=NotImplemented,
-            images=NotImplemented,
-            mediaFiles=NotImplemented,
-            metas=NotImplemented,
-            tags=NotImplemented,
-            relatedEntities=NotImplemented,
-            startDate=NotImplemented,
-            endDate=NotImplemented,
-            createDate=NotImplemented,
-            updateDate=NotImplemented,
-            externalId=NotImplemented,
-            indexStatus=NotImplemented):
+            id = NotImplemented,
+            type = NotImplemented,
+            name = NotImplemented,
+            multilingualName = NotImplemented,
+            description = NotImplemented,
+            multilingualDescription = NotImplemented,
+            images = NotImplemented,
+            mediaFiles = NotImplemented,
+            metas = NotImplemented,
+            tags = NotImplemented,
+            relatedEntities = NotImplemented,
+            startDate = NotImplemented,
+            endDate = NotImplemented,
+            createDate = NotImplemented,
+            updateDate = NotImplemented,
+            externalId = NotImplemented,
+            indexStatus = NotImplemented):
         KalturaObjectBase.__init__(self)
 
         # Unique identifier for the asset
@@ -36448,30 +36958,30 @@ class KalturaAsset(KalturaObjectBase):
         self.type = type
 
         # Asset name
-        # @var string
+        # @var str
         # @readonly
         self.name = name
 
         # Asset name
-        # @var array of KalturaTranslationToken
+        # @var List[KalturaTranslationToken]
         self.multilingualName = multilingualName
 
         # Asset description
-        # @var string
+        # @var str
         # @readonly
         self.description = description
 
         # Asset description
-        # @var array of KalturaTranslationToken
+        # @var List[KalturaTranslationToken]
         self.multilingualDescription = multilingualDescription
 
         # Collection of images details that can be used to represent this asset
-        # @var array of KalturaMediaImage
+        # @var List[KalturaMediaImage]
         # @readonly
         self.images = images
 
         # Files
-        # @var array of KalturaMediaFile
+        # @var List[KalturaMediaFile]
         # @readonly
         self.mediaFiles = mediaFiles
 
@@ -36506,7 +37016,7 @@ class KalturaAsset(KalturaObjectBase):
         self.updateDate = updateDate
 
         # External identifier for the asset
-        # @var string
+        # @var str
         self.externalId = externalId
 
         # The media asset index status
@@ -36638,13 +37148,13 @@ class KalturaAssetListResponse(KalturaListResponse):
     """Asset wrapper"""
 
     def __init__(self,
-            totalCount=NotImplemented,
-            objects=NotImplemented):
+            totalCount = NotImplemented,
+            objects = NotImplemented):
         KalturaListResponse.__init__(self,
             totalCount)
 
         # Assets
-        # @var array of KalturaAsset
+        # @var List[KalturaAsset]
         self.objects = objects
 
 
@@ -36673,14 +37183,14 @@ class KalturaAssetListResponse(KalturaListResponse):
 # @subpackage Client
 class KalturaLiveToVodInfoAsset(KalturaObjectBase):
     def __init__(self,
-            linearAssetId=NotImplemented,
-            epgId=NotImplemented,
-            epgChannelId=NotImplemented,
-            crid=NotImplemented,
-            originalStartDate=NotImplemented,
-            originalEndDate=NotImplemented,
-            paddingBeforeProgramStarts=NotImplemented,
-            paddingAfterProgramEnds=NotImplemented):
+            linearAssetId = NotImplemented,
+            epgId = NotImplemented,
+            epgChannelId = NotImplemented,
+            crid = NotImplemented,
+            originalStartDate = NotImplemented,
+            originalEndDate = NotImplemented,
+            paddingBeforeProgramStarts = NotImplemented,
+            paddingAfterProgramEnds = NotImplemented):
         KalturaObjectBase.__init__(self)
 
         # Linear Asset Id
@@ -36688,7 +37198,7 @@ class KalturaLiveToVodInfoAsset(KalturaObjectBase):
         self.linearAssetId = linearAssetId
 
         # EPG Id
-        # @var string
+        # @var str
         self.epgId = epgId
 
         # EPG Channel Id
@@ -36696,7 +37206,7 @@ class KalturaLiveToVodInfoAsset(KalturaObjectBase):
         self.epgChannelId = epgChannelId
 
         # Crid
-        # @var string
+        # @var str
         self.crid = crid
 
         # Original Start Date
@@ -36799,30 +37309,30 @@ class KalturaMediaAsset(KalturaAsset):
     """Media-asset info"""
 
     def __init__(self,
-            id=NotImplemented,
-            type=NotImplemented,
-            name=NotImplemented,
-            multilingualName=NotImplemented,
-            description=NotImplemented,
-            multilingualDescription=NotImplemented,
-            images=NotImplemented,
-            mediaFiles=NotImplemented,
-            metas=NotImplemented,
-            tags=NotImplemented,
-            relatedEntities=NotImplemented,
-            startDate=NotImplemented,
-            endDate=NotImplemented,
-            createDate=NotImplemented,
-            updateDate=NotImplemented,
-            externalId=NotImplemented,
-            indexStatus=NotImplemented,
-            externalIds=NotImplemented,
-            entryId=NotImplemented,
-            deviceRuleId=NotImplemented,
-            geoBlockRuleId=NotImplemented,
-            status=NotImplemented,
-            inheritancePolicy=NotImplemented,
-            liveToVod=NotImplemented):
+            id = NotImplemented,
+            type = NotImplemented,
+            name = NotImplemented,
+            multilingualName = NotImplemented,
+            description = NotImplemented,
+            multilingualDescription = NotImplemented,
+            images = NotImplemented,
+            mediaFiles = NotImplemented,
+            metas = NotImplemented,
+            tags = NotImplemented,
+            relatedEntities = NotImplemented,
+            startDate = NotImplemented,
+            endDate = NotImplemented,
+            createDate = NotImplemented,
+            updateDate = NotImplemented,
+            externalId = NotImplemented,
+            indexStatus = NotImplemented,
+            externalIds = NotImplemented,
+            entryId = NotImplemented,
+            deviceRuleId = NotImplemented,
+            geoBlockRuleId = NotImplemented,
+            status = NotImplemented,
+            inheritancePolicy = NotImplemented,
+            liveToVod = NotImplemented):
         KalturaAsset.__init__(self,
             id,
             type,
@@ -36843,11 +37353,11 @@ class KalturaMediaAsset(KalturaAsset):
             indexStatus)
 
         # External identifiers
-        # @var string
+        # @var str
         self.externalIds = externalIds
 
         # Entry Identifier
-        # @var string
+        # @var str
         self.entryId = entryId
 
         # Device rule identifier
@@ -36946,49 +37456,49 @@ class KalturaLiveAsset(KalturaMediaAsset):
     """Linear media asset info"""
 
     def __init__(self,
-            id=NotImplemented,
-            type=NotImplemented,
-            name=NotImplemented,
-            multilingualName=NotImplemented,
-            description=NotImplemented,
-            multilingualDescription=NotImplemented,
-            images=NotImplemented,
-            mediaFiles=NotImplemented,
-            metas=NotImplemented,
-            tags=NotImplemented,
-            relatedEntities=NotImplemented,
-            startDate=NotImplemented,
-            endDate=NotImplemented,
-            createDate=NotImplemented,
-            updateDate=NotImplemented,
-            externalId=NotImplemented,
-            indexStatus=NotImplemented,
-            externalIds=NotImplemented,
-            entryId=NotImplemented,
-            deviceRuleId=NotImplemented,
-            geoBlockRuleId=NotImplemented,
-            status=NotImplemented,
-            inheritancePolicy=NotImplemented,
-            liveToVod=NotImplemented,
-            enableCdvrState=NotImplemented,
-            enableCatchUpState=NotImplemented,
-            enableStartOverState=NotImplemented,
-            bufferCatchUpSetting=NotImplemented,
-            paddingBeforeProgramStarts=NotImplemented,
-            paddingAfterProgramEnds=NotImplemented,
-            bufferTrickPlaySetting=NotImplemented,
-            enableRecordingPlaybackNonEntitledChannelState=NotImplemented,
-            enableTrickPlayState=NotImplemented,
-            externalEpgIngestId=NotImplemented,
-            externalCdvrId=NotImplemented,
-            enableCdvr=NotImplemented,
-            enableCatchUp=NotImplemented,
-            enableStartOver=NotImplemented,
-            catchUpBuffer=NotImplemented,
-            trickPlayBuffer=NotImplemented,
-            enableRecordingPlaybackNonEntitledChannel=NotImplemented,
-            enableTrickPlay=NotImplemented,
-            channelType=NotImplemented):
+            id = NotImplemented,
+            type = NotImplemented,
+            name = NotImplemented,
+            multilingualName = NotImplemented,
+            description = NotImplemented,
+            multilingualDescription = NotImplemented,
+            images = NotImplemented,
+            mediaFiles = NotImplemented,
+            metas = NotImplemented,
+            tags = NotImplemented,
+            relatedEntities = NotImplemented,
+            startDate = NotImplemented,
+            endDate = NotImplemented,
+            createDate = NotImplemented,
+            updateDate = NotImplemented,
+            externalId = NotImplemented,
+            indexStatus = NotImplemented,
+            externalIds = NotImplemented,
+            entryId = NotImplemented,
+            deviceRuleId = NotImplemented,
+            geoBlockRuleId = NotImplemented,
+            status = NotImplemented,
+            inheritancePolicy = NotImplemented,
+            liveToVod = NotImplemented,
+            enableCdvrState = NotImplemented,
+            enableCatchUpState = NotImplemented,
+            enableStartOverState = NotImplemented,
+            bufferCatchUpSetting = NotImplemented,
+            paddingBeforeProgramStarts = NotImplemented,
+            paddingAfterProgramEnds = NotImplemented,
+            bufferTrickPlaySetting = NotImplemented,
+            enableRecordingPlaybackNonEntitledChannelState = NotImplemented,
+            enableTrickPlayState = NotImplemented,
+            externalEpgIngestId = NotImplemented,
+            externalCdvrId = NotImplemented,
+            enableCdvr = NotImplemented,
+            enableCatchUp = NotImplemented,
+            enableStartOver = NotImplemented,
+            catchUpBuffer = NotImplemented,
+            trickPlayBuffer = NotImplemented,
+            enableRecordingPlaybackNonEntitledChannel = NotImplemented,
+            enableTrickPlay = NotImplemented,
+            channelType = NotImplemented):
         KalturaMediaAsset.__init__(self,
             id,
             type,
@@ -37054,11 +37564,11 @@ class KalturaLiveAsset(KalturaMediaAsset):
         self.enableTrickPlayState = enableTrickPlayState
 
         # External identifier used when ingesting programs for this linear media asset
-        # @var string
+        # @var str
         self.externalEpgIngestId = externalEpgIngestId
 
         # External identifier for the CDVR
-        # @var string
+        # @var str
         self.externalCdvrId = externalCdvrId
 
         # Is CDVR enabled for this asset
@@ -37252,50 +37762,50 @@ class KalturaLineupChannelAsset(KalturaLiveAsset):
     """A Lineup channel asset is KalturaLiveAsset in a context of specific region (includes LCN)"""
 
     def __init__(self,
-            id=NotImplemented,
-            type=NotImplemented,
-            name=NotImplemented,
-            multilingualName=NotImplemented,
-            description=NotImplemented,
-            multilingualDescription=NotImplemented,
-            images=NotImplemented,
-            mediaFiles=NotImplemented,
-            metas=NotImplemented,
-            tags=NotImplemented,
-            relatedEntities=NotImplemented,
-            startDate=NotImplemented,
-            endDate=NotImplemented,
-            createDate=NotImplemented,
-            updateDate=NotImplemented,
-            externalId=NotImplemented,
-            indexStatus=NotImplemented,
-            externalIds=NotImplemented,
-            entryId=NotImplemented,
-            deviceRuleId=NotImplemented,
-            geoBlockRuleId=NotImplemented,
-            status=NotImplemented,
-            inheritancePolicy=NotImplemented,
-            liveToVod=NotImplemented,
-            enableCdvrState=NotImplemented,
-            enableCatchUpState=NotImplemented,
-            enableStartOverState=NotImplemented,
-            bufferCatchUpSetting=NotImplemented,
-            paddingBeforeProgramStarts=NotImplemented,
-            paddingAfterProgramEnds=NotImplemented,
-            bufferTrickPlaySetting=NotImplemented,
-            enableRecordingPlaybackNonEntitledChannelState=NotImplemented,
-            enableTrickPlayState=NotImplemented,
-            externalEpgIngestId=NotImplemented,
-            externalCdvrId=NotImplemented,
-            enableCdvr=NotImplemented,
-            enableCatchUp=NotImplemented,
-            enableStartOver=NotImplemented,
-            catchUpBuffer=NotImplemented,
-            trickPlayBuffer=NotImplemented,
-            enableRecordingPlaybackNonEntitledChannel=NotImplemented,
-            enableTrickPlay=NotImplemented,
-            channelType=NotImplemented,
-            lcn=NotImplemented):
+            id = NotImplemented,
+            type = NotImplemented,
+            name = NotImplemented,
+            multilingualName = NotImplemented,
+            description = NotImplemented,
+            multilingualDescription = NotImplemented,
+            images = NotImplemented,
+            mediaFiles = NotImplemented,
+            metas = NotImplemented,
+            tags = NotImplemented,
+            relatedEntities = NotImplemented,
+            startDate = NotImplemented,
+            endDate = NotImplemented,
+            createDate = NotImplemented,
+            updateDate = NotImplemented,
+            externalId = NotImplemented,
+            indexStatus = NotImplemented,
+            externalIds = NotImplemented,
+            entryId = NotImplemented,
+            deviceRuleId = NotImplemented,
+            geoBlockRuleId = NotImplemented,
+            status = NotImplemented,
+            inheritancePolicy = NotImplemented,
+            liveToVod = NotImplemented,
+            enableCdvrState = NotImplemented,
+            enableCatchUpState = NotImplemented,
+            enableStartOverState = NotImplemented,
+            bufferCatchUpSetting = NotImplemented,
+            paddingBeforeProgramStarts = NotImplemented,
+            paddingAfterProgramEnds = NotImplemented,
+            bufferTrickPlaySetting = NotImplemented,
+            enableRecordingPlaybackNonEntitledChannelState = NotImplemented,
+            enableTrickPlayState = NotImplemented,
+            externalEpgIngestId = NotImplemented,
+            externalCdvrId = NotImplemented,
+            enableCdvr = NotImplemented,
+            enableCatchUp = NotImplemented,
+            enableStartOver = NotImplemented,
+            catchUpBuffer = NotImplemented,
+            trickPlayBuffer = NotImplemented,
+            enableRecordingPlaybackNonEntitledChannel = NotImplemented,
+            enableTrickPlay = NotImplemented,
+            channelType = NotImplemented,
+            lcn = NotImplemented):
         KalturaLiveAsset.__init__(self,
             id,
             type,
@@ -37373,33 +37883,33 @@ class KalturaProgramAsset(KalturaAsset):
     """Program-asset info"""
 
     def __init__(self,
-            id=NotImplemented,
-            type=NotImplemented,
-            name=NotImplemented,
-            multilingualName=NotImplemented,
-            description=NotImplemented,
-            multilingualDescription=NotImplemented,
-            images=NotImplemented,
-            mediaFiles=NotImplemented,
-            metas=NotImplemented,
-            tags=NotImplemented,
-            relatedEntities=NotImplemented,
-            startDate=NotImplemented,
-            endDate=NotImplemented,
-            createDate=NotImplemented,
-            updateDate=NotImplemented,
-            externalId=NotImplemented,
-            indexStatus=NotImplemented,
-            epgChannelId=NotImplemented,
-            epgId=NotImplemented,
-            relatedMediaId=NotImplemented,
-            crid=NotImplemented,
-            linearAssetId=NotImplemented,
-            enableCdvr=NotImplemented,
-            enableCatchUp=NotImplemented,
-            enableStartOver=NotImplemented,
-            enableTrickPlay=NotImplemented,
-            externalOfferIds=NotImplemented):
+            id = NotImplemented,
+            type = NotImplemented,
+            name = NotImplemented,
+            multilingualName = NotImplemented,
+            description = NotImplemented,
+            multilingualDescription = NotImplemented,
+            images = NotImplemented,
+            mediaFiles = NotImplemented,
+            metas = NotImplemented,
+            tags = NotImplemented,
+            relatedEntities = NotImplemented,
+            startDate = NotImplemented,
+            endDate = NotImplemented,
+            createDate = NotImplemented,
+            updateDate = NotImplemented,
+            externalId = NotImplemented,
+            indexStatus = NotImplemented,
+            epgChannelId = NotImplemented,
+            epgId = NotImplemented,
+            relatedMediaId = NotImplemented,
+            crid = NotImplemented,
+            linearAssetId = NotImplemented,
+            enableCdvr = NotImplemented,
+            enableCatchUp = NotImplemented,
+            enableStartOver = NotImplemented,
+            enableTrickPlay = NotImplemented,
+            externalOfferIds = NotImplemented):
         KalturaAsset.__init__(self,
             id,
             type,
@@ -37425,7 +37935,7 @@ class KalturaProgramAsset(KalturaAsset):
         self.epgChannelId = epgChannelId
 
         # EPG identifier
-        # @var string
+        # @var str
         # @readonly
         self.epgId = epgId
 
@@ -37434,7 +37944,7 @@ class KalturaProgramAsset(KalturaAsset):
         self.relatedMediaId = relatedMediaId
 
         # Unique identifier for the program
-        # @var string
+        # @var str
         self.crid = crid
 
         # Id of linear media asset
@@ -37467,7 +37977,7 @@ class KalturaProgramAsset(KalturaAsset):
         self.enableTrickPlay = enableTrickPlay
 
         # Contains comma separate list of KalturaProgramAssetGroupOffer.externalOfferId values indicating the PAGOs to which the Program Asset is bound.
-        # @var string
+        # @var str
         self.externalOfferIds = externalOfferIds
 
 
@@ -37562,37 +38072,37 @@ class KalturaRecordingAsset(KalturaProgramAsset):
     """Recording-asset info"""
 
     def __init__(self,
-            id=NotImplemented,
-            type=NotImplemented,
-            name=NotImplemented,
-            multilingualName=NotImplemented,
-            description=NotImplemented,
-            multilingualDescription=NotImplemented,
-            images=NotImplemented,
-            mediaFiles=NotImplemented,
-            metas=NotImplemented,
-            tags=NotImplemented,
-            relatedEntities=NotImplemented,
-            startDate=NotImplemented,
-            endDate=NotImplemented,
-            createDate=NotImplemented,
-            updateDate=NotImplemented,
-            externalId=NotImplemented,
-            indexStatus=NotImplemented,
-            epgChannelId=NotImplemented,
-            epgId=NotImplemented,
-            relatedMediaId=NotImplemented,
-            crid=NotImplemented,
-            linearAssetId=NotImplemented,
-            enableCdvr=NotImplemented,
-            enableCatchUp=NotImplemented,
-            enableStartOver=NotImplemented,
-            enableTrickPlay=NotImplemented,
-            externalOfferIds=NotImplemented,
-            recordingId=NotImplemented,
-            recordingType=NotImplemented,
-            viewableUntilDate=NotImplemented,
-            multiRecord=NotImplemented):
+            id = NotImplemented,
+            type = NotImplemented,
+            name = NotImplemented,
+            multilingualName = NotImplemented,
+            description = NotImplemented,
+            multilingualDescription = NotImplemented,
+            images = NotImplemented,
+            mediaFiles = NotImplemented,
+            metas = NotImplemented,
+            tags = NotImplemented,
+            relatedEntities = NotImplemented,
+            startDate = NotImplemented,
+            endDate = NotImplemented,
+            createDate = NotImplemented,
+            updateDate = NotImplemented,
+            externalId = NotImplemented,
+            indexStatus = NotImplemented,
+            epgChannelId = NotImplemented,
+            epgId = NotImplemented,
+            relatedMediaId = NotImplemented,
+            crid = NotImplemented,
+            linearAssetId = NotImplemented,
+            enableCdvr = NotImplemented,
+            enableCatchUp = NotImplemented,
+            enableStartOver = NotImplemented,
+            enableTrickPlay = NotImplemented,
+            externalOfferIds = NotImplemented,
+            recordingId = NotImplemented,
+            recordingType = NotImplemented,
+            viewableUntilDate = NotImplemented,
+            multiRecord = NotImplemented):
         KalturaProgramAsset.__init__(self,
             id,
             type,
@@ -37623,7 +38133,7 @@ class KalturaRecordingAsset(KalturaProgramAsset):
             externalOfferIds)
 
         # Recording identifier
-        # @var string
+        # @var str
         self.recordingId = recordingId
 
         # Recording Type: single/season/series
@@ -37688,33 +38198,33 @@ class KalturaRecordingAsset(KalturaProgramAsset):
 # @subpackage Client
 class KalturaEpg(KalturaProgramAsset):
     def __init__(self,
-            id=NotImplemented,
-            type=NotImplemented,
-            name=NotImplemented,
-            multilingualName=NotImplemented,
-            description=NotImplemented,
-            multilingualDescription=NotImplemented,
-            images=NotImplemented,
-            mediaFiles=NotImplemented,
-            metas=NotImplemented,
-            tags=NotImplemented,
-            relatedEntities=NotImplemented,
-            startDate=NotImplemented,
-            endDate=NotImplemented,
-            createDate=NotImplemented,
-            updateDate=NotImplemented,
-            externalId=NotImplemented,
-            indexStatus=NotImplemented,
-            epgChannelId=NotImplemented,
-            epgId=NotImplemented,
-            relatedMediaId=NotImplemented,
-            crid=NotImplemented,
-            linearAssetId=NotImplemented,
-            enableCdvr=NotImplemented,
-            enableCatchUp=NotImplemented,
-            enableStartOver=NotImplemented,
-            enableTrickPlay=NotImplemented,
-            externalOfferIds=NotImplemented):
+            id = NotImplemented,
+            type = NotImplemented,
+            name = NotImplemented,
+            multilingualName = NotImplemented,
+            description = NotImplemented,
+            multilingualDescription = NotImplemented,
+            images = NotImplemented,
+            mediaFiles = NotImplemented,
+            metas = NotImplemented,
+            tags = NotImplemented,
+            relatedEntities = NotImplemented,
+            startDate = NotImplemented,
+            endDate = NotImplemented,
+            createDate = NotImplemented,
+            updateDate = NotImplemented,
+            externalId = NotImplemented,
+            indexStatus = NotImplemented,
+            epgChannelId = NotImplemented,
+            epgId = NotImplemented,
+            relatedMediaId = NotImplemented,
+            crid = NotImplemented,
+            linearAssetId = NotImplemented,
+            enableCdvr = NotImplemented,
+            enableCatchUp = NotImplemented,
+            enableStartOver = NotImplemented,
+            enableTrickPlay = NotImplemented,
+            externalOfferIds = NotImplemented):
         KalturaProgramAsset.__init__(self,
             id,
             type,
@@ -37764,13 +38274,13 @@ class KalturaAssetStatisticsListResponse(KalturaListResponse):
     """List of assets statistics"""
 
     def __init__(self,
-            totalCount=NotImplemented,
-            objects=NotImplemented):
+            totalCount = NotImplemented,
+            objects = NotImplemented):
         KalturaListResponse.__init__(self,
             totalCount)
 
         # Assets
-        # @var array of KalturaAssetStatistics
+        # @var List[KalturaAssetStatistics]
         self.objects = objects
 
 
@@ -37799,20 +38309,20 @@ class KalturaAssetStatisticsListResponse(KalturaListResponse):
 # @subpackage Client
 class KalturaAssetStruct(KalturaObjectBase):
     def __init__(self,
-            id=NotImplemented,
-            name=NotImplemented,
-            multilingualName=NotImplemented,
-            systemName=NotImplemented,
-            isProtected=NotImplemented,
-            metaIds=NotImplemented,
-            createDate=NotImplemented,
-            updateDate=NotImplemented,
-            features=NotImplemented,
-            pluralName=NotImplemented,
-            parentId=NotImplemented,
-            connectingMetaId=NotImplemented,
-            connectedParentMetaId=NotImplemented,
-            dynamicData=NotImplemented):
+            id = NotImplemented,
+            name = NotImplemented,
+            multilingualName = NotImplemented,
+            systemName = NotImplemented,
+            isProtected = NotImplemented,
+            metaIds = NotImplemented,
+            createDate = NotImplemented,
+            updateDate = NotImplemented,
+            features = NotImplemented,
+            pluralName = NotImplemented,
+            parentId = NotImplemented,
+            connectingMetaId = NotImplemented,
+            connectedParentMetaId = NotImplemented,
+            dynamicData = NotImplemented):
         KalturaObjectBase.__init__(self)
 
         # Asset Struct id
@@ -37821,16 +38331,16 @@ class KalturaAssetStruct(KalturaObjectBase):
         self.id = id
 
         # Asset struct name for the partner
-        # @var string
+        # @var str
         # @readonly
         self.name = name
 
         # Asset struct name for the partner
-        # @var array of KalturaTranslationToken
+        # @var List[KalturaTranslationToken]
         self.multilingualName = multilingualName
 
         # Asset Struct system name for the partner
-        # @var string
+        # @var str
         self.systemName = systemName
 
         # Is the Asset Struct protected by the system
@@ -37838,7 +38348,7 @@ class KalturaAssetStruct(KalturaObjectBase):
         self.isProtected = isProtected
 
         # A list of comma separated meta ids associated with this asset struct, returned according to the order.
-        # @var string
+        # @var str
         self.metaIds = metaIds
 
         # Specifies when was the Asset Struct was created. Date and time represented as epoch.
@@ -37852,11 +38362,11 @@ class KalturaAssetStruct(KalturaObjectBase):
         self.updateDate = updateDate
 
         # List of supported features
-        # @var string
+        # @var str
         self.features = features
 
         # Plural Name
-        # @var string
+        # @var str
         self.pluralName = pluralName
 
         # AssetStruct parent Id
@@ -37991,13 +38501,13 @@ class KalturaAssetStructListResponse(KalturaListResponse):
     """Asset Structs list"""
 
     def __init__(self,
-            totalCount=NotImplemented,
-            objects=NotImplemented):
+            totalCount = NotImplemented,
+            objects = NotImplemented):
         KalturaListResponse.__init__(self,
             totalCount)
 
         # A list of asset structs
-        # @var array of KalturaAssetStruct
+        # @var List[KalturaAssetStruct]
         self.objects = objects
 
 
@@ -38028,17 +38538,17 @@ class KalturaAssetStructMeta(KalturaObjectBase):
     """Asset statistics"""
 
     def __init__(self,
-            assetStructId=NotImplemented,
-            metaId=NotImplemented,
-            ingestReferencePath=NotImplemented,
-            protectFromIngest=NotImplemented,
-            defaultIngestValue=NotImplemented,
-            createDate=NotImplemented,
-            updateDate=NotImplemented,
-            isInherited=NotImplemented,
-            isLocationTag=NotImplemented,
-            suppressedOrder=NotImplemented,
-            aliasName=NotImplemented):
+            assetStructId = NotImplemented,
+            metaId = NotImplemented,
+            ingestReferencePath = NotImplemented,
+            protectFromIngest = NotImplemented,
+            defaultIngestValue = NotImplemented,
+            createDate = NotImplemented,
+            updateDate = NotImplemented,
+            isInherited = NotImplemented,
+            isLocationTag = NotImplemented,
+            suppressedOrder = NotImplemented,
+            aliasName = NotImplemented):
         KalturaObjectBase.__init__(self)
 
         # Asset Struct id (template_id)
@@ -38052,7 +38562,7 @@ class KalturaAssetStructMeta(KalturaObjectBase):
         self.metaId = metaId
 
         # IngestReferencePath
-        # @var string
+        # @var str
         self.ingestReferencePath = ingestReferencePath
 
         # ProtectFromIngest
@@ -38060,7 +38570,7 @@ class KalturaAssetStructMeta(KalturaObjectBase):
         self.protectFromIngest = protectFromIngest
 
         # DefaultIngestValue
-        # @var string
+        # @var str
         self.defaultIngestValue = defaultIngestValue
 
         # Specifies when was the Asset Struct Meta was created. Date and time represented as epoch.
@@ -38086,7 +38596,7 @@ class KalturaAssetStructMeta(KalturaObjectBase):
         self.suppressedOrder = suppressedOrder
 
         # Case sensitive alias value
-        # @var string
+        # @var str
         self.aliasName = aliasName
 
 
@@ -38181,13 +38691,13 @@ class KalturaAssetStructMetaListResponse(KalturaListResponse):
     """Asset Struct Metas list"""
 
     def __init__(self,
-            totalCount=NotImplemented,
-            objects=NotImplemented):
+            totalCount = NotImplemented,
+            objects = NotImplemented):
         KalturaListResponse.__init__(self,
             totalCount)
 
         # A list of asset struct metas
-        # @var array of KalturaAssetStructMeta
+        # @var List[KalturaAssetStructMeta]
         self.objects = objects
 
 
@@ -38218,13 +38728,13 @@ class KalturaBookmarkListResponse(KalturaListResponse):
     """List of assets and their bookmarks"""
 
     def __init__(self,
-            totalCount=NotImplemented,
-            objects=NotImplemented):
+            totalCount = NotImplemented,
+            objects = NotImplemented):
         KalturaListResponse.__init__(self,
             totalCount)
 
         # Assets
-        # @var array of KalturaBookmark
+        # @var List[KalturaBookmark]
         self.objects = objects
 
 
@@ -38253,13 +38763,13 @@ class KalturaBookmarkListResponse(KalturaListResponse):
 # @subpackage Client
 class KalturaCategoryItemListResponse(KalturaListResponse):
     def __init__(self,
-            totalCount=NotImplemented,
-            objects=NotImplemented):
+            totalCount = NotImplemented,
+            objects = NotImplemented):
         KalturaListResponse.__init__(self,
             totalCount)
 
         # A list of CategoryItem
-        # @var array of KalturaCategoryItem
+        # @var List[KalturaCategoryItem]
         self.objects = objects
 
 
@@ -38288,13 +38798,13 @@ class KalturaCategoryItemListResponse(KalturaListResponse):
 # @subpackage Client
 class KalturaCategoryVersionListResponse(KalturaListResponse):
     def __init__(self,
-            totalCount=NotImplemented,
-            objects=NotImplemented):
+            totalCount = NotImplemented,
+            objects = NotImplemented):
         KalturaListResponse.__init__(self,
             totalCount)
 
         # A list of objects
-        # @var array of KalturaCategoryVersion
+        # @var List[KalturaCategoryVersion]
         self.objects = objects
 
 
@@ -38323,13 +38833,13 @@ class KalturaCategoryVersionListResponse(KalturaListResponse):
 # @subpackage Client
 class KalturaChannelListResponse(KalturaListResponse):
     def __init__(self,
-            totalCount=NotImplemented,
-            objects=NotImplemented):
+            totalCount = NotImplemented,
+            objects = NotImplemented):
         KalturaListResponse.__init__(self,
             totalCount)
 
         # A list of channels
-        # @var array of KalturaChannel
+        # @var List[KalturaChannel]
         self.objects = objects
 
 
@@ -38358,16 +38868,16 @@ class KalturaChannelListResponse(KalturaListResponse):
 # @subpackage Client
 class KalturaImage(KalturaObjectBase):
     def __init__(self,
-            id=NotImplemented,
-            version=NotImplemented,
-            imageTypeId=NotImplemented,
-            imageTypeName=NotImplemented,
-            imageObjectId=NotImplemented,
-            imageObjectType=NotImplemented,
-            status=NotImplemented,
-            url=NotImplemented,
-            contentId=NotImplemented,
-            isDefault=NotImplemented):
+            id = NotImplemented,
+            version = NotImplemented,
+            imageTypeId = NotImplemented,
+            imageTypeName = NotImplemented,
+            imageObjectId = NotImplemented,
+            imageObjectType = NotImplemented,
+            status = NotImplemented,
+            url = NotImplemented,
+            contentId = NotImplemented,
+            isDefault = NotImplemented):
         KalturaObjectBase.__init__(self)
 
         # Image ID
@@ -38376,7 +38886,7 @@ class KalturaImage(KalturaObjectBase):
         self.id = id
 
         # Image version
-        # @var string
+        # @var str
         # @readonly
         self.version = version
 
@@ -38385,7 +38895,7 @@ class KalturaImage(KalturaObjectBase):
         self.imageTypeId = imageTypeId
 
         # Image type Name
-        # @var string
+        # @var str
         self.imageTypeName = imageTypeName
 
         # ID of the object the image is related to
@@ -38402,12 +38912,12 @@ class KalturaImage(KalturaObjectBase):
         self.status = status
 
         # Image URL
-        # @var string
+        # @var str
         # @readonly
         self.url = url
 
         # Image content ID
-        # @var string
+        # @var str
         # @readonly
         self.contentId = contentId
 
@@ -38490,13 +39000,13 @@ class KalturaImage(KalturaObjectBase):
 # @subpackage Client
 class KalturaImageListResponse(KalturaListResponse):
     def __init__(self,
-            totalCount=NotImplemented,
-            objects=NotImplemented):
+            totalCount = NotImplemented,
+            objects = NotImplemented):
         KalturaListResponse.__init__(self,
             totalCount)
 
         # A list of images
-        # @var array of KalturaImage
+        # @var List[KalturaImage]
         self.objects = objects
 
 
@@ -38527,12 +39037,12 @@ class KalturaImageType(KalturaObjectBase):
     """Image type"""
 
     def __init__(self,
-            id=NotImplemented,
-            name=NotImplemented,
-            systemName=NotImplemented,
-            ratioId=NotImplemented,
-            helpText=NotImplemented,
-            defaultImageId=NotImplemented):
+            id = NotImplemented,
+            name = NotImplemented,
+            systemName = NotImplemented,
+            ratioId = NotImplemented,
+            helpText = NotImplemented,
+            defaultImageId = NotImplemented):
         KalturaObjectBase.__init__(self)
 
         # Image type ID
@@ -38541,11 +39051,11 @@ class KalturaImageType(KalturaObjectBase):
         self.id = id
 
         # Name
-        # @var string
+        # @var str
         self.name = name
 
         # System name
-        # @var string
+        # @var str
         self.systemName = systemName
 
         # Ration ID
@@ -38553,7 +39063,7 @@ class KalturaImageType(KalturaObjectBase):
         self.ratioId = ratioId
 
         # Help text
-        # @var string
+        # @var str
         self.helpText = helpText
 
         # Default image ID
@@ -38622,13 +39132,13 @@ class KalturaImageType(KalturaObjectBase):
 # @subpackage Client
 class KalturaImageTypeListResponse(KalturaListResponse):
     def __init__(self,
-            totalCount=NotImplemented,
-            objects=NotImplemented):
+            totalCount = NotImplemented,
+            objects = NotImplemented):
         KalturaListResponse.__init__(self,
             totalCount)
 
         # A list of partner image types
-        # @var array of KalturaImageType
+        # @var List[KalturaImageType]
         self.objects = objects
 
 
@@ -38657,9 +39167,9 @@ class KalturaImageTypeListResponse(KalturaListResponse):
 # @subpackage Client
 class KalturaLabel(KalturaObjectBase):
     def __init__(self,
-            id=NotImplemented,
-            value=NotImplemented,
-            entityAttribute=NotImplemented):
+            id = NotImplemented,
+            value = NotImplemented,
+            entityAttribute = NotImplemented):
         KalturaObjectBase.__init__(self)
 
         # Label identifier
@@ -38668,7 +39178,7 @@ class KalturaLabel(KalturaObjectBase):
         self.id = id
 
         # Label value. It must be unique in the context of entityAttribute
-        # @var string
+        # @var str
         self.value = value
 
         # Identifier of entity to which label belongs
@@ -38714,13 +39224,13 @@ class KalturaLabel(KalturaObjectBase):
 # @subpackage Client
 class KalturaLabelListResponse(KalturaListResponse):
     def __init__(self,
-            totalCount=NotImplemented,
-            objects=NotImplemented):
+            totalCount = NotImplemented,
+            objects = NotImplemented):
         KalturaListResponse.__init__(self,
             totalCount)
 
         # List of labels
-        # @var array of KalturaLabel
+        # @var List[KalturaLabel]
         self.objects = objects
 
 
@@ -38749,23 +39259,23 @@ class KalturaLabelListResponse(KalturaListResponse):
 # @subpackage Client
 class KalturaLineupChannelAssetListResponse(KalturaListResponse):
     def __init__(self,
-            totalCount=NotImplemented,
-            objects=NotImplemented,
-            lineupExternalId=NotImplemented,
-            parentLineupExternalId=NotImplemented):
+            totalCount = NotImplemented,
+            objects = NotImplemented,
+            lineupExternalId = NotImplemented,
+            parentLineupExternalId = NotImplemented):
         KalturaListResponse.__init__(self,
             totalCount)
 
         # A list of objects
-        # @var array of KalturaLineupChannelAsset
+        # @var List[KalturaLineupChannelAsset]
         self.objects = objects
 
         # Lineup External Id
-        # @var string
+        # @var str
         self.lineupExternalId = lineupExternalId
 
         # Parent Lineup External Id
-        # @var string
+        # @var str
         self.parentLineupExternalId = parentLineupExternalId
 
 
@@ -38810,10 +39320,10 @@ class KalturaLineupChannelAssetListResponse(KalturaListResponse):
 # @subpackage Client
 class KalturaMediaFileDynamicData(KalturaObjectBase):
     def __init__(self,
-            id=NotImplemented,
-            mediaFileTypeId=NotImplemented,
-            mediaFileTypeKeyName=NotImplemented,
-            value=NotImplemented):
+            id = NotImplemented,
+            mediaFileTypeId = NotImplemented,
+            mediaFileTypeKeyName = NotImplemented,
+            value = NotImplemented):
         KalturaObjectBase.__init__(self)
 
         # An integer representing the identifier of the value.
@@ -38826,11 +39336,11 @@ class KalturaMediaFileDynamicData(KalturaObjectBase):
 
         # A string representing the key name within the mediaFileType that identifies the list corresponding
         #             to that key name.
-        # @var string
+        # @var str
         self.mediaFileTypeKeyName = mediaFileTypeKeyName
 
         # Dynamic data value
-        # @var string
+        # @var str
         self.value = value
 
 
@@ -38883,13 +39393,13 @@ class KalturaMediaFileDynamicData(KalturaObjectBase):
 # @subpackage Client
 class KalturaMediaFileDynamicDataListResponse(KalturaListResponse):
     def __init__(self,
-            totalCount=NotImplemented,
-            objects=NotImplemented):
+            totalCount = NotImplemented,
+            objects = NotImplemented):
         KalturaListResponse.__init__(self,
             totalCount)
 
         # A list of media-file types
-        # @var array of KalturaMediaFileDynamicData
+        # @var List[KalturaMediaFileDynamicData]
         self.objects = objects
 
 
@@ -38920,13 +39430,13 @@ class KalturaMediaFileListResponse(KalturaListResponse):
     """Media-file list"""
 
     def __init__(self,
-            totalCount=NotImplemented,
-            objects=NotImplemented):
+            totalCount = NotImplemented,
+            objects = NotImplemented):
         KalturaListResponse.__init__(self,
             totalCount)
 
         # A list of media-file types
-        # @var array of KalturaMediaFile
+        # @var List[KalturaMediaFile]
         self.objects = objects
 
 
@@ -38957,19 +39467,19 @@ class KalturaMediaFileType(KalturaObjectBase):
     """Media-file type"""
 
     def __init__(self,
-            id=NotImplemented,
-            name=NotImplemented,
-            description=NotImplemented,
-            status=NotImplemented,
-            createDate=NotImplemented,
-            updateDate=NotImplemented,
-            isTrailer=NotImplemented,
-            streamerType=NotImplemented,
-            drmProfileId=NotImplemented,
-            quality=NotImplemented,
-            videoCodecs=NotImplemented,
-            audioCodecs=NotImplemented,
-            dynamicDataKeys=NotImplemented):
+            id = NotImplemented,
+            name = NotImplemented,
+            description = NotImplemented,
+            status = NotImplemented,
+            createDate = NotImplemented,
+            updateDate = NotImplemented,
+            isTrailer = NotImplemented,
+            streamerType = NotImplemented,
+            drmProfileId = NotImplemented,
+            quality = NotImplemented,
+            videoCodecs = NotImplemented,
+            audioCodecs = NotImplemented,
+            dynamicDataKeys = NotImplemented):
         KalturaObjectBase.__init__(self)
 
         # Unique identifier
@@ -38978,11 +39488,11 @@ class KalturaMediaFileType(KalturaObjectBase):
         self.id = id
 
         # Unique name
-        # @var string
+        # @var str
         self.name = name
 
         # Unique description
-        # @var string
+        # @var str
         self.description = description
 
         # Indicates if media-file type is active or disabled
@@ -39019,15 +39529,15 @@ class KalturaMediaFileType(KalturaObjectBase):
         self.quality = quality
 
         # List of comma separated video codecs
-        # @var string
+        # @var str
         self.videoCodecs = videoCodecs
 
         # List of comma separated audio codecs
-        # @var string
+        # @var str
         self.audioCodecs = audioCodecs
 
         # List of comma separated keys allowed to be used as KalturaMediaFile&#39;s dynamic data keys
-        # @var string
+        # @var str
         self.dynamicDataKeys = dynamicDataKeys
 
 
@@ -39142,13 +39652,13 @@ class KalturaMediaFileTypeListResponse(KalturaListResponse):
     """Media-file types list"""
 
     def __init__(self,
-            totalCount=NotImplemented,
-            objects=NotImplemented):
+            totalCount = NotImplemented,
+            objects = NotImplemented):
         KalturaListResponse.__init__(self,
             totalCount)
 
         # A list of media-file types
-        # @var array of KalturaMediaFileType
+        # @var List[KalturaMediaFileType]
         self.objects = objects
 
 
@@ -39177,11 +39687,11 @@ class KalturaMediaFileTypeListResponse(KalturaListResponse):
 # @subpackage Client
 class KalturaRatio(KalturaObjectBase):
     def __init__(self,
-            id=NotImplemented,
-            name=NotImplemented,
-            height=NotImplemented,
-            width=NotImplemented,
-            precisionPrecentage=NotImplemented):
+            id = NotImplemented,
+            name = NotImplemented,
+            height = NotImplemented,
+            width = NotImplemented,
+            precisionPrecentage = NotImplemented):
         KalturaObjectBase.__init__(self)
 
         # ID
@@ -39190,7 +39700,7 @@ class KalturaRatio(KalturaObjectBase):
         self.id = id
 
         # Name
-        # @var string
+        # @var str
         # @insertonly
         self.name = name
 
@@ -39263,13 +39773,13 @@ class KalturaRatio(KalturaObjectBase):
 # @subpackage Client
 class KalturaRatioListResponse(KalturaListResponse):
     def __init__(self,
-            totalCount=NotImplemented,
-            objects=NotImplemented):
+            totalCount = NotImplemented,
+            objects = NotImplemented):
         KalturaListResponse.__init__(self,
             totalCount)
 
         # A list of ratios
-        # @var array of KalturaRatio
+        # @var List[KalturaRatio]
         self.objects = objects
 
 
@@ -39300,9 +39810,9 @@ class KalturaStreamingDevice(KalturaObjectBase):
     """Watch history asset info"""
 
     def __init__(self,
-            asset=NotImplemented,
-            userId=NotImplemented,
-            udid=NotImplemented):
+            asset = NotImplemented,
+            userId = NotImplemented,
+            udid = NotImplemented):
         KalturaObjectBase.__init__(self)
 
         # Asset
@@ -39311,12 +39821,12 @@ class KalturaStreamingDevice(KalturaObjectBase):
         self.asset = asset
 
         # User identifier
-        # @var string
+        # @var str
         # @readonly
         self.userId = userId
 
         # Device UDID
-        # @var string
+        # @var str
         # @insertonly
         self.udid = udid
 
@@ -39356,13 +39866,13 @@ class KalturaStreamingDeviceListResponse(KalturaListResponse):
     """Watch history asset wrapper"""
 
     def __init__(self,
-            totalCount=NotImplemented,
-            objects=NotImplemented):
+            totalCount = NotImplemented,
+            objects = NotImplemented):
         KalturaListResponse.__init__(self,
             totalCount)
 
         # Streaming devices
-        # @var array of KalturaStreamingDevice
+        # @var List[KalturaStreamingDevice]
         self.objects = objects
 
 
@@ -39391,10 +39901,10 @@ class KalturaStreamingDeviceListResponse(KalturaListResponse):
 # @subpackage Client
 class KalturaTag(KalturaObjectBase):
     def __init__(self,
-            id=NotImplemented,
-            type=NotImplemented,
-            tag=NotImplemented,
-            multilingualTag=NotImplemented):
+            id = NotImplemented,
+            type = NotImplemented,
+            tag = NotImplemented,
+            multilingualTag = NotImplemented):
         KalturaObjectBase.__init__(self)
 
         # Tag id
@@ -39407,12 +39917,12 @@ class KalturaTag(KalturaObjectBase):
         self.type = type
 
         # Tag
-        # @var string
+        # @var str
         # @readonly
         self.tag = tag
 
         # Tag
-        # @var array of KalturaTranslationToken
+        # @var List[KalturaTranslationToken]
         self.multilingualTag = multilingualTag
 
 
@@ -39457,13 +39967,13 @@ class KalturaTag(KalturaObjectBase):
 # @subpackage Client
 class KalturaTagListResponse(KalturaListResponse):
     def __init__(self,
-            totalCount=NotImplemented,
-            objects=NotImplemented):
+            totalCount = NotImplemented,
+            objects = NotImplemented):
         KalturaListResponse.__init__(self,
             totalCount)
 
         # A list of partner tags
-        # @var array of KalturaTag
+        # @var List[KalturaTag]
         self.objects = objects
 
 
@@ -39492,8 +40002,8 @@ class KalturaTagListResponse(KalturaListResponse):
 # @subpackage Client
 class KalturaSearchPriorityCriteria(KalturaObjectBase):
     def __init__(self,
-            type=NotImplemented,
-            value=NotImplemented):
+            type = NotImplemented,
+            value = NotImplemented):
         KalturaObjectBase.__init__(self)
 
         # Criterion type
@@ -39502,7 +40012,7 @@ class KalturaSearchPriorityCriteria(KalturaObjectBase):
 
         # Condition
         #             KSQL has to have no more than 10 conditions. Text, boolean, enum and tag fields can be used only with = operator, numeric and datetime fields - only with &lt;, = and &gt; operators.
-        # @var string
+        # @var str
         self.value = value
 
 
@@ -39539,10 +40049,10 @@ class KalturaSearchPriorityCriteria(KalturaObjectBase):
 # @subpackage Client
 class KalturaSearchPriorityGroup(KalturaObjectBase):
     def __init__(self,
-            id=NotImplemented,
-            name=NotImplemented,
-            multilingualName=NotImplemented,
-            criteria=NotImplemented):
+            id = NotImplemented,
+            name = NotImplemented,
+            multilingualName = NotImplemented,
+            criteria = NotImplemented):
         KalturaObjectBase.__init__(self)
 
         # Identifier
@@ -39551,12 +40061,12 @@ class KalturaSearchPriorityGroup(KalturaObjectBase):
         self.id = id
 
         # Name
-        # @var string
+        # @var str
         # @readonly
         self.name = name
 
         # Name
-        # @var array of KalturaTranslationToken
+        # @var List[KalturaTranslationToken]
         self.multilingualName = multilingualName
 
         # Search criterion
@@ -39605,13 +40115,13 @@ class KalturaSearchPriorityGroup(KalturaObjectBase):
 # @subpackage Client
 class KalturaSearchPriorityGroupListResponse(KalturaListResponse):
     def __init__(self,
-            totalCount=NotImplemented,
-            objects=NotImplemented):
+            totalCount = NotImplemented,
+            objects = NotImplemented):
         KalturaListResponse.__init__(self,
             totalCount)
 
         # List of search priority groups
-        # @var array of KalturaSearchPriorityGroup
+        # @var List[KalturaSearchPriorityGroup]
         self.objects = objects
 
 
@@ -39642,8 +40152,8 @@ class KalturaSuspendSettings(KalturaObjectBase):
     """Suspend Settings"""
 
     def __init__(self,
-            revokeEntitlements=NotImplemented,
-            stopRenew=NotImplemented):
+            revokeEntitlements = NotImplemented,
+            stopRenew = NotImplemented):
         KalturaObjectBase.__init__(self)
 
         # revoke entitlements
@@ -39688,11 +40198,11 @@ class KalturaSuspendSettings(KalturaObjectBase):
 # @subpackage Client
 class KalturaHouseholdPaymentGateway(KalturaObjectBase):
     def __init__(self,
-            id=NotImplemented,
-            name=NotImplemented,
-            isDefault=NotImplemented,
-            selectedBy=NotImplemented,
-            suspendSettings=NotImplemented):
+            id = NotImplemented,
+            name = NotImplemented,
+            isDefault = NotImplemented,
+            selectedBy = NotImplemented,
+            suspendSettings = NotImplemented):
         KalturaObjectBase.__init__(self)
 
         # payment gateway id
@@ -39701,7 +40211,7 @@ class KalturaHouseholdPaymentGateway(KalturaObjectBase):
         self.id = id
 
         # payment gateway name
-        # @var string
+        # @var str
         self.name = name
 
         # Payment gateway default (true/false)
@@ -39769,13 +40279,13 @@ class KalturaHouseholdPaymentGatewayListResponse(KalturaListResponse):
     """List of household payment gateways."""
 
     def __init__(self,
-            totalCount=NotImplemented,
-            objects=NotImplemented):
+            totalCount = NotImplemented,
+            objects = NotImplemented):
         KalturaListResponse.__init__(self,
             totalCount)
 
         # Follow data list
-        # @var array of KalturaHouseholdPaymentGateway
+        # @var List[KalturaHouseholdPaymentGateway]
         self.objects = objects
 
 
@@ -39804,12 +40314,12 @@ class KalturaHouseholdPaymentGatewayListResponse(KalturaListResponse):
 # @subpackage Client
 class KalturaHouseholdPaymentMethod(KalturaObjectBase):
     def __init__(self,
-            id=NotImplemented,
-            externalId=NotImplemented,
-            paymentGatewayId=NotImplemented,
-            details=NotImplemented,
-            isDefault=NotImplemented,
-            paymentMethodProfileId=NotImplemented):
+            id = NotImplemented,
+            externalId = NotImplemented,
+            paymentGatewayId = NotImplemented,
+            details = NotImplemented,
+            isDefault = NotImplemented,
+            paymentMethodProfileId = NotImplemented):
         KalturaObjectBase.__init__(self)
 
         # Household payment method identifier (internal)
@@ -39818,7 +40328,7 @@ class KalturaHouseholdPaymentMethod(KalturaObjectBase):
         self.id = id
 
         # External identifier for the household payment method
-        # @var string
+        # @var str
         # @insertonly
         self.externalId = externalId
 
@@ -39827,7 +40337,7 @@ class KalturaHouseholdPaymentMethod(KalturaObjectBase):
         self.paymentGatewayId = paymentGatewayId
 
         # Description of the payment method details
-        # @var string
+        # @var str
         self.details = details
 
         # indicates whether the payment method is set as default for the household
@@ -39899,13 +40409,13 @@ class KalturaHouseholdPaymentMethodListResponse(KalturaListResponse):
     """List of household payment methods."""
 
     def __init__(self,
-            totalCount=NotImplemented,
-            objects=NotImplemented):
+            totalCount = NotImplemented,
+            objects = NotImplemented):
         KalturaListResponse.__init__(self,
             totalCount)
 
         # Follow data list
-        # @var array of KalturaHouseholdPaymentMethod
+        # @var List[KalturaHouseholdPaymentMethod]
         self.objects = objects
 
 
@@ -39936,10 +40446,10 @@ class KalturaPaymentGatewayBaseProfile(KalturaObjectBase):
     """Payment gateway base profile"""
 
     def __init__(self,
-            id=NotImplemented,
-            name=NotImplemented,
-            isDefault=NotImplemented,
-            selectedBy=NotImplemented):
+            id = NotImplemented,
+            name = NotImplemented,
+            isDefault = NotImplemented,
+            selectedBy = NotImplemented):
         KalturaObjectBase.__init__(self)
 
         # payment gateway id
@@ -39948,7 +40458,7 @@ class KalturaPaymentGatewayBaseProfile(KalturaObjectBase):
         self.id = id
 
         # payment gateway name
-        # @var string
+        # @var str
         self.name = name
 
         # Payment gateway default (true/false)
@@ -40007,24 +40517,24 @@ class KalturaPaymentGatewayProfile(KalturaPaymentGatewayBaseProfile):
     """Payment gateway profile"""
 
     def __init__(self,
-            id=NotImplemented,
-            name=NotImplemented,
-            isDefault=NotImplemented,
-            selectedBy=NotImplemented,
-            isActive=NotImplemented,
-            adapterUrl=NotImplemented,
-            transactUrl=NotImplemented,
-            statusUrl=NotImplemented,
-            renewUrl=NotImplemented,
-            paymentGatewaySettings=NotImplemented,
-            externalIdentifier=NotImplemented,
-            pendingInterval=NotImplemented,
-            pendingRetries=NotImplemented,
-            sharedSecret=NotImplemented,
-            renewIntervalMinutes=NotImplemented,
-            renewStartMinutes=NotImplemented,
-            externalVerification=NotImplemented,
-            isAsyncPolicy=NotImplemented):
+            id = NotImplemented,
+            name = NotImplemented,
+            isDefault = NotImplemented,
+            selectedBy = NotImplemented,
+            isActive = NotImplemented,
+            adapterUrl = NotImplemented,
+            transactUrl = NotImplemented,
+            statusUrl = NotImplemented,
+            renewUrl = NotImplemented,
+            paymentGatewaySettings = NotImplemented,
+            externalIdentifier = NotImplemented,
+            pendingInterval = NotImplemented,
+            pendingRetries = NotImplemented,
+            sharedSecret = NotImplemented,
+            renewIntervalMinutes = NotImplemented,
+            renewStartMinutes = NotImplemented,
+            externalVerification = NotImplemented,
+            isAsyncPolicy = NotImplemented):
         KalturaPaymentGatewayBaseProfile.__init__(self,
             id,
             name,
@@ -40036,19 +40546,19 @@ class KalturaPaymentGatewayProfile(KalturaPaymentGatewayBaseProfile):
         self.isActive = isActive
 
         # Payment gateway adapter URL
-        # @var string
+        # @var str
         self.adapterUrl = adapterUrl
 
         # Payment gateway transact URL
-        # @var string
+        # @var str
         self.transactUrl = transactUrl
 
         # Payment gateway status URL
-        # @var string
+        # @var str
         self.statusUrl = statusUrl
 
         # Payment gateway renew URL
-        # @var string
+        # @var str
         self.renewUrl = renewUrl
 
         # Payment gateway extra parameters
@@ -40056,7 +40566,7 @@ class KalturaPaymentGatewayProfile(KalturaPaymentGatewayBaseProfile):
         self.paymentGatewaySettings = paymentGatewaySettings
 
         # Payment gateway external identifier
-        # @var string
+        # @var str
         self.externalIdentifier = externalIdentifier
 
         # Pending Interval in minutes
@@ -40068,7 +40578,7 @@ class KalturaPaymentGatewayProfile(KalturaPaymentGatewayBaseProfile):
         self.pendingRetries = pendingRetries
 
         # Shared Secret
-        # @var string
+        # @var str
         self.sharedSecret = sharedSecret
 
         # Renew Interval Minutes
@@ -40219,13 +40729,13 @@ class KalturaPaymentGatewayProfileListResponse(KalturaListResponse):
     """PaymentGatewayProfile list"""
 
     def __init__(self,
-            totalCount=NotImplemented,
-            objects=NotImplemented):
+            totalCount = NotImplemented,
+            objects = NotImplemented):
         KalturaListResponse.__init__(self,
             totalCount)
 
         # A list of payment-gateway profiles
-        # @var array of KalturaPaymentGatewayProfile
+        # @var List[KalturaPaymentGatewayProfile]
         self.objects = objects
 
 
@@ -40254,10 +40764,10 @@ class KalturaPaymentGatewayProfileListResponse(KalturaListResponse):
 # @subpackage Client
 class KalturaPaymentMethodProfile(KalturaObjectBase):
     def __init__(self,
-            id=NotImplemented,
-            paymentGatewayId=NotImplemented,
-            name=NotImplemented,
-            allowMultiInstance=NotImplemented):
+            id = NotImplemented,
+            paymentGatewayId = NotImplemented,
+            name = NotImplemented,
+            allowMultiInstance = NotImplemented):
         KalturaObjectBase.__init__(self)
 
         # Payment method identifier (internal)
@@ -40270,7 +40780,7 @@ class KalturaPaymentMethodProfile(KalturaObjectBase):
         self.paymentGatewayId = paymentGatewayId
 
         # Payment method name
-        # @var string
+        # @var str
         self.name = name
 
         # Indicates whether the payment method allow multiple instances
@@ -40325,13 +40835,13 @@ class KalturaPaymentMethodProfileListResponse(KalturaListResponse):
     """List of payment method profiles."""
 
     def __init__(self,
-            totalCount=NotImplemented,
-            objects=NotImplemented):
+            totalCount = NotImplemented,
+            objects = NotImplemented):
         KalturaListResponse.__init__(self,
             totalCount)
 
         # Payment method profiles list
-        # @var array of KalturaPaymentMethodProfile
+        # @var List[KalturaPaymentMethodProfile]
         self.objects = objects
 
 
@@ -40362,9 +40872,9 @@ class KalturaProductMarkup(KalturaObjectBase):
     """Product Markup"""
 
     def __init__(self,
-            productId=NotImplemented,
-            productType=NotImplemented,
-            isEntitled=NotImplemented):
+            productId = NotImplemented,
+            productType = NotImplemented,
+            isEntitled = NotImplemented):
         KalturaObjectBase.__init__(self)
 
         # Product Id
@@ -40414,9 +40924,9 @@ class KalturaAssetPersonalMarkup(KalturaObjectBase):
     """Asset Personal Markup"""
 
     def __init__(self,
-            assetId=NotImplemented,
-            assetType=NotImplemented,
-            products=NotImplemented):
+            assetId = NotImplemented,
+            assetType = NotImplemented,
+            products = NotImplemented):
         KalturaObjectBase.__init__(self)
 
         # Asset Id
@@ -40430,7 +40940,7 @@ class KalturaAssetPersonalMarkup(KalturaObjectBase):
         self.assetType = assetType
 
         # all related asset&#39;s Product Markups
-        # @var array of KalturaProductMarkup
+        # @var List[KalturaProductMarkup]
         self.products = products
 
 
@@ -40469,13 +40979,13 @@ class KalturaAssetPersonalMarkupListResponse(KalturaListResponse):
     """Asset Personal Markup"""
 
     def __init__(self,
-            totalCount=NotImplemented,
-            objects=NotImplemented):
+            totalCount = NotImplemented,
+            objects = NotImplemented):
         KalturaListResponse.__init__(self,
             totalCount)
 
         # Adapters
-        # @var array of KalturaAssetPersonalMarkup
+        # @var List[KalturaAssetPersonalMarkup]
         self.objects = objects
 
 
@@ -40504,13 +41014,13 @@ class KalturaAssetPersonalMarkupListResponse(KalturaListResponse):
 # @subpackage Client
 class KalturaAssetRuleListResponse(KalturaListResponse):
     def __init__(self,
-            totalCount=NotImplemented,
-            objects=NotImplemented):
+            totalCount = NotImplemented,
+            objects = NotImplemented):
         KalturaListResponse.__init__(self,
             totalCount)
 
         # Asset rules
-        # @var array of KalturaAssetRule
+        # @var List[KalturaAssetRule]
         self.objects = objects
 
 
@@ -40539,13 +41049,13 @@ class KalturaAssetRuleListResponse(KalturaListResponse):
 # @subpackage Client
 class KalturaAssetUserRuleListResponse(KalturaListResponse):
     def __init__(self,
-            totalCount=NotImplemented,
-            objects=NotImplemented):
+            totalCount = NotImplemented,
+            objects = NotImplemented):
         KalturaListResponse.__init__(self,
             totalCount)
 
         # Asset user rules
-        # @var array of KalturaAssetUserRule
+        # @var List[KalturaAssetUserRule]
         self.objects = objects
 
 
@@ -40574,13 +41084,13 @@ class KalturaAssetUserRuleListResponse(KalturaListResponse):
 # @subpackage Client
 class KalturaBusinessModuleRuleListResponse(KalturaListResponse):
     def __init__(self,
-            totalCount=NotImplemented,
-            objects=NotImplemented):
+            totalCount = NotImplemented,
+            objects = NotImplemented):
         KalturaListResponse.__init__(self,
             totalCount)
 
         # Asset rules
-        # @var array of KalturaBusinessModuleRule
+        # @var List[KalturaBusinessModuleRule]
         self.objects = objects
 
 
@@ -40609,13 +41119,13 @@ class KalturaBusinessModuleRuleListResponse(KalturaListResponse):
 # @subpackage Client
 class KalturaCampaignListResponse(KalturaListResponse):
     def __init__(self,
-            totalCount=NotImplemented,
-            objects=NotImplemented):
+            totalCount = NotImplemented,
+            objects = NotImplemented):
         KalturaListResponse.__init__(self,
             totalCount)
 
         # A list of Campaigns
-        # @var array of KalturaCampaign
+        # @var List[KalturaCampaign]
         self.objects = objects
 
 
@@ -40646,14 +41156,14 @@ class KalturaCDNAdapterProfile(KalturaObjectBase):
     """CDN Adapter"""
 
     def __init__(self,
-            id=NotImplemented,
-            name=NotImplemented,
-            isActive=NotImplemented,
-            adapterUrl=NotImplemented,
-            baseUrl=NotImplemented,
-            settings=NotImplemented,
-            systemName=NotImplemented,
-            sharedSecret=NotImplemented):
+            id = NotImplemented,
+            name = NotImplemented,
+            isActive = NotImplemented,
+            adapterUrl = NotImplemented,
+            baseUrl = NotImplemented,
+            settings = NotImplemented,
+            systemName = NotImplemented,
+            sharedSecret = NotImplemented):
         KalturaObjectBase.__init__(self)
 
         # CDN adapter identifier
@@ -40662,7 +41172,7 @@ class KalturaCDNAdapterProfile(KalturaObjectBase):
         self.id = id
 
         # CDNR adapter name
-        # @var string
+        # @var str
         self.name = name
 
         # CDN adapter active status
@@ -40670,11 +41180,11 @@ class KalturaCDNAdapterProfile(KalturaObjectBase):
         self.isActive = isActive
 
         # CDN adapter URL
-        # @var string
+        # @var str
         self.adapterUrl = adapterUrl
 
         # CDN adapter base URL
-        # @var string
+        # @var str
         self.baseUrl = baseUrl
 
         # CDN adapter settings
@@ -40682,11 +41192,11 @@ class KalturaCDNAdapterProfile(KalturaObjectBase):
         self.settings = settings
 
         # CDN adapter alias
-        # @var string
+        # @var str
         self.systemName = systemName
 
         # CDN shared secret
-        # @var string
+        # @var str
         # @readonly
         self.sharedSecret = sharedSecret
 
@@ -40764,13 +41274,13 @@ class KalturaCDNAdapterProfile(KalturaObjectBase):
 # @subpackage Client
 class KalturaCDNAdapterProfileListResponse(KalturaListResponse):
     def __init__(self,
-            totalCount=NotImplemented,
-            objects=NotImplemented):
+            totalCount = NotImplemented,
+            objects = NotImplemented):
         KalturaListResponse.__init__(self,
             totalCount)
 
         # Adapters
-        # @var array of KalturaCDNAdapterProfile
+        # @var List[KalturaCDNAdapterProfile]
         self.objects = objects
 
 
@@ -40799,13 +41309,13 @@ class KalturaCDNAdapterProfileListResponse(KalturaListResponse):
 # @subpackage Client
 class KalturaCountryListResponse(KalturaListResponse):
     def __init__(self,
-            totalCount=NotImplemented,
-            objects=NotImplemented):
+            totalCount = NotImplemented,
+            objects = NotImplemented):
         KalturaListResponse.__init__(self,
             totalCount)
 
         # Countries
-        # @var array of KalturaCountry
+        # @var List[KalturaCountry]
         self.objects = objects
 
 
@@ -40836,11 +41346,11 @@ class KalturaCurrency(KalturaObjectBase):
     """Currency details"""
 
     def __init__(self,
-            id=NotImplemented,
-            name=NotImplemented,
-            code=NotImplemented,
-            sign=NotImplemented,
-            isDefault=NotImplemented):
+            id = NotImplemented,
+            name = NotImplemented,
+            code = NotImplemented,
+            sign = NotImplemented,
+            isDefault = NotImplemented):
         KalturaObjectBase.__init__(self)
 
         # Identifier
@@ -40848,15 +41358,15 @@ class KalturaCurrency(KalturaObjectBase):
         self.id = id
 
         # Currency name
-        # @var string
+        # @var str
         self.name = name
 
         # Currency code
-        # @var string
+        # @var str
         self.code = code
 
         # Currency Sign
-        # @var string
+        # @var str
         self.sign = sign
 
         # Is the default Currency of the account
@@ -40921,13 +41431,13 @@ class KalturaCurrency(KalturaObjectBase):
 # @subpackage Client
 class KalturaCurrencyListResponse(KalturaListResponse):
     def __init__(self,
-            totalCount=NotImplemented,
-            objects=NotImplemented):
+            totalCount = NotImplemented,
+            objects = NotImplemented):
         KalturaListResponse.__init__(self,
             totalCount)
 
         # Currencies
-        # @var array of KalturaCurrency
+        # @var List[KalturaCurrency]
         self.objects = objects
 
 
@@ -40958,10 +41468,10 @@ class KalturaDeviceBrand(KalturaObjectBase):
     """Device brand details"""
 
     def __init__(self,
-            id=NotImplemented,
-            name=NotImplemented,
-            deviceFamilyid=NotImplemented,
-            type=NotImplemented):
+            id = NotImplemented,
+            name = NotImplemented,
+            deviceFamilyid = NotImplemented,
+            type = NotImplemented):
         KalturaObjectBase.__init__(self)
 
         # Device brand identifier
@@ -40969,7 +41479,7 @@ class KalturaDeviceBrand(KalturaObjectBase):
         self.id = id
 
         # Device brand name
-        # @var string
+        # @var str
         self.name = name
 
         # Device family identifier
@@ -41029,13 +41539,13 @@ class KalturaDeviceBrand(KalturaObjectBase):
 # @subpackage Client
 class KalturaDeviceBrandListResponse(KalturaListResponse):
     def __init__(self,
-            totalCount=NotImplemented,
-            objects=NotImplemented):
+            totalCount = NotImplemented,
+            objects = NotImplemented):
         KalturaListResponse.__init__(self,
             totalCount)
 
         # Device brands
-        # @var array of KalturaDeviceBrand
+        # @var List[KalturaDeviceBrand]
         self.objects = objects
 
 
@@ -41064,13 +41574,13 @@ class KalturaDeviceBrandListResponse(KalturaListResponse):
 # @subpackage Client
 class KalturaDeviceFamilyListResponse(KalturaListResponse):
     def __init__(self,
-            totalCount=NotImplemented,
-            objects=NotImplemented):
+            totalCount = NotImplemented,
+            objects = NotImplemented):
         KalturaListResponse.__init__(self,
             totalCount)
 
         # Device families
-        # @var array of KalturaDeviceFamily
+        # @var List[KalturaDeviceFamily]
         self.objects = objects
 
 
@@ -41101,13 +41611,13 @@ class KalturaDrmProfile(KalturaObjectBase):
     """DRM Adapter"""
 
     def __init__(self,
-            id=NotImplemented,
-            name=NotImplemented,
-            isActive=NotImplemented,
-            adapterUrl=NotImplemented,
-            settings=NotImplemented,
-            systemName=NotImplemented,
-            sharedSecret=NotImplemented):
+            id = NotImplemented,
+            name = NotImplemented,
+            isActive = NotImplemented,
+            adapterUrl = NotImplemented,
+            settings = NotImplemented,
+            systemName = NotImplemented,
+            sharedSecret = NotImplemented):
         KalturaObjectBase.__init__(self)
 
         # DRM adapter identifier
@@ -41116,7 +41626,7 @@ class KalturaDrmProfile(KalturaObjectBase):
         self.id = id
 
         # DRM adapter name
-        # @var string
+        # @var str
         self.name = name
 
         # DRM adapter active status
@@ -41124,19 +41634,19 @@ class KalturaDrmProfile(KalturaObjectBase):
         self.isActive = isActive
 
         # DRM adapter URL
-        # @var string
+        # @var str
         self.adapterUrl = adapterUrl
 
         # DRM adapter settings
-        # @var string
+        # @var str
         self.settings = settings
 
         # DRM adapter alias
-        # @var string
+        # @var str
         self.systemName = systemName
 
         # DRM shared secret
-        # @var string
+        # @var str
         # @readonly
         self.sharedSecret = sharedSecret
 
@@ -41206,13 +41716,13 @@ class KalturaDrmProfile(KalturaObjectBase):
 # @subpackage Client
 class KalturaDrmProfileListResponse(KalturaListResponse):
     def __init__(self,
-            totalCount=NotImplemented,
-            objects=NotImplemented):
+            totalCount = NotImplemented,
+            objects = NotImplemented):
         KalturaListResponse.__init__(self,
             totalCount)
 
         # Adapters
-        # @var array of KalturaDrmProfile
+        # @var List[KalturaDrmProfile]
         self.objects = objects
 
 
@@ -41241,13 +41751,13 @@ class KalturaDrmProfileListResponse(KalturaListResponse):
 # @subpackage Client
 class KalturaEventNotificationListResponse(KalturaListResponse):
     def __init__(self,
-            totalCount=NotImplemented,
-            objects=NotImplemented):
+            totalCount = NotImplemented,
+            objects = NotImplemented):
         KalturaListResponse.__init__(self,
             totalCount)
 
         # A list of objects
-        # @var array of KalturaEventNotification
+        # @var List[KalturaEventNotification]
         self.objects = objects
 
 
@@ -41278,15 +41788,15 @@ class KalturaExportTask(KalturaObjectBase):
     """Bulk export task"""
 
     def __init__(self,
-            id=NotImplemented,
-            alias=NotImplemented,
-            name=NotImplemented,
-            dataType=NotImplemented,
-            filter=NotImplemented,
-            exportType=NotImplemented,
-            frequency=NotImplemented,
-            notificationUrl=NotImplemented,
-            isActive=NotImplemented):
+            id = NotImplemented,
+            alias = NotImplemented,
+            name = NotImplemented,
+            dataType = NotImplemented,
+            filter = NotImplemented,
+            exportType = NotImplemented,
+            frequency = NotImplemented,
+            notificationUrl = NotImplemented,
+            isActive = NotImplemented):
         KalturaObjectBase.__init__(self)
 
         # Task identifier
@@ -41295,11 +41805,11 @@ class KalturaExportTask(KalturaObjectBase):
         self.id = id
 
         # Alias for the task used to solicit an export using API
-        # @var string
+        # @var str
         self.alias = alias
 
         # Task display name
-        # @var string
+        # @var str
         self.name = name
 
         # The data type exported in this task
@@ -41308,7 +41818,7 @@ class KalturaExportTask(KalturaObjectBase):
 
         # Filter to apply on the export, utilize KSQL.
         #             Note: KSQL currently applies to media assets only. It cannot be used for USERS filtering
-        # @var string
+        # @var str
         self.filter = filter
 
         # Type of export batch - full or incremental
@@ -41320,7 +41830,7 @@ class KalturaExportTask(KalturaObjectBase):
         self.frequency = frequency
 
         # The URL for sending a notification when the task&#39;s export process is done
-        # @var string
+        # @var str
         self.notificationUrl = notificationUrl
 
         # Indicates if the task is active or not
@@ -41415,13 +41925,13 @@ class KalturaExportTaskListResponse(KalturaListResponse):
     """Export task list wrapper"""
 
     def __init__(self,
-            totalCount=NotImplemented,
-            objects=NotImplemented):
+            totalCount = NotImplemented,
+            objects = NotImplemented):
         KalturaListResponse.__init__(self,
             totalCount)
 
         # Export task items
-        # @var array of KalturaExportTask
+        # @var List[KalturaExportTask]
         self.objects = objects
 
 
@@ -41452,7 +41962,7 @@ class KalturaChannelEnrichmentHolder(KalturaObjectBase):
     """Holder object for channel enrichment enum"""
 
     def __init__(self,
-            type=NotImplemented):
+            type = NotImplemented):
         KalturaObjectBase.__init__(self)
 
         # Enrichment type
@@ -41487,15 +41997,15 @@ class KalturaExternalChannelProfile(KalturaObjectBase):
     """OSS Adapter"""
 
     def __init__(self,
-            id=NotImplemented,
-            name=NotImplemented,
-            isActive=NotImplemented,
-            externalIdentifier=NotImplemented,
-            filterExpression=NotImplemented,
-            recommendationEngineId=NotImplemented,
-            enrichments=NotImplemented,
-            assetUserRuleId=NotImplemented,
-            metaData=NotImplemented):
+            id = NotImplemented,
+            name = NotImplemented,
+            isActive = NotImplemented,
+            externalIdentifier = NotImplemented,
+            filterExpression = NotImplemented,
+            recommendationEngineId = NotImplemented,
+            enrichments = NotImplemented,
+            assetUserRuleId = NotImplemented,
+            metaData = NotImplemented):
         KalturaObjectBase.__init__(self)
 
         # External channel id
@@ -41504,7 +42014,7 @@ class KalturaExternalChannelProfile(KalturaObjectBase):
         self.id = id
 
         # External channel name
-        # @var string
+        # @var str
         self.name = name
 
         # External channel active status
@@ -41512,11 +42022,11 @@ class KalturaExternalChannelProfile(KalturaObjectBase):
         self.isActive = isActive
 
         # External channel external identifier
-        # @var string
+        # @var str
         self.externalIdentifier = externalIdentifier
 
         # Filter expression
-        # @var string
+        # @var str
         self.filterExpression = filterExpression
 
         # Recommendation engine id
@@ -41524,7 +42034,7 @@ class KalturaExternalChannelProfile(KalturaObjectBase):
         self.recommendationEngineId = recommendationEngineId
 
         # Enrichments
-        # @var array of KalturaChannelEnrichmentHolder
+        # @var List[KalturaChannelEnrichmentHolder]
         self.enrichments = enrichments
 
         # Asset user rule identifier
@@ -41623,13 +42133,13 @@ class KalturaExternalChannelProfileListResponse(KalturaListResponse):
     """External channel profiles"""
 
     def __init__(self,
-            totalCount=NotImplemented,
-            objects=NotImplemented):
+            totalCount = NotImplemented,
+            objects = NotImplemented):
         KalturaListResponse.__init__(self,
             totalCount)
 
         # External channel profiles
-        # @var array of KalturaExternalChannelProfile
+        # @var List[KalturaExternalChannelProfile]
         self.objects = objects
 
 
@@ -41660,16 +42170,16 @@ class KalturaIngestProfile(KalturaObjectBase):
     """Ingest profile"""
 
     def __init__(self,
-            id=NotImplemented,
-            name=NotImplemented,
-            externalId=NotImplemented,
-            assetTypeId=NotImplemented,
-            transformationAdapterUrl=NotImplemented,
-            transformationAdapterSettings=NotImplemented,
-            transformationAdapterSharedSecret=NotImplemented,
-            defaultAutoFillPolicy=NotImplemented,
-            defaultOverlapPolicy=NotImplemented,
-            overlapChannels=NotImplemented):
+            id = NotImplemented,
+            name = NotImplemented,
+            externalId = NotImplemented,
+            assetTypeId = NotImplemented,
+            transformationAdapterUrl = NotImplemented,
+            transformationAdapterSettings = NotImplemented,
+            transformationAdapterSharedSecret = NotImplemented,
+            defaultAutoFillPolicy = NotImplemented,
+            defaultOverlapPolicy = NotImplemented,
+            overlapChannels = NotImplemented):
         KalturaObjectBase.__init__(self)
 
         # Ingest profile identifier
@@ -41678,11 +42188,11 @@ class KalturaIngestProfile(KalturaObjectBase):
         self.id = id
 
         # Ingest profile name
-        # @var string
+        # @var str
         self.name = name
 
         # Ingest profile externalId
-        # @var string
+        # @var str
         self.externalId = externalId
 
         # Type of assets that this profile suppose to ingest: 0 - EPG, 1 - MEDIA
@@ -41690,7 +42200,7 @@ class KalturaIngestProfile(KalturaObjectBase):
         self.assetTypeId = assetTypeId
 
         # Transformation Adapter URL
-        # @var string
+        # @var str
         self.transformationAdapterUrl = transformationAdapterUrl
 
         # Transformation Adapter settings
@@ -41698,7 +42208,7 @@ class KalturaIngestProfile(KalturaObjectBase):
         self.transformationAdapterSettings = transformationAdapterSettings
 
         # Transformation Adapter shared secret
-        # @var string
+        # @var str
         self.transformationAdapterSharedSecret = transformationAdapterSharedSecret
 
         # Ingest profile default Auto-fill policy
@@ -41710,7 +42220,7 @@ class KalturaIngestProfile(KalturaObjectBase):
         self.defaultOverlapPolicy = defaultOverlapPolicy
 
         # Ingest profile overlap channels
-        # @var string
+        # @var str
         self.overlapChannels = overlapChannels
 
 
@@ -41807,13 +42317,13 @@ class KalturaIngestProfile(KalturaObjectBase):
 # @subpackage Client
 class KalturaIngestProfileListResponse(KalturaListResponse):
     def __init__(self,
-            totalCount=NotImplemented,
-            objects=NotImplemented):
+            totalCount = NotImplemented,
+            objects = NotImplemented):
         KalturaListResponse.__init__(self,
             totalCount)
 
         # Adapters
-        # @var array of KalturaIngestProfile
+        # @var List[KalturaIngestProfile]
         self.objects = objects
 
 
@@ -41842,13 +42352,13 @@ class KalturaIngestProfileListResponse(KalturaListResponse):
 # @subpackage Client
 class KalturaIotListResponse(KalturaListResponse):
     def __init__(self,
-            totalCount=NotImplemented,
-            objects=NotImplemented):
+            totalCount = NotImplemented,
+            objects = NotImplemented):
         KalturaListResponse.__init__(self,
             totalCount)
 
         # A list of objects
-        # @var array of KalturaIot
+        # @var List[KalturaIot]
         self.objects = objects
 
 
@@ -41879,12 +42389,12 @@ class KalturaLanguage(KalturaObjectBase):
     """Language details"""
 
     def __init__(self,
-            id=NotImplemented,
-            name=NotImplemented,
-            systemName=NotImplemented,
-            code=NotImplemented,
-            direction=NotImplemented,
-            isDefault=NotImplemented):
+            id = NotImplemented,
+            name = NotImplemented,
+            systemName = NotImplemented,
+            code = NotImplemented,
+            direction = NotImplemented,
+            isDefault = NotImplemented):
         KalturaObjectBase.__init__(self)
 
         # Identifier
@@ -41892,19 +42402,19 @@ class KalturaLanguage(KalturaObjectBase):
         self.id = id
 
         # Language name
-        # @var string
+        # @var str
         self.name = name
 
         # Language system name
-        # @var string
+        # @var str
         self.systemName = systemName
 
         # Language code
-        # @var string
+        # @var str
         self.code = code
 
         # Language direction (LTR/RTL)
-        # @var string
+        # @var str
         self.direction = direction
 
         # Is the default language of the account
@@ -41977,13 +42487,13 @@ class KalturaLanguage(KalturaObjectBase):
 # @subpackage Client
 class KalturaLanguageListResponse(KalturaListResponse):
     def __init__(self,
-            totalCount=NotImplemented,
-            objects=NotImplemented):
+            totalCount = NotImplemented,
+            objects = NotImplemented):
         KalturaListResponse.__init__(self,
             totalCount)
 
         # Languages
-        # @var array of KalturaLanguage
+        # @var List[KalturaLanguage]
         self.objects = objects
 
 
@@ -42014,18 +42524,18 @@ class KalturaMediaConcurrencyRule(KalturaObjectBase):
     """Media concurrency rule"""
 
     def __init__(self,
-            id=NotImplemented,
-            name=NotImplemented,
-            concurrencyLimitationType=NotImplemented,
-            limitation=NotImplemented):
+            id = NotImplemented,
+            name = NotImplemented,
+            concurrencyLimitationType = NotImplemented,
+            limitation = NotImplemented):
         KalturaObjectBase.__init__(self)
 
         # Media concurrency rule  identifier
-        # @var string
+        # @var str
         self.id = id
 
         # Media concurrency rule  name
-        # @var string
+        # @var str
         self.name = name
 
         # Concurrency limitation type
@@ -42086,13 +42596,13 @@ class KalturaMediaConcurrencyRule(KalturaObjectBase):
 # @subpackage Client
 class KalturaMediaConcurrencyRuleListResponse(KalturaListResponse):
     def __init__(self,
-            totalCount=NotImplemented,
-            objects=NotImplemented):
+            totalCount = NotImplemented,
+            objects = NotImplemented):
         KalturaListResponse.__init__(self,
             totalCount)
 
         # Media CONCURRENCY RULES
-        # @var array of KalturaMediaConcurrencyRule
+        # @var List[KalturaMediaConcurrencyRule]
         self.objects = objects
 
 
@@ -42123,37 +42633,37 @@ class KalturaMeta(KalturaObjectBase):
     """Asset meta"""
 
     def __init__(self,
-            id=NotImplemented,
-            name=NotImplemented,
-            multilingualName=NotImplemented,
-            systemName=NotImplemented,
-            dataType=NotImplemented,
-            multipleValue=NotImplemented,
-            isProtected=NotImplemented,
-            helpText=NotImplemented,
-            features=NotImplemented,
-            parentId=NotImplemented,
-            createDate=NotImplemented,
-            updateDate=NotImplemented,
-            dynamicData=NotImplemented):
+            id = NotImplemented,
+            name = NotImplemented,
+            multilingualName = NotImplemented,
+            systemName = NotImplemented,
+            dataType = NotImplemented,
+            multipleValue = NotImplemented,
+            isProtected = NotImplemented,
+            helpText = NotImplemented,
+            features = NotImplemented,
+            parentId = NotImplemented,
+            createDate = NotImplemented,
+            updateDate = NotImplemented,
+            dynamicData = NotImplemented):
         KalturaObjectBase.__init__(self)
 
         # Meta id
-        # @var string
+        # @var str
         # @readonly
         self.id = id
 
         # Meta name for the partner
-        # @var string
+        # @var str
         # @readonly
         self.name = name
 
         # Meta name for the partner
-        # @var array of KalturaTranslationToken
+        # @var List[KalturaTranslationToken]
         self.multilingualName = multilingualName
 
         # Meta system name for the partner
-        # @var string
+        # @var str
         # @insertonly
         self.systemName = systemName
 
@@ -42172,15 +42682,15 @@ class KalturaMeta(KalturaObjectBase):
         self.isProtected = isProtected
 
         # The help text of the meta to be displayed on the UI.
-        # @var string
+        # @var str
         self.helpText = helpText
 
         # List of supported features
-        # @var string
+        # @var str
         self.features = features
 
         # Parent meta id
-        # @var string
+        # @var str
         self.parentId = parentId
 
         # Specifies when was the meta created. Date and time represented as epoch.
@@ -42305,13 +42815,13 @@ class KalturaMetaListResponse(KalturaListResponse):
     """Meta list response"""
 
     def __init__(self,
-            totalCount=NotImplemented,
-            objects=NotImplemented):
+            totalCount = NotImplemented,
+            objects = NotImplemented):
         KalturaListResponse.__init__(self,
             totalCount)
 
         # A list asset meta
-        # @var array of KalturaMeta
+        # @var List[KalturaMeta]
         self.objects = objects
 
 
@@ -42342,8 +42852,8 @@ class KalturaOSSAdapterBaseProfile(KalturaObjectBase):
     """OSS adapter basic"""
 
     def __init__(self,
-            id=NotImplemented,
-            name=NotImplemented):
+            id = NotImplemented,
+            name = NotImplemented):
         KalturaObjectBase.__init__(self)
 
         # OSS adapter id
@@ -42352,7 +42862,7 @@ class KalturaOSSAdapterBaseProfile(KalturaObjectBase):
         self.id = id
 
         # OSS adapter name
-        # @var string
+        # @var str
         self.name = name
 
 
@@ -42387,13 +42897,13 @@ class KalturaOSSAdapterProfile(KalturaOSSAdapterBaseProfile):
     """OSS Adapter"""
 
     def __init__(self,
-            id=NotImplemented,
-            name=NotImplemented,
-            isActive=NotImplemented,
-            adapterUrl=NotImplemented,
-            ossAdapterSettings=NotImplemented,
-            externalIdentifier=NotImplemented,
-            sharedSecret=NotImplemented):
+            id = NotImplemented,
+            name = NotImplemented,
+            isActive = NotImplemented,
+            adapterUrl = NotImplemented,
+            ossAdapterSettings = NotImplemented,
+            externalIdentifier = NotImplemented,
+            sharedSecret = NotImplemented):
         KalturaOSSAdapterBaseProfile.__init__(self,
             id,
             name)
@@ -42403,7 +42913,7 @@ class KalturaOSSAdapterProfile(KalturaOSSAdapterBaseProfile):
         self.isActive = isActive
 
         # OSS adapter adapter URL
-        # @var string
+        # @var str
         self.adapterUrl = adapterUrl
 
         # OSS adapter extra parameters
@@ -42411,11 +42921,11 @@ class KalturaOSSAdapterProfile(KalturaOSSAdapterBaseProfile):
         self.ossAdapterSettings = ossAdapterSettings
 
         # OSS adapter external identifier
-        # @var string
+        # @var str
         self.externalIdentifier = externalIdentifier
 
         # Shared Secret
-        # @var string
+        # @var str
         # @readonly
         self.sharedSecret = sharedSecret
 
@@ -42475,13 +42985,13 @@ class KalturaOSSAdapterProfileListResponse(KalturaListResponse):
     """OSS adapter-profiles list"""
 
     def __init__(self,
-            totalCount=NotImplemented,
-            objects=NotImplemented):
+            totalCount = NotImplemented,
+            objects = NotImplemented):
         KalturaListResponse.__init__(self,
             totalCount)
 
         # A list of OSS adapter-profiles
-        # @var array of KalturaOSSAdapterProfile
+        # @var List[KalturaOSSAdapterProfile]
         self.objects = objects
 
 
@@ -42512,21 +43022,21 @@ class KalturaParentalRule(KalturaObjectBase):
     """Parental rule"""
 
     def __init__(self,
-            id=NotImplemented,
-            name=NotImplemented,
-            description=NotImplemented,
-            order=NotImplemented,
-            mediaTag=NotImplemented,
-            epgTag=NotImplemented,
-            blockAnonymousAccess=NotImplemented,
-            ruleType=NotImplemented,
-            mediaTagValues=NotImplemented,
-            epgTagValues=NotImplemented,
-            isDefault=NotImplemented,
-            origin=NotImplemented,
-            isActive=NotImplemented,
-            createDate=NotImplemented,
-            updateDate=NotImplemented):
+            id = NotImplemented,
+            name = NotImplemented,
+            description = NotImplemented,
+            order = NotImplemented,
+            mediaTag = NotImplemented,
+            epgTag = NotImplemented,
+            blockAnonymousAccess = NotImplemented,
+            ruleType = NotImplemented,
+            mediaTagValues = NotImplemented,
+            epgTagValues = NotImplemented,
+            isDefault = NotImplemented,
+            origin = NotImplemented,
+            isActive = NotImplemented,
+            createDate = NotImplemented,
+            updateDate = NotImplemented):
         KalturaObjectBase.__init__(self)
 
         # Unique parental rule identifier
@@ -42535,11 +43045,11 @@ class KalturaParentalRule(KalturaObjectBase):
         self.id = id
 
         # Rule display name
-        # @var string
+        # @var str
         self.name = name
 
         # Explanatory description
-        # @var string
+        # @var str
         self.description = description
 
         # Rule order within the full list of rules
@@ -42563,11 +43073,11 @@ class KalturaParentalRule(KalturaObjectBase):
         self.ruleType = ruleType
 
         # Media tag values that trigger rule
-        # @var array of KalturaStringValue
+        # @var List[KalturaStringValue]
         self.mediaTagValues = mediaTagValues
 
         # EPG tag values that trigger rule
-        # @var array of KalturaStringValue
+        # @var List[KalturaStringValue]
         self.epgTagValues = epgTagValues
 
         # Is the rule the default rule of the account
@@ -42714,13 +43224,13 @@ class KalturaParentalRuleListResponse(KalturaListResponse):
     """ParentalRules list"""
 
     def __init__(self,
-            totalCount=NotImplemented,
-            objects=NotImplemented):
+            totalCount = NotImplemented,
+            objects = NotImplemented):
         KalturaListResponse.__init__(self,
             totalCount)
 
         # A list of parental rules
-        # @var array of KalturaParentalRule
+        # @var List[KalturaParentalRule]
         self.objects = objects
 
 
@@ -42749,9 +43259,9 @@ class KalturaParentalRuleListResponse(KalturaListResponse):
 # @subpackage Client
 class KalturaPermissionItem(KalturaObjectBase):
     def __init__(self,
-            id=NotImplemented,
-            name=NotImplemented,
-            isExcluded=NotImplemented):
+            id = NotImplemented,
+            name = NotImplemented,
+            isExcluded = NotImplemented):
         KalturaObjectBase.__init__(self)
 
         # Permission item identifier
@@ -42760,7 +43270,7 @@ class KalturaPermissionItem(KalturaObjectBase):
         self.id = id
 
         # Permission item name
-        # @var string
+        # @var str
         self.name = name
 
         # Permission isExcluded
@@ -42805,13 +43315,13 @@ class KalturaPermissionItem(KalturaObjectBase):
 # @subpackage Client
 class KalturaPermissionItemListResponse(KalturaListResponse):
     def __init__(self,
-            totalCount=NotImplemented,
-            objects=NotImplemented):
+            totalCount = NotImplemented,
+            objects = NotImplemented):
         KalturaListResponse.__init__(self,
             totalCount)
 
         # A list of objects
-        # @var array of KalturaPermissionItem
+        # @var List[KalturaPermissionItem]
         self.objects = objects
 
 
@@ -42840,22 +43350,22 @@ class KalturaPermissionItemListResponse(KalturaListResponse):
 # @subpackage Client
 class KalturaApiActionPermissionItem(KalturaPermissionItem):
     def __init__(self,
-            id=NotImplemented,
-            name=NotImplemented,
-            isExcluded=NotImplemented,
-            service=NotImplemented,
-            action=NotImplemented):
+            id = NotImplemented,
+            name = NotImplemented,
+            isExcluded = NotImplemented,
+            service = NotImplemented,
+            action = NotImplemented):
         KalturaPermissionItem.__init__(self,
             id,
             name,
             isExcluded)
 
         # API service name
-        # @var string
+        # @var str
         self.service = service
 
         # API action name
-        # @var string
+        # @var str
         self.action = action
 
 
@@ -42892,27 +43402,27 @@ class KalturaApiActionPermissionItem(KalturaPermissionItem):
 # @subpackage Client
 class KalturaApiArgumentPermissionItem(KalturaPermissionItem):
     def __init__(self,
-            id=NotImplemented,
-            name=NotImplemented,
-            isExcluded=NotImplemented,
-            service=NotImplemented,
-            action=NotImplemented,
-            parameter=NotImplemented):
+            id = NotImplemented,
+            name = NotImplemented,
+            isExcluded = NotImplemented,
+            service = NotImplemented,
+            action = NotImplemented,
+            parameter = NotImplemented):
         KalturaPermissionItem.__init__(self,
             id,
             name,
             isExcluded)
 
         # API service name
-        # @var string
+        # @var str
         self.service = service
 
         # API action name
-        # @var string
+        # @var str
         self.action = action
 
         # API parameter name
-        # @var string
+        # @var str
         self.parameter = parameter
 
 
@@ -42957,23 +43467,23 @@ class KalturaApiArgumentPermissionItem(KalturaPermissionItem):
 # @subpackage Client
 class KalturaApiParameterPermissionItem(KalturaPermissionItem):
     def __init__(self,
-            id=NotImplemented,
-            name=NotImplemented,
-            isExcluded=NotImplemented,
-            object=NotImplemented,
-            parameter=NotImplemented,
-            action=NotImplemented):
+            id = NotImplemented,
+            name = NotImplemented,
+            isExcluded = NotImplemented,
+            object = NotImplemented,
+            parameter = NotImplemented,
+            action = NotImplemented):
         KalturaPermissionItem.__init__(self,
             id,
             name,
             isExcluded)
 
         # API object name
-        # @var string
+        # @var str
         self.object = object
 
         # API parameter name
-        # @var string
+        # @var str
         self.parameter = parameter
 
         # API action type
@@ -43022,22 +43532,22 @@ class KalturaApiParameterPermissionItem(KalturaPermissionItem):
 # @subpackage Client
 class KalturaApiPriviligesPermissionItem(KalturaPermissionItem):
     def __init__(self,
-            id=NotImplemented,
-            name=NotImplemented,
-            isExcluded=NotImplemented,
-            object=NotImplemented,
-            parameter=NotImplemented):
+            id = NotImplemented,
+            name = NotImplemented,
+            isExcluded = NotImplemented,
+            object = NotImplemented,
+            parameter = NotImplemented):
         KalturaPermissionItem.__init__(self,
             id,
             name,
             isExcluded)
 
         # API object name
-        # @var string
+        # @var str
         self.object = object
 
         # API parameter name
-        # @var string
+        # @var str
         self.parameter = parameter
 
 
@@ -43074,12 +43584,12 @@ class KalturaApiPriviligesPermissionItem(KalturaPermissionItem):
 # @subpackage Client
 class KalturaPermission(KalturaObjectBase):
     def __init__(self,
-            id=NotImplemented,
-            name=NotImplemented,
-            friendlyName=NotImplemented,
-            dependsOnPermissionNames=NotImplemented,
-            type=NotImplemented,
-            permissionItemsIds=NotImplemented):
+            id = NotImplemented,
+            name = NotImplemented,
+            friendlyName = NotImplemented,
+            dependsOnPermissionNames = NotImplemented,
+            type = NotImplemented,
+            permissionItemsIds = NotImplemented):
         KalturaObjectBase.__init__(self)
 
         # Permission identifier
@@ -43088,15 +43598,15 @@ class KalturaPermission(KalturaObjectBase):
         self.id = id
 
         # Permission name
-        # @var string
+        # @var str
         self.name = name
 
         # Permission friendly name
-        # @var string
+        # @var str
         self.friendlyName = friendlyName
 
         # Comma separated permissions names from type SPECIAL_FEATURE
-        # @var string
+        # @var str
         # @readonly
         self.dependsOnPermissionNames = dependsOnPermissionNames
 
@@ -43105,7 +43615,7 @@ class KalturaPermission(KalturaObjectBase):
         self.type = type
 
         # Comma separated associated permission items IDs
-        # @var string
+        # @var str
         self.permissionItemsIds = permissionItemsIds
 
 
@@ -43168,13 +43678,13 @@ class KalturaPermissionListResponse(KalturaListResponse):
     """Permissions list"""
 
     def __init__(self,
-            totalCount=NotImplemented,
-            objects=NotImplemented):
+            totalCount = NotImplemented,
+            objects = NotImplemented):
         KalturaListResponse.__init__(self,
             totalCount)
 
         # A list of permissions
-        # @var array of KalturaPermission
+        # @var List[KalturaPermission]
         self.objects = objects
 
 
@@ -43203,13 +43713,13 @@ class KalturaPermissionListResponse(KalturaListResponse):
 # @subpackage Client
 class KalturaGroupPermission(KalturaPermission):
     def __init__(self,
-            id=NotImplemented,
-            name=NotImplemented,
-            friendlyName=NotImplemented,
-            dependsOnPermissionNames=NotImplemented,
-            type=NotImplemented,
-            permissionItemsIds=NotImplemented,
-            group=NotImplemented):
+            id = NotImplemented,
+            name = NotImplemented,
+            friendlyName = NotImplemented,
+            dependsOnPermissionNames = NotImplemented,
+            type = NotImplemented,
+            permissionItemsIds = NotImplemented,
+            group = NotImplemented):
         KalturaPermission.__init__(self,
             id,
             name,
@@ -43219,7 +43729,7 @@ class KalturaGroupPermission(KalturaPermission):
             permissionItemsIds)
 
         # Permission identifier
-        # @var string
+        # @var str
         # @readonly
         self.group = group
 
@@ -43247,14 +43757,14 @@ class KalturaPlaybackProfile(KalturaObjectBase):
     """Playback profile"""
 
     def __init__(self,
-            id=NotImplemented,
-            name=NotImplemented,
-            isActive=NotImplemented,
-            adapterGrpcAddress=NotImplemented,
-            adapterUrl=NotImplemented,
-            settings=NotImplemented,
-            systemName=NotImplemented,
-            sharedSecret=NotImplemented):
+            id = NotImplemented,
+            name = NotImplemented,
+            isActive = NotImplemented,
+            adapterGrpcAddress = NotImplemented,
+            adapterUrl = NotImplemented,
+            settings = NotImplemented,
+            systemName = NotImplemented,
+            sharedSecret = NotImplemented):
         KalturaObjectBase.__init__(self)
 
         # Playback profile identifier
@@ -43263,7 +43773,7 @@ class KalturaPlaybackProfile(KalturaObjectBase):
         self.id = id
 
         # Playback profile name
-        # @var string
+        # @var str
         self.name = name
 
         # Playback profile active status
@@ -43271,23 +43781,23 @@ class KalturaPlaybackProfile(KalturaObjectBase):
         self.isActive = isActive
 
         # Playback profile Grpc address
-        # @var string
+        # @var str
         self.adapterGrpcAddress = adapterGrpcAddress
 
         # Playback profile URL
-        # @var string
+        # @var str
         self.adapterUrl = adapterUrl
 
         # Playback profile settings
-        # @var string
+        # @var str
         self.settings = settings
 
         # Playback profile alias
-        # @var string
+        # @var str
         self.systemName = systemName
 
         # Playback adapter shared secret
-        # @var string
+        # @var str
         # @readonly
         self.sharedSecret = sharedSecret
 
@@ -43365,13 +43875,13 @@ class KalturaPlaybackProfile(KalturaObjectBase):
 # @subpackage Client
 class KalturaPlaybackProfileListResponse(KalturaListResponse):
     def __init__(self,
-            totalCount=NotImplemented,
-            objects=NotImplemented):
+            totalCount = NotImplemented,
+            objects = NotImplemented):
         KalturaListResponse.__init__(self,
             totalCount)
 
         # A list of Engagement adapter
-        # @var array of KalturaPlaybackProfile
+        # @var List[KalturaPlaybackProfile]
         self.objects = objects
 
 
@@ -43402,13 +43912,13 @@ class KalturaRecommendationProfile(KalturaObjectBase):
     """PaymentGW"""
 
     def __init__(self,
-            id=NotImplemented,
-            name=NotImplemented,
-            isActive=NotImplemented,
-            adapterUrl=NotImplemented,
-            recommendationEngineSettings=NotImplemented,
-            externalIdentifier=NotImplemented,
-            sharedSecret=NotImplemented):
+            id = NotImplemented,
+            name = NotImplemented,
+            isActive = NotImplemented,
+            adapterUrl = NotImplemented,
+            recommendationEngineSettings = NotImplemented,
+            externalIdentifier = NotImplemented,
+            sharedSecret = NotImplemented):
         KalturaObjectBase.__init__(self)
 
         # recommendation engine id
@@ -43417,7 +43927,7 @@ class KalturaRecommendationProfile(KalturaObjectBase):
         self.id = id
 
         # recommendation engine name
-        # @var string
+        # @var str
         self.name = name
 
         # recommendation engine is active status
@@ -43425,7 +43935,7 @@ class KalturaRecommendationProfile(KalturaObjectBase):
         self.isActive = isActive
 
         # recommendation engine adapter URL
-        # @var string
+        # @var str
         self.adapterUrl = adapterUrl
 
         # recommendation engine extra parameters
@@ -43433,11 +43943,11 @@ class KalturaRecommendationProfile(KalturaObjectBase):
         self.recommendationEngineSettings = recommendationEngineSettings
 
         # recommendation engine external identifier
-        # @var string
+        # @var str
         self.externalIdentifier = externalIdentifier
 
         # Shared Secret
-        # @var string
+        # @var str
         # @readonly
         self.sharedSecret = sharedSecret
 
@@ -43509,13 +44019,13 @@ class KalturaRecommendationProfileListResponse(KalturaListResponse):
     """List of recommendation profiles."""
 
     def __init__(self,
-            totalCount=NotImplemented,
-            objects=NotImplemented):
+            totalCount = NotImplemented,
+            objects = NotImplemented):
         KalturaListResponse.__init__(self,
             totalCount)
 
         # Recommendation profiles list
-        # @var array of KalturaRecommendationProfile
+        # @var List[KalturaRecommendationProfile]
         self.objects = objects
 
 
@@ -43544,8 +44054,9 @@ class KalturaRecommendationProfileListResponse(KalturaListResponse):
 # @subpackage Client
 class KalturaRegionalChannel(KalturaObjectBase):
     def __init__(self,
-            linearChannelId=NotImplemented,
-            channelNumber=NotImplemented):
+            linearChannelId = NotImplemented,
+            channelNumber = NotImplemented,
+            dynamicData = NotImplemented):
         KalturaObjectBase.__init__(self)
 
         # The identifier of the linear media representing the channel
@@ -43556,10 +44067,15 @@ class KalturaRegionalChannel(KalturaObjectBase):
         # @var int
         self.channelNumber = channelNumber
 
+        # The dynamic data of a channel
+        # @var map
+        self.dynamicData = dynamicData
+
 
     PROPERTY_LOADERS = {
         'linearChannelId': getXmlNodeInt, 
         'channelNumber': getXmlNodeInt, 
+        'dynamicData': (KalturaObjectFactory.createMap, 'KalturaStringValue'), 
     }
 
     def fromXml(self, node):
@@ -43571,6 +44087,7 @@ class KalturaRegionalChannel(KalturaObjectBase):
         kparams.put("objectType", "KalturaRegionalChannel")
         kparams.addIntIfDefined("linearChannelId", self.linearChannelId)
         kparams.addIntIfDefined("channelNumber", self.channelNumber)
+        kparams.addMapIfDefined("dynamicData", self.dynamicData)
         return kparams
 
     def getLinearChannelId(self):
@@ -43585,17 +44102,23 @@ class KalturaRegionalChannel(KalturaObjectBase):
     def setChannelNumber(self, newChannelNumber):
         self.channelNumber = newChannelNumber
 
+    def getDynamicData(self):
+        return self.dynamicData
+
+    def setDynamicData(self, newDynamicData):
+        self.dynamicData = newDynamicData
+
 
 # @package Kaltura
 # @subpackage Client
 class KalturaRegion(KalturaObjectBase):
     def __init__(self,
-            id=NotImplemented,
-            name=NotImplemented,
-            externalId=NotImplemented,
-            isDefault=NotImplemented,
-            linearChannels=NotImplemented,
-            parentId=NotImplemented):
+            id = NotImplemented,
+            name = NotImplemented,
+            externalId = NotImplemented,
+            isDefault = NotImplemented,
+            linearChannels = NotImplemented,
+            parentId = NotImplemented):
         KalturaObjectBase.__init__(self)
 
         # Region identifier
@@ -43603,11 +44126,11 @@ class KalturaRegion(KalturaObjectBase):
         self.id = id
 
         # Region name
-        # @var string
+        # @var str
         self.name = name
 
         # Region external identifier
-        # @var string
+        # @var str
         self.externalId = externalId
 
         # Indicates whether this is the default region for the partner
@@ -43616,7 +44139,7 @@ class KalturaRegion(KalturaObjectBase):
         self.isDefault = isDefault
 
         # List of associated linear channels
-        # @var array of KalturaRegionalChannel
+        # @var List[KalturaRegionalChannel]
         self.linearChannels = linearChannels
 
         # Parent region ID
@@ -43687,13 +44210,13 @@ class KalturaRegionListResponse(KalturaListResponse):
     """Regions list"""
 
     def __init__(self,
-            totalCount=NotImplemented,
-            objects=NotImplemented):
+            totalCount = NotImplemented,
+            objects = NotImplemented):
         KalturaListResponse.__init__(self,
             totalCount)
 
         # A list of regions
-        # @var array of KalturaRegion
+        # @var List[KalturaRegion]
         self.objects = objects
 
 
@@ -43722,15 +44245,17 @@ class KalturaRegionListResponse(KalturaListResponse):
 # @subpackage Client
 class KalturaRegionalChannelMultiLcns(KalturaRegionalChannel):
     def __init__(self,
-            linearChannelId=NotImplemented,
-            channelNumber=NotImplemented,
-            lcns=NotImplemented):
+            linearChannelId = NotImplemented,
+            channelNumber = NotImplemented,
+            dynamicData = NotImplemented,
+            lcns = NotImplemented):
         KalturaRegionalChannel.__init__(self,
             linearChannelId,
-            channelNumber)
+            channelNumber,
+            dynamicData)
 
         # Linear channel numbers
-        # @var string
+        # @var str
         self.lcns = lcns
 
 
@@ -43759,16 +44284,16 @@ class KalturaRegionalChannelMultiLcns(KalturaRegionalChannel):
 # @subpackage Client
 class KalturaRegistrySettings(KalturaObjectBase):
     def __init__(self,
-            key=NotImplemented,
-            value=NotImplemented):
+            key = NotImplemented,
+            value = NotImplemented):
         KalturaObjectBase.__init__(self)
 
         # Permission item identifier
-        # @var string
+        # @var str
         self.key = key
 
         # Permission item name
-        # @var string
+        # @var str
         self.value = value
 
 
@@ -43807,13 +44332,13 @@ class KalturaRegistrySettingsListResponse(KalturaListResponse):
     """List of registry settings."""
 
     def __init__(self,
-            totalCount=NotImplemented,
-            objects=NotImplemented):
+            totalCount = NotImplemented,
+            objects = NotImplemented):
         KalturaListResponse.__init__(self,
             totalCount)
 
         # Registry settings list
-        # @var array of KalturaRegistrySettings
+        # @var List[KalturaRegistrySettings]
         self.objects = objects
 
 
@@ -43844,33 +44369,33 @@ class KalturaSearchHistory(KalturaObjectBase):
     """Search history info"""
 
     def __init__(self,
-            id=NotImplemented,
-            name=NotImplemented,
-            filter=NotImplemented,
-            language=NotImplemented,
-            createdAt=NotImplemented,
-            service=NotImplemented,
-            action=NotImplemented,
-            deviceId=NotImplemented):
+            id = NotImplemented,
+            name = NotImplemented,
+            filter = NotImplemented,
+            language = NotImplemented,
+            createdAt = NotImplemented,
+            service = NotImplemented,
+            action = NotImplemented,
+            deviceId = NotImplemented):
         KalturaObjectBase.__init__(self)
 
         # Search ID
-        # @var string
+        # @var str
         # @readonly
         self.id = id
 
         # Search name
-        # @var string
+        # @var str
         # @readonly
         self.name = name
 
         # Filter
-        # @var string
+        # @var str
         # @readonly
         self.filter = filter
 
         # Search language
-        # @var string
+        # @var str
         # @readonly
         self.language = language
 
@@ -43880,17 +44405,17 @@ class KalturaSearchHistory(KalturaObjectBase):
         self.createdAt = createdAt
 
         # Kaltura OTT Service
-        # @var string
+        # @var str
         # @readonly
         self.service = service
 
         # Kaltura OTT Service Action
-        # @var string
+        # @var str
         # @readonly
         self.action = action
 
         # Unique Device ID
-        # @var string
+        # @var str
         # @readonly
         self.deviceId = deviceId
 
@@ -43946,13 +44471,13 @@ class KalturaSearchHistoryListResponse(KalturaListResponse):
     """Search history wrapper"""
 
     def __init__(self,
-            totalCount=NotImplemented,
-            objects=NotImplemented):
+            totalCount = NotImplemented,
+            objects = NotImplemented):
         KalturaListResponse.__init__(self,
             totalCount)
 
         # KalturaSearchHistory Models
-        # @var array of KalturaSearchHistory
+        # @var List[KalturaSearchHistory]
         self.objects = objects
 
 
@@ -43981,13 +44506,13 @@ class KalturaSearchHistoryListResponse(KalturaListResponse):
 # @subpackage Client
 class KalturaTvmRuleListResponse(KalturaListResponse):
     def __init__(self,
-            totalCount=NotImplemented,
-            objects=NotImplemented):
+            totalCount = NotImplemented,
+            objects = NotImplemented):
         KalturaListResponse.__init__(self,
             totalCount)
 
         # tvm rules
-        # @var array of KalturaTvmRule
+        # @var List[KalturaTvmRule]
         self.objects = objects
 
 
@@ -44018,10 +44543,10 @@ class KalturaUserAssetRule(KalturaObjectBase):
     """User asset rule - representing different type of rules on an asset(Parental, Geo, User Type, Device)"""
 
     def __init__(self,
-            id=NotImplemented,
-            ruleType=NotImplemented,
-            name=NotImplemented,
-            description=NotImplemented):
+            id = NotImplemented,
+            ruleType = NotImplemented,
+            name = NotImplemented,
+            description = NotImplemented):
         KalturaObjectBase.__init__(self)
 
         # Unique rule identifier
@@ -44034,11 +44559,11 @@ class KalturaUserAssetRule(KalturaObjectBase):
         self.ruleType = ruleType
 
         # Rule display name
-        # @var string
+        # @var str
         self.name = name
 
         # Additional description for the specific rule
-        # @var string
+        # @var str
         self.description = description
 
 
@@ -44089,13 +44614,13 @@ class KalturaUserAssetRuleListResponse(KalturaListResponse):
     """GenericRules list"""
 
     def __init__(self,
-            totalCount=NotImplemented,
-            objects=NotImplemented):
+            totalCount = NotImplemented,
+            objects = NotImplemented):
         KalturaListResponse.__init__(self,
             totalCount)
 
         # A list of generic rules
-        # @var array of KalturaUserAssetRule
+        # @var List[KalturaUserAssetRule]
         self.objects = objects
 
 
@@ -44124,12 +44649,12 @@ class KalturaUserAssetRuleListResponse(KalturaListResponse):
 # @subpackage Client
 class KalturaUserRole(KalturaObjectBase):
     def __init__(self,
-            id=NotImplemented,
-            name=NotImplemented,
-            permissionNames=NotImplemented,
-            excludedPermissionNames=NotImplemented,
-            type=NotImplemented,
-            profile=NotImplemented):
+            id = NotImplemented,
+            name = NotImplemented,
+            permissionNames = NotImplemented,
+            excludedPermissionNames = NotImplemented,
+            type = NotImplemented,
+            profile = NotImplemented):
         KalturaObjectBase.__init__(self)
 
         # User role identifier
@@ -44138,15 +44663,15 @@ class KalturaUserRole(KalturaObjectBase):
         self.id = id
 
         # User role name
-        # @var string
+        # @var str
         self.name = name
 
         # permissions associated with the user role
-        # @var string
+        # @var str
         self.permissionNames = permissionNames
 
         # permissions associated with the user role in is_exclueded = true
-        # @var string
+        # @var str
         self.excludedPermissionNames = excludedPermissionNames
 
         # Role type
@@ -44218,13 +44743,13 @@ class KalturaUserRoleListResponse(KalturaListResponse):
     """User-roles list"""
 
     def __init__(self,
-            totalCount=NotImplemented,
-            objects=NotImplemented):
+            totalCount = NotImplemented,
+            objects = NotImplemented):
         KalturaListResponse.__init__(self,
             totalCount)
 
         # A list of generic rules
-        # @var array of KalturaUserRole
+        # @var List[KalturaUserRole]
         self.objects = objects
 
 
@@ -44255,13 +44780,13 @@ class KalturaEpgListResponse(KalturaListResponse):
     """EPG wrapper"""
 
     def __init__(self,
-            totalCount=NotImplemented,
-            objects=NotImplemented):
+            totalCount = NotImplemented,
+            objects = NotImplemented):
         KalturaListResponse.__init__(self,
             totalCount)
 
         # Assets
-        # @var array of KalturaEpg
+        # @var List[KalturaEpg]
         self.objects = objects
 
 
@@ -44292,20 +44817,21 @@ class KalturaAppToken(KalturaObjectBase):
     """Application token"""
 
     def __init__(self,
-            id=NotImplemented,
-            expiry=NotImplemented,
-            partnerId=NotImplemented,
-            sessionDuration=NotImplemented,
-            hashType=NotImplemented,
-            sessionPrivileges=NotImplemented,
-            token=NotImplemented,
-            sessionUserId=NotImplemented,
-            createDate=NotImplemented,
-            updateDate=NotImplemented):
+            id = NotImplemented,
+            expiry = NotImplemented,
+            partnerId = NotImplemented,
+            sessionDuration = NotImplemented,
+            hashType = NotImplemented,
+            sessionPrivileges = NotImplemented,
+            token = NotImplemented,
+            sessionUserId = NotImplemented,
+            createDate = NotImplemented,
+            updateDate = NotImplemented,
+            regionId = NotImplemented):
         KalturaObjectBase.__init__(self)
 
         # The id of the application token
-        # @var string
+        # @var str
         # @readonly
         self.id = id
 
@@ -44327,16 +44853,16 @@ class KalturaAppToken(KalturaObjectBase):
         self.hashType = hashType
 
         # Comma separated privileges to be applied on KS (Kaltura Session) that created using the current token
-        # @var string
+        # @var str
         self.sessionPrivileges = sessionPrivileges
 
         # The application token
-        # @var string
+        # @var str
         # @readonly
         self.token = token
 
         # User id of KS (Kaltura Session) that created using the current token
-        # @var string
+        # @var str
         self.sessionUserId = sessionUserId
 
         # Create date
@@ -44348,6 +44874,11 @@ class KalturaAppToken(KalturaObjectBase):
         # @var int
         # @readonly
         self.updateDate = updateDate
+
+        # The region identifier of the KS used to create the appToken. Value is presented only for partners with the enabled feature.
+        # @var int
+        # @readonly
+        self.regionId = regionId
 
 
     PROPERTY_LOADERS = {
@@ -44361,6 +44892,7 @@ class KalturaAppToken(KalturaObjectBase):
         'sessionUserId': getXmlNodeText, 
         'createDate': getXmlNodeInt, 
         'updateDate': getXmlNodeInt, 
+        'regionId': getXmlNodeInt, 
     }
 
     def fromXml(self, node):
@@ -44422,6 +44954,9 @@ class KalturaAppToken(KalturaObjectBase):
     def getUpdateDate(self):
         return self.updateDate
 
+    def getRegionId(self):
+        return self.regionId
+
 
 # @package Kaltura
 # @subpackage Client
@@ -44429,17 +44964,17 @@ class KalturaSession(KalturaObjectBase):
     """Kaltura Session"""
 
     def __init__(self,
-            ks=NotImplemented,
-            partnerId=NotImplemented,
-            userId=NotImplemented,
-            expiry=NotImplemented,
-            privileges=NotImplemented,
-            udid=NotImplemented,
-            createDate=NotImplemented):
+            ks = NotImplemented,
+            partnerId = NotImplemented,
+            userId = NotImplemented,
+            expiry = NotImplemented,
+            privileges = NotImplemented,
+            udid = NotImplemented,
+            createDate = NotImplemented):
         KalturaObjectBase.__init__(self)
 
         # KS
-        # @var string
+        # @var str
         self.ks = ks
 
         # Partner identifier
@@ -44447,7 +44982,7 @@ class KalturaSession(KalturaObjectBase):
         self.partnerId = partnerId
 
         # User identifier
-        # @var string
+        # @var str
         self.userId = userId
 
         # Expiry
@@ -44455,11 +44990,11 @@ class KalturaSession(KalturaObjectBase):
         self.expiry = expiry
 
         # Privileges
-        # @var string
+        # @var str
         self.privileges = privileges
 
         # UDID
-        # @var string
+        # @var str
         self.udid = udid
 
         # Create date
@@ -44542,13 +45077,13 @@ class KalturaSessionInfo(KalturaSession):
     """Kaltura Session"""
 
     def __init__(self,
-            ks=NotImplemented,
-            partnerId=NotImplemented,
-            userId=NotImplemented,
-            expiry=NotImplemented,
-            privileges=NotImplemented,
-            udid=NotImplemented,
-            createDate=NotImplemented):
+            ks = NotImplemented,
+            partnerId = NotImplemented,
+            userId = NotImplemented,
+            expiry = NotImplemented,
+            privileges = NotImplemented,
+            udid = NotImplemented,
+            createDate = NotImplemented):
         KalturaSession.__init__(self,
             ks,
             partnerId,
@@ -44594,9 +45129,42 @@ class KalturaRepresentativeSelectionPolicy(KalturaObjectBase):
 
 # @package Kaltura
 # @subpackage Client
+class KalturaTopEntitledOrFreeRsp(KalturaRepresentativeSelectionPolicy):
+    def __init__(self,
+            orderBy = NotImplemented):
+        KalturaRepresentativeSelectionPolicy.__init__(self)
+
+        # order by
+        # @var KalturaBaseAssetOrder
+        self.orderBy = orderBy
+
+
+    PROPERTY_LOADERS = {
+        'orderBy': (KalturaObjectFactory.create, 'KalturaBaseAssetOrder'), 
+    }
+
+    def fromXml(self, node):
+        KalturaRepresentativeSelectionPolicy.fromXml(self, node)
+        self.fromXmlImpl(node, KalturaTopEntitledOrFreeRsp.PROPERTY_LOADERS)
+
+    def toParams(self):
+        kparams = KalturaRepresentativeSelectionPolicy.toParams(self)
+        kparams.put("objectType", "KalturaTopEntitledOrFreeRsp")
+        kparams.addObjectIfDefined("orderBy", self.orderBy)
+        return kparams
+
+    def getOrderBy(self):
+        return self.orderBy
+
+    def setOrderBy(self, newOrderBy):
+        self.orderBy = newOrderBy
+
+
+# @package Kaltura
+# @subpackage Client
 class KalturaTopRsp(KalturaRepresentativeSelectionPolicy):
     def __init__(self,
-            orderBy=NotImplemented):
+            orderBy = NotImplemented):
         KalturaRepresentativeSelectionPolicy.__init__(self)
 
         # order by
@@ -44627,9 +45195,42 @@ class KalturaTopRsp(KalturaRepresentativeSelectionPolicy):
 
 # @package Kaltura
 # @subpackage Client
+class KalturaTopSubscriptionEntitledOrFreeRsp(KalturaRepresentativeSelectionPolicy):
+    def __init__(self,
+            orderBy = NotImplemented):
+        KalturaRepresentativeSelectionPolicy.__init__(self)
+
+        # order by
+        # @var KalturaBaseAssetOrder
+        self.orderBy = orderBy
+
+
+    PROPERTY_LOADERS = {
+        'orderBy': (KalturaObjectFactory.create, 'KalturaBaseAssetOrder'), 
+    }
+
+    def fromXml(self, node):
+        KalturaRepresentativeSelectionPolicy.fromXml(self, node)
+        self.fromXmlImpl(node, KalturaTopSubscriptionEntitledOrFreeRsp.PROPERTY_LOADERS)
+
+    def toParams(self):
+        kparams = KalturaRepresentativeSelectionPolicy.toParams(self)
+        kparams.put("objectType", "KalturaTopSubscriptionEntitledOrFreeRsp")
+        kparams.addObjectIfDefined("orderBy", self.orderBy)
+        return kparams
+
+    def getOrderBy(self):
+        return self.orderBy
+
+    def setOrderBy(self, newOrderBy):
+        self.orderBy = newOrderBy
+
+
+# @package Kaltura
+# @subpackage Client
 class KalturaTopSubscriptionEntitledRsp(KalturaRepresentativeSelectionPolicy):
     def __init__(self,
-            orderBy=NotImplemented):
+            orderBy = NotImplemented):
         KalturaRepresentativeSelectionPolicy.__init__(self)
 
         # order by
@@ -44662,24 +45263,24 @@ class KalturaTopSubscriptionEntitledRsp(KalturaRepresentativeSelectionPolicy):
 # @subpackage Client
 class KalturaPlaybackContextOptions(KalturaObjectBase):
     def __init__(self,
-            mediaProtocol=NotImplemented,
-            streamerType=NotImplemented,
-            assetFileIds=NotImplemented,
-            adapterData=NotImplemented,
-            context=NotImplemented,
-            urlType=NotImplemented):
+            mediaProtocol = NotImplemented,
+            streamerType = NotImplemented,
+            assetFileIds = NotImplemented,
+            adapterData = NotImplemented,
+            context = NotImplemented,
+            urlType = NotImplemented):
         KalturaObjectBase.__init__(self)
 
         # Protocol of the specific media object (http / https).
-        # @var string
+        # @var str
         self.mediaProtocol = mediaProtocol
 
         # Playback streamer type: applehttp, mpegdash, url, smothstreaming, multicast, none
-        # @var string
+        # @var str
         self.streamerType = streamerType
 
         # List of comma separated media file IDs
-        # @var string
+        # @var str
         self.assetFileIds = assetFileIds
 
         # key/value map field for extra data
@@ -44760,16 +45361,16 @@ class KalturaPlaybackContextOptions(KalturaObjectBase):
 # @subpackage Client
 class KalturaAccessControlMessage(KalturaObjectBase):
     def __init__(self,
-            message=NotImplemented,
-            code=NotImplemented):
+            message = NotImplemented,
+            code = NotImplemented):
         KalturaObjectBase.__init__(self)
 
         # Message
-        # @var string
+        # @var str
         self.message = message
 
         # Code
-        # @var string
+        # @var str
         self.code = code
 
 
@@ -44806,26 +45407,26 @@ class KalturaAccessControlMessage(KalturaObjectBase):
 # @subpackage Client
 class KalturaCaptionPlaybackPluginData(KalturaObjectBase):
     def __init__(self,
-            url=NotImplemented,
-            language=NotImplemented,
-            label=NotImplemented,
-            format=NotImplemented):
+            url = NotImplemented,
+            language = NotImplemented,
+            label = NotImplemented,
+            format = NotImplemented):
         KalturaObjectBase.__init__(self)
 
         # url
-        # @var string
+        # @var str
         self.url = url
 
         # Language
-        # @var string
+        # @var str
         self.language = language
 
         # Label
-        # @var string
+        # @var str
         self.label = label
 
         # Format
-        # @var string
+        # @var str
         self.format = format
 
 
@@ -44898,31 +45499,31 @@ class KalturaPlaybackPluginData(KalturaObjectBase):
 # @subpackage Client
 class KalturaPlaybackContext(KalturaObjectBase):
     def __init__(self,
-            sources=NotImplemented,
-            actions=NotImplemented,
-            messages=NotImplemented,
-            playbackCaptions=NotImplemented,
-            plugins=NotImplemented):
+            sources = NotImplemented,
+            actions = NotImplemented,
+            messages = NotImplemented,
+            playbackCaptions = NotImplemented,
+            plugins = NotImplemented):
         KalturaObjectBase.__init__(self)
 
         # Sources
-        # @var array of KalturaPlaybackSource
+        # @var List[KalturaPlaybackSource]
         self.sources = sources
 
         # Actions
-        # @var array of KalturaRuleAction
+        # @var List[KalturaRuleAction]
         self.actions = actions
 
         # Messages
-        # @var array of KalturaAccessControlMessage
+        # @var List[KalturaAccessControlMessage]
         self.messages = messages
 
         # Playback captions
-        # @var array of KalturaCaptionPlaybackPluginData
+        # @var List[KalturaCaptionPlaybackPluginData]
         self.playbackCaptions = playbackCaptions
 
         # Plugins
-        # @var array of KalturaPlaybackPluginData
+        # @var List[KalturaPlaybackPluginData]
         self.plugins = plugins
 
 
@@ -44983,16 +45584,16 @@ class KalturaPlaybackContext(KalturaObjectBase):
 # @subpackage Client
 class KalturaBumpersPlaybackPluginData(KalturaPlaybackPluginData):
     def __init__(self,
-            url=NotImplemented,
-            streamertype=NotImplemented):
+            url = NotImplemented,
+            streamertype = NotImplemented):
         KalturaPlaybackPluginData.__init__(self)
 
         # url
-        # @var string
+        # @var str
         self.url = url
 
         # Streamer type: hls, dash, progressive.
-        # @var string
+        # @var str
         self.streamertype = streamertype
 
 
@@ -45029,10 +45630,10 @@ class KalturaBumpersPlaybackPluginData(KalturaPlaybackPluginData):
 # @subpackage Client
 class KalturaAdsSource(KalturaObjectBase):
     def __init__(self,
-            id=NotImplemented,
-            type=NotImplemented,
-            adsPolicy=NotImplemented,
-            adsParam=NotImplemented):
+            id = NotImplemented,
+            type = NotImplemented,
+            adsPolicy = NotImplemented,
+            adsParam = NotImplemented):
         KalturaObjectBase.__init__(self)
 
         # File unique identifier
@@ -45041,7 +45642,7 @@ class KalturaAdsSource(KalturaObjectBase):
         self.id = id
 
         # Device types as defined in the system
-        # @var string
+        # @var str
         self.type = type
 
         # Ads policy
@@ -45049,7 +45650,7 @@ class KalturaAdsSource(KalturaObjectBase):
         self.adsPolicy = adsPolicy
 
         # The parameters to pass to the ads server
-        # @var string
+        # @var str
         self.adsParam = adsParam
 
 
@@ -45098,11 +45699,11 @@ class KalturaAdsSource(KalturaObjectBase):
 # @subpackage Client
 class KalturaAdsContext(KalturaObjectBase):
     def __init__(self,
-            sources=NotImplemented):
+            sources = NotImplemented):
         KalturaObjectBase.__init__(self)
 
         # Sources
-        # @var array of KalturaAdsSource
+        # @var List[KalturaAdsSource]
         self.sources = sources
 
 
@@ -45177,8 +45778,8 @@ class KalturaBulkUploadIngestJobData(KalturaBulkUploadJobData):
     """instructions for upload data type with xml"""
 
     def __init__(self,
-            ingestProfileId=NotImplemented,
-            disableEpgNotification=NotImplemented):
+            ingestProfileId = NotImplemented,
+            disableEpgNotification = NotImplemented):
         KalturaBulkUploadJobData.__init__(self)
 
         # Identifies the ingest profile that will handle the ingest of programs
@@ -45249,7 +45850,7 @@ class KalturaBulkUploadAssetData(KalturaBulkUploadObjectData):
     """indicates the asset object type in the bulk file"""
 
     def __init__(self,
-            typeId=NotImplemented):
+            typeId = NotImplemented):
         KalturaBulkUploadObjectData.__init__(self)
 
         # Identifies the asset type (EPG, Recording, Movie, TV Series, etc). 
@@ -45285,7 +45886,7 @@ class KalturaBulkUploadDynamicListData(KalturaBulkUploadObjectData):
     """indicates the DynamicList object type in the bulk file"""
 
     def __init__(self,
-            dynamicListId=NotImplemented):
+            dynamicListId = NotImplemented):
         KalturaBulkUploadObjectData.__init__(self)
 
         # Identifies the dynamicList Id
@@ -45320,7 +45921,7 @@ class KalturaBulkUploadUdidDynamicListData(KalturaBulkUploadDynamicListData):
     """indicates the UDID DynamicList object type in the bulk file"""
 
     def __init__(self,
-            dynamicListId=NotImplemented):
+            dynamicListId = NotImplemented):
         KalturaBulkUploadDynamicListData.__init__(self,
             dynamicListId)
 
@@ -45344,7 +45945,7 @@ class KalturaBulkUploadMediaAssetData(KalturaBulkUploadAssetData):
     """indicates the media asset object type in the bulk file"""
 
     def __init__(self,
-            typeId=NotImplemented):
+            typeId = NotImplemented):
         KalturaBulkUploadAssetData.__init__(self,
             typeId)
 
@@ -45368,7 +45969,7 @@ class KalturaBulkUploadLiveAssetData(KalturaBulkUploadMediaAssetData):
     """indicates the media asset object type in the bulk file"""
 
     def __init__(self,
-            typeId=NotImplemented):
+            typeId = NotImplemented):
         KalturaBulkUploadMediaAssetData.__init__(self,
             typeId)
 
@@ -45392,7 +45993,7 @@ class KalturaBulkUploadProgramAssetData(KalturaBulkUploadAssetData):
     """indicates the epg asset object type in the bulk file"""
 
     def __init__(self,
-            typeId=NotImplemented):
+            typeId = NotImplemented):
         KalturaBulkUploadAssetData.__init__(self,
             typeId)
 
@@ -45414,19 +46015,19 @@ class KalturaBulkUploadProgramAssetData(KalturaBulkUploadAssetData):
 # @subpackage Client
 class KalturaAssetFileContext(KalturaObjectBase):
     def __init__(self,
-            viewLifeCycle=NotImplemented,
-            fullLifeCycle=NotImplemented,
-            isOfflinePlayBack=NotImplemented,
-            isLivePlayBack=NotImplemented):
+            viewLifeCycle = NotImplemented,
+            fullLifeCycle = NotImplemented,
+            isOfflinePlayBack = NotImplemented,
+            isLivePlayBack = NotImplemented):
         KalturaObjectBase.__init__(self)
 
         # viewLifeCycle
-        # @var string
+        # @var str
         # @readonly
         self.viewLifeCycle = viewLifeCycle
 
         # fullLifeCycle
-        # @var string
+        # @var str
         # @readonly
         self.fullLifeCycle = fullLifeCycle
 
@@ -45474,31 +46075,31 @@ class KalturaAssetFileContext(KalturaObjectBase):
 # @subpackage Client
 class KalturaSeriesIdArguments(KalturaObjectBase):
     def __init__(self,
-            assetTypeIdIn=NotImplemented,
-            seriesId=NotImplemented,
-            seriesIdMetaName=NotImplemented,
-            seasonNumberMetaName=NotImplemented,
-            episodeNumberMetaName=NotImplemented):
+            assetTypeIdIn = NotImplemented,
+            seriesId = NotImplemented,
+            seriesIdMetaName = NotImplemented,
+            seasonNumberMetaName = NotImplemented,
+            episodeNumberMetaName = NotImplemented):
         KalturaObjectBase.__init__(self)
 
         # Comma separated asset type IDs
-        # @var string
+        # @var str
         self.assetTypeIdIn = assetTypeIdIn
 
         # Series ID
-        # @var string
+        # @var str
         self.seriesId = seriesId
 
         # Series ID meta name.
-        # @var string
+        # @var str
         self.seriesIdMetaName = seriesIdMetaName
 
         # Season number meta name
-        # @var string
+        # @var str
         self.seasonNumberMetaName = seasonNumberMetaName
 
         # Episode number meta name
-        # @var string
+        # @var str
         self.episodeNumberMetaName = episodeNumberMetaName
 
 
@@ -45561,9 +46162,9 @@ class KalturaAssetPersonalSelection(KalturaObjectBase):
     """Asset personal selection"""
 
     def __init__(self,
-            assetId=NotImplemented,
-            assetType=NotImplemented,
-            updateDate=NotImplemented):
+            assetId = NotImplemented,
+            assetType = NotImplemented,
+            updateDate = NotImplemented):
         KalturaObjectBase.__init__(self)
 
         # Asset Id
@@ -45611,14 +46212,14 @@ class KalturaAssetPersonalSelection(KalturaObjectBase):
 # @subpackage Client
 class KalturaAssetStatisticsQuery(KalturaObjectBase):
     def __init__(self,
-            assetIdIn=NotImplemented,
-            assetTypeEqual=NotImplemented,
-            startDateGreaterThanOrEqual=NotImplemented,
-            endDateGreaterThanOrEqual=NotImplemented):
+            assetIdIn = NotImplemented,
+            assetTypeEqual = NotImplemented,
+            startDateGreaterThanOrEqual = NotImplemented,
+            endDateGreaterThanOrEqual = NotImplemented):
         KalturaObjectBase.__init__(self)
 
         # Comma separated list of asset identifiers.
-        # @var string
+        # @var str
         self.assetIdIn = assetIdIn
 
         # Asset type
@@ -45685,16 +46286,16 @@ class KalturaBulkUploadStatistics(KalturaObjectBase):
     """Bulk Upload Statistics"""
 
     def __init__(self,
-            pending=NotImplemented,
-            uploaded=NotImplemented,
-            queued=NotImplemented,
-            parsing=NotImplemented,
-            processing=NotImplemented,
-            processed=NotImplemented,
-            success=NotImplemented,
-            partial=NotImplemented,
-            failed=NotImplemented,
-            fatal=NotImplemented):
+            pending = NotImplemented,
+            uploaded = NotImplemented,
+            queued = NotImplemented,
+            parsing = NotImplemented,
+            processing = NotImplemented,
+            processed = NotImplemented,
+            success = NotImplemented,
+            partial = NotImplemented,
+            failed = NotImplemented,
+            fatal = NotImplemented):
         KalturaObjectBase.__init__(self)
 
         # count of bulk upload in pending status
@@ -45837,12 +46438,12 @@ class KalturaOTTCategory(KalturaObjectBase):
     """Category details"""
 
     def __init__(self,
-            id=NotImplemented,
-            name=NotImplemented,
-            parentCategoryId=NotImplemented,
-            childCategories=NotImplemented,
-            channels=NotImplemented,
-            images=NotImplemented):
+            id = NotImplemented,
+            name = NotImplemented,
+            parentCategoryId = NotImplemented,
+            childCategories = NotImplemented,
+            channels = NotImplemented,
+            images = NotImplemented):
         KalturaObjectBase.__init__(self)
 
         # Unique identifier for the category
@@ -45851,7 +46452,7 @@ class KalturaOTTCategory(KalturaObjectBase):
         self.id = id
 
         # Category name
-        # @var string
+        # @var str
         self.name = name
 
         # Category parent identifier
@@ -45859,15 +46460,15 @@ class KalturaOTTCategory(KalturaObjectBase):
         self.parentCategoryId = parentCategoryId
 
         # Child categories
-        # @var array of KalturaOTTCategory
+        # @var List[KalturaOTTCategory]
         self.childCategories = childCategories
 
         # Category channels
-        # @var array of KalturaChannel
+        # @var List[KalturaChannel]
         self.channels = channels
 
         # Category images
-        # @var array of KalturaMediaImage
+        # @var List[KalturaMediaImage]
         self.images = images
 
 
@@ -45934,20 +46535,20 @@ class KalturaCategoryTree(KalturaObjectBase):
     """Category details"""
 
     def __init__(self,
-            id=NotImplemented,
-            name=NotImplemented,
-            multilingualName=NotImplemented,
-            children=NotImplemented,
-            unifiedChannels=NotImplemented,
-            dynamicData=NotImplemented,
-            images=NotImplemented,
-            isActive=NotImplemented,
-            startDateInSeconds=NotImplemented,
-            endDateInSeconds=NotImplemented,
-            type=NotImplemented,
-            versionId=NotImplemented,
-            virtualAssetId=NotImplemented,
-            referenceId=NotImplemented):
+            id = NotImplemented,
+            name = NotImplemented,
+            multilingualName = NotImplemented,
+            children = NotImplemented,
+            unifiedChannels = NotImplemented,
+            dynamicData = NotImplemented,
+            images = NotImplemented,
+            isActive = NotImplemented,
+            startDateInSeconds = NotImplemented,
+            endDateInSeconds = NotImplemented,
+            type = NotImplemented,
+            versionId = NotImplemented,
+            virtualAssetId = NotImplemented,
+            referenceId = NotImplemented):
         KalturaObjectBase.__init__(self)
 
         # Unique identifier for the category item
@@ -45956,21 +46557,21 @@ class KalturaCategoryTree(KalturaObjectBase):
         self.id = id
 
         # Category name
-        # @var string
+        # @var str
         # @readonly
         self.name = name
 
         # Category name
-        # @var array of KalturaTranslationToken
+        # @var List[KalturaTranslationToken]
         self.multilingualName = multilingualName
 
         # List of category tree
-        # @var array of KalturaCategoryTree
+        # @var List[KalturaCategoryTree]
         # @readonly
         self.children = children
 
         # List of unified Channels.
-        # @var array of KalturaUnifiedChannelInfo
+        # @var List[KalturaUnifiedChannelInfo]
         self.unifiedChannels = unifiedChannels
 
         # Dynamic data
@@ -45978,7 +46579,7 @@ class KalturaCategoryTree(KalturaObjectBase):
         self.dynamicData = dynamicData
 
         # Category images
-        # @var array of KalturaImage
+        # @var List[KalturaImage]
         self.images = images
 
         # Category active status
@@ -45994,7 +46595,7 @@ class KalturaCategoryTree(KalturaObjectBase):
         self.endDateInSeconds = endDateInSeconds
 
         # Category type
-        # @var string
+        # @var str
         # @insertonly
         self.type = type
 
@@ -46009,7 +46610,7 @@ class KalturaCategoryTree(KalturaObjectBase):
         self.virtualAssetId = virtualAssetId
 
         # Category reference identifier
-        # @var string
+        # @var str
         # @readonly
         self.referenceId = referenceId
 
@@ -46119,8 +46720,8 @@ class KalturaCategoryTree(KalturaObjectBase):
 # @subpackage Client
 class KalturaCDNPartnerSettings(KalturaObjectBase):
     def __init__(self,
-            defaultAdapterId=NotImplemented,
-            defaultRecordingAdapterId=NotImplemented):
+            defaultAdapterId = NotImplemented,
+            defaultRecordingAdapterId = NotImplemented):
         KalturaObjectBase.__init__(self)
 
         # Default CDN adapter identifier
@@ -46167,13 +46768,13 @@ class KalturaCompensation(KalturaObjectBase):
     """Compensation request parameters"""
 
     def __init__(self,
-            id=NotImplemented,
-            subscriptionId=NotImplemented,
-            compensationType=NotImplemented,
-            amount=NotImplemented,
-            totalRenewalIterations=NotImplemented,
-            appliedRenewalIterations=NotImplemented,
-            purchaseId=NotImplemented):
+            id = NotImplemented,
+            subscriptionId = NotImplemented,
+            compensationType = NotImplemented,
+            amount = NotImplemented,
+            totalRenewalIterations = NotImplemented,
+            appliedRenewalIterations = NotImplemented,
+            purchaseId = NotImplemented):
         KalturaObjectBase.__init__(self)
 
         # Compensation identifier
@@ -46271,8 +46872,8 @@ class KalturaCouponFilesLinks(KalturaObjectBase):
     """An object holding all the URLs (links) to files which contain coupon codes"""
 
     def __init__(self,
-            totalCount=NotImplemented,
-            objects=NotImplemented):
+            totalCount = NotImplemented,
+            objects = NotImplemented):
         KalturaObjectBase.__init__(self)
 
         # Total count of coupons code files
@@ -46280,7 +46881,7 @@ class KalturaCouponFilesLinks(KalturaObjectBase):
         self.totalCount = totalCount
 
         # A pre-signed URL pointing to a coupon codes file
-        # @var array of KalturaStringValue
+        # @var List[KalturaStringValue]
         self.objects = objects
 
 
@@ -46339,11 +46940,11 @@ class KalturaCouponGenerationOptions(KalturaObjectBase):
 # @subpackage Client
 class KalturaPublicCouponGenerationOptions(KalturaCouponGenerationOptions):
     def __init__(self,
-            code=NotImplemented):
+            code = NotImplemented):
         KalturaCouponGenerationOptions.__init__(self)
 
         # Coupon code (name)
-        # @var string
+        # @var str
         self.code = code
 
 
@@ -46372,10 +46973,10 @@ class KalturaPublicCouponGenerationOptions(KalturaCouponGenerationOptions):
 # @subpackage Client
 class KalturaRandomCouponGenerationOptions(KalturaCouponGenerationOptions):
     def __init__(self,
-            numberOfCoupons=NotImplemented,
-            useLetters=NotImplemented,
-            useNumbers=NotImplemented,
-            useSpecialCharacters=NotImplemented):
+            numberOfCoupons = NotImplemented,
+            useLetters = NotImplemented,
+            useNumbers = NotImplemented,
+            useSpecialCharacters = NotImplemented):
         KalturaCouponGenerationOptions.__init__(self)
 
         # Number of coupons to generate
@@ -46444,16 +47045,16 @@ class KalturaRandomCouponGenerationOptions(KalturaCouponGenerationOptions):
 # @subpackage Client
 class KalturaKeyValue(KalturaObjectBase):
     def __init__(self,
-            key=NotImplemented,
-            value=NotImplemented):
+            key = NotImplemented,
+            value = NotImplemented):
         KalturaObjectBase.__init__(self)
 
         # Key
-        # @var string
+        # @var str
         self.key = key
 
         # Value
-        # @var string
+        # @var str
         self.value = value
 
 
@@ -46490,51 +47091,51 @@ class KalturaKeyValue(KalturaObjectBase):
 # @subpackage Client
 class KalturaEmailMessage(KalturaObjectBase):
     def __init__(self,
-            templateName=NotImplemented,
-            subject=NotImplemented,
-            firstName=NotImplemented,
-            lastName=NotImplemented,
-            senderName=NotImplemented,
-            senderFrom=NotImplemented,
-            senderTo=NotImplemented,
-            bccAddress=NotImplemented,
-            extraParameters=NotImplemented):
+            templateName = NotImplemented,
+            subject = NotImplemented,
+            firstName = NotImplemented,
+            lastName = NotImplemented,
+            senderName = NotImplemented,
+            senderFrom = NotImplemented,
+            senderTo = NotImplemented,
+            bccAddress = NotImplemented,
+            extraParameters = NotImplemented):
         KalturaObjectBase.__init__(self)
 
         # email template name
-        # @var string
+        # @var str
         self.templateName = templateName
 
         # email subject
-        # @var string
+        # @var str
         self.subject = subject
 
         # first name
-        # @var string
+        # @var str
         self.firstName = firstName
 
         # last name
-        # @var string
+        # @var str
         self.lastName = lastName
 
         # sender name
-        # @var string
+        # @var str
         self.senderName = senderName
 
         # sender from
-        # @var string
+        # @var str
         self.senderFrom = senderFrom
 
         # sender to
-        # @var string
+        # @var str
         self.senderTo = senderTo
 
         # bcc address - seperated by comma
-        # @var string
+        # @var str
         self.bccAddress = bccAddress
 
         # extra parameters
-        # @var array of KalturaKeyValue
+        # @var List[KalturaKeyValue]
         self.extraParameters = extraParameters
 
 
@@ -46627,11 +47228,11 @@ class KalturaEmailMessage(KalturaObjectBase):
 # @subpackage Client
 class KalturaEntitlementRenewal(KalturaObjectBase):
     def __init__(self,
-            price=NotImplemented,
-            date=NotImplemented,
-            purchaseId=NotImplemented,
-            subscriptionId=NotImplemented,
-            userId=NotImplemented):
+            price = NotImplemented,
+            date = NotImplemented,
+            purchaseId = NotImplemented,
+            subscriptionId = NotImplemented,
+            userId = NotImplemented):
         KalturaObjectBase.__init__(self)
 
         # Price that is going to be paid on the renewal
@@ -46712,8 +47313,8 @@ class KalturaEntitlementRenewal(KalturaObjectBase):
 # @subpackage Client
 class KalturaEpgServicePartnerConfiguration(KalturaObjectBase):
     def __init__(self,
-            numberOfSlots=NotImplemented,
-            firstSlotOffset=NotImplemented):
+            numberOfSlots = NotImplemented,
+            firstSlotOffset = NotImplemented):
         KalturaObjectBase.__init__(self)
 
         # The number of slots (NOS) that are supported (1, 2, 3, 4, 6, 8, 12, 24)
@@ -46802,7 +47403,7 @@ class KalturaEventNotificationObjectScope(KalturaEventNotificationScope):
     """Kaltura event notification object scope"""
 
     def __init__(self,
-            eventObject=NotImplemented):
+            eventObject = NotImplemented):
         KalturaEventNotificationScope.__init__(self)
 
         # Event object to fire
@@ -46835,10 +47436,10 @@ class KalturaEventNotificationObjectScope(KalturaEventNotificationScope):
 # @subpackage Client
 class KalturaAssetEvent(KalturaEventObject):
     def __init__(self,
-            userId=NotImplemented,
-            assetId=NotImplemented,
-            type=NotImplemented,
-            externalId=NotImplemented):
+            userId = NotImplemented,
+            assetId = NotImplemented,
+            type = NotImplemented,
+            externalId = NotImplemented):
         KalturaEventObject.__init__(self)
 
         # User Id
@@ -46858,7 +47459,7 @@ class KalturaAssetEvent(KalturaEventObject):
         self.type = type
 
         # External identifier for the asset
-        # @var string
+        # @var str
         # @readonly
         self.externalId = externalId
 
@@ -46896,11 +47497,11 @@ class KalturaAssetEvent(KalturaEventObject):
 # @subpackage Client
 class KalturaProgramAssetEvent(KalturaAssetEvent):
     def __init__(self,
-            userId=NotImplemented,
-            assetId=NotImplemented,
-            type=NotImplemented,
-            externalId=NotImplemented,
-            liveAssetId=NotImplemented):
+            userId = NotImplemented,
+            assetId = NotImplemented,
+            type = NotImplemented,
+            externalId = NotImplemented,
+            liveAssetId = NotImplemented):
         KalturaAssetEvent.__init__(self,
             userId,
             assetId,
@@ -46934,14 +47535,14 @@ class KalturaProgramAssetEvent(KalturaAssetEvent):
 # @subpackage Client
 class KalturaBookmarkEvent(KalturaEventObject):
     def __init__(self,
-            userId=NotImplemented,
-            householdId=NotImplemented,
-            assetId=NotImplemented,
-            fileId=NotImplemented,
-            position=NotImplemented,
-            action=NotImplemented,
-            productType=NotImplemented,
-            productId=NotImplemented):
+            userId = NotImplemented,
+            householdId = NotImplemented,
+            assetId = NotImplemented,
+            fileId = NotImplemented,
+            position = NotImplemented,
+            action = NotImplemented,
+            productType = NotImplemented,
+            productId = NotImplemented):
         KalturaEventObject.__init__(self)
 
         # User Id
@@ -47058,12 +47659,12 @@ class KalturaBookmarkEvent(KalturaEventObject):
 # @subpackage Client
 class KalturaConcurrencyViolation(KalturaEventObject):
     def __init__(self,
-            timestamp=NotImplemented,
-            udid=NotImplemented,
-            assetId=NotImplemented,
-            violationRule=NotImplemented,
-            householdId=NotImplemented,
-            userId=NotImplemented):
+            timestamp = NotImplemented,
+            udid = NotImplemented,
+            assetId = NotImplemented,
+            violationRule = NotImplemented,
+            householdId = NotImplemented,
+            userId = NotImplemented):
         KalturaEventObject.__init__(self)
 
         # Timestamp
@@ -47071,23 +47672,23 @@ class KalturaConcurrencyViolation(KalturaEventObject):
         self.timestamp = timestamp
 
         # UDID
-        # @var string
+        # @var str
         self.udid = udid
 
         # Asset Id
-        # @var string
+        # @var str
         self.assetId = assetId
 
         # Violation Rule
-        # @var string
+        # @var str
         self.violationRule = violationRule
 
         # Household Id
-        # @var string
+        # @var str
         self.householdId = householdId
 
         # User Id
-        # @var string
+        # @var str
         self.userId = userId
 
 
@@ -47156,10 +47757,10 @@ class KalturaConcurrencyViolation(KalturaEventObject):
 # @subpackage Client
 class KalturaTriggerCampaignEvent(KalturaEventObject):
     def __init__(self,
-            userId=NotImplemented,
-            campaignId=NotImplemented,
-            udid=NotImplemented,
-            householdId=NotImplemented):
+            userId = NotImplemented,
+            campaignId = NotImplemented,
+            udid = NotImplemented,
+            householdId = NotImplemented):
         KalturaEventObject.__init__(self)
 
         # User Id
@@ -47173,7 +47774,7 @@ class KalturaTriggerCampaignEvent(KalturaEventObject):
         self.campaignId = campaignId
 
         # Udid
-        # @var string
+        # @var str
         # @readonly
         self.udid = udid
 
@@ -47216,8 +47817,8 @@ class KalturaTriggerCampaignEvent(KalturaEventObject):
 # @subpackage Client
 class KalturaRetryDeleteRequest(KalturaObjectBase):
     def __init__(self,
-            startDate=NotImplemented,
-            endDate=NotImplemented):
+            startDate = NotImplemented,
+            endDate = NotImplemented):
         KalturaObjectBase.__init__(self)
 
         # The first date (epoch) to start the retryDelete from - by default {now} - {30 days in second}
@@ -47262,7 +47863,7 @@ class KalturaRetryDeleteRequest(KalturaObjectBase):
 # @subpackage Client
 class KalturaHouseholdPartnerConfiguration(KalturaObjectBase):
     def __init__(self,
-            retentionPeriodDays=NotImplemented):
+            retentionPeriodDays = NotImplemented):
         KalturaObjectBase.__init__(self)
 
         # Retention period in days.
@@ -47297,11 +47898,11 @@ class KalturaDevicePin(KalturaObjectBase):
     """Device pin"""
 
     def __init__(self,
-            pin=NotImplemented):
+            pin = NotImplemented):
         KalturaObjectBase.__init__(self)
 
         # Device pin
-        # @var string
+        # @var str
         self.pin = pin
 
 
@@ -47332,12 +47933,12 @@ class KalturaLoginSession(KalturaObjectBase):
     """Login response"""
 
     def __init__(self,
-            ks=NotImplemented,
-            expiry=NotImplemented):
+            ks = NotImplemented,
+            expiry = NotImplemented):
         KalturaObjectBase.__init__(self)
 
         # Access token in a KS format
-        # @var string
+        # @var str
         self.ks = ks
 
         # Expiration
@@ -47378,8 +47979,8 @@ class KalturaLoginSession(KalturaObjectBase):
 # @subpackage Client
 class KalturaLoginResponse(KalturaObjectBase):
     def __init__(self,
-            user=NotImplemented,
-            loginSession=NotImplemented):
+            user = NotImplemented,
+            loginSession = NotImplemented):
         KalturaObjectBase.__init__(self)
 
         # User
@@ -47424,12 +48025,12 @@ class KalturaLoginResponse(KalturaObjectBase):
 # @subpackage Client
 class KalturaDynamicData(KalturaObjectBase):
     def __init__(self,
-            key=NotImplemented,
-            value=NotImplemented):
+            key = NotImplemented,
+            value = NotImplemented):
         KalturaObjectBase.__init__(self)
 
         # Key
-        # @var string
+        # @var str
         self.key = key
 
         # Value
@@ -47470,11 +48071,11 @@ class KalturaDynamicData(KalturaObjectBase):
 # @subpackage Client
 class KalturaPaymentGatewayConfiguration(KalturaObjectBase):
     def __init__(self,
-            paymentGatewayConfiguration=NotImplemented):
+            paymentGatewayConfiguration = NotImplemented):
         KalturaObjectBase.__init__(self)
 
         # Payment gateway configuration
-        # @var array of KalturaKeyValue
+        # @var List[KalturaKeyValue]
         self.paymentGatewayConfiguration = paymentGatewayConfiguration
 
 
@@ -47503,9 +48104,9 @@ class KalturaPaymentGatewayConfiguration(KalturaObjectBase):
 # @subpackage Client
 class KalturaHouseholdQuota(KalturaObjectBase):
     def __init__(self,
-            householdId=NotImplemented,
-            totalQuota=NotImplemented,
-            availableQuota=NotImplemented):
+            householdId = NotImplemented,
+            totalQuota = NotImplemented,
+            availableQuota = NotImplemented):
         KalturaObjectBase.__init__(self)
 
         # Household identifier
@@ -47573,11 +48174,11 @@ class KalturaContentResource(KalturaObjectBase):
 # @subpackage Client
 class KalturaUploadedFileTokenResource(KalturaContentResource):
     def __init__(self,
-            token=NotImplemented):
+            token = NotImplemented):
         KalturaContentResource.__init__(self)
 
         # Token that returned from uploadToken.add action
-        # @var string
+        # @var str
         self.token = token
 
 
@@ -47606,11 +48207,11 @@ class KalturaUploadedFileTokenResource(KalturaContentResource):
 # @subpackage Client
 class KalturaUrlResource(KalturaContentResource):
     def __init__(self,
-            url=NotImplemented):
+            url = NotImplemented):
         KalturaContentResource.__init__(self)
 
         # URL of the content
-        # @var string
+        # @var str
         self.url = url
 
 
@@ -47639,8 +48240,8 @@ class KalturaUrlResource(KalturaContentResource):
 # @subpackage Client
 class KalturaIngestStatusEpgConfiguration(KalturaObjectBase):
     def __init__(self,
-            isSupported=NotImplemented,
-            retainingPeriod=NotImplemented):
+            isSupported = NotImplemented,
+            retainingPeriod = NotImplemented):
         KalturaObjectBase.__init__(self)
 
         # Defines whether partner in question enabled core ingest status service.
@@ -47685,8 +48286,8 @@ class KalturaIngestStatusEpgConfiguration(KalturaObjectBase):
 # @subpackage Client
 class KalturaIngestStatusVodConfiguration(KalturaObjectBase):
     def __init__(self,
-            isSupported=NotImplemented,
-            retainingPeriod=NotImplemented):
+            isSupported = NotImplemented,
+            retainingPeriod = NotImplemented):
         KalturaObjectBase.__init__(self)
 
         # Defines whether partner in question enabled core ingest status service.
@@ -47731,8 +48332,8 @@ class KalturaIngestStatusVodConfiguration(KalturaObjectBase):
 # @subpackage Client
 class KalturaIngestStatusPartnerConfiguration(KalturaObjectBase):
     def __init__(self,
-            epg=NotImplemented,
-            vod=NotImplemented):
+            epg = NotImplemented,
+            vod = NotImplemented):
         KalturaObjectBase.__init__(self)
 
         # Defines the epg configuration of the partner.
@@ -47779,16 +48380,16 @@ class KalturaVodIngestAssetResultErrorMessage(KalturaObjectBase):
     """A Kaltura error message"""
 
     def __init__(self,
-            message=NotImplemented,
-            code=NotImplemented):
+            message = NotImplemented,
+            code = NotImplemented):
         KalturaObjectBase.__init__(self)
 
         # The message description with arguments place holders
-        # @var string
+        # @var str
         self.message = message
 
         # The message code
-        # @var string
+        # @var str
         self.code = code
 
 
@@ -47825,18 +48426,18 @@ class KalturaVodIngestAssetResultErrorMessage(KalturaObjectBase):
 # @subpackage Client
 class KalturaVodIngestAssetResult(KalturaObjectBase):
     def __init__(self,
-            assetName=NotImplemented,
-            shopAssetUserRuleId=NotImplemented,
-            fileName=NotImplemented,
-            ingestDate=NotImplemented,
-            status=NotImplemented,
-            vodTypeSystemName=NotImplemented,
-            errors=NotImplemented,
-            warnings=NotImplemented):
+            assetName = NotImplemented,
+            shopAssetUserRuleId = NotImplemented,
+            fileName = NotImplemented,
+            ingestDate = NotImplemented,
+            status = NotImplemented,
+            vodTypeSystemName = NotImplemented,
+            errors = NotImplemented,
+            warnings = NotImplemented):
         KalturaObjectBase.__init__(self)
 
         # Ingested asset name. Absent only in case of NameRequired error
-        # @var string
+        # @var str
         self.assetName = assetName
 
         # The shop ID the asset is assigned to. Omitted if the asset is not associated to any shop.
@@ -47844,7 +48445,7 @@ class KalturaVodIngestAssetResult(KalturaObjectBase):
         self.shopAssetUserRuleId = shopAssetUserRuleId
 
         # The XML file name used at the ingest gateway. Referred to as process name
-        # @var string
+        # @var str
         self.fileName = fileName
 
         # Date and time the asset was ingested. Date and time represented as epoch.
@@ -47860,15 +48461,15 @@ class KalturaVodIngestAssetResult(KalturaObjectBase):
         self.status = status
 
         # VOD asset type (assetStruct.systemName).
-        # @var string
+        # @var str
         self.vodTypeSystemName = vodTypeSystemName
 
         # Errors which prevent the asset from being ingested
-        # @var array of KalturaVodIngestAssetResultErrorMessage
+        # @var List[KalturaVodIngestAssetResultErrorMessage]
         self.errors = errors
 
         # Errors which do not prevent the asset from being ingested
-        # @var array of KalturaVodIngestAssetResultErrorMessage
+        # @var List[KalturaVodIngestAssetResultErrorMessage]
         self.warnings = warnings
 
 
@@ -47953,12 +48554,12 @@ class KalturaVodIngestAssetResult(KalturaObjectBase):
 # @subpackage Client
 class KalturaVodIngestAssetResultList(KalturaObjectBase):
     def __init__(self,
-            objects=NotImplemented,
-            totalCount=NotImplemented):
+            objects = NotImplemented,
+            totalCount = NotImplemented):
         KalturaObjectBase.__init__(self)
 
         # list of KalturaVodIngestAssetResult
-        # @var array of KalturaVodIngestAssetResult
+        # @var List[KalturaVodIngestAssetResult]
         self.objects = objects
 
         # Total items
@@ -47999,12 +48600,12 @@ class KalturaVodIngestAssetResultList(KalturaObjectBase):
 # @subpackage Client
 class KalturaVodIngestAssetResultAggregation(KalturaObjectBase):
     def __init__(self,
-            ingestDateFrom=NotImplemented,
-            ingestDateTo=NotImplemented,
-            failureCount=NotImplemented,
-            successCount=NotImplemented,
-            externalFailureCount=NotImplemented,
-            successWithWarningCount=NotImplemented):
+            ingestDateFrom = NotImplemented,
+            ingestDateTo = NotImplemented,
+            failureCount = NotImplemented,
+            successCount = NotImplemented,
+            externalFailureCount = NotImplemented,
+            successWithWarningCount = NotImplemented):
         KalturaObjectBase.__init__(self)
 
         # Ingest date of the first asset in the response list. Date and time represented as epoch.
@@ -48097,8 +48698,8 @@ class KalturaVodIngestAssetResultAggregation(KalturaObjectBase):
 # @subpackage Client
 class KalturaVodIngestAssetResultResponse(KalturaObjectBase):
     def __init__(self,
-            result=NotImplemented,
-            aggregations=NotImplemented):
+            result = NotImplemented,
+            aggregations = NotImplemented):
         KalturaObjectBase.__init__(self)
 
         # Errors
@@ -48145,76 +48746,76 @@ class KalturaIotClientConfiguration(KalturaObjectBase):
     """Iot client Configuration"""
 
     def __init__(self,
-            identityPoolId=NotImplemented,
-            userPoolId=NotImplemented,
-            awsRegion=NotImplemented,
-            appClientId=NotImplemented,
-            legacyEndPoint=NotImplemented,
-            endPoint=NotImplemented,
-            thingName=NotImplemented,
-            thingArn=NotImplemented,
-            thingId=NotImplemented,
-            username=NotImplemented,
-            password=NotImplemented,
-            topics=NotImplemented,
-            status=NotImplemented,
-            message=NotImplemented):
+            identityPoolId = NotImplemented,
+            userPoolId = NotImplemented,
+            awsRegion = NotImplemented,
+            appClientId = NotImplemented,
+            legacyEndPoint = NotImplemented,
+            endPoint = NotImplemented,
+            thingName = NotImplemented,
+            thingArn = NotImplemented,
+            thingId = NotImplemented,
+            username = NotImplemented,
+            password = NotImplemented,
+            topics = NotImplemented,
+            status = NotImplemented,
+            message = NotImplemented):
         KalturaObjectBase.__init__(self)
 
         # IdentityPoolId
-        # @var string
+        # @var str
         self.identityPoolId = identityPoolId
 
         # UserPoolId
-        # @var string
+        # @var str
         self.userPoolId = userPoolId
 
         # AwsRegion
-        # @var string
+        # @var str
         self.awsRegion = awsRegion
 
         # appClientId
-        # @var string
+        # @var str
         self.appClientId = appClientId
 
         # legacyEndPoint
-        # @var string
+        # @var str
         self.legacyEndPoint = legacyEndPoint
 
         # endPoint
-        # @var string
+        # @var str
         self.endPoint = endPoint
 
         # thingName
-        # @var string
+        # @var str
         self.thingName = thingName
 
         # thingArn
-        # @var string
+        # @var str
         self.thingArn = thingArn
 
         # thingId
-        # @var string
+        # @var str
         self.thingId = thingId
 
         # username
-        # @var string
+        # @var str
         self.username = username
 
         # password
-        # @var string
+        # @var str
         self.password = password
 
         # topics
-        # @var array of KalturaKeyValue
+        # @var List[KalturaKeyValue]
         self.topics = topics
 
         # status
-        # @var string
+        # @var str
         self.status = status
 
         # message
-        # @var string
+        # @var str
         self.message = message
 
 
@@ -48347,16 +48948,16 @@ class KalturaIotClientConfiguration(KalturaObjectBase):
 # @subpackage Client
 class KalturaLicensedUrl(KalturaObjectBase):
     def __init__(self,
-            mainUrl=NotImplemented,
-            altUrl=NotImplemented):
+            mainUrl = NotImplemented,
+            altUrl = NotImplemented):
         KalturaObjectBase.__init__(self)
 
         # Main licensed URL
-        # @var string
+        # @var str
         self.mainUrl = mainUrl
 
         # An alternate URL to use in case the main fails
-        # @var string
+        # @var str
         self.altUrl = altUrl
 
 
@@ -48393,11 +48994,11 @@ class KalturaLicensedUrl(KalturaObjectBase):
 # @subpackage Client
 class KalturaLicensedUrlBaseRequest(KalturaObjectBase):
     def __init__(self,
-            assetId=NotImplemented):
+            assetId = NotImplemented):
         KalturaObjectBase.__init__(self)
 
         # Asset identifier
-        # @var string
+        # @var str
         self.assetId = assetId
 
 
@@ -48426,9 +49027,9 @@ class KalturaLicensedUrlBaseRequest(KalturaObjectBase):
 # @subpackage Client
 class KalturaLicensedUrlMediaRequest(KalturaLicensedUrlBaseRequest):
     def __init__(self,
-            assetId=NotImplemented,
-            contentId=NotImplemented,
-            baseUrl=NotImplemented):
+            assetId = NotImplemented,
+            contentId = NotImplemented,
+            baseUrl = NotImplemented):
         KalturaLicensedUrlBaseRequest.__init__(self,
             assetId)
 
@@ -48437,7 +49038,7 @@ class KalturaLicensedUrlMediaRequest(KalturaLicensedUrlBaseRequest):
         self.contentId = contentId
 
         # Base URL for the licensed URLs
-        # @var string
+        # @var str
         self.baseUrl = baseUrl
 
 
@@ -48474,11 +49075,11 @@ class KalturaLicensedUrlMediaRequest(KalturaLicensedUrlBaseRequest):
 # @subpackage Client
 class KalturaLicensedUrlEpgRequest(KalturaLicensedUrlMediaRequest):
     def __init__(self,
-            assetId=NotImplemented,
-            contentId=NotImplemented,
-            baseUrl=NotImplemented,
-            streamType=NotImplemented,
-            startDate=NotImplemented):
+            assetId = NotImplemented,
+            contentId = NotImplemented,
+            baseUrl = NotImplemented,
+            streamType = NotImplemented,
+            startDate = NotImplemented):
         KalturaLicensedUrlMediaRequest.__init__(self,
             assetId,
             contentId,
@@ -48526,13 +49127,13 @@ class KalturaLicensedUrlEpgRequest(KalturaLicensedUrlMediaRequest):
 # @subpackage Client
 class KalturaLicensedUrlRecordingRequest(KalturaLicensedUrlBaseRequest):
     def __init__(self,
-            assetId=NotImplemented,
-            fileType=NotImplemented):
+            assetId = NotImplemented,
+            fileType = NotImplemented):
         KalturaLicensedUrlBaseRequest.__init__(self,
             assetId)
 
         # The file type for the URL
-        # @var string
+        # @var str
         self.fileType = fileType
 
 
@@ -48563,9 +49164,9 @@ class KalturaLiveToVodLinearAssetConfiguration(KalturaObjectBase):
     """Configuration of isL2vEnabled and retentionPeriodDays per each channel, overriding the defaults set in the account&#39;s configuration."""
 
     def __init__(self,
-            linearAssetId=NotImplemented,
-            isL2vEnabled=NotImplemented,
-            retentionPeriodDays=NotImplemented):
+            linearAssetId = NotImplemented,
+            isL2vEnabled = NotImplemented,
+            retentionPeriodDays = NotImplemented):
         KalturaObjectBase.__init__(self)
 
         # Linear asset&#39;s identifier.
@@ -48623,10 +49224,10 @@ class KalturaLiveToVodLinearAssetConfiguration(KalturaObjectBase):
 # @subpackage Client
 class KalturaLiveToVodFullConfiguration(KalturaObjectBase):
     def __init__(self,
-            isL2vEnabled=NotImplemented,
-            retentionPeriodDays=NotImplemented,
-            metadataClassifier=NotImplemented,
-            linearAssets=NotImplemented):
+            isL2vEnabled = NotImplemented,
+            retentionPeriodDays = NotImplemented,
+            metadataClassifier = NotImplemented,
+            linearAssets = NotImplemented):
         KalturaObjectBase.__init__(self)
 
         # Enable/disable the feature globally. If disabled, then all linear assets are not enabled.
@@ -48638,11 +49239,11 @@ class KalturaLiveToVodFullConfiguration(KalturaObjectBase):
         self.retentionPeriodDays = retentionPeriodDays
 
         # The name (label) of the metadata field marking the program asset to be duplicated as a L2V asset.
-        # @var string
+        # @var str
         self.metadataClassifier = metadataClassifier
 
         # Configuring isL2vEnabled/retentionPeriodDays per each channel, overriding the defaults set in the global isL2vEnabled and retentionPeriodDays parameters.
-        # @var array of KalturaLiveToVodLinearAssetConfiguration
+        # @var List[KalturaLiveToVodLinearAssetConfiguration]
         self.linearAssets = linearAssets
 
 
@@ -48695,9 +49296,9 @@ class KalturaLiveToVodFullConfiguration(KalturaObjectBase):
 # @subpackage Client
 class KalturaLiveToVodPartnerConfiguration(KalturaObjectBase):
     def __init__(self,
-            isL2vEnabled=NotImplemented,
-            retentionPeriodDays=NotImplemented,
-            metadataClassifier=NotImplemented):
+            isL2vEnabled = NotImplemented,
+            retentionPeriodDays = NotImplemented,
+            metadataClassifier = NotImplemented):
         KalturaObjectBase.__init__(self)
 
         # Enable/disable the feature globally. If disabled, then all linear assets are not enabled.
@@ -48709,7 +49310,7 @@ class KalturaLiveToVodPartnerConfiguration(KalturaObjectBase):
         self.retentionPeriodDays = retentionPeriodDays
 
         # The name (label) of the metadata field marking the program asset to be duplicated as a L2V asset.
-        # @var string
+        # @var str
         self.metadataClassifier = metadataClassifier
 
 
@@ -48754,23 +49355,23 @@ class KalturaLiveToVodPartnerConfiguration(KalturaObjectBase):
 # @subpackage Client
 class KalturaMessageTemplate(KalturaObjectBase):
     def __init__(self,
-            message=NotImplemented,
-            dateFormat=NotImplemented,
-            messageType=NotImplemented,
-            sound=NotImplemented,
-            action=NotImplemented,
-            url=NotImplemented,
-            mailTemplate=NotImplemented,
-            mailSubject=NotImplemented,
-            ratioId=NotImplemented):
+            message = NotImplemented,
+            dateFormat = NotImplemented,
+            messageType = NotImplemented,
+            sound = NotImplemented,
+            action = NotImplemented,
+            url = NotImplemented,
+            mailTemplate = NotImplemented,
+            mailSubject = NotImplemented,
+            ratioId = NotImplemented):
         KalturaObjectBase.__init__(self)
 
         # The message template with placeholders
-        # @var string
+        # @var str
         self.message = message
 
         # Default date format for the date &amp; time entries used in the template
-        # @var string
+        # @var str
         self.dateFormat = dateFormat
 
         # Template type. Possible values: Series, Reminder,Churn, SeriesReminder
@@ -48778,27 +49379,27 @@ class KalturaMessageTemplate(KalturaObjectBase):
         self.messageType = messageType
 
         # Sound file name to play upon message arrival to the device (if supported by target device)
-        # @var string
+        # @var str
         self.sound = sound
 
         # an optional action
-        # @var string
+        # @var str
         self.action = action
 
         # URL template for deep linking. Example - /app/location/{mediaId}
-        # @var string
+        # @var str
         self.url = url
 
         # Mail template name
-        # @var string
+        # @var str
         self.mailTemplate = mailTemplate
 
         # Mail subject
-        # @var string
+        # @var str
         self.mailSubject = mailSubject
 
         # Ratio identifier
-        # @var string
+        # @var str
         self.ratioId = ratioId
 
 
@@ -48889,11 +49490,83 @@ class KalturaMessageTemplate(KalturaObjectBase):
 
 # @package Kaltura
 # @subpackage Client
+class KalturaMultifactorAuthenticationPartnerConfiguration(KalturaObjectBase):
+    def __init__(self,
+            isEnabled = NotImplemented,
+            roles = NotImplemented,
+            tokenExpirationInSeconds = NotImplemented,
+            tokenDeliveryMethod = NotImplemented):
+        KalturaObjectBase.__init__(self)
+
+        # Is MFA Enabled for partner
+        # @var bool
+        self.isEnabled = isEnabled
+
+        # Roles
+        # @var str
+        self.roles = roles
+
+        # Token expiration in seconds
+        # @var int
+        self.tokenExpirationInSeconds = tokenExpirationInSeconds
+
+        # Token delivery method
+        # @var KalturaTokenDeliveryMethod
+        self.tokenDeliveryMethod = tokenDeliveryMethod
+
+
+    PROPERTY_LOADERS = {
+        'isEnabled': getXmlNodeBool, 
+        'roles': getXmlNodeText, 
+        'tokenExpirationInSeconds': getXmlNodeInt, 
+        'tokenDeliveryMethod': (KalturaEnumsFactory.createString, "KalturaTokenDeliveryMethod"), 
+    }
+
+    def fromXml(self, node):
+        KalturaObjectBase.fromXml(self, node)
+        self.fromXmlImpl(node, KalturaMultifactorAuthenticationPartnerConfiguration.PROPERTY_LOADERS)
+
+    def toParams(self):
+        kparams = KalturaObjectBase.toParams(self)
+        kparams.put("objectType", "KalturaMultifactorAuthenticationPartnerConfiguration")
+        kparams.addBoolIfDefined("isEnabled", self.isEnabled)
+        kparams.addStringIfDefined("roles", self.roles)
+        kparams.addIntIfDefined("tokenExpirationInSeconds", self.tokenExpirationInSeconds)
+        kparams.addStringEnumIfDefined("tokenDeliveryMethod", self.tokenDeliveryMethod)
+        return kparams
+
+    def getIsEnabled(self):
+        return self.isEnabled
+
+    def setIsEnabled(self, newIsEnabled):
+        self.isEnabled = newIsEnabled
+
+    def getRoles(self):
+        return self.roles
+
+    def setRoles(self, newRoles):
+        self.roles = newRoles
+
+    def getTokenExpirationInSeconds(self):
+        return self.tokenExpirationInSeconds
+
+    def setTokenExpirationInSeconds(self, newTokenExpirationInSeconds):
+        self.tokenExpirationInSeconds = newTokenExpirationInSeconds
+
+    def getTokenDeliveryMethod(self):
+        return self.tokenDeliveryMethod
+
+    def setTokenDeliveryMethod(self, newTokenDeliveryMethod):
+        self.tokenDeliveryMethod = newTokenDeliveryMethod
+
+
+# @package Kaltura
+# @subpackage Client
 class KalturaRegistryResponse(KalturaObjectBase):
     def __init__(self,
-            announcementId=NotImplemented,
-            key=NotImplemented,
-            url=NotImplemented):
+            announcementId = NotImplemented,
+            key = NotImplemented,
+            url = NotImplemented):
         KalturaObjectBase.__init__(self)
 
         # Announcement Id
@@ -48901,11 +49574,11 @@ class KalturaRegistryResponse(KalturaObjectBase):
         self.announcementId = announcementId
 
         # Key
-        # @var string
+        # @var str
         self.key = key
 
         # URL
-        # @var string
+        # @var str
         self.url = url
 
 
@@ -48950,36 +49623,36 @@ class KalturaRegistryResponse(KalturaObjectBase):
 # @subpackage Client
 class KalturaPushMessage(KalturaObjectBase):
     def __init__(self,
-            message=NotImplemented,
-            sound=NotImplemented,
-            action=NotImplemented,
-            url=NotImplemented,
-            udid=NotImplemented,
-            pushChannels=NotImplemented):
+            message = NotImplemented,
+            sound = NotImplemented,
+            action = NotImplemented,
+            url = NotImplemented,
+            udid = NotImplemented,
+            pushChannels = NotImplemented):
         KalturaObjectBase.__init__(self)
 
         # The message that will be presented to the user.
-        # @var string
+        # @var str
         self.message = message
 
         # Optional. Can be used to change the default push sound on the user device.
-        # @var string
+        # @var str
         self.sound = sound
 
         # Optional. Used to change the default action of the application when a push is received.
-        # @var string
+        # @var str
         self.action = action
 
         # Optional. Used to direct the application to the relevant page.
-        # @var string
+        # @var str
         self.url = url
 
         # Device unique identifier
-        # @var string
+        # @var str
         self.udid = udid
 
         # PushChannels - separated with comma
-        # @var string
+        # @var str
         self.pushChannels = pushChannels
 
 
@@ -49048,11 +49721,11 @@ class KalturaPushMessage(KalturaObjectBase):
 # @subpackage Client
 class KalturaEpgNotificationSettings(KalturaObjectBase):
     def __init__(self,
-            enabled=NotImplemented,
-            deviceFamilyIds=NotImplemented,
-            liveAssetIds=NotImplemented,
-            backwardTimeRange=NotImplemented,
-            forwardTimeRange=NotImplemented):
+            enabled = NotImplemented,
+            deviceFamilyIds = NotImplemented,
+            liveAssetIds = NotImplemented,
+            backwardTimeRange = NotImplemented,
+            forwardTimeRange = NotImplemented):
         KalturaObjectBase.__init__(self)
 
         # EPG notification capability is enabled for the account
@@ -49060,11 +49733,11 @@ class KalturaEpgNotificationSettings(KalturaObjectBase):
         self.enabled = enabled
 
         # Specify which devices should receive notifications
-        # @var string
+        # @var str
         self.deviceFamilyIds = deviceFamilyIds
 
         # Specify which live assets should fire notifications
-        # @var string
+        # @var str
         self.liveAssetIds = liveAssetIds
 
         # The backward range (in hours), in which, EPG updates triggers a notification,
@@ -49135,7 +49808,7 @@ class KalturaEpgNotificationSettings(KalturaObjectBase):
 # @subpackage Client
 class KalturaLineupNotificationSettings(KalturaObjectBase):
     def __init__(self,
-            enabled=NotImplemented):
+            enabled = NotImplemented):
         KalturaObjectBase.__init__(self)
 
         # if lineup notifications are enabled.
@@ -49168,26 +49841,26 @@ class KalturaLineupNotificationSettings(KalturaObjectBase):
 # @subpackage Client
 class KalturaNotificationsPartnerSettings(KalturaObjectBase):
     def __init__(self,
-            pushNotificationEnabled=NotImplemented,
-            pushSystemAnnouncementsEnabled=NotImplemented,
-            pushStartHour=NotImplemented,
-            pushEndHour=NotImplemented,
-            inboxEnabled=NotImplemented,
-            messageTTLDays=NotImplemented,
-            automaticIssueFollowNotification=NotImplemented,
-            topicExpirationDurationDays=NotImplemented,
-            reminderEnabled=NotImplemented,
-            reminderOffsetSec=NotImplemented,
-            pushAdapterUrl=NotImplemented,
-            churnMailTemplateName=NotImplemented,
-            churnMailSubject=NotImplemented,
-            senderEmail=NotImplemented,
-            mailSenderName=NotImplemented,
-            mailNotificationAdapterId=NotImplemented,
-            smsEnabled=NotImplemented,
-            iotEnabled=NotImplemented,
-            epgNotification=NotImplemented,
-            lineupNotification=NotImplemented):
+            pushNotificationEnabled = NotImplemented,
+            pushSystemAnnouncementsEnabled = NotImplemented,
+            pushStartHour = NotImplemented,
+            pushEndHour = NotImplemented,
+            inboxEnabled = NotImplemented,
+            messageTTLDays = NotImplemented,
+            automaticIssueFollowNotification = NotImplemented,
+            topicExpirationDurationDays = NotImplemented,
+            reminderEnabled = NotImplemented,
+            reminderOffsetSec = NotImplemented,
+            pushAdapterUrl = NotImplemented,
+            churnMailTemplateName = NotImplemented,
+            churnMailSubject = NotImplemented,
+            senderEmail = NotImplemented,
+            mailSenderName = NotImplemented,
+            mailNotificationAdapterId = NotImplemented,
+            smsEnabled = NotImplemented,
+            iotEnabled = NotImplemented,
+            epgNotification = NotImplemented,
+            lineupNotification = NotImplemented):
         KalturaObjectBase.__init__(self)
 
         # Push notification capability is enabled for the account
@@ -49231,23 +49904,23 @@ class KalturaNotificationsPartnerSettings(KalturaObjectBase):
         self.reminderOffsetSec = reminderOffsetSec
 
         # Push adapter URL
-        # @var string
+        # @var str
         self.pushAdapterUrl = pushAdapterUrl
 
         # Churn mail template name
-        # @var string
+        # @var str
         self.churnMailTemplateName = churnMailTemplateName
 
         # Churn mail subject
-        # @var string
+        # @var str
         self.churnMailSubject = churnMailSubject
 
         # Sender email
-        # @var string
+        # @var str
         self.senderEmail = senderEmail
 
         # Mail sender name
-        # @var string
+        # @var str
         self.mailSenderName = mailSenderName
 
         # Mail notification adapter identifier
@@ -49448,10 +50121,10 @@ class KalturaNotificationsPartnerSettings(KalturaObjectBase):
 # @subpackage Client
 class KalturaNotificationsSettings(KalturaObjectBase):
     def __init__(self,
-            pushNotificationEnabled=NotImplemented,
-            pushFollowEnabled=NotImplemented,
-            mailEnabled=NotImplemented,
-            smsEnabled=NotImplemented):
+            pushNotificationEnabled = NotImplemented,
+            pushFollowEnabled = NotImplemented,
+            mailEnabled = NotImplemented,
+            smsEnabled = NotImplemented):
         KalturaObjectBase.__init__(self)
 
         # Specify if the user want to receive push notifications or not
@@ -49522,18 +50195,18 @@ class KalturaOTTUserDynamicData(KalturaObjectBase):
     """User dynamic data"""
 
     def __init__(self,
-            userId=NotImplemented,
-            key=NotImplemented,
-            value=NotImplemented):
+            userId = NotImplemented,
+            key = NotImplemented,
+            value = NotImplemented):
         KalturaObjectBase.__init__(self)
 
         # User identifier
-        # @var string
+        # @var str
         # @readonly
         self.userId = userId
 
         # Key
-        # @var string
+        # @var str
         self.key = key
 
         # Value
@@ -49576,21 +50249,54 @@ class KalturaOTTUserDynamicData(KalturaObjectBase):
 
 # @package Kaltura
 # @subpackage Client
+class KalturaResendMfaTokenResponse(KalturaObjectBase):
+    def __init__(self,
+            result = NotImplemented):
+        KalturaObjectBase.__init__(self)
+
+        # Result of resend MFA token operation
+        # @var bool
+        self.result = result
+
+
+    PROPERTY_LOADERS = {
+        'result': getXmlNodeBool, 
+    }
+
+    def fromXml(self, node):
+        KalturaObjectBase.fromXml(self, node)
+        self.fromXmlImpl(node, KalturaResendMfaTokenResponse.PROPERTY_LOADERS)
+
+    def toParams(self):
+        kparams = KalturaObjectBase.toParams(self)
+        kparams.put("objectType", "KalturaResendMfaTokenResponse")
+        kparams.addBoolIfDefined("result", self.result)
+        return kparams
+
+    def getResult(self):
+        return self.result
+
+    def setResult(self, newResult):
+        self.result = newResult
+
+
+# @package Kaltura
+# @subpackage Client
 class KalturaPartnerSetup(KalturaObjectBase):
     """Parameters for partner setup"""
 
     def __init__(self,
-            adminUsername=NotImplemented,
-            adminPassword=NotImplemented,
-            basePartnerConfiguration=NotImplemented):
+            adminUsername = NotImplemented,
+            adminPassword = NotImplemented,
+            basePartnerConfiguration = NotImplemented):
         KalturaObjectBase.__init__(self)
 
         # admin Username
-        # @var string
+        # @var str
         self.adminUsername = adminUsername
 
         # admin Password
-        # @var string
+        # @var str
         self.adminPassword = adminPassword
 
         # basePartnerConfiguration
@@ -49641,9 +50347,9 @@ class KalturaPartnerPremiumService(KalturaObjectBase):
     """Premium service"""
 
     def __init__(self,
-            id=NotImplemented,
-            name=NotImplemented,
-            isApplied=NotImplemented):
+            id = NotImplemented,
+            name = NotImplemented,
+            isApplied = NotImplemented):
         KalturaObjectBase.__init__(self)
 
         # Service identifier
@@ -49651,7 +50357,7 @@ class KalturaPartnerPremiumService(KalturaObjectBase):
         self.id = id
 
         # Service name / description
-        # @var string
+        # @var str
         # @readonly
         self.name = name
 
@@ -49697,11 +50403,11 @@ class KalturaPartnerPremiumService(KalturaObjectBase):
 # @subpackage Client
 class KalturaPartnerPremiumServices(KalturaObjectBase):
     def __init__(self,
-            objects=NotImplemented):
+            objects = NotImplemented):
         KalturaObjectBase.__init__(self)
 
         # A list of services
-        # @var array of KalturaPartnerPremiumService
+        # @var List[KalturaPartnerPremiumService]
         self.objects = objects
 
 
@@ -49730,7 +50436,7 @@ class KalturaPartnerPremiumServices(KalturaObjectBase):
 # @subpackage Client
 class KalturaPersonalActivityCleanupConfiguration(KalturaObjectBase):
     def __init__(self,
-            retentionPeriodDays=NotImplemented):
+            retentionPeriodDays = NotImplemented):
         KalturaObjectBase.__init__(self)
 
         # Retention Period Days
@@ -49765,13 +50471,13 @@ class KalturaPin(KalturaObjectBase):
     """PIN and its origin of definition"""
 
     def __init__(self,
-            pin=NotImplemented,
-            origin=NotImplemented,
-            type=NotImplemented):
+            pin = NotImplemented,
+            origin = NotImplemented,
+            type = NotImplemented):
         KalturaObjectBase.__init__(self)
 
         # PIN code
-        # @var string
+        # @var str
         self.pin = pin
 
         # Where the PIN was defined at - account, household or user
@@ -49826,10 +50532,10 @@ class KalturaPurchaseSettings(KalturaPin):
     """Purchase settings and PIN"""
 
     def __init__(self,
-            pin=NotImplemented,
-            origin=NotImplemented,
-            type=NotImplemented,
-            permission=NotImplemented):
+            pin = NotImplemented,
+            origin = NotImplemented,
+            type = NotImplemented,
+            permission = NotImplemented):
         KalturaPin.__init__(self,
             pin,
             origin,
@@ -49867,8 +50573,8 @@ class KalturaActionResult(KalturaObjectBase):
     """Result of action performed on entity with Id"""
 
     def __init__(self,
-            id=NotImplemented,
-            result=NotImplemented):
+            id = NotImplemented,
+            result = NotImplemented):
         KalturaObjectBase.__init__(self)
 
         # Identifier of entity
@@ -49907,22 +50613,28 @@ class KalturaActionResult(KalturaObjectBase):
 # @subpackage Client
 class KalturaRegionChannelNumber(KalturaObjectBase):
     def __init__(self,
-            regionId=NotImplemented,
-            channelNumber=NotImplemented):
+            regionId = NotImplemented,
+            channelNumber = NotImplemented,
+            dynamicData = NotImplemented):
         KalturaObjectBase.__init__(self)
 
         # The identifier of the region
         # @var int
         self.regionId = regionId
 
-        # The number of the channel
+        # The LCN of a channel
         # @var int
         self.channelNumber = channelNumber
+
+        # The dynamic data of a channel
+        # @var map
+        self.dynamicData = dynamicData
 
 
     PROPERTY_LOADERS = {
         'regionId': getXmlNodeInt, 
         'channelNumber': getXmlNodeInt, 
+        'dynamicData': (KalturaObjectFactory.createMap, 'KalturaStringValue'), 
     }
 
     def fromXml(self, node):
@@ -49934,6 +50646,7 @@ class KalturaRegionChannelNumber(KalturaObjectBase):
         kparams.put("objectType", "KalturaRegionChannelNumber")
         kparams.addIntIfDefined("regionId", self.regionId)
         kparams.addIntIfDefined("channelNumber", self.channelNumber)
+        kparams.addMapIfDefined("dynamicData", self.dynamicData)
         return kparams
 
     def getRegionId(self):
@@ -49948,20 +50661,28 @@ class KalturaRegionChannelNumber(KalturaObjectBase):
     def setChannelNumber(self, newChannelNumber):
         self.channelNumber = newChannelNumber
 
+    def getDynamicData(self):
+        return self.dynamicData
+
+    def setDynamicData(self, newDynamicData):
+        self.dynamicData = newDynamicData
+
 
 # @package Kaltura
 # @subpackage Client
 class KalturaRegionChannelNumberMultiLcns(KalturaRegionChannelNumber):
     def __init__(self,
-            regionId=NotImplemented,
-            channelNumber=NotImplemented,
-            lcns=NotImplemented):
+            regionId = NotImplemented,
+            channelNumber = NotImplemented,
+            dynamicData = NotImplemented,
+            lcns = NotImplemented):
         KalturaRegionChannelNumber.__init__(self,
             regionId,
-            channelNumber)
+            channelNumber,
+            dynamicData)
 
         # Linear channel numbers
-        # @var string
+        # @var str
         self.lcns = lcns
 
 
@@ -49990,11 +50711,11 @@ class KalturaRegionChannelNumberMultiLcns(KalturaRegionChannelNumber):
 # @subpackage Client
 class KalturaSearchPriorityGroupOrderedIdsSet(KalturaObjectBase):
     def __init__(self,
-            priorityGroupIds=NotImplemented):
+            priorityGroupIds = NotImplemented):
         KalturaObjectBase.__init__(self)
 
         # The order and effectively the priority of each group.
-        # @var string
+        # @var str
         self.priorityGroupIds = priorityGroupIds
 
 
@@ -50025,8 +50746,8 @@ class KalturaSegmentationPartnerConfiguration(KalturaObjectBase):
     """Partner configuration for segments configuration"""
 
     def __init__(self,
-            maxCalculatedPeriod=NotImplemented,
-            maxDynamicSegments=NotImplemented):
+            maxCalculatedPeriod = NotImplemented,
+            maxDynamicSegments = NotImplemented):
         KalturaObjectBase.__init__(self)
 
         # The maximum number of past days to be calculated for dynamic segments, default=180
@@ -50071,8 +50792,8 @@ class KalturaSegmentationPartnerConfiguration(KalturaObjectBase):
 # @subpackage Client
 class KalturaNetworkActionStatus(KalturaObjectBase):
     def __init__(self,
-            status=NotImplemented,
-            network=NotImplemented):
+            status = NotImplemented,
+            network = NotImplemented):
         KalturaObjectBase.__init__(self)
 
         # Status
@@ -50117,8 +50838,8 @@ class KalturaNetworkActionStatus(KalturaObjectBase):
 # @subpackage Client
 class KalturaUserSocialActionResponse(KalturaObjectBase):
     def __init__(self,
-            socialAction=NotImplemented,
-            failStatus=NotImplemented):
+            socialAction = NotImplemented,
+            failStatus = NotImplemented):
         KalturaObjectBase.__init__(self)
 
         # socialAction
@@ -50126,7 +50847,7 @@ class KalturaUserSocialActionResponse(KalturaObjectBase):
         self.socialAction = socialAction
 
         # List of action permission items
-        # @var array of KalturaNetworkActionStatus
+        # @var List[KalturaNetworkActionStatus]
         self.failStatus = failStatus
 
 
@@ -50163,60 +50884,60 @@ class KalturaUserSocialActionResponse(KalturaObjectBase):
 # @subpackage Client
 class KalturaSocial(KalturaObjectBase):
     def __init__(self,
-            id=NotImplemented,
-            name=NotImplemented,
-            firstName=NotImplemented,
-            lastName=NotImplemented,
-            email=NotImplemented,
-            gender=NotImplemented,
-            userId=NotImplemented,
-            birthday=NotImplemented,
-            status=NotImplemented,
-            pictureUrl=NotImplemented):
+            id = NotImplemented,
+            name = NotImplemented,
+            firstName = NotImplemented,
+            lastName = NotImplemented,
+            email = NotImplemented,
+            gender = NotImplemented,
+            userId = NotImplemented,
+            birthday = NotImplemented,
+            status = NotImplemented,
+            pictureUrl = NotImplemented):
         KalturaObjectBase.__init__(self)
 
         # Facebook identifier
-        # @var string
+        # @var str
         # @readonly
         self.id = id
 
         # Full name
-        # @var string
+        # @var str
         self.name = name
 
         # First name
-        # @var string
+        # @var str
         self.firstName = firstName
 
         # Last name
-        # @var string
+        # @var str
         self.lastName = lastName
 
         # User email
-        # @var string
+        # @var str
         self.email = email
 
         # Gender
-        # @var string
+        # @var str
         self.gender = gender
 
         # User identifier
-        # @var string
+        # @var str
         # @readonly
         self.userId = userId
 
         # User birthday
-        # @var string
+        # @var str
         self.birthday = birthday
 
         # User model status
         #             Possible values: UNKNOWN, OK, ERROR, NOACTION, NOTEXIST, CONFLICT, MERGE, MERGEOK, NEWUSER, MINFRIENDS, INVITEOK, INVITEERROR, ACCESSDENIED, WRONGPASSWORDORUSERNAME, UNMERGEOK, USEREMAILISMISSING
-        # @var string
+        # @var str
         # @readonly
         self.status = status
 
         # Profile picture URL
-        # @var string
+        # @var str
         self.pictureUrl = pictureUrl
 
 
@@ -50305,16 +51026,16 @@ class KalturaSocial(KalturaObjectBase):
 # @subpackage Client
 class KalturaFacebookSocial(KalturaSocial):
     def __init__(self,
-            id=NotImplemented,
-            name=NotImplemented,
-            firstName=NotImplemented,
-            lastName=NotImplemented,
-            email=NotImplemented,
-            gender=NotImplemented,
-            userId=NotImplemented,
-            birthday=NotImplemented,
-            status=NotImplemented,
-            pictureUrl=NotImplemented):
+            id = NotImplemented,
+            name = NotImplemented,
+            firstName = NotImplemented,
+            lastName = NotImplemented,
+            email = NotImplemented,
+            gender = NotImplemented,
+            userId = NotImplemented,
+            birthday = NotImplemented,
+            status = NotImplemented,
+            pictureUrl = NotImplemented):
         KalturaSocial.__init__(self,
             id,
             name,
@@ -50369,16 +51090,16 @@ class KalturaSocialFacebookConfig(KalturaSocialConfig):
     """Returns social configuration for the partner"""
 
     def __init__(self,
-            appId=NotImplemented,
-            permissions=NotImplemented):
+            appId = NotImplemented,
+            permissions = NotImplemented):
         KalturaSocialConfig.__init__(self)
 
         # The application identifier
-        # @var string
+        # @var str
         self.appId = appId
 
         # List of application permissions
-        # @var string
+        # @var str
         self.permissions = permissions
 
 
@@ -50415,10 +51136,10 @@ class KalturaSocialFacebookConfig(KalturaSocialConfig):
 # @subpackage Client
 class KalturaActionPermissionItem(KalturaObjectBase):
     def __init__(self,
-            network=NotImplemented,
-            actionPrivacy=NotImplemented,
-            privacy=NotImplemented,
-            action=NotImplemented):
+            network = NotImplemented,
+            actionPrivacy = NotImplemented,
+            privacy = NotImplemented,
+            action = NotImplemented):
         KalturaObjectBase.__init__(self)
 
         # Social network
@@ -50434,7 +51155,7 @@ class KalturaActionPermissionItem(KalturaObjectBase):
         self.privacy = privacy
 
         # Action - separated with comma
-        # @var string
+        # @var str
         self.action = action
 
 
@@ -50487,11 +51208,11 @@ class KalturaActionPermissionItem(KalturaObjectBase):
 # @subpackage Client
 class KalturaSocialUserConfig(KalturaSocialConfig):
     def __init__(self,
-            actionPermissionItems=NotImplemented):
+            actionPermissionItems = NotImplemented):
         KalturaSocialConfig.__init__(self)
 
         # List of action permission items
-        # @var array of KalturaActionPermissionItem
+        # @var List[KalturaActionPermissionItem]
         self.actionPermissionItems = actionPermissionItems
 
 
@@ -50520,9 +51241,9 @@ class KalturaSocialUserConfig(KalturaSocialConfig):
 # @subpackage Client
 class KalturaSSOAdapterProfileInvoke(KalturaObjectBase):
     def __init__(self,
-            adapterData=NotImplemented,
-            code=NotImplemented,
-            message=NotImplemented):
+            adapterData = NotImplemented,
+            code = NotImplemented,
+            message = NotImplemented):
         KalturaObjectBase.__init__(self)
 
         # key/value map field for adapter data
@@ -50530,11 +51251,11 @@ class KalturaSSOAdapterProfileInvoke(KalturaObjectBase):
         self.adapterData = adapterData
 
         # code
-        # @var string
+        # @var str
         self.code = code
 
         # message
-        # @var string
+        # @var str
         self.message = message
 
 
@@ -50579,32 +51300,33 @@ class KalturaSSOAdapterProfileInvoke(KalturaObjectBase):
 # @subpackage Client
 class KalturaTimeShiftedTvPartnerSettings(KalturaObjectBase):
     def __init__(self,
-            catchUpEnabled=NotImplemented,
-            cdvrEnabled=NotImplemented,
-            startOverEnabled=NotImplemented,
-            trickPlayEnabled=NotImplemented,
-            recordingScheduleWindowEnabled=NotImplemented,
-            protectionEnabled=NotImplemented,
-            catchUpBufferLength=NotImplemented,
-            trickPlayBufferLength=NotImplemented,
-            recordingScheduleWindow=NotImplemented,
-            paddingBeforeProgramStarts=NotImplemented,
-            paddingAfterProgramEnds=NotImplemented,
-            protectionPeriod=NotImplemented,
-            protectionQuotaPercentage=NotImplemented,
-            recordingLifetimePeriod=NotImplemented,
-            cleanupNoticePeriod=NotImplemented,
-            seriesRecordingEnabled=NotImplemented,
-            nonEntitledChannelPlaybackEnabled=NotImplemented,
-            nonExistingChannelPlaybackEnabled=NotImplemented,
-            quotaOveragePolicy=NotImplemented,
-            protectionPolicy=NotImplemented,
-            recoveryGracePeriod=NotImplemented,
-            privateCopyEnabled=NotImplemented,
-            defaultQuota=NotImplemented,
-            personalizedRecording=NotImplemented,
-            maxRecordingConcurrency=NotImplemented,
-            maxConcurrencyMargin=NotImplemented):
+            catchUpEnabled = NotImplemented,
+            cdvrEnabled = NotImplemented,
+            startOverEnabled = NotImplemented,
+            trickPlayEnabled = NotImplemented,
+            recordingScheduleWindowEnabled = NotImplemented,
+            protectionEnabled = NotImplemented,
+            catchUpBufferLength = NotImplemented,
+            trickPlayBufferLength = NotImplemented,
+            recordingScheduleWindow = NotImplemented,
+            paddingBeforeProgramStarts = NotImplemented,
+            paddingAfterProgramEnds = NotImplemented,
+            protectionPeriod = NotImplemented,
+            protectionQuotaPercentage = NotImplemented,
+            recordingLifetimePeriod = NotImplemented,
+            cleanupNoticePeriod = NotImplemented,
+            seriesRecordingEnabled = NotImplemented,
+            nonEntitledChannelPlaybackEnabled = NotImplemented,
+            nonExistingChannelPlaybackEnabled = NotImplemented,
+            quotaOveragePolicy = NotImplemented,
+            protectionPolicy = NotImplemented,
+            recoveryGracePeriod = NotImplemented,
+            privateCopyEnabled = NotImplemented,
+            defaultQuota = NotImplemented,
+            personalizedRecording = NotImplemented,
+            maxRecordingConcurrency = NotImplemented,
+            maxConcurrencyMargin = NotImplemented,
+            shouldRoundStopRecordingsBySeconds = NotImplemented):
         KalturaObjectBase.__init__(self)
 
         # Is catch-up enabled
@@ -50711,6 +51433,11 @@ class KalturaTimeShiftedTvPartnerSettings(KalturaObjectBase):
         # @var int
         self.maxConcurrencyMargin = maxConcurrencyMargin
 
+        # When using padded and immediate recordings, define if end date of recording should be rounded by the minute or by the second.
+        #             Default by minutes, FALSE.
+        # @var bool
+        self.shouldRoundStopRecordingsBySeconds = shouldRoundStopRecordingsBySeconds
+
 
     PROPERTY_LOADERS = {
         'catchUpEnabled': getXmlNodeBool, 
@@ -50739,6 +51466,7 @@ class KalturaTimeShiftedTvPartnerSettings(KalturaObjectBase):
         'personalizedRecording': getXmlNodeBool, 
         'maxRecordingConcurrency': getXmlNodeInt, 
         'maxConcurrencyMargin': getXmlNodeInt, 
+        'shouldRoundStopRecordingsBySeconds': getXmlNodeBool, 
     }
 
     def fromXml(self, node):
@@ -50774,6 +51502,7 @@ class KalturaTimeShiftedTvPartnerSettings(KalturaObjectBase):
         kparams.addBoolIfDefined("personalizedRecording", self.personalizedRecording)
         kparams.addIntIfDefined("maxRecordingConcurrency", self.maxRecordingConcurrency)
         kparams.addIntIfDefined("maxConcurrencyMargin", self.maxConcurrencyMargin)
+        kparams.addBoolIfDefined("shouldRoundStopRecordingsBySeconds", self.shouldRoundStopRecordingsBySeconds)
         return kparams
 
     def getCatchUpEnabled(self):
@@ -50932,15 +51661,21 @@ class KalturaTimeShiftedTvPartnerSettings(KalturaObjectBase):
     def setMaxConcurrencyMargin(self, newMaxConcurrencyMargin):
         self.maxConcurrencyMargin = newMaxConcurrencyMargin
 
+    def getShouldRoundStopRecordingsBySeconds(self):
+        return self.shouldRoundStopRecordingsBySeconds
+
+    def setShouldRoundStopRecordingsBySeconds(self, newShouldRoundStopRecordingsBySeconds):
+        self.shouldRoundStopRecordingsBySeconds = newShouldRoundStopRecordingsBySeconds
+
 
 # @package Kaltura
 # @subpackage Client
 class KalturaPurchaseBase(KalturaObjectBase):
     def __init__(self,
-            productId=NotImplemented,
-            contentId=NotImplemented,
-            productType=NotImplemented,
-            adapterData=NotImplemented):
+            productId = NotImplemented,
+            contentId = NotImplemented,
+            productType = NotImplemented,
+            adapterData = NotImplemented):
         KalturaObjectBase.__init__(self)
 
         # Identifier for the package from which this content is offered
@@ -50956,7 +51691,7 @@ class KalturaPurchaseBase(KalturaObjectBase):
         self.productType = productType
 
         # Additional data for the adapter
-        # @var string
+        # @var str
         self.adapterData = adapterData
 
 
@@ -51009,15 +51744,15 @@ class KalturaPurchaseBase(KalturaObjectBase):
 # @subpackage Client
 class KalturaPurchase(KalturaPurchaseBase):
     def __init__(self,
-            productId=NotImplemented,
-            contentId=NotImplemented,
-            productType=NotImplemented,
-            adapterData=NotImplemented,
-            currency=NotImplemented,
-            price=NotImplemented,
-            paymentMethodId=NotImplemented,
-            paymentGatewayId=NotImplemented,
-            coupon=NotImplemented):
+            productId = NotImplemented,
+            contentId = NotImplemented,
+            productType = NotImplemented,
+            adapterData = NotImplemented,
+            currency = NotImplemented,
+            price = NotImplemented,
+            paymentMethodId = NotImplemented,
+            paymentGatewayId = NotImplemented,
+            coupon = NotImplemented):
         KalturaPurchaseBase.__init__(self,
             productId,
             contentId,
@@ -51025,7 +51760,7 @@ class KalturaPurchase(KalturaPurchaseBase):
             adapterData)
 
         # Identifier for paying currency, according to ISO 4217
-        # @var string
+        # @var str
         self.currency = currency
 
         # Net sum to charge - as a one-time transaction. Price must match the previously provided price for the specified content.
@@ -51041,7 +51776,7 @@ class KalturaPurchase(KalturaPurchaseBase):
         self.paymentGatewayId = paymentGatewayId
 
         # Coupon code
-        # @var string
+        # @var str
         self.coupon = coupon
 
 
@@ -51102,12 +51837,12 @@ class KalturaPurchase(KalturaPurchaseBase):
 # @subpackage Client
 class KalturaExternalReceipt(KalturaPurchaseBase):
     def __init__(self,
-            productId=NotImplemented,
-            contentId=NotImplemented,
-            productType=NotImplemented,
-            adapterData=NotImplemented,
-            receiptId=NotImplemented,
-            paymentGatewayName=NotImplemented):
+            productId = NotImplemented,
+            contentId = NotImplemented,
+            productType = NotImplemented,
+            adapterData = NotImplemented,
+            receiptId = NotImplemented,
+            paymentGatewayName = NotImplemented):
         KalturaPurchaseBase.__init__(self,
             productId,
             contentId,
@@ -51115,11 +51850,11 @@ class KalturaExternalReceipt(KalturaPurchaseBase):
             adapterData)
 
         # A unique identifier that was provided by the In-App billing service to validate the purchase
-        # @var string
+        # @var str
         self.receiptId = receiptId
 
         # The payment gateway name for the In-App billing service to be used. Possible values: Google/Apple
-        # @var string
+        # @var str
         self.paymentGatewayName = paymentGatewayName
 
 
@@ -51156,16 +51891,16 @@ class KalturaExternalReceipt(KalturaPurchaseBase):
 # @subpackage Client
 class KalturaPurchaseSession(KalturaPurchase):
     def __init__(self,
-            productId=NotImplemented,
-            contentId=NotImplemented,
-            productType=NotImplemented,
-            adapterData=NotImplemented,
-            currency=NotImplemented,
-            price=NotImplemented,
-            paymentMethodId=NotImplemented,
-            paymentGatewayId=NotImplemented,
-            coupon=NotImplemented,
-            previewModuleId=NotImplemented):
+            productId = NotImplemented,
+            contentId = NotImplemented,
+            productType = NotImplemented,
+            adapterData = NotImplemented,
+            currency = NotImplemented,
+            price = NotImplemented,
+            paymentMethodId = NotImplemented,
+            paymentGatewayId = NotImplemented,
+            coupon = NotImplemented,
+            previewModuleId = NotImplemented):
         KalturaPurchase.__init__(self,
             productId,
             contentId,
@@ -51207,30 +51942,30 @@ class KalturaPurchaseSession(KalturaPurchase):
 # @subpackage Client
 class KalturaTransaction(KalturaObjectBase):
     def __init__(self,
-            id=NotImplemented,
-            paymentGatewayReferenceId=NotImplemented,
-            paymentGatewayResponseId=NotImplemented,
-            state=NotImplemented,
-            failReasonCode=NotImplemented,
-            createdAt=NotImplemented):
+            id = NotImplemented,
+            paymentGatewayReferenceId = NotImplemented,
+            paymentGatewayResponseId = NotImplemented,
+            state = NotImplemented,
+            failReasonCode = NotImplemented,
+            createdAt = NotImplemented):
         KalturaObjectBase.__init__(self)
 
         # Kaltura unique ID representing the transaction
-        # @var string
+        # @var str
         self.id = id
 
         # Transaction reference ID received from the payment gateway. 
         #             Value is available only if the payment gateway provides this information.
-        # @var string
+        # @var str
         self.paymentGatewayReferenceId = paymentGatewayReferenceId
 
         # Response ID received from by the payment gateway. 
         #             Value is available only if the payment gateway provides this information.
-        # @var string
+        # @var str
         self.paymentGatewayResponseId = paymentGatewayResponseId
 
         # Transaction state: OK/Pending/Failed
-        # @var string
+        # @var str
         self.state = state
 
         # Adapter failure reason code
@@ -51309,11 +52044,11 @@ class KalturaTransaction(KalturaObjectBase):
 # @subpackage Client
 class KalturaTransactionStatus(KalturaObjectBase):
     def __init__(self,
-            adapterTransactionStatus=NotImplemented,
-            externalId=NotImplemented,
-            externalStatus=NotImplemented,
-            externalMessage=NotImplemented,
-            failReason=NotImplemented):
+            adapterTransactionStatus = NotImplemented,
+            externalId = NotImplemented,
+            externalStatus = NotImplemented,
+            externalMessage = NotImplemented,
+            failReason = NotImplemented):
         KalturaObjectBase.__init__(self)
 
         # Payment gateway adapter application state for the transaction to update
@@ -51321,15 +52056,15 @@ class KalturaTransactionStatus(KalturaObjectBase):
         self.adapterTransactionStatus = adapterTransactionStatus
 
         # External transaction identifier
-        # @var string
+        # @var str
         self.externalId = externalId
 
         # Payment gateway transaction status
-        # @var string
+        # @var str
         self.externalStatus = externalStatus
 
         # Payment gateway message
-        # @var string
+        # @var str
         self.externalMessage = externalMessage
 
         # The reason the transaction failed
@@ -51394,9 +52129,9 @@ class KalturaTransactionStatus(KalturaObjectBase):
 # @subpackage Client
 class KalturaEntitlementRenewalBase(KalturaObjectBase):
     def __init__(self,
-            price=NotImplemented,
-            purchaseId=NotImplemented,
-            subscriptionId=NotImplemented):
+            price = NotImplemented,
+            purchaseId = NotImplemented,
+            subscriptionId = NotImplemented):
         KalturaObjectBase.__init__(self)
 
         # Price that is going to be paid on the renewal
@@ -51453,11 +52188,11 @@ class KalturaEntitlementRenewalBase(KalturaObjectBase):
 # @subpackage Client
 class KalturaUnifiedPaymentRenewal(KalturaObjectBase):
     def __init__(self,
-            price=NotImplemented,
-            date=NotImplemented,
-            unifiedPaymentId=NotImplemented,
-            entitlements=NotImplemented,
-            userId=NotImplemented):
+            price = NotImplemented,
+            date = NotImplemented,
+            unifiedPaymentId = NotImplemented,
+            entitlements = NotImplemented,
+            userId = NotImplemented):
         KalturaObjectBase.__init__(self)
 
         # Price that is going to be paid on the renewal
@@ -51473,7 +52208,7 @@ class KalturaUnifiedPaymentRenewal(KalturaObjectBase):
         self.unifiedPaymentId = unifiedPaymentId
 
         # List of entitlements in this unified payment renewal
-        # @var array of KalturaEntitlementRenewalBase
+        # @var List[KalturaEntitlementRenewalBase]
         self.entitlements = entitlements
 
         # User ID
@@ -51538,15 +52273,15 @@ class KalturaUnifiedPaymentRenewal(KalturaObjectBase):
 # @subpackage Client
 class KalturaUploadToken(KalturaObjectBase):
     def __init__(self,
-            id=NotImplemented,
-            status=NotImplemented,
-            fileSize=NotImplemented,
-            createDate=NotImplemented,
-            updateDate=NotImplemented):
+            id = NotImplemented,
+            status = NotImplemented,
+            fileSize = NotImplemented,
+            createDate = NotImplemented,
+            updateDate = NotImplemented):
         KalturaObjectBase.__init__(self)
 
         # Upload-token identifier
-        # @var string
+        # @var str
         # @readonly
         self.id = id
 
@@ -51610,15 +52345,15 @@ class KalturaUserAssetsListItem(KalturaObjectBase):
     """An item of user asset list"""
 
     def __init__(self,
-            id=NotImplemented,
-            orderIndex=NotImplemented,
-            type=NotImplemented,
-            userId=NotImplemented,
-            listType=NotImplemented):
+            id = NotImplemented,
+            orderIndex = NotImplemented,
+            type = NotImplemented,
+            userId = NotImplemented,
+            listType = NotImplemented):
         KalturaObjectBase.__init__(self)
 
         # Asset identifier
-        # @var string
+        # @var str
         self.id = id
 
         # The order index of the asset in the list
@@ -51630,7 +52365,7 @@ class KalturaUserAssetsListItem(KalturaObjectBase):
         self.type = type
 
         # The identifier of the user who added the item to the list
-        # @var string
+        # @var str
         # @readonly
         self.userId = userId
 
@@ -51694,13 +52429,13 @@ class KalturaUserLoginPin(KalturaObjectBase):
     """Log in pin code details"""
 
     def __init__(self,
-            pinCode=NotImplemented,
-            expirationTime=NotImplemented,
-            userId=NotImplemented):
+            pinCode = NotImplemented,
+            expirationTime = NotImplemented,
+            userId = NotImplemented):
         KalturaObjectBase.__init__(self)
 
         # Generated login pin code
-        # @var string
+        # @var str
         self.pinCode = pinCode
 
         # Login pin expiration time (epoch)
@@ -51708,7 +52443,7 @@ class KalturaUserLoginPin(KalturaObjectBase):
         self.expirationTime = expirationTime
 
         # User Identifier
-        # @var string
+        # @var str
         # @readonly
         self.userId = userId
 
@@ -51744,6 +52479,65 @@ class KalturaUserLoginPin(KalturaObjectBase):
 
     def getUserId(self):
         return self.userId
+
+
+# @package Kaltura
+# @subpackage Client
+class KalturaWatchBasedRecommendationsAdminConfiguration(KalturaObjectBase):
+    def __init__(self,
+            maxProfiles = NotImplemented,
+            activeUserDurationDays = NotImplemented,
+            recommendationsCachingTimeDays = NotImplemented):
+        KalturaObjectBase.__init__(self)
+
+        # The maximum number of profiles.
+        # @var int
+        self.maxProfiles = maxProfiles
+
+        # The duration that a user is considered active after his last playback.
+        # @var int
+        self.activeUserDurationDays = activeUserDurationDays
+
+        # The number of days the recommendations will be cached.
+        # @var int
+        self.recommendationsCachingTimeDays = recommendationsCachingTimeDays
+
+
+    PROPERTY_LOADERS = {
+        'maxProfiles': getXmlNodeInt, 
+        'activeUserDurationDays': getXmlNodeInt, 
+        'recommendationsCachingTimeDays': getXmlNodeInt, 
+    }
+
+    def fromXml(self, node):
+        KalturaObjectBase.fromXml(self, node)
+        self.fromXmlImpl(node, KalturaWatchBasedRecommendationsAdminConfiguration.PROPERTY_LOADERS)
+
+    def toParams(self):
+        kparams = KalturaObjectBase.toParams(self)
+        kparams.put("objectType", "KalturaWatchBasedRecommendationsAdminConfiguration")
+        kparams.addIntIfDefined("maxProfiles", self.maxProfiles)
+        kparams.addIntIfDefined("activeUserDurationDays", self.activeUserDurationDays)
+        kparams.addIntIfDefined("recommendationsCachingTimeDays", self.recommendationsCachingTimeDays)
+        return kparams
+
+    def getMaxProfiles(self):
+        return self.maxProfiles
+
+    def setMaxProfiles(self, newMaxProfiles):
+        self.maxProfiles = newMaxProfiles
+
+    def getActiveUserDurationDays(self):
+        return self.activeUserDurationDays
+
+    def setActiveUserDurationDays(self, newActiveUserDurationDays):
+        self.activeUserDurationDays = newActiveUserDurationDays
+
+    def getRecommendationsCachingTimeDays(self):
+        return self.recommendationsCachingTimeDays
+
+    def setRecommendationsCachingTimeDays(self, newRecommendationsCachingTimeDays):
+        self.recommendationsCachingTimeDays = newRecommendationsCachingTimeDays
 
 
 ########## services ##########
@@ -51927,7 +52721,7 @@ class KalturaAssetService(KalturaServiceBase):
         return KalturaObjectFactory.create(resultNode, 'KalturaAsset')
 
     def addFromBulkUpload(self, fileData, bulkUploadJobData, bulkUploadAssetData):
-        """Add new bulk upload batch job Conversion profile id can be specified in the API."""
+        """Add new bulk upload batch job Conversion profile id can be specified in the API (note that the total request body size is limited to 10MB)."""
 
         kparams = KalturaParams()
         kfiles = {"fileData": fileData}
@@ -52080,6 +52874,17 @@ class KalturaAssetService(KalturaServiceBase):
             return self.client.getMultiRequestResult()
         resultNode = self.client.doQueue()
         return KalturaObjectFactory.create(resultNode, 'KalturaAsset')
+
+    def watchBasedRecommendationsList(self, profileId):
+        """Return list of assets - assets are personal recommendations for the caller."""
+
+        kparams = KalturaParams()
+        kparams.addIntIfDefined("profileId", profileId);
+        self.client.queueServiceActionCall("asset", "watchBasedRecommendationsList", "KalturaAssetListResponse", kparams)
+        if self.client.isMultiRequest():
+            return self.client.getMultiRequestResult()
+        resultNode = self.client.doQueue()
+        return KalturaObjectFactory.create(resultNode, 'KalturaAssetListResponse')
 
 
 # @package Kaltura
@@ -52335,7 +53140,8 @@ class KalturaAssetStatisticsService(KalturaServiceBase):
         KalturaServiceBase.__init__(self, client)
 
     def query(self, query):
-        """Returns statistics for given list of assets by type and / or time period"""
+        """Returns statistics for given list of assets by type and / or time period.
+                    Supported values for KalturaAssetStatisticsQuery.assetTypeEqual : KalturaAssetType.media, KalturaAssetType.epg."""
 
         kparams = KalturaParams()
         kparams.addObjectIfDefined("query", query)
@@ -52798,12 +53604,13 @@ class KalturaCategoryTreeService(KalturaServiceBase):
         resultNode = self.client.doQueue()
         return KalturaObjectFactory.create(resultNode, 'KalturaCategoryTree')
 
-    def getByVersion(self, versionId = NotImplemented, deviceFamilyId = NotImplemented):
+    def getByVersion(self, versionId = NotImplemented, deviceFamilyId = NotImplemented, filter = False):
         """Retrieve default category tree of deviceFamilyId by KS or specific one if versionId is set."""
 
         kparams = KalturaParams()
         kparams.addIntIfDefined("versionId", versionId);
         kparams.addIntIfDefined("deviceFamilyId", deviceFamilyId);
+        kparams.addBoolIfDefined("filter", filter);
         self.client.queueServiceActionCall("categorytree", "getByVersion", "KalturaCategoryTree", kparams)
         if self.client.isMultiRequest():
             return self.client.getMultiRequestResult()
@@ -53837,7 +54644,7 @@ class KalturaDynamicListService(KalturaServiceBase):
         return KalturaObjectFactory.create(resultNode, 'KalturaDynamicList')
 
     def addFromBulkUpload(self, fileData, jobData, bulkUploadData):
-        """Add new bulk upload batch job Conversion profile id can be specified in the API."""
+        """Add new bulk upload batch job Conversion profile id can be specified in the API (note that the total request body size is limited to 10MB)."""
 
         kparams = KalturaParams()
         kfiles = {"fileData": fileData}
@@ -55610,6 +56417,16 @@ class KalturaLineupService(KalturaServiceBase):
         resultNode = self.client.doQueue()
         return KalturaObjectFactory.create(resultNode, 'KalturaLineupChannelAssetListResponse')
 
+    def invalidate(self):
+        """Sends lineup requested invalidation"""
+
+        kparams = KalturaParams()
+        self.client.queueServiceActionCall("lineup", "invalidate", "None", kparams)
+        if self.client.isMultiRequest():
+            return self.client.getMultiRequestResult()
+        resultNode = self.client.doQueue()
+        return getXmlNodeBool(resultNode)
+
     def list(self, filter, pager = NotImplemented):
         """Returns list of lineup regional linear channels associated with one LCN and its region information. Allows to apply sorting and filtering by LCN and linear channels."""
 
@@ -55935,6 +56752,34 @@ class KalturaMetaService(KalturaServiceBase):
             return self.client.getMultiRequestResult()
         resultNode = self.client.doQueue()
         return KalturaObjectFactory.create(resultNode, 'KalturaMeta')
+
+
+# @package Kaltura
+# @subpackage Client
+class KalturaMfaPartnerConfigurationService(KalturaServiceBase):
+    def __init__(self, client = None):
+        KalturaServiceBase.__init__(self, client)
+
+    def get(self):
+        """Get MFA partner configuration."""
+
+        kparams = KalturaParams()
+        self.client.queueServiceActionCall("mfapartnerconfiguration", "get", "KalturaMultifactorAuthenticationPartnerConfiguration", kparams)
+        if self.client.isMultiRequest():
+            return self.client.getMultiRequestResult()
+        resultNode = self.client.doQueue()
+        return KalturaObjectFactory.create(resultNode, 'KalturaMultifactorAuthenticationPartnerConfiguration')
+
+    def update(self, configuration):
+        """Update MFA partner configuration."""
+
+        kparams = KalturaParams()
+        kparams.addObjectIfDefined("configuration", configuration)
+        self.client.queueServiceActionCall("mfapartnerconfiguration", "update", "KalturaMultifactorAuthenticationPartnerConfiguration", kparams)
+        if self.client.isMultiRequest():
+            return self.client.getMultiRequestResult()
+        resultNode = self.client.doQueue()
+        return KalturaObjectFactory.create(resultNode, 'KalturaMultifactorAuthenticationPartnerConfiguration')
 
 
 # @package Kaltura
@@ -56287,6 +57132,22 @@ class KalturaOttUserService(KalturaServiceBase):
         resultNode = self.client.doQueue()
         return getXmlNodeBool(resultNode)
 
+    def mfaLogin(self, partnerId, token, username = NotImplemented, password = NotImplemented, extraParams = NotImplemented, udid = NotImplemented):
+        """login based on MFA token."""
+
+        kparams = KalturaParams()
+        kparams.addIntIfDefined("partnerId", partnerId);
+        kparams.addStringIfDefined("token", token)
+        kparams.addStringIfDefined("username", username)
+        kparams.addStringIfDefined("password", password)
+        kparams.addMapIfDefined("extraParams", extraParams)
+        kparams.addStringIfDefined("udid", udid)
+        self.client.queueServiceActionCall("ottuser", "mfaLogin", "KalturaLoginResponse", kparams)
+        if self.client.isMultiRequest():
+            return self.client.getMultiRequestResult()
+        resultNode = self.client.doQueue()
+        return KalturaObjectFactory.create(resultNode, 'KalturaLoginResponse')
+
     def register(self, partnerId, user, password):
         """Sign up a new user."""
 
@@ -56311,6 +57172,20 @@ class KalturaOttUserService(KalturaServiceBase):
             return self.client.getMultiRequestResult()
         resultNode = self.client.doQueue()
         return getXmlNodeBool(resultNode)
+
+    def resendMfaToken(self, partnerId, username = NotImplemented, password = NotImplemented, extraParams = NotImplemented):
+        """resend MFA Token for the user."""
+
+        kparams = KalturaParams()
+        kparams.addIntIfDefined("partnerId", partnerId);
+        kparams.addStringIfDefined("username", username)
+        kparams.addStringIfDefined("password", password)
+        kparams.addMapIfDefined("extraParams", extraParams)
+        self.client.queueServiceActionCall("ottuser", "resendMfaToken", "KalturaResendMfaTokenResponse", kparams)
+        if self.client.isMultiRequest():
+            return self.client.getMultiRequestResult()
+        resultNode = self.client.doQueue()
+        return KalturaObjectFactory.create(resultNode, 'KalturaResendMfaTokenResponse')
 
     def resetPassword(self, partnerId, username, templateName = NotImplemented):
         """Send an e-mail with URL to enable the user to set new password."""
@@ -58820,7 +59695,8 @@ class KalturaTimeShiftedTvPartnerSettingsService(KalturaServiceBase):
         return KalturaObjectFactory.create(resultNode, 'KalturaTimeShiftedTvPartnerSettings')
 
     def update(self, settings):
-        """Configure the account's time-shifted TV settings (catch-up and C-DVR, Trick-play, Start-over)"""
+        """Configure the account's time-shifted TV settings (catch-up and C-DVR, Trick-play, Start-over).
+                    When updating the timeshiftedtvpartnersettings, user must provide values for all the setting fields. If any field is omitted, its value may reset to the default configuration, potentially overwriting the current settings."""
 
         kparams = KalturaParams()
         kparams.addObjectIfDefined("settings", settings)
@@ -59543,6 +60419,95 @@ class KalturaUserSessionProfileService(KalturaServiceBase):
         resultNode = self.client.doQueue()
         return KalturaObjectFactory.create(resultNode, 'KalturaUserSessionProfile')
 
+
+# @package Kaltura
+# @subpackage Client
+class KalturaWatchBasedRecommendationsAdminConfigurationService(KalturaServiceBase):
+    def __init__(self, client = None):
+        KalturaServiceBase.__init__(self, client)
+
+    def get(self):
+        """Get partner&#39;s watch based recommendations admin configuration."""
+
+        kparams = KalturaParams()
+        self.client.queueServiceActionCall("watchbasedrecommendationsadminconfiguration", "get", "KalturaWatchBasedRecommendationsAdminConfiguration", kparams)
+        if self.client.isMultiRequest():
+            return self.client.getMultiRequestResult()
+        resultNode = self.client.doQueue()
+        return KalturaObjectFactory.create(resultNode, 'KalturaWatchBasedRecommendationsAdminConfiguration')
+
+    def update(self, configuration):
+        """Updates partner&#39;s watch based recommendations admin configuration."""
+
+        kparams = KalturaParams()
+        kparams.addObjectIfDefined("configuration", configuration)
+        self.client.queueServiceActionCall("watchbasedrecommendationsadminconfiguration", "update", "KalturaWatchBasedRecommendationsAdminConfiguration", kparams)
+        if self.client.isMultiRequest():
+            return self.client.getMultiRequestResult()
+        resultNode = self.client.doQueue()
+        return KalturaObjectFactory.create(resultNode, 'KalturaWatchBasedRecommendationsAdminConfiguration')
+
+
+# @package Kaltura
+# @subpackage Client
+class KalturaWatchBasedRecommendationsProfileService(KalturaServiceBase):
+    def __init__(self, client = None):
+        KalturaServiceBase.__init__(self, client)
+
+    def add(self, profile):
+        """Add partner&#39;s watch based recommendations profile."""
+
+        kparams = KalturaParams()
+        kparams.addObjectIfDefined("profile", profile)
+        self.client.queueServiceActionCall("watchbasedrecommendationsprofile", "add", "KalturaWatchBasedRecommendationsProfile", kparams)
+        if self.client.isMultiRequest():
+            return self.client.getMultiRequestResult()
+        resultNode = self.client.doQueue()
+        return KalturaObjectFactory.create(resultNode, 'KalturaWatchBasedRecommendationsProfile')
+
+    def delete(self, id):
+        """Delete partner&#39;s watch based recommendations profile."""
+
+        kparams = KalturaParams()
+        kparams.addIntIfDefined("id", id);
+        self.client.queueServiceActionCall("watchbasedrecommendationsprofile", "delete", "None", kparams)
+        if self.client.isMultiRequest():
+            return self.client.getMultiRequestResult()
+        resultNode = self.client.doQueue()
+
+    def deleteWatchBasedRecommendationsOfProfile(self, id):
+        """Delete all recommendations that were calculated based on specific profile."""
+
+        kparams = KalturaParams()
+        kparams.addIntIfDefined("id", id);
+        self.client.queueServiceActionCall("watchbasedrecommendationsprofile", "deleteWatchBasedRecommendationsOfProfile", "None", kparams)
+        if self.client.isMultiRequest():
+            return self.client.getMultiRequestResult()
+        resultNode = self.client.doQueue()
+
+    def list(self, filter = NotImplemented):
+        """Get partner&#39;s watch based recommendations profiles."""
+
+        kparams = KalturaParams()
+        kparams.addObjectIfDefined("filter", filter)
+        self.client.queueServiceActionCall("watchbasedrecommendationsprofile", "list", "KalturaWatchBasedRecommendationsProfileListResponse", kparams)
+        if self.client.isMultiRequest():
+            return self.client.getMultiRequestResult()
+        resultNode = self.client.doQueue()
+        return KalturaObjectFactory.create(resultNode, 'KalturaWatchBasedRecommendationsProfileListResponse')
+
+    def update(self, id, profile):
+        """Update partner&#39;s watch based recommendations profile."""
+
+        kparams = KalturaParams()
+        kparams.addIntIfDefined("id", id);
+        kparams.addObjectIfDefined("profile", profile)
+        self.client.queueServiceActionCall("watchbasedrecommendationsprofile", "update", "KalturaWatchBasedRecommendationsProfile", kparams)
+        if self.client.isMultiRequest():
+            return self.client.getMultiRequestResult()
+        resultNode = self.client.doQueue()
+        return KalturaObjectFactory.create(resultNode, 'KalturaWatchBasedRecommendationsProfile')
+
 ########## main ##########
 class KalturaCoreClient(KalturaClientPlugin):
     # KalturaCoreClient
@@ -59642,6 +60607,7 @@ class KalturaCoreClient(KalturaClientPlugin):
             'mediaFileType': KalturaMediaFileTypeService,
             'messageTemplate': KalturaMessageTemplateService,
             'meta': KalturaMetaService,
+            'mfaPartnerConfiguration': KalturaMfaPartnerConfigurationService,
             'notification': KalturaNotificationService,
             'notificationsPartnerSettings': KalturaNotificationsPartnerSettingsService,
             'notificationsSettings': KalturaNotificationsSettingsService,
@@ -59710,6 +60676,8 @@ class KalturaCoreClient(KalturaClientPlugin):
             'userRole': KalturaUserRoleService,
             'userSegment': KalturaUserSegmentService,
             'userSessionProfile': KalturaUserSessionProfileService,
+            'watchBasedRecommendationsAdminConfiguration': KalturaWatchBasedRecommendationsAdminConfigurationService,
+            'watchBasedRecommendationsProfile': KalturaWatchBasedRecommendationsProfileService,
         }
 
     def getEnums(self):
@@ -59928,6 +60896,7 @@ class KalturaCoreClient(KalturaClientPlugin):
             'KalturaSuspensionProfileInheritanceType': KalturaSuspensionProfileInheritanceType,
             'KalturaTagOrderBy': KalturaTagOrderBy,
             'KalturaTimeShiftedTvState': KalturaTimeShiftedTvState,
+            'KalturaTokenDeliveryMethod': KalturaTokenDeliveryMethod,
             'KalturaTopicAutomaticIssueNotification': KalturaTopicAutomaticIssueNotification,
             'KalturaTopicNotificationMessageOrderBy': KalturaTopicNotificationMessageOrderBy,
             'KalturaTopicNotificationOrderBy': KalturaTopicNotificationOrderBy,
@@ -59949,6 +60918,7 @@ class KalturaCoreClient(KalturaClientPlugin):
             'KalturaUserState': KalturaUserState,
             'KalturaVodIngestAssetResultOrderBy': KalturaVodIngestAssetResultOrderBy,
             'KalturaVodIngestAssetResultStatus': KalturaVodIngestAssetResultStatus,
+            'KalturaWatchBasedRecommendationsProfileOrderBy': KalturaWatchBasedRecommendationsProfileOrderBy,
             'KalturaWatchedAllReturnStrategy': KalturaWatchedAllReturnStrategy,
             'KalturaWatchStatus': KalturaWatchStatus,
         }
@@ -59988,8 +60958,12 @@ class KalturaCoreClient(KalturaClientPlugin):
             'KalturaSegmentValueFilter': KalturaSegmentValueFilter,
             'KalturaHouseholdSegmentFilter': KalturaHouseholdSegmentFilter,
             'KalturaUserSegmentFilter': KalturaUserSegmentFilter,
+            'KalturaWatchBasedRecommendationsProfileFilter': KalturaWatchBasedRecommendationsProfileFilter,
+            'KalturaWatchBasedRecommendationsProfileByIdsFilter': KalturaWatchBasedRecommendationsProfileByIdsFilter,
+            'KalturaWatchBasedRecommendationsProfileByNameFilter': KalturaWatchBasedRecommendationsProfileByNameFilter,
             'KalturaAssetFilePpvFilter': KalturaAssetFilePpvFilter,
             'KalturaCollectionFilter': KalturaCollectionFilter,
+            'KalturaAssociatedShopEntities': KalturaAssociatedShopEntities,
             'KalturaDiscountDetailsFilter': KalturaDiscountDetailsFilter,
             'KalturaPpvFilter': KalturaPpvFilter,
             'KalturaPreviewModuleFilter': KalturaPreviewModuleFilter,
@@ -60047,6 +61021,7 @@ class KalturaCoreClient(KalturaClientPlugin):
             'KalturaAssetMetaOrTagGroupBy': KalturaAssetMetaOrTagGroupBy,
             'KalturaBundleFilter': KalturaBundleFilter,
             'KalturaChannelExternalFilter': KalturaChannelExternalFilter,
+            'KalturaLiveAssetHasRecordingsFilter': KalturaLiveAssetHasRecordingsFilter,
             'KalturaRelatedExternalFilter': KalturaRelatedExternalFilter,
             'KalturaScheduledRecordingProgramFilter': KalturaScheduledRecordingProgramFilter,
             'KalturaSearchExternalFilter': KalturaSearchExternalFilter,
@@ -60380,6 +61355,8 @@ class KalturaCoreClient(KalturaClientPlugin):
             'KalturaSingleSegmentValue': KalturaSingleSegmentValue,
             'KalturaUserSegment': KalturaUserSegment,
             'KalturaUserSegmentListResponse': KalturaUserSegmentListResponse,
+            'KalturaWatchBasedRecommendationsProfile': KalturaWatchBasedRecommendationsProfile,
+            'KalturaWatchBasedRecommendationsProfileListResponse': KalturaWatchBasedRecommendationsProfileListResponse,
             'KalturaAssetFilePpvListResponse': KalturaAssetFilePpvListResponse,
             'KalturaCollectionListResponse': KalturaCollectionListResponse,
             'KalturaCoupon': KalturaCoupon,
@@ -60658,7 +61635,9 @@ class KalturaCoreClient(KalturaClientPlugin):
             'KalturaSession': KalturaSession,
             'KalturaSessionInfo': KalturaSessionInfo,
             'KalturaRepresentativeSelectionPolicy': KalturaRepresentativeSelectionPolicy,
+            'KalturaTopEntitledOrFreeRsp': KalturaTopEntitledOrFreeRsp,
             'KalturaTopRsp': KalturaTopRsp,
+            'KalturaTopSubscriptionEntitledOrFreeRsp': KalturaTopSubscriptionEntitledOrFreeRsp,
             'KalturaTopSubscriptionEntitledRsp': KalturaTopSubscriptionEntitledRsp,
             'KalturaPlaybackContextOptions': KalturaPlaybackContextOptions,
             'KalturaAccessControlMessage': KalturaAccessControlMessage,
@@ -60732,6 +61711,7 @@ class KalturaCoreClient(KalturaClientPlugin):
             'KalturaLiveToVodFullConfiguration': KalturaLiveToVodFullConfiguration,
             'KalturaLiveToVodPartnerConfiguration': KalturaLiveToVodPartnerConfiguration,
             'KalturaMessageTemplate': KalturaMessageTemplate,
+            'KalturaMultifactorAuthenticationPartnerConfiguration': KalturaMultifactorAuthenticationPartnerConfiguration,
             'KalturaRegistryResponse': KalturaRegistryResponse,
             'KalturaPushMessage': KalturaPushMessage,
             'KalturaEpgNotificationSettings': KalturaEpgNotificationSettings,
@@ -60739,6 +61719,7 @@ class KalturaCoreClient(KalturaClientPlugin):
             'KalturaNotificationsPartnerSettings': KalturaNotificationsPartnerSettings,
             'KalturaNotificationsSettings': KalturaNotificationsSettings,
             'KalturaOTTUserDynamicData': KalturaOTTUserDynamicData,
+            'KalturaResendMfaTokenResponse': KalturaResendMfaTokenResponse,
             'KalturaPartnerSetup': KalturaPartnerSetup,
             'KalturaPartnerPremiumService': KalturaPartnerPremiumService,
             'KalturaPartnerPremiumServices': KalturaPartnerPremiumServices,
@@ -60771,6 +61752,7 @@ class KalturaCoreClient(KalturaClientPlugin):
             'KalturaUploadToken': KalturaUploadToken,
             'KalturaUserAssetsListItem': KalturaUserAssetsListItem,
             'KalturaUserLoginPin': KalturaUserLoginPin,
+            'KalturaWatchBasedRecommendationsAdminConfiguration': KalturaWatchBasedRecommendationsAdminConfiguration,
         }
 
     # @return string
