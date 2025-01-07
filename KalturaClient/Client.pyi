@@ -32,6 +32,7 @@ from KalturaClient.Plugins.Core import KalturaAnnouncementService
 from KalturaClient.Plugins.Core import KalturaAppTokenService
 from KalturaClient.Plugins.Core import KalturaAssetCommentService
 from KalturaClient.Plugins.Core import KalturaAssetService
+from KalturaClient.Plugins.Core import KalturaAssetEnrichService
 from KalturaClient.Plugins.Core import KalturaAssetFileService
 from KalturaClient.Plugins.Core import KalturaAssetFilePpvService
 from KalturaClient.Plugins.Core import KalturaAssetHistoryService
@@ -210,6 +211,7 @@ class KalturaClient:
     appToken: KalturaAppTokenService
     assetComment: KalturaAssetCommentService
     asset: KalturaAssetService
+    assetEnrich: KalturaAssetEnrichService
     assetFile: KalturaAssetFileService
     assetFilePpv: KalturaAssetFilePpvService
     assetHistory: KalturaAssetHistoryService

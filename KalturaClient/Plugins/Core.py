@@ -42,7 +42,7 @@ from ..Base import (
     KalturaServiceBase,
 )
 
-API_VERSION = '10.7.1.4'
+API_VERSION = '10.8.0.0'
 
 ########## enums ##########
 # @package Kaltura
@@ -175,6 +175,19 @@ class KalturaAppTokenHashType(object):
 # @subpackage Client
 class KalturaAssetCommentOrderBy(object):
     CREATE_DATE_DESC = "CREATE_DATE_DESC"
+
+    def __init__(self, value):
+        self.value = value
+
+    def getValue(self):
+        return self.value
+
+# @package Kaltura
+# @subpackage Client
+class KalturaAssetEnrichCaptionType(object):
+    SRT = "SRT"
+    WEBTTV = "WebTTV"
+    TEXT_ONLY = "Text_Only"
 
     def __init__(self, value):
         self.value = value
@@ -613,6 +626,21 @@ class KalturaCampaignOrderBy(object):
     UPDATE_DATE_ASC = "UPDATE_DATE_ASC"
     END_DATE_DESC = "END_DATE_DESC"
     END_DATE_ASC = "END_DATE_ASC"
+
+    def __init__(self, value):
+        self.value = value
+
+    def getValue(self):
+        return self.value
+
+# @package Kaltura
+# @subpackage Client
+class KalturaCaptionUploadStatus(object):
+    PENDING = "Pending"
+    UPLOADED = "Uploaded"
+    PROCESSING = "Processing"
+    SUCCESS = "Success"
+    FAILED = "Failed"
 
     def __init__(self, value):
         self.value = value
@@ -46013,6 +46041,232 @@ class KalturaBulkUploadProgramAssetData(KalturaBulkUploadAssetData):
 
 # @package Kaltura
 # @subpackage Client
+class KalturaCaptionUploadData(KalturaObjectBase):
+    """An object representing the uploaded file characteristics."""
+
+    def __init__(self,
+            captionType = NotImplemented,
+            captionLanguage = NotImplemented):
+        KalturaObjectBase.__init__(self)
+
+        # The content type included in the caption file. Can be of SRT, WebVTT or free text without cues. Must also be in UTF-8 encoding
+        # @var KalturaAssetEnrichCaptionType
+        self.captionType = captionType
+
+        # The language used for the captions
+        # @var str
+        # @readonly
+        self.captionLanguage = captionLanguage
+
+
+    PROPERTY_LOADERS = {
+        'captionType': (KalturaEnumsFactory.createString, "KalturaAssetEnrichCaptionType"), 
+        'captionLanguage': getXmlNodeText, 
+    }
+
+    def fromXml(self, node):
+        KalturaObjectBase.fromXml(self, node)
+        self.fromXmlImpl(node, KalturaCaptionUploadData.PROPERTY_LOADERS)
+
+    def toParams(self):
+        kparams = KalturaObjectBase.toParams(self)
+        kparams.put("objectType", "KalturaCaptionUploadData")
+        kparams.addStringEnumIfDefined("captionType", self.captionType)
+        return kparams
+
+    def getCaptionType(self):
+        return self.captionType
+
+    def setCaptionType(self, newCaptionType):
+        self.captionType = newCaptionType
+
+    def getCaptionLanguage(self):
+        return self.captionLanguage
+
+
+# @package Kaltura
+# @subpackage Client
+class KalturaCaptionUploadJob(KalturaObjectBase):
+    def __init__(self,
+            id = NotImplemented,
+            createDate = NotImplemented,
+            updateDate = NotImplemented,
+            fileName = NotImplemented,
+            status = NotImplemented,
+            message = NotImplemented):
+        KalturaObjectBase.__init__(self)
+
+        # Id
+        # @var int
+        # @readonly
+        self.id = id
+
+        # Create date
+        # @var int
+        # @readonly
+        self.createDate = createDate
+
+        # Update Date
+        # @var int
+        # @readonly
+        self.updateDate = updateDate
+
+        # File name
+        # @var str
+        # @readonly
+        self.fileName = fileName
+
+        # Status enum: Uploaded, Processing, Success, Failed
+        # @var KalturaCaptionUploadStatus
+        # @readonly
+        self.status = status
+
+        # Message
+        # @var str
+        # @readonly
+        self.message = message
+
+
+    PROPERTY_LOADERS = {
+        'id': getXmlNodeInt, 
+        'createDate': getXmlNodeInt, 
+        'updateDate': getXmlNodeInt, 
+        'fileName': getXmlNodeText, 
+        'status': (KalturaEnumsFactory.createString, "KalturaCaptionUploadStatus"), 
+        'message': getXmlNodeText, 
+    }
+
+    def fromXml(self, node):
+        KalturaObjectBase.fromXml(self, node)
+        self.fromXmlImpl(node, KalturaCaptionUploadJob.PROPERTY_LOADERS)
+
+    def toParams(self):
+        kparams = KalturaObjectBase.toParams(self)
+        kparams.put("objectType", "KalturaCaptionUploadJob")
+        return kparams
+
+    def getId(self):
+        return self.id
+
+    def getCreateDate(self):
+        return self.createDate
+
+    def getUpdateDate(self):
+        return self.updateDate
+
+    def getFileName(self):
+        return self.fileName
+
+    def getStatus(self):
+        return self.status
+
+    def getMessage(self):
+        return self.message
+
+
+# @package Kaltura
+# @subpackage Client
+class KalturaEnrichedMetadataResult(KalturaObjectBase):
+    """An object representing the newly generated metadata. It is used when a user requests to retrieve the results of the metadata enrichment."""
+
+    def __init__(self,
+            enrichedMetadata = NotImplemented):
+        KalturaObjectBase.__init__(self)
+
+        # A dictionary holding the names and values of the generated metadata.
+        #             key - the metadata name/key, e.g. 'Genre', 'shortDescription' etc.
+        #             value - The metadata value generated by the LLM, in a KalturaTranslationToken format.
+        # @var map
+        self.enrichedMetadata = enrichedMetadata
+
+
+    PROPERTY_LOADERS = {
+        'enrichedMetadata': (KalturaObjectFactory.createMap, 'KalturaTranslationToken'), 
+    }
+
+    def fromXml(self, node):
+        KalturaObjectBase.fromXml(self, node)
+        self.fromXmlImpl(node, KalturaEnrichedMetadataResult.PROPERTY_LOADERS)
+
+    def toParams(self):
+        kparams = KalturaObjectBase.toParams(self)
+        kparams.put("objectType", "KalturaEnrichedMetadataResult")
+        kparams.addMapIfDefined("enrichedMetadata", self.enrichedMetadata)
+        return kparams
+
+    def getEnrichedMetadata(self):
+        return self.enrichedMetadata
+
+    def setEnrichedMetadata(self, newEnrichedMetadata):
+        self.enrichedMetadata = newEnrichedMetadata
+
+
+# @package Kaltura
+# @subpackage Client
+class KalturaMetaEnrichConfiguration(KalturaObjectBase):
+    """The configuration object for the metadata enrichment feature."""
+
+    def __init__(self,
+            isEnabled = NotImplemented,
+            metaFieldNameMap = NotImplemented,
+            vectorizedMetaIds = NotImplemented):
+        KalturaObjectBase.__init__(self)
+
+        # Specifies if the feature is enabled or disabled.
+        # @var bool
+        self.isEnabled = isEnabled
+
+        # A type of dictionary defined as [KalturaLlmMetadataKeysEnum,Integer]. 
+        #             This property is used to correlate the newly generated metadata to existing metadata IDs which are available in the asset's struct. 
+        #             That is, per each generated metadata key (name), to which metadata ID on the asset it is mapped and stored.
+        # @var map
+        self.metaFieldNameMap = metaFieldNameMap
+
+        # a String type holding a comma separated list of metadata IDs. 
+        #              It is used to define which metadata fields will be extracted from the asset and sent for embeddings.
+        # @var str
+        self.vectorizedMetaIds = vectorizedMetaIds
+
+
+    PROPERTY_LOADERS = {
+        'isEnabled': getXmlNodeBool, 
+        'metaFieldNameMap': (KalturaObjectFactory.createMap, 'KalturaStringValue'), 
+        'vectorizedMetaIds': getXmlNodeText, 
+    }
+
+    def fromXml(self, node):
+        KalturaObjectBase.fromXml(self, node)
+        self.fromXmlImpl(node, KalturaMetaEnrichConfiguration.PROPERTY_LOADERS)
+
+    def toParams(self):
+        kparams = KalturaObjectBase.toParams(self)
+        kparams.put("objectType", "KalturaMetaEnrichConfiguration")
+        kparams.addBoolIfDefined("isEnabled", self.isEnabled)
+        kparams.addMapIfDefined("metaFieldNameMap", self.metaFieldNameMap)
+        kparams.addStringIfDefined("vectorizedMetaIds", self.vectorizedMetaIds)
+        return kparams
+
+    def getIsEnabled(self):
+        return self.isEnabled
+
+    def setIsEnabled(self, newIsEnabled):
+        self.isEnabled = newIsEnabled
+
+    def getMetaFieldNameMap(self):
+        return self.metaFieldNameMap
+
+    def setMetaFieldNameMap(self, newMetaFieldNameMap):
+        self.metaFieldNameMap = newMetaFieldNameMap
+
+    def getVectorizedMetaIds(self):
+        return self.vectorizedMetaIds
+
+    def setVectorizedMetaIds(self, newVectorizedMetaIds):
+        self.vectorizedMetaIds = newVectorizedMetaIds
+
+
+# @package Kaltura
+# @subpackage Client
 class KalturaAssetFileContext(KalturaObjectBase):
     def __init__(self,
             viewLifeCycle = NotImplemented,
@@ -52885,6 +53139,81 @@ class KalturaAssetService(KalturaServiceBase):
             return self.client.getMultiRequestResult()
         resultNode = self.client.doQueue()
         return KalturaObjectFactory.create(resultNode, 'KalturaAssetListResponse')
+
+
+# @package Kaltura
+# @subpackage Client
+class KalturaAssetEnrichService(KalturaServiceBase):
+    def __init__(self, client = None):
+        KalturaServiceBase.__init__(self, client)
+
+    def generateMetadata(self, captionUploadJobId, externalAssetIds, targetDisplayLanguage):
+        """Initiate the process of metadata generation"""
+
+        kparams = KalturaParams()
+        kparams.addIntIfDefined("captionUploadJobId", captionUploadJobId);
+        kparams.addArrayIfDefined("externalAssetIds", externalAssetIds)
+        kparams.addStringIfDefined("targetDisplayLanguage", targetDisplayLanguage)
+        self.client.queueServiceActionCall("assetenrich", "generateMetadata", "KalturaCaptionUploadJob", kparams)
+        if self.client.isMultiRequest():
+            return self.client.getMultiRequestResult()
+        resultNode = self.client.doQueue()
+        return KalturaObjectFactory.create(resultNode, 'KalturaCaptionUploadJob')
+
+    def getCaptionUploadJob(self, captionUploadJobId):
+        """retrieve the status of the metadata generation job"""
+
+        kparams = KalturaParams()
+        kparams.addIntIfDefined("captionUploadJobId", captionUploadJobId);
+        self.client.queueServiceActionCall("assetenrich", "getCaptionUploadJob", "KalturaCaptionUploadJob", kparams)
+        if self.client.isMultiRequest():
+            return self.client.getMultiRequestResult()
+        resultNode = self.client.doQueue()
+        return KalturaObjectFactory.create(resultNode, 'KalturaCaptionUploadJob')
+
+    def getGeneratedMetadata(self, captionUploadJobId):
+        """retrieve the generated metadata"""
+
+        kparams = KalturaParams()
+        kparams.addIntIfDefined("captionUploadJobId", captionUploadJobId);
+        self.client.queueServiceActionCall("assetenrich", "getGeneratedMetadata", "KalturaEnrichedMetadataResult", kparams)
+        if self.client.isMultiRequest():
+            return self.client.getMultiRequestResult()
+        resultNode = self.client.doQueue()
+        return KalturaObjectFactory.create(resultNode, 'KalturaEnrichedMetadataResult')
+
+    def getPartnerConfiguration(self):
+        """retrieve feature configuration"""
+
+        kparams = KalturaParams()
+        self.client.queueServiceActionCall("assetenrich", "getPartnerConfiguration", "KalturaMetaEnrichConfiguration", kparams)
+        if self.client.isMultiRequest():
+            return self.client.getMultiRequestResult()
+        resultNode = self.client.doQueue()
+        return KalturaObjectFactory.create(resultNode, 'KalturaMetaEnrichConfiguration')
+
+    def updatePartnerConfiguration(self, configuration):
+        """update feature configuration"""
+
+        kparams = KalturaParams()
+        kparams.addObjectIfDefined("configuration", configuration)
+        self.client.queueServiceActionCall("assetenrich", "updatePartnerConfiguration", "KalturaMetaEnrichConfiguration", kparams)
+        if self.client.isMultiRequest():
+            return self.client.getMultiRequestResult()
+        resultNode = self.client.doQueue()
+        return KalturaObjectFactory.create(resultNode, 'KalturaMetaEnrichConfiguration')
+
+    def uploadCaptionFile(self, json, fileName):
+        """Add a file to be used for enriching the assets&#39; metadata"""
+
+        kparams = KalturaParams()
+        kparams.addObjectIfDefined("json", json)
+        kfiles = {"fileName": fileName}
+        self.client.queueServiceActionCall("assetenrich", "uploadCaptionFile", "KalturaCaptionUploadJob", kparams, kfiles)
+        if self.client.isMultiRequest():
+            return self.client.getMultiRequestResult()
+        resultNode = self.client.doQueue()
+        return KalturaObjectFactory.create(resultNode, 'KalturaCaptionUploadJob')
 
 
 # @package Kaltura
@@ -60527,6 +60856,7 @@ class KalturaCoreClient(KalturaClientPlugin):
             'appToken': KalturaAppTokenService,
             'assetComment': KalturaAssetCommentService,
             'asset': KalturaAssetService,
+            'assetEnrich': KalturaAssetEnrichService,
             'assetFile': KalturaAssetFileService,
             'assetFilePpv': KalturaAssetFilePpvService,
             'assetHistory': KalturaAssetHistoryService,
@@ -60693,6 +61023,7 @@ class KalturaCoreClient(KalturaClientPlugin):
             'KalturaApiService': KalturaApiService,
             'KalturaAppTokenHashType': KalturaAppTokenHashType,
             'KalturaAssetCommentOrderBy': KalturaAssetCommentOrderBy,
+            'KalturaAssetEnrichCaptionType': KalturaAssetEnrichCaptionType,
             'KalturaAssetFilePpvOrderBy': KalturaAssetFilePpvOrderBy,
             'KalturaAssetHistoryOrderBy': KalturaAssetHistoryOrderBy,
             'KalturaAssetImagePerRatioOrderBy': KalturaAssetImagePerRatioOrderBy,
@@ -60724,6 +61055,7 @@ class KalturaCoreClient(KalturaClientPlugin):
             'KalturaBulkUploadResultStatus': KalturaBulkUploadResultStatus,
             'KalturaBundleType': KalturaBundleType,
             'KalturaCampaignOrderBy': KalturaCampaignOrderBy,
+            'KalturaCaptionUploadStatus': KalturaCaptionUploadStatus,
             'KalturaCategoryItemOrderBy': KalturaCategoryItemOrderBy,
             'KalturaCategoryVersionOrderBy': KalturaCategoryVersionOrderBy,
             'KalturaCategoryVersionState': KalturaCategoryVersionState,
@@ -61657,6 +61989,10 @@ class KalturaCoreClient(KalturaClientPlugin):
             'KalturaBulkUploadMediaAssetData': KalturaBulkUploadMediaAssetData,
             'KalturaBulkUploadLiveAssetData': KalturaBulkUploadLiveAssetData,
             'KalturaBulkUploadProgramAssetData': KalturaBulkUploadProgramAssetData,
+            'KalturaCaptionUploadData': KalturaCaptionUploadData,
+            'KalturaCaptionUploadJob': KalturaCaptionUploadJob,
+            'KalturaEnrichedMetadataResult': KalturaEnrichedMetadataResult,
+            'KalturaMetaEnrichConfiguration': KalturaMetaEnrichConfiguration,
             'KalturaAssetFileContext': KalturaAssetFileContext,
             'KalturaSeriesIdArguments': KalturaSeriesIdArguments,
             'KalturaAssetPersonalSelection': KalturaAssetPersonalSelection,
