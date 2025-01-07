@@ -172,7 +172,7 @@ class KalturaClient(object):
         self.callsQueue = []
         self.requestHeaders = {}
         self.clientConfiguration = {
-            'clientTag': 'python-24-11-28',
+            'clientTag': 'python-25-01-07',
             'apiVersion': API_VERSION,
         }
         self.requestConfiguration = {}
@@ -390,7 +390,6 @@ class KalturaClient(object):
         self.responseHeaders = r.headers
         return data
 
-    @retry_on_exception(max_retries=5, delay=5, backoff=2, exceptions=(KalturaException, KalturaClientException, UnicodeDecodeError, UnicodeEncodeError, requests.exceptions.RequestException))
     def parsePostResult(self, postResult):
         try:
             # Remove the content within <dataContent> tags to avoid utf8 decoding issues with binary data inside the xml
