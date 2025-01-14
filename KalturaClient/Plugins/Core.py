@@ -13861,12 +13861,112 @@ class KalturaGenerateMetadataResult(KalturaObjectBase):
 
 # @package Kaltura
 # @subpackage Client
+class KalturaMetaFieldNameMap(KalturaObjectBase):
+    """For each metadata type, defines its system name in the partner"""
+
+    def __init__(self,
+            genre = NotImplemented,
+            sentiment = NotImplemented,
+            shortDescription = NotImplemented,
+            longDescription = NotImplemented,
+            oneLiner = NotImplemented,
+            keywords = NotImplemented):
+        KalturaObjectBase.__init__(self)
+
+        # Genre
+        # @var str
+        self.genre = genre
+
+        # Sentiment
+        # @var str
+        self.sentiment = sentiment
+
+        # Short Description
+        # @var str
+        self.shortDescription = shortDescription
+
+        # Long Description
+        # @var str
+        self.longDescription = longDescription
+
+        # One Liner
+        # @var str
+        self.oneLiner = oneLiner
+
+        # Keywords
+        # @var str
+        self.keywords = keywords
+
+
+    PROPERTY_LOADERS = {
+        'genre': getXmlNodeText, 
+        'sentiment': getXmlNodeText, 
+        'shortDescription': getXmlNodeText, 
+        'longDescription': getXmlNodeText, 
+        'oneLiner': getXmlNodeText, 
+        'keywords': getXmlNodeText, 
+    }
+
+    def fromXml(self, node):
+        KalturaObjectBase.fromXml(self, node)
+        self.fromXmlImpl(node, KalturaMetaFieldNameMap.PROPERTY_LOADERS)
+
+    def toParams(self):
+        kparams = KalturaObjectBase.toParams(self)
+        kparams.put("objectType", "KalturaMetaFieldNameMap")
+        kparams.addStringIfDefined("genre", self.genre)
+        kparams.addStringIfDefined("sentiment", self.sentiment)
+        kparams.addStringIfDefined("shortDescription", self.shortDescription)
+        kparams.addStringIfDefined("longDescription", self.longDescription)
+        kparams.addStringIfDefined("oneLiner", self.oneLiner)
+        kparams.addStringIfDefined("keywords", self.keywords)
+        return kparams
+
+    def getGenre(self):
+        return self.genre
+
+    def setGenre(self, newGenre):
+        self.genre = newGenre
+
+    def getSentiment(self):
+        return self.sentiment
+
+    def setSentiment(self, newSentiment):
+        self.sentiment = newSentiment
+
+    def getShortDescription(self):
+        return self.shortDescription
+
+    def setShortDescription(self, newShortDescription):
+        self.shortDescription = newShortDescription
+
+    def getLongDescription(self):
+        return self.longDescription
+
+    def setLongDescription(self, newLongDescription):
+        self.longDescription = newLongDescription
+
+    def getOneLiner(self):
+        return self.oneLiner
+
+    def setOneLiner(self, newOneLiner):
+        self.oneLiner = newOneLiner
+
+    def getKeywords(self):
+        return self.keywords
+
+    def setKeywords(self, newKeywords):
+        self.keywords = newKeywords
+
+
+# @package Kaltura
+# @subpackage Client
 class KalturaAiMetadataGeneratorConfiguration(KalturaObjectBase):
     """The configuration object for the metadata enrichment feature."""
 
     def __init__(self,
             isEnabled = NotImplemented,
-            metaFieldNameMap = NotImplemented,
+            assetStructMetaNameMap = NotImplemented,
             vectorizedMetaIds = NotImplemented):
         KalturaObjectBase.__init__(self)
 
@@ -13874,11 +13974,11 @@ class KalturaAiMetadataGeneratorConfiguration(KalturaObjectBase):
         # @var bool
         self.isEnabled = isEnabled
 
-        # A type of dictionary defined as [KalturaLlmMetadataKeysEnum,Integer]. 
-        #             This property is used to correlate the newly generated metadata to existing metadata IDs which are available in the asset's struct. 
-        #             That is, per each generated metadata key (name), to which metadata ID on the asset it is mapped and stored.
+        # A type of dictionary defined as [long,KalturaMetaFieldNameMap]. 
+        #             This property is used to correlate the newly generated metadata to
+        #             existing metadata IDs which are available in the asset's struct.
         # @var map
-        self.metaFieldNameMap = metaFieldNameMap
+        self.assetStructMetaNameMap = assetStructMetaNameMap
 
         # a String type holding a comma separated list of metadata IDs. 
         #              It is used to define which metadata fields will be extracted from the asset and sent for embeddings.
@@ -13888,7 +13988,7 @@ class KalturaAiMetadataGeneratorConfiguration(KalturaObjectBase):
 
     PROPERTY_LOADERS = {
         'isEnabled': getXmlNodeBool, 
-        'metaFieldNameMap': (KalturaObjectFactory.createMap, 'KalturaStringValue'), 
+        'assetStructMetaNameMap': (KalturaObjectFactory.createMap, 'KalturaMetaFieldNameMap'), 
         'vectorizedMetaIds': getXmlNodeText, 
     }
 
@@ -13900,7 +14000,7 @@ class KalturaAiMetadataGeneratorConfiguration(KalturaObjectBase):
         kparams = KalturaObjectBase.toParams(self)
         kparams.put("objectType", "KalturaAiMetadataGeneratorConfiguration")
         kparams.addBoolIfDefined("isEnabled", self.isEnabled)
-        kparams.addMapIfDefined("metaFieldNameMap", self.metaFieldNameMap)
+        kparams.addMapIfDefined("assetStructMetaNameMap", self.assetStructMetaNameMap)
         kparams.addStringIfDefined("vectorizedMetaIds", self.vectorizedMetaIds)
         return kparams
 
@@ -13910,11 +14010,11 @@ class KalturaAiMetadataGeneratorConfiguration(KalturaObjectBase):
     def setIsEnabled(self, newIsEnabled):
         self.isEnabled = newIsEnabled
 
-    def getMetaFieldNameMap(self):
-        return self.metaFieldNameMap
+    def getAssetStructMetaNameMap(self):
+        return self.assetStructMetaNameMap
 
-    def setMetaFieldNameMap(self, newMetaFieldNameMap):
-        self.metaFieldNameMap = newMetaFieldNameMap
+    def setAssetStructMetaNameMap(self, newAssetStructMetaNameMap):
+        self.assetStructMetaNameMap = newAssetStructMetaNameMap
 
     def getVectorizedMetaIds(self):
         return self.vectorizedMetaIds
@@ -25095,7 +25195,6 @@ class KalturaSubtitles(KalturaObjectBase):
         #             be the language in which it generates the metadata values
         #             (note that the metadata keys are always in English). It includes a KalturaLanguage systemName.
         # @var str
-        # @readonly
         self.subtitlesLanguage = subtitlesLanguage
 
 
@@ -25116,6 +25215,7 @@ class KalturaSubtitles(KalturaObjectBase):
         kparams.put("objectType", "KalturaSubtitles")
         kparams.addStringIfDefined("fileName", self.fileName)
         kparams.addStringEnumIfDefined("subtitlesType", self.subtitlesType)
+        kparams.addStringIfDefined("subtitlesLanguage", self.subtitlesLanguage)
         return kparams
 
     def getId(self):
@@ -25138,6 +25238,9 @@ class KalturaSubtitles(KalturaObjectBase):
 
     def getSubtitlesLanguage(self):
         return self.subtitlesLanguage
+
+    def setSubtitlesLanguage(self, newSubtitlesLanguage):
+        self.subtitlesLanguage = newSubtitlesLanguage
 
 
 # @package Kaltura
@@ -61952,6 +62055,7 @@ class KalturaCoreClient(KalturaClientPlugin):
             'KalturaSkipOnErrorCondition': KalturaSkipOnErrorCondition,
             'KalturaGenerateMetadataBySubtitlesJob': KalturaGenerateMetadataBySubtitlesJob,
             'KalturaGenerateMetadataResult': KalturaGenerateMetadataResult,
+            'KalturaMetaFieldNameMap': KalturaMetaFieldNameMap,
             'KalturaAiMetadataGeneratorConfiguration': KalturaAiMetadataGeneratorConfiguration,
             'KalturaAnnouncement': KalturaAnnouncement,
             'KalturaFilterPager': KalturaFilterPager,
