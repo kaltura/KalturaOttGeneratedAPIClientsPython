@@ -42,7 +42,7 @@ from ..Base import (
     KalturaServiceBase,
 )
 
-API_VERSION = '10.7.1.4'
+API_VERSION = '10.8.0.0'
 
 ########## enums ##########
 # @package Kaltura
@@ -45261,100 +45261,48 @@ class KalturaTopSubscriptionEntitledRsp(KalturaRepresentativeSelectionPolicy):
 
 # @package Kaltura
 # @subpackage Client
-class KalturaPlaybackContextOptions(KalturaObjectBase):
+class KalturaKeyValue(KalturaObjectBase):
     def __init__(self,
-            mediaProtocol = NotImplemented,
-            streamerType = NotImplemented,
-            assetFileIds = NotImplemented,
-            adapterData = NotImplemented,
-            context = NotImplemented,
-            urlType = NotImplemented):
+            key = NotImplemented,
+            value = NotImplemented):
         KalturaObjectBase.__init__(self)
 
-        # Protocol of the specific media object (http / https).
+        # Key
         # @var str
-        self.mediaProtocol = mediaProtocol
+        self.key = key
 
-        # Playback streamer type: applehttp, mpegdash, url, smothstreaming, multicast, none
+        # Value
         # @var str
-        self.streamerType = streamerType
-
-        # List of comma separated media file IDs
-        # @var str
-        self.assetFileIds = assetFileIds
-
-        # key/value map field for extra data
-        # @var map
-        self.adapterData = adapterData
-
-        # Playback context type
-        # @var KalturaPlaybackContextType
-        self.context = context
-
-        # Url type
-        # @var KalturaUrlType
-        self.urlType = urlType
+        self.value = value
 
 
     PROPERTY_LOADERS = {
-        'mediaProtocol': getXmlNodeText, 
-        'streamerType': getXmlNodeText, 
-        'assetFileIds': getXmlNodeText, 
-        'adapterData': (KalturaObjectFactory.createMap, 'KalturaStringValue'), 
-        'context': (KalturaEnumsFactory.createString, "KalturaPlaybackContextType"), 
-        'urlType': (KalturaEnumsFactory.createString, "KalturaUrlType"), 
+        'key': getXmlNodeText, 
+        'value': getXmlNodeText, 
     }
 
     def fromXml(self, node):
         KalturaObjectBase.fromXml(self, node)
-        self.fromXmlImpl(node, KalturaPlaybackContextOptions.PROPERTY_LOADERS)
+        self.fromXmlImpl(node, KalturaKeyValue.PROPERTY_LOADERS)
 
     def toParams(self):
         kparams = KalturaObjectBase.toParams(self)
-        kparams.put("objectType", "KalturaPlaybackContextOptions")
-        kparams.addStringIfDefined("mediaProtocol", self.mediaProtocol)
-        kparams.addStringIfDefined("streamerType", self.streamerType)
-        kparams.addStringIfDefined("assetFileIds", self.assetFileIds)
-        kparams.addMapIfDefined("adapterData", self.adapterData)
-        kparams.addStringEnumIfDefined("context", self.context)
-        kparams.addStringEnumIfDefined("urlType", self.urlType)
+        kparams.put("objectType", "KalturaKeyValue")
+        kparams.addStringIfDefined("key", self.key)
+        kparams.addStringIfDefined("value", self.value)
         return kparams
 
-    def getMediaProtocol(self):
-        return self.mediaProtocol
+    def getKey(self):
+        return self.key
 
-    def setMediaProtocol(self, newMediaProtocol):
-        self.mediaProtocol = newMediaProtocol
+    def setKey(self, newKey):
+        self.key = newKey
 
-    def getStreamerType(self):
-        return self.streamerType
+    def getValue(self):
+        return self.value
 
-    def setStreamerType(self, newStreamerType):
-        self.streamerType = newStreamerType
-
-    def getAssetFileIds(self):
-        return self.assetFileIds
-
-    def setAssetFileIds(self, newAssetFileIds):
-        self.assetFileIds = newAssetFileIds
-
-    def getAdapterData(self):
-        return self.adapterData
-
-    def setAdapterData(self, newAdapterData):
-        self.adapterData = newAdapterData
-
-    def getContext(self):
-        return self.context
-
-    def setContext(self, newContext):
-        self.context = newContext
-
-    def getUrlType(self):
-        return self.urlType
-
-    def setUrlType(self, newUrlType):
-        self.urlType = newUrlType
+    def setValue(self, newValue):
+        self.value = newValue
 
 
 # @package Kaltura
@@ -45582,6 +45530,39 @@ class KalturaPlaybackContext(KalturaObjectBase):
 
 # @package Kaltura
 # @subpackage Client
+class KalturaBulkPlaybackContext(KalturaObjectBase):
+    def __init__(self,
+            playbackContexts = NotImplemented):
+        KalturaObjectBase.__init__(self)
+
+        # List of playback contexts
+        # @var List[KalturaPlaybackContext]
+        self.playbackContexts = playbackContexts
+
+
+    PROPERTY_LOADERS = {
+        'playbackContexts': (KalturaObjectFactory.createArray, 'KalturaPlaybackContext'), 
+    }
+
+    def fromXml(self, node):
+        KalturaObjectBase.fromXml(self, node)
+        self.fromXmlImpl(node, KalturaBulkPlaybackContext.PROPERTY_LOADERS)
+
+    def toParams(self):
+        kparams = KalturaObjectBase.toParams(self)
+        kparams.put("objectType", "KalturaBulkPlaybackContext")
+        kparams.addArrayIfDefined("playbackContexts", self.playbackContexts)
+        return kparams
+
+    def getPlaybackContexts(self):
+        return self.playbackContexts
+
+    def setPlaybackContexts(self, newPlaybackContexts):
+        self.playbackContexts = newPlaybackContexts
+
+
+# @package Kaltura
+# @subpackage Client
 class KalturaBumpersPlaybackPluginData(KalturaPlaybackPluginData):
     def __init__(self,
             url = NotImplemented,
@@ -45624,6 +45605,104 @@ class KalturaBumpersPlaybackPluginData(KalturaPlaybackPluginData):
 
     def setStreamertype(self, newStreamertype):
         self.streamertype = newStreamertype
+
+
+# @package Kaltura
+# @subpackage Client
+class KalturaPlaybackContextOptions(KalturaObjectBase):
+    def __init__(self,
+            mediaProtocol = NotImplemented,
+            streamerType = NotImplemented,
+            assetFileIds = NotImplemented,
+            adapterData = NotImplemented,
+            context = NotImplemented,
+            urlType = NotImplemented):
+        KalturaObjectBase.__init__(self)
+
+        # Protocol of the specific media object (http / https).
+        # @var str
+        self.mediaProtocol = mediaProtocol
+
+        # Playback streamer type: applehttp, mpegdash, url, smothstreaming, multicast, none
+        # @var str
+        self.streamerType = streamerType
+
+        # List of comma separated media file IDs
+        # @var str
+        self.assetFileIds = assetFileIds
+
+        # key/value map field for extra data
+        # @var map
+        self.adapterData = adapterData
+
+        # Playback context type
+        # @var KalturaPlaybackContextType
+        self.context = context
+
+        # Url type
+        # @var KalturaUrlType
+        self.urlType = urlType
+
+
+    PROPERTY_LOADERS = {
+        'mediaProtocol': getXmlNodeText, 
+        'streamerType': getXmlNodeText, 
+        'assetFileIds': getXmlNodeText, 
+        'adapterData': (KalturaObjectFactory.createMap, 'KalturaStringValue'), 
+        'context': (KalturaEnumsFactory.createString, "KalturaPlaybackContextType"), 
+        'urlType': (KalturaEnumsFactory.createString, "KalturaUrlType"), 
+    }
+
+    def fromXml(self, node):
+        KalturaObjectBase.fromXml(self, node)
+        self.fromXmlImpl(node, KalturaPlaybackContextOptions.PROPERTY_LOADERS)
+
+    def toParams(self):
+        kparams = KalturaObjectBase.toParams(self)
+        kparams.put("objectType", "KalturaPlaybackContextOptions")
+        kparams.addStringIfDefined("mediaProtocol", self.mediaProtocol)
+        kparams.addStringIfDefined("streamerType", self.streamerType)
+        kparams.addStringIfDefined("assetFileIds", self.assetFileIds)
+        kparams.addMapIfDefined("adapterData", self.adapterData)
+        kparams.addStringEnumIfDefined("context", self.context)
+        kparams.addStringEnumIfDefined("urlType", self.urlType)
+        return kparams
+
+    def getMediaProtocol(self):
+        return self.mediaProtocol
+
+    def setMediaProtocol(self, newMediaProtocol):
+        self.mediaProtocol = newMediaProtocol
+
+    def getStreamerType(self):
+        return self.streamerType
+
+    def setStreamerType(self, newStreamerType):
+        self.streamerType = newStreamerType
+
+    def getAssetFileIds(self):
+        return self.assetFileIds
+
+    def setAssetFileIds(self, newAssetFileIds):
+        self.assetFileIds = newAssetFileIds
+
+    def getAdapterData(self):
+        return self.adapterData
+
+    def setAdapterData(self, newAdapterData):
+        self.adapterData = newAdapterData
+
+    def getContext(self):
+        return self.context
+
+    def setContext(self, newContext):
+        self.context = newContext
+
+    def getUrlType(self):
+        return self.urlType
+
+    def setUrlType(self, newUrlType):
+        self.urlType = newUrlType
 
 
 # @package Kaltura
@@ -47039,52 +47118,6 @@ class KalturaRandomCouponGenerationOptions(KalturaCouponGenerationOptions):
 
     def setUseSpecialCharacters(self, newUseSpecialCharacters):
         self.useSpecialCharacters = newUseSpecialCharacters
-
-
-# @package Kaltura
-# @subpackage Client
-class KalturaKeyValue(KalturaObjectBase):
-    def __init__(self,
-            key = NotImplemented,
-            value = NotImplemented):
-        KalturaObjectBase.__init__(self)
-
-        # Key
-        # @var str
-        self.key = key
-
-        # Value
-        # @var str
-        self.value = value
-
-
-    PROPERTY_LOADERS = {
-        'key': getXmlNodeText, 
-        'value': getXmlNodeText, 
-    }
-
-    def fromXml(self, node):
-        KalturaObjectBase.fromXml(self, node)
-        self.fromXmlImpl(node, KalturaKeyValue.PROPERTY_LOADERS)
-
-    def toParams(self):
-        kparams = KalturaObjectBase.toParams(self)
-        kparams.put("objectType", "KalturaKeyValue")
-        kparams.addStringIfDefined("key", self.key)
-        kparams.addStringIfDefined("value", self.value)
-        return kparams
-
-    def getKey(self):
-        return self.key
-
-    def setKey(self, newKey):
-        self.key = newKey
-
-    def getValue(self):
-        return self.value
-
-    def setValue(self, newValue):
-        self.value = newValue
 
 
 # @package Kaltura
@@ -52781,6 +52814,20 @@ class KalturaAssetService(KalturaServiceBase):
             return self.client.getMultiRequestResult()
         resultNode = self.client.doQueue()
         return KalturaObjectFactory.create(resultNode, 'KalturaAdsContext')
+
+    def getBulkPlaybackContext(self, fileTypes, streamerType, context, urlType):
+        """Gets the bulk playback context for assets."""
+
+        kparams = KalturaParams()
+        kparams.addArrayIfDefined("fileTypes", fileTypes)
+        kparams.addStringIfDefined("streamerType", streamerType)
+        kparams.addStringIfDefined("context", context)
+        kparams.addStringIfDefined("urlType", urlType)
+        self.client.queueServiceActionCall("asset", "getBulkPlaybackContext", "KalturaBulkPlaybackContext", kparams)
+        if self.client.isMultiRequest():
+            return self.client.getMultiRequestResult()
+        resultNode = self.client.doQueue()
+        return KalturaObjectFactory.create(resultNode, 'KalturaBulkPlaybackContext')
 
     def getPlaybackContext(self, assetId, assetType, contextDataParams, sourceType = NotImplemented):
         """This action delivers all data relevant for player"""
@@ -61639,12 +61686,14 @@ class KalturaCoreClient(KalturaClientPlugin):
             'KalturaTopRsp': KalturaTopRsp,
             'KalturaTopSubscriptionEntitledOrFreeRsp': KalturaTopSubscriptionEntitledOrFreeRsp,
             'KalturaTopSubscriptionEntitledRsp': KalturaTopSubscriptionEntitledRsp,
-            'KalturaPlaybackContextOptions': KalturaPlaybackContextOptions,
+            'KalturaKeyValue': KalturaKeyValue,
             'KalturaAccessControlMessage': KalturaAccessControlMessage,
             'KalturaCaptionPlaybackPluginData': KalturaCaptionPlaybackPluginData,
             'KalturaPlaybackPluginData': KalturaPlaybackPluginData,
             'KalturaPlaybackContext': KalturaPlaybackContext,
+            'KalturaBulkPlaybackContext': KalturaBulkPlaybackContext,
             'KalturaBumpersPlaybackPluginData': KalturaBumpersPlaybackPluginData,
+            'KalturaPlaybackContextOptions': KalturaPlaybackContextOptions,
             'KalturaAdsSource': KalturaAdsSource,
             'KalturaAdsContext': KalturaAdsContext,
             'KalturaBulkUploadJobData': KalturaBulkUploadJobData,
@@ -61670,7 +61719,6 @@ class KalturaCoreClient(KalturaClientPlugin):
             'KalturaCouponGenerationOptions': KalturaCouponGenerationOptions,
             'KalturaPublicCouponGenerationOptions': KalturaPublicCouponGenerationOptions,
             'KalturaRandomCouponGenerationOptions': KalturaRandomCouponGenerationOptions,
-            'KalturaKeyValue': KalturaKeyValue,
             'KalturaEmailMessage': KalturaEmailMessage,
             'KalturaEntitlementRenewal': KalturaEntitlementRenewal,
             'KalturaEpgServicePartnerConfiguration': KalturaEpgServicePartnerConfiguration,
