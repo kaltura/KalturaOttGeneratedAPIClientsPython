@@ -42,7 +42,7 @@ from ..Base import (
     KalturaServiceBase,
 )
 
-API_VERSION = '10.7.1.4'
+API_VERSION = '10.7.0.6'
 
 ########## enums ##########
 # @package Kaltura
@@ -1500,6 +1500,7 @@ class KalturaImageOrderBy(object):
 class KalturaImageStatus(object):
     PENDING = "PENDING"
     READY = "READY"
+    FAILED = "FAILED"
 
     def __init__(self, value):
         self.value = value

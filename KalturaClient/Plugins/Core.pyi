@@ -1041,6 +1041,7 @@ class KalturaImageOrderBy(object):
 class KalturaImageStatus(object):
     PENDING = "PENDING"
     READY = "READY"
+    FAILED = "FAILED"
 
     def __init__(self, value: str): ...
 
