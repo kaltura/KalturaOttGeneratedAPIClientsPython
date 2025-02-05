@@ -42,7 +42,7 @@ from ..Base import (
     KalturaServiceBase,
 )
 
-API_VERSION = '10.8.0.0'
+API_VERSION = '10.9.0.0'
 
 ########## enums ##########
 # @package Kaltura
@@ -53317,6 +53317,16 @@ class KalturaAiMetadataGeneratorService(KalturaServiceBase):
         resultNode = self.client.doQueue()
         return KalturaObjectFactory.create(resultNode, 'KalturaGenerateMetadataBySubtitlesJob')
 
+    def getMetadataFieldDefinitions(self):
+        """Get metadata mapping structure and available generated metadata fields"""
+
+        kparams = KalturaParams()
+        self.client.queueServiceActionCall("aimetadatagenerator", "getMetadataFieldDefinitions", "KalturaMetaFieldNameMap", kparams)
+        if self.client.isMultiRequest():
+            return self.client.getMultiRequestResult()
+        resultNode = self.client.doQueue()
+        return KalturaObjectFactory.create(resultNode, 'KalturaMetaFieldNameMap')
+
     def getPartnerConfiguration(self):
         """retrieve feature configuration"""
 
@@ -53327,12 +53337,12 @@ class KalturaAiMetadataGeneratorService(KalturaServiceBase):
         resultNode = self.client.doQueue()
         return KalturaObjectFactory.create(resultNode, 'KalturaAiMetadataGeneratorConfiguration')
 
-    def setPartnerConfiguration(self, configuration):
+    def updatePartnerConfiguration(self, configuration):
         """update feature configuration"""
 
         kparams = KalturaParams()
         kparams.addObjectIfDefined("configuration", configuration)
-        self.client.queueServiceActionCall("aimetadatagenerator", "setPartnerConfiguration", "KalturaAiMetadataGeneratorConfiguration", kparams)
+        self.client.queueServiceActionCall("aimetadatagenerator", "updatePartnerConfiguration", "KalturaAiMetadataGeneratorConfiguration", kparams)
         if self.client.isMultiRequest():
             return self.client.getMultiRequestResult()
         resultNode = self.client.doQueue()
