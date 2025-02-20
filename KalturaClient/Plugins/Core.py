@@ -13838,28 +13838,34 @@ class KalturaMetaFieldNameMap(KalturaObjectBase):
 
     def __init__(self,
             genre = NotImplemented,
+            subGenre = NotImplemented,
             sentiment = NotImplemented,
-            shortDescription = NotImplemented,
-            longDescription = NotImplemented,
+            suggestedTitle = NotImplemented,
+            description = NotImplemented,
             oneLiner = NotImplemented,
-            keywords = NotImplemented):
+            keywords = NotImplemented,
+            sensitiveContent = NotImplemented):
         KalturaObjectBase.__init__(self)
 
         # Genre
         # @var str
         self.genre = genre
 
+        # Sub-Genre
+        # @var str
+        self.subGenre = subGenre
+
         # Sentiment
         # @var str
         self.sentiment = sentiment
 
-        # Short Description
+        # Suggested Title
         # @var str
-        self.shortDescription = shortDescription
+        self.suggestedTitle = suggestedTitle
 
-        # Long Description
+        # Description
         # @var str
-        self.longDescription = longDescription
+        self.description = description
 
         # One Liner
         # @var str
@@ -13869,14 +13875,20 @@ class KalturaMetaFieldNameMap(KalturaObjectBase):
         # @var str
         self.keywords = keywords
 
+        # Sensitive Content
+        # @var str
+        self.sensitiveContent = sensitiveContent
+
 
     PROPERTY_LOADERS = {
         'genre': getXmlNodeText, 
+        'subGenre': getXmlNodeText, 
         'sentiment': getXmlNodeText, 
-        'shortDescription': getXmlNodeText, 
-        'longDescription': getXmlNodeText, 
+        'suggestedTitle': getXmlNodeText, 
+        'description': getXmlNodeText, 
         'oneLiner': getXmlNodeText, 
         'keywords': getXmlNodeText, 
+        'sensitiveContent': getXmlNodeText, 
     }
 
     def fromXml(self, node):
@@ -13887,11 +13899,13 @@ class KalturaMetaFieldNameMap(KalturaObjectBase):
         kparams = KalturaObjectBase.toParams(self)
         kparams.put("objectType", "KalturaMetaFieldNameMap")
         kparams.addStringIfDefined("genre", self.genre)
+        kparams.addStringIfDefined("subGenre", self.subGenre)
         kparams.addStringIfDefined("sentiment", self.sentiment)
-        kparams.addStringIfDefined("shortDescription", self.shortDescription)
-        kparams.addStringIfDefined("longDescription", self.longDescription)
+        kparams.addStringIfDefined("suggestedTitle", self.suggestedTitle)
+        kparams.addStringIfDefined("description", self.description)
         kparams.addStringIfDefined("oneLiner", self.oneLiner)
         kparams.addStringIfDefined("keywords", self.keywords)
+        kparams.addStringIfDefined("sensitiveContent", self.sensitiveContent)
         return kparams
 
     def getGenre(self):
@@ -13900,23 +13914,29 @@ class KalturaMetaFieldNameMap(KalturaObjectBase):
     def setGenre(self, newGenre):
         self.genre = newGenre
 
+    def getSubGenre(self):
+        return self.subGenre
+
+    def setSubGenre(self, newSubGenre):
+        self.subGenre = newSubGenre
+
     def getSentiment(self):
         return self.sentiment
 
     def setSentiment(self, newSentiment):
         self.sentiment = newSentiment
 
-    def getShortDescription(self):
-        return self.shortDescription
+    def getSuggestedTitle(self):
+        return self.suggestedTitle
 
-    def setShortDescription(self, newShortDescription):
-        self.shortDescription = newShortDescription
+    def setSuggestedTitle(self, newSuggestedTitle):
+        self.suggestedTitle = newSuggestedTitle
 
-    def getLongDescription(self):
-        return self.longDescription
+    def getDescription(self):
+        return self.description
 
-    def setLongDescription(self, newLongDescription):
-        self.longDescription = newLongDescription
+    def setDescription(self, newDescription):
+        self.description = newDescription
 
     def getOneLiner(self):
         return self.oneLiner
@@ -13929,6 +13949,12 @@ class KalturaMetaFieldNameMap(KalturaObjectBase):
 
     def setKeywords(self, newKeywords):
         self.keywords = newKeywords
+
+    def getSensitiveContent(self):
+        return self.sensitiveContent
+
+    def setSensitiveContent(self, newSensitiveContent):
+        self.sensitiveContent = newSensitiveContent
 
 
 # @package Kaltura
