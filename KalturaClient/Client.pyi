@@ -151,6 +151,7 @@ from KalturaClient.Plugins.Core import KalturaSearchHistoryService
 from KalturaClient.Plugins.Core import KalturaSearchPriorityGroupService
 from KalturaClient.Plugins.Core import KalturaSearchPriorityGroupOrderedIdsSetService
 from KalturaClient.Plugins.Core import KalturaSegmentationTypeService
+from KalturaClient.Plugins.Core import KalturaSemanticAssetSearchPartnerConfigService
 from KalturaClient.Plugins.Core import KalturaSeriesRecordingService
 from KalturaClient.Plugins.Core import KalturaSessionService
 from KalturaClient.Plugins.Core import KalturaSmsAdapterProfileService
@@ -329,6 +330,7 @@ class KalturaClient:
     searchPriorityGroup: KalturaSearchPriorityGroupService
     searchPriorityGroupOrderedIdsSet: KalturaSearchPriorityGroupOrderedIdsSetService
     segmentationType: KalturaSegmentationTypeService
+    semanticAssetSearchPartnerConfig: KalturaSemanticAssetSearchPartnerConfigService
     seriesRecording: KalturaSeriesRecordingService
     session: KalturaSessionService
     smsAdapterProfile: KalturaSmsAdapterProfileService

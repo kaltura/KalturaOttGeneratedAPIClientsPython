@@ -42,7 +42,7 @@ from ..Base import (
     KalturaServiceBase,
 )
 
-API_VERSION = '10.7.1.4'
+API_VERSION = '10.9.0.0'
 
 ########## enums ##########
 # @package Kaltura
@@ -820,6 +820,18 @@ class KalturaCompensationType(object):
 class KalturaConcurrencyLimitationType(object):
     SINGLE = "Single"
     GROUP = "Group"
+
+    def __init__(self, value):
+        self.value = value
+
+    def getValue(self):
+        return self.value
+
+# @package Kaltura
+# @subpackage Client
+class KalturaConditionOperator(object):
+    EQUAL = "Equal"
+    NOTEQUAL = "NotEqual"
 
     def __init__(self, value):
         self.value = value
@@ -50790,6 +50802,153 @@ class KalturaSegmentationPartnerConfiguration(KalturaObjectBase):
 
 # @package Kaltura
 # @subpackage Client
+class KalturaSearchableAttribute(KalturaObjectBase):
+    """Represents a single searchable attribute for a given asset structure.
+                This class extends KalturaOTTObject and contains details such as the asset structure ID and its associated attributes."""
+
+    def __init__(self,
+            assetStructId = NotImplemented,
+            attributes = NotImplemented):
+        KalturaObjectBase.__init__(self)
+
+        # The unique identifier for the asset structure associated with the searchable attribute.
+        # @var str
+        self.assetStructId = assetStructId
+
+        # The specific attributes that define the searchable aspect of the asset.
+        # @var str
+        self.attributes = attributes
+
+
+    PROPERTY_LOADERS = {
+        'assetStructId': getXmlNodeText, 
+        'attributes': getXmlNodeText, 
+    }
+
+    def fromXml(self, node):
+        KalturaObjectBase.fromXml(self, node)
+        self.fromXmlImpl(node, KalturaSearchableAttribute.PROPERTY_LOADERS)
+
+    def toParams(self):
+        kparams = KalturaObjectBase.toParams(self)
+        kparams.put("objectType", "KalturaSearchableAttribute")
+        kparams.addStringIfDefined("assetStructId", self.assetStructId)
+        kparams.addStringIfDefined("attributes", self.attributes)
+        return kparams
+
+    def getAssetStructId(self):
+        return self.assetStructId
+
+    def setAssetStructId(self, newAssetStructId):
+        self.assetStructId = newAssetStructId
+
+    def getAttributes(self):
+        return self.attributes
+
+    def setAttributes(self, newAttributes):
+        self.attributes = newAttributes
+
+
+# @package Kaltura
+# @subpackage Client
+class KalturaSearchableAttributes(KalturaObjectBase):
+    """Represents a collection of searchable attributes within the Kaltura platform.
+                This class extends KalturaOTTObject and contains a list of KalturaSearchableAttribute objects."""
+
+    def __init__(self,
+            items = NotImplemented):
+        KalturaObjectBase.__init__(self)
+
+        # A list of searchable attributes associated with an asset structure.
+        # @var List[KalturaSearchableAttribute]
+        self.items = items
+
+
+    PROPERTY_LOADERS = {
+        'items': (KalturaObjectFactory.createArray, 'KalturaSearchableAttribute'), 
+    }
+
+    def fromXml(self, node):
+        KalturaObjectBase.fromXml(self, node)
+        self.fromXmlImpl(node, KalturaSearchableAttributes.PROPERTY_LOADERS)
+
+    def toParams(self):
+        kparams = KalturaObjectBase.toParams(self)
+        kparams.put("objectType", "KalturaSearchableAttributes")
+        kparams.addArrayIfDefined("items", self.items)
+        return kparams
+
+    def getItems(self):
+        return self.items
+
+    def setItems(self, newItems):
+        self.items = newItems
+
+
+# @package Kaltura
+# @subpackage Client
+class KalturaFilteringCondition(KalturaObjectBase):
+    """Represents a filtering condition used in Kaltura&#39;s search and query functionalities.
+                This class defines a condition based on a metadata attribute, an operator, and a comparison value."""
+
+    def __init__(self,
+            metaName = NotImplemented,
+            operator = NotImplemented,
+            value = NotImplemented):
+        KalturaObjectBase.__init__(self)
+
+        # The name of the metadata attribute to apply the filtering condition on.
+        # @var str
+        self.metaName = metaName
+
+        # The operator defining how the value should be compared (e.g., Equal, NotEqual).
+        # @var KalturaConditionOperator
+        self.operator = operator
+
+        # The value to compare against the metadata attribute using the specified operator.
+        # @var str
+        self.value = value
+
+
+    PROPERTY_LOADERS = {
+        'metaName': getXmlNodeText, 
+        'operator': (KalturaEnumsFactory.createString, "KalturaConditionOperator"), 
+        'value': getXmlNodeText, 
+    }
+
+    def fromXml(self, node):
+        KalturaObjectBase.fromXml(self, node)
+        self.fromXmlImpl(node, KalturaFilteringCondition.PROPERTY_LOADERS)
+
+    def toParams(self):
+        kparams = KalturaObjectBase.toParams(self)
+        kparams.put("objectType", "KalturaFilteringCondition")
+        kparams.addStringIfDefined("metaName", self.metaName)
+        kparams.addStringEnumIfDefined("operator", self.operator)
+        kparams.addStringIfDefined("value", self.value)
+        return kparams
+
+    def getMetaName(self):
+        return self.metaName
+
+    def setMetaName(self, newMetaName):
+        self.metaName = newMetaName
+
+    def getOperator(self):
+        return self.operator
+
+    def setOperator(self, newOperator):
+        self.operator = newOperator
+
+    def getValue(self):
+        return self.value
+
+    def setValue(self, newValue):
+        self.value = newValue
+
+
+# @package Kaltura
+# @subpackage Client
 class KalturaNetworkActionStatus(KalturaObjectBase):
     def __init__(self,
             status = NotImplemented,
@@ -52861,6 +53020,19 @@ class KalturaAssetService(KalturaServiceBase):
             return self.client.getMultiRequestResult()
         resultNode = self.client.doQueue()
         return getXmlNodeBool(resultNode)
+
+    def semanticSearch(self, query, refineQuery = False, size = 10):
+        """This API provides search capabilities for assets using semantic similarity based on the provided query."""
+
+        kparams = KalturaParams()
+        kparams.addStringIfDefined("query", query)
+        kparams.addBoolIfDefined("refineQuery", refineQuery);
+        kparams.addIntIfDefined("size", size);
+        self.client.queueServiceActionCall("asset", "semanticSearch", "KalturaAssetListResponse", kparams)
+        if self.client.isMultiRequest():
+            return self.client.getMultiRequestResult()
+        resultNode = self.client.doQueue()
+        return KalturaObjectFactory.create(resultNode, 'KalturaAssetListResponse')
 
     def update(self, id, asset):
         """update an existing asset.
@@ -58905,6 +59077,56 @@ class KalturaSegmentationTypeService(KalturaServiceBase):
 
 # @package Kaltura
 # @subpackage Client
+class KalturaSemanticAssetSearchPartnerConfigService(KalturaServiceBase):
+    def __init__(self, client = None):
+        KalturaServiceBase.__init__(self, client)
+
+    def getFilteringCondition(self):
+        """Retrieves the filtering condition applied to asset searches."""
+
+        kparams = KalturaParams()
+        self.client.queueServiceActionCall("semanticassetsearchpartnerconfig", "getFilteringCondition", "KalturaFilteringCondition", kparams)
+        if self.client.isMultiRequest():
+            return self.client.getMultiRequestResult()
+        resultNode = self.client.doQueue()
+        return KalturaObjectFactory.create(resultNode, 'KalturaFilteringCondition')
+
+    def getSearchableAttributes(self, assetStructId):
+        """Retrieves the searchable attributes associated with a specific asset structure."""
+
+        kparams = KalturaParams()
+        kparams.addStringIfDefined("assetStructId", assetStructId)
+        self.client.queueServiceActionCall("semanticassetsearchpartnerconfig", "getSearchableAttributes", "KalturaSearchableAttributes", kparams)
+        if self.client.isMultiRequest():
+            return self.client.getMultiRequestResult()
+        resultNode = self.client.doQueue()
+        return KalturaObjectFactory.create(resultNode, 'KalturaSearchableAttributes')
+
+    def upsertFilteringCondition(self, filteringCondition):
+        """Adds or updates a filtering condition for asset searches."""
+
+        kparams = KalturaParams()
+        kparams.addObjectIfDefined("filteringCondition", filteringCondition)
+        self.client.queueServiceActionCall("semanticassetsearchpartnerconfig", "upsertFilteringCondition", "KalturaFilteringCondition", kparams)
+        if self.client.isMultiRequest():
+            return self.client.getMultiRequestResult()
+        resultNode = self.client.doQueue()
+        return KalturaObjectFactory.create(resultNode, 'KalturaFilteringCondition')
+
+    def upsertSearchableAttributes(self, attributes):
+        """Adds or updates searchable attributes for a given asset."""
+
+        kparams = KalturaParams()
+        kparams.addObjectIfDefined("attributes", attributes)
+        self.client.queueServiceActionCall("semanticassetsearchpartnerconfig", "upsertSearchableAttributes", "KalturaSearchableAttributes", kparams)
+        if self.client.isMultiRequest():
+            return self.client.getMultiRequestResult()
+        resultNode = self.client.doQueue()
+        return KalturaObjectFactory.create(resultNode, 'KalturaSearchableAttributes')
+
+
+# @package Kaltura
+# @subpackage Client
 class KalturaSeriesRecordingService(KalturaServiceBase):
     def __init__(self, client = None):
         KalturaServiceBase.__init__(self, client)
@@ -60646,6 +60868,7 @@ class KalturaCoreClient(KalturaClientPlugin):
             'searchPriorityGroup': KalturaSearchPriorityGroupService,
             'searchPriorityGroupOrderedIdsSet': KalturaSearchPriorityGroupOrderedIdsSetService,
             'segmentationType': KalturaSegmentationTypeService,
+            'semanticAssetSearchPartnerConfig': KalturaSemanticAssetSearchPartnerConfigService,
             'seriesRecording': KalturaSeriesRecordingService,
             'session': KalturaSessionService,
             'smsAdapterProfile': KalturaSmsAdapterProfileService,
@@ -60738,6 +60961,7 @@ class KalturaCoreClient(KalturaClientPlugin):
             'KalturaCollectionOrderBy': KalturaCollectionOrderBy,
             'KalturaCompensationType': KalturaCompensationType,
             'KalturaConcurrencyLimitationType': KalturaConcurrencyLimitationType,
+            'KalturaConditionOperator': KalturaConditionOperator,
             'KalturaConfigurationGroupDeviceOrderBy': KalturaConfigurationGroupDeviceOrderBy,
             'KalturaConfigurationGroupTagOrderBy': KalturaConfigurationGroupTagOrderBy,
             'KalturaConfigurationsOrderBy': KalturaConfigurationsOrderBy,
@@ -61731,6 +61955,9 @@ class KalturaCoreClient(KalturaClientPlugin):
             'KalturaRegionChannelNumberMultiLcns': KalturaRegionChannelNumberMultiLcns,
             'KalturaSearchPriorityGroupOrderedIdsSet': KalturaSearchPriorityGroupOrderedIdsSet,
             'KalturaSegmentationPartnerConfiguration': KalturaSegmentationPartnerConfiguration,
+            'KalturaSearchableAttribute': KalturaSearchableAttribute,
+            'KalturaSearchableAttributes': KalturaSearchableAttributes,
+            'KalturaFilteringCondition': KalturaFilteringCondition,
             'KalturaNetworkActionStatus': KalturaNetworkActionStatus,
             'KalturaUserSocialActionResponse': KalturaUserSocialActionResponse,
             'KalturaSocial': KalturaSocial,
