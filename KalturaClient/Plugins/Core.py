@@ -42,7 +42,7 @@ from ..Base import (
     KalturaServiceBase,
 )
 
-API_VERSION = '10.7.1.4'
+API_VERSION = '11.0.0.0'
 
 ########## enums ##########
 # @package Kaltura
@@ -11106,7 +11106,7 @@ class KalturaPersonalAssetSelectionFilter(KalturaFilter):
         KalturaFilter.__init__(self,
             orderBy)
 
-        # selected assets for specific slot number
+        # Filters the results of asset.listPersonalSelection by slot number.  Takes a slot number as input and returns only those assets from the personal selection that are assigned to that slot.
         # @var int
         self.slotNumberEqual = slotNumberEqual
 
@@ -53068,7 +53068,7 @@ class KalturaAssetPersonalSelectionService(KalturaServiceBase):
         resultNode = self.client.doQueue()
 
     def upsert(self, assetId, assetType, slotNumber):
-        """Add or update asset selection in slot"""
+        """upsert manages asset selections within slots.  It adds a new asset ID if it doesn&#39;t exist, or updates the timestamp if it does.  Slots are limited to 30 unique IDs.  When a slot is full, the oldest entry is removed (FIFO).  Inactive assets are automatically removed after 90 days."""
 
         kparams = KalturaParams()
         kparams.addIntIfDefined("assetId", assetId);
