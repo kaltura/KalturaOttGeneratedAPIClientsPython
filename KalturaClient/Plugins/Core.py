@@ -42,7 +42,7 @@ from ..Base import (
     KalturaServiceBase,
 )
 
-API_VERSION = '10.7.1.4'
+API_VERSION = '11.0.0.0'
 
 ########## enums ##########
 # @package Kaltura
@@ -3135,6 +3135,17 @@ class KalturaUserAssetsListType(object):
     WATCH = "watch"
     PURCHASE = "purchase"
     LIBRARY = "library"
+
+    def __init__(self, value):
+        self.value = value
+
+    def getValue(self):
+        return self.value
+
+# @package Kaltura
+# @subpackage Client
+class KalturaUserLogOrderBy(object):
+    NONE = "NONE"
 
     def __init__(self, value):
         self.value = value
@@ -6837,6 +6848,72 @@ class KalturaVodIngestAssetResultFilter(KalturaFilter):
 
     def setShopAssetUserRuleIdIn(self, newShopAssetUserRuleIdIn):
         self.shopAssetUserRuleIdIn = newShopAssetUserRuleIdIn
+
+
+# @package Kaltura
+# @subpackage Client
+class KalturaUserLogFilter(KalturaFilter):
+    """Filters user logs using the following criteria: user ID(s), message content (substring match), and creation date."""
+
+    def __init__(self,
+            orderBy = NotImplemented,
+            userIdIn = NotImplemented,
+            startDate = NotImplemented,
+            endDate = NotImplemented):
+        KalturaFilter.__init__(self,
+            orderBy)
+
+        # A comma-separated list of up to 15 positive integer user IDs (greater than zero) used to filter log entries. An empty list is not permitted;
+        #             Valid IDs: Only log entries associated with valid, existing user IDs are returned; 
+        #             Invalid IDs: Specifying a non-existent user ID will result in no log entries being returned for that specific ID; 
+        #             Users: Log entries associated with a deleted user will be returned unless the log entry itself has also been deleted;
+        # @var str
+        self.userIdIn = userIdIn
+
+        # The start date for filtering (Epoch format). Only logs created on or after this date are returned. If omitted, no start date filter is applied.
+        # @var int
+        self.startDate = startDate
+
+        # The end date for filtering (Epoch format). Only logs created on or before this date are returned. If omitted, no end date filter is applied.
+        # @var int
+        self.endDate = endDate
+
+
+    PROPERTY_LOADERS = {
+        'userIdIn': getXmlNodeText, 
+        'startDate': getXmlNodeInt, 
+        'endDate': getXmlNodeInt, 
+    }
+
+    def fromXml(self, node):
+        KalturaFilter.fromXml(self, node)
+        self.fromXmlImpl(node, KalturaUserLogFilter.PROPERTY_LOADERS)
+
+    def toParams(self):
+        kparams = KalturaFilter.toParams(self)
+        kparams.put("objectType", "KalturaUserLogFilter")
+        kparams.addStringIfDefined("userIdIn", self.userIdIn)
+        kparams.addIntIfDefined("startDate", self.startDate)
+        kparams.addIntIfDefined("endDate", self.endDate)
+        return kparams
+
+    def getUserIdIn(self):
+        return self.userIdIn
+
+    def setUserIdIn(self, newUserIdIn):
+        self.userIdIn = newUserIdIn
+
+    def getStartDate(self):
+        return self.startDate
+
+    def setStartDate(self, newStartDate):
+        self.startDate = newStartDate
+
+    def getEndDate(self):
+        return self.endDate
+
+    def setEndDate(self, newEndDate):
+        self.endDate = newEndDate
 
 
 # @package Kaltura
@@ -11106,7 +11183,7 @@ class KalturaPersonalAssetSelectionFilter(KalturaFilter):
         KalturaFilter.__init__(self,
             orderBy)
 
-        # selected assets for specific slot number
+        # Filters the results of asset.listPersonalSelection by slot number.  Takes a slot number as input and returns only those assets from the personal selection that are assigned to that slot.
         # @var int
         self.slotNumberEqual = slotNumberEqual
 
@@ -32707,6 +32784,105 @@ class KalturaIngestStatusEpgProgramResultListResponse(KalturaListResponse):
 
 # @package Kaltura
 # @subpackage Client
+class KalturaUserLog(KalturaObjectBase):
+    """This log entry records an event related to a user&#39;s interaction with the Kaltura TV Platform (KTP). The event may be initiated directly by the user or by the platform itself in response to user activity."""
+
+    def __init__(self,
+            id = NotImplemented,
+            createDate = NotImplemented,
+            userId = NotImplemented,
+            message = NotImplemented):
+        KalturaObjectBase.__init__(self)
+
+        # UserLog entry unique identifier
+        # @var int
+        # @readonly
+        self.id = id
+
+        # The log created date in epoch
+        # @var int
+        # @readonly
+        self.createDate = createDate
+
+        # A valid user unique identifier
+        # @var int
+        # @readonly
+        self.userId = userId
+
+        # Log message
+        # @var str
+        # @readonly
+        self.message = message
+
+
+    PROPERTY_LOADERS = {
+        'id': getXmlNodeInt, 
+        'createDate': getXmlNodeInt, 
+        'userId': getXmlNodeInt, 
+        'message': getXmlNodeText, 
+    }
+
+    def fromXml(self, node):
+        KalturaObjectBase.fromXml(self, node)
+        self.fromXmlImpl(node, KalturaUserLog.PROPERTY_LOADERS)
+
+    def toParams(self):
+        kparams = KalturaObjectBase.toParams(self)
+        kparams.put("objectType", "KalturaUserLog")
+        return kparams
+
+    def getId(self):
+        return self.id
+
+    def getCreateDate(self):
+        return self.createDate
+
+    def getUserId(self):
+        return self.userId
+
+    def getMessage(self):
+        return self.message
+
+
+# @package Kaltura
+# @subpackage Client
+class KalturaUserLogListResponse(KalturaListResponse):
+    """TODO: Ask about renaming to *List*Response"""
+
+    def __init__(self,
+            totalCount = NotImplemented,
+            objects = NotImplemented):
+        KalturaListResponse.__init__(self,
+            totalCount)
+
+        # KalturaUserLog list response
+        # @var List[KalturaUserLog]
+        self.objects = objects
+
+
+    PROPERTY_LOADERS = {
+        'objects': (KalturaObjectFactory.createArray, 'KalturaUserLog'), 
+    }
+
+    def fromXml(self, node):
+        KalturaListResponse.fromXml(self, node)
+        self.fromXmlImpl(node, KalturaUserLogListResponse.PROPERTY_LOADERS)
+
+    def toParams(self):
+        kparams = KalturaListResponse.toParams(self)
+        kparams.put("objectType", "KalturaUserLogListResponse")
+        kparams.addArrayIfDefined("objects", self.objects)
+        return kparams
+
+    def getObjects(self):
+        return self.objects
+
+    def setObjects(self, newObjects):
+        self.objects = newObjects
+
+
+# @package Kaltura
+# @subpackage Client
 class KalturaDurationListResponse(KalturaListResponse):
     def __init__(self,
             totalCount = NotImplemented,
@@ -53068,7 +53244,7 @@ class KalturaAssetPersonalSelectionService(KalturaServiceBase):
         resultNode = self.client.doQueue()
 
     def upsert(self, assetId, assetType, slotNumber):
-        """Add or update asset selection in slot"""
+        """upsert manages asset selections within slots.  It adds a new asset ID if it doesn&#39;t exist, or updates the timestamp if it does.  Slots are limited to 30 unique IDs.  When a slot is full, the oldest entry is removed (FIFO).  Inactive assets are automatically removed after 90 days."""
 
         kparams = KalturaParams()
         kparams.addIntIfDefined("assetId", assetId);
@@ -60220,6 +60396,25 @@ class KalturaUserInterestService(KalturaServiceBase):
 
 # @package Kaltura
 # @subpackage Client
+class KalturaUserLogService(KalturaServiceBase):
+    def __init__(self, client = None):
+        KalturaServiceBase.__init__(self, client)
+
+    def list(self, filter = NotImplemented, pager = NotImplemented):
+        """Retrieves a list of user log entries matching the specified filter criteria."""
+
+        kparams = KalturaParams()
+        kparams.addObjectIfDefined("filter", filter)
+        kparams.addObjectIfDefined("pager", pager)
+        self.client.queueServiceActionCall("userlog", "list", "KalturaUserLogListResponse", kparams)
+        if self.client.isMultiRequest():
+            return self.client.getMultiRequestResult()
+        resultNode = self.client.doQueue()
+        return KalturaObjectFactory.create(resultNode, 'KalturaUserLogListResponse')
+
+
+# @package Kaltura
+# @subpackage Client
 class KalturaUserLoginPinService(KalturaServiceBase):
     def __init__(self, client = None):
         KalturaServiceBase.__init__(self, client)
@@ -60672,6 +60867,7 @@ class KalturaCoreClient(KalturaClientPlugin):
             'userAssetRule': KalturaUserAssetRuleService,
             'userAssetsListItem': KalturaUserAssetsListItemService,
             'userInterest': KalturaUserInterestService,
+            'userLog': KalturaUserLogService,
             'userLoginPin': KalturaUserLoginPinService,
             'userRole': KalturaUserRoleService,
             'userSegment': KalturaUserSegmentService,
@@ -60912,6 +61108,7 @@ class KalturaCoreClient(KalturaClientPlugin):
             'KalturaUserAssetRuleOrderBy': KalturaUserAssetRuleOrderBy,
             'KalturaUserAssetsListItemType': KalturaUserAssetsListItemType,
             'KalturaUserAssetsListType': KalturaUserAssetsListType,
+            'KalturaUserLogOrderBy': KalturaUserLogOrderBy,
             'KalturaUserRoleOrderBy': KalturaUserRoleOrderBy,
             'KalturaUserRoleProfile': KalturaUserRoleProfile,
             'KalturaUserRoleType': KalturaUserRoleType,
@@ -61001,6 +61198,7 @@ class KalturaCoreClient(KalturaClientPlugin):
             'KalturaIngestProgramResultsByExternalIdsFilter': KalturaIngestProgramResultsByExternalIdsFilter,
             'KalturaIngestProgramResultsByProgramIdsFilter': KalturaIngestProgramResultsByProgramIdsFilter,
             'KalturaVodIngestAssetResultFilter': KalturaVodIngestAssetResultFilter,
+            'KalturaUserLogFilter': KalturaUserLogFilter,
             'KalturaAggregationCountFilter': KalturaAggregationCountFilter,
             'KalturaDynamicListFilter': KalturaDynamicListFilter,
             'KalturaDynamicListIdInFilter': KalturaDynamicListIdInFilter,
@@ -61453,6 +61651,8 @@ class KalturaCoreClient(KalturaClientPlugin):
             'KalturaIngestEpgDetails': KalturaIngestEpgDetails,
             'KalturaIngestEpgProgramResult': KalturaIngestEpgProgramResult,
             'KalturaIngestStatusEpgProgramResultListResponse': KalturaIngestStatusEpgProgramResultListResponse,
+            'KalturaUserLog': KalturaUserLog,
+            'KalturaUserLogListResponse': KalturaUserLogListResponse,
             'KalturaDurationListResponse': KalturaDurationListResponse,
             'KalturaDynamicListListResponse': KalturaDynamicListListResponse,
             'KalturaIntegerValueListResponse': KalturaIntegerValueListResponse,

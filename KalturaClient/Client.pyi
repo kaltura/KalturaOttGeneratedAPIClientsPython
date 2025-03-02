@@ -177,6 +177,7 @@ from KalturaClient.Plugins.Core import KalturaUsageModuleService
 from KalturaClient.Plugins.Core import KalturaUserAssetRuleService
 from KalturaClient.Plugins.Core import KalturaUserAssetsListItemService
 from KalturaClient.Plugins.Core import KalturaUserInterestService
+from KalturaClient.Plugins.Core import KalturaUserLogService
 from KalturaClient.Plugins.Core import KalturaUserLoginPinService
 from KalturaClient.Plugins.Core import KalturaUserRoleService
 from KalturaClient.Plugins.Core import KalturaUserSegmentService
@@ -355,6 +356,7 @@ class KalturaClient:
     userAssetRule: KalturaUserAssetRuleService
     userAssetsListItem: KalturaUserAssetsListItemService
     userInterest: KalturaUserInterestService
+    userLog: KalturaUserLogService
     userLoginPin: KalturaUserLoginPinService
     userRole: KalturaUserRoleService
     userSegment: KalturaUserSegmentService
