@@ -42,7 +42,7 @@ from ..Base import (
     KalturaServiceBase,
 )
 
-API_VERSION = '10.9.0.0'
+API_VERSION = '11.0.0.1'
 
 ########## enums ##########
 # @package Kaltura
@@ -2917,19 +2917,6 @@ class KalturaSubscriptionSetType(object):
 class KalturaSubscriptionTriggerType(object):
     START_DATE = "START_DATE"
     END_DATE = "END_DATE"
-
-    def __init__(self, value):
-        self.value = value
-
-    def getValue(self):
-        return self.value
-
-# @package Kaltura
-# @subpackage Client
-class KalturaSubtitlesType(object):
-    TEXT = "Text"
-    SRT = "SRT"
-    WEBVTT = "WebVTT"
 
     def __init__(self, value):
         self.value = value
@@ -25163,7 +25150,6 @@ class KalturaSubtitles(KalturaObjectBase):
             id = NotImplemented,
             createDate = NotImplemented,
             fileName = NotImplemented,
-            type = NotImplemented,
             language = NotImplemented):
         KalturaObjectBase.__init__(self)
 
@@ -25181,10 +25167,6 @@ class KalturaSubtitles(KalturaObjectBase):
         # @var str
         self.fileName = fileName
 
-        # Mandatory. The type of the subtitles file. Supported - Text, SRT, WebVTT.
-        # @var KalturaSubtitlesType
-        self.type = type
-
         # Mandatory. The language in which the subtitles are written.
         #             It is used in the LLM prompt to inform it what is the language it needs to analyze.
         # @var str
@@ -25195,7 +25177,6 @@ class KalturaSubtitles(KalturaObjectBase):
         'id': getXmlNodeInt, 
         'createDate': getXmlNodeInt, 
         'fileName': getXmlNodeText, 
-        'type': (KalturaEnumsFactory.createString, "KalturaSubtitlesType"), 
         'language': getXmlNodeText, 
     }
 
@@ -25207,7 +25188,6 @@ class KalturaSubtitles(KalturaObjectBase):
         kparams = KalturaObjectBase.toParams(self)
         kparams.put("objectType", "KalturaSubtitles")
         kparams.addStringIfDefined("fileName", self.fileName)
-        kparams.addStringEnumIfDefined("type", self.type)
         kparams.addStringIfDefined("language", self.language)
         return kparams
 
@@ -25222,12 +25202,6 @@ class KalturaSubtitles(KalturaObjectBase):
 
     def setFileName(self, newFileName):
         self.fileName = newFileName
-
-    def getType(self):
-        return self.type
-
-    def setType(self, newType):
-        self.type = newType
 
     def getLanguage(self):
         return self.language
@@ -53049,8 +53023,8 @@ class KalturaAiMetadataGeneratorService(KalturaServiceBase):
     def __init__(self, client = None):
         KalturaServiceBase.__init__(self, client)
 
-    def generateMetadataBySubtitles(self, subtitlesFileId, externalAssetIds):
-        """initiate the the process of metadata generation based on the subtitles file."""
+    def generateMetadataBySubtitles(self, subtitlesFileId, externalAssetIds = NotImplemented):
+        """Initiate the the process of metadata generation based on the subtitles file."""
 
         kparams = KalturaParams()
         kparams.addIntIfDefined("subtitlesFileId", subtitlesFileId);
@@ -61511,7 +61485,6 @@ class KalturaCoreClient(KalturaClientPlugin):
             'KalturaSubscriptionSetOrderBy': KalturaSubscriptionSetOrderBy,
             'KalturaSubscriptionSetType': KalturaSubscriptionSetType,
             'KalturaSubscriptionTriggerType': KalturaSubscriptionTriggerType,
-            'KalturaSubtitlesType': KalturaSubtitlesType,
             'KalturaSuspensionProfileInheritanceType': KalturaSuspensionProfileInheritanceType,
             'KalturaTagOrderBy': KalturaTagOrderBy,
             'KalturaTimeShiftedTvState': KalturaTimeShiftedTvState,
