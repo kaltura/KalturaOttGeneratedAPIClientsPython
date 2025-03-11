@@ -2206,7 +2206,7 @@ class KalturaUserAssetsListType(object):
     def getValue(self) -> str: ...
 
 class KalturaUserLogOrderBy(object):
-    NONE = "NONE"
+    CREATE_DATE_DESC = "CREATE_DATE_DESC"
 
     def __init__(self, value: str): ...
 
