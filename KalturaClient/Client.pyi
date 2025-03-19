@@ -28,6 +28,7 @@
 from typing import List
 from KalturaClient import KalturaConfiguration
 from KalturaClient.Plugins.Core import KalturaObject
+from KalturaClient.Plugins.Core import KalturaAiMetadataGeneratorService
 from KalturaClient.Plugins.Core import KalturaAnnouncementService
 from KalturaClient.Plugins.Core import KalturaAppTokenService
 from KalturaClient.Plugins.Core import KalturaAssetCommentService
@@ -162,6 +163,7 @@ from KalturaClient.Plugins.Core import KalturaSsoAdapterProfileService
 from KalturaClient.Plugins.Core import KalturaStreamingDeviceService
 from KalturaClient.Plugins.Core import KalturaSubscriptionService
 from KalturaClient.Plugins.Core import KalturaSubscriptionSetService
+from KalturaClient.Plugins.Core import KalturaSubtitlesService
 from KalturaClient.Plugins.Core import KalturaSystemService
 from KalturaClient.Plugins.Core import KalturaTagService
 from KalturaClient.Plugins.Core import KalturaTimeShiftedTvPartnerSettingsService
@@ -207,6 +209,7 @@ class KalturaClient:
     def startMultiRequest(self): ...
     def doMultiRequest(self) -> List[KalturaObject]: ...
 
+    aiMetadataGenerator: KalturaAiMetadataGeneratorService
     announcement: KalturaAnnouncementService
     appToken: KalturaAppTokenService
     assetComment: KalturaAssetCommentService
@@ -341,6 +344,7 @@ class KalturaClient:
     streamingDevice: KalturaStreamingDeviceService
     subscription: KalturaSubscriptionService
     subscriptionSet: KalturaSubscriptionSetService
+    subtitles: KalturaSubtitlesService
     system: KalturaSystemService
     tag: KalturaTagService
     timeShiftedTvPartnerSettings: KalturaTimeShiftedTvPartnerSettingsService
