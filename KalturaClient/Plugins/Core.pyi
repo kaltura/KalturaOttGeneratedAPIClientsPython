@@ -5831,6 +5831,7 @@ class KalturaManualCollectionAsset(KalturaObjectBase):
     def setType(self, newType: KalturaManualCollectionAssetType) -> None: ...
 
 class KalturaManualChannel(KalturaChannel):
+    mediaIds: str
     assets: List[KalturaManualCollectionAsset]
     def __init__(self,
             id: int = NotImplemented,
@@ -5850,8 +5851,11 @@ class KalturaManualChannel(KalturaChannel):
             assetUserRuleId: int = NotImplemented,
             metaData: map = NotImplemented,
             virtualAssetId: int = NotImplemented,
+            mediaIds: str = NotImplemented,
             assets: List[KalturaManualCollectionAsset] = NotImplemented): ...
 
+    def getMediaIds(self) -> str: ...
+    def setMediaIds(self, newMediaIds: str) -> None: ...
     def getAssets(self) -> List[KalturaManualCollectionAsset]: ...
     def setAssets(self, newAssets: List[KalturaManualCollectionAsset]) -> None: ...
 

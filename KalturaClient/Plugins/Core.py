@@ -16293,6 +16293,7 @@ class KalturaManualChannel(KalturaChannel):
             assetUserRuleId = NotImplemented,
             metaData = NotImplemented,
             virtualAssetId = NotImplemented,
+            mediaIds = NotImplemented,
             assets = NotImplemented):
         KalturaChannel.__init__(self,
             id,
@@ -16313,12 +16314,17 @@ class KalturaManualChannel(KalturaChannel):
             metaData,
             virtualAssetId)
 
+        # A list of comma separated media ids associated with this channel, according to the order of the medias in the channel.
+        # @var str
+        self.mediaIds = mediaIds
+
         # List of assets identifier
         # @var List[KalturaManualCollectionAsset]
         self.assets = assets
 
 
     PROPERTY_LOADERS = {
+        'mediaIds': getXmlNodeText, 
         'assets': (KalturaObjectFactory.createArray, 'KalturaManualCollectionAsset'), 
     }
 
@@ -16329,8 +16335,15 @@ class KalturaManualChannel(KalturaChannel):
     def toParams(self):
         kparams = KalturaChannel.toParams(self)
         kparams.put("objectType", "KalturaManualChannel")
+        kparams.addStringIfDefined("mediaIds", self.mediaIds)
         kparams.addArrayIfDefined("assets", self.assets)
         return kparams
+
+    def getMediaIds(self):
+        return self.mediaIds
+
+    def setMediaIds(self, newMediaIds):
+        self.mediaIds = newMediaIds
 
     def getAssets(self):
         return self.assets
