@@ -60132,22 +60132,29 @@ class KalturaSemanticQueryService(KalturaServiceBase):
         resultNode = self.client.doQueue()
         return KalturaObjectFactory.create(resultNode, 'KalturaSemanticQuery')
 
-    def getPartnerConfiguration(self):
+
+# @package Kaltura
+# @subpackage Client
+class KalturaSemanticQueryPartnerConfigurationService(KalturaServiceBase):
+    def __init__(self, client = None):
+        KalturaServiceBase.__init__(self, client)
+
+    def get(self):
         """Retrieves the current partner configuration for semantic query."""
 
         kparams = KalturaParams()
-        self.client.queueServiceActionCall("semanticquery", "getPartnerConfiguration", "KalturaSemanticQueryPartnerConfiguration", kparams)
+        self.client.queueServiceActionCall("semanticquerypartnerconfiguration", "get", "KalturaSemanticQueryPartnerConfiguration", kparams)
         if self.client.isMultiRequest():
             return self.client.getMultiRequestResult()
         resultNode = self.client.doQueue()
         return KalturaObjectFactory.create(resultNode, 'KalturaSemanticQueryPartnerConfiguration')
 
-    def updatePartnerConfiguration(self, configuration):
+    def update(self, configuration):
         """Updates the partner configuration for semantic query."""
 
         kparams = KalturaParams()
         kparams.addObjectIfDefined("configuration", configuration)
-        self.client.queueServiceActionCall("semanticquery", "updatePartnerConfiguration", "KalturaSemanticQueryPartnerConfiguration", kparams)
+        self.client.queueServiceActionCall("semanticquerypartnerconfiguration", "update", "KalturaSemanticQueryPartnerConfiguration", kparams)
         if self.client.isMultiRequest():
             return self.client.getMultiRequestResult()
         resultNode = self.client.doQueue()
@@ -61938,6 +61945,7 @@ class KalturaCoreClient(KalturaClientPlugin):
             'segmentationType': KalturaSegmentationTypeService,
             'semanticAssetSearchPartnerConfig': KalturaSemanticAssetSearchPartnerConfigService,
             'semanticQuery': KalturaSemanticQueryService,
+            'semanticQueryPartnerConfiguration': KalturaSemanticQueryPartnerConfigurationService,
             'seriesRecording': KalturaSeriesRecordingService,
             'session': KalturaSessionService,
             'smsAdapterProfile': KalturaSmsAdapterProfileService,
