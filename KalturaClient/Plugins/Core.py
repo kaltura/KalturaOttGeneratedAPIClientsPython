@@ -42,7 +42,7 @@ from ..Base import (
     KalturaServiceBase,
 )
 
-API_VERSION = '11.1.0.1'
+API_VERSION = '11.2.0.1'
 
 ########## enums ##########
 # @package Kaltura
@@ -51630,16 +51630,16 @@ class KalturaGenerateSemanticQuery(KalturaObjectBase):
     """Request object for generating semantic queries."""
 
     def __init__(self,
-            query = NotImplemented):
+            text = NotImplemented):
         KalturaObjectBase.__init__(self)
 
         # The input query text to generate semantic queries from.
         # @var str
-        self.query = query
+        self.text = text
 
 
     PROPERTY_LOADERS = {
-        'query': getXmlNodeText, 
+        'text': getXmlNodeText, 
     }
 
     def fromXml(self, node):
@@ -51649,14 +51649,14 @@ class KalturaGenerateSemanticQuery(KalturaObjectBase):
     def toParams(self):
         kparams = KalturaObjectBase.toParams(self)
         kparams.put("objectType", "KalturaGenerateSemanticQuery")
-        kparams.addStringIfDefined("query", self.query)
+        kparams.addStringIfDefined("text", self.text)
         return kparams
 
-    def getQuery(self):
-        return self.query
+    def getText(self):
+        return self.text
 
-    def setQuery(self, newQuery):
-        self.query = newQuery
+    def setText(self, newText):
+        self.text = newText
 
 
 # @package Kaltura
