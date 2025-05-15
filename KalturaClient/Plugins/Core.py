@@ -42,7 +42,7 @@ from ..Base import (
     KalturaServiceBase,
 )
 
-API_VERSION = '10.7.1.4'
+API_VERSION = '10.6.0.12'
 
 ########## enums ##########
 # @package Kaltura
@@ -1500,6 +1500,7 @@ class KalturaImageOrderBy(object):
 class KalturaImageStatus(object):
     PENDING = "PENDING"
     READY = "READY"
+    FAILED = "FAILED"
 
     def __init__(self, value):
         self.value = value
@@ -3228,17 +3229,6 @@ class KalturaVodIngestAssetResultStatus(object):
 
 # @package Kaltura
 # @subpackage Client
-class KalturaWatchBasedRecommendationsProfileOrderBy(object):
-    NONE = "NONE"
-
-    def __init__(self, value):
-        self.value = value
-
-    def getValue(self):
-        return self.value
-
-# @package Kaltura
-# @subpackage Client
 class KalturaWatchedAllReturnStrategy(object):
     RETURN_NO_NEXT_EPISODE = "RETURN_NO_NEXT_EPISODE"
     RETURN_FIRST_EPISODE = "RETURN_FIRST_EPISODE"
@@ -4838,98 +4828,6 @@ class KalturaUserSegmentFilter(KalturaFilter):
 
     def setKSql(self, newKSql):
         self.kSql = newKSql
-
-
-# @package Kaltura
-# @subpackage Client
-class KalturaWatchBasedRecommendationsProfileFilter(KalturaFilter):
-    def __init__(self,
-            orderBy = NotImplemented):
-        KalturaFilter.__init__(self,
-            orderBy)
-
-
-    PROPERTY_LOADERS = {
-    }
-
-    def fromXml(self, node):
-        KalturaFilter.fromXml(self, node)
-        self.fromXmlImpl(node, KalturaWatchBasedRecommendationsProfileFilter.PROPERTY_LOADERS)
-
-    def toParams(self):
-        kparams = KalturaFilter.toParams(self)
-        kparams.put("objectType", "KalturaWatchBasedRecommendationsProfileFilter")
-        return kparams
-
-
-# @package Kaltura
-# @subpackage Client
-class KalturaWatchBasedRecommendationsProfileByIdsFilter(KalturaWatchBasedRecommendationsProfileFilter):
-    def __init__(self,
-            orderBy = NotImplemented,
-            idIn = NotImplemented):
-        KalturaWatchBasedRecommendationsProfileFilter.__init__(self,
-            orderBy)
-
-        # Comma seperated watch based recommendation profile ids
-        # @var str
-        self.idIn = idIn
-
-
-    PROPERTY_LOADERS = {
-        'idIn': getXmlNodeText, 
-    }
-
-    def fromXml(self, node):
-        KalturaWatchBasedRecommendationsProfileFilter.fromXml(self, node)
-        self.fromXmlImpl(node, KalturaWatchBasedRecommendationsProfileByIdsFilter.PROPERTY_LOADERS)
-
-    def toParams(self):
-        kparams = KalturaWatchBasedRecommendationsProfileFilter.toParams(self)
-        kparams.put("objectType", "KalturaWatchBasedRecommendationsProfileByIdsFilter")
-        kparams.addStringIfDefined("idIn", self.idIn)
-        return kparams
-
-    def getIdIn(self):
-        return self.idIn
-
-    def setIdIn(self, newIdIn):
-        self.idIn = newIdIn
-
-
-# @package Kaltura
-# @subpackage Client
-class KalturaWatchBasedRecommendationsProfileByNameFilter(KalturaWatchBasedRecommendationsProfileFilter):
-    def __init__(self,
-            orderBy = NotImplemented,
-            nameContains = NotImplemented):
-        KalturaWatchBasedRecommendationsProfileFilter.__init__(self,
-            orderBy)
-
-        # A string that is included in the profile name
-        # @var str
-        self.nameContains = nameContains
-
-
-    PROPERTY_LOADERS = {
-        'nameContains': getXmlNodeText, 
-    }
-
-    def fromXml(self, node):
-        KalturaWatchBasedRecommendationsProfileFilter.fromXml(self, node)
-        self.fromXmlImpl(node, KalturaWatchBasedRecommendationsProfileByNameFilter.PROPERTY_LOADERS)
-
-    def toParams(self):
-        kparams = KalturaWatchBasedRecommendationsProfileFilter.toParams(self)
-        kparams.put("objectType", "KalturaWatchBasedRecommendationsProfileByNameFilter")
-        kparams.addStringIfDefined("nameContains", self.nameContains)
-        return kparams
-
-    def getNameContains(self):
-        return self.nameContains
-
-    def setNameContains(self, newNameContains):
-        self.nameContains = newNameContains
 
 
 # @package Kaltura
@@ -15832,7 +15730,6 @@ class KalturaManualChannel(KalturaChannel):
             assetUserRuleId = NotImplemented,
             metaData = NotImplemented,
             virtualAssetId = NotImplemented,
-            mediaIds = NotImplemented,
             assets = NotImplemented):
         KalturaChannel.__init__(self,
             id,
@@ -15853,17 +15750,12 @@ class KalturaManualChannel(KalturaChannel):
             metaData,
             virtualAssetId)
 
-        # A list of comma separated media ids associated with this channel, according to the order of the medias in the channel.
-        # @var str
-        self.mediaIds = mediaIds
-
         # List of assets identifier
         # @var List[KalturaManualCollectionAsset]
         self.assets = assets
 
 
     PROPERTY_LOADERS = {
-        'mediaIds': getXmlNodeText, 
         'assets': (KalturaObjectFactory.createArray, 'KalturaManualCollectionAsset'), 
     }
 
@@ -15874,15 +15766,8 @@ class KalturaManualChannel(KalturaChannel):
     def toParams(self):
         kparams = KalturaChannel.toParams(self)
         kparams.put("objectType", "KalturaManualChannel")
-        kparams.addStringIfDefined("mediaIds", self.mediaIds)
         kparams.addArrayIfDefined("assets", self.assets)
         return kparams
-
-    def getMediaIds(self):
-        return self.mediaIds
-
-    def setMediaIds(self, newMediaIds):
-        self.mediaIds = newMediaIds
 
     def getAssets(self):
         return self.assets
@@ -26868,201 +26753,6 @@ class KalturaUserSegmentListResponse(KalturaListResponse):
     def toParams(self):
         kparams = KalturaListResponse.toParams(self)
         kparams.put("objectType", "KalturaUserSegmentListResponse")
-        kparams.addArrayIfDefined("objects", self.objects)
-        return kparams
-
-    def getObjects(self):
-        return self.objects
-
-    def setObjects(self, newObjects):
-        self.objects = newObjects
-
-
-# @package Kaltura
-# @subpackage Client
-class KalturaWatchBasedRecommendationsProfile(KalturaObjectBase):
-    def __init__(self,
-            id = NotImplemented,
-            name = NotImplemented,
-            topicIds = NotImplemented,
-            analysisMediaTypeIds = NotImplemented,
-            userInterestPlayThresholdInPercentages = NotImplemented,
-            numberOfInterests = NotImplemented,
-            fallbackChannelId = NotImplemented,
-            minPlaybacks = NotImplemented,
-            maxPlaybacks = NotImplemented,
-            allowedRecommendationsKsql = NotImplemented,
-            playbackInterestsCalculationPeriodDays = NotImplemented):
-        KalturaObjectBase.__init__(self)
-
-        # Unique identifier for the profile
-        # @var int
-        # @readonly
-        self.id = id
-
-        # Friendly name for the profile
-        # @var str
-        self.name = name
-
-        # List of comma seperated topic ids considered for recommendations calculation.
-        # @var str
-        self.topicIds = topicIds
-
-        # List of comma seperated type ids considered for recommendations calculation.
-        # @var str
-        self.analysisMediaTypeIds = analysisMediaTypeIds
-
-        # The minimum coverage in percentages that media is considered viewed.
-        # @var int
-        self.userInterestPlayThresholdInPercentages = userInterestPlayThresholdInPercentages
-
-        # The number of interests that will be selected per user.
-        # @var int
-        self.numberOfInterests = numberOfInterests
-
-        # Reference to partner default recommendations (first 30 assets that are included in the referred KalturaChannel).
-        # @var int
-        self.fallbackChannelId = fallbackChannelId
-
-        # Minimum number of media assets that user shall watch to trigger user interests calculation.
-        # @var int
-        self.minPlaybacks = minPlaybacks
-
-        # Maximum number of assets that watched by a user and will be considered for recommendations calculation (the last maxPlaybacks shall be used in the analysis).
-        # @var int
-        self.maxPlaybacks = maxPlaybacks
-
-        # A kSql is used to filter the "user interests" recommendations. Only asset properties, metas, or tags are allowed ti be included in this ksql.
-        # @var str
-        self.allowedRecommendationsKsql = allowedRecommendationsKsql
-
-        # The number of days the user interests are considered to be up-to-date.
-        # @var int
-        self.playbackInterestsCalculationPeriodDays = playbackInterestsCalculationPeriodDays
-
-
-    PROPERTY_LOADERS = {
-        'id': getXmlNodeInt, 
-        'name': getXmlNodeText, 
-        'topicIds': getXmlNodeText, 
-        'analysisMediaTypeIds': getXmlNodeText, 
-        'userInterestPlayThresholdInPercentages': getXmlNodeInt, 
-        'numberOfInterests': getXmlNodeInt, 
-        'fallbackChannelId': getXmlNodeInt, 
-        'minPlaybacks': getXmlNodeInt, 
-        'maxPlaybacks': getXmlNodeInt, 
-        'allowedRecommendationsKsql': getXmlNodeText, 
-        'playbackInterestsCalculationPeriodDays': getXmlNodeInt, 
-    }
-
-    def fromXml(self, node):
-        KalturaObjectBase.fromXml(self, node)
-        self.fromXmlImpl(node, KalturaWatchBasedRecommendationsProfile.PROPERTY_LOADERS)
-
-    def toParams(self):
-        kparams = KalturaObjectBase.toParams(self)
-        kparams.put("objectType", "KalturaWatchBasedRecommendationsProfile")
-        kparams.addStringIfDefined("name", self.name)
-        kparams.addStringIfDefined("topicIds", self.topicIds)
-        kparams.addStringIfDefined("analysisMediaTypeIds", self.analysisMediaTypeIds)
-        kparams.addIntIfDefined("userInterestPlayThresholdInPercentages", self.userInterestPlayThresholdInPercentages)
-        kparams.addIntIfDefined("numberOfInterests", self.numberOfInterests)
-        kparams.addIntIfDefined("fallbackChannelId", self.fallbackChannelId)
-        kparams.addIntIfDefined("minPlaybacks", self.minPlaybacks)
-        kparams.addIntIfDefined("maxPlaybacks", self.maxPlaybacks)
-        kparams.addStringIfDefined("allowedRecommendationsKsql", self.allowedRecommendationsKsql)
-        kparams.addIntIfDefined("playbackInterestsCalculationPeriodDays", self.playbackInterestsCalculationPeriodDays)
-        return kparams
-
-    def getId(self):
-        return self.id
-
-    def getName(self):
-        return self.name
-
-    def setName(self, newName):
-        self.name = newName
-
-    def getTopicIds(self):
-        return self.topicIds
-
-    def setTopicIds(self, newTopicIds):
-        self.topicIds = newTopicIds
-
-    def getAnalysisMediaTypeIds(self):
-        return self.analysisMediaTypeIds
-
-    def setAnalysisMediaTypeIds(self, newAnalysisMediaTypeIds):
-        self.analysisMediaTypeIds = newAnalysisMediaTypeIds
-
-    def getUserInterestPlayThresholdInPercentages(self):
-        return self.userInterestPlayThresholdInPercentages
-
-    def setUserInterestPlayThresholdInPercentages(self, newUserInterestPlayThresholdInPercentages):
-        self.userInterestPlayThresholdInPercentages = newUserInterestPlayThresholdInPercentages
-
-    def getNumberOfInterests(self):
-        return self.numberOfInterests
-
-    def setNumberOfInterests(self, newNumberOfInterests):
-        self.numberOfInterests = newNumberOfInterests
-
-    def getFallbackChannelId(self):
-        return self.fallbackChannelId
-
-    def setFallbackChannelId(self, newFallbackChannelId):
-        self.fallbackChannelId = newFallbackChannelId
-
-    def getMinPlaybacks(self):
-        return self.minPlaybacks
-
-    def setMinPlaybacks(self, newMinPlaybacks):
-        self.minPlaybacks = newMinPlaybacks
-
-    def getMaxPlaybacks(self):
-        return self.maxPlaybacks
-
-    def setMaxPlaybacks(self, newMaxPlaybacks):
-        self.maxPlaybacks = newMaxPlaybacks
-
-    def getAllowedRecommendationsKsql(self):
-        return self.allowedRecommendationsKsql
-
-    def setAllowedRecommendationsKsql(self, newAllowedRecommendationsKsql):
-        self.allowedRecommendationsKsql = newAllowedRecommendationsKsql
-
-    def getPlaybackInterestsCalculationPeriodDays(self):
-        return self.playbackInterestsCalculationPeriodDays
-
-    def setPlaybackInterestsCalculationPeriodDays(self, newPlaybackInterestsCalculationPeriodDays):
-        self.playbackInterestsCalculationPeriodDays = newPlaybackInterestsCalculationPeriodDays
-
-
-# @package Kaltura
-# @subpackage Client
-class KalturaWatchBasedRecommendationsProfileListResponse(KalturaListResponse):
-    def __init__(self,
-            totalCount = NotImplemented,
-            objects = NotImplemented):
-        KalturaListResponse.__init__(self,
-            totalCount)
-
-        # Assets
-        # @var List[KalturaWatchBasedRecommendationsProfile]
-        self.objects = objects
-
-
-    PROPERTY_LOADERS = {
-        'objects': (KalturaObjectFactory.createArray, 'KalturaWatchBasedRecommendationsProfile'), 
-    }
-
-    def fromXml(self, node):
-        KalturaListResponse.fromXml(self, node)
-        self.fromXmlImpl(node, KalturaWatchBasedRecommendationsProfileListResponse.PROPERTY_LOADERS)
-
-    def toParams(self):
-        kparams = KalturaListResponse.toParams(self)
-        kparams.put("objectType", "KalturaWatchBasedRecommendationsProfileListResponse")
         kparams.addArrayIfDefined("objects", self.objects)
         return kparams
 
@@ -52481,65 +52171,6 @@ class KalturaUserLoginPin(KalturaObjectBase):
         return self.userId
 
 
-# @package Kaltura
-# @subpackage Client
-class KalturaWatchBasedRecommendationsAdminConfiguration(KalturaObjectBase):
-    def __init__(self,
-            maxProfiles = NotImplemented,
-            activeUserDurationDays = NotImplemented,
-            recommendationsCachingTimeDays = NotImplemented):
-        KalturaObjectBase.__init__(self)
-
-        # The maximum number of profiles.
-        # @var int
-        self.maxProfiles = maxProfiles
-
-        # The duration that a user is considered active after his last playback.
-        # @var int
-        self.activeUserDurationDays = activeUserDurationDays
-
-        # The number of days the recommendations will be cached.
-        # @var int
-        self.recommendationsCachingTimeDays = recommendationsCachingTimeDays
-
-
-    PROPERTY_LOADERS = {
-        'maxProfiles': getXmlNodeInt, 
-        'activeUserDurationDays': getXmlNodeInt, 
-        'recommendationsCachingTimeDays': getXmlNodeInt, 
-    }
-
-    def fromXml(self, node):
-        KalturaObjectBase.fromXml(self, node)
-        self.fromXmlImpl(node, KalturaWatchBasedRecommendationsAdminConfiguration.PROPERTY_LOADERS)
-
-    def toParams(self):
-        kparams = KalturaObjectBase.toParams(self)
-        kparams.put("objectType", "KalturaWatchBasedRecommendationsAdminConfiguration")
-        kparams.addIntIfDefined("maxProfiles", self.maxProfiles)
-        kparams.addIntIfDefined("activeUserDurationDays", self.activeUserDurationDays)
-        kparams.addIntIfDefined("recommendationsCachingTimeDays", self.recommendationsCachingTimeDays)
-        return kparams
-
-    def getMaxProfiles(self):
-        return self.maxProfiles
-
-    def setMaxProfiles(self, newMaxProfiles):
-        self.maxProfiles = newMaxProfiles
-
-    def getActiveUserDurationDays(self):
-        return self.activeUserDurationDays
-
-    def setActiveUserDurationDays(self, newActiveUserDurationDays):
-        self.activeUserDurationDays = newActiveUserDurationDays
-
-    def getRecommendationsCachingTimeDays(self):
-        return self.recommendationsCachingTimeDays
-
-    def setRecommendationsCachingTimeDays(self, newRecommendationsCachingTimeDays):
-        self.recommendationsCachingTimeDays = newRecommendationsCachingTimeDays
-
-
 ########## services ##########
 
 # @package Kaltura
@@ -52874,17 +52505,6 @@ class KalturaAssetService(KalturaServiceBase):
             return self.client.getMultiRequestResult()
         resultNode = self.client.doQueue()
         return KalturaObjectFactory.create(resultNode, 'KalturaAsset')
-
-    def watchBasedRecommendationsList(self, profileId):
-        """Return list of assets - assets are personal recommendations for the caller."""
-
-        kparams = KalturaParams()
-        kparams.addIntIfDefined("profileId", profileId);
-        self.client.queueServiceActionCall("asset", "watchBasedRecommendationsList", "KalturaAssetListResponse", kparams)
-        if self.client.isMultiRequest():
-            return self.client.getMultiRequestResult()
-        resultNode = self.client.doQueue()
-        return KalturaObjectFactory.create(resultNode, 'KalturaAssetListResponse')
 
 
 # @package Kaltura
@@ -59695,8 +59315,7 @@ class KalturaTimeShiftedTvPartnerSettingsService(KalturaServiceBase):
         return KalturaObjectFactory.create(resultNode, 'KalturaTimeShiftedTvPartnerSettings')
 
     def update(self, settings):
-        """Configure the account's time-shifted TV settings (catch-up and C-DVR, Trick-play, Start-over).
-                    When updating the timeshiftedtvpartnersettings, user must provide values for all the setting fields. If any field is omitted, its value may reset to the default configuration, potentially overwriting the current settings."""
+        """Configure the account's time-shifted TV settings (catch-up and C-DVR, Trick-play, Start-over)"""
 
         kparams = KalturaParams()
         kparams.addObjectIfDefined("settings", settings)
@@ -60419,95 +60038,6 @@ class KalturaUserSessionProfileService(KalturaServiceBase):
         resultNode = self.client.doQueue()
         return KalturaObjectFactory.create(resultNode, 'KalturaUserSessionProfile')
 
-
-# @package Kaltura
-# @subpackage Client
-class KalturaWatchBasedRecommendationsAdminConfigurationService(KalturaServiceBase):
-    def __init__(self, client = None):
-        KalturaServiceBase.__init__(self, client)
-
-    def get(self):
-        """Get partner&#39;s watch based recommendations admin configuration."""
-
-        kparams = KalturaParams()
-        self.client.queueServiceActionCall("watchbasedrecommendationsadminconfiguration", "get", "KalturaWatchBasedRecommendationsAdminConfiguration", kparams)
-        if self.client.isMultiRequest():
-            return self.client.getMultiRequestResult()
-        resultNode = self.client.doQueue()
-        return KalturaObjectFactory.create(resultNode, 'KalturaWatchBasedRecommendationsAdminConfiguration')
-
-    def update(self, configuration):
-        """Updates partner&#39;s watch based recommendations admin configuration."""
-
-        kparams = KalturaParams()
-        kparams.addObjectIfDefined("configuration", configuration)
-        self.client.queueServiceActionCall("watchbasedrecommendationsadminconfiguration", "update", "KalturaWatchBasedRecommendationsAdminConfiguration", kparams)
-        if self.client.isMultiRequest():
-            return self.client.getMultiRequestResult()
-        resultNode = self.client.doQueue()
-        return KalturaObjectFactory.create(resultNode, 'KalturaWatchBasedRecommendationsAdminConfiguration')
-
-
-# @package Kaltura
-# @subpackage Client
-class KalturaWatchBasedRecommendationsProfileService(KalturaServiceBase):
-    def __init__(self, client = None):
-        KalturaServiceBase.__init__(self, client)
-
-    def add(self, profile):
-        """Add partner&#39;s watch based recommendations profile."""
-
-        kparams = KalturaParams()
-        kparams.addObjectIfDefined("profile", profile)
-        self.client.queueServiceActionCall("watchbasedrecommendationsprofile", "add", "KalturaWatchBasedRecommendationsProfile", kparams)
-        if self.client.isMultiRequest():
-            return self.client.getMultiRequestResult()
-        resultNode = self.client.doQueue()
-        return KalturaObjectFactory.create(resultNode, 'KalturaWatchBasedRecommendationsProfile')
-
-    def delete(self, id):
-        """Delete partner&#39;s watch based recommendations profile."""
-
-        kparams = KalturaParams()
-        kparams.addIntIfDefined("id", id);
-        self.client.queueServiceActionCall("watchbasedrecommendationsprofile", "delete", "None", kparams)
-        if self.client.isMultiRequest():
-            return self.client.getMultiRequestResult()
-        resultNode = self.client.doQueue()
-
-    def deleteWatchBasedRecommendationsOfProfile(self, id):
-        """Delete all recommendations that were calculated based on specific profile."""
-
-        kparams = KalturaParams()
-        kparams.addIntIfDefined("id", id);
-        self.client.queueServiceActionCall("watchbasedrecommendationsprofile", "deleteWatchBasedRecommendationsOfProfile", "None", kparams)
-        if self.client.isMultiRequest():
-            return self.client.getMultiRequestResult()
-        resultNode = self.client.doQueue()
-
-    def list(self, filter = NotImplemented):
-        """Get partner&#39;s watch based recommendations profiles."""
-
-        kparams = KalturaParams()
-        kparams.addObjectIfDefined("filter", filter)
-        self.client.queueServiceActionCall("watchbasedrecommendationsprofile", "list", "KalturaWatchBasedRecommendationsProfileListResponse", kparams)
-        if self.client.isMultiRequest():
-            return self.client.getMultiRequestResult()
-        resultNode = self.client.doQueue()
-        return KalturaObjectFactory.create(resultNode, 'KalturaWatchBasedRecommendationsProfileListResponse')
-
-    def update(self, id, profile):
-        """Update partner&#39;s watch based recommendations profile."""
-
-        kparams = KalturaParams()
-        kparams.addIntIfDefined("id", id);
-        kparams.addObjectIfDefined("profile", profile)
-        self.client.queueServiceActionCall("watchbasedrecommendationsprofile", "update", "KalturaWatchBasedRecommendationsProfile", kparams)
-        if self.client.isMultiRequest():
-            return self.client.getMultiRequestResult()
-        resultNode = self.client.doQueue()
-        return KalturaObjectFactory.create(resultNode, 'KalturaWatchBasedRecommendationsProfile')
-
 ########## main ##########
 class KalturaCoreClient(KalturaClientPlugin):
     # KalturaCoreClient
@@ -60676,8 +60206,6 @@ class KalturaCoreClient(KalturaClientPlugin):
             'userRole': KalturaUserRoleService,
             'userSegment': KalturaUserSegmentService,
             'userSessionProfile': KalturaUserSessionProfileService,
-            'watchBasedRecommendationsAdminConfiguration': KalturaWatchBasedRecommendationsAdminConfigurationService,
-            'watchBasedRecommendationsProfile': KalturaWatchBasedRecommendationsProfileService,
         }
 
     def getEnums(self):
@@ -60918,7 +60446,6 @@ class KalturaCoreClient(KalturaClientPlugin):
             'KalturaUserState': KalturaUserState,
             'KalturaVodIngestAssetResultOrderBy': KalturaVodIngestAssetResultOrderBy,
             'KalturaVodIngestAssetResultStatus': KalturaVodIngestAssetResultStatus,
-            'KalturaWatchBasedRecommendationsProfileOrderBy': KalturaWatchBasedRecommendationsProfileOrderBy,
             'KalturaWatchedAllReturnStrategy': KalturaWatchedAllReturnStrategy,
             'KalturaWatchStatus': KalturaWatchStatus,
         }
@@ -60958,9 +60485,6 @@ class KalturaCoreClient(KalturaClientPlugin):
             'KalturaSegmentValueFilter': KalturaSegmentValueFilter,
             'KalturaHouseholdSegmentFilter': KalturaHouseholdSegmentFilter,
             'KalturaUserSegmentFilter': KalturaUserSegmentFilter,
-            'KalturaWatchBasedRecommendationsProfileFilter': KalturaWatchBasedRecommendationsProfileFilter,
-            'KalturaWatchBasedRecommendationsProfileByIdsFilter': KalturaWatchBasedRecommendationsProfileByIdsFilter,
-            'KalturaWatchBasedRecommendationsProfileByNameFilter': KalturaWatchBasedRecommendationsProfileByNameFilter,
             'KalturaAssetFilePpvFilter': KalturaAssetFilePpvFilter,
             'KalturaCollectionFilter': KalturaCollectionFilter,
             'KalturaAssociatedShopEntities': KalturaAssociatedShopEntities,
@@ -61355,8 +60879,6 @@ class KalturaCoreClient(KalturaClientPlugin):
             'KalturaSingleSegmentValue': KalturaSingleSegmentValue,
             'KalturaUserSegment': KalturaUserSegment,
             'KalturaUserSegmentListResponse': KalturaUserSegmentListResponse,
-            'KalturaWatchBasedRecommendationsProfile': KalturaWatchBasedRecommendationsProfile,
-            'KalturaWatchBasedRecommendationsProfileListResponse': KalturaWatchBasedRecommendationsProfileListResponse,
             'KalturaAssetFilePpvListResponse': KalturaAssetFilePpvListResponse,
             'KalturaCollectionListResponse': KalturaCollectionListResponse,
             'KalturaCoupon': KalturaCoupon,
@@ -61752,7 +61274,6 @@ class KalturaCoreClient(KalturaClientPlugin):
             'KalturaUploadToken': KalturaUploadToken,
             'KalturaUserAssetsListItem': KalturaUserAssetsListItem,
             'KalturaUserLoginPin': KalturaUserLoginPin,
-            'KalturaWatchBasedRecommendationsAdminConfiguration': KalturaWatchBasedRecommendationsAdminConfiguration,
         }
 
     # @return string

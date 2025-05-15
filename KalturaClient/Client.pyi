@@ -181,8 +181,6 @@ from KalturaClient.Plugins.Core import KalturaUserLoginPinService
 from KalturaClient.Plugins.Core import KalturaUserRoleService
 from KalturaClient.Plugins.Core import KalturaUserSegmentService
 from KalturaClient.Plugins.Core import KalturaUserSessionProfileService
-from KalturaClient.Plugins.Core import KalturaWatchBasedRecommendationsAdminConfigurationService
-from KalturaClient.Plugins.Core import KalturaWatchBasedRecommendationsProfileService
 
 class MultiRequestSubResult(object):
     def __init__(self, value): ...
@@ -359,5 +357,3 @@ class KalturaClient:
     userRole: KalturaUserRoleService
     userSegment: KalturaUserSegmentService
     userSessionProfile: KalturaUserSessionProfileService
-    watchBasedRecommendationsAdminConfiguration: KalturaWatchBasedRecommendationsAdminConfigurationService
-    watchBasedRecommendationsProfile: KalturaWatchBasedRecommendationsProfileService
