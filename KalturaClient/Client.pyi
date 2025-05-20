@@ -28,6 +28,7 @@
 from typing import List
 from KalturaClient import KalturaConfiguration
 from KalturaClient.Plugins.Core import KalturaObject
+from KalturaClient.Plugins.Core import KalturaAiMetadataGeneratorService
 from KalturaClient.Plugins.Core import KalturaAnnouncementService
 from KalturaClient.Plugins.Core import KalturaAppTokenService
 from KalturaClient.Plugins.Core import KalturaAssetCommentService
@@ -151,6 +152,7 @@ from KalturaClient.Plugins.Core import KalturaSearchHistoryService
 from KalturaClient.Plugins.Core import KalturaSearchPriorityGroupService
 from KalturaClient.Plugins.Core import KalturaSearchPriorityGroupOrderedIdsSetService
 from KalturaClient.Plugins.Core import KalturaSegmentationTypeService
+from KalturaClient.Plugins.Core import KalturaSemanticAssetSearchPartnerConfigService
 from KalturaClient.Plugins.Core import KalturaSeriesRecordingService
 from KalturaClient.Plugins.Core import KalturaSessionService
 from KalturaClient.Plugins.Core import KalturaSmsAdapterProfileService
@@ -162,6 +164,7 @@ from KalturaClient.Plugins.Core import KalturaSsoAdapterProfileService
 from KalturaClient.Plugins.Core import KalturaStreamingDeviceService
 from KalturaClient.Plugins.Core import KalturaSubscriptionService
 from KalturaClient.Plugins.Core import KalturaSubscriptionSetService
+from KalturaClient.Plugins.Core import KalturaSubtitlesService
 from KalturaClient.Plugins.Core import KalturaSystemService
 from KalturaClient.Plugins.Core import KalturaTagService
 from KalturaClient.Plugins.Core import KalturaTimeShiftedTvPartnerSettingsService
@@ -177,6 +180,7 @@ from KalturaClient.Plugins.Core import KalturaUsageModuleService
 from KalturaClient.Plugins.Core import KalturaUserAssetRuleService
 from KalturaClient.Plugins.Core import KalturaUserAssetsListItemService
 from KalturaClient.Plugins.Core import KalturaUserInterestService
+from KalturaClient.Plugins.Core import KalturaUserLogService
 from KalturaClient.Plugins.Core import KalturaUserLoginPinService
 from KalturaClient.Plugins.Core import KalturaUserRoleService
 from KalturaClient.Plugins.Core import KalturaUserSegmentService
@@ -206,6 +210,7 @@ class KalturaClient:
     def startMultiRequest(self): ...
     def doMultiRequest(self) -> List[KalturaObject]: ...
 
+    aiMetadataGenerator: KalturaAiMetadataGeneratorService
     announcement: KalturaAnnouncementService
     appToken: KalturaAppTokenService
     assetComment: KalturaAssetCommentService
@@ -329,6 +334,7 @@ class KalturaClient:
     searchPriorityGroup: KalturaSearchPriorityGroupService
     searchPriorityGroupOrderedIdsSet: KalturaSearchPriorityGroupOrderedIdsSetService
     segmentationType: KalturaSegmentationTypeService
+    semanticAssetSearchPartnerConfig: KalturaSemanticAssetSearchPartnerConfigService
     seriesRecording: KalturaSeriesRecordingService
     session: KalturaSessionService
     smsAdapterProfile: KalturaSmsAdapterProfileService
@@ -340,6 +346,7 @@ class KalturaClient:
     streamingDevice: KalturaStreamingDeviceService
     subscription: KalturaSubscriptionService
     subscriptionSet: KalturaSubscriptionSetService
+    subtitles: KalturaSubtitlesService
     system: KalturaSystemService
     tag: KalturaTagService
     timeShiftedTvPartnerSettings: KalturaTimeShiftedTvPartnerSettingsService
@@ -355,6 +362,7 @@ class KalturaClient:
     userAssetRule: KalturaUserAssetRuleService
     userAssetsListItem: KalturaUserAssetsListItemService
     userInterest: KalturaUserInterestService
+    userLog: KalturaUserLogService
     userLoginPin: KalturaUserLoginPinService
     userRole: KalturaUserRoleService
     userSegment: KalturaUserSegmentService
