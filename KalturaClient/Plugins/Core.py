@@ -42,7 +42,7 @@ from ..Base import (
     KalturaServiceBase,
 )
 
-API_VERSION = '10.7.1.4'
+API_VERSION = '11.3.0.0'
 
 ########## enums ##########
 # @package Kaltura
@@ -829,6 +829,18 @@ class KalturaConcurrencyLimitationType(object):
 
 # @package Kaltura
 # @subpackage Client
+class KalturaConditionOperator(object):
+    EQUAL = "Equal"
+    NOTEQUAL = "NotEqual"
+
+    def __init__(self, value):
+        self.value = value
+
+    def getValue(self):
+        return self.value
+
+# @package Kaltura
+# @subpackage Client
 class KalturaConfigurationGroupDeviceOrderBy(object):
     NONE = "NONE"
 
@@ -1283,6 +1295,21 @@ class KalturaFavoriteOrderBy(object):
 class KalturaFollowTvSeriesOrderBy(object):
     START_DATE_DESC = "START_DATE_DESC"
     START_DATE_ASC = "START_DATE_ASC"
+
+    def __init__(self, value):
+        self.value = value
+
+    def getValue(self):
+        return self.value
+
+# @package Kaltura
+# @subpackage Client
+class KalturaGenerateMetadataStatus(object):
+    PROCESSING = "Processing"
+    PARTIALSUCCESS = "PartialSuccess"
+    SUCCESSPENDINGASSETS = "SuccessPendingAssets"
+    SUCCESS = "Success"
+    FAILED = "Failed"
 
     def __init__(self, value):
         self.value = value
@@ -2911,6 +2938,19 @@ class KalturaSubscriptionTriggerType(object):
 
 # @package Kaltura
 # @subpackage Client
+class KalturaSubtitlesType(object):
+    TEXT = "Text"
+    SRT = "SRT"
+    WEBVTT = "WebVTT"
+
+    def __init__(self, value):
+        self.value = value
+
+    def getValue(self):
+        return self.value
+
+# @package Kaltura
+# @subpackage Client
 class KalturaSuspensionProfileInheritanceType(object):
     ALWAYS = "ALWAYS"
     NEVER = "NEVER"
@@ -3135,6 +3175,17 @@ class KalturaUserAssetsListType(object):
     WATCH = "watch"
     PURCHASE = "purchase"
     LIBRARY = "library"
+
+    def __init__(self, value):
+        self.value = value
+
+    def getValue(self):
+        return self.value
+
+# @package Kaltura
+# @subpackage Client
+class KalturaUserLogOrderBy(object):
+    CREATE_DATE_DESC = "CREATE_DATE_DESC"
 
     def __init__(self, value):
         self.value = value
@@ -4424,6 +4475,54 @@ class KalturaBulkUploadFilter(KalturaFilter):
 
     def setStatusIn(self, newStatusIn):
         self.statusIn = newStatusIn
+
+
+# @package Kaltura
+# @subpackage Client
+class KalturaSubtitlesFilter(KalturaFilter):
+    def __init__(self,
+            orderBy = NotImplemented,
+            idIn = NotImplemented,
+            fileNameContains = NotImplemented):
+        KalturaFilter.__init__(self,
+            orderBy)
+
+        # A comma separated list of IDs indicating the KalturaSubtitles objects&#39; IDs.
+        # @var str
+        self.idIn = idIn
+
+        # Contains a name or a partial name of the subtitles file.
+        # @var str
+        self.fileNameContains = fileNameContains
+
+
+    PROPERTY_LOADERS = {
+        'idIn': getXmlNodeText, 
+        'fileNameContains': getXmlNodeText, 
+    }
+
+    def fromXml(self, node):
+        KalturaFilter.fromXml(self, node)
+        self.fromXmlImpl(node, KalturaSubtitlesFilter.PROPERTY_LOADERS)
+
+    def toParams(self):
+        kparams = KalturaFilter.toParams(self)
+        kparams.put("objectType", "KalturaSubtitlesFilter")
+        kparams.addStringIfDefined("idIn", self.idIn)
+        kparams.addStringIfDefined("fileNameContains", self.fileNameContains)
+        return kparams
+
+    def getIdIn(self):
+        return self.idIn
+
+    def setIdIn(self, newIdIn):
+        self.idIn = newIdIn
+
+    def getFileNameContains(self):
+        return self.fileNameContains
+
+    def setFileNameContains(self, newFileNameContains):
+        self.fileNameContains = newFileNameContains
 
 
 # @package Kaltura
@@ -6837,6 +6936,72 @@ class KalturaVodIngestAssetResultFilter(KalturaFilter):
 
     def setShopAssetUserRuleIdIn(self, newShopAssetUserRuleIdIn):
         self.shopAssetUserRuleIdIn = newShopAssetUserRuleIdIn
+
+
+# @package Kaltura
+# @subpackage Client
+class KalturaUserLogFilter(KalturaFilter):
+    """Filters user logs using the following criteria: user ID(s), message content (substring match), and creation date."""
+
+    def __init__(self,
+            orderBy = NotImplemented,
+            userIdIn = NotImplemented,
+            startDate = NotImplemented,
+            endDate = NotImplemented):
+        KalturaFilter.__init__(self,
+            orderBy)
+
+        # A comma-separated list of up to 15 positive integer user IDs (greater than zero) used to filter log entries. An empty list is not permitted;
+        #             Valid IDs: Only log entries associated with valid, existing user IDs are returned; 
+        #             Invalid IDs: Specifying a non-existent user ID will result in no log entries being returned for that specific ID; 
+        #             Users: Log entries associated with a deleted user will be returned unless the log entry itself has also been deleted;
+        # @var str
+        self.userIdIn = userIdIn
+
+        # The start date for filtering (Epoch format). Only logs created on or after this date are returned. If omitted, no start date filter is applied.
+        # @var int
+        self.startDate = startDate
+
+        # The end date for filtering (Epoch format). Only logs created on or before this date are returned. If omitted, no end date filter is applied.
+        # @var int
+        self.endDate = endDate
+
+
+    PROPERTY_LOADERS = {
+        'userIdIn': getXmlNodeText, 
+        'startDate': getXmlNodeInt, 
+        'endDate': getXmlNodeInt, 
+    }
+
+    def fromXml(self, node):
+        KalturaFilter.fromXml(self, node)
+        self.fromXmlImpl(node, KalturaUserLogFilter.PROPERTY_LOADERS)
+
+    def toParams(self):
+        kparams = KalturaFilter.toParams(self)
+        kparams.put("objectType", "KalturaUserLogFilter")
+        kparams.addStringIfDefined("userIdIn", self.userIdIn)
+        kparams.addIntIfDefined("startDate", self.startDate)
+        kparams.addIntIfDefined("endDate", self.endDate)
+        return kparams
+
+    def getUserIdIn(self):
+        return self.userIdIn
+
+    def setUserIdIn(self, newUserIdIn):
+        self.userIdIn = newUserIdIn
+
+    def getStartDate(self):
+        return self.startDate
+
+    def setStartDate(self, newStartDate):
+        self.startDate = newStartDate
+
+    def getEndDate(self):
+        return self.endDate
+
+    def setEndDate(self, newEndDate):
+        self.endDate = newEndDate
 
 
 # @package Kaltura
@@ -11106,7 +11271,7 @@ class KalturaPersonalAssetSelectionFilter(KalturaFilter):
         KalturaFilter.__init__(self,
             orderBy)
 
-        # selected assets for specific slot number
+        # Filters the results of asset.listPersonalSelection by slot number.  Takes a slot number as input and returns only those assets from the personal selection that are assigned to that slot.
         # @var int
         self.slotNumberEqual = slotNumberEqual
 
@@ -13632,6 +13797,779 @@ class KalturaSkipOnErrorCondition(KalturaSkipCondition):
 
     def setCondition(self, newCondition):
         self.condition = newCondition
+
+
+# @package Kaltura
+# @subpackage Client
+class KalturaGenerateMetadataBySubtitlesJob(KalturaObjectBase):
+    """An object containing information on the metadata generation job."""
+
+    def __init__(self,
+            id = NotImplemented,
+            createDate = NotImplemented,
+            updateDate = NotImplemented,
+            fileName = NotImplemented,
+            status = NotImplemented,
+            errorMessage = NotImplemented):
+        KalturaObjectBase.__init__(self)
+
+        # Unique identifier for the generation job
+        # @var int
+        # @readonly
+        self.id = id
+
+        # Specifies when the job was created, expressed in Epoch timestamp.
+        # @var int
+        # @readonly
+        self.createDate = createDate
+
+        # Specifies when the job was updated, expressed in Epoch timestamp.
+        # @var int
+        # @readonly
+        self.updateDate = updateDate
+
+        # Name of the uploaded subtitles file from which the metadata is generated.
+        # @var str
+        # @readonly
+        self.fileName = fileName
+
+        # Service status states.
+        # @var KalturaGenerateMetadataStatus
+        # @readonly
+        self.status = status
+
+        # Error messages for non-success cases.
+        # @var str
+        # @readonly
+        self.errorMessage = errorMessage
+
+
+    PROPERTY_LOADERS = {
+        'id': getXmlNodeInt, 
+        'createDate': getXmlNodeInt, 
+        'updateDate': getXmlNodeInt, 
+        'fileName': getXmlNodeText, 
+        'status': (KalturaEnumsFactory.createString, "KalturaGenerateMetadataStatus"), 
+        'errorMessage': getXmlNodeText, 
+    }
+
+    def fromXml(self, node):
+        KalturaObjectBase.fromXml(self, node)
+        self.fromXmlImpl(node, KalturaGenerateMetadataBySubtitlesJob.PROPERTY_LOADERS)
+
+    def toParams(self):
+        kparams = KalturaObjectBase.toParams(self)
+        kparams.put("objectType", "KalturaGenerateMetadataBySubtitlesJob")
+        return kparams
+
+    def getId(self):
+        return self.id
+
+    def getCreateDate(self):
+        return self.createDate
+
+    def getUpdateDate(self):
+        return self.updateDate
+
+    def getFileName(self):
+        return self.fileName
+
+    def getStatus(self):
+        return self.status
+
+    def getErrorMessage(self):
+        return self.errorMessage
+
+
+# @package Kaltura
+# @subpackage Client
+class KalturaGenerateMetadataResult(KalturaObjectBase):
+    """Metadata generation result object."""
+
+    def __init__(self,
+            enrichedMetadata = NotImplemented):
+        KalturaObjectBase.__init__(self)
+
+        # A dictionary/map containing the generated metadata. The map key includes the metadata name and the map value includes the generated value.
+        # @var map
+        self.enrichedMetadata = enrichedMetadata
+
+
+    PROPERTY_LOADERS = {
+        'enrichedMetadata': (KalturaObjectFactory.createMap, 'KalturaTranslationToken'), 
+    }
+
+    def fromXml(self, node):
+        KalturaObjectBase.fromXml(self, node)
+        self.fromXmlImpl(node, KalturaGenerateMetadataResult.PROPERTY_LOADERS)
+
+    def toParams(self):
+        kparams = KalturaObjectBase.toParams(self)
+        kparams.put("objectType", "KalturaGenerateMetadataResult")
+        kparams.addMapIfDefined("enrichedMetadata", self.enrichedMetadata)
+        return kparams
+
+    def getEnrichedMetadata(self):
+        return self.enrichedMetadata
+
+    def setEnrichedMetadata(self, newEnrichedMetadata):
+        self.enrichedMetadata = newEnrichedMetadata
+
+
+# @package Kaltura
+# @subpackage Client
+class KalturaMetaFieldNameMap(KalturaObjectBase):
+    """Map a newly generated metadata field to an existing meta field on the assetStruct"""
+
+    def __init__(self,
+            genre = NotImplemented,
+            subGenre = NotImplemented,
+            sentiment = NotImplemented,
+            suggestedTitle = NotImplemented,
+            description = NotImplemented,
+            oneLiner = NotImplemented,
+            keywords = NotImplemented,
+            sensitiveContent = NotImplemented):
+        KalturaObjectBase.__init__(self)
+
+        # map &#39;genre&#39; AI generated metadata name to assetStruct&#39;s meta systemName
+        # @var str
+        self.genre = genre
+
+        # map &#39;subGenre&#39; AI generated metadata name to assetStruct&#39;s meta systemName
+        # @var str
+        self.subGenre = subGenre
+
+        # map &#39;sentiment&#39; AI generated metadata name to assetStruct&#39;s meta systemName
+        # @var str
+        self.sentiment = sentiment
+
+        # map &#39;suggestedTitle&#39; AI generated metadata name to assetStruct&#39;s meta systemName
+        # @var str
+        self.suggestedTitle = suggestedTitle
+
+        # map &#39;Description&#39; AI generated metadata name to assetStruct&#39;s meta systemName
+        # @var str
+        self.description = description
+
+        # map &#39;oneLiner&#39; AI generated metadata name to assetStruct&#39;s meta systemName
+        # @var str
+        self.oneLiner = oneLiner
+
+        # map &#39;Keywords&#39; AI generated metadata name to assetStruct&#39;s meta systemName
+        # @var str
+        self.keywords = keywords
+
+        # map &#39;sensitiveContent&#39; AI generated metadata name to assetStruct&#39;s meta systemName
+        # @var str
+        self.sensitiveContent = sensitiveContent
+
+
+    PROPERTY_LOADERS = {
+        'genre': getXmlNodeText, 
+        'subGenre': getXmlNodeText, 
+        'sentiment': getXmlNodeText, 
+        'suggestedTitle': getXmlNodeText, 
+        'description': getXmlNodeText, 
+        'oneLiner': getXmlNodeText, 
+        'keywords': getXmlNodeText, 
+        'sensitiveContent': getXmlNodeText, 
+    }
+
+    def fromXml(self, node):
+        KalturaObjectBase.fromXml(self, node)
+        self.fromXmlImpl(node, KalturaMetaFieldNameMap.PROPERTY_LOADERS)
+
+    def toParams(self):
+        kparams = KalturaObjectBase.toParams(self)
+        kparams.put("objectType", "KalturaMetaFieldNameMap")
+        kparams.addStringIfDefined("genre", self.genre)
+        kparams.addStringIfDefined("subGenre", self.subGenre)
+        kparams.addStringIfDefined("sentiment", self.sentiment)
+        kparams.addStringIfDefined("suggestedTitle", self.suggestedTitle)
+        kparams.addStringIfDefined("description", self.description)
+        kparams.addStringIfDefined("oneLiner", self.oneLiner)
+        kparams.addStringIfDefined("keywords", self.keywords)
+        kparams.addStringIfDefined("sensitiveContent", self.sensitiveContent)
+        return kparams
+
+    def getGenre(self):
+        return self.genre
+
+    def setGenre(self, newGenre):
+        self.genre = newGenre
+
+    def getSubGenre(self):
+        return self.subGenre
+
+    def setSubGenre(self, newSubGenre):
+        self.subGenre = newSubGenre
+
+    def getSentiment(self):
+        return self.sentiment
+
+    def setSentiment(self, newSentiment):
+        self.sentiment = newSentiment
+
+    def getSuggestedTitle(self):
+        return self.suggestedTitle
+
+    def setSuggestedTitle(self, newSuggestedTitle):
+        self.suggestedTitle = newSuggestedTitle
+
+    def getDescription(self):
+        return self.description
+
+    def setDescription(self, newDescription):
+        self.description = newDescription
+
+    def getOneLiner(self):
+        return self.oneLiner
+
+    def setOneLiner(self, newOneLiner):
+        self.oneLiner = newOneLiner
+
+    def getKeywords(self):
+        return self.keywords
+
+    def setKeywords(self, newKeywords):
+        self.keywords = newKeywords
+
+    def getSensitiveContent(self):
+        return self.sensitiveContent
+
+    def setSensitiveContent(self, newSensitiveContent):
+        self.sensitiveContent = newSensitiveContent
+
+
+# @package Kaltura
+# @subpackage Client
+class KalturaAiMetadataGeneratorConfiguration(KalturaObjectBase):
+    """The configuration object for the metadata enrichment feature."""
+
+    def __init__(self,
+            isEnabled = NotImplemented,
+            assetStructMetaNameMap = NotImplemented,
+            supportedLanguages = NotImplemented):
+        KalturaObjectBase.__init__(self)
+
+        # Specifies if the feature is enabled or disabled.
+        # @var bool
+        self.isEnabled = isEnabled
+
+        # A map (dictionary) to indicate to which existing metadata or tag the newly generated metadata value should be pushed, per assetStruct (per &#39;asset type&#39;)
+        # @var map
+        self.assetStructMetaNameMap = assetStructMetaNameMap
+
+        # A read only array to list the set of languages which can be used with the service.
+        #             In practice it is populated with the values set in KalturaMetadataGeneratorLanguages ENUM.
+        # @var List[KalturaStringValue]
+        # @readonly
+        self.supportedLanguages = supportedLanguages
+
+
+    PROPERTY_LOADERS = {
+        'isEnabled': getXmlNodeBool, 
+        'assetStructMetaNameMap': (KalturaObjectFactory.createMap, 'KalturaMetaFieldNameMap'), 
+        'supportedLanguages': (KalturaObjectFactory.createArray, 'KalturaStringValue'), 
+    }
+
+    def fromXml(self, node):
+        KalturaObjectBase.fromXml(self, node)
+        self.fromXmlImpl(node, KalturaAiMetadataGeneratorConfiguration.PROPERTY_LOADERS)
+
+    def toParams(self):
+        kparams = KalturaObjectBase.toParams(self)
+        kparams.put("objectType", "KalturaAiMetadataGeneratorConfiguration")
+        kparams.addBoolIfDefined("isEnabled", self.isEnabled)
+        kparams.addMapIfDefined("assetStructMetaNameMap", self.assetStructMetaNameMap)
+        return kparams
+
+    def getIsEnabled(self):
+        return self.isEnabled
+
+    def setIsEnabled(self, newIsEnabled):
+        self.isEnabled = newIsEnabled
+
+    def getAssetStructMetaNameMap(self):
+        return self.assetStructMetaNameMap
+
+    def setAssetStructMetaNameMap(self, newAssetStructMetaNameMap):
+        self.assetStructMetaNameMap = newAssetStructMetaNameMap
+
+    def getSupportedLanguages(self):
+        return self.supportedLanguages
+
+
+# @package Kaltura
+# @subpackage Client
+class KalturaTreeQuestion(KalturaObjectBase):
+    """A class representing a question in the decision tree."""
+
+    def __init__(self,
+            questionId = NotImplemented,
+            text = NotImplemented,
+            level = NotImplemented,
+            metadataTypes = NotImplemented):
+        KalturaObjectBase.__init__(self)
+
+        # Unique identifier for the question.
+        # @var str
+        self.questionId = questionId
+
+        # The question text to display to the user.
+        # @var str
+        self.text = text
+
+        # The depth level in the tree (1 for top-level).
+        # @var int
+        self.level = level
+
+        # Array of metadata categories this question focuses on.
+        # @var List[KalturaStringValue]
+        self.metadataTypes = metadataTypes
+
+
+    PROPERTY_LOADERS = {
+        'questionId': getXmlNodeText, 
+        'text': getXmlNodeText, 
+        'level': getXmlNodeInt, 
+        'metadataTypes': (KalturaObjectFactory.createArray, 'KalturaStringValue'), 
+    }
+
+    def fromXml(self, node):
+        KalturaObjectBase.fromXml(self, node)
+        self.fromXmlImpl(node, KalturaTreeQuestion.PROPERTY_LOADERS)
+
+    def toParams(self):
+        kparams = KalturaObjectBase.toParams(self)
+        kparams.put("objectType", "KalturaTreeQuestion")
+        kparams.addStringIfDefined("questionId", self.questionId)
+        kparams.addStringIfDefined("text", self.text)
+        kparams.addIntIfDefined("level", self.level)
+        kparams.addArrayIfDefined("metadataTypes", self.metadataTypes)
+        return kparams
+
+    def getQuestionId(self):
+        return self.questionId
+
+    def setQuestionId(self, newQuestionId):
+        self.questionId = newQuestionId
+
+    def getText(self):
+        return self.text
+
+    def setText(self, newText):
+        self.text = newText
+
+    def getLevel(self):
+        return self.level
+
+    def setLevel(self, newLevel):
+        self.level = newLevel
+
+    def getMetadataTypes(self):
+        return self.metadataTypes
+
+    def setMetadataTypes(self, newMetadataTypes):
+        self.metadataTypes = newMetadataTypes
+
+
+# @package Kaltura
+# @subpackage Client
+class KalturaTreeAnswer(KalturaObjectBase):
+    """A class representing a possible response to a question."""
+
+    def __init__(self,
+            answerId = NotImplemented,
+            text = NotImplemented,
+            hasNextQuestion = NotImplemented,
+            isSpecial = NotImplemented,
+            specialType = NotImplemented):
+        KalturaObjectBase.__init__(self)
+
+        # Unique identifier for the answer.
+        # @var str
+        self.answerId = answerId
+
+        # The answer text to display to the user.
+        # @var str
+        self.text = text
+
+        # Boolean indicating if selecting this answer leads to another question.
+        # @var bool
+        self.hasNextQuestion = hasNextQuestion
+
+        # Flag for special answers like &quot;I don&#39;t know&quot; (optional).
+        # @var bool
+        self.isSpecial = isSpecial
+
+        # The type of special answer, e.g., &quot;unsure&quot; (optional).
+        # @var str
+        self.specialType = specialType
+
+
+    PROPERTY_LOADERS = {
+        'answerId': getXmlNodeText, 
+        'text': getXmlNodeText, 
+        'hasNextQuestion': getXmlNodeBool, 
+        'isSpecial': getXmlNodeBool, 
+        'specialType': getXmlNodeText, 
+    }
+
+    def fromXml(self, node):
+        KalturaObjectBase.fromXml(self, node)
+        self.fromXmlImpl(node, KalturaTreeAnswer.PROPERTY_LOADERS)
+
+    def toParams(self):
+        kparams = KalturaObjectBase.toParams(self)
+        kparams.put("objectType", "KalturaTreeAnswer")
+        kparams.addStringIfDefined("answerId", self.answerId)
+        kparams.addStringIfDefined("text", self.text)
+        kparams.addBoolIfDefined("hasNextQuestion", self.hasNextQuestion)
+        kparams.addBoolIfDefined("isSpecial", self.isSpecial)
+        kparams.addStringIfDefined("specialType", self.specialType)
+        return kparams
+
+    def getAnswerId(self):
+        return self.answerId
+
+    def setAnswerId(self, newAnswerId):
+        self.answerId = newAnswerId
+
+    def getText(self):
+        return self.text
+
+    def setText(self, newText):
+        self.text = newText
+
+    def getHasNextQuestion(self):
+        return self.hasNextQuestion
+
+    def setHasNextQuestion(self, newHasNextQuestion):
+        self.hasNextQuestion = newHasNextQuestion
+
+    def getIsSpecial(self):
+        return self.isSpecial
+
+    def setIsSpecial(self, newIsSpecial):
+        self.isSpecial = newIsSpecial
+
+    def getSpecialType(self):
+        return self.specialType
+
+    def setSpecialType(self, newSpecialType):
+        self.specialType = newSpecialType
+
+
+# @package Kaltura
+# @subpackage Client
+class KalturaTreeRecommendations(KalturaObjectBase):
+    """A class representing content recommendations."""
+
+    def __init__(self,
+            title = NotImplemented,
+            searchQuery = NotImplemented,
+            assetIds = NotImplemented):
+        KalturaObjectBase.__init__(self)
+
+        # Descriptive title for the recommendation set.
+        # @var str
+        self.title = title
+
+        # The semantic search query used to find matching assets.
+        # @var str
+        self.searchQuery = searchQuery
+
+        # Array of content assets Id&#39;s matching the recommendation criteria.
+        # @var List[KalturaStringValue]
+        self.assetIds = assetIds
+
+
+    PROPERTY_LOADERS = {
+        'title': getXmlNodeText, 
+        'searchQuery': getXmlNodeText, 
+        'assetIds': (KalturaObjectFactory.createArray, 'KalturaStringValue'), 
+    }
+
+    def fromXml(self, node):
+        KalturaObjectBase.fromXml(self, node)
+        self.fromXmlImpl(node, KalturaTreeRecommendations.PROPERTY_LOADERS)
+
+    def toParams(self):
+        kparams = KalturaObjectBase.toParams(self)
+        kparams.put("objectType", "KalturaTreeRecommendations")
+        kparams.addStringIfDefined("title", self.title)
+        kparams.addStringIfDefined("searchQuery", self.searchQuery)
+        kparams.addArrayIfDefined("assetIds", self.assetIds)
+        return kparams
+
+    def getTitle(self):
+        return self.title
+
+    def setTitle(self, newTitle):
+        self.title = newTitle
+
+    def getSearchQuery(self):
+        return self.searchQuery
+
+    def setSearchQuery(self, newSearchQuery):
+        self.searchQuery = newSearchQuery
+
+    def getAssetIds(self):
+        return self.assetIds
+
+    def setAssetIds(self, newAssetIds):
+        self.assetIds = newAssetIds
+
+
+# @package Kaltura
+# @subpackage Client
+class KalturaTreeNextNodeResponse(KalturaObjectBase):
+    """A class representing the response from the getNextNodeAndRecommendation API.
+                Contains the next question, possible answers, and content recommendations."""
+
+    def __init__(self,
+            question = NotImplemented,
+            answers = NotImplemented,
+            recommendations = NotImplemented):
+        KalturaObjectBase.__init__(self)
+
+        # The next question to present to the user, or null for terminal nodes.
+        # @var KalturaTreeQuestion
+        self.question = question
+
+        # Array of possible answer options for the question.
+        # @var List[KalturaTreeAnswer]
+        self.answers = answers
+
+        # Content recommendations based on the current path.
+        # @var KalturaTreeRecommendations
+        self.recommendations = recommendations
+
+
+    PROPERTY_LOADERS = {
+        'question': (KalturaObjectFactory.create, 'KalturaTreeQuestion'), 
+        'answers': (KalturaObjectFactory.createArray, 'KalturaTreeAnswer'), 
+        'recommendations': (KalturaObjectFactory.create, 'KalturaTreeRecommendations'), 
+    }
+
+    def fromXml(self, node):
+        KalturaObjectBase.fromXml(self, node)
+        self.fromXmlImpl(node, KalturaTreeNextNodeResponse.PROPERTY_LOADERS)
+
+    def toParams(self):
+        kparams = KalturaObjectBase.toParams(self)
+        kparams.put("objectType", "KalturaTreeNextNodeResponse")
+        kparams.addObjectIfDefined("question", self.question)
+        kparams.addArrayIfDefined("answers", self.answers)
+        kparams.addObjectIfDefined("recommendations", self.recommendations)
+        return kparams
+
+    def getQuestion(self):
+        return self.question
+
+    def setQuestion(self, newQuestion):
+        self.question = newQuestion
+
+    def getAnswers(self):
+        return self.answers
+
+    def setAnswers(self, newAnswers):
+        self.answers = newAnswers
+
+    def getRecommendations(self):
+        return self.recommendations
+
+    def setRecommendations(self, newRecommendations):
+        self.recommendations = newRecommendations
+
+
+# @package Kaltura
+# @subpackage Client
+class KalturaTreeNaturalTextResponse(KalturaObjectBase):
+    """A class representing the response from the getRecommendationWithNaturalText API."""
+
+    def __init__(self,
+            recommendations = NotImplemented):
+        KalturaObjectBase.__init__(self)
+
+        # Content recommendations based on the natural language query.
+        # @var KalturaTreeRecommendations
+        self.recommendations = recommendations
+
+
+    PROPERTY_LOADERS = {
+        'recommendations': (KalturaObjectFactory.create, 'KalturaTreeRecommendations'), 
+    }
+
+    def fromXml(self, node):
+        KalturaObjectBase.fromXml(self, node)
+        self.fromXmlImpl(node, KalturaTreeNaturalTextResponse.PROPERTY_LOADERS)
+
+    def toParams(self):
+        kparams = KalturaObjectBase.toParams(self)
+        kparams.put("objectType", "KalturaTreeNaturalTextResponse")
+        kparams.addObjectIfDefined("recommendations", self.recommendations)
+        return kparams
+
+    def getRecommendations(self):
+        return self.recommendations
+
+    def setRecommendations(self, newRecommendations):
+        self.recommendations = newRecommendations
+
+
+# @package Kaltura
+# @subpackage Client
+class KalturaAiRecommendationTreePartnerConfiguration(KalturaObjectBase):
+    """A class representing the partner-specific configuration for TV Genie recommendation trees."""
+
+    def __init__(self,
+            activeMetadataTypes = NotImplemented,
+            topLevelQuestions = NotImplemented,
+            answersPerQuestion = NotImplemented,
+            levels = NotImplemented,
+            specialAnswers = NotImplemented,
+            numOfRecommendedAssets = NotImplemented,
+            removeWatchedRecommendations = NotImplemented,
+            treeGenerationFrequency = NotImplemented,
+            modelId = NotImplemented,
+            activeTreeId = NotImplemented):
+        KalturaObjectBase.__init__(self)
+
+        # List of metadata types to base questions on (genre, actor, director, etc.).
+        # @var List[KalturaStringValue]
+        self.activeMetadataTypes = activeMetadataTypes
+
+        # Number of top-level questions to generate (range: 5-21).
+        # @var int
+        self.topLevelQuestions = topLevelQuestions
+
+        # Number of regular answers per question (range: 2-3).
+        # @var int
+        self.answersPerQuestion = answersPerQuestion
+
+        # Maximum depth of the decision tree (range: 1-5).
+        # @var int
+        self.levels = levels
+
+        # Whether to include special answers like &quot;I don&#39;t know&quot; or &quot;Surprise Me&quot;.
+        # @var bool
+        self.specialAnswers = specialAnswers
+
+        # Number of assets to include in each recommendation set.
+        # @var int
+        self.numOfRecommendedAssets = numOfRecommendedAssets
+
+        # Whether to exclude already watched content.
+        # @var bool
+        self.removeWatchedRecommendations = removeWatchedRecommendations
+
+        # Cron expression for scheduling tree regeneration.
+        # @var str
+        self.treeGenerationFrequency = treeGenerationFrequency
+
+        # Identifier for the LLM model used for tree generation.
+        # @var str
+        self.modelId = modelId
+
+        # Identifier for the tree that is currently marked as Active (can be only one at a time)
+        # @var str
+        self.activeTreeId = activeTreeId
+
+
+    PROPERTY_LOADERS = {
+        'activeMetadataTypes': (KalturaObjectFactory.createArray, 'KalturaStringValue'), 
+        'topLevelQuestions': getXmlNodeInt, 
+        'answersPerQuestion': getXmlNodeInt, 
+        'levels': getXmlNodeInt, 
+        'specialAnswers': getXmlNodeBool, 
+        'numOfRecommendedAssets': getXmlNodeInt, 
+        'removeWatchedRecommendations': getXmlNodeBool, 
+        'treeGenerationFrequency': getXmlNodeText, 
+        'modelId': getXmlNodeText, 
+        'activeTreeId': getXmlNodeText, 
+    }
+
+    def fromXml(self, node):
+        KalturaObjectBase.fromXml(self, node)
+        self.fromXmlImpl(node, KalturaAiRecommendationTreePartnerConfiguration.PROPERTY_LOADERS)
+
+    def toParams(self):
+        kparams = KalturaObjectBase.toParams(self)
+        kparams.put("objectType", "KalturaAiRecommendationTreePartnerConfiguration")
+        kparams.addArrayIfDefined("activeMetadataTypes", self.activeMetadataTypes)
+        kparams.addIntIfDefined("topLevelQuestions", self.topLevelQuestions)
+        kparams.addIntIfDefined("answersPerQuestion", self.answersPerQuestion)
+        kparams.addIntIfDefined("levels", self.levels)
+        kparams.addBoolIfDefined("specialAnswers", self.specialAnswers)
+        kparams.addIntIfDefined("numOfRecommendedAssets", self.numOfRecommendedAssets)
+        kparams.addBoolIfDefined("removeWatchedRecommendations", self.removeWatchedRecommendations)
+        kparams.addStringIfDefined("treeGenerationFrequency", self.treeGenerationFrequency)
+        kparams.addStringIfDefined("modelId", self.modelId)
+        kparams.addStringIfDefined("activeTreeId", self.activeTreeId)
+        return kparams
+
+    def getActiveMetadataTypes(self):
+        return self.activeMetadataTypes
+
+    def setActiveMetadataTypes(self, newActiveMetadataTypes):
+        self.activeMetadataTypes = newActiveMetadataTypes
+
+    def getTopLevelQuestions(self):
+        return self.topLevelQuestions
+
+    def setTopLevelQuestions(self, newTopLevelQuestions):
+        self.topLevelQuestions = newTopLevelQuestions
+
+    def getAnswersPerQuestion(self):
+        return self.answersPerQuestion
+
+    def setAnswersPerQuestion(self, newAnswersPerQuestion):
+        self.answersPerQuestion = newAnswersPerQuestion
+
+    def getLevels(self):
+        return self.levels
+
+    def setLevels(self, newLevels):
+        self.levels = newLevels
+
+    def getSpecialAnswers(self):
+        return self.specialAnswers
+
+    def setSpecialAnswers(self, newSpecialAnswers):
+        self.specialAnswers = newSpecialAnswers
+
+    def getNumOfRecommendedAssets(self):
+        return self.numOfRecommendedAssets
+
+    def setNumOfRecommendedAssets(self, newNumOfRecommendedAssets):
+        self.numOfRecommendedAssets = newNumOfRecommendedAssets
+
+    def getRemoveWatchedRecommendations(self):
+        return self.removeWatchedRecommendations
+
+    def setRemoveWatchedRecommendations(self, newRemoveWatchedRecommendations):
+        self.removeWatchedRecommendations = newRemoveWatchedRecommendations
+
+    def getTreeGenerationFrequency(self):
+        return self.treeGenerationFrequency
+
+    def setTreeGenerationFrequency(self, newTreeGenerationFrequency):
+        self.treeGenerationFrequency = newTreeGenerationFrequency
+
+    def getModelId(self):
+        return self.modelId
+
+    def setModelId(self, newModelId):
+        self.modelId = newModelId
+
+    def getActiveTreeId(self):
+        return self.activeTreeId
+
+    def setActiveTreeId(self, newActiveTreeId):
+        self.activeTreeId = newActiveTreeId
 
 
 # @package Kaltura
@@ -16728,29 +17666,29 @@ class KalturaSubscription(KalturaOTTObjectSupportNullable):
         # @var str
         self.id = id
 
-        # A list of channels associated with this subscription
+        # List of KalturaBaseChannel objects associated with this subscription
         # @var List[KalturaBaseChannel]
         # @readonly
         self.channels = channels
 
-        # Comma separated channels Ids associated with this subscription
+        # Comma separated list identifying the KalturaBaseChannel objects associated with this subscription. In practice this is a list of KalturaBaseChannel.id values.
         # @var str
         self.channelsIds = channelsIds
 
-        # The first date the subscription is available for purchasing
+        # The first date the subscription is available for purchasing (in seconds since the Unix epoch)
         # @var int
         self.startDate = startDate
 
-        # The last date the subscription is available for purchasing
+        # The last date the subscription is available for purchasing (in seconds since the Unix epoch)
         # @var int
         self.endDate = endDate
 
-        # A list of file types identifiers that are supported in this subscription
+        # List of file types (KalturaMediaFileType.id values) that are supported by this subscription
         # @var List[KalturaIntegerValue]
         # @readonly
         self.fileTypes = fileTypes
 
-        # Comma separated file types identifiers that are supported in this subscription
+        # Comma separated list of file types (KalturaMediaFileType.id values) that are supported by this subscription
         # @var str
         self.fileTypesIds = fileTypesIds
 
@@ -16779,7 +17717,7 @@ class KalturaSubscription(KalturaOTTObjectSupportNullable):
         # @readonly
         self.discountModule = discountModule
 
-        # The internal discount module identifier for the subscription
+        # The internal discount module identifier (kalturaDiscountModule.id value) for the subscription
         # @var int
         self.internalDiscountModuleId = internalDiscountModuleId
 
@@ -16801,7 +17739,7 @@ class KalturaSubscription(KalturaOTTObjectSupportNullable):
         # @var List[KalturaTranslationToken]
         self.multilingualDescription = multilingualDescription
 
-        # Identifier of the media associated with the subscription
+        # Identifier of the media (KalturaAsset.id value) associated with the subscription
         # @var int
         # @readonly
         self.mediaId = mediaId
@@ -16810,11 +17748,11 @@ class KalturaSubscription(KalturaOTTObjectSupportNullable):
         # @var int
         self.prorityInOrder = prorityInOrder
 
-        # Comma separated subscription price plan IDs
+        # Comma separated list of subscription price plans (KalturaPricePlan.id values) that are associated to this subscription
         # @var str
         self.pricePlanIds = pricePlanIds
 
-        # Optional: If the subscription has a flexible price plan. Represents an initial none-recurring discounted period which is charged immediately (no unified billing), followed by a recuring price plan which should be aligned with the unified billing cycle
+        # Optional: If the subscription has a flexible price plan. Represents an initial non-recurring discounted period which is charged immediately (no unified billing), followed by a recurring price plan which should be aligned with the unified billing cycle
         # @var int
         self.flexiblePricePlanId = flexiblePricePlanId
 
@@ -16823,11 +17761,11 @@ class KalturaSubscription(KalturaOTTObjectSupportNullable):
         # @readonly
         self.previewModule = previewModule
 
-        # Subscription preview module identifier
+        # Identifier of the KalturaPreviewModule (KalturaPreviewModule.id value) associated with this subscription
         # @var int
         self.previewModuleId = previewModuleId
 
-        # The household limitation module identifier associated with this subscription
+        # Identifier of the KalturaHouseholdLimitationModule (KalturaHouseholdLimitations.id value) associated with this subscription
         # @var int
         self.householdLimitationsId = householdLimitationsId
 
@@ -16864,12 +17802,12 @@ class KalturaSubscription(KalturaOTTObjectSupportNullable):
         # @readonly
         self.userTypes = userTypes
 
-        # List of Coupons group
+        # List of KalturaCouponsGroup objects associated with the subscription
         # @var List[KalturaCouponsGroup]
         # @readonly
         self.couponsGroups = couponsGroups
 
-        # List of subscription Coupons group
+        # List of KalturaSubscriptionCouponGroup objects associated with the subscription
         # @var List[KalturaSubscriptionCouponGroup]
         self.subscriptionCouponGroup = subscriptionCouponGroup
 
@@ -16881,7 +17819,7 @@ class KalturaSubscription(KalturaOTTObjectSupportNullable):
         # @var KalturaSubscriptionDependencyType
         self.dependencyType = dependencyType
 
-        # External ID
+        # Identifier of the subsription object as assigned by an external system
         # @var str
         self.externalId = externalId
 
@@ -16889,7 +17827,7 @@ class KalturaSubscription(KalturaOTTObjectSupportNullable):
         # @var bool
         self.isCancellationBlocked = isCancellationBlocked
 
-        # The Pre-Sale date the subscription is available for purchasing
+        # Pre-sale date that subscription is available for purchasing (in seconds since the Unix epoch)
         # @var int
         self.preSaleDate = preSaleDate
 
@@ -16905,12 +17843,12 @@ class KalturaSubscription(KalturaOTTObjectSupportNullable):
         # @var bool
         self.isActive = isActive
 
-        # Specifies when was the Subscription created. Date and time represented as epoch.
+        # Specifies when the subscription was created (in seconds since the Unix epoch)
         # @var int
         # @readonly
         self.createDate = createDate
 
-        # Specifies when was the Subscription last updated. Date and time represented as epoch.
+        # Specifies when the subscription was last updated (in seconds since the Unix epoch)
         # @var int
         # @readonly
         self.updateDate = updateDate
@@ -24768,6 +25706,122 @@ class KalturaBulkUploadProgramAssetResult(KalturaBulkUploadResult):
 
     def getLiveAssetId(self):
         return self.liveAssetId
+
+
+# @package Kaltura
+# @subpackage Client
+class KalturaSubtitles(KalturaObjectBase):
+    """A class representing the properties of an uploaded subtitles file."""
+
+    def __init__(self,
+            id = NotImplemented,
+            createDate = NotImplemented,
+            fileName = NotImplemented,
+            detectedType = NotImplemented,
+            language = NotImplemented):
+        KalturaObjectBase.__init__(self)
+
+        # Unique identifier for the subtitles file.
+        # @var int
+        # @readonly
+        self.id = id
+
+        # Specifies when the file was uploaded, expressed in Epoch timestamp.
+        # @var int
+        # @readonly
+        self.createDate = createDate
+
+        # Name of the uploaded subtitles text file.
+        # @var str
+        self.fileName = fileName
+
+        # The content type included in the subtitles file, as auto-detected by the subtitles service. Can be of SRT, WebVTT or free text without cues.
+        # @var KalturaSubtitlesType
+        self.detectedType = detectedType
+
+        # The language used for the subtitles.
+        # @var str
+        self.language = language
+
+
+    PROPERTY_LOADERS = {
+        'id': getXmlNodeInt, 
+        'createDate': getXmlNodeInt, 
+        'fileName': getXmlNodeText, 
+        'detectedType': (KalturaEnumsFactory.createString, "KalturaSubtitlesType"), 
+        'language': getXmlNodeText, 
+    }
+
+    def fromXml(self, node):
+        KalturaObjectBase.fromXml(self, node)
+        self.fromXmlImpl(node, KalturaSubtitles.PROPERTY_LOADERS)
+
+    def toParams(self):
+        kparams = KalturaObjectBase.toParams(self)
+        kparams.put("objectType", "KalturaSubtitles")
+        kparams.addStringIfDefined("fileName", self.fileName)
+        kparams.addStringEnumIfDefined("detectedType", self.detectedType)
+        kparams.addStringIfDefined("language", self.language)
+        return kparams
+
+    def getId(self):
+        return self.id
+
+    def getCreateDate(self):
+        return self.createDate
+
+    def getFileName(self):
+        return self.fileName
+
+    def setFileName(self, newFileName):
+        self.fileName = newFileName
+
+    def getDetectedType(self):
+        return self.detectedType
+
+    def setDetectedType(self, newDetectedType):
+        self.detectedType = newDetectedType
+
+    def getLanguage(self):
+        return self.language
+
+    def setLanguage(self, newLanguage):
+        self.language = newLanguage
+
+
+# @package Kaltura
+# @subpackage Client
+class KalturaSubtitlesListResponse(KalturaListResponse):
+    def __init__(self,
+            totalCount = NotImplemented,
+            objects = NotImplemented):
+        KalturaListResponse.__init__(self,
+            totalCount)
+
+        # A list of subtitles files
+        # @var List[KalturaSubtitles]
+        self.objects = objects
+
+
+    PROPERTY_LOADERS = {
+        'objects': (KalturaObjectFactory.createArray, 'KalturaSubtitles'), 
+    }
+
+    def fromXml(self, node):
+        KalturaListResponse.fromXml(self, node)
+        self.fromXmlImpl(node, KalturaSubtitlesListResponse.PROPERTY_LOADERS)
+
+    def toParams(self):
+        kparams = KalturaListResponse.toParams(self)
+        kparams.put("objectType", "KalturaSubtitlesListResponse")
+        kparams.addArrayIfDefined("objects", self.objects)
+        return kparams
+
+    def getObjects(self):
+        return self.objects
+
+    def setObjects(self, newObjects):
+        self.objects = newObjects
 
 
 # @package Kaltura
@@ -32695,6 +33749,105 @@ class KalturaIngestStatusEpgProgramResultListResponse(KalturaListResponse):
     def toParams(self):
         kparams = KalturaListResponse.toParams(self)
         kparams.put("objectType", "KalturaIngestStatusEpgProgramResultListResponse")
+        kparams.addArrayIfDefined("objects", self.objects)
+        return kparams
+
+    def getObjects(self):
+        return self.objects
+
+    def setObjects(self, newObjects):
+        self.objects = newObjects
+
+
+# @package Kaltura
+# @subpackage Client
+class KalturaUserLog(KalturaObjectBase):
+    """This log entry records an event related to a user&#39;s interaction with the Kaltura TV Platform (KTP). The event may be initiated directly by the user or by the platform itself in response to user activity."""
+
+    def __init__(self,
+            id = NotImplemented,
+            createDate = NotImplemented,
+            userId = NotImplemented,
+            message = NotImplemented):
+        KalturaObjectBase.__init__(self)
+
+        # UserLog entry unique identifier
+        # @var int
+        # @readonly
+        self.id = id
+
+        # The log created date in epoch
+        # @var int
+        # @readonly
+        self.createDate = createDate
+
+        # A valid user unique identifier
+        # @var int
+        # @readonly
+        self.userId = userId
+
+        # Log message
+        # @var str
+        # @readonly
+        self.message = message
+
+
+    PROPERTY_LOADERS = {
+        'id': getXmlNodeInt, 
+        'createDate': getXmlNodeInt, 
+        'userId': getXmlNodeInt, 
+        'message': getXmlNodeText, 
+    }
+
+    def fromXml(self, node):
+        KalturaObjectBase.fromXml(self, node)
+        self.fromXmlImpl(node, KalturaUserLog.PROPERTY_LOADERS)
+
+    def toParams(self):
+        kparams = KalturaObjectBase.toParams(self)
+        kparams.put("objectType", "KalturaUserLog")
+        return kparams
+
+    def getId(self):
+        return self.id
+
+    def getCreateDate(self):
+        return self.createDate
+
+    def getUserId(self):
+        return self.userId
+
+    def getMessage(self):
+        return self.message
+
+
+# @package Kaltura
+# @subpackage Client
+class KalturaUserLogListResponse(KalturaListResponse):
+    """TODO: Ask about renaming to *List*Response"""
+
+    def __init__(self,
+            totalCount = NotImplemented,
+            objects = NotImplemented):
+        KalturaListResponse.__init__(self,
+            totalCount)
+
+        # KalturaUserLog list response
+        # @var List[KalturaUserLog]
+        self.objects = objects
+
+
+    PROPERTY_LOADERS = {
+        'objects': (KalturaObjectFactory.createArray, 'KalturaUserLog'), 
+    }
+
+    def fromXml(self, node):
+        KalturaListResponse.fromXml(self, node)
+        self.fromXmlImpl(node, KalturaUserLogListResponse.PROPERTY_LOADERS)
+
+    def toParams(self):
+        kparams = KalturaListResponse.toParams(self)
+        kparams.put("objectType", "KalturaUserLogListResponse")
         kparams.addArrayIfDefined("objects", self.objects)
         return kparams
 
@@ -50790,6 +51943,342 @@ class KalturaSegmentationPartnerConfiguration(KalturaObjectBase):
 
 # @package Kaltura
 # @subpackage Client
+class KalturaSearchableAttribute(KalturaObjectBase):
+    """Configuration for semantic search attributes for a specific asset type"""
+
+    def __init__(self,
+            assetStructId = NotImplemented,
+            attributes = NotImplemented):
+        KalturaObjectBase.__init__(self)
+
+        # The unique identifier of the asset structure.
+        # @var int
+        self.assetStructId = assetStructId
+
+        # Comma-separated list of field names to include in embedding.
+        # @var str
+        self.attributes = attributes
+
+
+    PROPERTY_LOADERS = {
+        'assetStructId': getXmlNodeInt, 
+        'attributes': getXmlNodeText, 
+    }
+
+    def fromXml(self, node):
+        KalturaObjectBase.fromXml(self, node)
+        self.fromXmlImpl(node, KalturaSearchableAttribute.PROPERTY_LOADERS)
+
+    def toParams(self):
+        kparams = KalturaObjectBase.toParams(self)
+        kparams.put("objectType", "KalturaSearchableAttribute")
+        kparams.addIntIfDefined("assetStructId", self.assetStructId)
+        kparams.addStringIfDefined("attributes", self.attributes)
+        return kparams
+
+    def getAssetStructId(self):
+        return self.assetStructId
+
+    def setAssetStructId(self, newAssetStructId):
+        self.assetStructId = newAssetStructId
+
+    def getAttributes(self):
+        return self.attributes
+
+    def setAttributes(self, newAttributes):
+        self.attributes = newAttributes
+
+
+# @package Kaltura
+# @subpackage Client
+class KalturaSearchableAttributes(KalturaObjectBase):
+    """Container for searchable attributes configuration"""
+
+    def __init__(self,
+            items = NotImplemented):
+        KalturaObjectBase.__init__(self)
+
+        # A list of searchable attributes.
+        # @var List[KalturaSearchableAttribute]
+        self.items = items
+
+
+    PROPERTY_LOADERS = {
+        'items': (KalturaObjectFactory.createArray, 'KalturaSearchableAttribute'), 
+    }
+
+    def fromXml(self, node):
+        KalturaObjectBase.fromXml(self, node)
+        self.fromXmlImpl(node, KalturaSearchableAttributes.PROPERTY_LOADERS)
+
+    def toParams(self):
+        kparams = KalturaObjectBase.toParams(self)
+        kparams.put("objectType", "KalturaSearchableAttributes")
+        kparams.addArrayIfDefined("items", self.items)
+        return kparams
+
+    def getItems(self):
+        return self.items
+
+    def setItems(self, newItems):
+        self.items = newItems
+
+
+# @package Kaltura
+# @subpackage Client
+class KalturaFilteringCondition(KalturaObjectBase):
+    """Configuration for embedding generation rule."""
+
+    def __init__(self,
+            metaName = NotImplemented,
+            operator = NotImplemented,
+            value = NotImplemented):
+        KalturaObjectBase.__init__(self)
+
+        # Meta Name (SystemName) to apply the rule to.
+        # @var str
+        self.metaName = metaName
+
+        # Operator to use for the rule.
+        # @var KalturaConditionOperator
+        self.operator = operator
+
+        # Single value for the rule condition.
+        # @var str
+        self.value = value
+
+
+    PROPERTY_LOADERS = {
+        'metaName': getXmlNodeText, 
+        'operator': (KalturaEnumsFactory.createString, "KalturaConditionOperator"), 
+        'value': getXmlNodeText, 
+    }
+
+    def fromXml(self, node):
+        KalturaObjectBase.fromXml(self, node)
+        self.fromXmlImpl(node, KalturaFilteringCondition.PROPERTY_LOADERS)
+
+    def toParams(self):
+        kparams = KalturaObjectBase.toParams(self)
+        kparams.put("objectType", "KalturaFilteringCondition")
+        kparams.addStringIfDefined("metaName", self.metaName)
+        kparams.addStringEnumIfDefined("operator", self.operator)
+        kparams.addStringIfDefined("value", self.value)
+        return kparams
+
+    def getMetaName(self):
+        return self.metaName
+
+    def setMetaName(self, newMetaName):
+        self.metaName = newMetaName
+
+    def getOperator(self):
+        return self.operator
+
+    def setOperator(self, newOperator):
+        self.operator = newOperator
+
+    def getValue(self):
+        return self.value
+
+    def setValue(self, newValue):
+        self.value = newValue
+
+
+# @package Kaltura
+# @subpackage Client
+class KalturaGenerateSemanticQuery(KalturaObjectBase):
+    """Parameters required for generating semantic queries."""
+
+    def __init__(self,
+            text = NotImplemented):
+        KalturaObjectBase.__init__(self)
+
+        # A primary query to be extended with multiple sub-queries.
+        # @var str
+        self.text = text
+
+
+    PROPERTY_LOADERS = {
+        'text': getXmlNodeText, 
+    }
+
+    def fromXml(self, node):
+        KalturaObjectBase.fromXml(self, node)
+        self.fromXmlImpl(node, KalturaGenerateSemanticQuery.PROPERTY_LOADERS)
+
+    def toParams(self):
+        kparams = KalturaObjectBase.toParams(self)
+        kparams.put("objectType", "KalturaGenerateSemanticQuery")
+        kparams.addStringIfDefined("text", self.text)
+        return kparams
+
+    def getText(self):
+        return self.text
+
+    def setText(self, newText):
+        self.text = newText
+
+
+# @package Kaltura
+# @subpackage Client
+class KalturaSemanticSubQuery(KalturaObjectBase):
+    """The generated sub-query and its properties."""
+
+    def __init__(self,
+            text = NotImplemented,
+            name = NotImplemented):
+        KalturaObjectBase.__init__(self)
+
+        # The text generated for the sub-query.
+        # @var str
+        self.text = text
+
+        # The name generated for the sub-query, using the account&#39;s Primary language.
+        # @var KalturaTranslationToken
+        self.name = name
+
+
+    PROPERTY_LOADERS = {
+        'text': getXmlNodeText, 
+        'name': (KalturaObjectFactory.create, 'KalturaTranslationToken'), 
+    }
+
+    def fromXml(self, node):
+        KalturaObjectBase.fromXml(self, node)
+        self.fromXmlImpl(node, KalturaSemanticSubQuery.PROPERTY_LOADERS)
+
+    def toParams(self):
+        kparams = KalturaObjectBase.toParams(self)
+        kparams.put("objectType", "KalturaSemanticSubQuery")
+        kparams.addStringIfDefined("text", self.text)
+        kparams.addObjectIfDefined("name", self.name)
+        return kparams
+
+    def getText(self):
+        return self.text
+
+    def setText(self, newText):
+        self.text = newText
+
+    def getName(self):
+        return self.name
+
+    def setName(self, newName):
+        self.name = newName
+
+
+# @package Kaltura
+# @subpackage Client
+class KalturaSemanticQuery(KalturaObjectBase):
+    """The result of semantic query generation."""
+
+    def __init__(self,
+            subQueries = NotImplemented,
+            title = NotImplemented):
+        KalturaObjectBase.__init__(self)
+
+        # A list of generated sub-queries.
+        # @var List[KalturaSemanticSubQuery]
+        self.subQueries = subQueries
+
+        # A title generated for the entire queries&#39; generation.
+        # @var str
+        self.title = title
+
+
+    PROPERTY_LOADERS = {
+        'subQueries': (KalturaObjectFactory.createArray, 'KalturaSemanticSubQuery'), 
+        'title': getXmlNodeText, 
+    }
+
+    def fromXml(self, node):
+        KalturaObjectBase.fromXml(self, node)
+        self.fromXmlImpl(node, KalturaSemanticQuery.PROPERTY_LOADERS)
+
+    def toParams(self):
+        kparams = KalturaObjectBase.toParams(self)
+        kparams.put("objectType", "KalturaSemanticQuery")
+        kparams.addArrayIfDefined("subQueries", self.subQueries)
+        kparams.addStringIfDefined("title", self.title)
+        return kparams
+
+    def getSubQueries(self):
+        return self.subQueries
+
+    def setSubQueries(self, newSubQueries):
+        self.subQueries = newSubQueries
+
+    def getTitle(self):
+        return self.title
+
+    def setTitle(self, newTitle):
+        self.title = newTitle
+
+
+# @package Kaltura
+# @subpackage Client
+class KalturaSemanticQueryPartnerConfiguration(KalturaObjectBase):
+    """Partner configuration for semantic query generation."""
+
+    def __init__(self,
+            subQueriesCount = NotImplemented,
+            defaultQueriesCount = NotImplemented,
+            assetsPerCollectionCount = NotImplemented):
+        KalturaObjectBase.__init__(self)
+
+        # The number of sub-queries to generate, including the main (base) one. Optional, Requires Admin role.
+        # @var int
+        self.subQueriesCount = subQueriesCount
+
+        # The number of default sub-queries to generate if the primary requested query is empty. Optional, Requires Admin role.
+        # @var int
+        self.defaultQueriesCount = defaultQueriesCount
+
+        # The number of assets per suggested collection.
+        # @var int
+        self.assetsPerCollectionCount = assetsPerCollectionCount
+
+
+    PROPERTY_LOADERS = {
+        'subQueriesCount': getXmlNodeInt, 
+        'defaultQueriesCount': getXmlNodeInt, 
+        'assetsPerCollectionCount': getXmlNodeInt, 
+    }
+
+    def fromXml(self, node):
+        KalturaObjectBase.fromXml(self, node)
+        self.fromXmlImpl(node, KalturaSemanticQueryPartnerConfiguration.PROPERTY_LOADERS)
+
+    def toParams(self):
+        kparams = KalturaObjectBase.toParams(self)
+        kparams.put("objectType", "KalturaSemanticQueryPartnerConfiguration")
+        kparams.addIntIfDefined("subQueriesCount", self.subQueriesCount)
+        kparams.addIntIfDefined("defaultQueriesCount", self.defaultQueriesCount)
+        kparams.addIntIfDefined("assetsPerCollectionCount", self.assetsPerCollectionCount)
+        return kparams
+
+    def getSubQueriesCount(self):
+        return self.subQueriesCount
+
+    def setSubQueriesCount(self, newSubQueriesCount):
+        self.subQueriesCount = newSubQueriesCount
+
+    def getDefaultQueriesCount(self):
+        return self.defaultQueriesCount
+
+    def setDefaultQueriesCount(self, newDefaultQueriesCount):
+        self.defaultQueriesCount = newDefaultQueriesCount
+
+    def getAssetsPerCollectionCount(self):
+        return self.assetsPerCollectionCount
+
+    def setAssetsPerCollectionCount(self, newAssetsPerCollectionCount):
+        self.assetsPerCollectionCount = newAssetsPerCollectionCount
+
+
+# @package Kaltura
+# @subpackage Client
 class KalturaNetworkActionStatus(KalturaObjectBase):
     def __init__(self,
             status = NotImplemented,
@@ -51294,6 +52783,54 @@ class KalturaSSOAdapterProfileInvoke(KalturaObjectBase):
 
     def setMessage(self, newMessage):
         self.message = newMessage
+
+
+# @package Kaltura
+# @subpackage Client
+class KalturaUploadSubtitles(KalturaObjectBase):
+    """A class representing the request to upload subtitles to Kaltura."""
+
+    def __init__(self,
+            fileName = NotImplemented,
+            language = NotImplemented):
+        KalturaObjectBase.__init__(self)
+
+        # Name of the subtitles file.
+        # @var str
+        self.fileName = fileName
+
+        # The language in which the subtitles are written.
+        # @var str
+        self.language = language
+
+
+    PROPERTY_LOADERS = {
+        'fileName': getXmlNodeText, 
+        'language': getXmlNodeText, 
+    }
+
+    def fromXml(self, node):
+        KalturaObjectBase.fromXml(self, node)
+        self.fromXmlImpl(node, KalturaUploadSubtitles.PROPERTY_LOADERS)
+
+    def toParams(self):
+        kparams = KalturaObjectBase.toParams(self)
+        kparams.put("objectType", "KalturaUploadSubtitles")
+        kparams.addStringIfDefined("fileName", self.fileName)
+        kparams.addStringIfDefined("language", self.language)
+        return kparams
+
+    def getFileName(self):
+        return self.fileName
+
+    def setFileName(self, newFileName):
+        self.fileName = newFileName
+
+    def getLanguage(self):
+        return self.language
+
+    def setLanguage(self, newLanguage):
+        self.language = newLanguage
 
 
 # @package Kaltura
@@ -52544,6 +54081,133 @@ class KalturaWatchBasedRecommendationsAdminConfiguration(KalturaObjectBase):
 
 # @package Kaltura
 # @subpackage Client
+class KalturaAiMetadataGeneratorService(KalturaServiceBase):
+    def __init__(self, client = None):
+        KalturaServiceBase.__init__(self, client)
+
+    def generateMetadataBySubtitles(self, subtitlesFileId, externalAssetIds = NotImplemented):
+        """Start metadata generation process based on subtitles."""
+
+        kparams = KalturaParams()
+        kparams.addIntIfDefined("subtitlesFileId", subtitlesFileId);
+        kparams.addArrayIfDefined("externalAssetIds", externalAssetIds)
+        self.client.queueServiceActionCall("aimetadatagenerator", "generateMetadataBySubtitles", "KalturaGenerateMetadataBySubtitlesJob", kparams)
+        if self.client.isMultiRequest():
+            return self.client.getMultiRequestResult()
+        resultNode = self.client.doQueue()
+        return KalturaObjectFactory.create(resultNode, 'KalturaGenerateMetadataBySubtitlesJob')
+
+    def getGeneratedMetadata(self, jobId):
+        """Retrieve the generated metadata"""
+
+        kparams = KalturaParams()
+        kparams.addIntIfDefined("jobId", jobId);
+        self.client.queueServiceActionCall("aimetadatagenerator", "getGeneratedMetadata", "KalturaGenerateMetadataResult", kparams)
+        if self.client.isMultiRequest():
+            return self.client.getMultiRequestResult()
+        resultNode = self.client.doQueue()
+        return KalturaObjectFactory.create(resultNode, 'KalturaGenerateMetadataResult')
+
+    def getGenerateMetadataJob(self, id):
+        """Get a metadata generation job."""
+
+        kparams = KalturaParams()
+        kparams.addIntIfDefined("id", id);
+        self.client.queueServiceActionCall("aimetadatagenerator", "getGenerateMetadataJob", "KalturaGenerateMetadataBySubtitlesJob", kparams)
+        if self.client.isMultiRequest():
+            return self.client.getMultiRequestResult()
+        resultNode = self.client.doQueue()
+        return KalturaObjectFactory.create(resultNode, 'KalturaGenerateMetadataBySubtitlesJob')
+
+    def getMetadataFieldDefinitions(self):
+        """Get metadata mapping structure and available generated metadata fields."""
+
+        kparams = KalturaParams()
+        self.client.queueServiceActionCall("aimetadatagenerator", "getMetadataFieldDefinitions", "KalturaMetaFieldNameMap", kparams)
+        if self.client.isMultiRequest():
+            return self.client.getMultiRequestResult()
+        resultNode = self.client.doQueue()
+        return KalturaObjectFactory.create(resultNode, 'KalturaMetaFieldNameMap')
+
+    def getPartnerConfiguration(self):
+        """Get the metadata generation configuration."""
+
+        kparams = KalturaParams()
+        self.client.queueServiceActionCall("aimetadatagenerator", "getPartnerConfiguration", "KalturaAiMetadataGeneratorConfiguration", kparams)
+        if self.client.isMultiRequest():
+            return self.client.getMultiRequestResult()
+        resultNode = self.client.doQueue()
+        return KalturaObjectFactory.create(resultNode, 'KalturaAiMetadataGeneratorConfiguration')
+
+    def updatePartnerConfiguration(self, configuration):
+        """Update/set the metadata generation configuration"""
+
+        kparams = KalturaParams()
+        kparams.addObjectIfDefined("configuration", configuration)
+        self.client.queueServiceActionCall("aimetadatagenerator", "updatePartnerConfiguration", "KalturaAiMetadataGeneratorConfiguration", kparams)
+        if self.client.isMultiRequest():
+            return self.client.getMultiRequestResult()
+        resultNode = self.client.doQueue()
+        return KalturaObjectFactory.create(resultNode, 'KalturaAiMetadataGeneratorConfiguration')
+
+
+# @package Kaltura
+# @subpackage Client
+class KalturaAiRecommendationTreeService(KalturaServiceBase):
+    def __init__(self, client = None):
+        KalturaServiceBase.__init__(self, client)
+
+    def getNextNodeAndRecommendation(self, treeId = NotImplemented, previousQuestionId = NotImplemented, answerId = NotImplemented, topQuestion = NotImplemented):
+        """Returns the next question, available answers, and content recommendations based on the current path through the tree."""
+
+        kparams = KalturaParams()
+        kparams.addStringIfDefined("treeId", treeId)
+        kparams.addStringIfDefined("previousQuestionId", previousQuestionId)
+        kparams.addStringIfDefined("answerId", answerId)
+        kparams.addStringIfDefined("topQuestion", topQuestion)
+        self.client.queueServiceActionCall("airecommendationtree", "getNextNodeAndRecommendation", "KalturaTreeNextNodeResponse", kparams)
+        if self.client.isMultiRequest():
+            return self.client.getMultiRequestResult()
+        resultNode = self.client.doQueue()
+        return KalturaObjectFactory.create(resultNode, 'KalturaTreeNextNodeResponse')
+
+    def getPartnerConfig(self):
+        """Retrieves the current configuration settings for TV Genie for a specific partner."""
+
+        kparams = KalturaParams()
+        self.client.queueServiceActionCall("airecommendationtree", "getPartnerConfig", "KalturaAiRecommendationTreePartnerConfiguration", kparams)
+        if self.client.isMultiRequest():
+            return self.client.getMultiRequestResult()
+        resultNode = self.client.doQueue()
+        return KalturaObjectFactory.create(resultNode, 'KalturaAiRecommendationTreePartnerConfiguration')
+
+    def getRecommendationWithNaturalText(self, naturalTextQuery, previousQuestionId = NotImplemented, treeId = NotImplemented):
+        """Returns content recommendations based on natural language input."""
+
+        kparams = KalturaParams()
+        kparams.addStringIfDefined("naturalTextQuery", naturalTextQuery)
+        kparams.addStringIfDefined("previousQuestionId", previousQuestionId)
+        kparams.addStringIfDefined("treeId", treeId)
+        self.client.queueServiceActionCall("airecommendationtree", "getRecommendationWithNaturalText", "KalturaTreeNaturalTextResponse", kparams)
+        if self.client.isMultiRequest():
+            return self.client.getMultiRequestResult()
+        resultNode = self.client.doQueue()
+        return KalturaObjectFactory.create(resultNode, 'KalturaTreeNaturalTextResponse')
+
+    def upsertPartnerConfig(self, configuration):
+        """Updates the configuration settings for TV Genie on a per-partner basis."""
+
+        kparams = KalturaParams()
+        kparams.addObjectIfDefined("configuration", configuration)
+        self.client.queueServiceActionCall("airecommendationtree", "upsertPartnerConfig", "KalturaAiRecommendationTreePartnerConfiguration", kparams)
+        if self.client.isMultiRequest():
+            return self.client.getMultiRequestResult()
+        resultNode = self.client.doQueue()
+        return KalturaObjectFactory.create(resultNode, 'KalturaAiRecommendationTreePartnerConfiguration')
+
+
+# @package Kaltura
+# @subpackage Client
 class KalturaAnnouncementService(KalturaServiceBase):
     def __init__(self, client = None):
         KalturaServiceBase.__init__(self, client)
@@ -52862,6 +54526,19 @@ class KalturaAssetService(KalturaServiceBase):
         resultNode = self.client.doQueue()
         return getXmlNodeBool(resultNode)
 
+    def semanticSearch(self, query, refineQuery = False, size = 10):
+        """Search for assets using semantic similarity to a natural language query, with optional query refinement using LLM."""
+
+        kparams = KalturaParams()
+        kparams.addStringIfDefined("query", query)
+        kparams.addBoolIfDefined("refineQuery", refineQuery);
+        kparams.addIntIfDefined("size", size);
+        self.client.queueServiceActionCall("asset", "semanticSearch", "KalturaAssetListResponse", kparams)
+        if self.client.isMultiRequest():
+            return self.client.getMultiRequestResult()
+        resultNode = self.client.doQueue()
+        return KalturaObjectFactory.create(resultNode, 'KalturaAssetListResponse')
+
     def update(self, id, asset):
         """update an existing asset.
                     For metas of type bool-&gt; use kalturaBoolValue, type number-&gt; KalturaDoubleValue, type date -&gt; KalturaLongValue, type string -&gt; KalturaStringValue"""
@@ -53068,7 +54745,7 @@ class KalturaAssetPersonalSelectionService(KalturaServiceBase):
         resultNode = self.client.doQueue()
 
     def upsert(self, assetId, assetType, slotNumber):
-        """Add or update asset selection in slot"""
+        """upsert manages asset selections within slots.  It adds a new asset ID if it doesn&#39;t exist, or updates the timestamp if it does.  Slots are limited to 30 unique IDs.  When a slot is full, the oldest entry is removed (FIFO).  Inactive assets are automatically removed after 90 days."""
 
         kparams = KalturaParams()
         kparams.addIntIfDefined("assetId", assetId);
@@ -58905,6 +60582,102 @@ class KalturaSegmentationTypeService(KalturaServiceBase):
 
 # @package Kaltura
 # @subpackage Client
+class KalturaSemanticAssetSearchPartnerConfigService(KalturaServiceBase):
+    def __init__(self, client = None):
+        KalturaServiceBase.__init__(self, client)
+
+    def getFilteringCondition(self):
+        """Retrieve the filtering condition configuration for the partner."""
+
+        kparams = KalturaParams()
+        self.client.queueServiceActionCall("semanticassetsearchpartnerconfig", "getFilteringCondition", "KalturaFilteringCondition", kparams)
+        if self.client.isMultiRequest():
+            return self.client.getMultiRequestResult()
+        resultNode = self.client.doQueue()
+        return KalturaObjectFactory.create(resultNode, 'KalturaFilteringCondition')
+
+    def getSearchableAttributes(self, assetStructId):
+        """Retrieve the current field configurations for semantic search."""
+
+        kparams = KalturaParams()
+        kparams.addIntIfDefined("assetStructId", assetStructId);
+        self.client.queueServiceActionCall("semanticassetsearchpartnerconfig", "getSearchableAttributes", "KalturaSearchableAttributes", kparams)
+        if self.client.isMultiRequest():
+            return self.client.getMultiRequestResult()
+        resultNode = self.client.doQueue()
+        return KalturaObjectFactory.create(resultNode, 'KalturaSearchableAttributes')
+
+    def upsertFilteringCondition(self, filteringCondition):
+        """Update rule that controls embedding generation and search behavior."""
+
+        kparams = KalturaParams()
+        kparams.addObjectIfDefined("filteringCondition", filteringCondition)
+        self.client.queueServiceActionCall("semanticassetsearchpartnerconfig", "upsertFilteringCondition", "KalturaFilteringCondition", kparams)
+        if self.client.isMultiRequest():
+            return self.client.getMultiRequestResult()
+        resultNode = self.client.doQueue()
+        return KalturaObjectFactory.create(resultNode, 'KalturaFilteringCondition')
+
+    def upsertSearchableAttributes(self, attributes):
+        """Update which fields should be included in semantic search for specific asset types."""
+
+        kparams = KalturaParams()
+        kparams.addObjectIfDefined("attributes", attributes)
+        self.client.queueServiceActionCall("semanticassetsearchpartnerconfig", "upsertSearchableAttributes", "KalturaSearchableAttributes", kparams)
+        if self.client.isMultiRequest():
+            return self.client.getMultiRequestResult()
+        resultNode = self.client.doQueue()
+        return KalturaObjectFactory.create(resultNode, 'KalturaSearchableAttributes')
+
+
+# @package Kaltura
+# @subpackage Client
+class KalturaSemanticQueryService(KalturaServiceBase):
+    def __init__(self, client = None):
+        KalturaServiceBase.__init__(self, client)
+
+    def generate(self, query):
+        """Generates a title and semantic sub-queries."""
+
+        kparams = KalturaParams()
+        kparams.addObjectIfDefined("query", query)
+        self.client.queueServiceActionCall("semanticquery", "generate", "KalturaSemanticQuery", kparams)
+        if self.client.isMultiRequest():
+            return self.client.getMultiRequestResult()
+        resultNode = self.client.doQueue()
+        return KalturaObjectFactory.create(resultNode, 'KalturaSemanticQuery')
+
+
+# @package Kaltura
+# @subpackage Client
+class KalturaSemanticQueryPartnerConfigurationService(KalturaServiceBase):
+    def __init__(self, client = None):
+        KalturaServiceBase.__init__(self, client)
+
+    def get(self):
+        """Retrieves partner configuration for semantic query service."""
+
+        kparams = KalturaParams()
+        self.client.queueServiceActionCall("semanticquerypartnerconfiguration", "get", "KalturaSemanticQueryPartnerConfiguration", kparams)
+        if self.client.isMultiRequest():
+            return self.client.getMultiRequestResult()
+        resultNode = self.client.doQueue()
+        return KalturaObjectFactory.create(resultNode, 'KalturaSemanticQueryPartnerConfiguration')
+
+    def update(self, configuration):
+        """Updates the partner configuration for semantic query service."""
+
+        kparams = KalturaParams()
+        kparams.addObjectIfDefined("configuration", configuration)
+        self.client.queueServiceActionCall("semanticquerypartnerconfiguration", "update", "KalturaSemanticQueryPartnerConfiguration", kparams)
+        if self.client.isMultiRequest():
+            return self.client.getMultiRequestResult()
+        resultNode = self.client.doQueue()
+        return KalturaObjectFactory.create(resultNode, 'KalturaSemanticQueryPartnerConfiguration')
+
+
+# @package Kaltura
+# @subpackage Client
 class KalturaSeriesRecordingService(KalturaServiceBase):
     def __init__(self, client = None):
         KalturaServiceBase.__init__(self, client)
@@ -59528,6 +61301,25 @@ class KalturaSubscriptionSetService(KalturaServiceBase):
             return self.client.getMultiRequestResult()
         resultNode = self.client.doQueue()
         return KalturaObjectFactory.create(resultNode, 'KalturaSubscriptionSet')
+
+
+# @package Kaltura
+# @subpackage Client
+class KalturaSubtitlesService(KalturaServiceBase):
+    def __init__(self, client = None):
+        KalturaServiceBase.__init__(self, client)
+
+    def uploadFile(self, subtitles, fileData):
+        """Add a subtitles file to be used for generating metadata and enriching the assets using a multi-part form-data body including the JSON configuration object and the uploaded file."""
+
+        kparams = KalturaParams()
+        kparams.addObjectIfDefined("subtitles", subtitles)
+        kfiles = {"fileData": fileData}
+        self.client.queueServiceActionCall("subtitles", "uploadFile", "KalturaSubtitles", kparams, kfiles)
+        if self.client.isMultiRequest():
+            return self.client.getMultiRequestResult()
+        resultNode = self.client.doQueue()
+        return KalturaObjectFactory.create(resultNode, 'KalturaSubtitles')
 
 
 # @package Kaltura
@@ -60220,6 +62012,25 @@ class KalturaUserInterestService(KalturaServiceBase):
 
 # @package Kaltura
 # @subpackage Client
+class KalturaUserLogService(KalturaServiceBase):
+    def __init__(self, client = None):
+        KalturaServiceBase.__init__(self, client)
+
+    def list(self, filter, pager = NotImplemented):
+        """Retrieves a list of user log entries matching the specified filter criteria."""
+
+        kparams = KalturaParams()
+        kparams.addObjectIfDefined("filter", filter)
+        kparams.addObjectIfDefined("pager", pager)
+        self.client.queueServiceActionCall("userlog", "list", "KalturaUserLogListResponse", kparams)
+        if self.client.isMultiRequest():
+            return self.client.getMultiRequestResult()
+        resultNode = self.client.doQueue()
+        return KalturaObjectFactory.create(resultNode, 'KalturaUserLogListResponse')
+
+
+# @package Kaltura
+# @subpackage Client
 class KalturaUserLoginPinService(KalturaServiceBase):
     def __init__(self, client = None):
         KalturaServiceBase.__init__(self, client)
@@ -60523,6 +62334,8 @@ class KalturaCoreClient(KalturaClientPlugin):
     # @return array<KalturaServiceBase>
     def getServices(self):
         return {
+            'aiMetadataGenerator': KalturaAiMetadataGeneratorService,
+            'aiRecommendationTree': KalturaAiRecommendationTreeService,
             'announcement': KalturaAnnouncementService,
             'appToken': KalturaAppTokenService,
             'assetComment': KalturaAssetCommentService,
@@ -60646,6 +62459,9 @@ class KalturaCoreClient(KalturaClientPlugin):
             'searchPriorityGroup': KalturaSearchPriorityGroupService,
             'searchPriorityGroupOrderedIdsSet': KalturaSearchPriorityGroupOrderedIdsSetService,
             'segmentationType': KalturaSegmentationTypeService,
+            'semanticAssetSearchPartnerConfig': KalturaSemanticAssetSearchPartnerConfigService,
+            'semanticQuery': KalturaSemanticQueryService,
+            'semanticQueryPartnerConfiguration': KalturaSemanticQueryPartnerConfigurationService,
             'seriesRecording': KalturaSeriesRecordingService,
             'session': KalturaSessionService,
             'smsAdapterProfile': KalturaSmsAdapterProfileService,
@@ -60657,6 +62473,7 @@ class KalturaCoreClient(KalturaClientPlugin):
             'streamingDevice': KalturaStreamingDeviceService,
             'subscription': KalturaSubscriptionService,
             'subscriptionSet': KalturaSubscriptionSetService,
+            'subtitles': KalturaSubtitlesService,
             'system': KalturaSystemService,
             'tag': KalturaTagService,
             'timeShiftedTvPartnerSettings': KalturaTimeShiftedTvPartnerSettingsService,
@@ -60672,6 +62489,7 @@ class KalturaCoreClient(KalturaClientPlugin):
             'userAssetRule': KalturaUserAssetRuleService,
             'userAssetsListItem': KalturaUserAssetsListItemService,
             'userInterest': KalturaUserInterestService,
+            'userLog': KalturaUserLogService,
             'userLoginPin': KalturaUserLoginPinService,
             'userRole': KalturaUserRoleService,
             'userSegment': KalturaUserSegmentService,
@@ -60738,6 +62556,7 @@ class KalturaCoreClient(KalturaClientPlugin):
             'KalturaCollectionOrderBy': KalturaCollectionOrderBy,
             'KalturaCompensationType': KalturaCompensationType,
             'KalturaConcurrencyLimitationType': KalturaConcurrencyLimitationType,
+            'KalturaConditionOperator': KalturaConditionOperator,
             'KalturaConfigurationGroupDeviceOrderBy': KalturaConfigurationGroupDeviceOrderBy,
             'KalturaConfigurationGroupTagOrderBy': KalturaConfigurationGroupTagOrderBy,
             'KalturaConfigurationsOrderBy': KalturaConfigurationsOrderBy,
@@ -60776,6 +62595,7 @@ class KalturaCoreClient(KalturaClientPlugin):
             'KalturaExternalRecordingResponseProfileOrderBy': KalturaExternalRecordingResponseProfileOrderBy,
             'KalturaFavoriteOrderBy': KalturaFavoriteOrderBy,
             'KalturaFollowTvSeriesOrderBy': KalturaFollowTvSeriesOrderBy,
+            'KalturaGenerateMetadataStatus': KalturaGenerateMetadataStatus,
             'KalturaGroupByField': KalturaGroupByField,
             'KalturaGroupByOrder': KalturaGroupByOrder,
             'KalturaGroupingOption': KalturaGroupingOption,
@@ -60893,6 +62713,7 @@ class KalturaCoreClient(KalturaClientPlugin):
             'KalturaSubscriptionSetOrderBy': KalturaSubscriptionSetOrderBy,
             'KalturaSubscriptionSetType': KalturaSubscriptionSetType,
             'KalturaSubscriptionTriggerType': KalturaSubscriptionTriggerType,
+            'KalturaSubtitlesType': KalturaSubtitlesType,
             'KalturaSuspensionProfileInheritanceType': KalturaSuspensionProfileInheritanceType,
             'KalturaTagOrderBy': KalturaTagOrderBy,
             'KalturaTimeShiftedTvState': KalturaTimeShiftedTvState,
@@ -60912,6 +62733,7 @@ class KalturaCoreClient(KalturaClientPlugin):
             'KalturaUserAssetRuleOrderBy': KalturaUserAssetRuleOrderBy,
             'KalturaUserAssetsListItemType': KalturaUserAssetsListItemType,
             'KalturaUserAssetsListType': KalturaUserAssetsListType,
+            'KalturaUserLogOrderBy': KalturaUserLogOrderBy,
             'KalturaUserRoleOrderBy': KalturaUserRoleOrderBy,
             'KalturaUserRoleProfile': KalturaUserRoleProfile,
             'KalturaUserRoleType': KalturaUserRoleType,
@@ -60950,6 +62772,7 @@ class KalturaCoreClient(KalturaClientPlugin):
             'KalturaPasswordPolicyFilter': KalturaPasswordPolicyFilter,
             'KalturaUserSessionProfileFilter': KalturaUserSessionProfileFilter,
             'KalturaBulkUploadFilter': KalturaBulkUploadFilter,
+            'KalturaSubtitlesFilter': KalturaSubtitlesFilter,
             'KalturaSocialActionFilter': KalturaSocialActionFilter,
             'KalturaSocialCommentFilter': KalturaSocialCommentFilter,
             'KalturaSocialFriendActivityFilter': KalturaSocialFriendActivityFilter,
@@ -61001,6 +62824,7 @@ class KalturaCoreClient(KalturaClientPlugin):
             'KalturaIngestProgramResultsByExternalIdsFilter': KalturaIngestProgramResultsByExternalIdsFilter,
             'KalturaIngestProgramResultsByProgramIdsFilter': KalturaIngestProgramResultsByProgramIdsFilter,
             'KalturaVodIngestAssetResultFilter': KalturaVodIngestAssetResultFilter,
+            'KalturaUserLogFilter': KalturaUserLogFilter,
             'KalturaAggregationCountFilter': KalturaAggregationCountFilter,
             'KalturaDynamicListFilter': KalturaDynamicListFilter,
             'KalturaDynamicListIdInFilter': KalturaDynamicListIdInFilter,
@@ -61131,6 +62955,16 @@ class KalturaCoreClient(KalturaClientPlugin):
             'KalturaPropertySkipCondition': KalturaPropertySkipCondition,
             'KalturaAggregatedPropertySkipCondition': KalturaAggregatedPropertySkipCondition,
             'KalturaSkipOnErrorCondition': KalturaSkipOnErrorCondition,
+            'KalturaGenerateMetadataBySubtitlesJob': KalturaGenerateMetadataBySubtitlesJob,
+            'KalturaGenerateMetadataResult': KalturaGenerateMetadataResult,
+            'KalturaMetaFieldNameMap': KalturaMetaFieldNameMap,
+            'KalturaAiMetadataGeneratorConfiguration': KalturaAiMetadataGeneratorConfiguration,
+            'KalturaTreeQuestion': KalturaTreeQuestion,
+            'KalturaTreeAnswer': KalturaTreeAnswer,
+            'KalturaTreeRecommendations': KalturaTreeRecommendations,
+            'KalturaTreeNextNodeResponse': KalturaTreeNextNodeResponse,
+            'KalturaTreeNaturalTextResponse': KalturaTreeNaturalTextResponse,
+            'KalturaAiRecommendationTreePartnerConfiguration': KalturaAiRecommendationTreePartnerConfiguration,
             'KalturaAnnouncement': KalturaAnnouncement,
             'KalturaFilterPager': KalturaFilterPager,
             'KalturaListResponse': KalturaListResponse,
@@ -61313,6 +63147,8 @@ class KalturaCoreClient(KalturaClientPlugin):
             'KalturaBulkUploadDynamicListResult': KalturaBulkUploadDynamicListResult,
             'KalturaBulkUploadUdidDynamicListResult': KalturaBulkUploadUdidDynamicListResult,
             'KalturaBulkUploadProgramAssetResult': KalturaBulkUploadProgramAssetResult,
+            'KalturaSubtitles': KalturaSubtitles,
+            'KalturaSubtitlesListResponse': KalturaSubtitlesListResponse,
             'KalturaSocialAction': KalturaSocialAction,
             'KalturaSocialActionListResponse': KalturaSocialActionListResponse,
             'KalturaSocialActionRate': KalturaSocialActionRate,
@@ -61453,6 +63289,8 @@ class KalturaCoreClient(KalturaClientPlugin):
             'KalturaIngestEpgDetails': KalturaIngestEpgDetails,
             'KalturaIngestEpgProgramResult': KalturaIngestEpgProgramResult,
             'KalturaIngestStatusEpgProgramResultListResponse': KalturaIngestStatusEpgProgramResultListResponse,
+            'KalturaUserLog': KalturaUserLog,
+            'KalturaUserLogListResponse': KalturaUserLogListResponse,
             'KalturaDurationListResponse': KalturaDurationListResponse,
             'KalturaDynamicListListResponse': KalturaDynamicListListResponse,
             'KalturaIntegerValueListResponse': KalturaIntegerValueListResponse,
@@ -61731,6 +63569,13 @@ class KalturaCoreClient(KalturaClientPlugin):
             'KalturaRegionChannelNumberMultiLcns': KalturaRegionChannelNumberMultiLcns,
             'KalturaSearchPriorityGroupOrderedIdsSet': KalturaSearchPriorityGroupOrderedIdsSet,
             'KalturaSegmentationPartnerConfiguration': KalturaSegmentationPartnerConfiguration,
+            'KalturaSearchableAttribute': KalturaSearchableAttribute,
+            'KalturaSearchableAttributes': KalturaSearchableAttributes,
+            'KalturaFilteringCondition': KalturaFilteringCondition,
+            'KalturaGenerateSemanticQuery': KalturaGenerateSemanticQuery,
+            'KalturaSemanticSubQuery': KalturaSemanticSubQuery,
+            'KalturaSemanticQuery': KalturaSemanticQuery,
+            'KalturaSemanticQueryPartnerConfiguration': KalturaSemanticQueryPartnerConfiguration,
             'KalturaNetworkActionStatus': KalturaNetworkActionStatus,
             'KalturaUserSocialActionResponse': KalturaUserSocialActionResponse,
             'KalturaSocial': KalturaSocial,
@@ -61740,6 +63585,7 @@ class KalturaCoreClient(KalturaClientPlugin):
             'KalturaActionPermissionItem': KalturaActionPermissionItem,
             'KalturaSocialUserConfig': KalturaSocialUserConfig,
             'KalturaSSOAdapterProfileInvoke': KalturaSSOAdapterProfileInvoke,
+            'KalturaUploadSubtitles': KalturaUploadSubtitles,
             'KalturaTimeShiftedTvPartnerSettings': KalturaTimeShiftedTvPartnerSettings,
             'KalturaPurchaseBase': KalturaPurchaseBase,
             'KalturaPurchase': KalturaPurchase,
