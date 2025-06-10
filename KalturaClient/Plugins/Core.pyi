@@ -3816,16 +3816,20 @@ class KalturaConfigurationsFilter(KalturaFilter):
 
 class KalturaRecordingFilter(KalturaFilter):
     statusIn: str
+    assetIdIn: str
     externalRecordingIdIn: str
     kSql: str
     def __init__(self,
             orderBy: str = NotImplemented,
             statusIn: str = NotImplemented,
+            assetIdIn: str = NotImplemented,
             externalRecordingIdIn: str = NotImplemented,
             kSql: str = NotImplemented): ...
 
     def getStatusIn(self) -> str: ...
     def setStatusIn(self, newStatusIn: str) -> None: ...
+    def getAssetIdIn(self) -> str: ...
+    def setAssetIdIn(self, newAssetIdIn: str) -> None: ...
     def getExternalRecordingIdIn(self) -> str: ...
     def setExternalRecordingIdIn(self, newExternalRecordingIdIn: str) -> None: ...
     def getKSql(self) -> str: ...
@@ -3836,6 +3840,7 @@ class KalturaExternalRecordingFilter(KalturaRecordingFilter):
     def __init__(self,
             orderBy: str = NotImplemented,
             statusIn: str = NotImplemented,
+            assetIdIn: str = NotImplemented,
             externalRecordingIdIn: str = NotImplemented,
             kSql: str = NotImplemented,
             metaData: map = NotImplemented): ...
@@ -3848,6 +3853,7 @@ class KalturaCloudRecordingFilter(KalturaExternalRecordingFilter):
     def __init__(self,
             orderBy: str = NotImplemented,
             statusIn: str = NotImplemented,
+            assetIdIn: str = NotImplemented,
             externalRecordingIdIn: str = NotImplemented,
             kSql: str = NotImplemented,
             metaData: map = NotImplemented,

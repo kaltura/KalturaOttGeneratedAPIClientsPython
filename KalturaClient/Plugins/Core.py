@@ -42,7 +42,7 @@ from ..Base import (
     KalturaServiceBase,
 )
 
-API_VERSION = '11.2.1.0'
+API_VERSION = '11.3.0.0'
 
 ########## enums ##########
 # @package Kaltura
@@ -8869,6 +8869,7 @@ class KalturaRecordingFilter(KalturaFilter):
     def __init__(self,
             orderBy = NotImplemented,
             statusIn = NotImplemented,
+            assetIdIn = NotImplemented,
             externalRecordingIdIn = NotImplemented,
             kSql = NotImplemented):
         KalturaFilter.__init__(self,
@@ -8877,6 +8878,10 @@ class KalturaRecordingFilter(KalturaFilter):
         # Recording Statuses
         # @var str
         self.statusIn = statusIn
+
+        # Comma separated list of assets identifiers
+        # @var str
+        self.assetIdIn = assetIdIn
 
         # Comma separated external identifiers
         # @var str
@@ -8889,6 +8894,7 @@ class KalturaRecordingFilter(KalturaFilter):
 
     PROPERTY_LOADERS = {
         'statusIn': getXmlNodeText, 
+        'assetIdIn': getXmlNodeText, 
         'externalRecordingIdIn': getXmlNodeText, 
         'kSql': getXmlNodeText, 
     }
@@ -8901,6 +8907,7 @@ class KalturaRecordingFilter(KalturaFilter):
         kparams = KalturaFilter.toParams(self)
         kparams.put("objectType", "KalturaRecordingFilter")
         kparams.addStringIfDefined("statusIn", self.statusIn)
+        kparams.addStringIfDefined("assetIdIn", self.assetIdIn)
         kparams.addStringIfDefined("externalRecordingIdIn", self.externalRecordingIdIn)
         kparams.addStringIfDefined("kSql", self.kSql)
         return kparams
@@ -8910,6 +8917,12 @@ class KalturaRecordingFilter(KalturaFilter):
 
     def setStatusIn(self, newStatusIn):
         self.statusIn = newStatusIn
+
+    def getAssetIdIn(self):
+        return self.assetIdIn
+
+    def setAssetIdIn(self, newAssetIdIn):
+        self.assetIdIn = newAssetIdIn
 
     def getExternalRecordingIdIn(self):
         return self.externalRecordingIdIn
@@ -8932,12 +8945,14 @@ class KalturaExternalRecordingFilter(KalturaRecordingFilter):
     def __init__(self,
             orderBy = NotImplemented,
             statusIn = NotImplemented,
+            assetIdIn = NotImplemented,
             externalRecordingIdIn = NotImplemented,
             kSql = NotImplemented,
             metaData = NotImplemented):
         KalturaRecordingFilter.__init__(self,
             orderBy,
             statusIn,
+            assetIdIn,
             externalRecordingIdIn,
             kSql)
 
@@ -8975,6 +8990,7 @@ class KalturaCloudRecordingFilter(KalturaExternalRecordingFilter):
     def __init__(self,
             orderBy = NotImplemented,
             statusIn = NotImplemented,
+            assetIdIn = NotImplemented,
             externalRecordingIdIn = NotImplemented,
             kSql = NotImplemented,
             metaData = NotImplemented,
@@ -8982,6 +8998,7 @@ class KalturaCloudRecordingFilter(KalturaExternalRecordingFilter):
         KalturaExternalRecordingFilter.__init__(self,
             orderBy,
             statusIn,
+            assetIdIn,
             externalRecordingIdIn,
             kSql,
             metaData)
