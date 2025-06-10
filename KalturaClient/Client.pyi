@@ -29,7 +29,6 @@ from typing import List
 from KalturaClient import KalturaConfiguration
 from KalturaClient.Plugins.Core import KalturaObject
 from KalturaClient.Plugins.Core import KalturaAiMetadataGeneratorService
-from KalturaClient.Plugins.Core import KalturaAiRecommendationTreeService
 from KalturaClient.Plugins.Core import KalturaAnnouncementService
 from KalturaClient.Plugins.Core import KalturaAppTokenService
 from KalturaClient.Plugins.Core import KalturaAssetCommentService
@@ -214,7 +213,6 @@ class KalturaClient:
     def doMultiRequest(self) -> List[KalturaObject]: ...
 
     aiMetadataGenerator: KalturaAiMetadataGeneratorService
-    aiRecommendationTree: KalturaAiRecommendationTreeService
     announcement: KalturaAnnouncementService
     appToken: KalturaAppTokenService
     assetComment: KalturaAssetCommentService
