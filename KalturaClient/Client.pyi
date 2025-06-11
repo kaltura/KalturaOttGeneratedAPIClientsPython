@@ -85,6 +85,7 @@ from KalturaClient.Plugins.Core import KalturaExportTaskService
 from KalturaClient.Plugins.Core import KalturaExternalChannelProfileService
 from KalturaClient.Plugins.Core import KalturaFavoriteService
 from KalturaClient.Plugins.Core import KalturaFollowTvSeriesService
+from KalturaClient.Plugins.Core import KalturaGeoBlockRuleService
 from KalturaClient.Plugins.Core import KalturaHomeNetworkService
 from KalturaClient.Plugins.Core import KalturaHouseholdService
 from KalturaClient.Plugins.Core import KalturaHouseholdCouponService
@@ -270,6 +271,7 @@ class KalturaClient:
     externalChannelProfile: KalturaExternalChannelProfileService
     favorite: KalturaFavoriteService
     followTvSeries: KalturaFollowTvSeriesService
+    geoBlockRule: KalturaGeoBlockRuleService
     homeNetwork: KalturaHomeNetworkService
     household: KalturaHouseholdService
     householdCoupon: KalturaHouseholdCouponService
