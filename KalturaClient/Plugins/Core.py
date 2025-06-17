@@ -14325,39 +14325,6 @@ class KalturaTreeAnswer(KalturaObjectBase):
 
 # @package Kaltura
 # @subpackage Client
-class KalturaListResponse(KalturaObjectBase):
-    def __init__(self,
-            totalCount = NotImplemented):
-        KalturaObjectBase.__init__(self)
-
-        # Total items
-        # @var int
-        self.totalCount = totalCount
-
-
-    PROPERTY_LOADERS = {
-        'totalCount': getXmlNodeInt, 
-    }
-
-    def fromXml(self, node):
-        KalturaObjectBase.fromXml(self, node)
-        self.fromXmlImpl(node, KalturaListResponse.PROPERTY_LOADERS)
-
-    def toParams(self):
-        kparams = KalturaObjectBase.toParams(self)
-        kparams.put("objectType", "KalturaListResponse")
-        kparams.addIntIfDefined("totalCount", self.totalCount)
-        return kparams
-
-    def getTotalCount(self):
-        return self.totalCount
-
-    def setTotalCount(self, newTotalCount):
-        self.totalCount = newTotalCount
-
-
-# @package Kaltura
-# @subpackage Client
 class KalturaMediaImage(KalturaObjectBase):
     """Image details"""
 
@@ -14494,39 +14461,6 @@ class KalturaMediaImage(KalturaObjectBase):
 
 # @package Kaltura
 # @subpackage Client
-class KalturaStringValueArray(KalturaObjectBase):
-    def __init__(self,
-            objects = NotImplemented):
-        KalturaObjectBase.__init__(self)
-
-        # List of string values
-        # @var List[KalturaStringValue]
-        self.objects = objects
-
-
-    PROPERTY_LOADERS = {
-        'objects': (KalturaObjectFactory.createArray, 'KalturaStringValue'), 
-    }
-
-    def fromXml(self, node):
-        KalturaObjectBase.fromXml(self, node)
-        self.fromXmlImpl(node, KalturaStringValueArray.PROPERTY_LOADERS)
-
-    def toParams(self):
-        kparams = KalturaObjectBase.toParams(self)
-        kparams.put("objectType", "KalturaStringValueArray")
-        kparams.addArrayIfDefined("objects", self.objects)
-        return kparams
-
-    def getObjects(self):
-        return self.objects
-
-    def setObjects(self, newObjects):
-        self.objects = newObjects
-
-
-# @package Kaltura
-# @subpackage Client
 class KalturaAssetFile(KalturaObjectBase):
     """Asset file details"""
 
@@ -14558,6 +14492,39 @@ class KalturaAssetFile(KalturaObjectBase):
 
     def setUrl(self, newUrl):
         self.url = newUrl
+
+
+# @package Kaltura
+# @subpackage Client
+class KalturaStringValueArray(KalturaObjectBase):
+    def __init__(self,
+            objects = NotImplemented):
+        KalturaObjectBase.__init__(self)
+
+        # List of string values
+        # @var List[KalturaStringValue]
+        self.objects = objects
+
+
+    PROPERTY_LOADERS = {
+        'objects': (KalturaObjectFactory.createArray, 'KalturaStringValue'), 
+    }
+
+    def fromXml(self, node):
+        KalturaObjectBase.fromXml(self, node)
+        self.fromXmlImpl(node, KalturaStringValueArray.PROPERTY_LOADERS)
+
+    def toParams(self):
+        kparams = KalturaObjectBase.toParams(self)
+        kparams.put("objectType", "KalturaStringValueArray")
+        kparams.addArrayIfDefined("objects", self.objects)
+        return kparams
+
+    def getObjects(self):
+        return self.objects
+
+    def setObjects(self, newObjects):
+        self.objects = newObjects
 
 
 # @package Kaltura
@@ -15460,43 +15427,6 @@ class KalturaAsset(KalturaObjectBase):
 
 # @package Kaltura
 # @subpackage Client
-class KalturaAssetListResponse(KalturaListResponse):
-    """Asset wrapper"""
-
-    def __init__(self,
-            totalCount = NotImplemented,
-            objects = NotImplemented):
-        KalturaListResponse.__init__(self,
-            totalCount)
-
-        # Assets
-        # @var List[KalturaAsset]
-        self.objects = objects
-
-
-    PROPERTY_LOADERS = {
-        'objects': (KalturaObjectFactory.createArray, 'KalturaAsset'), 
-    }
-
-    def fromXml(self, node):
-        KalturaListResponse.fromXml(self, node)
-        self.fromXmlImpl(node, KalturaAssetListResponse.PROPERTY_LOADERS)
-
-    def toParams(self):
-        kparams = KalturaListResponse.toParams(self)
-        kparams.put("objectType", "KalturaAssetListResponse")
-        kparams.addArrayIfDefined("objects", self.objects)
-        return kparams
-
-    def getObjects(self):
-        return self.objects
-
-    def setObjects(self, newObjects):
-        self.objects = newObjects
-
-
-# @package Kaltura
-# @subpackage Client
 class KalturaTreeRecommendations(KalturaObjectBase):
     """A class representing content recommendations."""
 
@@ -15510,13 +15440,13 @@ class KalturaTreeRecommendations(KalturaObjectBase):
         self.title = title
 
         # Array of content assets matching the recommendation criteria.
-        # @var KalturaAssetListResponse
+        # @var List[KalturaAsset]
         self.assets = assets
 
 
     PROPERTY_LOADERS = {
         'title': getXmlNodeText, 
-        'assets': (KalturaObjectFactory.create, 'KalturaAssetListResponse'), 
+        'assets': (KalturaObjectFactory.createArray, 'KalturaAsset'), 
     }
 
     def fromXml(self, node):
@@ -15527,7 +15457,7 @@ class KalturaTreeRecommendations(KalturaObjectBase):
         kparams = KalturaObjectBase.toParams(self)
         kparams.put("objectType", "KalturaTreeRecommendations")
         kparams.addStringIfDefined("title", self.title)
-        kparams.addObjectIfDefined("assets", self.assets)
+        kparams.addArrayIfDefined("assets", self.assets)
         return kparams
 
     def getTitle(self):
@@ -15603,6 +15533,1962 @@ class KalturaTreeNextNodeResponse(KalturaObjectBase):
 
     def setRecommendations(self, newRecommendations):
         self.recommendations = newRecommendations
+
+
+# @package Kaltura
+# @subpackage Client
+class KalturaLiveToVodInfoAsset(KalturaObjectBase):
+    def __init__(self,
+            linearAssetId = NotImplemented,
+            epgId = NotImplemented,
+            epgChannelId = NotImplemented,
+            crid = NotImplemented,
+            originalStartDate = NotImplemented,
+            originalEndDate = NotImplemented,
+            paddingBeforeProgramStarts = NotImplemented,
+            paddingAfterProgramEnds = NotImplemented):
+        KalturaObjectBase.__init__(self)
+
+        # Linear Asset Id
+        # @var int
+        self.linearAssetId = linearAssetId
+
+        # EPG Id
+        # @var str
+        self.epgId = epgId
+
+        # EPG Channel Id
+        # @var int
+        self.epgChannelId = epgChannelId
+
+        # Crid
+        # @var str
+        self.crid = crid
+
+        # Original Start Date
+        # @var int
+        self.originalStartDate = originalStartDate
+
+        # Original End Date
+        # @var int
+        self.originalEndDate = originalEndDate
+
+        # Padding before program starts
+        # @var int
+        self.paddingBeforeProgramStarts = paddingBeforeProgramStarts
+
+        # Padding after program ends
+        # @var int
+        self.paddingAfterProgramEnds = paddingAfterProgramEnds
+
+
+    PROPERTY_LOADERS = {
+        'linearAssetId': getXmlNodeInt, 
+        'epgId': getXmlNodeText, 
+        'epgChannelId': getXmlNodeInt, 
+        'crid': getXmlNodeText, 
+        'originalStartDate': getXmlNodeInt, 
+        'originalEndDate': getXmlNodeInt, 
+        'paddingBeforeProgramStarts': getXmlNodeInt, 
+        'paddingAfterProgramEnds': getXmlNodeInt, 
+    }
+
+    def fromXml(self, node):
+        KalturaObjectBase.fromXml(self, node)
+        self.fromXmlImpl(node, KalturaLiveToVodInfoAsset.PROPERTY_LOADERS)
+
+    def toParams(self):
+        kparams = KalturaObjectBase.toParams(self)
+        kparams.put("objectType", "KalturaLiveToVodInfoAsset")
+        kparams.addIntIfDefined("linearAssetId", self.linearAssetId)
+        kparams.addStringIfDefined("epgId", self.epgId)
+        kparams.addIntIfDefined("epgChannelId", self.epgChannelId)
+        kparams.addStringIfDefined("crid", self.crid)
+        kparams.addIntIfDefined("originalStartDate", self.originalStartDate)
+        kparams.addIntIfDefined("originalEndDate", self.originalEndDate)
+        kparams.addIntIfDefined("paddingBeforeProgramStarts", self.paddingBeforeProgramStarts)
+        kparams.addIntIfDefined("paddingAfterProgramEnds", self.paddingAfterProgramEnds)
+        return kparams
+
+    def getLinearAssetId(self):
+        return self.linearAssetId
+
+    def setLinearAssetId(self, newLinearAssetId):
+        self.linearAssetId = newLinearAssetId
+
+    def getEpgId(self):
+        return self.epgId
+
+    def setEpgId(self, newEpgId):
+        self.epgId = newEpgId
+
+    def getEpgChannelId(self):
+        return self.epgChannelId
+
+    def setEpgChannelId(self, newEpgChannelId):
+        self.epgChannelId = newEpgChannelId
+
+    def getCrid(self):
+        return self.crid
+
+    def setCrid(self, newCrid):
+        self.crid = newCrid
+
+    def getOriginalStartDate(self):
+        return self.originalStartDate
+
+    def setOriginalStartDate(self, newOriginalStartDate):
+        self.originalStartDate = newOriginalStartDate
+
+    def getOriginalEndDate(self):
+        return self.originalEndDate
+
+    def setOriginalEndDate(self, newOriginalEndDate):
+        self.originalEndDate = newOriginalEndDate
+
+    def getPaddingBeforeProgramStarts(self):
+        return self.paddingBeforeProgramStarts
+
+    def setPaddingBeforeProgramStarts(self, newPaddingBeforeProgramStarts):
+        self.paddingBeforeProgramStarts = newPaddingBeforeProgramStarts
+
+    def getPaddingAfterProgramEnds(self):
+        return self.paddingAfterProgramEnds
+
+    def setPaddingAfterProgramEnds(self, newPaddingAfterProgramEnds):
+        self.paddingAfterProgramEnds = newPaddingAfterProgramEnds
+
+
+# @package Kaltura
+# @subpackage Client
+class KalturaMediaAsset(KalturaAsset):
+    """Media-asset info"""
+
+    def __init__(self,
+            id = NotImplemented,
+            type = NotImplemented,
+            name = NotImplemented,
+            multilingualName = NotImplemented,
+            description = NotImplemented,
+            multilingualDescription = NotImplemented,
+            images = NotImplemented,
+            mediaFiles = NotImplemented,
+            metas = NotImplemented,
+            tags = NotImplemented,
+            relatedEntities = NotImplemented,
+            startDate = NotImplemented,
+            endDate = NotImplemented,
+            createDate = NotImplemented,
+            updateDate = NotImplemented,
+            externalId = NotImplemented,
+            indexStatus = NotImplemented,
+            externalIds = NotImplemented,
+            entryId = NotImplemented,
+            deviceRuleId = NotImplemented,
+            geoBlockRuleId = NotImplemented,
+            status = NotImplemented,
+            inheritancePolicy = NotImplemented,
+            liveToVod = NotImplemented):
+        KalturaAsset.__init__(self,
+            id,
+            type,
+            name,
+            multilingualName,
+            description,
+            multilingualDescription,
+            images,
+            mediaFiles,
+            metas,
+            tags,
+            relatedEntities,
+            startDate,
+            endDate,
+            createDate,
+            updateDate,
+            externalId,
+            indexStatus)
+
+        # External identifiers
+        # @var str
+        self.externalIds = externalIds
+
+        # Entry Identifier
+        # @var str
+        self.entryId = entryId
+
+        # Device rule identifier
+        # @var int
+        self.deviceRuleId = deviceRuleId
+
+        # Geo block rule identifier
+        # @var int
+        self.geoBlockRuleId = geoBlockRuleId
+
+        # The media asset status
+        # @var bool
+        self.status = status
+
+        # The media asset inheritance policy
+        # @var KalturaAssetInheritancePolicy
+        self.inheritancePolicy = inheritancePolicy
+
+        # Live to VOD (if present)
+        # @var KalturaLiveToVodInfoAsset
+        self.liveToVod = liveToVod
+
+
+    PROPERTY_LOADERS = {
+        'externalIds': getXmlNodeText, 
+        'entryId': getXmlNodeText, 
+        'deviceRuleId': getXmlNodeInt, 
+        'geoBlockRuleId': getXmlNodeInt, 
+        'status': getXmlNodeBool, 
+        'inheritancePolicy': (KalturaEnumsFactory.createString, "KalturaAssetInheritancePolicy"), 
+        'liveToVod': (KalturaObjectFactory.create, 'KalturaLiveToVodInfoAsset'), 
+    }
+
+    def fromXml(self, node):
+        KalturaAsset.fromXml(self, node)
+        self.fromXmlImpl(node, KalturaMediaAsset.PROPERTY_LOADERS)
+
+    def toParams(self):
+        kparams = KalturaAsset.toParams(self)
+        kparams.put("objectType", "KalturaMediaAsset")
+        kparams.addStringIfDefined("externalIds", self.externalIds)
+        kparams.addStringIfDefined("entryId", self.entryId)
+        kparams.addIntIfDefined("deviceRuleId", self.deviceRuleId)
+        kparams.addIntIfDefined("geoBlockRuleId", self.geoBlockRuleId)
+        kparams.addBoolIfDefined("status", self.status)
+        kparams.addStringEnumIfDefined("inheritancePolicy", self.inheritancePolicy)
+        kparams.addObjectIfDefined("liveToVod", self.liveToVod)
+        return kparams
+
+    def getExternalIds(self):
+        return self.externalIds
+
+    def setExternalIds(self, newExternalIds):
+        self.externalIds = newExternalIds
+
+    def getEntryId(self):
+        return self.entryId
+
+    def setEntryId(self, newEntryId):
+        self.entryId = newEntryId
+
+    def getDeviceRuleId(self):
+        return self.deviceRuleId
+
+    def setDeviceRuleId(self, newDeviceRuleId):
+        self.deviceRuleId = newDeviceRuleId
+
+    def getGeoBlockRuleId(self):
+        return self.geoBlockRuleId
+
+    def setGeoBlockRuleId(self, newGeoBlockRuleId):
+        self.geoBlockRuleId = newGeoBlockRuleId
+
+    def getStatus(self):
+        return self.status
+
+    def setStatus(self, newStatus):
+        self.status = newStatus
+
+    def getInheritancePolicy(self):
+        return self.inheritancePolicy
+
+    def setInheritancePolicy(self, newInheritancePolicy):
+        self.inheritancePolicy = newInheritancePolicy
+
+    def getLiveToVod(self):
+        return self.liveToVod
+
+    def setLiveToVod(self, newLiveToVod):
+        self.liveToVod = newLiveToVod
+
+
+# @package Kaltura
+# @subpackage Client
+class KalturaLiveAsset(KalturaMediaAsset):
+    """Linear media asset info"""
+
+    def __init__(self,
+            id = NotImplemented,
+            type = NotImplemented,
+            name = NotImplemented,
+            multilingualName = NotImplemented,
+            description = NotImplemented,
+            multilingualDescription = NotImplemented,
+            images = NotImplemented,
+            mediaFiles = NotImplemented,
+            metas = NotImplemented,
+            tags = NotImplemented,
+            relatedEntities = NotImplemented,
+            startDate = NotImplemented,
+            endDate = NotImplemented,
+            createDate = NotImplemented,
+            updateDate = NotImplemented,
+            externalId = NotImplemented,
+            indexStatus = NotImplemented,
+            externalIds = NotImplemented,
+            entryId = NotImplemented,
+            deviceRuleId = NotImplemented,
+            geoBlockRuleId = NotImplemented,
+            status = NotImplemented,
+            inheritancePolicy = NotImplemented,
+            liveToVod = NotImplemented,
+            enableCdvrState = NotImplemented,
+            enableCatchUpState = NotImplemented,
+            enableStartOverState = NotImplemented,
+            bufferCatchUpSetting = NotImplemented,
+            paddingBeforeProgramStarts = NotImplemented,
+            paddingAfterProgramEnds = NotImplemented,
+            bufferTrickPlaySetting = NotImplemented,
+            enableRecordingPlaybackNonEntitledChannelState = NotImplemented,
+            enableTrickPlayState = NotImplemented,
+            externalEpgIngestId = NotImplemented,
+            externalCdvrId = NotImplemented,
+            enableCdvr = NotImplemented,
+            enableCatchUp = NotImplemented,
+            enableStartOver = NotImplemented,
+            catchUpBuffer = NotImplemented,
+            trickPlayBuffer = NotImplemented,
+            enableRecordingPlaybackNonEntitledChannel = NotImplemented,
+            enableTrickPlay = NotImplemented,
+            channelType = NotImplemented):
+        KalturaMediaAsset.__init__(self,
+            id,
+            type,
+            name,
+            multilingualName,
+            description,
+            multilingualDescription,
+            images,
+            mediaFiles,
+            metas,
+            tags,
+            relatedEntities,
+            startDate,
+            endDate,
+            createDate,
+            updateDate,
+            externalId,
+            indexStatus,
+            externalIds,
+            entryId,
+            deviceRuleId,
+            geoBlockRuleId,
+            status,
+            inheritancePolicy,
+            liveToVod)
+
+        # Enable CDVR, configuration only
+        # @var KalturaTimeShiftedTvState
+        self.enableCdvrState = enableCdvrState
+
+        # Enable catch-up, configuration only
+        # @var KalturaTimeShiftedTvState
+        self.enableCatchUpState = enableCatchUpState
+
+        # Enable start over, configuration only
+        # @var KalturaTimeShiftedTvState
+        self.enableStartOverState = enableStartOverState
+
+        # buffer Catch-up, configuration only
+        # @var int
+        self.bufferCatchUpSetting = bufferCatchUpSetting
+
+        # Returns padding before program starts in seconds from a live asset if configured,
+        #             otherwise returns corresponding value from TimeShiftedTvPartnerSettings.
+        # @var int
+        self.paddingBeforeProgramStarts = paddingBeforeProgramStarts
+
+        # Returns padding after program ends in seconds from a live asset if configured,
+        #             otherwise returns corresponding value from TimeShiftedTvPartnerSettings.
+        # @var int
+        self.paddingAfterProgramEnds = paddingAfterProgramEnds
+
+        # buffer Trick-play, configuration only
+        # @var int
+        self.bufferTrickPlaySetting = bufferTrickPlaySetting
+
+        # Enable Recording playback for non entitled channel, configuration only
+        # @var KalturaTimeShiftedTvState
+        self.enableRecordingPlaybackNonEntitledChannelState = enableRecordingPlaybackNonEntitledChannelState
+
+        # Enable trick-play, configuration only
+        # @var KalturaTimeShiftedTvState
+        self.enableTrickPlayState = enableTrickPlayState
+
+        # External identifier used when ingesting programs for this linear media asset
+        # @var str
+        self.externalEpgIngestId = externalEpgIngestId
+
+        # External identifier for the CDVR
+        # @var str
+        self.externalCdvrId = externalCdvrId
+
+        # Is CDVR enabled for this asset
+        #             Please, note that value of this property is strictly connected with CDV-R setting on Partner level.
+        #             In order to enable CDV-R for KalturaLiveAsset, Partner CDV-R setting should be enabled.
+        # @var bool
+        # @readonly
+        self.enableCdvr = enableCdvr
+
+        # Is catch-up enabled for this asset
+        #             Please, note that value of this property is strictly connected with Catch Up setting on Partner level.
+        #             In order to enable Catch Up for KalturaLiveAsset, Partner Catch Up setting should be enabled.
+        # @var bool
+        # @readonly
+        self.enableCatchUp = enableCatchUp
+
+        # Is start over enabled for this asset
+        #             Please, note that value of this property is strictly connected with Start Over setting on Partner level.
+        #             In order to enable Start Over for KalturaLiveAsset, Partner Start Over setting should be enabled.
+        # @var bool
+        # @readonly
+        self.enableStartOver = enableStartOver
+
+        # summed Catch-up buffer, the TimeShiftedTvPartnerSettings are also taken into consideration
+        # @var int
+        # @readonly
+        self.catchUpBuffer = catchUpBuffer
+
+        # summed Trick-play buffer, the TimeShiftedTvPartnerSettings are also taken into consideration
+        # @var int
+        # @readonly
+        self.trickPlayBuffer = trickPlayBuffer
+
+        # Is recording playback for non entitled channel enabled for this asset
+        # @var bool
+        # @readonly
+        self.enableRecordingPlaybackNonEntitledChannel = enableRecordingPlaybackNonEntitledChannel
+
+        # Is trick-play enabled for this asset
+        #             Please, note that value of this property is strictly connected with Trick Play setting on Partner level.
+        #             In order to enable Trick Play for KalturaLiveAsset, Partner Trick Play setting should be enabled.
+        # @var bool
+        # @readonly
+        self.enableTrickPlay = enableTrickPlay
+
+        # channel type, possible values: UNKNOWN, DTT, OTT, DTT_AND_OTT
+        # @var KalturaLinearChannelType
+        self.channelType = channelType
+
+
+    PROPERTY_LOADERS = {
+        'enableCdvrState': (KalturaEnumsFactory.createString, "KalturaTimeShiftedTvState"), 
+        'enableCatchUpState': (KalturaEnumsFactory.createString, "KalturaTimeShiftedTvState"), 
+        'enableStartOverState': (KalturaEnumsFactory.createString, "KalturaTimeShiftedTvState"), 
+        'bufferCatchUpSetting': getXmlNodeInt, 
+        'paddingBeforeProgramStarts': getXmlNodeInt, 
+        'paddingAfterProgramEnds': getXmlNodeInt, 
+        'bufferTrickPlaySetting': getXmlNodeInt, 
+        'enableRecordingPlaybackNonEntitledChannelState': (KalturaEnumsFactory.createString, "KalturaTimeShiftedTvState"), 
+        'enableTrickPlayState': (KalturaEnumsFactory.createString, "KalturaTimeShiftedTvState"), 
+        'externalEpgIngestId': getXmlNodeText, 
+        'externalCdvrId': getXmlNodeText, 
+        'enableCdvr': getXmlNodeBool, 
+        'enableCatchUp': getXmlNodeBool, 
+        'enableStartOver': getXmlNodeBool, 
+        'catchUpBuffer': getXmlNodeInt, 
+        'trickPlayBuffer': getXmlNodeInt, 
+        'enableRecordingPlaybackNonEntitledChannel': getXmlNodeBool, 
+        'enableTrickPlay': getXmlNodeBool, 
+        'channelType': (KalturaEnumsFactory.createString, "KalturaLinearChannelType"), 
+    }
+
+    def fromXml(self, node):
+        KalturaMediaAsset.fromXml(self, node)
+        self.fromXmlImpl(node, KalturaLiveAsset.PROPERTY_LOADERS)
+
+    def toParams(self):
+        kparams = KalturaMediaAsset.toParams(self)
+        kparams.put("objectType", "KalturaLiveAsset")
+        kparams.addStringEnumIfDefined("enableCdvrState", self.enableCdvrState)
+        kparams.addStringEnumIfDefined("enableCatchUpState", self.enableCatchUpState)
+        kparams.addStringEnumIfDefined("enableStartOverState", self.enableStartOverState)
+        kparams.addIntIfDefined("bufferCatchUpSetting", self.bufferCatchUpSetting)
+        kparams.addIntIfDefined("paddingBeforeProgramStarts", self.paddingBeforeProgramStarts)
+        kparams.addIntIfDefined("paddingAfterProgramEnds", self.paddingAfterProgramEnds)
+        kparams.addIntIfDefined("bufferTrickPlaySetting", self.bufferTrickPlaySetting)
+        kparams.addStringEnumIfDefined("enableRecordingPlaybackNonEntitledChannelState", self.enableRecordingPlaybackNonEntitledChannelState)
+        kparams.addStringEnumIfDefined("enableTrickPlayState", self.enableTrickPlayState)
+        kparams.addStringIfDefined("externalEpgIngestId", self.externalEpgIngestId)
+        kparams.addStringIfDefined("externalCdvrId", self.externalCdvrId)
+        kparams.addStringEnumIfDefined("channelType", self.channelType)
+        return kparams
+
+    def getEnableCdvrState(self):
+        return self.enableCdvrState
+
+    def setEnableCdvrState(self, newEnableCdvrState):
+        self.enableCdvrState = newEnableCdvrState
+
+    def getEnableCatchUpState(self):
+        return self.enableCatchUpState
+
+    def setEnableCatchUpState(self, newEnableCatchUpState):
+        self.enableCatchUpState = newEnableCatchUpState
+
+    def getEnableStartOverState(self):
+        return self.enableStartOverState
+
+    def setEnableStartOverState(self, newEnableStartOverState):
+        self.enableStartOverState = newEnableStartOverState
+
+    def getBufferCatchUpSetting(self):
+        return self.bufferCatchUpSetting
+
+    def setBufferCatchUpSetting(self, newBufferCatchUpSetting):
+        self.bufferCatchUpSetting = newBufferCatchUpSetting
+
+    def getPaddingBeforeProgramStarts(self):
+        return self.paddingBeforeProgramStarts
+
+    def setPaddingBeforeProgramStarts(self, newPaddingBeforeProgramStarts):
+        self.paddingBeforeProgramStarts = newPaddingBeforeProgramStarts
+
+    def getPaddingAfterProgramEnds(self):
+        return self.paddingAfterProgramEnds
+
+    def setPaddingAfterProgramEnds(self, newPaddingAfterProgramEnds):
+        self.paddingAfterProgramEnds = newPaddingAfterProgramEnds
+
+    def getBufferTrickPlaySetting(self):
+        return self.bufferTrickPlaySetting
+
+    def setBufferTrickPlaySetting(self, newBufferTrickPlaySetting):
+        self.bufferTrickPlaySetting = newBufferTrickPlaySetting
+
+    def getEnableRecordingPlaybackNonEntitledChannelState(self):
+        return self.enableRecordingPlaybackNonEntitledChannelState
+
+    def setEnableRecordingPlaybackNonEntitledChannelState(self, newEnableRecordingPlaybackNonEntitledChannelState):
+        self.enableRecordingPlaybackNonEntitledChannelState = newEnableRecordingPlaybackNonEntitledChannelState
+
+    def getEnableTrickPlayState(self):
+        return self.enableTrickPlayState
+
+    def setEnableTrickPlayState(self, newEnableTrickPlayState):
+        self.enableTrickPlayState = newEnableTrickPlayState
+
+    def getExternalEpgIngestId(self):
+        return self.externalEpgIngestId
+
+    def setExternalEpgIngestId(self, newExternalEpgIngestId):
+        self.externalEpgIngestId = newExternalEpgIngestId
+
+    def getExternalCdvrId(self):
+        return self.externalCdvrId
+
+    def setExternalCdvrId(self, newExternalCdvrId):
+        self.externalCdvrId = newExternalCdvrId
+
+    def getEnableCdvr(self):
+        return self.enableCdvr
+
+    def getEnableCatchUp(self):
+        return self.enableCatchUp
+
+    def getEnableStartOver(self):
+        return self.enableStartOver
+
+    def getCatchUpBuffer(self):
+        return self.catchUpBuffer
+
+    def getTrickPlayBuffer(self):
+        return self.trickPlayBuffer
+
+    def getEnableRecordingPlaybackNonEntitledChannel(self):
+        return self.enableRecordingPlaybackNonEntitledChannel
+
+    def getEnableTrickPlay(self):
+        return self.enableTrickPlay
+
+    def getChannelType(self):
+        return self.channelType
+
+    def setChannelType(self, newChannelType):
+        self.channelType = newChannelType
+
+
+# @package Kaltura
+# @subpackage Client
+class KalturaLineupChannelAsset(KalturaLiveAsset):
+    """A Lineup channel asset is KalturaLiveAsset in a context of specific region (includes LCN)"""
+
+    def __init__(self,
+            id = NotImplemented,
+            type = NotImplemented,
+            name = NotImplemented,
+            multilingualName = NotImplemented,
+            description = NotImplemented,
+            multilingualDescription = NotImplemented,
+            images = NotImplemented,
+            mediaFiles = NotImplemented,
+            metas = NotImplemented,
+            tags = NotImplemented,
+            relatedEntities = NotImplemented,
+            startDate = NotImplemented,
+            endDate = NotImplemented,
+            createDate = NotImplemented,
+            updateDate = NotImplemented,
+            externalId = NotImplemented,
+            indexStatus = NotImplemented,
+            externalIds = NotImplemented,
+            entryId = NotImplemented,
+            deviceRuleId = NotImplemented,
+            geoBlockRuleId = NotImplemented,
+            status = NotImplemented,
+            inheritancePolicy = NotImplemented,
+            liveToVod = NotImplemented,
+            enableCdvrState = NotImplemented,
+            enableCatchUpState = NotImplemented,
+            enableStartOverState = NotImplemented,
+            bufferCatchUpSetting = NotImplemented,
+            paddingBeforeProgramStarts = NotImplemented,
+            paddingAfterProgramEnds = NotImplemented,
+            bufferTrickPlaySetting = NotImplemented,
+            enableRecordingPlaybackNonEntitledChannelState = NotImplemented,
+            enableTrickPlayState = NotImplemented,
+            externalEpgIngestId = NotImplemented,
+            externalCdvrId = NotImplemented,
+            enableCdvr = NotImplemented,
+            enableCatchUp = NotImplemented,
+            enableStartOver = NotImplemented,
+            catchUpBuffer = NotImplemented,
+            trickPlayBuffer = NotImplemented,
+            enableRecordingPlaybackNonEntitledChannel = NotImplemented,
+            enableTrickPlay = NotImplemented,
+            channelType = NotImplemented,
+            lcn = NotImplemented):
+        KalturaLiveAsset.__init__(self,
+            id,
+            type,
+            name,
+            multilingualName,
+            description,
+            multilingualDescription,
+            images,
+            mediaFiles,
+            metas,
+            tags,
+            relatedEntities,
+            startDate,
+            endDate,
+            createDate,
+            updateDate,
+            externalId,
+            indexStatus,
+            externalIds,
+            entryId,
+            deviceRuleId,
+            geoBlockRuleId,
+            status,
+            inheritancePolicy,
+            liveToVod,
+            enableCdvrState,
+            enableCatchUpState,
+            enableStartOverState,
+            bufferCatchUpSetting,
+            paddingBeforeProgramStarts,
+            paddingAfterProgramEnds,
+            bufferTrickPlaySetting,
+            enableRecordingPlaybackNonEntitledChannelState,
+            enableTrickPlayState,
+            externalEpgIngestId,
+            externalCdvrId,
+            enableCdvr,
+            enableCatchUp,
+            enableStartOver,
+            catchUpBuffer,
+            trickPlayBuffer,
+            enableRecordingPlaybackNonEntitledChannel,
+            enableTrickPlay,
+            channelType)
+
+        # Lineup channel number (LCN) - A logical linear channel number. This number is unique in the region context.
+        # @var int
+        self.lcn = lcn
+
+
+    PROPERTY_LOADERS = {
+        'lcn': getXmlNodeInt, 
+    }
+
+    def fromXml(self, node):
+        KalturaLiveAsset.fromXml(self, node)
+        self.fromXmlImpl(node, KalturaLineupChannelAsset.PROPERTY_LOADERS)
+
+    def toParams(self):
+        kparams = KalturaLiveAsset.toParams(self)
+        kparams.put("objectType", "KalturaLineupChannelAsset")
+        kparams.addIntIfDefined("lcn", self.lcn)
+        return kparams
+
+    def getLcn(self):
+        return self.lcn
+
+    def setLcn(self, newLcn):
+        self.lcn = newLcn
+
+
+# @package Kaltura
+# @subpackage Client
+class KalturaProgramAsset(KalturaAsset):
+    """Program-asset info"""
+
+    def __init__(self,
+            id = NotImplemented,
+            type = NotImplemented,
+            name = NotImplemented,
+            multilingualName = NotImplemented,
+            description = NotImplemented,
+            multilingualDescription = NotImplemented,
+            images = NotImplemented,
+            mediaFiles = NotImplemented,
+            metas = NotImplemented,
+            tags = NotImplemented,
+            relatedEntities = NotImplemented,
+            startDate = NotImplemented,
+            endDate = NotImplemented,
+            createDate = NotImplemented,
+            updateDate = NotImplemented,
+            externalId = NotImplemented,
+            indexStatus = NotImplemented,
+            epgChannelId = NotImplemented,
+            epgId = NotImplemented,
+            relatedMediaId = NotImplemented,
+            crid = NotImplemented,
+            linearAssetId = NotImplemented,
+            enableCdvr = NotImplemented,
+            enableCatchUp = NotImplemented,
+            enableStartOver = NotImplemented,
+            enableTrickPlay = NotImplemented,
+            externalOfferIds = NotImplemented):
+        KalturaAsset.__init__(self,
+            id,
+            type,
+            name,
+            multilingualName,
+            description,
+            multilingualDescription,
+            images,
+            mediaFiles,
+            metas,
+            tags,
+            relatedEntities,
+            startDate,
+            endDate,
+            createDate,
+            updateDate,
+            externalId,
+            indexStatus)
+
+        # EPG channel identifier
+        # @var int
+        # @readonly
+        self.epgChannelId = epgChannelId
+
+        # EPG identifier
+        # @var str
+        # @readonly
+        self.epgId = epgId
+
+        # Ralated media identifier
+        # @var int
+        self.relatedMediaId = relatedMediaId
+
+        # Unique identifier for the program
+        # @var str
+        self.crid = crid
+
+        # Id of linear media asset
+        # @var int
+        # @insertonly
+        self.linearAssetId = linearAssetId
+
+        # Is CDVR enabled for this asset
+        #             Please, note that value of this property is strictly connected with CDV-R setting on Partner and KalturaLiveAsset levels.
+        #             In order to enable CDV-R for KalturaProgramAsset, Partner and KalturaLiveAsset CDV-R settings should be enabled.
+        # @var bool
+        self.enableCdvr = enableCdvr
+
+        # Is catch-up enabled for this asset
+        #             Please, note that value of this property is strictly connected with Catch Up setting on Partner and KalturaLiveAsset levels.
+        #             In order to enable Catch Up for KalturaProgramAsset, Partner and KalturaLiveAsset Catch Up settings should be enabled.
+        # @var bool
+        self.enableCatchUp = enableCatchUp
+
+        # Is start over enabled for this asset
+        #             Please, note that value of this property is strictly connected with Start Over setting on Partner and KalturaLiveAsset levels.
+        #             In order to enable Start Over for KalturaProgramAsset, Partner and KalturaLiveAsset Start Over settings should be enabled.
+        # @var bool
+        self.enableStartOver = enableStartOver
+
+        # Is trick-play enabled for this asset
+        #             Please, note that value of this property is strictly connected with Trick Play setting on Partner and KalturaLiveAsset levels.
+        #             In order to enable Trick Play for KalturaProgramAsset, Partner and KalturaLiveAsset Trick Play settings should be enabled.
+        # @var bool
+        self.enableTrickPlay = enableTrickPlay
+
+        # Contains comma separate list of KalturaProgramAssetGroupOffer.externalOfferId values indicating the PAGOs to which the Program Asset is bound.
+        # @var str
+        self.externalOfferIds = externalOfferIds
+
+
+    PROPERTY_LOADERS = {
+        'epgChannelId': getXmlNodeInt, 
+        'epgId': getXmlNodeText, 
+        'relatedMediaId': getXmlNodeInt, 
+        'crid': getXmlNodeText, 
+        'linearAssetId': getXmlNodeInt, 
+        'enableCdvr': getXmlNodeBool, 
+        'enableCatchUp': getXmlNodeBool, 
+        'enableStartOver': getXmlNodeBool, 
+        'enableTrickPlay': getXmlNodeBool, 
+        'externalOfferIds': getXmlNodeText, 
+    }
+
+    def fromXml(self, node):
+        KalturaAsset.fromXml(self, node)
+        self.fromXmlImpl(node, KalturaProgramAsset.PROPERTY_LOADERS)
+
+    def toParams(self):
+        kparams = KalturaAsset.toParams(self)
+        kparams.put("objectType", "KalturaProgramAsset")
+        kparams.addIntIfDefined("relatedMediaId", self.relatedMediaId)
+        kparams.addStringIfDefined("crid", self.crid)
+        kparams.addIntIfDefined("linearAssetId", self.linearAssetId)
+        kparams.addBoolIfDefined("enableCdvr", self.enableCdvr)
+        kparams.addBoolIfDefined("enableCatchUp", self.enableCatchUp)
+        kparams.addBoolIfDefined("enableStartOver", self.enableStartOver)
+        kparams.addBoolIfDefined("enableTrickPlay", self.enableTrickPlay)
+        kparams.addStringIfDefined("externalOfferIds", self.externalOfferIds)
+        return kparams
+
+    def getEpgChannelId(self):
+        return self.epgChannelId
+
+    def getEpgId(self):
+        return self.epgId
+
+    def getRelatedMediaId(self):
+        return self.relatedMediaId
+
+    def setRelatedMediaId(self, newRelatedMediaId):
+        self.relatedMediaId = newRelatedMediaId
+
+    def getCrid(self):
+        return self.crid
+
+    def setCrid(self, newCrid):
+        self.crid = newCrid
+
+    def getLinearAssetId(self):
+        return self.linearAssetId
+
+    def setLinearAssetId(self, newLinearAssetId):
+        self.linearAssetId = newLinearAssetId
+
+    def getEnableCdvr(self):
+        return self.enableCdvr
+
+    def setEnableCdvr(self, newEnableCdvr):
+        self.enableCdvr = newEnableCdvr
+
+    def getEnableCatchUp(self):
+        return self.enableCatchUp
+
+    def setEnableCatchUp(self, newEnableCatchUp):
+        self.enableCatchUp = newEnableCatchUp
+
+    def getEnableStartOver(self):
+        return self.enableStartOver
+
+    def setEnableStartOver(self, newEnableStartOver):
+        self.enableStartOver = newEnableStartOver
+
+    def getEnableTrickPlay(self):
+        return self.enableTrickPlay
+
+    def setEnableTrickPlay(self, newEnableTrickPlay):
+        self.enableTrickPlay = newEnableTrickPlay
+
+    def getExternalOfferIds(self):
+        return self.externalOfferIds
+
+    def setExternalOfferIds(self, newExternalOfferIds):
+        self.externalOfferIds = newExternalOfferIds
+
+
+# @package Kaltura
+# @subpackage Client
+class KalturaRecordingAsset(KalturaProgramAsset):
+    """Recording-asset info"""
+
+    def __init__(self,
+            id = NotImplemented,
+            type = NotImplemented,
+            name = NotImplemented,
+            multilingualName = NotImplemented,
+            description = NotImplemented,
+            multilingualDescription = NotImplemented,
+            images = NotImplemented,
+            mediaFiles = NotImplemented,
+            metas = NotImplemented,
+            tags = NotImplemented,
+            relatedEntities = NotImplemented,
+            startDate = NotImplemented,
+            endDate = NotImplemented,
+            createDate = NotImplemented,
+            updateDate = NotImplemented,
+            externalId = NotImplemented,
+            indexStatus = NotImplemented,
+            epgChannelId = NotImplemented,
+            epgId = NotImplemented,
+            relatedMediaId = NotImplemented,
+            crid = NotImplemented,
+            linearAssetId = NotImplemented,
+            enableCdvr = NotImplemented,
+            enableCatchUp = NotImplemented,
+            enableStartOver = NotImplemented,
+            enableTrickPlay = NotImplemented,
+            externalOfferIds = NotImplemented,
+            recordingId = NotImplemented,
+            recordingType = NotImplemented,
+            viewableUntilDate = NotImplemented,
+            multiRecord = NotImplemented):
+        KalturaProgramAsset.__init__(self,
+            id,
+            type,
+            name,
+            multilingualName,
+            description,
+            multilingualDescription,
+            images,
+            mediaFiles,
+            metas,
+            tags,
+            relatedEntities,
+            startDate,
+            endDate,
+            createDate,
+            updateDate,
+            externalId,
+            indexStatus,
+            epgChannelId,
+            epgId,
+            relatedMediaId,
+            crid,
+            linearAssetId,
+            enableCdvr,
+            enableCatchUp,
+            enableStartOver,
+            enableTrickPlay,
+            externalOfferIds)
+
+        # Recording identifier
+        # @var str
+        self.recordingId = recordingId
+
+        # Recording Type: single/season/series
+        # @var KalturaRecordingType
+        self.recordingType = recordingType
+
+        # Specifies until when the recording is available for viewing. Date and time represented as epoch.
+        # @var int
+        self.viewableUntilDate = viewableUntilDate
+
+        # When TRUE indicates that there are multiple KalturaImmediateRecording instances for the event.
+        # @var bool
+        self.multiRecord = multiRecord
+
+
+    PROPERTY_LOADERS = {
+        'recordingId': getXmlNodeText, 
+        'recordingType': (KalturaEnumsFactory.createString, "KalturaRecordingType"), 
+        'viewableUntilDate': getXmlNodeInt, 
+        'multiRecord': getXmlNodeBool, 
+    }
+
+    def fromXml(self, node):
+        KalturaProgramAsset.fromXml(self, node)
+        self.fromXmlImpl(node, KalturaRecordingAsset.PROPERTY_LOADERS)
+
+    def toParams(self):
+        kparams = KalturaProgramAsset.toParams(self)
+        kparams.put("objectType", "KalturaRecordingAsset")
+        kparams.addStringIfDefined("recordingId", self.recordingId)
+        kparams.addStringEnumIfDefined("recordingType", self.recordingType)
+        kparams.addIntIfDefined("viewableUntilDate", self.viewableUntilDate)
+        kparams.addBoolIfDefined("multiRecord", self.multiRecord)
+        return kparams
+
+    def getRecordingId(self):
+        return self.recordingId
+
+    def setRecordingId(self, newRecordingId):
+        self.recordingId = newRecordingId
+
+    def getRecordingType(self):
+        return self.recordingType
+
+    def setRecordingType(self, newRecordingType):
+        self.recordingType = newRecordingType
+
+    def getViewableUntilDate(self):
+        return self.viewableUntilDate
+
+    def setViewableUntilDate(self, newViewableUntilDate):
+        self.viewableUntilDate = newViewableUntilDate
+
+    def getMultiRecord(self):
+        return self.multiRecord
+
+    def setMultiRecord(self, newMultiRecord):
+        self.multiRecord = newMultiRecord
+
+
+# @package Kaltura
+# @subpackage Client
+class KalturaEpg(KalturaProgramAsset):
+    def __init__(self,
+            id = NotImplemented,
+            type = NotImplemented,
+            name = NotImplemented,
+            multilingualName = NotImplemented,
+            description = NotImplemented,
+            multilingualDescription = NotImplemented,
+            images = NotImplemented,
+            mediaFiles = NotImplemented,
+            metas = NotImplemented,
+            tags = NotImplemented,
+            relatedEntities = NotImplemented,
+            startDate = NotImplemented,
+            endDate = NotImplemented,
+            createDate = NotImplemented,
+            updateDate = NotImplemented,
+            externalId = NotImplemented,
+            indexStatus = NotImplemented,
+            epgChannelId = NotImplemented,
+            epgId = NotImplemented,
+            relatedMediaId = NotImplemented,
+            crid = NotImplemented,
+            linearAssetId = NotImplemented,
+            enableCdvr = NotImplemented,
+            enableCatchUp = NotImplemented,
+            enableStartOver = NotImplemented,
+            enableTrickPlay = NotImplemented,
+            externalOfferIds = NotImplemented):
+        KalturaProgramAsset.__init__(self,
+            id,
+            type,
+            name,
+            multilingualName,
+            description,
+            multilingualDescription,
+            images,
+            mediaFiles,
+            metas,
+            tags,
+            relatedEntities,
+            startDate,
+            endDate,
+            createDate,
+            updateDate,
+            externalId,
+            indexStatus,
+            epgChannelId,
+            epgId,
+            relatedMediaId,
+            crid,
+            linearAssetId,
+            enableCdvr,
+            enableCatchUp,
+            enableStartOver,
+            enableTrickPlay,
+            externalOfferIds)
+
+
+    PROPERTY_LOADERS = {
+    }
+
+    def fromXml(self, node):
+        KalturaProgramAsset.fromXml(self, node)
+        self.fromXmlImpl(node, KalturaEpg.PROPERTY_LOADERS)
+
+    def toParams(self):
+        kparams = KalturaProgramAsset.toParams(self)
+        kparams.put("objectType", "KalturaEpg")
+        return kparams
+
+
+# @package Kaltura
+# @subpackage Client
+class KalturaPluginData(KalturaObjectBase):
+    def __init__(self):
+        KalturaObjectBase.__init__(self)
+
+
+    PROPERTY_LOADERS = {
+    }
+
+    def fromXml(self, node):
+        KalturaObjectBase.fromXml(self, node)
+        self.fromXmlImpl(node, KalturaPluginData.PROPERTY_LOADERS)
+
+    def toParams(self):
+        kparams = KalturaObjectBase.toParams(self)
+        kparams.put("objectType", "KalturaPluginData")
+        return kparams
+
+
+# @package Kaltura
+# @subpackage Client
+class KalturaDrmPlaybackPluginData(KalturaPluginData):
+    def __init__(self,
+            scheme = NotImplemented,
+            licenseURL = NotImplemented,
+            dynamicData = NotImplemented):
+        KalturaPluginData.__init__(self)
+
+        # Scheme
+        # @var KalturaDrmSchemeName
+        self.scheme = scheme
+
+        # License URL
+        # @var str
+        self.licenseURL = licenseURL
+
+        # Dynamic data
+        # @var map
+        self.dynamicData = dynamicData
+
+
+    PROPERTY_LOADERS = {
+        'scheme': (KalturaEnumsFactory.createString, "KalturaDrmSchemeName"), 
+        'licenseURL': getXmlNodeText, 
+        'dynamicData': (KalturaObjectFactory.createMap, 'KalturaStringValue'), 
+    }
+
+    def fromXml(self, node):
+        KalturaPluginData.fromXml(self, node)
+        self.fromXmlImpl(node, KalturaDrmPlaybackPluginData.PROPERTY_LOADERS)
+
+    def toParams(self):
+        kparams = KalturaPluginData.toParams(self)
+        kparams.put("objectType", "KalturaDrmPlaybackPluginData")
+        kparams.addStringEnumIfDefined("scheme", self.scheme)
+        kparams.addStringIfDefined("licenseURL", self.licenseURL)
+        kparams.addMapIfDefined("dynamicData", self.dynamicData)
+        return kparams
+
+    def getScheme(self):
+        return self.scheme
+
+    def setScheme(self, newScheme):
+        self.scheme = newScheme
+
+    def getLicenseURL(self):
+        return self.licenseURL
+
+    def setLicenseURL(self, newLicenseURL):
+        self.licenseURL = newLicenseURL
+
+    def getDynamicData(self):
+        return self.dynamicData
+
+    def setDynamicData(self, newDynamicData):
+        self.dynamicData = newDynamicData
+
+
+# @package Kaltura
+# @subpackage Client
+class KalturaPlaybackSource(KalturaMediaFile):
+    def __init__(self,
+            url = NotImplemented,
+            assetId = NotImplemented,
+            id = NotImplemented,
+            type = NotImplemented,
+            typeId = NotImplemented,
+            altUrl = NotImplemented,
+            duration = NotImplemented,
+            externalId = NotImplemented,
+            altExternalId = NotImplemented,
+            fileSize = NotImplemented,
+            additionalData = NotImplemented,
+            altStreamingCode = NotImplemented,
+            alternativeCdnAdapaterProfileId = NotImplemented,
+            endDate = NotImplemented,
+            startDate = NotImplemented,
+            externalStoreId = NotImplemented,
+            isDefaultLanguage = NotImplemented,
+            language = NotImplemented,
+            orderNum = NotImplemented,
+            outputProtecationLevel = NotImplemented,
+            cdnAdapaterProfileId = NotImplemented,
+            status = NotImplemented,
+            catalogEndDate = NotImplemented,
+            opl = NotImplemented,
+            businessModuleDetails = NotImplemented,
+            labels = NotImplemented,
+            dynamicData = NotImplemented,
+            format = NotImplemented,
+            protocols = NotImplemented,
+            drm = NotImplemented,
+            isTokenized = NotImplemented,
+            businessModuleId = NotImplemented,
+            businessModuleType = NotImplemented):
+        KalturaMediaFile.__init__(self,
+            url,
+            assetId,
+            id,
+            type,
+            typeId,
+            altUrl,
+            duration,
+            externalId,
+            altExternalId,
+            fileSize,
+            additionalData,
+            altStreamingCode,
+            alternativeCdnAdapaterProfileId,
+            endDate,
+            startDate,
+            externalStoreId,
+            isDefaultLanguage,
+            language,
+            orderNum,
+            outputProtecationLevel,
+            cdnAdapaterProfileId,
+            status,
+            catalogEndDate,
+            opl,
+            businessModuleDetails,
+            labels,
+            dynamicData)
+
+        # Source format according to delivery profile streamer type (applehttp, mpegdash etc.)
+        # @var str
+        self.format = format
+
+        # Comma separated string according to deliveryProfile media protocols (&#39;http,https&#39; etc.)
+        # @var str
+        self.protocols = protocols
+
+        # DRM data object containing relevant license URL ,scheme name and certificate
+        # @var List[KalturaDrmPlaybackPluginData]
+        self.drm = drm
+
+        # Is Tokenized
+        # @var bool
+        self.isTokenized = isTokenized
+
+        # Business Module Id
+        # @var int
+        # @readonly
+        self.businessModuleId = businessModuleId
+
+        # Business Module Type
+        # @var KalturaTransactionType
+        # @readonly
+        self.businessModuleType = businessModuleType
+
+
+    PROPERTY_LOADERS = {
+        'format': getXmlNodeText, 
+        'protocols': getXmlNodeText, 
+        'drm': (KalturaObjectFactory.createArray, 'KalturaDrmPlaybackPluginData'), 
+        'isTokenized': getXmlNodeBool, 
+        'businessModuleId': getXmlNodeInt, 
+        'businessModuleType': (KalturaEnumsFactory.createString, "KalturaTransactionType"), 
+    }
+
+    def fromXml(self, node):
+        KalturaMediaFile.fromXml(self, node)
+        self.fromXmlImpl(node, KalturaPlaybackSource.PROPERTY_LOADERS)
+
+    def toParams(self):
+        kparams = KalturaMediaFile.toParams(self)
+        kparams.put("objectType", "KalturaPlaybackSource")
+        kparams.addStringIfDefined("format", self.format)
+        kparams.addStringIfDefined("protocols", self.protocols)
+        kparams.addArrayIfDefined("drm", self.drm)
+        kparams.addBoolIfDefined("isTokenized", self.isTokenized)
+        return kparams
+
+    def getFormat(self):
+        return self.format
+
+    def setFormat(self, newFormat):
+        self.format = newFormat
+
+    def getProtocols(self):
+        return self.protocols
+
+    def setProtocols(self, newProtocols):
+        self.protocols = newProtocols
+
+    def getDrm(self):
+        return self.drm
+
+    def setDrm(self, newDrm):
+        self.drm = newDrm
+
+    def getIsTokenized(self):
+        return self.isTokenized
+
+    def setIsTokenized(self, newIsTokenized):
+        self.isTokenized = newIsTokenized
+
+    def getBusinessModuleId(self):
+        return self.businessModuleId
+
+    def getBusinessModuleType(self):
+        return self.businessModuleType
+
+
+# @package Kaltura
+# @subpackage Client
+class KalturaCustomDrmPlaybackPluginData(KalturaDrmPlaybackPluginData):
+    def __init__(self,
+            scheme = NotImplemented,
+            licenseURL = NotImplemented,
+            dynamicData = NotImplemented,
+            data = NotImplemented):
+        KalturaDrmPlaybackPluginData.__init__(self,
+            scheme,
+            licenseURL,
+            dynamicData)
+
+        # Custom DRM license data
+        # @var str
+        self.data = data
+
+
+    PROPERTY_LOADERS = {
+        'data': getXmlNodeText, 
+    }
+
+    def fromXml(self, node):
+        KalturaDrmPlaybackPluginData.fromXml(self, node)
+        self.fromXmlImpl(node, KalturaCustomDrmPlaybackPluginData.PROPERTY_LOADERS)
+
+    def toParams(self):
+        kparams = KalturaDrmPlaybackPluginData.toParams(self)
+        kparams.put("objectType", "KalturaCustomDrmPlaybackPluginData")
+        kparams.addStringIfDefined("data", self.data)
+        return kparams
+
+    def getData(self):
+        return self.data
+
+    def setData(self, newData):
+        self.data = newData
+
+
+# @package Kaltura
+# @subpackage Client
+class KalturaFairPlayPlaybackPluginData(KalturaDrmPlaybackPluginData):
+    def __init__(self,
+            scheme = NotImplemented,
+            licenseURL = NotImplemented,
+            dynamicData = NotImplemented,
+            certificate = NotImplemented):
+        KalturaDrmPlaybackPluginData.__init__(self,
+            scheme,
+            licenseURL,
+            dynamicData)
+
+        # Custom data string
+        # @var str
+        self.certificate = certificate
+
+
+    PROPERTY_LOADERS = {
+        'certificate': getXmlNodeText, 
+    }
+
+    def fromXml(self, node):
+        KalturaDrmPlaybackPluginData.fromXml(self, node)
+        self.fromXmlImpl(node, KalturaFairPlayPlaybackPluginData.PROPERTY_LOADERS)
+
+    def toParams(self):
+        kparams = KalturaDrmPlaybackPluginData.toParams(self)
+        kparams.put("objectType", "KalturaFairPlayPlaybackPluginData")
+        kparams.addStringIfDefined("certificate", self.certificate)
+        return kparams
+
+    def getCertificate(self):
+        return self.certificate
+
+    def setCertificate(self, newCertificate):
+        self.certificate = newCertificate
+
+
+# @package Kaltura
+# @subpackage Client
+class KalturaDiscoveryMediaFile(KalturaMediaFile):
+    """Media file in discovery context"""
+
+    def __init__(self,
+            url = NotImplemented,
+            assetId = NotImplemented,
+            id = NotImplemented,
+            type = NotImplemented,
+            typeId = NotImplemented,
+            altUrl = NotImplemented,
+            duration = NotImplemented,
+            externalId = NotImplemented,
+            altExternalId = NotImplemented,
+            fileSize = NotImplemented,
+            additionalData = NotImplemented,
+            altStreamingCode = NotImplemented,
+            alternativeCdnAdapaterProfileId = NotImplemented,
+            endDate = NotImplemented,
+            startDate = NotImplemented,
+            externalStoreId = NotImplemented,
+            isDefaultLanguage = NotImplemented,
+            language = NotImplemented,
+            orderNum = NotImplemented,
+            outputProtecationLevel = NotImplemented,
+            cdnAdapaterProfileId = NotImplemented,
+            status = NotImplemented,
+            catalogEndDate = NotImplemented,
+            opl = NotImplemented,
+            businessModuleDetails = NotImplemented,
+            labels = NotImplemented,
+            dynamicData = NotImplemented,
+            isPlaybackable = NotImplemented):
+        KalturaMediaFile.__init__(self,
+            url,
+            assetId,
+            id,
+            type,
+            typeId,
+            altUrl,
+            duration,
+            externalId,
+            altExternalId,
+            fileSize,
+            additionalData,
+            altStreamingCode,
+            alternativeCdnAdapaterProfileId,
+            endDate,
+            startDate,
+            externalStoreId,
+            isDefaultLanguage,
+            language,
+            orderNum,
+            outputProtecationLevel,
+            cdnAdapaterProfileId,
+            status,
+            catalogEndDate,
+            opl,
+            businessModuleDetails,
+            labels,
+            dynamicData)
+
+        # show, if file could be played
+        # @var bool
+        self.isPlaybackable = isPlaybackable
+
+
+    PROPERTY_LOADERS = {
+        'isPlaybackable': getXmlNodeBool, 
+    }
+
+    def fromXml(self, node):
+        KalturaMediaFile.fromXml(self, node)
+        self.fromXmlImpl(node, KalturaDiscoveryMediaFile.PROPERTY_LOADERS)
+
+    def toParams(self):
+        kparams = KalturaMediaFile.toParams(self)
+        kparams.put("objectType", "KalturaDiscoveryMediaFile")
+        kparams.addBoolIfDefined("isPlaybackable", self.isPlaybackable)
+        return kparams
+
+    def getIsPlaybackable(self):
+        return self.isPlaybackable
+
+    def setIsPlaybackable(self, newIsPlaybackable):
+        self.isPlaybackable = newIsPlaybackable
+
+
+# @package Kaltura
+# @subpackage Client
+class KalturaTreeNaturalTextResponse(KalturaObjectBase):
+    """A class representing the response from the getRecommendationWithNaturalText API."""
+
+    def __init__(self,
+            recommendations = NotImplemented):
+        KalturaObjectBase.__init__(self)
+
+        # Content recommendations based on the natural language query.
+        # @var KalturaTreeRecommendations
+        self.recommendations = recommendations
+
+
+    PROPERTY_LOADERS = {
+        'recommendations': (KalturaObjectFactory.create, 'KalturaTreeRecommendations'), 
+    }
+
+    def fromXml(self, node):
+        KalturaObjectBase.fromXml(self, node)
+        self.fromXmlImpl(node, KalturaTreeNaturalTextResponse.PROPERTY_LOADERS)
+
+    def toParams(self):
+        kparams = KalturaObjectBase.toParams(self)
+        kparams.put("objectType", "KalturaTreeNaturalTextResponse")
+        kparams.addObjectIfDefined("recommendations", self.recommendations)
+        return kparams
+
+    def getRecommendations(self):
+        return self.recommendations
+
+    def setRecommendations(self, newRecommendations):
+        self.recommendations = newRecommendations
+
+
+# @package Kaltura
+# @subpackage Client
+class KalturaAiRecommendationTreePartnerConfiguration(KalturaObjectBase):
+    """A class representing the partner-specific configuration for TV Genie recommendation trees."""
+
+    def __init__(self,
+            activeMetadataTypes = NotImplemented,
+            topLevelQuestions = NotImplemented,
+            answersPerQuestion = NotImplemented,
+            levels = NotImplemented,
+            numOfRecommendedAssets = NotImplemented,
+            treeGenerationFrequency = NotImplemented,
+            activeTreeId = NotImplemented):
+        KalturaObjectBase.__init__(self)
+
+        # Dictionary of metadata types to base questions on (genre, actor, director, etc.) with their respective counts.
+        # @var map
+        self.activeMetadataTypes = activeMetadataTypes
+
+        # Number of top-level questions to generate (range: 5-21).
+        # @var int
+        self.topLevelQuestions = topLevelQuestions
+
+        # Number of regular answers per question (range: 2-3).
+        # @var int
+        self.answersPerQuestion = answersPerQuestion
+
+        # Maximum depth of the decision tree (range: 1-5).
+        # @var int
+        self.levels = levels
+
+        # Number of assets to include in each recommendation set.
+        # @var int
+        self.numOfRecommendedAssets = numOfRecommendedAssets
+
+        # Cron expression for scheduling tree regeneration.
+        # @var str
+        self.treeGenerationFrequency = treeGenerationFrequency
+
+        # Identifier for the tree that is currently marked as Active (can be only one at a time)
+        # @var str
+        self.activeTreeId = activeTreeId
+
+
+    PROPERTY_LOADERS = {
+        'activeMetadataTypes': (KalturaObjectFactory.createMap, 'KalturaIntegerValue'), 
+        'topLevelQuestions': getXmlNodeInt, 
+        'answersPerQuestion': getXmlNodeInt, 
+        'levels': getXmlNodeInt, 
+        'numOfRecommendedAssets': getXmlNodeInt, 
+        'treeGenerationFrequency': getXmlNodeText, 
+        'activeTreeId': getXmlNodeText, 
+    }
+
+    def fromXml(self, node):
+        KalturaObjectBase.fromXml(self, node)
+        self.fromXmlImpl(node, KalturaAiRecommendationTreePartnerConfiguration.PROPERTY_LOADERS)
+
+    def toParams(self):
+        kparams = KalturaObjectBase.toParams(self)
+        kparams.put("objectType", "KalturaAiRecommendationTreePartnerConfiguration")
+        kparams.addMapIfDefined("activeMetadataTypes", self.activeMetadataTypes)
+        kparams.addIntIfDefined("topLevelQuestions", self.topLevelQuestions)
+        kparams.addIntIfDefined("answersPerQuestion", self.answersPerQuestion)
+        kparams.addIntIfDefined("levels", self.levels)
+        kparams.addIntIfDefined("numOfRecommendedAssets", self.numOfRecommendedAssets)
+        kparams.addStringIfDefined("treeGenerationFrequency", self.treeGenerationFrequency)
+        kparams.addStringIfDefined("activeTreeId", self.activeTreeId)
+        return kparams
+
+    def getActiveMetadataTypes(self):
+        return self.activeMetadataTypes
+
+    def setActiveMetadataTypes(self, newActiveMetadataTypes):
+        self.activeMetadataTypes = newActiveMetadataTypes
+
+    def getTopLevelQuestions(self):
+        return self.topLevelQuestions
+
+    def setTopLevelQuestions(self, newTopLevelQuestions):
+        self.topLevelQuestions = newTopLevelQuestions
+
+    def getAnswersPerQuestion(self):
+        return self.answersPerQuestion
+
+    def setAnswersPerQuestion(self, newAnswersPerQuestion):
+        self.answersPerQuestion = newAnswersPerQuestion
+
+    def getLevels(self):
+        return self.levels
+
+    def setLevels(self, newLevels):
+        self.levels = newLevels
+
+    def getNumOfRecommendedAssets(self):
+        return self.numOfRecommendedAssets
+
+    def setNumOfRecommendedAssets(self, newNumOfRecommendedAssets):
+        self.numOfRecommendedAssets = newNumOfRecommendedAssets
+
+    def getTreeGenerationFrequency(self):
+        return self.treeGenerationFrequency
+
+    def setTreeGenerationFrequency(self, newTreeGenerationFrequency):
+        self.treeGenerationFrequency = newTreeGenerationFrequency
+
+    def getActiveTreeId(self):
+        return self.activeTreeId
+
+    def setActiveTreeId(self, newActiveTreeId):
+        self.activeTreeId = newActiveTreeId
+
+
+# @package Kaltura
+# @subpackage Client
+class KalturaAnnouncement(KalturaObjectBase):
+    def __init__(self,
+            name = NotImplemented,
+            message = NotImplemented,
+            enabled = NotImplemented,
+            startTime = NotImplemented,
+            timezone = NotImplemented,
+            status = NotImplemented,
+            recipients = NotImplemented,
+            id = NotImplemented,
+            imageUrl = NotImplemented,
+            includeMail = NotImplemented,
+            mailTemplate = NotImplemented,
+            mailSubject = NotImplemented,
+            includeSms = NotImplemented,
+            includeIot = NotImplemented,
+            includeUserInbox = NotImplemented):
+        KalturaObjectBase.__init__(self)
+
+        # Announcement name
+        # @var str
+        self.name = name
+
+        # Announcement message
+        # @var str
+        self.message = message
+
+        # Announcement enabled
+        # @var bool
+        self.enabled = enabled
+
+        # Announcement start time
+        # @var int
+        self.startTime = startTime
+
+        # Announcement time zone
+        # @var str
+        self.timezone = timezone
+
+        # Announcement status: NotSent=0/Sending=1/Sent=2/Aborted=3
+        # @var KalturaAnnouncementStatus
+        # @readonly
+        self.status = status
+
+        # Announcement recipients: All=0/LoggedIn=1/Guests=2/Other=3
+        # @var KalturaAnnouncementRecipientsType
+        self.recipients = recipients
+
+        # Announcement id
+        # @var int
+        # @readonly
+        self.id = id
+
+        # Announcement image URL, relevant for system announcements
+        # @var str
+        self.imageUrl = imageUrl
+
+        # Include Mail
+        # @var bool
+        self.includeMail = includeMail
+
+        # Mail Template
+        # @var str
+        self.mailTemplate = mailTemplate
+
+        # Mail Subject
+        # @var str
+        self.mailSubject = mailSubject
+
+        # Include SMS
+        # @var bool
+        self.includeSms = includeSms
+
+        # Include IOT
+        # @var bool
+        self.includeIot = includeIot
+
+        # Should add to user inbox
+        # @var bool
+        self.includeUserInbox = includeUserInbox
+
+
+    PROPERTY_LOADERS = {
+        'name': getXmlNodeText, 
+        'message': getXmlNodeText, 
+        'enabled': getXmlNodeBool, 
+        'startTime': getXmlNodeInt, 
+        'timezone': getXmlNodeText, 
+        'status': (KalturaEnumsFactory.createString, "KalturaAnnouncementStatus"), 
+        'recipients': (KalturaEnumsFactory.createString, "KalturaAnnouncementRecipientsType"), 
+        'id': getXmlNodeInt, 
+        'imageUrl': getXmlNodeText, 
+        'includeMail': getXmlNodeBool, 
+        'mailTemplate': getXmlNodeText, 
+        'mailSubject': getXmlNodeText, 
+        'includeSms': getXmlNodeBool, 
+        'includeIot': getXmlNodeBool, 
+        'includeUserInbox': getXmlNodeBool, 
+    }
+
+    def fromXml(self, node):
+        KalturaObjectBase.fromXml(self, node)
+        self.fromXmlImpl(node, KalturaAnnouncement.PROPERTY_LOADERS)
+
+    def toParams(self):
+        kparams = KalturaObjectBase.toParams(self)
+        kparams.put("objectType", "KalturaAnnouncement")
+        kparams.addStringIfDefined("name", self.name)
+        kparams.addStringIfDefined("message", self.message)
+        kparams.addBoolIfDefined("enabled", self.enabled)
+        kparams.addIntIfDefined("startTime", self.startTime)
+        kparams.addStringIfDefined("timezone", self.timezone)
+        kparams.addStringEnumIfDefined("recipients", self.recipients)
+        kparams.addStringIfDefined("imageUrl", self.imageUrl)
+        kparams.addBoolIfDefined("includeMail", self.includeMail)
+        kparams.addStringIfDefined("mailTemplate", self.mailTemplate)
+        kparams.addStringIfDefined("mailSubject", self.mailSubject)
+        kparams.addBoolIfDefined("includeSms", self.includeSms)
+        kparams.addBoolIfDefined("includeIot", self.includeIot)
+        kparams.addBoolIfDefined("includeUserInbox", self.includeUserInbox)
+        return kparams
+
+    def getName(self):
+        return self.name
+
+    def setName(self, newName):
+        self.name = newName
+
+    def getMessage(self):
+        return self.message
+
+    def setMessage(self, newMessage):
+        self.message = newMessage
+
+    def getEnabled(self):
+        return self.enabled
+
+    def setEnabled(self, newEnabled):
+        self.enabled = newEnabled
+
+    def getStartTime(self):
+        return self.startTime
+
+    def setStartTime(self, newStartTime):
+        self.startTime = newStartTime
+
+    def getTimezone(self):
+        return self.timezone
+
+    def setTimezone(self, newTimezone):
+        self.timezone = newTimezone
+
+    def getStatus(self):
+        return self.status
+
+    def getRecipients(self):
+        return self.recipients
+
+    def setRecipients(self, newRecipients):
+        self.recipients = newRecipients
+
+    def getId(self):
+        return self.id
+
+    def getImageUrl(self):
+        return self.imageUrl
+
+    def setImageUrl(self, newImageUrl):
+        self.imageUrl = newImageUrl
+
+    def getIncludeMail(self):
+        return self.includeMail
+
+    def setIncludeMail(self, newIncludeMail):
+        self.includeMail = newIncludeMail
+
+    def getMailTemplate(self):
+        return self.mailTemplate
+
+    def setMailTemplate(self, newMailTemplate):
+        self.mailTemplate = newMailTemplate
+
+    def getMailSubject(self):
+        return self.mailSubject
+
+    def setMailSubject(self, newMailSubject):
+        self.mailSubject = newMailSubject
+
+    def getIncludeSms(self):
+        return self.includeSms
+
+    def setIncludeSms(self, newIncludeSms):
+        self.includeSms = newIncludeSms
+
+    def getIncludeIot(self):
+        return self.includeIot
+
+    def setIncludeIot(self, newIncludeIot):
+        self.includeIot = newIncludeIot
+
+    def getIncludeUserInbox(self):
+        return self.includeUserInbox
+
+    def setIncludeUserInbox(self, newIncludeUserInbox):
+        self.includeUserInbox = newIncludeUserInbox
+
+
+# @package Kaltura
+# @subpackage Client
+class KalturaFilterPager(KalturaObjectBase):
+    """The KalturaFilterPager object enables paging management to be applied upon service list actions"""
+
+    def __init__(self,
+            pageSize = NotImplemented,
+            pageIndex = NotImplemented):
+        KalturaObjectBase.__init__(self)
+
+        # The number of objects to retrieve. Possible range 1 <= value <= 50. If omitted or value &lt; 1 - will be set to 25. If a value &gt; 50 provided - will be set to 50
+        # @var int
+        self.pageSize = pageSize
+
+        # The page number for which {pageSize} of objects should be retrieved
+        # @var int
+        self.pageIndex = pageIndex
+
+
+    PROPERTY_LOADERS = {
+        'pageSize': getXmlNodeInt, 
+        'pageIndex': getXmlNodeInt, 
+    }
+
+    def fromXml(self, node):
+        KalturaObjectBase.fromXml(self, node)
+        self.fromXmlImpl(node, KalturaFilterPager.PROPERTY_LOADERS)
+
+    def toParams(self):
+        kparams = KalturaObjectBase.toParams(self)
+        kparams.put("objectType", "KalturaFilterPager")
+        kparams.addIntIfDefined("pageSize", self.pageSize)
+        kparams.addIntIfDefined("pageIndex", self.pageIndex)
+        return kparams
+
+    def getPageSize(self):
+        return self.pageSize
+
+    def setPageSize(self, newPageSize):
+        self.pageSize = newPageSize
+
+    def getPageIndex(self):
+        return self.pageIndex
+
+    def setPageIndex(self, newPageIndex):
+        self.pageIndex = newPageIndex
+
+
+# @package Kaltura
+# @subpackage Client
+class KalturaListResponse(KalturaObjectBase):
+    def __init__(self,
+            totalCount = NotImplemented):
+        KalturaObjectBase.__init__(self)
+
+        # Total items
+        # @var int
+        self.totalCount = totalCount
+
+
+    PROPERTY_LOADERS = {
+        'totalCount': getXmlNodeInt, 
+    }
+
+    def fromXml(self, node):
+        KalturaObjectBase.fromXml(self, node)
+        self.fromXmlImpl(node, KalturaListResponse.PROPERTY_LOADERS)
+
+    def toParams(self):
+        kparams = KalturaObjectBase.toParams(self)
+        kparams.put("objectType", "KalturaListResponse")
+        kparams.addIntIfDefined("totalCount", self.totalCount)
+        return kparams
+
+    def getTotalCount(self):
+        return self.totalCount
+
+    def setTotalCount(self, newTotalCount):
+        self.totalCount = newTotalCount
+
+
+# @package Kaltura
+# @subpackage Client
+class KalturaAnnouncementListResponse(KalturaListResponse):
+    """List of message announcements from DB."""
+
+    def __init__(self,
+            totalCount = NotImplemented,
+            objects = NotImplemented):
+        KalturaListResponse.__init__(self,
+            totalCount)
+
+        # Announcements
+        # @var List[KalturaAnnouncement]
+        self.objects = objects
+
+
+    PROPERTY_LOADERS = {
+        'objects': (KalturaObjectFactory.createArray, 'KalturaAnnouncement'), 
+    }
+
+    def fromXml(self, node):
+        KalturaListResponse.fromXml(self, node)
+        self.fromXmlImpl(node, KalturaAnnouncementListResponse.PROPERTY_LOADERS)
+
+    def toParams(self):
+        kparams = KalturaListResponse.toParams(self)
+        kparams.put("objectType", "KalturaAnnouncementListResponse")
+        kparams.addArrayIfDefined("objects", self.objects)
+        return kparams
+
+    def getObjects(self):
+        return self.objects
+
+    def setObjects(self, newObjects):
+        self.objects = newObjects
 
 
 # @package Kaltura
@@ -19018,124 +20904,6 @@ class KalturaUdidDynamicList(KalturaDynamicList):
 
 # @package Kaltura
 # @subpackage Client
-class KalturaPluginData(KalturaObjectBase):
-    def __init__(self):
-        KalturaObjectBase.__init__(self)
-
-
-    PROPERTY_LOADERS = {
-    }
-
-    def fromXml(self, node):
-        KalturaObjectBase.fromXml(self, node)
-        self.fromXmlImpl(node, KalturaPluginData.PROPERTY_LOADERS)
-
-    def toParams(self):
-        kparams = KalturaObjectBase.toParams(self)
-        kparams.put("objectType", "KalturaPluginData")
-        return kparams
-
-
-# @package Kaltura
-# @subpackage Client
-class KalturaDrmPlaybackPluginData(KalturaPluginData):
-    def __init__(self,
-            scheme = NotImplemented,
-            licenseURL = NotImplemented,
-            dynamicData = NotImplemented):
-        KalturaPluginData.__init__(self)
-
-        # Scheme
-        # @var KalturaDrmSchemeName
-        self.scheme = scheme
-
-        # License URL
-        # @var str
-        self.licenseURL = licenseURL
-
-        # Dynamic data
-        # @var map
-        self.dynamicData = dynamicData
-
-
-    PROPERTY_LOADERS = {
-        'scheme': (KalturaEnumsFactory.createString, "KalturaDrmSchemeName"), 
-        'licenseURL': getXmlNodeText, 
-        'dynamicData': (KalturaObjectFactory.createMap, 'KalturaStringValue'), 
-    }
-
-    def fromXml(self, node):
-        KalturaPluginData.fromXml(self, node)
-        self.fromXmlImpl(node, KalturaDrmPlaybackPluginData.PROPERTY_LOADERS)
-
-    def toParams(self):
-        kparams = KalturaPluginData.toParams(self)
-        kparams.put("objectType", "KalturaDrmPlaybackPluginData")
-        kparams.addStringEnumIfDefined("scheme", self.scheme)
-        kparams.addStringIfDefined("licenseURL", self.licenseURL)
-        kparams.addMapIfDefined("dynamicData", self.dynamicData)
-        return kparams
-
-    def getScheme(self):
-        return self.scheme
-
-    def setScheme(self, newScheme):
-        self.scheme = newScheme
-
-    def getLicenseURL(self):
-        return self.licenseURL
-
-    def setLicenseURL(self, newLicenseURL):
-        self.licenseURL = newLicenseURL
-
-    def getDynamicData(self):
-        return self.dynamicData
-
-    def setDynamicData(self, newDynamicData):
-        self.dynamicData = newDynamicData
-
-
-# @package Kaltura
-# @subpackage Client
-class KalturaCustomDrmPlaybackPluginData(KalturaDrmPlaybackPluginData):
-    def __init__(self,
-            scheme = NotImplemented,
-            licenseURL = NotImplemented,
-            dynamicData = NotImplemented,
-            data = NotImplemented):
-        KalturaDrmPlaybackPluginData.__init__(self,
-            scheme,
-            licenseURL,
-            dynamicData)
-
-        # Custom DRM license data
-        # @var str
-        self.data = data
-
-
-    PROPERTY_LOADERS = {
-        'data': getXmlNodeText, 
-    }
-
-    def fromXml(self, node):
-        KalturaDrmPlaybackPluginData.fromXml(self, node)
-        self.fromXmlImpl(node, KalturaCustomDrmPlaybackPluginData.PROPERTY_LOADERS)
-
-    def toParams(self):
-        kparams = KalturaDrmPlaybackPluginData.toParams(self)
-        kparams.put("objectType", "KalturaCustomDrmPlaybackPluginData")
-        kparams.addStringIfDefined("data", self.data)
-        return kparams
-
-    def getData(self):
-        return self.data
-
-    def setData(self, newData):
-        self.data = newData
-
-
-# @package Kaltura
-# @subpackage Client
 class KalturaHouseholdDevice(KalturaOTTObjectSupportNullable):
     """Device details"""
 
@@ -19335,45 +21103,6 @@ class KalturaHouseholdDevice(KalturaOTTObjectSupportNullable):
 
     def getLastActivityTime(self):
         return self.lastActivityTime
-
-
-# @package Kaltura
-# @subpackage Client
-class KalturaFairPlayPlaybackPluginData(KalturaDrmPlaybackPluginData):
-    def __init__(self,
-            scheme = NotImplemented,
-            licenseURL = NotImplemented,
-            dynamicData = NotImplemented,
-            certificate = NotImplemented):
-        KalturaDrmPlaybackPluginData.__init__(self,
-            scheme,
-            licenseURL,
-            dynamicData)
-
-        # Custom data string
-        # @var str
-        self.certificate = certificate
-
-
-    PROPERTY_LOADERS = {
-        'certificate': getXmlNodeText, 
-    }
-
-    def fromXml(self, node):
-        KalturaDrmPlaybackPluginData.fromXml(self, node)
-        self.fromXmlImpl(node, KalturaFairPlayPlaybackPluginData.PROPERTY_LOADERS)
-
-    def toParams(self):
-        kparams = KalturaDrmPlaybackPluginData.toParams(self)
-        kparams.put("objectType", "KalturaFairPlayPlaybackPluginData")
-        kparams.addStringIfDefined("certificate", self.certificate)
-        return kparams
-
-    def getCertificate(self):
-        return self.certificate
-
-    def setCertificate(self, newCertificate):
-        self.certificate = newCertificate
 
 
 # @package Kaltura
@@ -24075,241 +25804,6 @@ class KalturaFavoriteListResponse(KalturaListResponse):
 
     def setObjects(self, newObjects):
         self.objects = newObjects
-
-
-# @package Kaltura
-# @subpackage Client
-class KalturaPlaybackSource(KalturaMediaFile):
-    def __init__(self,
-            url = NotImplemented,
-            assetId = NotImplemented,
-            id = NotImplemented,
-            type = NotImplemented,
-            typeId = NotImplemented,
-            altUrl = NotImplemented,
-            duration = NotImplemented,
-            externalId = NotImplemented,
-            altExternalId = NotImplemented,
-            fileSize = NotImplemented,
-            additionalData = NotImplemented,
-            altStreamingCode = NotImplemented,
-            alternativeCdnAdapaterProfileId = NotImplemented,
-            endDate = NotImplemented,
-            startDate = NotImplemented,
-            externalStoreId = NotImplemented,
-            isDefaultLanguage = NotImplemented,
-            language = NotImplemented,
-            orderNum = NotImplemented,
-            outputProtecationLevel = NotImplemented,
-            cdnAdapaterProfileId = NotImplemented,
-            status = NotImplemented,
-            catalogEndDate = NotImplemented,
-            opl = NotImplemented,
-            businessModuleDetails = NotImplemented,
-            labels = NotImplemented,
-            dynamicData = NotImplemented,
-            format = NotImplemented,
-            protocols = NotImplemented,
-            drm = NotImplemented,
-            isTokenized = NotImplemented,
-            businessModuleId = NotImplemented,
-            businessModuleType = NotImplemented):
-        KalturaMediaFile.__init__(self,
-            url,
-            assetId,
-            id,
-            type,
-            typeId,
-            altUrl,
-            duration,
-            externalId,
-            altExternalId,
-            fileSize,
-            additionalData,
-            altStreamingCode,
-            alternativeCdnAdapaterProfileId,
-            endDate,
-            startDate,
-            externalStoreId,
-            isDefaultLanguage,
-            language,
-            orderNum,
-            outputProtecationLevel,
-            cdnAdapaterProfileId,
-            status,
-            catalogEndDate,
-            opl,
-            businessModuleDetails,
-            labels,
-            dynamicData)
-
-        # Source format according to delivery profile streamer type (applehttp, mpegdash etc.)
-        # @var str
-        self.format = format
-
-        # Comma separated string according to deliveryProfile media protocols (&#39;http,https&#39; etc.)
-        # @var str
-        self.protocols = protocols
-
-        # DRM data object containing relevant license URL ,scheme name and certificate
-        # @var List[KalturaDrmPlaybackPluginData]
-        self.drm = drm
-
-        # Is Tokenized
-        # @var bool
-        self.isTokenized = isTokenized
-
-        # Business Module Id
-        # @var int
-        # @readonly
-        self.businessModuleId = businessModuleId
-
-        # Business Module Type
-        # @var KalturaTransactionType
-        # @readonly
-        self.businessModuleType = businessModuleType
-
-
-    PROPERTY_LOADERS = {
-        'format': getXmlNodeText, 
-        'protocols': getXmlNodeText, 
-        'drm': (KalturaObjectFactory.createArray, 'KalturaDrmPlaybackPluginData'), 
-        'isTokenized': getXmlNodeBool, 
-        'businessModuleId': getXmlNodeInt, 
-        'businessModuleType': (KalturaEnumsFactory.createString, "KalturaTransactionType"), 
-    }
-
-    def fromXml(self, node):
-        KalturaMediaFile.fromXml(self, node)
-        self.fromXmlImpl(node, KalturaPlaybackSource.PROPERTY_LOADERS)
-
-    def toParams(self):
-        kparams = KalturaMediaFile.toParams(self)
-        kparams.put("objectType", "KalturaPlaybackSource")
-        kparams.addStringIfDefined("format", self.format)
-        kparams.addStringIfDefined("protocols", self.protocols)
-        kparams.addArrayIfDefined("drm", self.drm)
-        kparams.addBoolIfDefined("isTokenized", self.isTokenized)
-        return kparams
-
-    def getFormat(self):
-        return self.format
-
-    def setFormat(self, newFormat):
-        self.format = newFormat
-
-    def getProtocols(self):
-        return self.protocols
-
-    def setProtocols(self, newProtocols):
-        self.protocols = newProtocols
-
-    def getDrm(self):
-        return self.drm
-
-    def setDrm(self, newDrm):
-        self.drm = newDrm
-
-    def getIsTokenized(self):
-        return self.isTokenized
-
-    def setIsTokenized(self, newIsTokenized):
-        self.isTokenized = newIsTokenized
-
-    def getBusinessModuleId(self):
-        return self.businessModuleId
-
-    def getBusinessModuleType(self):
-        return self.businessModuleType
-
-
-# @package Kaltura
-# @subpackage Client
-class KalturaDiscoveryMediaFile(KalturaMediaFile):
-    """Media file in discovery context"""
-
-    def __init__(self,
-            url = NotImplemented,
-            assetId = NotImplemented,
-            id = NotImplemented,
-            type = NotImplemented,
-            typeId = NotImplemented,
-            altUrl = NotImplemented,
-            duration = NotImplemented,
-            externalId = NotImplemented,
-            altExternalId = NotImplemented,
-            fileSize = NotImplemented,
-            additionalData = NotImplemented,
-            altStreamingCode = NotImplemented,
-            alternativeCdnAdapaterProfileId = NotImplemented,
-            endDate = NotImplemented,
-            startDate = NotImplemented,
-            externalStoreId = NotImplemented,
-            isDefaultLanguage = NotImplemented,
-            language = NotImplemented,
-            orderNum = NotImplemented,
-            outputProtecationLevel = NotImplemented,
-            cdnAdapaterProfileId = NotImplemented,
-            status = NotImplemented,
-            catalogEndDate = NotImplemented,
-            opl = NotImplemented,
-            businessModuleDetails = NotImplemented,
-            labels = NotImplemented,
-            dynamicData = NotImplemented,
-            isPlaybackable = NotImplemented):
-        KalturaMediaFile.__init__(self,
-            url,
-            assetId,
-            id,
-            type,
-            typeId,
-            altUrl,
-            duration,
-            externalId,
-            altExternalId,
-            fileSize,
-            additionalData,
-            altStreamingCode,
-            alternativeCdnAdapaterProfileId,
-            endDate,
-            startDate,
-            externalStoreId,
-            isDefaultLanguage,
-            language,
-            orderNum,
-            outputProtecationLevel,
-            cdnAdapaterProfileId,
-            status,
-            catalogEndDate,
-            opl,
-            businessModuleDetails,
-            labels,
-            dynamicData)
-
-        # show, if file could be played
-        # @var bool
-        self.isPlaybackable = isPlaybackable
-
-
-    PROPERTY_LOADERS = {
-        'isPlaybackable': getXmlNodeBool, 
-    }
-
-    def fromXml(self, node):
-        KalturaMediaFile.fromXml(self, node)
-        self.fromXmlImpl(node, KalturaDiscoveryMediaFile.PROPERTY_LOADERS)
-
-    def toParams(self):
-        kparams = KalturaMediaFile.toParams(self)
-        kparams.put("objectType", "KalturaDiscoveryMediaFile")
-        kparams.addBoolIfDefined("isPlaybackable", self.isPlaybackable)
-        return kparams
-
-    def getIsPlaybackable(self):
-        return self.isPlaybackable
-
-    def setIsPlaybackable(self, newIsPlaybackable):
-        self.isPlaybackable = newIsPlaybackable
 
 
 # @package Kaltura
@@ -31499,252 +32993,6 @@ class KalturaPersonalListListResponse(KalturaListResponse):
 
 # @package Kaltura
 # @subpackage Client
-class KalturaAnnouncement(KalturaObjectBase):
-    def __init__(self,
-            name = NotImplemented,
-            message = NotImplemented,
-            enabled = NotImplemented,
-            startTime = NotImplemented,
-            timezone = NotImplemented,
-            status = NotImplemented,
-            recipients = NotImplemented,
-            id = NotImplemented,
-            imageUrl = NotImplemented,
-            includeMail = NotImplemented,
-            mailTemplate = NotImplemented,
-            mailSubject = NotImplemented,
-            includeSms = NotImplemented,
-            includeIot = NotImplemented,
-            includeUserInbox = NotImplemented):
-        KalturaObjectBase.__init__(self)
-
-        # Announcement name
-        # @var str
-        self.name = name
-
-        # Announcement message
-        # @var str
-        self.message = message
-
-        # Announcement enabled
-        # @var bool
-        self.enabled = enabled
-
-        # Announcement start time
-        # @var int
-        self.startTime = startTime
-
-        # Announcement time zone
-        # @var str
-        self.timezone = timezone
-
-        # Announcement status: NotSent=0/Sending=1/Sent=2/Aborted=3
-        # @var KalturaAnnouncementStatus
-        # @readonly
-        self.status = status
-
-        # Announcement recipients: All=0/LoggedIn=1/Guests=2/Other=3
-        # @var KalturaAnnouncementRecipientsType
-        self.recipients = recipients
-
-        # Announcement id
-        # @var int
-        # @readonly
-        self.id = id
-
-        # Announcement image URL, relevant for system announcements
-        # @var str
-        self.imageUrl = imageUrl
-
-        # Include Mail
-        # @var bool
-        self.includeMail = includeMail
-
-        # Mail Template
-        # @var str
-        self.mailTemplate = mailTemplate
-
-        # Mail Subject
-        # @var str
-        self.mailSubject = mailSubject
-
-        # Include SMS
-        # @var bool
-        self.includeSms = includeSms
-
-        # Include IOT
-        # @var bool
-        self.includeIot = includeIot
-
-        # Should add to user inbox
-        # @var bool
-        self.includeUserInbox = includeUserInbox
-
-
-    PROPERTY_LOADERS = {
-        'name': getXmlNodeText, 
-        'message': getXmlNodeText, 
-        'enabled': getXmlNodeBool, 
-        'startTime': getXmlNodeInt, 
-        'timezone': getXmlNodeText, 
-        'status': (KalturaEnumsFactory.createString, "KalturaAnnouncementStatus"), 
-        'recipients': (KalturaEnumsFactory.createString, "KalturaAnnouncementRecipientsType"), 
-        'id': getXmlNodeInt, 
-        'imageUrl': getXmlNodeText, 
-        'includeMail': getXmlNodeBool, 
-        'mailTemplate': getXmlNodeText, 
-        'mailSubject': getXmlNodeText, 
-        'includeSms': getXmlNodeBool, 
-        'includeIot': getXmlNodeBool, 
-        'includeUserInbox': getXmlNodeBool, 
-    }
-
-    def fromXml(self, node):
-        KalturaObjectBase.fromXml(self, node)
-        self.fromXmlImpl(node, KalturaAnnouncement.PROPERTY_LOADERS)
-
-    def toParams(self):
-        kparams = KalturaObjectBase.toParams(self)
-        kparams.put("objectType", "KalturaAnnouncement")
-        kparams.addStringIfDefined("name", self.name)
-        kparams.addStringIfDefined("message", self.message)
-        kparams.addBoolIfDefined("enabled", self.enabled)
-        kparams.addIntIfDefined("startTime", self.startTime)
-        kparams.addStringIfDefined("timezone", self.timezone)
-        kparams.addStringEnumIfDefined("recipients", self.recipients)
-        kparams.addStringIfDefined("imageUrl", self.imageUrl)
-        kparams.addBoolIfDefined("includeMail", self.includeMail)
-        kparams.addStringIfDefined("mailTemplate", self.mailTemplate)
-        kparams.addStringIfDefined("mailSubject", self.mailSubject)
-        kparams.addBoolIfDefined("includeSms", self.includeSms)
-        kparams.addBoolIfDefined("includeIot", self.includeIot)
-        kparams.addBoolIfDefined("includeUserInbox", self.includeUserInbox)
-        return kparams
-
-    def getName(self):
-        return self.name
-
-    def setName(self, newName):
-        self.name = newName
-
-    def getMessage(self):
-        return self.message
-
-    def setMessage(self, newMessage):
-        self.message = newMessage
-
-    def getEnabled(self):
-        return self.enabled
-
-    def setEnabled(self, newEnabled):
-        self.enabled = newEnabled
-
-    def getStartTime(self):
-        return self.startTime
-
-    def setStartTime(self, newStartTime):
-        self.startTime = newStartTime
-
-    def getTimezone(self):
-        return self.timezone
-
-    def setTimezone(self, newTimezone):
-        self.timezone = newTimezone
-
-    def getStatus(self):
-        return self.status
-
-    def getRecipients(self):
-        return self.recipients
-
-    def setRecipients(self, newRecipients):
-        self.recipients = newRecipients
-
-    def getId(self):
-        return self.id
-
-    def getImageUrl(self):
-        return self.imageUrl
-
-    def setImageUrl(self, newImageUrl):
-        self.imageUrl = newImageUrl
-
-    def getIncludeMail(self):
-        return self.includeMail
-
-    def setIncludeMail(self, newIncludeMail):
-        self.includeMail = newIncludeMail
-
-    def getMailTemplate(self):
-        return self.mailTemplate
-
-    def setMailTemplate(self, newMailTemplate):
-        self.mailTemplate = newMailTemplate
-
-    def getMailSubject(self):
-        return self.mailSubject
-
-    def setMailSubject(self, newMailSubject):
-        self.mailSubject = newMailSubject
-
-    def getIncludeSms(self):
-        return self.includeSms
-
-    def setIncludeSms(self, newIncludeSms):
-        self.includeSms = newIncludeSms
-
-    def getIncludeIot(self):
-        return self.includeIot
-
-    def setIncludeIot(self, newIncludeIot):
-        self.includeIot = newIncludeIot
-
-    def getIncludeUserInbox(self):
-        return self.includeUserInbox
-
-    def setIncludeUserInbox(self, newIncludeUserInbox):
-        self.includeUserInbox = newIncludeUserInbox
-
-
-# @package Kaltura
-# @subpackage Client
-class KalturaAnnouncementListResponse(KalturaListResponse):
-    """List of message announcements from DB."""
-
-    def __init__(self,
-            totalCount = NotImplemented,
-            objects = NotImplemented):
-        KalturaListResponse.__init__(self,
-            totalCount)
-
-        # Announcements
-        # @var List[KalturaAnnouncement]
-        self.objects = objects
-
-
-    PROPERTY_LOADERS = {
-        'objects': (KalturaObjectFactory.createArray, 'KalturaAnnouncement'), 
-    }
-
-    def fromXml(self, node):
-        KalturaListResponse.fromXml(self, node)
-        self.fromXmlImpl(node, KalturaAnnouncementListResponse.PROPERTY_LOADERS)
-
-    def toParams(self):
-        kparams = KalturaListResponse.toParams(self)
-        kparams.put("objectType", "KalturaAnnouncementListResponse")
-        kparams.addArrayIfDefined("objects", self.objects)
-        return kparams
-
-    def getObjects(self):
-        return self.objects
-
-    def setObjects(self, newObjects):
-        self.objects = newObjects
-
-
-# @package Kaltura
-# @subpackage Client
 class KalturaEngagementAdapterBase(KalturaObjectBase):
     """Engagement adapter basic"""
 
@@ -38147,6 +39395,43 @@ class KalturaAssetHistoryListResponse(KalturaListResponse):
 
 # @package Kaltura
 # @subpackage Client
+class KalturaAssetListResponse(KalturaListResponse):
+    """Asset wrapper"""
+
+    def __init__(self,
+            totalCount = NotImplemented,
+            objects = NotImplemented):
+        KalturaListResponse.__init__(self,
+            totalCount)
+
+        # Assets
+        # @var List[KalturaAsset]
+        self.objects = objects
+
+
+    PROPERTY_LOADERS = {
+        'objects': (KalturaObjectFactory.createArray, 'KalturaAsset'), 
+    }
+
+    def fromXml(self, node):
+        KalturaListResponse.fromXml(self, node)
+        self.fromXmlImpl(node, KalturaAssetListResponse.PROPERTY_LOADERS)
+
+    def toParams(self):
+        kparams = KalturaListResponse.toParams(self)
+        kparams.put("objectType", "KalturaAssetListResponse")
+        kparams.addArrayIfDefined("objects", self.objects)
+        return kparams
+
+    def getObjects(self):
+        return self.objects
+
+    def setObjects(self, newObjects):
+        self.objects = newObjects
+
+
+# @package Kaltura
+# @subpackage Client
 class KalturaAssetStatisticsListResponse(KalturaListResponse):
     """List of assets statistics"""
 
@@ -39134,704 +40419,6 @@ class KalturaLabelListResponse(KalturaListResponse):
 
 # @package Kaltura
 # @subpackage Client
-class KalturaLiveToVodInfoAsset(KalturaObjectBase):
-    def __init__(self,
-            linearAssetId = NotImplemented,
-            epgId = NotImplemented,
-            epgChannelId = NotImplemented,
-            crid = NotImplemented,
-            originalStartDate = NotImplemented,
-            originalEndDate = NotImplemented,
-            paddingBeforeProgramStarts = NotImplemented,
-            paddingAfterProgramEnds = NotImplemented):
-        KalturaObjectBase.__init__(self)
-
-        # Linear Asset Id
-        # @var int
-        self.linearAssetId = linearAssetId
-
-        # EPG Id
-        # @var str
-        self.epgId = epgId
-
-        # EPG Channel Id
-        # @var int
-        self.epgChannelId = epgChannelId
-
-        # Crid
-        # @var str
-        self.crid = crid
-
-        # Original Start Date
-        # @var int
-        self.originalStartDate = originalStartDate
-
-        # Original End Date
-        # @var int
-        self.originalEndDate = originalEndDate
-
-        # Padding before program starts
-        # @var int
-        self.paddingBeforeProgramStarts = paddingBeforeProgramStarts
-
-        # Padding after program ends
-        # @var int
-        self.paddingAfterProgramEnds = paddingAfterProgramEnds
-
-
-    PROPERTY_LOADERS = {
-        'linearAssetId': getXmlNodeInt, 
-        'epgId': getXmlNodeText, 
-        'epgChannelId': getXmlNodeInt, 
-        'crid': getXmlNodeText, 
-        'originalStartDate': getXmlNodeInt, 
-        'originalEndDate': getXmlNodeInt, 
-        'paddingBeforeProgramStarts': getXmlNodeInt, 
-        'paddingAfterProgramEnds': getXmlNodeInt, 
-    }
-
-    def fromXml(self, node):
-        KalturaObjectBase.fromXml(self, node)
-        self.fromXmlImpl(node, KalturaLiveToVodInfoAsset.PROPERTY_LOADERS)
-
-    def toParams(self):
-        kparams = KalturaObjectBase.toParams(self)
-        kparams.put("objectType", "KalturaLiveToVodInfoAsset")
-        kparams.addIntIfDefined("linearAssetId", self.linearAssetId)
-        kparams.addStringIfDefined("epgId", self.epgId)
-        kparams.addIntIfDefined("epgChannelId", self.epgChannelId)
-        kparams.addStringIfDefined("crid", self.crid)
-        kparams.addIntIfDefined("originalStartDate", self.originalStartDate)
-        kparams.addIntIfDefined("originalEndDate", self.originalEndDate)
-        kparams.addIntIfDefined("paddingBeforeProgramStarts", self.paddingBeforeProgramStarts)
-        kparams.addIntIfDefined("paddingAfterProgramEnds", self.paddingAfterProgramEnds)
-        return kparams
-
-    def getLinearAssetId(self):
-        return self.linearAssetId
-
-    def setLinearAssetId(self, newLinearAssetId):
-        self.linearAssetId = newLinearAssetId
-
-    def getEpgId(self):
-        return self.epgId
-
-    def setEpgId(self, newEpgId):
-        self.epgId = newEpgId
-
-    def getEpgChannelId(self):
-        return self.epgChannelId
-
-    def setEpgChannelId(self, newEpgChannelId):
-        self.epgChannelId = newEpgChannelId
-
-    def getCrid(self):
-        return self.crid
-
-    def setCrid(self, newCrid):
-        self.crid = newCrid
-
-    def getOriginalStartDate(self):
-        return self.originalStartDate
-
-    def setOriginalStartDate(self, newOriginalStartDate):
-        self.originalStartDate = newOriginalStartDate
-
-    def getOriginalEndDate(self):
-        return self.originalEndDate
-
-    def setOriginalEndDate(self, newOriginalEndDate):
-        self.originalEndDate = newOriginalEndDate
-
-    def getPaddingBeforeProgramStarts(self):
-        return self.paddingBeforeProgramStarts
-
-    def setPaddingBeforeProgramStarts(self, newPaddingBeforeProgramStarts):
-        self.paddingBeforeProgramStarts = newPaddingBeforeProgramStarts
-
-    def getPaddingAfterProgramEnds(self):
-        return self.paddingAfterProgramEnds
-
-    def setPaddingAfterProgramEnds(self, newPaddingAfterProgramEnds):
-        self.paddingAfterProgramEnds = newPaddingAfterProgramEnds
-
-
-# @package Kaltura
-# @subpackage Client
-class KalturaMediaAsset(KalturaAsset):
-    """Media-asset info"""
-
-    def __init__(self,
-            id = NotImplemented,
-            type = NotImplemented,
-            name = NotImplemented,
-            multilingualName = NotImplemented,
-            description = NotImplemented,
-            multilingualDescription = NotImplemented,
-            images = NotImplemented,
-            mediaFiles = NotImplemented,
-            metas = NotImplemented,
-            tags = NotImplemented,
-            relatedEntities = NotImplemented,
-            startDate = NotImplemented,
-            endDate = NotImplemented,
-            createDate = NotImplemented,
-            updateDate = NotImplemented,
-            externalId = NotImplemented,
-            indexStatus = NotImplemented,
-            externalIds = NotImplemented,
-            entryId = NotImplemented,
-            deviceRuleId = NotImplemented,
-            geoBlockRuleId = NotImplemented,
-            status = NotImplemented,
-            inheritancePolicy = NotImplemented,
-            liveToVod = NotImplemented):
-        KalturaAsset.__init__(self,
-            id,
-            type,
-            name,
-            multilingualName,
-            description,
-            multilingualDescription,
-            images,
-            mediaFiles,
-            metas,
-            tags,
-            relatedEntities,
-            startDate,
-            endDate,
-            createDate,
-            updateDate,
-            externalId,
-            indexStatus)
-
-        # External identifiers
-        # @var str
-        self.externalIds = externalIds
-
-        # Entry Identifier
-        # @var str
-        self.entryId = entryId
-
-        # Device rule identifier
-        # @var int
-        self.deviceRuleId = deviceRuleId
-
-        # Geo block rule identifier
-        # @var int
-        self.geoBlockRuleId = geoBlockRuleId
-
-        # The media asset status
-        # @var bool
-        self.status = status
-
-        # The media asset inheritance policy
-        # @var KalturaAssetInheritancePolicy
-        self.inheritancePolicy = inheritancePolicy
-
-        # Live to VOD (if present)
-        # @var KalturaLiveToVodInfoAsset
-        self.liveToVod = liveToVod
-
-
-    PROPERTY_LOADERS = {
-        'externalIds': getXmlNodeText, 
-        'entryId': getXmlNodeText, 
-        'deviceRuleId': getXmlNodeInt, 
-        'geoBlockRuleId': getXmlNodeInt, 
-        'status': getXmlNodeBool, 
-        'inheritancePolicy': (KalturaEnumsFactory.createString, "KalturaAssetInheritancePolicy"), 
-        'liveToVod': (KalturaObjectFactory.create, 'KalturaLiveToVodInfoAsset'), 
-    }
-
-    def fromXml(self, node):
-        KalturaAsset.fromXml(self, node)
-        self.fromXmlImpl(node, KalturaMediaAsset.PROPERTY_LOADERS)
-
-    def toParams(self):
-        kparams = KalturaAsset.toParams(self)
-        kparams.put("objectType", "KalturaMediaAsset")
-        kparams.addStringIfDefined("externalIds", self.externalIds)
-        kparams.addStringIfDefined("entryId", self.entryId)
-        kparams.addIntIfDefined("deviceRuleId", self.deviceRuleId)
-        kparams.addIntIfDefined("geoBlockRuleId", self.geoBlockRuleId)
-        kparams.addBoolIfDefined("status", self.status)
-        kparams.addStringEnumIfDefined("inheritancePolicy", self.inheritancePolicy)
-        kparams.addObjectIfDefined("liveToVod", self.liveToVod)
-        return kparams
-
-    def getExternalIds(self):
-        return self.externalIds
-
-    def setExternalIds(self, newExternalIds):
-        self.externalIds = newExternalIds
-
-    def getEntryId(self):
-        return self.entryId
-
-    def setEntryId(self, newEntryId):
-        self.entryId = newEntryId
-
-    def getDeviceRuleId(self):
-        return self.deviceRuleId
-
-    def setDeviceRuleId(self, newDeviceRuleId):
-        self.deviceRuleId = newDeviceRuleId
-
-    def getGeoBlockRuleId(self):
-        return self.geoBlockRuleId
-
-    def setGeoBlockRuleId(self, newGeoBlockRuleId):
-        self.geoBlockRuleId = newGeoBlockRuleId
-
-    def getStatus(self):
-        return self.status
-
-    def setStatus(self, newStatus):
-        self.status = newStatus
-
-    def getInheritancePolicy(self):
-        return self.inheritancePolicy
-
-    def setInheritancePolicy(self, newInheritancePolicy):
-        self.inheritancePolicy = newInheritancePolicy
-
-    def getLiveToVod(self):
-        return self.liveToVod
-
-    def setLiveToVod(self, newLiveToVod):
-        self.liveToVod = newLiveToVod
-
-
-# @package Kaltura
-# @subpackage Client
-class KalturaLiveAsset(KalturaMediaAsset):
-    """Linear media asset info"""
-
-    def __init__(self,
-            id = NotImplemented,
-            type = NotImplemented,
-            name = NotImplemented,
-            multilingualName = NotImplemented,
-            description = NotImplemented,
-            multilingualDescription = NotImplemented,
-            images = NotImplemented,
-            mediaFiles = NotImplemented,
-            metas = NotImplemented,
-            tags = NotImplemented,
-            relatedEntities = NotImplemented,
-            startDate = NotImplemented,
-            endDate = NotImplemented,
-            createDate = NotImplemented,
-            updateDate = NotImplemented,
-            externalId = NotImplemented,
-            indexStatus = NotImplemented,
-            externalIds = NotImplemented,
-            entryId = NotImplemented,
-            deviceRuleId = NotImplemented,
-            geoBlockRuleId = NotImplemented,
-            status = NotImplemented,
-            inheritancePolicy = NotImplemented,
-            liveToVod = NotImplemented,
-            enableCdvrState = NotImplemented,
-            enableCatchUpState = NotImplemented,
-            enableStartOverState = NotImplemented,
-            bufferCatchUpSetting = NotImplemented,
-            paddingBeforeProgramStarts = NotImplemented,
-            paddingAfterProgramEnds = NotImplemented,
-            bufferTrickPlaySetting = NotImplemented,
-            enableRecordingPlaybackNonEntitledChannelState = NotImplemented,
-            enableTrickPlayState = NotImplemented,
-            externalEpgIngestId = NotImplemented,
-            externalCdvrId = NotImplemented,
-            enableCdvr = NotImplemented,
-            enableCatchUp = NotImplemented,
-            enableStartOver = NotImplemented,
-            catchUpBuffer = NotImplemented,
-            trickPlayBuffer = NotImplemented,
-            enableRecordingPlaybackNonEntitledChannel = NotImplemented,
-            enableTrickPlay = NotImplemented,
-            channelType = NotImplemented):
-        KalturaMediaAsset.__init__(self,
-            id,
-            type,
-            name,
-            multilingualName,
-            description,
-            multilingualDescription,
-            images,
-            mediaFiles,
-            metas,
-            tags,
-            relatedEntities,
-            startDate,
-            endDate,
-            createDate,
-            updateDate,
-            externalId,
-            indexStatus,
-            externalIds,
-            entryId,
-            deviceRuleId,
-            geoBlockRuleId,
-            status,
-            inheritancePolicy,
-            liveToVod)
-
-        # Enable CDVR, configuration only
-        # @var KalturaTimeShiftedTvState
-        self.enableCdvrState = enableCdvrState
-
-        # Enable catch-up, configuration only
-        # @var KalturaTimeShiftedTvState
-        self.enableCatchUpState = enableCatchUpState
-
-        # Enable start over, configuration only
-        # @var KalturaTimeShiftedTvState
-        self.enableStartOverState = enableStartOverState
-
-        # buffer Catch-up, configuration only
-        # @var int
-        self.bufferCatchUpSetting = bufferCatchUpSetting
-
-        # Returns padding before program starts in seconds from a live asset if configured,
-        #             otherwise returns corresponding value from TimeShiftedTvPartnerSettings.
-        # @var int
-        self.paddingBeforeProgramStarts = paddingBeforeProgramStarts
-
-        # Returns padding after program ends in seconds from a live asset if configured,
-        #             otherwise returns corresponding value from TimeShiftedTvPartnerSettings.
-        # @var int
-        self.paddingAfterProgramEnds = paddingAfterProgramEnds
-
-        # buffer Trick-play, configuration only
-        # @var int
-        self.bufferTrickPlaySetting = bufferTrickPlaySetting
-
-        # Enable Recording playback for non entitled channel, configuration only
-        # @var KalturaTimeShiftedTvState
-        self.enableRecordingPlaybackNonEntitledChannelState = enableRecordingPlaybackNonEntitledChannelState
-
-        # Enable trick-play, configuration only
-        # @var KalturaTimeShiftedTvState
-        self.enableTrickPlayState = enableTrickPlayState
-
-        # External identifier used when ingesting programs for this linear media asset
-        # @var str
-        self.externalEpgIngestId = externalEpgIngestId
-
-        # External identifier for the CDVR
-        # @var str
-        self.externalCdvrId = externalCdvrId
-
-        # Is CDVR enabled for this asset
-        #             Please, note that value of this property is strictly connected with CDV-R setting on Partner level.
-        #             In order to enable CDV-R for KalturaLiveAsset, Partner CDV-R setting should be enabled.
-        # @var bool
-        # @readonly
-        self.enableCdvr = enableCdvr
-
-        # Is catch-up enabled for this asset
-        #             Please, note that value of this property is strictly connected with Catch Up setting on Partner level.
-        #             In order to enable Catch Up for KalturaLiveAsset, Partner Catch Up setting should be enabled.
-        # @var bool
-        # @readonly
-        self.enableCatchUp = enableCatchUp
-
-        # Is start over enabled for this asset
-        #             Please, note that value of this property is strictly connected with Start Over setting on Partner level.
-        #             In order to enable Start Over for KalturaLiveAsset, Partner Start Over setting should be enabled.
-        # @var bool
-        # @readonly
-        self.enableStartOver = enableStartOver
-
-        # summed Catch-up buffer, the TimeShiftedTvPartnerSettings are also taken into consideration
-        # @var int
-        # @readonly
-        self.catchUpBuffer = catchUpBuffer
-
-        # summed Trick-play buffer, the TimeShiftedTvPartnerSettings are also taken into consideration
-        # @var int
-        # @readonly
-        self.trickPlayBuffer = trickPlayBuffer
-
-        # Is recording playback for non entitled channel enabled for this asset
-        # @var bool
-        # @readonly
-        self.enableRecordingPlaybackNonEntitledChannel = enableRecordingPlaybackNonEntitledChannel
-
-        # Is trick-play enabled for this asset
-        #             Please, note that value of this property is strictly connected with Trick Play setting on Partner level.
-        #             In order to enable Trick Play for KalturaLiveAsset, Partner Trick Play setting should be enabled.
-        # @var bool
-        # @readonly
-        self.enableTrickPlay = enableTrickPlay
-
-        # channel type, possible values: UNKNOWN, DTT, OTT, DTT_AND_OTT
-        # @var KalturaLinearChannelType
-        self.channelType = channelType
-
-
-    PROPERTY_LOADERS = {
-        'enableCdvrState': (KalturaEnumsFactory.createString, "KalturaTimeShiftedTvState"), 
-        'enableCatchUpState': (KalturaEnumsFactory.createString, "KalturaTimeShiftedTvState"), 
-        'enableStartOverState': (KalturaEnumsFactory.createString, "KalturaTimeShiftedTvState"), 
-        'bufferCatchUpSetting': getXmlNodeInt, 
-        'paddingBeforeProgramStarts': getXmlNodeInt, 
-        'paddingAfterProgramEnds': getXmlNodeInt, 
-        'bufferTrickPlaySetting': getXmlNodeInt, 
-        'enableRecordingPlaybackNonEntitledChannelState': (KalturaEnumsFactory.createString, "KalturaTimeShiftedTvState"), 
-        'enableTrickPlayState': (KalturaEnumsFactory.createString, "KalturaTimeShiftedTvState"), 
-        'externalEpgIngestId': getXmlNodeText, 
-        'externalCdvrId': getXmlNodeText, 
-        'enableCdvr': getXmlNodeBool, 
-        'enableCatchUp': getXmlNodeBool, 
-        'enableStartOver': getXmlNodeBool, 
-        'catchUpBuffer': getXmlNodeInt, 
-        'trickPlayBuffer': getXmlNodeInt, 
-        'enableRecordingPlaybackNonEntitledChannel': getXmlNodeBool, 
-        'enableTrickPlay': getXmlNodeBool, 
-        'channelType': (KalturaEnumsFactory.createString, "KalturaLinearChannelType"), 
-    }
-
-    def fromXml(self, node):
-        KalturaMediaAsset.fromXml(self, node)
-        self.fromXmlImpl(node, KalturaLiveAsset.PROPERTY_LOADERS)
-
-    def toParams(self):
-        kparams = KalturaMediaAsset.toParams(self)
-        kparams.put("objectType", "KalturaLiveAsset")
-        kparams.addStringEnumIfDefined("enableCdvrState", self.enableCdvrState)
-        kparams.addStringEnumIfDefined("enableCatchUpState", self.enableCatchUpState)
-        kparams.addStringEnumIfDefined("enableStartOverState", self.enableStartOverState)
-        kparams.addIntIfDefined("bufferCatchUpSetting", self.bufferCatchUpSetting)
-        kparams.addIntIfDefined("paddingBeforeProgramStarts", self.paddingBeforeProgramStarts)
-        kparams.addIntIfDefined("paddingAfterProgramEnds", self.paddingAfterProgramEnds)
-        kparams.addIntIfDefined("bufferTrickPlaySetting", self.bufferTrickPlaySetting)
-        kparams.addStringEnumIfDefined("enableRecordingPlaybackNonEntitledChannelState", self.enableRecordingPlaybackNonEntitledChannelState)
-        kparams.addStringEnumIfDefined("enableTrickPlayState", self.enableTrickPlayState)
-        kparams.addStringIfDefined("externalEpgIngestId", self.externalEpgIngestId)
-        kparams.addStringIfDefined("externalCdvrId", self.externalCdvrId)
-        kparams.addStringEnumIfDefined("channelType", self.channelType)
-        return kparams
-
-    def getEnableCdvrState(self):
-        return self.enableCdvrState
-
-    def setEnableCdvrState(self, newEnableCdvrState):
-        self.enableCdvrState = newEnableCdvrState
-
-    def getEnableCatchUpState(self):
-        return self.enableCatchUpState
-
-    def setEnableCatchUpState(self, newEnableCatchUpState):
-        self.enableCatchUpState = newEnableCatchUpState
-
-    def getEnableStartOverState(self):
-        return self.enableStartOverState
-
-    def setEnableStartOverState(self, newEnableStartOverState):
-        self.enableStartOverState = newEnableStartOverState
-
-    def getBufferCatchUpSetting(self):
-        return self.bufferCatchUpSetting
-
-    def setBufferCatchUpSetting(self, newBufferCatchUpSetting):
-        self.bufferCatchUpSetting = newBufferCatchUpSetting
-
-    def getPaddingBeforeProgramStarts(self):
-        return self.paddingBeforeProgramStarts
-
-    def setPaddingBeforeProgramStarts(self, newPaddingBeforeProgramStarts):
-        self.paddingBeforeProgramStarts = newPaddingBeforeProgramStarts
-
-    def getPaddingAfterProgramEnds(self):
-        return self.paddingAfterProgramEnds
-
-    def setPaddingAfterProgramEnds(self, newPaddingAfterProgramEnds):
-        self.paddingAfterProgramEnds = newPaddingAfterProgramEnds
-
-    def getBufferTrickPlaySetting(self):
-        return self.bufferTrickPlaySetting
-
-    def setBufferTrickPlaySetting(self, newBufferTrickPlaySetting):
-        self.bufferTrickPlaySetting = newBufferTrickPlaySetting
-
-    def getEnableRecordingPlaybackNonEntitledChannelState(self):
-        return self.enableRecordingPlaybackNonEntitledChannelState
-
-    def setEnableRecordingPlaybackNonEntitledChannelState(self, newEnableRecordingPlaybackNonEntitledChannelState):
-        self.enableRecordingPlaybackNonEntitledChannelState = newEnableRecordingPlaybackNonEntitledChannelState
-
-    def getEnableTrickPlayState(self):
-        return self.enableTrickPlayState
-
-    def setEnableTrickPlayState(self, newEnableTrickPlayState):
-        self.enableTrickPlayState = newEnableTrickPlayState
-
-    def getExternalEpgIngestId(self):
-        return self.externalEpgIngestId
-
-    def setExternalEpgIngestId(self, newExternalEpgIngestId):
-        self.externalEpgIngestId = newExternalEpgIngestId
-
-    def getExternalCdvrId(self):
-        return self.externalCdvrId
-
-    def setExternalCdvrId(self, newExternalCdvrId):
-        self.externalCdvrId = newExternalCdvrId
-
-    def getEnableCdvr(self):
-        return self.enableCdvr
-
-    def getEnableCatchUp(self):
-        return self.enableCatchUp
-
-    def getEnableStartOver(self):
-        return self.enableStartOver
-
-    def getCatchUpBuffer(self):
-        return self.catchUpBuffer
-
-    def getTrickPlayBuffer(self):
-        return self.trickPlayBuffer
-
-    def getEnableRecordingPlaybackNonEntitledChannel(self):
-        return self.enableRecordingPlaybackNonEntitledChannel
-
-    def getEnableTrickPlay(self):
-        return self.enableTrickPlay
-
-    def getChannelType(self):
-        return self.channelType
-
-    def setChannelType(self, newChannelType):
-        self.channelType = newChannelType
-
-
-# @package Kaltura
-# @subpackage Client
-class KalturaLineupChannelAsset(KalturaLiveAsset):
-    """A Lineup channel asset is KalturaLiveAsset in a context of specific region (includes LCN)"""
-
-    def __init__(self,
-            id = NotImplemented,
-            type = NotImplemented,
-            name = NotImplemented,
-            multilingualName = NotImplemented,
-            description = NotImplemented,
-            multilingualDescription = NotImplemented,
-            images = NotImplemented,
-            mediaFiles = NotImplemented,
-            metas = NotImplemented,
-            tags = NotImplemented,
-            relatedEntities = NotImplemented,
-            startDate = NotImplemented,
-            endDate = NotImplemented,
-            createDate = NotImplemented,
-            updateDate = NotImplemented,
-            externalId = NotImplemented,
-            indexStatus = NotImplemented,
-            externalIds = NotImplemented,
-            entryId = NotImplemented,
-            deviceRuleId = NotImplemented,
-            geoBlockRuleId = NotImplemented,
-            status = NotImplemented,
-            inheritancePolicy = NotImplemented,
-            liveToVod = NotImplemented,
-            enableCdvrState = NotImplemented,
-            enableCatchUpState = NotImplemented,
-            enableStartOverState = NotImplemented,
-            bufferCatchUpSetting = NotImplemented,
-            paddingBeforeProgramStarts = NotImplemented,
-            paddingAfterProgramEnds = NotImplemented,
-            bufferTrickPlaySetting = NotImplemented,
-            enableRecordingPlaybackNonEntitledChannelState = NotImplemented,
-            enableTrickPlayState = NotImplemented,
-            externalEpgIngestId = NotImplemented,
-            externalCdvrId = NotImplemented,
-            enableCdvr = NotImplemented,
-            enableCatchUp = NotImplemented,
-            enableStartOver = NotImplemented,
-            catchUpBuffer = NotImplemented,
-            trickPlayBuffer = NotImplemented,
-            enableRecordingPlaybackNonEntitledChannel = NotImplemented,
-            enableTrickPlay = NotImplemented,
-            channelType = NotImplemented,
-            lcn = NotImplemented):
-        KalturaLiveAsset.__init__(self,
-            id,
-            type,
-            name,
-            multilingualName,
-            description,
-            multilingualDescription,
-            images,
-            mediaFiles,
-            metas,
-            tags,
-            relatedEntities,
-            startDate,
-            endDate,
-            createDate,
-            updateDate,
-            externalId,
-            indexStatus,
-            externalIds,
-            entryId,
-            deviceRuleId,
-            geoBlockRuleId,
-            status,
-            inheritancePolicy,
-            liveToVod,
-            enableCdvrState,
-            enableCatchUpState,
-            enableStartOverState,
-            bufferCatchUpSetting,
-            paddingBeforeProgramStarts,
-            paddingAfterProgramEnds,
-            bufferTrickPlaySetting,
-            enableRecordingPlaybackNonEntitledChannelState,
-            enableTrickPlayState,
-            externalEpgIngestId,
-            externalCdvrId,
-            enableCdvr,
-            enableCatchUp,
-            enableStartOver,
-            catchUpBuffer,
-            trickPlayBuffer,
-            enableRecordingPlaybackNonEntitledChannel,
-            enableTrickPlay,
-            channelType)
-
-        # Lineup channel number (LCN) - A logical linear channel number. This number is unique in the region context.
-        # @var int
-        self.lcn = lcn
-
-
-    PROPERTY_LOADERS = {
-        'lcn': getXmlNodeInt, 
-    }
-
-    def fromXml(self, node):
-        KalturaLiveAsset.fromXml(self, node)
-        self.fromXmlImpl(node, KalturaLineupChannelAsset.PROPERTY_LOADERS)
-
-    def toParams(self):
-        kparams = KalturaLiveAsset.toParams(self)
-        kparams.put("objectType", "KalturaLineupChannelAsset")
-        kparams.addIntIfDefined("lcn", self.lcn)
-        return kparams
-
-    def getLcn(self):
-        return self.lcn
-
-    def setLcn(self, newLcn):
-        self.lcn = newLcn
-
-
-# @package Kaltura
-# @subpackage Client
 class KalturaLineupChannelAssetListResponse(KalturaListResponse):
     def __init__(self,
             totalCount = NotImplemented,
@@ -39889,397 +40476,6 @@ class KalturaLineupChannelAssetListResponse(KalturaListResponse):
 
     def setParentLineupExternalId(self, newParentLineupExternalId):
         self.parentLineupExternalId = newParentLineupExternalId
-
-
-# @package Kaltura
-# @subpackage Client
-class KalturaProgramAsset(KalturaAsset):
-    """Program-asset info"""
-
-    def __init__(self,
-            id = NotImplemented,
-            type = NotImplemented,
-            name = NotImplemented,
-            multilingualName = NotImplemented,
-            description = NotImplemented,
-            multilingualDescription = NotImplemented,
-            images = NotImplemented,
-            mediaFiles = NotImplemented,
-            metas = NotImplemented,
-            tags = NotImplemented,
-            relatedEntities = NotImplemented,
-            startDate = NotImplemented,
-            endDate = NotImplemented,
-            createDate = NotImplemented,
-            updateDate = NotImplemented,
-            externalId = NotImplemented,
-            indexStatus = NotImplemented,
-            epgChannelId = NotImplemented,
-            epgId = NotImplemented,
-            relatedMediaId = NotImplemented,
-            crid = NotImplemented,
-            linearAssetId = NotImplemented,
-            enableCdvr = NotImplemented,
-            enableCatchUp = NotImplemented,
-            enableStartOver = NotImplemented,
-            enableTrickPlay = NotImplemented,
-            externalOfferIds = NotImplemented):
-        KalturaAsset.__init__(self,
-            id,
-            type,
-            name,
-            multilingualName,
-            description,
-            multilingualDescription,
-            images,
-            mediaFiles,
-            metas,
-            tags,
-            relatedEntities,
-            startDate,
-            endDate,
-            createDate,
-            updateDate,
-            externalId,
-            indexStatus)
-
-        # EPG channel identifier
-        # @var int
-        # @readonly
-        self.epgChannelId = epgChannelId
-
-        # EPG identifier
-        # @var str
-        # @readonly
-        self.epgId = epgId
-
-        # Ralated media identifier
-        # @var int
-        self.relatedMediaId = relatedMediaId
-
-        # Unique identifier for the program
-        # @var str
-        self.crid = crid
-
-        # Id of linear media asset
-        # @var int
-        # @insertonly
-        self.linearAssetId = linearAssetId
-
-        # Is CDVR enabled for this asset
-        #             Please, note that value of this property is strictly connected with CDV-R setting on Partner and KalturaLiveAsset levels.
-        #             In order to enable CDV-R for KalturaProgramAsset, Partner and KalturaLiveAsset CDV-R settings should be enabled.
-        # @var bool
-        self.enableCdvr = enableCdvr
-
-        # Is catch-up enabled for this asset
-        #             Please, note that value of this property is strictly connected with Catch Up setting on Partner and KalturaLiveAsset levels.
-        #             In order to enable Catch Up for KalturaProgramAsset, Partner and KalturaLiveAsset Catch Up settings should be enabled.
-        # @var bool
-        self.enableCatchUp = enableCatchUp
-
-        # Is start over enabled for this asset
-        #             Please, note that value of this property is strictly connected with Start Over setting on Partner and KalturaLiveAsset levels.
-        #             In order to enable Start Over for KalturaProgramAsset, Partner and KalturaLiveAsset Start Over settings should be enabled.
-        # @var bool
-        self.enableStartOver = enableStartOver
-
-        # Is trick-play enabled for this asset
-        #             Please, note that value of this property is strictly connected with Trick Play setting on Partner and KalturaLiveAsset levels.
-        #             In order to enable Trick Play for KalturaProgramAsset, Partner and KalturaLiveAsset Trick Play settings should be enabled.
-        # @var bool
-        self.enableTrickPlay = enableTrickPlay
-
-        # Contains comma separate list of KalturaProgramAssetGroupOffer.externalOfferId values indicating the PAGOs to which the Program Asset is bound.
-        # @var str
-        self.externalOfferIds = externalOfferIds
-
-
-    PROPERTY_LOADERS = {
-        'epgChannelId': getXmlNodeInt, 
-        'epgId': getXmlNodeText, 
-        'relatedMediaId': getXmlNodeInt, 
-        'crid': getXmlNodeText, 
-        'linearAssetId': getXmlNodeInt, 
-        'enableCdvr': getXmlNodeBool, 
-        'enableCatchUp': getXmlNodeBool, 
-        'enableStartOver': getXmlNodeBool, 
-        'enableTrickPlay': getXmlNodeBool, 
-        'externalOfferIds': getXmlNodeText, 
-    }
-
-    def fromXml(self, node):
-        KalturaAsset.fromXml(self, node)
-        self.fromXmlImpl(node, KalturaProgramAsset.PROPERTY_LOADERS)
-
-    def toParams(self):
-        kparams = KalturaAsset.toParams(self)
-        kparams.put("objectType", "KalturaProgramAsset")
-        kparams.addIntIfDefined("relatedMediaId", self.relatedMediaId)
-        kparams.addStringIfDefined("crid", self.crid)
-        kparams.addIntIfDefined("linearAssetId", self.linearAssetId)
-        kparams.addBoolIfDefined("enableCdvr", self.enableCdvr)
-        kparams.addBoolIfDefined("enableCatchUp", self.enableCatchUp)
-        kparams.addBoolIfDefined("enableStartOver", self.enableStartOver)
-        kparams.addBoolIfDefined("enableTrickPlay", self.enableTrickPlay)
-        kparams.addStringIfDefined("externalOfferIds", self.externalOfferIds)
-        return kparams
-
-    def getEpgChannelId(self):
-        return self.epgChannelId
-
-    def getEpgId(self):
-        return self.epgId
-
-    def getRelatedMediaId(self):
-        return self.relatedMediaId
-
-    def setRelatedMediaId(self, newRelatedMediaId):
-        self.relatedMediaId = newRelatedMediaId
-
-    def getCrid(self):
-        return self.crid
-
-    def setCrid(self, newCrid):
-        self.crid = newCrid
-
-    def getLinearAssetId(self):
-        return self.linearAssetId
-
-    def setLinearAssetId(self, newLinearAssetId):
-        self.linearAssetId = newLinearAssetId
-
-    def getEnableCdvr(self):
-        return self.enableCdvr
-
-    def setEnableCdvr(self, newEnableCdvr):
-        self.enableCdvr = newEnableCdvr
-
-    def getEnableCatchUp(self):
-        return self.enableCatchUp
-
-    def setEnableCatchUp(self, newEnableCatchUp):
-        self.enableCatchUp = newEnableCatchUp
-
-    def getEnableStartOver(self):
-        return self.enableStartOver
-
-    def setEnableStartOver(self, newEnableStartOver):
-        self.enableStartOver = newEnableStartOver
-
-    def getEnableTrickPlay(self):
-        return self.enableTrickPlay
-
-    def setEnableTrickPlay(self, newEnableTrickPlay):
-        self.enableTrickPlay = newEnableTrickPlay
-
-    def getExternalOfferIds(self):
-        return self.externalOfferIds
-
-    def setExternalOfferIds(self, newExternalOfferIds):
-        self.externalOfferIds = newExternalOfferIds
-
-
-# @package Kaltura
-# @subpackage Client
-class KalturaRecordingAsset(KalturaProgramAsset):
-    """Recording-asset info"""
-
-    def __init__(self,
-            id = NotImplemented,
-            type = NotImplemented,
-            name = NotImplemented,
-            multilingualName = NotImplemented,
-            description = NotImplemented,
-            multilingualDescription = NotImplemented,
-            images = NotImplemented,
-            mediaFiles = NotImplemented,
-            metas = NotImplemented,
-            tags = NotImplemented,
-            relatedEntities = NotImplemented,
-            startDate = NotImplemented,
-            endDate = NotImplemented,
-            createDate = NotImplemented,
-            updateDate = NotImplemented,
-            externalId = NotImplemented,
-            indexStatus = NotImplemented,
-            epgChannelId = NotImplemented,
-            epgId = NotImplemented,
-            relatedMediaId = NotImplemented,
-            crid = NotImplemented,
-            linearAssetId = NotImplemented,
-            enableCdvr = NotImplemented,
-            enableCatchUp = NotImplemented,
-            enableStartOver = NotImplemented,
-            enableTrickPlay = NotImplemented,
-            externalOfferIds = NotImplemented,
-            recordingId = NotImplemented,
-            recordingType = NotImplemented,
-            viewableUntilDate = NotImplemented,
-            multiRecord = NotImplemented):
-        KalturaProgramAsset.__init__(self,
-            id,
-            type,
-            name,
-            multilingualName,
-            description,
-            multilingualDescription,
-            images,
-            mediaFiles,
-            metas,
-            tags,
-            relatedEntities,
-            startDate,
-            endDate,
-            createDate,
-            updateDate,
-            externalId,
-            indexStatus,
-            epgChannelId,
-            epgId,
-            relatedMediaId,
-            crid,
-            linearAssetId,
-            enableCdvr,
-            enableCatchUp,
-            enableStartOver,
-            enableTrickPlay,
-            externalOfferIds)
-
-        # Recording identifier
-        # @var str
-        self.recordingId = recordingId
-
-        # Recording Type: single/season/series
-        # @var KalturaRecordingType
-        self.recordingType = recordingType
-
-        # Specifies until when the recording is available for viewing. Date and time represented as epoch.
-        # @var int
-        self.viewableUntilDate = viewableUntilDate
-
-        # When TRUE indicates that there are multiple KalturaImmediateRecording instances for the event.
-        # @var bool
-        self.multiRecord = multiRecord
-
-
-    PROPERTY_LOADERS = {
-        'recordingId': getXmlNodeText, 
-        'recordingType': (KalturaEnumsFactory.createString, "KalturaRecordingType"), 
-        'viewableUntilDate': getXmlNodeInt, 
-        'multiRecord': getXmlNodeBool, 
-    }
-
-    def fromXml(self, node):
-        KalturaProgramAsset.fromXml(self, node)
-        self.fromXmlImpl(node, KalturaRecordingAsset.PROPERTY_LOADERS)
-
-    def toParams(self):
-        kparams = KalturaProgramAsset.toParams(self)
-        kparams.put("objectType", "KalturaRecordingAsset")
-        kparams.addStringIfDefined("recordingId", self.recordingId)
-        kparams.addStringEnumIfDefined("recordingType", self.recordingType)
-        kparams.addIntIfDefined("viewableUntilDate", self.viewableUntilDate)
-        kparams.addBoolIfDefined("multiRecord", self.multiRecord)
-        return kparams
-
-    def getRecordingId(self):
-        return self.recordingId
-
-    def setRecordingId(self, newRecordingId):
-        self.recordingId = newRecordingId
-
-    def getRecordingType(self):
-        return self.recordingType
-
-    def setRecordingType(self, newRecordingType):
-        self.recordingType = newRecordingType
-
-    def getViewableUntilDate(self):
-        return self.viewableUntilDate
-
-    def setViewableUntilDate(self, newViewableUntilDate):
-        self.viewableUntilDate = newViewableUntilDate
-
-    def getMultiRecord(self):
-        return self.multiRecord
-
-    def setMultiRecord(self, newMultiRecord):
-        self.multiRecord = newMultiRecord
-
-
-# @package Kaltura
-# @subpackage Client
-class KalturaEpg(KalturaProgramAsset):
-    def __init__(self,
-            id = NotImplemented,
-            type = NotImplemented,
-            name = NotImplemented,
-            multilingualName = NotImplemented,
-            description = NotImplemented,
-            multilingualDescription = NotImplemented,
-            images = NotImplemented,
-            mediaFiles = NotImplemented,
-            metas = NotImplemented,
-            tags = NotImplemented,
-            relatedEntities = NotImplemented,
-            startDate = NotImplemented,
-            endDate = NotImplemented,
-            createDate = NotImplemented,
-            updateDate = NotImplemented,
-            externalId = NotImplemented,
-            indexStatus = NotImplemented,
-            epgChannelId = NotImplemented,
-            epgId = NotImplemented,
-            relatedMediaId = NotImplemented,
-            crid = NotImplemented,
-            linearAssetId = NotImplemented,
-            enableCdvr = NotImplemented,
-            enableCatchUp = NotImplemented,
-            enableStartOver = NotImplemented,
-            enableTrickPlay = NotImplemented,
-            externalOfferIds = NotImplemented):
-        KalturaProgramAsset.__init__(self,
-            id,
-            type,
-            name,
-            multilingualName,
-            description,
-            multilingualDescription,
-            images,
-            mediaFiles,
-            metas,
-            tags,
-            relatedEntities,
-            startDate,
-            endDate,
-            createDate,
-            updateDate,
-            externalId,
-            indexStatus,
-            epgChannelId,
-            epgId,
-            relatedMediaId,
-            crid,
-            linearAssetId,
-            enableCdvr,
-            enableCatchUp,
-            enableStartOver,
-            enableTrickPlay,
-            externalOfferIds)
-
-
-    PROPERTY_LOADERS = {
-    }
-
-    def fromXml(self, node):
-        KalturaProgramAsset.fromXml(self, node)
-        self.fromXmlImpl(node, KalturaEpg.PROPERTY_LOADERS)
-
-    def toParams(self):
-        kparams = KalturaProgramAsset.toParams(self)
-        kparams.put("objectType", "KalturaEpg")
-        return kparams
 
 
 # @package Kaltura
@@ -45929,202 +46125,6 @@ class KalturaEpgListResponse(KalturaListResponse):
 
     def setObjects(self, newObjects):
         self.objects = newObjects
-
-
-# @package Kaltura
-# @subpackage Client
-class KalturaTreeNaturalTextResponse(KalturaObjectBase):
-    """A class representing the response from the getRecommendationWithNaturalText API."""
-
-    def __init__(self,
-            recommendations = NotImplemented):
-        KalturaObjectBase.__init__(self)
-
-        # Content recommendations based on the natural language query.
-        # @var KalturaTreeRecommendations
-        self.recommendations = recommendations
-
-
-    PROPERTY_LOADERS = {
-        'recommendations': (KalturaObjectFactory.create, 'KalturaTreeRecommendations'), 
-    }
-
-    def fromXml(self, node):
-        KalturaObjectBase.fromXml(self, node)
-        self.fromXmlImpl(node, KalturaTreeNaturalTextResponse.PROPERTY_LOADERS)
-
-    def toParams(self):
-        kparams = KalturaObjectBase.toParams(self)
-        kparams.put("objectType", "KalturaTreeNaturalTextResponse")
-        kparams.addObjectIfDefined("recommendations", self.recommendations)
-        return kparams
-
-    def getRecommendations(self):
-        return self.recommendations
-
-    def setRecommendations(self, newRecommendations):
-        self.recommendations = newRecommendations
-
-
-# @package Kaltura
-# @subpackage Client
-class KalturaAiRecommendationTreePartnerConfiguration(KalturaObjectBase):
-    """A class representing the partner-specific configuration for TV Genie recommendation trees."""
-
-    def __init__(self,
-            activeMetadataTypes = NotImplemented,
-            topLevelQuestions = NotImplemented,
-            answersPerQuestion = NotImplemented,
-            levels = NotImplemented,
-            numOfRecommendedAssets = NotImplemented,
-            treeGenerationFrequency = NotImplemented,
-            activeTreeId = NotImplemented):
-        KalturaObjectBase.__init__(self)
-
-        # Dictionary of metadata types to base questions on (genre, actor, director, etc.) with their respective counts.
-        # @var map
-        self.activeMetadataTypes = activeMetadataTypes
-
-        # Number of top-level questions to generate (range: 5-21).
-        # @var int
-        self.topLevelQuestions = topLevelQuestions
-
-        # Number of regular answers per question (range: 2-3).
-        # @var int
-        self.answersPerQuestion = answersPerQuestion
-
-        # Maximum depth of the decision tree (range: 1-5).
-        # @var int
-        self.levels = levels
-
-        # Number of assets to include in each recommendation set.
-        # @var int
-        self.numOfRecommendedAssets = numOfRecommendedAssets
-
-        # Cron expression for scheduling tree regeneration.
-        # @var str
-        self.treeGenerationFrequency = treeGenerationFrequency
-
-        # Identifier for the tree that is currently marked as Active (can be only one at a time)
-        # @var str
-        self.activeTreeId = activeTreeId
-
-
-    PROPERTY_LOADERS = {
-        'activeMetadataTypes': (KalturaObjectFactory.createMap, 'KalturaIntegerValue'), 
-        'topLevelQuestions': getXmlNodeInt, 
-        'answersPerQuestion': getXmlNodeInt, 
-        'levels': getXmlNodeInt, 
-        'numOfRecommendedAssets': getXmlNodeInt, 
-        'treeGenerationFrequency': getXmlNodeText, 
-        'activeTreeId': getXmlNodeText, 
-    }
-
-    def fromXml(self, node):
-        KalturaObjectBase.fromXml(self, node)
-        self.fromXmlImpl(node, KalturaAiRecommendationTreePartnerConfiguration.PROPERTY_LOADERS)
-
-    def toParams(self):
-        kparams = KalturaObjectBase.toParams(self)
-        kparams.put("objectType", "KalturaAiRecommendationTreePartnerConfiguration")
-        kparams.addMapIfDefined("activeMetadataTypes", self.activeMetadataTypes)
-        kparams.addIntIfDefined("topLevelQuestions", self.topLevelQuestions)
-        kparams.addIntIfDefined("answersPerQuestion", self.answersPerQuestion)
-        kparams.addIntIfDefined("levels", self.levels)
-        kparams.addIntIfDefined("numOfRecommendedAssets", self.numOfRecommendedAssets)
-        kparams.addStringIfDefined("treeGenerationFrequency", self.treeGenerationFrequency)
-        kparams.addStringIfDefined("activeTreeId", self.activeTreeId)
-        return kparams
-
-    def getActiveMetadataTypes(self):
-        return self.activeMetadataTypes
-
-    def setActiveMetadataTypes(self, newActiveMetadataTypes):
-        self.activeMetadataTypes = newActiveMetadataTypes
-
-    def getTopLevelQuestions(self):
-        return self.topLevelQuestions
-
-    def setTopLevelQuestions(self, newTopLevelQuestions):
-        self.topLevelQuestions = newTopLevelQuestions
-
-    def getAnswersPerQuestion(self):
-        return self.answersPerQuestion
-
-    def setAnswersPerQuestion(self, newAnswersPerQuestion):
-        self.answersPerQuestion = newAnswersPerQuestion
-
-    def getLevels(self):
-        return self.levels
-
-    def setLevels(self, newLevels):
-        self.levels = newLevels
-
-    def getNumOfRecommendedAssets(self):
-        return self.numOfRecommendedAssets
-
-    def setNumOfRecommendedAssets(self, newNumOfRecommendedAssets):
-        self.numOfRecommendedAssets = newNumOfRecommendedAssets
-
-    def getTreeGenerationFrequency(self):
-        return self.treeGenerationFrequency
-
-    def setTreeGenerationFrequency(self, newTreeGenerationFrequency):
-        self.treeGenerationFrequency = newTreeGenerationFrequency
-
-    def getActiveTreeId(self):
-        return self.activeTreeId
-
-    def setActiveTreeId(self, newActiveTreeId):
-        self.activeTreeId = newActiveTreeId
-
-
-# @package Kaltura
-# @subpackage Client
-class KalturaFilterPager(KalturaObjectBase):
-    """The KalturaFilterPager object enables paging management to be applied upon service list actions"""
-
-    def __init__(self,
-            pageSize = NotImplemented,
-            pageIndex = NotImplemented):
-        KalturaObjectBase.__init__(self)
-
-        # The number of objects to retrieve. Possible range 1 <= value <= 50. If omitted or value &lt; 1 - will be set to 25. If a value &gt; 50 provided - will be set to 50
-        # @var int
-        self.pageSize = pageSize
-
-        # The page number for which {pageSize} of objects should be retrieved
-        # @var int
-        self.pageIndex = pageIndex
-
-
-    PROPERTY_LOADERS = {
-        'pageSize': getXmlNodeInt, 
-        'pageIndex': getXmlNodeInt, 
-    }
-
-    def fromXml(self, node):
-        KalturaObjectBase.fromXml(self, node)
-        self.fromXmlImpl(node, KalturaFilterPager.PROPERTY_LOADERS)
-
-    def toParams(self):
-        kparams = KalturaObjectBase.toParams(self)
-        kparams.put("objectType", "KalturaFilterPager")
-        kparams.addIntIfDefined("pageSize", self.pageSize)
-        kparams.addIntIfDefined("pageIndex", self.pageIndex)
-        return kparams
-
-    def getPageSize(self):
-        return self.pageSize
-
-    def setPageSize(self, newPageSize):
-        self.pageSize = newPageSize
-
-    def getPageIndex(self):
-        return self.pageIndex
-
-    def setPageIndex(self, newPageIndex):
-        self.pageIndex = newPageIndex
 
 
 # @package Kaltura
@@ -63182,10 +63182,9 @@ class KalturaCoreClient(KalturaClientPlugin):
             'KalturaAiMetadataGeneratorConfiguration': KalturaAiMetadataGeneratorConfiguration,
             'KalturaTreeQuestion': KalturaTreeQuestion,
             'KalturaTreeAnswer': KalturaTreeAnswer,
-            'KalturaListResponse': KalturaListResponse,
             'KalturaMediaImage': KalturaMediaImage,
-            'KalturaStringValueArray': KalturaStringValueArray,
             'KalturaAssetFile': KalturaAssetFile,
+            'KalturaStringValueArray': KalturaStringValueArray,
             'KalturaBusinessModuleDetails': KalturaBusinessModuleDetails,
             'KalturaMediaFile': KalturaMediaFile,
             'KalturaBuzzScore': KalturaBuzzScore,
@@ -63194,9 +63193,27 @@ class KalturaCoreClient(KalturaClientPlugin):
             'KalturaRelatedEntity': KalturaRelatedEntity,
             'KalturaRelatedEntityArray': KalturaRelatedEntityArray,
             'KalturaAsset': KalturaAsset,
-            'KalturaAssetListResponse': KalturaAssetListResponse,
             'KalturaTreeRecommendations': KalturaTreeRecommendations,
             'KalturaTreeNextNodeResponse': KalturaTreeNextNodeResponse,
+            'KalturaLiveToVodInfoAsset': KalturaLiveToVodInfoAsset,
+            'KalturaMediaAsset': KalturaMediaAsset,
+            'KalturaLiveAsset': KalturaLiveAsset,
+            'KalturaLineupChannelAsset': KalturaLineupChannelAsset,
+            'KalturaProgramAsset': KalturaProgramAsset,
+            'KalturaRecordingAsset': KalturaRecordingAsset,
+            'KalturaEpg': KalturaEpg,
+            'KalturaPluginData': KalturaPluginData,
+            'KalturaDrmPlaybackPluginData': KalturaDrmPlaybackPluginData,
+            'KalturaPlaybackSource': KalturaPlaybackSource,
+            'KalturaCustomDrmPlaybackPluginData': KalturaCustomDrmPlaybackPluginData,
+            'KalturaFairPlayPlaybackPluginData': KalturaFairPlayPlaybackPluginData,
+            'KalturaDiscoveryMediaFile': KalturaDiscoveryMediaFile,
+            'KalturaTreeNaturalTextResponse': KalturaTreeNaturalTextResponse,
+            'KalturaAiRecommendationTreePartnerConfiguration': KalturaAiRecommendationTreePartnerConfiguration,
+            'KalturaAnnouncement': KalturaAnnouncement,
+            'KalturaFilterPager': KalturaFilterPager,
+            'KalturaListResponse': KalturaListResponse,
+            'KalturaAnnouncementListResponse': KalturaAnnouncementListResponse,
             'KalturaOTTObjectSupportNullable': KalturaOTTObjectSupportNullable,
             'KalturaDeviceReferenceData': KalturaDeviceReferenceData,
             'KalturaDeviceReferenceDataListResponse': KalturaDeviceReferenceDataListResponse,
@@ -63235,11 +63252,7 @@ class KalturaCoreClient(KalturaClientPlugin):
             'KalturaSmsAdapterProfile': KalturaSmsAdapterProfile,
             'KalturaDynamicList': KalturaDynamicList,
             'KalturaUdidDynamicList': KalturaUdidDynamicList,
-            'KalturaPluginData': KalturaPluginData,
-            'KalturaDrmPlaybackPluginData': KalturaDrmPlaybackPluginData,
-            'KalturaCustomDrmPlaybackPluginData': KalturaCustomDrmPlaybackPluginData,
             'KalturaHouseholdDevice': KalturaHouseholdDevice,
-            'KalturaFairPlayPlaybackPluginData': KalturaFairPlayPlaybackPluginData,
             'KalturaHouseholdCoupon': KalturaHouseholdCoupon,
             'KalturaUnifiedChannel': KalturaUnifiedChannel,
             'KalturaCategoryItem': KalturaCategoryItem,
@@ -63339,8 +63352,6 @@ class KalturaCoreClient(KalturaClientPlugin):
             'KalturaIotProfileAws': KalturaIotProfileAws,
             'KalturaFavorite': KalturaFavorite,
             'KalturaFavoriteListResponse': KalturaFavoriteListResponse,
-            'KalturaPlaybackSource': KalturaPlaybackSource,
-            'KalturaDiscoveryMediaFile': KalturaDiscoveryMediaFile,
             'KalturaOTTUserListResponse': KalturaOTTUserListResponse,
             'KalturaPartner': KalturaPartner,
             'KalturaPartnerListResponse': KalturaPartnerListResponse,
@@ -63469,8 +63480,6 @@ class KalturaCoreClient(KalturaClientPlugin):
             'KalturaSecurityPartnerConfig': KalturaSecurityPartnerConfig,
             'KalturaPersonalList': KalturaPersonalList,
             'KalturaPersonalListListResponse': KalturaPersonalListListResponse,
-            'KalturaAnnouncement': KalturaAnnouncement,
-            'KalturaAnnouncementListResponse': KalturaAnnouncementListResponse,
             'KalturaEngagementAdapterBase': KalturaEngagementAdapterBase,
             'KalturaEngagementAdapter': KalturaEngagementAdapter,
             'KalturaEngagementAdapterListResponse': KalturaEngagementAdapterListResponse,
@@ -63576,6 +63585,7 @@ class KalturaCoreClient(KalturaClientPlugin):
             'KalturaAssetCountListResponse': KalturaAssetCountListResponse,
             'KalturaAssetHistory': KalturaAssetHistory,
             'KalturaAssetHistoryListResponse': KalturaAssetHistoryListResponse,
+            'KalturaAssetListResponse': KalturaAssetListResponse,
             'KalturaAssetStatisticsListResponse': KalturaAssetStatisticsListResponse,
             'KalturaAssetStruct': KalturaAssetStruct,
             'KalturaAssetStructListResponse': KalturaAssetStructListResponse,
@@ -63591,14 +63601,7 @@ class KalturaCoreClient(KalturaClientPlugin):
             'KalturaImageTypeListResponse': KalturaImageTypeListResponse,
             'KalturaLabel': KalturaLabel,
             'KalturaLabelListResponse': KalturaLabelListResponse,
-            'KalturaLiveToVodInfoAsset': KalturaLiveToVodInfoAsset,
-            'KalturaMediaAsset': KalturaMediaAsset,
-            'KalturaLiveAsset': KalturaLiveAsset,
-            'KalturaLineupChannelAsset': KalturaLineupChannelAsset,
             'KalturaLineupChannelAssetListResponse': KalturaLineupChannelAssetListResponse,
-            'KalturaProgramAsset': KalturaProgramAsset,
-            'KalturaRecordingAsset': KalturaRecordingAsset,
-            'KalturaEpg': KalturaEpg,
             'KalturaMediaFileDynamicData': KalturaMediaFileDynamicData,
             'KalturaMediaFileDynamicDataListResponse': KalturaMediaFileDynamicDataListResponse,
             'KalturaMediaFileListResponse': KalturaMediaFileListResponse,
@@ -63689,9 +63692,6 @@ class KalturaCoreClient(KalturaClientPlugin):
             'KalturaGeoBlockRule': KalturaGeoBlockRule,
             'KalturaGeoBlockRuleListResponse': KalturaGeoBlockRuleListResponse,
             'KalturaEpgListResponse': KalturaEpgListResponse,
-            'KalturaTreeNaturalTextResponse': KalturaTreeNaturalTextResponse,
-            'KalturaAiRecommendationTreePartnerConfiguration': KalturaAiRecommendationTreePartnerConfiguration,
-            'KalturaFilterPager': KalturaFilterPager,
             'KalturaAppToken': KalturaAppToken,
             'KalturaSession': KalturaSession,
             'KalturaSessionInfo': KalturaSessionInfo,

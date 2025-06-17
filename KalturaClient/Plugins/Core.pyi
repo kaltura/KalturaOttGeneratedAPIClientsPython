@@ -5306,14 +5306,6 @@ class KalturaTreeAnswer(KalturaObjectBase):
     def getSpecialType(self) -> str: ...
     def setSpecialType(self, newSpecialType: str) -> None: ...
 
-class KalturaListResponse(KalturaObjectBase):
-    totalCount: int
-    def __init__(self,
-            totalCount: int = NotImplemented): ...
-
-    def getTotalCount(self) -> int: ...
-    def setTotalCount(self, newTotalCount: int) -> None: ...
-
 class KalturaMediaImage(KalturaObjectBase):
     ratio: str
     width: int
@@ -5353,14 +5345,6 @@ class KalturaMediaImage(KalturaObjectBase):
     def getImageTypeName(self) -> str: ...
     def setImageTypeName(self, newImageTypeName: str) -> None: ...
 
-class KalturaStringValueArray(KalturaObjectBase):
-    objects: List[KalturaStringValue]
-    def __init__(self,
-            objects: List[KalturaStringValue] = NotImplemented): ...
-
-    def getObjects(self) -> List[KalturaStringValue]: ...
-    def setObjects(self, newObjects: List[KalturaStringValue]) -> None: ...
-
 class KalturaAssetFile(KalturaObjectBase):
     url: str
     def __init__(self,
@@ -5368,6 +5352,14 @@ class KalturaAssetFile(KalturaObjectBase):
 
     def getUrl(self) -> str: ...
     def setUrl(self, newUrl: str) -> None: ...
+
+class KalturaStringValueArray(KalturaObjectBase):
+    objects: List[KalturaStringValue]
+    def __init__(self,
+            objects: List[KalturaStringValue] = NotImplemented): ...
+
+    def getObjects(self) -> List[KalturaStringValue]: ...
+    def setObjects(self, newObjects: List[KalturaStringValue]) -> None: ...
 
 class KalturaBusinessModuleDetails(KalturaObjectBase):
     businessModuleId: int
@@ -5624,26 +5616,17 @@ class KalturaAsset(KalturaObjectBase):
     def setExternalId(self, newExternalId: str) -> None: ...
     def getIndexStatus(self) -> KalturaAssetIndexStatus: ...
 
-class KalturaAssetListResponse(KalturaListResponse):
-    objects: List[KalturaAsset]
-    def __init__(self,
-            totalCount: int = NotImplemented,
-            objects: List[KalturaAsset] = NotImplemented): ...
-
-    def getObjects(self) -> List[KalturaAsset]: ...
-    def setObjects(self, newObjects: List[KalturaAsset]) -> None: ...
-
 class KalturaTreeRecommendations(KalturaObjectBase):
     title: str
-    assets: KalturaAssetListResponse
+    assets: List[KalturaAsset]
     def __init__(self,
             title: str = NotImplemented,
-            assets: KalturaAssetListResponse = NotImplemented): ...
+            assets: List[KalturaAsset] = NotImplemented): ...
 
     def getTitle(self) -> str: ...
     def setTitle(self, newTitle: str) -> None: ...
-    def getAssets(self) -> KalturaAssetListResponse: ...
-    def setAssets(self, newAssets: KalturaAssetListResponse) -> None: ...
+    def getAssets(self) -> List[KalturaAsset]: ...
+    def setAssets(self, newAssets: List[KalturaAsset]) -> None: ...
 
 class KalturaTreeNextNodeResponse(KalturaObjectBase):
     question: KalturaTreeQuestion
@@ -5660,6 +5643,637 @@ class KalturaTreeNextNodeResponse(KalturaObjectBase):
     def setAnswers(self, newAnswers: List[KalturaTreeAnswer]) -> None: ...
     def getRecommendations(self) -> KalturaTreeRecommendations: ...
     def setRecommendations(self, newRecommendations: KalturaTreeRecommendations) -> None: ...
+
+class KalturaLiveToVodInfoAsset(KalturaObjectBase):
+    linearAssetId: int
+    epgId: str
+    epgChannelId: int
+    crid: str
+    originalStartDate: int
+    originalEndDate: int
+    paddingBeforeProgramStarts: int
+    paddingAfterProgramEnds: int
+    def __init__(self,
+            linearAssetId: int = NotImplemented,
+            epgId: str = NotImplemented,
+            epgChannelId: int = NotImplemented,
+            crid: str = NotImplemented,
+            originalStartDate: int = NotImplemented,
+            originalEndDate: int = NotImplemented,
+            paddingBeforeProgramStarts: int = NotImplemented,
+            paddingAfterProgramEnds: int = NotImplemented): ...
+
+    def getLinearAssetId(self) -> int: ...
+    def setLinearAssetId(self, newLinearAssetId: int) -> None: ...
+    def getEpgId(self) -> str: ...
+    def setEpgId(self, newEpgId: str) -> None: ...
+    def getEpgChannelId(self) -> int: ...
+    def setEpgChannelId(self, newEpgChannelId: int) -> None: ...
+    def getCrid(self) -> str: ...
+    def setCrid(self, newCrid: str) -> None: ...
+    def getOriginalStartDate(self) -> int: ...
+    def setOriginalStartDate(self, newOriginalStartDate: int) -> None: ...
+    def getOriginalEndDate(self) -> int: ...
+    def setOriginalEndDate(self, newOriginalEndDate: int) -> None: ...
+    def getPaddingBeforeProgramStarts(self) -> int: ...
+    def setPaddingBeforeProgramStarts(self, newPaddingBeforeProgramStarts: int) -> None: ...
+    def getPaddingAfterProgramEnds(self) -> int: ...
+    def setPaddingAfterProgramEnds(self, newPaddingAfterProgramEnds: int) -> None: ...
+
+class KalturaMediaAsset(KalturaAsset):
+    externalIds: str
+    entryId: str
+    deviceRuleId: int
+    geoBlockRuleId: int
+    status: bool
+    inheritancePolicy: KalturaAssetInheritancePolicy
+    liveToVod: KalturaLiveToVodInfoAsset
+    def __init__(self,
+            id: int = NotImplemented,
+            type: int = NotImplemented,
+            name: str = NotImplemented,
+            multilingualName: List[KalturaTranslationToken] = NotImplemented,
+            description: str = NotImplemented,
+            multilingualDescription: List[KalturaTranslationToken] = NotImplemented,
+            images: List[KalturaMediaImage] = NotImplemented,
+            mediaFiles: List[KalturaMediaFile] = NotImplemented,
+            metas: map = NotImplemented,
+            tags: map = NotImplemented,
+            relatedEntities: map = NotImplemented,
+            startDate: int = NotImplemented,
+            endDate: int = NotImplemented,
+            createDate: int = NotImplemented,
+            updateDate: int = NotImplemented,
+            externalId: str = NotImplemented,
+            indexStatus: KalturaAssetIndexStatus = NotImplemented,
+            externalIds: str = NotImplemented,
+            entryId: str = NotImplemented,
+            deviceRuleId: int = NotImplemented,
+            geoBlockRuleId: int = NotImplemented,
+            status: bool = NotImplemented,
+            inheritancePolicy: KalturaAssetInheritancePolicy = NotImplemented,
+            liveToVod: KalturaLiveToVodInfoAsset = NotImplemented): ...
+
+    def getExternalIds(self) -> str: ...
+    def setExternalIds(self, newExternalIds: str) -> None: ...
+    def getEntryId(self) -> str: ...
+    def setEntryId(self, newEntryId: str) -> None: ...
+    def getDeviceRuleId(self) -> int: ...
+    def setDeviceRuleId(self, newDeviceRuleId: int) -> None: ...
+    def getGeoBlockRuleId(self) -> int: ...
+    def setGeoBlockRuleId(self, newGeoBlockRuleId: int) -> None: ...
+    def getStatus(self) -> bool: ...
+    def setStatus(self, newStatus: bool) -> None: ...
+    def getInheritancePolicy(self) -> KalturaAssetInheritancePolicy: ...
+    def setInheritancePolicy(self, newInheritancePolicy: KalturaAssetInheritancePolicy) -> None: ...
+    def getLiveToVod(self) -> KalturaLiveToVodInfoAsset: ...
+    def setLiveToVod(self, newLiveToVod: KalturaLiveToVodInfoAsset) -> None: ...
+
+class KalturaLiveAsset(KalturaMediaAsset):
+    enableCdvrState: KalturaTimeShiftedTvState
+    enableCatchUpState: KalturaTimeShiftedTvState
+    enableStartOverState: KalturaTimeShiftedTvState
+    bufferCatchUpSetting: int
+    paddingBeforeProgramStarts: int
+    paddingAfterProgramEnds: int
+    bufferTrickPlaySetting: int
+    enableRecordingPlaybackNonEntitledChannelState: KalturaTimeShiftedTvState
+    enableTrickPlayState: KalturaTimeShiftedTvState
+    externalEpgIngestId: str
+    externalCdvrId: str
+    enableCdvr: bool
+    enableCatchUp: bool
+    enableStartOver: bool
+    catchUpBuffer: int
+    trickPlayBuffer: int
+    enableRecordingPlaybackNonEntitledChannel: bool
+    enableTrickPlay: bool
+    channelType: KalturaLinearChannelType
+    def __init__(self,
+            id: int = NotImplemented,
+            type: int = NotImplemented,
+            name: str = NotImplemented,
+            multilingualName: List[KalturaTranslationToken] = NotImplemented,
+            description: str = NotImplemented,
+            multilingualDescription: List[KalturaTranslationToken] = NotImplemented,
+            images: List[KalturaMediaImage] = NotImplemented,
+            mediaFiles: List[KalturaMediaFile] = NotImplemented,
+            metas: map = NotImplemented,
+            tags: map = NotImplemented,
+            relatedEntities: map = NotImplemented,
+            startDate: int = NotImplemented,
+            endDate: int = NotImplemented,
+            createDate: int = NotImplemented,
+            updateDate: int = NotImplemented,
+            externalId: str = NotImplemented,
+            indexStatus: KalturaAssetIndexStatus = NotImplemented,
+            externalIds: str = NotImplemented,
+            entryId: str = NotImplemented,
+            deviceRuleId: int = NotImplemented,
+            geoBlockRuleId: int = NotImplemented,
+            status: bool = NotImplemented,
+            inheritancePolicy: KalturaAssetInheritancePolicy = NotImplemented,
+            liveToVod: KalturaLiveToVodInfoAsset = NotImplemented,
+            enableCdvrState: KalturaTimeShiftedTvState = NotImplemented,
+            enableCatchUpState: KalturaTimeShiftedTvState = NotImplemented,
+            enableStartOverState: KalturaTimeShiftedTvState = NotImplemented,
+            bufferCatchUpSetting: int = NotImplemented,
+            paddingBeforeProgramStarts: int = NotImplemented,
+            paddingAfterProgramEnds: int = NotImplemented,
+            bufferTrickPlaySetting: int = NotImplemented,
+            enableRecordingPlaybackNonEntitledChannelState: KalturaTimeShiftedTvState = NotImplemented,
+            enableTrickPlayState: KalturaTimeShiftedTvState = NotImplemented,
+            externalEpgIngestId: str = NotImplemented,
+            externalCdvrId: str = NotImplemented,
+            enableCdvr: bool = NotImplemented,
+            enableCatchUp: bool = NotImplemented,
+            enableStartOver: bool = NotImplemented,
+            catchUpBuffer: int = NotImplemented,
+            trickPlayBuffer: int = NotImplemented,
+            enableRecordingPlaybackNonEntitledChannel: bool = NotImplemented,
+            enableTrickPlay: bool = NotImplemented,
+            channelType: KalturaLinearChannelType = NotImplemented): ...
+
+    def getEnableCdvrState(self) -> KalturaTimeShiftedTvState: ...
+    def setEnableCdvrState(self, newEnableCdvrState: KalturaTimeShiftedTvState) -> None: ...
+    def getEnableCatchUpState(self) -> KalturaTimeShiftedTvState: ...
+    def setEnableCatchUpState(self, newEnableCatchUpState: KalturaTimeShiftedTvState) -> None: ...
+    def getEnableStartOverState(self) -> KalturaTimeShiftedTvState: ...
+    def setEnableStartOverState(self, newEnableStartOverState: KalturaTimeShiftedTvState) -> None: ...
+    def getBufferCatchUpSetting(self) -> int: ...
+    def setBufferCatchUpSetting(self, newBufferCatchUpSetting: int) -> None: ...
+    def getPaddingBeforeProgramStarts(self) -> int: ...
+    def setPaddingBeforeProgramStarts(self, newPaddingBeforeProgramStarts: int) -> None: ...
+    def getPaddingAfterProgramEnds(self) -> int: ...
+    def setPaddingAfterProgramEnds(self, newPaddingAfterProgramEnds: int) -> None: ...
+    def getBufferTrickPlaySetting(self) -> int: ...
+    def setBufferTrickPlaySetting(self, newBufferTrickPlaySetting: int) -> None: ...
+    def getEnableRecordingPlaybackNonEntitledChannelState(self) -> KalturaTimeShiftedTvState: ...
+    def setEnableRecordingPlaybackNonEntitledChannelState(self, newEnableRecordingPlaybackNonEntitledChannelState: KalturaTimeShiftedTvState) -> None: ...
+    def getEnableTrickPlayState(self) -> KalturaTimeShiftedTvState: ...
+    def setEnableTrickPlayState(self, newEnableTrickPlayState: KalturaTimeShiftedTvState) -> None: ...
+    def getExternalEpgIngestId(self) -> str: ...
+    def setExternalEpgIngestId(self, newExternalEpgIngestId: str) -> None: ...
+    def getExternalCdvrId(self) -> str: ...
+    def setExternalCdvrId(self, newExternalCdvrId: str) -> None: ...
+    def getEnableCdvr(self) -> bool: ...
+    def getEnableCatchUp(self) -> bool: ...
+    def getEnableStartOver(self) -> bool: ...
+    def getCatchUpBuffer(self) -> int: ...
+    def getTrickPlayBuffer(self) -> int: ...
+    def getEnableRecordingPlaybackNonEntitledChannel(self) -> bool: ...
+    def getEnableTrickPlay(self) -> bool: ...
+    def getChannelType(self) -> KalturaLinearChannelType: ...
+    def setChannelType(self, newChannelType: KalturaLinearChannelType) -> None: ...
+
+class KalturaLineupChannelAsset(KalturaLiveAsset):
+    lcn: int
+    def __init__(self,
+            id: int = NotImplemented,
+            type: int = NotImplemented,
+            name: str = NotImplemented,
+            multilingualName: List[KalturaTranslationToken] = NotImplemented,
+            description: str = NotImplemented,
+            multilingualDescription: List[KalturaTranslationToken] = NotImplemented,
+            images: List[KalturaMediaImage] = NotImplemented,
+            mediaFiles: List[KalturaMediaFile] = NotImplemented,
+            metas: map = NotImplemented,
+            tags: map = NotImplemented,
+            relatedEntities: map = NotImplemented,
+            startDate: int = NotImplemented,
+            endDate: int = NotImplemented,
+            createDate: int = NotImplemented,
+            updateDate: int = NotImplemented,
+            externalId: str = NotImplemented,
+            indexStatus: KalturaAssetIndexStatus = NotImplemented,
+            externalIds: str = NotImplemented,
+            entryId: str = NotImplemented,
+            deviceRuleId: int = NotImplemented,
+            geoBlockRuleId: int = NotImplemented,
+            status: bool = NotImplemented,
+            inheritancePolicy: KalturaAssetInheritancePolicy = NotImplemented,
+            liveToVod: KalturaLiveToVodInfoAsset = NotImplemented,
+            enableCdvrState: KalturaTimeShiftedTvState = NotImplemented,
+            enableCatchUpState: KalturaTimeShiftedTvState = NotImplemented,
+            enableStartOverState: KalturaTimeShiftedTvState = NotImplemented,
+            bufferCatchUpSetting: int = NotImplemented,
+            paddingBeforeProgramStarts: int = NotImplemented,
+            paddingAfterProgramEnds: int = NotImplemented,
+            bufferTrickPlaySetting: int = NotImplemented,
+            enableRecordingPlaybackNonEntitledChannelState: KalturaTimeShiftedTvState = NotImplemented,
+            enableTrickPlayState: KalturaTimeShiftedTvState = NotImplemented,
+            externalEpgIngestId: str = NotImplemented,
+            externalCdvrId: str = NotImplemented,
+            enableCdvr: bool = NotImplemented,
+            enableCatchUp: bool = NotImplemented,
+            enableStartOver: bool = NotImplemented,
+            catchUpBuffer: int = NotImplemented,
+            trickPlayBuffer: int = NotImplemented,
+            enableRecordingPlaybackNonEntitledChannel: bool = NotImplemented,
+            enableTrickPlay: bool = NotImplemented,
+            channelType: KalturaLinearChannelType = NotImplemented,
+            lcn: int = NotImplemented): ...
+
+    def getLcn(self) -> int: ...
+    def setLcn(self, newLcn: int) -> None: ...
+
+class KalturaProgramAsset(KalturaAsset):
+    epgChannelId: int
+    epgId: str
+    relatedMediaId: int
+    crid: str
+    linearAssetId: int
+    enableCdvr: bool
+    enableCatchUp: bool
+    enableStartOver: bool
+    enableTrickPlay: bool
+    externalOfferIds: str
+    def __init__(self,
+            id: int = NotImplemented,
+            type: int = NotImplemented,
+            name: str = NotImplemented,
+            multilingualName: List[KalturaTranslationToken] = NotImplemented,
+            description: str = NotImplemented,
+            multilingualDescription: List[KalturaTranslationToken] = NotImplemented,
+            images: List[KalturaMediaImage] = NotImplemented,
+            mediaFiles: List[KalturaMediaFile] = NotImplemented,
+            metas: map = NotImplemented,
+            tags: map = NotImplemented,
+            relatedEntities: map = NotImplemented,
+            startDate: int = NotImplemented,
+            endDate: int = NotImplemented,
+            createDate: int = NotImplemented,
+            updateDate: int = NotImplemented,
+            externalId: str = NotImplemented,
+            indexStatus: KalturaAssetIndexStatus = NotImplemented,
+            epgChannelId: int = NotImplemented,
+            epgId: str = NotImplemented,
+            relatedMediaId: int = NotImplemented,
+            crid: str = NotImplemented,
+            linearAssetId: int = NotImplemented,
+            enableCdvr: bool = NotImplemented,
+            enableCatchUp: bool = NotImplemented,
+            enableStartOver: bool = NotImplemented,
+            enableTrickPlay: bool = NotImplemented,
+            externalOfferIds: str = NotImplemented): ...
+
+    def getEpgChannelId(self) -> int: ...
+    def getEpgId(self) -> str: ...
+    def getRelatedMediaId(self) -> int: ...
+    def setRelatedMediaId(self, newRelatedMediaId: int) -> None: ...
+    def getCrid(self) -> str: ...
+    def setCrid(self, newCrid: str) -> None: ...
+    def getLinearAssetId(self) -> int: ...
+    def setLinearAssetId(self, newLinearAssetId: int) -> None: ...
+    def getEnableCdvr(self) -> bool: ...
+    def setEnableCdvr(self, newEnableCdvr: bool) -> None: ...
+    def getEnableCatchUp(self) -> bool: ...
+    def setEnableCatchUp(self, newEnableCatchUp: bool) -> None: ...
+    def getEnableStartOver(self) -> bool: ...
+    def setEnableStartOver(self, newEnableStartOver: bool) -> None: ...
+    def getEnableTrickPlay(self) -> bool: ...
+    def setEnableTrickPlay(self, newEnableTrickPlay: bool) -> None: ...
+    def getExternalOfferIds(self) -> str: ...
+    def setExternalOfferIds(self, newExternalOfferIds: str) -> None: ...
+
+class KalturaRecordingAsset(KalturaProgramAsset):
+    recordingId: str
+    recordingType: KalturaRecordingType
+    viewableUntilDate: int
+    multiRecord: bool
+    def __init__(self,
+            id: int = NotImplemented,
+            type: int = NotImplemented,
+            name: str = NotImplemented,
+            multilingualName: List[KalturaTranslationToken] = NotImplemented,
+            description: str = NotImplemented,
+            multilingualDescription: List[KalturaTranslationToken] = NotImplemented,
+            images: List[KalturaMediaImage] = NotImplemented,
+            mediaFiles: List[KalturaMediaFile] = NotImplemented,
+            metas: map = NotImplemented,
+            tags: map = NotImplemented,
+            relatedEntities: map = NotImplemented,
+            startDate: int = NotImplemented,
+            endDate: int = NotImplemented,
+            createDate: int = NotImplemented,
+            updateDate: int = NotImplemented,
+            externalId: str = NotImplemented,
+            indexStatus: KalturaAssetIndexStatus = NotImplemented,
+            epgChannelId: int = NotImplemented,
+            epgId: str = NotImplemented,
+            relatedMediaId: int = NotImplemented,
+            crid: str = NotImplemented,
+            linearAssetId: int = NotImplemented,
+            enableCdvr: bool = NotImplemented,
+            enableCatchUp: bool = NotImplemented,
+            enableStartOver: bool = NotImplemented,
+            enableTrickPlay: bool = NotImplemented,
+            externalOfferIds: str = NotImplemented,
+            recordingId: str = NotImplemented,
+            recordingType: KalturaRecordingType = NotImplemented,
+            viewableUntilDate: int = NotImplemented,
+            multiRecord: bool = NotImplemented): ...
+
+    def getRecordingId(self) -> str: ...
+    def setRecordingId(self, newRecordingId: str) -> None: ...
+    def getRecordingType(self) -> KalturaRecordingType: ...
+    def setRecordingType(self, newRecordingType: KalturaRecordingType) -> None: ...
+    def getViewableUntilDate(self) -> int: ...
+    def setViewableUntilDate(self, newViewableUntilDate: int) -> None: ...
+    def getMultiRecord(self) -> bool: ...
+    def setMultiRecord(self, newMultiRecord: bool) -> None: ...
+
+class KalturaEpg(KalturaProgramAsset):
+    def __init__(self,
+            id: int = NotImplemented,
+            type: int = NotImplemented,
+            name: str = NotImplemented,
+            multilingualName: List[KalturaTranslationToken] = NotImplemented,
+            description: str = NotImplemented,
+            multilingualDescription: List[KalturaTranslationToken] = NotImplemented,
+            images: List[KalturaMediaImage] = NotImplemented,
+            mediaFiles: List[KalturaMediaFile] = NotImplemented,
+            metas: map = NotImplemented,
+            tags: map = NotImplemented,
+            relatedEntities: map = NotImplemented,
+            startDate: int = NotImplemented,
+            endDate: int = NotImplemented,
+            createDate: int = NotImplemented,
+            updateDate: int = NotImplemented,
+            externalId: str = NotImplemented,
+            indexStatus: KalturaAssetIndexStatus = NotImplemented,
+            epgChannelId: int = NotImplemented,
+            epgId: str = NotImplemented,
+            relatedMediaId: int = NotImplemented,
+            crid: str = NotImplemented,
+            linearAssetId: int = NotImplemented,
+            enableCdvr: bool = NotImplemented,
+            enableCatchUp: bool = NotImplemented,
+            enableStartOver: bool = NotImplemented,
+            enableTrickPlay: bool = NotImplemented,
+            externalOfferIds: str = NotImplemented): ...
+        pass
+
+class KalturaPluginData(KalturaObjectBase):
+    def __init__(self): ...
+        pass
+
+class KalturaDrmPlaybackPluginData(KalturaPluginData):
+    scheme: KalturaDrmSchemeName
+    licenseURL: str
+    dynamicData: map
+    def __init__(self,
+            scheme: KalturaDrmSchemeName = NotImplemented,
+            licenseURL: str = NotImplemented,
+            dynamicData: map = NotImplemented): ...
+
+    def getScheme(self) -> KalturaDrmSchemeName: ...
+    def setScheme(self, newScheme: KalturaDrmSchemeName) -> None: ...
+    def getLicenseURL(self) -> str: ...
+    def setLicenseURL(self, newLicenseURL: str) -> None: ...
+    def getDynamicData(self) -> map: ...
+    def setDynamicData(self, newDynamicData: map) -> None: ...
+
+class KalturaPlaybackSource(KalturaMediaFile):
+    format: str
+    protocols: str
+    drm: List[KalturaDrmPlaybackPluginData]
+    isTokenized: bool
+    businessModuleId: int
+    businessModuleType: KalturaTransactionType
+    def __init__(self,
+            url: str = NotImplemented,
+            assetId: int = NotImplemented,
+            id: int = NotImplemented,
+            type: str = NotImplemented,
+            typeId: int = NotImplemented,
+            altUrl: str = NotImplemented,
+            duration: int = NotImplemented,
+            externalId: str = NotImplemented,
+            altExternalId: str = NotImplemented,
+            fileSize: int = NotImplemented,
+            additionalData: str = NotImplemented,
+            altStreamingCode: str = NotImplemented,
+            alternativeCdnAdapaterProfileId: int = NotImplemented,
+            endDate: int = NotImplemented,
+            startDate: int = NotImplemented,
+            externalStoreId: str = NotImplemented,
+            isDefaultLanguage: bool = NotImplemented,
+            language: str = NotImplemented,
+            orderNum: int = NotImplemented,
+            outputProtecationLevel: str = NotImplemented,
+            cdnAdapaterProfileId: int = NotImplemented,
+            status: bool = NotImplemented,
+            catalogEndDate: int = NotImplemented,
+            opl: str = NotImplemented,
+            businessModuleDetails: KalturaBusinessModuleDetails = NotImplemented,
+            labels: str = NotImplemented,
+            dynamicData: map = NotImplemented,
+            format: str = NotImplemented,
+            protocols: str = NotImplemented,
+            drm: List[KalturaDrmPlaybackPluginData] = NotImplemented,
+            isTokenized: bool = NotImplemented,
+            businessModuleId: int = NotImplemented,
+            businessModuleType: KalturaTransactionType = NotImplemented): ...
+
+    def getFormat(self) -> str: ...
+    def setFormat(self, newFormat: str) -> None: ...
+    def getProtocols(self) -> str: ...
+    def setProtocols(self, newProtocols: str) -> None: ...
+    def getDrm(self) -> List[KalturaDrmPlaybackPluginData]: ...
+    def setDrm(self, newDrm: List[KalturaDrmPlaybackPluginData]) -> None: ...
+    def getIsTokenized(self) -> bool: ...
+    def setIsTokenized(self, newIsTokenized: bool) -> None: ...
+    def getBusinessModuleId(self) -> int: ...
+    def getBusinessModuleType(self) -> KalturaTransactionType: ...
+
+class KalturaCustomDrmPlaybackPluginData(KalturaDrmPlaybackPluginData):
+    data: str
+    def __init__(self,
+            scheme: KalturaDrmSchemeName = NotImplemented,
+            licenseURL: str = NotImplemented,
+            dynamicData: map = NotImplemented,
+            data: str = NotImplemented): ...
+
+    def getData(self) -> str: ...
+    def setData(self, newData: str) -> None: ...
+
+class KalturaFairPlayPlaybackPluginData(KalturaDrmPlaybackPluginData):
+    certificate: str
+    def __init__(self,
+            scheme: KalturaDrmSchemeName = NotImplemented,
+            licenseURL: str = NotImplemented,
+            dynamicData: map = NotImplemented,
+            certificate: str = NotImplemented): ...
+
+    def getCertificate(self) -> str: ...
+    def setCertificate(self, newCertificate: str) -> None: ...
+
+class KalturaDiscoveryMediaFile(KalturaMediaFile):
+    isPlaybackable: bool
+    def __init__(self,
+            url: str = NotImplemented,
+            assetId: int = NotImplemented,
+            id: int = NotImplemented,
+            type: str = NotImplemented,
+            typeId: int = NotImplemented,
+            altUrl: str = NotImplemented,
+            duration: int = NotImplemented,
+            externalId: str = NotImplemented,
+            altExternalId: str = NotImplemented,
+            fileSize: int = NotImplemented,
+            additionalData: str = NotImplemented,
+            altStreamingCode: str = NotImplemented,
+            alternativeCdnAdapaterProfileId: int = NotImplemented,
+            endDate: int = NotImplemented,
+            startDate: int = NotImplemented,
+            externalStoreId: str = NotImplemented,
+            isDefaultLanguage: bool = NotImplemented,
+            language: str = NotImplemented,
+            orderNum: int = NotImplemented,
+            outputProtecationLevel: str = NotImplemented,
+            cdnAdapaterProfileId: int = NotImplemented,
+            status: bool = NotImplemented,
+            catalogEndDate: int = NotImplemented,
+            opl: str = NotImplemented,
+            businessModuleDetails: KalturaBusinessModuleDetails = NotImplemented,
+            labels: str = NotImplemented,
+            dynamicData: map = NotImplemented,
+            isPlaybackable: bool = NotImplemented): ...
+
+    def getIsPlaybackable(self) -> bool: ...
+    def setIsPlaybackable(self, newIsPlaybackable: bool) -> None: ...
+
+class KalturaTreeNaturalTextResponse(KalturaObjectBase):
+    recommendations: KalturaTreeRecommendations
+    def __init__(self,
+            recommendations: KalturaTreeRecommendations = NotImplemented): ...
+
+    def getRecommendations(self) -> KalturaTreeRecommendations: ...
+    def setRecommendations(self, newRecommendations: KalturaTreeRecommendations) -> None: ...
+
+class KalturaAiRecommendationTreePartnerConfiguration(KalturaObjectBase):
+    activeMetadataTypes: map
+    topLevelQuestions: int
+    answersPerQuestion: int
+    levels: int
+    numOfRecommendedAssets: int
+    treeGenerationFrequency: str
+    activeTreeId: str
+    def __init__(self,
+            activeMetadataTypes: map = NotImplemented,
+            topLevelQuestions: int = NotImplemented,
+            answersPerQuestion: int = NotImplemented,
+            levels: int = NotImplemented,
+            numOfRecommendedAssets: int = NotImplemented,
+            treeGenerationFrequency: str = NotImplemented,
+            activeTreeId: str = NotImplemented): ...
+
+    def getActiveMetadataTypes(self) -> map: ...
+    def setActiveMetadataTypes(self, newActiveMetadataTypes: map) -> None: ...
+    def getTopLevelQuestions(self) -> int: ...
+    def setTopLevelQuestions(self, newTopLevelQuestions: int) -> None: ...
+    def getAnswersPerQuestion(self) -> int: ...
+    def setAnswersPerQuestion(self, newAnswersPerQuestion: int) -> None: ...
+    def getLevels(self) -> int: ...
+    def setLevels(self, newLevels: int) -> None: ...
+    def getNumOfRecommendedAssets(self) -> int: ...
+    def setNumOfRecommendedAssets(self, newNumOfRecommendedAssets: int) -> None: ...
+    def getTreeGenerationFrequency(self) -> str: ...
+    def setTreeGenerationFrequency(self, newTreeGenerationFrequency: str) -> None: ...
+    def getActiveTreeId(self) -> str: ...
+    def setActiveTreeId(self, newActiveTreeId: str) -> None: ...
+
+class KalturaAnnouncement(KalturaObjectBase):
+    name: str
+    message: str
+    enabled: bool
+    startTime: int
+    timezone: str
+    status: KalturaAnnouncementStatus
+    recipients: KalturaAnnouncementRecipientsType
+    id: int
+    imageUrl: str
+    includeMail: bool
+    mailTemplate: str
+    mailSubject: str
+    includeSms: bool
+    includeIot: bool
+    includeUserInbox: bool
+    def __init__(self,
+            name: str = NotImplemented,
+            message: str = NotImplemented,
+            enabled: bool = NotImplemented,
+            startTime: int = NotImplemented,
+            timezone: str = NotImplemented,
+            status: KalturaAnnouncementStatus = NotImplemented,
+            recipients: KalturaAnnouncementRecipientsType = NotImplemented,
+            id: int = NotImplemented,
+            imageUrl: str = NotImplemented,
+            includeMail: bool = NotImplemented,
+            mailTemplate: str = NotImplemented,
+            mailSubject: str = NotImplemented,
+            includeSms: bool = NotImplemented,
+            includeIot: bool = NotImplemented,
+            includeUserInbox: bool = NotImplemented): ...
+
+    def getName(self) -> str: ...
+    def setName(self, newName: str) -> None: ...
+    def getMessage(self) -> str: ...
+    def setMessage(self, newMessage: str) -> None: ...
+    def getEnabled(self) -> bool: ...
+    def setEnabled(self, newEnabled: bool) -> None: ...
+    def getStartTime(self) -> int: ...
+    def setStartTime(self, newStartTime: int) -> None: ...
+    def getTimezone(self) -> str: ...
+    def setTimezone(self, newTimezone: str) -> None: ...
+    def getStatus(self) -> KalturaAnnouncementStatus: ...
+    def getRecipients(self) -> KalturaAnnouncementRecipientsType: ...
+    def setRecipients(self, newRecipients: KalturaAnnouncementRecipientsType) -> None: ...
+    def getId(self) -> int: ...
+    def getImageUrl(self) -> str: ...
+    def setImageUrl(self, newImageUrl: str) -> None: ...
+    def getIncludeMail(self) -> bool: ...
+    def setIncludeMail(self, newIncludeMail: bool) -> None: ...
+    def getMailTemplate(self) -> str: ...
+    def setMailTemplate(self, newMailTemplate: str) -> None: ...
+    def getMailSubject(self) -> str: ...
+    def setMailSubject(self, newMailSubject: str) -> None: ...
+    def getIncludeSms(self) -> bool: ...
+    def setIncludeSms(self, newIncludeSms: bool) -> None: ...
+    def getIncludeIot(self) -> bool: ...
+    def setIncludeIot(self, newIncludeIot: bool) -> None: ...
+    def getIncludeUserInbox(self) -> bool: ...
+    def setIncludeUserInbox(self, newIncludeUserInbox: bool) -> None: ...
+
+class KalturaFilterPager(KalturaObjectBase):
+    pageSize: int
+    pageIndex: int
+    def __init__(self,
+            pageSize: int = NotImplemented,
+            pageIndex: int = NotImplemented): ...
+
+    def getPageSize(self) -> int: ...
+    def setPageSize(self, newPageSize: int) -> None: ...
+    def getPageIndex(self) -> int: ...
+    def setPageIndex(self, newPageIndex: int) -> None: ...
+
+class KalturaListResponse(KalturaObjectBase):
+    totalCount: int
+    def __init__(self,
+            totalCount: int = NotImplemented): ...
+
+    def getTotalCount(self) -> int: ...
+    def setTotalCount(self, newTotalCount: int) -> None: ...
+
+class KalturaAnnouncementListResponse(KalturaListResponse):
+    objects: List[KalturaAnnouncement]
+    def __init__(self,
+            totalCount: int = NotImplemented,
+            objects: List[KalturaAnnouncement] = NotImplemented): ...
+
+    def getObjects(self) -> List[KalturaAnnouncement]: ...
+    def setObjects(self, newObjects: List[KalturaAnnouncement]) -> None: ...
 
 class KalturaOTTObjectSupportNullable(KalturaObjectBase):
     def __init__(self): ...
@@ -6625,37 +7239,6 @@ class KalturaUdidDynamicList(KalturaDynamicList):
             name: str = NotImplemented): ...
         pass
 
-class KalturaPluginData(KalturaObjectBase):
-    def __init__(self): ...
-        pass
-
-class KalturaDrmPlaybackPluginData(KalturaPluginData):
-    scheme: KalturaDrmSchemeName
-    licenseURL: str
-    dynamicData: map
-    def __init__(self,
-            scheme: KalturaDrmSchemeName = NotImplemented,
-            licenseURL: str = NotImplemented,
-            dynamicData: map = NotImplemented): ...
-
-    def getScheme(self) -> KalturaDrmSchemeName: ...
-    def setScheme(self, newScheme: KalturaDrmSchemeName) -> None: ...
-    def getLicenseURL(self) -> str: ...
-    def setLicenseURL(self, newLicenseURL: str) -> None: ...
-    def getDynamicData(self) -> map: ...
-    def setDynamicData(self, newDynamicData: map) -> None: ...
-
-class KalturaCustomDrmPlaybackPluginData(KalturaDrmPlaybackPluginData):
-    data: str
-    def __init__(self,
-            scheme: KalturaDrmSchemeName = NotImplemented,
-            licenseURL: str = NotImplemented,
-            dynamicData: map = NotImplemented,
-            data: str = NotImplemented): ...
-
-    def getData(self) -> str: ...
-    def setData(self, newData: str) -> None: ...
-
 class KalturaHouseholdDevice(KalturaOTTObjectSupportNullable):
     householdId: int
     udid: str
@@ -6714,17 +7297,6 @@ class KalturaHouseholdDevice(KalturaOTTObjectSupportNullable):
     def setManufacturer(self, newManufacturer: str) -> None: ...
     def getManufacturerId(self) -> int: ...
     def getLastActivityTime(self) -> int: ...
-
-class KalturaFairPlayPlaybackPluginData(KalturaDrmPlaybackPluginData):
-    certificate: str
-    def __init__(self,
-            scheme: KalturaDrmSchemeName = NotImplemented,
-            licenseURL: str = NotImplemented,
-            dynamicData: map = NotImplemented,
-            certificate: str = NotImplemented): ...
-
-    def getCertificate(self) -> str: ...
-    def setCertificate(self, newCertificate: str) -> None: ...
 
 class KalturaHouseholdCoupon(KalturaOTTObjectSupportNullable):
     code: str
@@ -8027,94 +8599,6 @@ class KalturaFavoriteListResponse(KalturaListResponse):
 
     def getObjects(self) -> List[KalturaFavorite]: ...
     def setObjects(self, newObjects: List[KalturaFavorite]) -> None: ...
-
-class KalturaPlaybackSource(KalturaMediaFile):
-    format: str
-    protocols: str
-    drm: List[KalturaDrmPlaybackPluginData]
-    isTokenized: bool
-    businessModuleId: int
-    businessModuleType: KalturaTransactionType
-    def __init__(self,
-            url: str = NotImplemented,
-            assetId: int = NotImplemented,
-            id: int = NotImplemented,
-            type: str = NotImplemented,
-            typeId: int = NotImplemented,
-            altUrl: str = NotImplemented,
-            duration: int = NotImplemented,
-            externalId: str = NotImplemented,
-            altExternalId: str = NotImplemented,
-            fileSize: int = NotImplemented,
-            additionalData: str = NotImplemented,
-            altStreamingCode: str = NotImplemented,
-            alternativeCdnAdapaterProfileId: int = NotImplemented,
-            endDate: int = NotImplemented,
-            startDate: int = NotImplemented,
-            externalStoreId: str = NotImplemented,
-            isDefaultLanguage: bool = NotImplemented,
-            language: str = NotImplemented,
-            orderNum: int = NotImplemented,
-            outputProtecationLevel: str = NotImplemented,
-            cdnAdapaterProfileId: int = NotImplemented,
-            status: bool = NotImplemented,
-            catalogEndDate: int = NotImplemented,
-            opl: str = NotImplemented,
-            businessModuleDetails: KalturaBusinessModuleDetails = NotImplemented,
-            labels: str = NotImplemented,
-            dynamicData: map = NotImplemented,
-            format: str = NotImplemented,
-            protocols: str = NotImplemented,
-            drm: List[KalturaDrmPlaybackPluginData] = NotImplemented,
-            isTokenized: bool = NotImplemented,
-            businessModuleId: int = NotImplemented,
-            businessModuleType: KalturaTransactionType = NotImplemented): ...
-
-    def getFormat(self) -> str: ...
-    def setFormat(self, newFormat: str) -> None: ...
-    def getProtocols(self) -> str: ...
-    def setProtocols(self, newProtocols: str) -> None: ...
-    def getDrm(self) -> List[KalturaDrmPlaybackPluginData]: ...
-    def setDrm(self, newDrm: List[KalturaDrmPlaybackPluginData]) -> None: ...
-    def getIsTokenized(self) -> bool: ...
-    def setIsTokenized(self, newIsTokenized: bool) -> None: ...
-    def getBusinessModuleId(self) -> int: ...
-    def getBusinessModuleType(self) -> KalturaTransactionType: ...
-
-class KalturaDiscoveryMediaFile(KalturaMediaFile):
-    isPlaybackable: bool
-    def __init__(self,
-            url: str = NotImplemented,
-            assetId: int = NotImplemented,
-            id: int = NotImplemented,
-            type: str = NotImplemented,
-            typeId: int = NotImplemented,
-            altUrl: str = NotImplemented,
-            duration: int = NotImplemented,
-            externalId: str = NotImplemented,
-            altExternalId: str = NotImplemented,
-            fileSize: int = NotImplemented,
-            additionalData: str = NotImplemented,
-            altStreamingCode: str = NotImplemented,
-            alternativeCdnAdapaterProfileId: int = NotImplemented,
-            endDate: int = NotImplemented,
-            startDate: int = NotImplemented,
-            externalStoreId: str = NotImplemented,
-            isDefaultLanguage: bool = NotImplemented,
-            language: str = NotImplemented,
-            orderNum: int = NotImplemented,
-            outputProtecationLevel: str = NotImplemented,
-            cdnAdapaterProfileId: int = NotImplemented,
-            status: bool = NotImplemented,
-            catalogEndDate: int = NotImplemented,
-            opl: str = NotImplemented,
-            businessModuleDetails: KalturaBusinessModuleDetails = NotImplemented,
-            labels: str = NotImplemented,
-            dynamicData: map = NotImplemented,
-            isPlaybackable: bool = NotImplemented): ...
-
-    def getIsPlaybackable(self) -> bool: ...
-    def setIsPlaybackable(self, newIsPlaybackable: bool) -> None: ...
 
 class KalturaOTTUserListResponse(KalturaListResponse):
     objects: List[KalturaOTTUser]
@@ -10040,77 +10524,6 @@ class KalturaPersonalListListResponse(KalturaListResponse):
     def getObjects(self) -> List[KalturaPersonalList]: ...
     def setObjects(self, newObjects: List[KalturaPersonalList]) -> None: ...
 
-class KalturaAnnouncement(KalturaObjectBase):
-    name: str
-    message: str
-    enabled: bool
-    startTime: int
-    timezone: str
-    status: KalturaAnnouncementStatus
-    recipients: KalturaAnnouncementRecipientsType
-    id: int
-    imageUrl: str
-    includeMail: bool
-    mailTemplate: str
-    mailSubject: str
-    includeSms: bool
-    includeIot: bool
-    includeUserInbox: bool
-    def __init__(self,
-            name: str = NotImplemented,
-            message: str = NotImplemented,
-            enabled: bool = NotImplemented,
-            startTime: int = NotImplemented,
-            timezone: str = NotImplemented,
-            status: KalturaAnnouncementStatus = NotImplemented,
-            recipients: KalturaAnnouncementRecipientsType = NotImplemented,
-            id: int = NotImplemented,
-            imageUrl: str = NotImplemented,
-            includeMail: bool = NotImplemented,
-            mailTemplate: str = NotImplemented,
-            mailSubject: str = NotImplemented,
-            includeSms: bool = NotImplemented,
-            includeIot: bool = NotImplemented,
-            includeUserInbox: bool = NotImplemented): ...
-
-    def getName(self) -> str: ...
-    def setName(self, newName: str) -> None: ...
-    def getMessage(self) -> str: ...
-    def setMessage(self, newMessage: str) -> None: ...
-    def getEnabled(self) -> bool: ...
-    def setEnabled(self, newEnabled: bool) -> None: ...
-    def getStartTime(self) -> int: ...
-    def setStartTime(self, newStartTime: int) -> None: ...
-    def getTimezone(self) -> str: ...
-    def setTimezone(self, newTimezone: str) -> None: ...
-    def getStatus(self) -> KalturaAnnouncementStatus: ...
-    def getRecipients(self) -> KalturaAnnouncementRecipientsType: ...
-    def setRecipients(self, newRecipients: KalturaAnnouncementRecipientsType) -> None: ...
-    def getId(self) -> int: ...
-    def getImageUrl(self) -> str: ...
-    def setImageUrl(self, newImageUrl: str) -> None: ...
-    def getIncludeMail(self) -> bool: ...
-    def setIncludeMail(self, newIncludeMail: bool) -> None: ...
-    def getMailTemplate(self) -> str: ...
-    def setMailTemplate(self, newMailTemplate: str) -> None: ...
-    def getMailSubject(self) -> str: ...
-    def setMailSubject(self, newMailSubject: str) -> None: ...
-    def getIncludeSms(self) -> bool: ...
-    def setIncludeSms(self, newIncludeSms: bool) -> None: ...
-    def getIncludeIot(self) -> bool: ...
-    def setIncludeIot(self, newIncludeIot: bool) -> None: ...
-    def getIncludeUserInbox(self) -> bool: ...
-    def setIncludeUserInbox(self, newIncludeUserInbox: bool) -> None: ...
-
-class KalturaAnnouncementListResponse(KalturaListResponse):
-    objects: List[KalturaAnnouncement]
-    def __init__(self,
-            totalCount: int = NotImplemented,
-            objects: List[KalturaAnnouncement] = NotImplemented): ...
-
-    def getObjects(self) -> List[KalturaAnnouncement]: ...
-    def setObjects(self, newObjects: List[KalturaAnnouncement]) -> None: ...
-
 class KalturaEngagementAdapterBase(KalturaObjectBase):
     id: int
     name: str
@@ -11878,6 +12291,15 @@ class KalturaAssetHistoryListResponse(KalturaListResponse):
     def getObjects(self) -> List[KalturaAssetHistory]: ...
     def setObjects(self, newObjects: List[KalturaAssetHistory]) -> None: ...
 
+class KalturaAssetListResponse(KalturaListResponse):
+    objects: List[KalturaAsset]
+    def __init__(self,
+            totalCount: int = NotImplemented,
+            objects: List[KalturaAsset] = NotImplemented): ...
+
+    def getObjects(self) -> List[KalturaAsset]: ...
+    def setObjects(self, newObjects: List[KalturaAsset]) -> None: ...
+
 class KalturaAssetStatisticsListResponse(KalturaListResponse):
     objects: List[KalturaAssetStatistics]
     def __init__(self,
@@ -12148,239 +12570,6 @@ class KalturaLabelListResponse(KalturaListResponse):
     def getObjects(self) -> List[KalturaLabel]: ...
     def setObjects(self, newObjects: List[KalturaLabel]) -> None: ...
 
-class KalturaLiveToVodInfoAsset(KalturaObjectBase):
-    linearAssetId: int
-    epgId: str
-    epgChannelId: int
-    crid: str
-    originalStartDate: int
-    originalEndDate: int
-    paddingBeforeProgramStarts: int
-    paddingAfterProgramEnds: int
-    def __init__(self,
-            linearAssetId: int = NotImplemented,
-            epgId: str = NotImplemented,
-            epgChannelId: int = NotImplemented,
-            crid: str = NotImplemented,
-            originalStartDate: int = NotImplemented,
-            originalEndDate: int = NotImplemented,
-            paddingBeforeProgramStarts: int = NotImplemented,
-            paddingAfterProgramEnds: int = NotImplemented): ...
-
-    def getLinearAssetId(self) -> int: ...
-    def setLinearAssetId(self, newLinearAssetId: int) -> None: ...
-    def getEpgId(self) -> str: ...
-    def setEpgId(self, newEpgId: str) -> None: ...
-    def getEpgChannelId(self) -> int: ...
-    def setEpgChannelId(self, newEpgChannelId: int) -> None: ...
-    def getCrid(self) -> str: ...
-    def setCrid(self, newCrid: str) -> None: ...
-    def getOriginalStartDate(self) -> int: ...
-    def setOriginalStartDate(self, newOriginalStartDate: int) -> None: ...
-    def getOriginalEndDate(self) -> int: ...
-    def setOriginalEndDate(self, newOriginalEndDate: int) -> None: ...
-    def getPaddingBeforeProgramStarts(self) -> int: ...
-    def setPaddingBeforeProgramStarts(self, newPaddingBeforeProgramStarts: int) -> None: ...
-    def getPaddingAfterProgramEnds(self) -> int: ...
-    def setPaddingAfterProgramEnds(self, newPaddingAfterProgramEnds: int) -> None: ...
-
-class KalturaMediaAsset(KalturaAsset):
-    externalIds: str
-    entryId: str
-    deviceRuleId: int
-    geoBlockRuleId: int
-    status: bool
-    inheritancePolicy: KalturaAssetInheritancePolicy
-    liveToVod: KalturaLiveToVodInfoAsset
-    def __init__(self,
-            id: int = NotImplemented,
-            type: int = NotImplemented,
-            name: str = NotImplemented,
-            multilingualName: List[KalturaTranslationToken] = NotImplemented,
-            description: str = NotImplemented,
-            multilingualDescription: List[KalturaTranslationToken] = NotImplemented,
-            images: List[KalturaMediaImage] = NotImplemented,
-            mediaFiles: List[KalturaMediaFile] = NotImplemented,
-            metas: map = NotImplemented,
-            tags: map = NotImplemented,
-            relatedEntities: map = NotImplemented,
-            startDate: int = NotImplemented,
-            endDate: int = NotImplemented,
-            createDate: int = NotImplemented,
-            updateDate: int = NotImplemented,
-            externalId: str = NotImplemented,
-            indexStatus: KalturaAssetIndexStatus = NotImplemented,
-            externalIds: str = NotImplemented,
-            entryId: str = NotImplemented,
-            deviceRuleId: int = NotImplemented,
-            geoBlockRuleId: int = NotImplemented,
-            status: bool = NotImplemented,
-            inheritancePolicy: KalturaAssetInheritancePolicy = NotImplemented,
-            liveToVod: KalturaLiveToVodInfoAsset = NotImplemented): ...
-
-    def getExternalIds(self) -> str: ...
-    def setExternalIds(self, newExternalIds: str) -> None: ...
-    def getEntryId(self) -> str: ...
-    def setEntryId(self, newEntryId: str) -> None: ...
-    def getDeviceRuleId(self) -> int: ...
-    def setDeviceRuleId(self, newDeviceRuleId: int) -> None: ...
-    def getGeoBlockRuleId(self) -> int: ...
-    def setGeoBlockRuleId(self, newGeoBlockRuleId: int) -> None: ...
-    def getStatus(self) -> bool: ...
-    def setStatus(self, newStatus: bool) -> None: ...
-    def getInheritancePolicy(self) -> KalturaAssetInheritancePolicy: ...
-    def setInheritancePolicy(self, newInheritancePolicy: KalturaAssetInheritancePolicy) -> None: ...
-    def getLiveToVod(self) -> KalturaLiveToVodInfoAsset: ...
-    def setLiveToVod(self, newLiveToVod: KalturaLiveToVodInfoAsset) -> None: ...
-
-class KalturaLiveAsset(KalturaMediaAsset):
-    enableCdvrState: KalturaTimeShiftedTvState
-    enableCatchUpState: KalturaTimeShiftedTvState
-    enableStartOverState: KalturaTimeShiftedTvState
-    bufferCatchUpSetting: int
-    paddingBeforeProgramStarts: int
-    paddingAfterProgramEnds: int
-    bufferTrickPlaySetting: int
-    enableRecordingPlaybackNonEntitledChannelState: KalturaTimeShiftedTvState
-    enableTrickPlayState: KalturaTimeShiftedTvState
-    externalEpgIngestId: str
-    externalCdvrId: str
-    enableCdvr: bool
-    enableCatchUp: bool
-    enableStartOver: bool
-    catchUpBuffer: int
-    trickPlayBuffer: int
-    enableRecordingPlaybackNonEntitledChannel: bool
-    enableTrickPlay: bool
-    channelType: KalturaLinearChannelType
-    def __init__(self,
-            id: int = NotImplemented,
-            type: int = NotImplemented,
-            name: str = NotImplemented,
-            multilingualName: List[KalturaTranslationToken] = NotImplemented,
-            description: str = NotImplemented,
-            multilingualDescription: List[KalturaTranslationToken] = NotImplemented,
-            images: List[KalturaMediaImage] = NotImplemented,
-            mediaFiles: List[KalturaMediaFile] = NotImplemented,
-            metas: map = NotImplemented,
-            tags: map = NotImplemented,
-            relatedEntities: map = NotImplemented,
-            startDate: int = NotImplemented,
-            endDate: int = NotImplemented,
-            createDate: int = NotImplemented,
-            updateDate: int = NotImplemented,
-            externalId: str = NotImplemented,
-            indexStatus: KalturaAssetIndexStatus = NotImplemented,
-            externalIds: str = NotImplemented,
-            entryId: str = NotImplemented,
-            deviceRuleId: int = NotImplemented,
-            geoBlockRuleId: int = NotImplemented,
-            status: bool = NotImplemented,
-            inheritancePolicy: KalturaAssetInheritancePolicy = NotImplemented,
-            liveToVod: KalturaLiveToVodInfoAsset = NotImplemented,
-            enableCdvrState: KalturaTimeShiftedTvState = NotImplemented,
-            enableCatchUpState: KalturaTimeShiftedTvState = NotImplemented,
-            enableStartOverState: KalturaTimeShiftedTvState = NotImplemented,
-            bufferCatchUpSetting: int = NotImplemented,
-            paddingBeforeProgramStarts: int = NotImplemented,
-            paddingAfterProgramEnds: int = NotImplemented,
-            bufferTrickPlaySetting: int = NotImplemented,
-            enableRecordingPlaybackNonEntitledChannelState: KalturaTimeShiftedTvState = NotImplemented,
-            enableTrickPlayState: KalturaTimeShiftedTvState = NotImplemented,
-            externalEpgIngestId: str = NotImplemented,
-            externalCdvrId: str = NotImplemented,
-            enableCdvr: bool = NotImplemented,
-            enableCatchUp: bool = NotImplemented,
-            enableStartOver: bool = NotImplemented,
-            catchUpBuffer: int = NotImplemented,
-            trickPlayBuffer: int = NotImplemented,
-            enableRecordingPlaybackNonEntitledChannel: bool = NotImplemented,
-            enableTrickPlay: bool = NotImplemented,
-            channelType: KalturaLinearChannelType = NotImplemented): ...
-
-    def getEnableCdvrState(self) -> KalturaTimeShiftedTvState: ...
-    def setEnableCdvrState(self, newEnableCdvrState: KalturaTimeShiftedTvState) -> None: ...
-    def getEnableCatchUpState(self) -> KalturaTimeShiftedTvState: ...
-    def setEnableCatchUpState(self, newEnableCatchUpState: KalturaTimeShiftedTvState) -> None: ...
-    def getEnableStartOverState(self) -> KalturaTimeShiftedTvState: ...
-    def setEnableStartOverState(self, newEnableStartOverState: KalturaTimeShiftedTvState) -> None: ...
-    def getBufferCatchUpSetting(self) -> int: ...
-    def setBufferCatchUpSetting(self, newBufferCatchUpSetting: int) -> None: ...
-    def getPaddingBeforeProgramStarts(self) -> int: ...
-    def setPaddingBeforeProgramStarts(self, newPaddingBeforeProgramStarts: int) -> None: ...
-    def getPaddingAfterProgramEnds(self) -> int: ...
-    def setPaddingAfterProgramEnds(self, newPaddingAfterProgramEnds: int) -> None: ...
-    def getBufferTrickPlaySetting(self) -> int: ...
-    def setBufferTrickPlaySetting(self, newBufferTrickPlaySetting: int) -> None: ...
-    def getEnableRecordingPlaybackNonEntitledChannelState(self) -> KalturaTimeShiftedTvState: ...
-    def setEnableRecordingPlaybackNonEntitledChannelState(self, newEnableRecordingPlaybackNonEntitledChannelState: KalturaTimeShiftedTvState) -> None: ...
-    def getEnableTrickPlayState(self) -> KalturaTimeShiftedTvState: ...
-    def setEnableTrickPlayState(self, newEnableTrickPlayState: KalturaTimeShiftedTvState) -> None: ...
-    def getExternalEpgIngestId(self) -> str: ...
-    def setExternalEpgIngestId(self, newExternalEpgIngestId: str) -> None: ...
-    def getExternalCdvrId(self) -> str: ...
-    def setExternalCdvrId(self, newExternalCdvrId: str) -> None: ...
-    def getEnableCdvr(self) -> bool: ...
-    def getEnableCatchUp(self) -> bool: ...
-    def getEnableStartOver(self) -> bool: ...
-    def getCatchUpBuffer(self) -> int: ...
-    def getTrickPlayBuffer(self) -> int: ...
-    def getEnableRecordingPlaybackNonEntitledChannel(self) -> bool: ...
-    def getEnableTrickPlay(self) -> bool: ...
-    def getChannelType(self) -> KalturaLinearChannelType: ...
-    def setChannelType(self, newChannelType: KalturaLinearChannelType) -> None: ...
-
-class KalturaLineupChannelAsset(KalturaLiveAsset):
-    lcn: int
-    def __init__(self,
-            id: int = NotImplemented,
-            type: int = NotImplemented,
-            name: str = NotImplemented,
-            multilingualName: List[KalturaTranslationToken] = NotImplemented,
-            description: str = NotImplemented,
-            multilingualDescription: List[KalturaTranslationToken] = NotImplemented,
-            images: List[KalturaMediaImage] = NotImplemented,
-            mediaFiles: List[KalturaMediaFile] = NotImplemented,
-            metas: map = NotImplemented,
-            tags: map = NotImplemented,
-            relatedEntities: map = NotImplemented,
-            startDate: int = NotImplemented,
-            endDate: int = NotImplemented,
-            createDate: int = NotImplemented,
-            updateDate: int = NotImplemented,
-            externalId: str = NotImplemented,
-            indexStatus: KalturaAssetIndexStatus = NotImplemented,
-            externalIds: str = NotImplemented,
-            entryId: str = NotImplemented,
-            deviceRuleId: int = NotImplemented,
-            geoBlockRuleId: int = NotImplemented,
-            status: bool = NotImplemented,
-            inheritancePolicy: KalturaAssetInheritancePolicy = NotImplemented,
-            liveToVod: KalturaLiveToVodInfoAsset = NotImplemented,
-            enableCdvrState: KalturaTimeShiftedTvState = NotImplemented,
-            enableCatchUpState: KalturaTimeShiftedTvState = NotImplemented,
-            enableStartOverState: KalturaTimeShiftedTvState = NotImplemented,
-            bufferCatchUpSetting: int = NotImplemented,
-            paddingBeforeProgramStarts: int = NotImplemented,
-            paddingAfterProgramEnds: int = NotImplemented,
-            bufferTrickPlaySetting: int = NotImplemented,
-            enableRecordingPlaybackNonEntitledChannelState: KalturaTimeShiftedTvState = NotImplemented,
-            enableTrickPlayState: KalturaTimeShiftedTvState = NotImplemented,
-            externalEpgIngestId: str = NotImplemented,
-            externalCdvrId: str = NotImplemented,
-            enableCdvr: bool = NotImplemented,
-            enableCatchUp: bool = NotImplemented,
-            enableStartOver: bool = NotImplemented,
-            catchUpBuffer: int = NotImplemented,
-            trickPlayBuffer: int = NotImplemented,
-            enableRecordingPlaybackNonEntitledChannel: bool = NotImplemented,
-            enableTrickPlay: bool = NotImplemented,
-            channelType: KalturaLinearChannelType = NotImplemented,
-            lcn: int = NotImplemented): ...
-
-    def getLcn(self) -> int: ...
-    def setLcn(self, newLcn: int) -> None: ...
-
 class KalturaLineupChannelAssetListResponse(KalturaListResponse):
     objects: List[KalturaLineupChannelAsset]
     lineupExternalId: str
@@ -12397,143 +12586,6 @@ class KalturaLineupChannelAssetListResponse(KalturaListResponse):
     def setLineupExternalId(self, newLineupExternalId: str) -> None: ...
     def getParentLineupExternalId(self) -> str: ...
     def setParentLineupExternalId(self, newParentLineupExternalId: str) -> None: ...
-
-class KalturaProgramAsset(KalturaAsset):
-    epgChannelId: int
-    epgId: str
-    relatedMediaId: int
-    crid: str
-    linearAssetId: int
-    enableCdvr: bool
-    enableCatchUp: bool
-    enableStartOver: bool
-    enableTrickPlay: bool
-    externalOfferIds: str
-    def __init__(self,
-            id: int = NotImplemented,
-            type: int = NotImplemented,
-            name: str = NotImplemented,
-            multilingualName: List[KalturaTranslationToken] = NotImplemented,
-            description: str = NotImplemented,
-            multilingualDescription: List[KalturaTranslationToken] = NotImplemented,
-            images: List[KalturaMediaImage] = NotImplemented,
-            mediaFiles: List[KalturaMediaFile] = NotImplemented,
-            metas: map = NotImplemented,
-            tags: map = NotImplemented,
-            relatedEntities: map = NotImplemented,
-            startDate: int = NotImplemented,
-            endDate: int = NotImplemented,
-            createDate: int = NotImplemented,
-            updateDate: int = NotImplemented,
-            externalId: str = NotImplemented,
-            indexStatus: KalturaAssetIndexStatus = NotImplemented,
-            epgChannelId: int = NotImplemented,
-            epgId: str = NotImplemented,
-            relatedMediaId: int = NotImplemented,
-            crid: str = NotImplemented,
-            linearAssetId: int = NotImplemented,
-            enableCdvr: bool = NotImplemented,
-            enableCatchUp: bool = NotImplemented,
-            enableStartOver: bool = NotImplemented,
-            enableTrickPlay: bool = NotImplemented,
-            externalOfferIds: str = NotImplemented): ...
-
-    def getEpgChannelId(self) -> int: ...
-    def getEpgId(self) -> str: ...
-    def getRelatedMediaId(self) -> int: ...
-    def setRelatedMediaId(self, newRelatedMediaId: int) -> None: ...
-    def getCrid(self) -> str: ...
-    def setCrid(self, newCrid: str) -> None: ...
-    def getLinearAssetId(self) -> int: ...
-    def setLinearAssetId(self, newLinearAssetId: int) -> None: ...
-    def getEnableCdvr(self) -> bool: ...
-    def setEnableCdvr(self, newEnableCdvr: bool) -> None: ...
-    def getEnableCatchUp(self) -> bool: ...
-    def setEnableCatchUp(self, newEnableCatchUp: bool) -> None: ...
-    def getEnableStartOver(self) -> bool: ...
-    def setEnableStartOver(self, newEnableStartOver: bool) -> None: ...
-    def getEnableTrickPlay(self) -> bool: ...
-    def setEnableTrickPlay(self, newEnableTrickPlay: bool) -> None: ...
-    def getExternalOfferIds(self) -> str: ...
-    def setExternalOfferIds(self, newExternalOfferIds: str) -> None: ...
-
-class KalturaRecordingAsset(KalturaProgramAsset):
-    recordingId: str
-    recordingType: KalturaRecordingType
-    viewableUntilDate: int
-    multiRecord: bool
-    def __init__(self,
-            id: int = NotImplemented,
-            type: int = NotImplemented,
-            name: str = NotImplemented,
-            multilingualName: List[KalturaTranslationToken] = NotImplemented,
-            description: str = NotImplemented,
-            multilingualDescription: List[KalturaTranslationToken] = NotImplemented,
-            images: List[KalturaMediaImage] = NotImplemented,
-            mediaFiles: List[KalturaMediaFile] = NotImplemented,
-            metas: map = NotImplemented,
-            tags: map = NotImplemented,
-            relatedEntities: map = NotImplemented,
-            startDate: int = NotImplemented,
-            endDate: int = NotImplemented,
-            createDate: int = NotImplemented,
-            updateDate: int = NotImplemented,
-            externalId: str = NotImplemented,
-            indexStatus: KalturaAssetIndexStatus = NotImplemented,
-            epgChannelId: int = NotImplemented,
-            epgId: str = NotImplemented,
-            relatedMediaId: int = NotImplemented,
-            crid: str = NotImplemented,
-            linearAssetId: int = NotImplemented,
-            enableCdvr: bool = NotImplemented,
-            enableCatchUp: bool = NotImplemented,
-            enableStartOver: bool = NotImplemented,
-            enableTrickPlay: bool = NotImplemented,
-            externalOfferIds: str = NotImplemented,
-            recordingId: str = NotImplemented,
-            recordingType: KalturaRecordingType = NotImplemented,
-            viewableUntilDate: int = NotImplemented,
-            multiRecord: bool = NotImplemented): ...
-
-    def getRecordingId(self) -> str: ...
-    def setRecordingId(self, newRecordingId: str) -> None: ...
-    def getRecordingType(self) -> KalturaRecordingType: ...
-    def setRecordingType(self, newRecordingType: KalturaRecordingType) -> None: ...
-    def getViewableUntilDate(self) -> int: ...
-    def setViewableUntilDate(self, newViewableUntilDate: int) -> None: ...
-    def getMultiRecord(self) -> bool: ...
-    def setMultiRecord(self, newMultiRecord: bool) -> None: ...
-
-class KalturaEpg(KalturaProgramAsset):
-    def __init__(self,
-            id: int = NotImplemented,
-            type: int = NotImplemented,
-            name: str = NotImplemented,
-            multilingualName: List[KalturaTranslationToken] = NotImplemented,
-            description: str = NotImplemented,
-            multilingualDescription: List[KalturaTranslationToken] = NotImplemented,
-            images: List[KalturaMediaImage] = NotImplemented,
-            mediaFiles: List[KalturaMediaFile] = NotImplemented,
-            metas: map = NotImplemented,
-            tags: map = NotImplemented,
-            relatedEntities: map = NotImplemented,
-            startDate: int = NotImplemented,
-            endDate: int = NotImplemented,
-            createDate: int = NotImplemented,
-            updateDate: int = NotImplemented,
-            externalId: str = NotImplemented,
-            indexStatus: KalturaAssetIndexStatus = NotImplemented,
-            epgChannelId: int = NotImplemented,
-            epgId: str = NotImplemented,
-            relatedMediaId: int = NotImplemented,
-            crid: str = NotImplemented,
-            linearAssetId: int = NotImplemented,
-            enableCdvr: bool = NotImplemented,
-            enableCatchUp: bool = NotImplemented,
-            enableStartOver: bool = NotImplemented,
-            enableTrickPlay: bool = NotImplemented,
-            externalOfferIds: str = NotImplemented): ...
-        pass
 
 class KalturaMediaFileDynamicData(KalturaObjectBase):
     id: int
@@ -14066,58 +14118,6 @@ class KalturaEpgListResponse(KalturaListResponse):
 
     def getObjects(self) -> List[KalturaEpg]: ...
     def setObjects(self, newObjects: List[KalturaEpg]) -> None: ...
-
-class KalturaTreeNaturalTextResponse(KalturaObjectBase):
-    recommendations: KalturaTreeRecommendations
-    def __init__(self,
-            recommendations: KalturaTreeRecommendations = NotImplemented): ...
-
-    def getRecommendations(self) -> KalturaTreeRecommendations: ...
-    def setRecommendations(self, newRecommendations: KalturaTreeRecommendations) -> None: ...
-
-class KalturaAiRecommendationTreePartnerConfiguration(KalturaObjectBase):
-    activeMetadataTypes: map
-    topLevelQuestions: int
-    answersPerQuestion: int
-    levels: int
-    numOfRecommendedAssets: int
-    treeGenerationFrequency: str
-    activeTreeId: str
-    def __init__(self,
-            activeMetadataTypes: map = NotImplemented,
-            topLevelQuestions: int = NotImplemented,
-            answersPerQuestion: int = NotImplemented,
-            levels: int = NotImplemented,
-            numOfRecommendedAssets: int = NotImplemented,
-            treeGenerationFrequency: str = NotImplemented,
-            activeTreeId: str = NotImplemented): ...
-
-    def getActiveMetadataTypes(self) -> map: ...
-    def setActiveMetadataTypes(self, newActiveMetadataTypes: map) -> None: ...
-    def getTopLevelQuestions(self) -> int: ...
-    def setTopLevelQuestions(self, newTopLevelQuestions: int) -> None: ...
-    def getAnswersPerQuestion(self) -> int: ...
-    def setAnswersPerQuestion(self, newAnswersPerQuestion: int) -> None: ...
-    def getLevels(self) -> int: ...
-    def setLevels(self, newLevels: int) -> None: ...
-    def getNumOfRecommendedAssets(self) -> int: ...
-    def setNumOfRecommendedAssets(self, newNumOfRecommendedAssets: int) -> None: ...
-    def getTreeGenerationFrequency(self) -> str: ...
-    def setTreeGenerationFrequency(self, newTreeGenerationFrequency: str) -> None: ...
-    def getActiveTreeId(self) -> str: ...
-    def setActiveTreeId(self, newActiveTreeId: str) -> None: ...
-
-class KalturaFilterPager(KalturaObjectBase):
-    pageSize: int
-    pageIndex: int
-    def __init__(self,
-            pageSize: int = NotImplemented,
-            pageIndex: int = NotImplemented): ...
-
-    def getPageSize(self) -> int: ...
-    def setPageSize(self, newPageSize: int) -> None: ...
-    def getPageIndex(self) -> int: ...
-    def setPageIndex(self, newPageIndex: int) -> None: ...
 
 class KalturaAppToken(KalturaObjectBase):
     id: str
