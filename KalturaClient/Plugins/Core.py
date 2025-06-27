@@ -49330,7 +49330,10 @@ class KalturaVodIngestAssetResult(KalturaObjectBase):
             status = NotImplemented,
             vodTypeSystemName = NotImplemented,
             errors = NotImplemented,
-            warnings = NotImplemented):
+            warnings = NotImplemented,
+            fileUploadDate = NotImplemented,
+            processingStartDate = NotImplemented,
+            processingCompletionDate = NotImplemented):
         KalturaObjectBase.__init__(self)
 
         # Ingested asset name. Absent only in case of NameRequired error
@@ -49369,6 +49372,18 @@ class KalturaVodIngestAssetResult(KalturaObjectBase):
         # @var List[KalturaVodIngestAssetResultErrorMessage]
         self.warnings = warnings
 
+        # The date and time for which the ingest file was uploaded to the remote file server. Expressed in milliseconds EPOCH time.
+        # @var int
+        self.fileUploadDate = fileUploadDate
+
+        # The date and time for which the ingest file moved to in progress folder and started processing. Expressed in milliseconds EPOCH time.
+        # @var int
+        self.processingStartDate = processingStartDate
+
+        # The date and time for which the ingest file completed the ingest process. Expressed in milliseconds EPOCH time.
+        # @var int
+        self.processingCompletionDate = processingCompletionDate
+
 
     PROPERTY_LOADERS = {
         'assetName': getXmlNodeText, 
@@ -49379,6 +49394,9 @@ class KalturaVodIngestAssetResult(KalturaObjectBase):
         'vodTypeSystemName': getXmlNodeText, 
         'errors': (KalturaObjectFactory.createArray, 'KalturaVodIngestAssetResultErrorMessage'), 
         'warnings': (KalturaObjectFactory.createArray, 'KalturaVodIngestAssetResultErrorMessage'), 
+        'fileUploadDate': getXmlNodeInt, 
+        'processingStartDate': getXmlNodeInt, 
+        'processingCompletionDate': getXmlNodeInt, 
     }
 
     def fromXml(self, node):
@@ -49396,6 +49414,9 @@ class KalturaVodIngestAssetResult(KalturaObjectBase):
         kparams.addStringIfDefined("vodTypeSystemName", self.vodTypeSystemName)
         kparams.addArrayIfDefined("errors", self.errors)
         kparams.addArrayIfDefined("warnings", self.warnings)
+        kparams.addIntIfDefined("fileUploadDate", self.fileUploadDate)
+        kparams.addIntIfDefined("processingStartDate", self.processingStartDate)
+        kparams.addIntIfDefined("processingCompletionDate", self.processingCompletionDate)
         return kparams
 
     def getAssetName(self):
@@ -49445,6 +49466,24 @@ class KalturaVodIngestAssetResult(KalturaObjectBase):
 
     def setWarnings(self, newWarnings):
         self.warnings = newWarnings
+
+    def getFileUploadDate(self):
+        return self.fileUploadDate
+
+    def setFileUploadDate(self, newFileUploadDate):
+        self.fileUploadDate = newFileUploadDate
+
+    def getProcessingStartDate(self):
+        return self.processingStartDate
+
+    def setProcessingStartDate(self, newProcessingStartDate):
+        self.processingStartDate = newProcessingStartDate
+
+    def getProcessingCompletionDate(self):
+        return self.processingCompletionDate
+
+    def setProcessingCompletionDate(self, newProcessingCompletionDate):
+        self.processingCompletionDate = newProcessingCompletionDate
 
 
 # @package Kaltura
@@ -49502,7 +49541,11 @@ class KalturaVodIngestAssetResultAggregation(KalturaObjectBase):
             failureCount = NotImplemented,
             successCount = NotImplemented,
             externalFailureCount = NotImplemented,
-            successWithWarningCount = NotImplemented):
+            successWithWarningCount = NotImplemented,
+            averageTotalProcessingDuration = NotImplemented,
+            averageTotalActiveProcessingDuration = NotImplemented,
+            p95TotalProcessingDuration = NotImplemented,
+            p95TotalActiveProcessingDuration = NotImplemented):
         KalturaObjectBase.__init__(self)
 
         # Ingest date of the first asset in the response list. Date and time represented as epoch.
@@ -49529,6 +49572,22 @@ class KalturaVodIngestAssetResultAggregation(KalturaObjectBase):
         # @var int
         self.successWithWarningCount = successWithWarningCount
 
+        # Average calculated for the total processing duration of the assets returned according to the applied filters.
+        # @var int
+        self.averageTotalProcessingDuration = averageTotalProcessingDuration
+
+        # Average calculated for the active processing duration of the assets returned according to the applied filters.
+        # @var int
+        self.averageTotalActiveProcessingDuration = averageTotalActiveProcessingDuration
+
+        # 0.95 percentile calculated for the total processing duration of the assets returned according to the applied filters.
+        # @var int
+        self.p95TotalProcessingDuration = p95TotalProcessingDuration
+
+        # 0.95 percentile calculated for the active processing duration of the assets returned according to the applied filters.
+        # @var int
+        self.p95TotalActiveProcessingDuration = p95TotalActiveProcessingDuration
+
 
     PROPERTY_LOADERS = {
         'ingestDateFrom': getXmlNodeInt, 
@@ -49537,6 +49596,10 @@ class KalturaVodIngestAssetResultAggregation(KalturaObjectBase):
         'successCount': getXmlNodeInt, 
         'externalFailureCount': getXmlNodeInt, 
         'successWithWarningCount': getXmlNodeInt, 
+        'averageTotalProcessingDuration': getXmlNodeInt, 
+        'averageTotalActiveProcessingDuration': getXmlNodeInt, 
+        'p95TotalProcessingDuration': getXmlNodeInt, 
+        'p95TotalActiveProcessingDuration': getXmlNodeInt, 
     }
 
     def fromXml(self, node):
@@ -49552,6 +49615,10 @@ class KalturaVodIngestAssetResultAggregation(KalturaObjectBase):
         kparams.addIntIfDefined("successCount", self.successCount)
         kparams.addIntIfDefined("externalFailureCount", self.externalFailureCount)
         kparams.addIntIfDefined("successWithWarningCount", self.successWithWarningCount)
+        kparams.addIntIfDefined("averageTotalProcessingDuration", self.averageTotalProcessingDuration)
+        kparams.addIntIfDefined("averageTotalActiveProcessingDuration", self.averageTotalActiveProcessingDuration)
+        kparams.addIntIfDefined("p95TotalProcessingDuration", self.p95TotalProcessingDuration)
+        kparams.addIntIfDefined("p95TotalActiveProcessingDuration", self.p95TotalActiveProcessingDuration)
         return kparams
 
     def getIngestDateFrom(self):
@@ -49589,6 +49656,30 @@ class KalturaVodIngestAssetResultAggregation(KalturaObjectBase):
 
     def setSuccessWithWarningCount(self, newSuccessWithWarningCount):
         self.successWithWarningCount = newSuccessWithWarningCount
+
+    def getAverageTotalProcessingDuration(self):
+        return self.averageTotalProcessingDuration
+
+    def setAverageTotalProcessingDuration(self, newAverageTotalProcessingDuration):
+        self.averageTotalProcessingDuration = newAverageTotalProcessingDuration
+
+    def getAverageTotalActiveProcessingDuration(self):
+        return self.averageTotalActiveProcessingDuration
+
+    def setAverageTotalActiveProcessingDuration(self, newAverageTotalActiveProcessingDuration):
+        self.averageTotalActiveProcessingDuration = newAverageTotalActiveProcessingDuration
+
+    def getP95TotalProcessingDuration(self):
+        return self.p95TotalProcessingDuration
+
+    def setP95TotalProcessingDuration(self, newP95TotalProcessingDuration):
+        self.p95TotalProcessingDuration = newP95TotalProcessingDuration
+
+    def getP95TotalActiveProcessingDuration(self):
+        return self.p95TotalActiveProcessingDuration
+
+    def setP95TotalActiveProcessingDuration(self, newP95TotalActiveProcessingDuration):
+        self.p95TotalActiveProcessingDuration = newP95TotalActiveProcessingDuration
 
 
 # @package Kaltura
