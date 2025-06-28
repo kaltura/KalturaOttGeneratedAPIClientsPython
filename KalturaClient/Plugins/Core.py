@@ -35545,7 +35545,7 @@ class KalturaBillingTransactionListResponse(KalturaListResponse):
 
 # @package Kaltura
 # @subpackage Client
-class KalturaBulkResponseObject(KalturaObjectBase):
+class KalturaBulkResponseItem(KalturaObjectBase):
     """Base class for objects that can be returned in bulk response operations"""
 
     def __init__(self,
@@ -35563,11 +35563,11 @@ class KalturaBulkResponseObject(KalturaObjectBase):
 
     def fromXml(self, node):
         KalturaObjectBase.fromXml(self, node)
-        self.fromXmlImpl(node, KalturaBulkResponseObject.PROPERTY_LOADERS)
+        self.fromXmlImpl(node, KalturaBulkResponseItem.PROPERTY_LOADERS)
 
     def toParams(self):
         kparams = KalturaObjectBase.toParams(self)
-        kparams.put("objectType", "KalturaBulkResponseObject")
+        kparams.put("objectType", "KalturaBulkResponseItem")
         kparams.addBoolIfDefined("isSuccess", self.isSuccess)
         return kparams
 
@@ -35593,12 +35593,12 @@ class KalturaBulkPlaybackContextResponse(KalturaListResponse):
         # Array of playback contexts or errors.
         #             Each item corresponds to the request at the same index in the request array.
         #             Items can be either KalturaPlaybackContext (success) or KalturaBulkPlaybackContextError (error).
-        # @var List[KalturaBulkResponseObject]
+        # @var List[KalturaBulkResponseItem]
         self.objects = objects
 
 
     PROPERTY_LOADERS = {
-        'objects': (KalturaObjectFactory.createArray, 'KalturaBulkResponseObject'), 
+        'objects': (KalturaObjectFactory.createArray, 'KalturaBulkResponseItem'), 
     }
 
     def fromXml(self, node):
@@ -35620,7 +35620,7 @@ class KalturaBulkPlaybackContextResponse(KalturaListResponse):
 
 # @package Kaltura
 # @subpackage Client
-class KalturaBulkPlaybackContextError(KalturaBulkResponseObject):
+class KalturaBulkPlaybackContextError(KalturaBulkResponseItem):
     """Wrapper for KalturaAPIException to make it compatible with KalturaOTTObject inheritance requirement"""
 
     def __init__(self,
@@ -35628,7 +35628,7 @@ class KalturaBulkPlaybackContextError(KalturaBulkResponseObject):
             code = NotImplemented,
             message = NotImplemented,
             args = NotImplemented):
-        KalturaBulkResponseObject.__init__(self,
+        KalturaBulkResponseItem.__init__(self,
             isSuccess)
 
         # The error code from the API exception
@@ -35651,11 +35651,11 @@ class KalturaBulkPlaybackContextError(KalturaBulkResponseObject):
     }
 
     def fromXml(self, node):
-        KalturaBulkResponseObject.fromXml(self, node)
+        KalturaBulkResponseItem.fromXml(self, node)
         self.fromXmlImpl(node, KalturaBulkPlaybackContextError.PROPERTY_LOADERS)
 
     def toParams(self):
-        kparams = KalturaBulkResponseObject.toParams(self)
+        kparams = KalturaBulkResponseItem.toParams(self)
         kparams.put("objectType", "KalturaBulkPlaybackContextError")
         kparams.addStringIfDefined("code", self.code)
         kparams.addStringIfDefined("message", self.message)
@@ -35906,13 +35906,13 @@ class KalturaPlaybackContext(KalturaObjectBase):
 
 # @package Kaltura
 # @subpackage Client
-class KalturaBulkPlaybackContextSuccess(KalturaBulkResponseObject):
+class KalturaBulkPlaybackContextSuccess(KalturaBulkResponseItem):
     """Wrapper for KalturaPlaybackContext to make it compatible with bulk response operations"""
 
     def __init__(self,
             isSuccess = NotImplemented,
             playbackContext = NotImplemented):
-        KalturaBulkResponseObject.__init__(self,
+        KalturaBulkResponseItem.__init__(self,
             isSuccess)
 
         # The successful playback context
@@ -35925,11 +35925,11 @@ class KalturaBulkPlaybackContextSuccess(KalturaBulkResponseObject):
     }
 
     def fromXml(self, node):
-        KalturaBulkResponseObject.fromXml(self, node)
+        KalturaBulkResponseItem.fromXml(self, node)
         self.fromXmlImpl(node, KalturaBulkPlaybackContextSuccess.PROPERTY_LOADERS)
 
     def toParams(self):
-        kparams = KalturaBulkResponseObject.toParams(self)
+        kparams = KalturaBulkResponseItem.toParams(self)
         kparams.put("objectType", "KalturaBulkPlaybackContextSuccess")
         kparams.addObjectIfDefined("playbackContext", self.playbackContext)
         return kparams
@@ -63358,7 +63358,7 @@ class KalturaCoreClient(KalturaClientPlugin):
             'KalturaConfigurationsListResponse': KalturaConfigurationsListResponse,
             'KalturaBillingTransaction': KalturaBillingTransaction,
             'KalturaBillingTransactionListResponse': KalturaBillingTransactionListResponse,
-            'KalturaBulkResponseObject': KalturaBulkResponseObject,
+            'KalturaBulkResponseItem': KalturaBulkResponseItem,
             'KalturaBulkPlaybackContextResponse': KalturaBulkPlaybackContextResponse,
             'KalturaBulkPlaybackContextError': KalturaBulkPlaybackContextError,
             'KalturaAccessControlMessage': KalturaAccessControlMessage,
