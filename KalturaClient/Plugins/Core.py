@@ -35545,450 +35545,6 @@ class KalturaBillingTransactionListResponse(KalturaListResponse):
 
 # @package Kaltura
 # @subpackage Client
-class KalturaBulkResponseItem(KalturaObjectBase):
-    """Base class for objects that can be returned in bulk response operations"""
-
-    def __init__(self,
-            isSuccess = NotImplemented):
-        KalturaObjectBase.__init__(self)
-
-        # Indicates whether the bulk operation was successful
-        # @var bool
-        self.isSuccess = isSuccess
-
-
-    PROPERTY_LOADERS = {
-        'isSuccess': getXmlNodeBool, 
-    }
-
-    def fromXml(self, node):
-        KalturaObjectBase.fromXml(self, node)
-        self.fromXmlImpl(node, KalturaBulkResponseItem.PROPERTY_LOADERS)
-
-    def toParams(self):
-        kparams = KalturaObjectBase.toParams(self)
-        kparams.put("objectType", "KalturaBulkResponseItem")
-        kparams.addBoolIfDefined("isSuccess", self.isSuccess)
-        return kparams
-
-    def getIsSuccess(self):
-        return self.isSuccess
-
-    def setIsSuccess(self, newIsSuccess):
-        self.isSuccess = newIsSuccess
-
-
-# @package Kaltura
-# @subpackage Client
-class KalturaBulkPlaybackContextResponse(KalturaListResponse):
-    """Response object for bulk getPlaybackContext operation.
-                Each item in the objects array corresponds to the request at the same index."""
-
-    def __init__(self,
-            totalCount = NotImplemented,
-            objects = NotImplemented):
-        KalturaListResponse.__init__(self,
-            totalCount)
-
-        # Array of playback contexts or errors.
-        #             Each item corresponds to the request at the same index in the request array.
-        #             Items can be either KalturaPlaybackContext (success) or KalturaBulkPlaybackContextError (error).
-        # @var List[KalturaBulkResponseItem]
-        self.objects = objects
-
-
-    PROPERTY_LOADERS = {
-        'objects': (KalturaObjectFactory.createArray, 'KalturaBulkResponseItem'), 
-    }
-
-    def fromXml(self, node):
-        KalturaListResponse.fromXml(self, node)
-        self.fromXmlImpl(node, KalturaBulkPlaybackContextResponse.PROPERTY_LOADERS)
-
-    def toParams(self):
-        kparams = KalturaListResponse.toParams(self)
-        kparams.put("objectType", "KalturaBulkPlaybackContextResponse")
-        kparams.addArrayIfDefined("objects", self.objects)
-        return kparams
-
-    def getObjects(self):
-        return self.objects
-
-    def setObjects(self, newObjects):
-        self.objects = newObjects
-
-
-# @package Kaltura
-# @subpackage Client
-class KalturaBulkPlaybackContextError(KalturaBulkResponseItem):
-    """Wrapper for KalturaAPIException to make it compatible with KalturaOTTObject inheritance requirement"""
-
-    def __init__(self,
-            isSuccess = NotImplemented,
-            code = NotImplemented,
-            message = NotImplemented,
-            args = NotImplemented):
-        KalturaBulkResponseItem.__init__(self,
-            isSuccess)
-
-        # The error code from the API exception
-        # @var str
-        self.code = code
-
-        # The error message from the API exception
-        # @var str
-        self.message = message
-
-        # Additional error arguments from the API exception
-        # @var List[KalturaApiExceptionArg]
-        self.args = args
-
-
-    PROPERTY_LOADERS = {
-        'code': getXmlNodeText, 
-        'message': getXmlNodeText, 
-        'args': (KalturaObjectFactory.createArray, 'KalturaApiExceptionArg'), 
-    }
-
-    def fromXml(self, node):
-        KalturaBulkResponseItem.fromXml(self, node)
-        self.fromXmlImpl(node, KalturaBulkPlaybackContextError.PROPERTY_LOADERS)
-
-    def toParams(self):
-        kparams = KalturaBulkResponseItem.toParams(self)
-        kparams.put("objectType", "KalturaBulkPlaybackContextError")
-        kparams.addStringIfDefined("code", self.code)
-        kparams.addStringIfDefined("message", self.message)
-        kparams.addArrayIfDefined("args", self.args)
-        return kparams
-
-    def getCode(self):
-        return self.code
-
-    def setCode(self, newCode):
-        self.code = newCode
-
-    def getMessage(self):
-        return self.message
-
-    def setMessage(self, newMessage):
-        self.message = newMessage
-
-    def getArgs(self):
-        return self.args
-
-    def setArgs(self, newArgs):
-        self.args = newArgs
-
-
-# @package Kaltura
-# @subpackage Client
-class KalturaAccessControlMessage(KalturaObjectBase):
-    def __init__(self,
-            message = NotImplemented,
-            code = NotImplemented):
-        KalturaObjectBase.__init__(self)
-
-        # Message
-        # @var str
-        self.message = message
-
-        # Code
-        # @var str
-        self.code = code
-
-
-    PROPERTY_LOADERS = {
-        'message': getXmlNodeText, 
-        'code': getXmlNodeText, 
-    }
-
-    def fromXml(self, node):
-        KalturaObjectBase.fromXml(self, node)
-        self.fromXmlImpl(node, KalturaAccessControlMessage.PROPERTY_LOADERS)
-
-    def toParams(self):
-        kparams = KalturaObjectBase.toParams(self)
-        kparams.put("objectType", "KalturaAccessControlMessage")
-        kparams.addStringIfDefined("message", self.message)
-        kparams.addStringIfDefined("code", self.code)
-        return kparams
-
-    def getMessage(self):
-        return self.message
-
-    def setMessage(self, newMessage):
-        self.message = newMessage
-
-    def getCode(self):
-        return self.code
-
-    def setCode(self, newCode):
-        self.code = newCode
-
-
-# @package Kaltura
-# @subpackage Client
-class KalturaCaptionPlaybackPluginData(KalturaObjectBase):
-    def __init__(self,
-            url = NotImplemented,
-            language = NotImplemented,
-            label = NotImplemented,
-            format = NotImplemented):
-        KalturaObjectBase.__init__(self)
-
-        # url
-        # @var str
-        self.url = url
-
-        # Language
-        # @var str
-        self.language = language
-
-        # Label
-        # @var str
-        self.label = label
-
-        # Format
-        # @var str
-        self.format = format
-
-
-    PROPERTY_LOADERS = {
-        'url': getXmlNodeText, 
-        'language': getXmlNodeText, 
-        'label': getXmlNodeText, 
-        'format': getXmlNodeText, 
-    }
-
-    def fromXml(self, node):
-        KalturaObjectBase.fromXml(self, node)
-        self.fromXmlImpl(node, KalturaCaptionPlaybackPluginData.PROPERTY_LOADERS)
-
-    def toParams(self):
-        kparams = KalturaObjectBase.toParams(self)
-        kparams.put("objectType", "KalturaCaptionPlaybackPluginData")
-        kparams.addStringIfDefined("url", self.url)
-        kparams.addStringIfDefined("language", self.language)
-        kparams.addStringIfDefined("label", self.label)
-        kparams.addStringIfDefined("format", self.format)
-        return kparams
-
-    def getUrl(self):
-        return self.url
-
-    def setUrl(self, newUrl):
-        self.url = newUrl
-
-    def getLanguage(self):
-        return self.language
-
-    def setLanguage(self, newLanguage):
-        self.language = newLanguage
-
-    def getLabel(self):
-        return self.label
-
-    def setLabel(self, newLabel):
-        self.label = newLabel
-
-    def getFormat(self):
-        return self.format
-
-    def setFormat(self, newFormat):
-        self.format = newFormat
-
-
-# @package Kaltura
-# @subpackage Client
-class KalturaPlaybackPluginData(KalturaObjectBase):
-    def __init__(self):
-        KalturaObjectBase.__init__(self)
-
-
-    PROPERTY_LOADERS = {
-    }
-
-    def fromXml(self, node):
-        KalturaObjectBase.fromXml(self, node)
-        self.fromXmlImpl(node, KalturaPlaybackPluginData.PROPERTY_LOADERS)
-
-    def toParams(self):
-        kparams = KalturaObjectBase.toParams(self)
-        kparams.put("objectType", "KalturaPlaybackPluginData")
-        return kparams
-
-
-# @package Kaltura
-# @subpackage Client
-class KalturaPlaybackContext(KalturaObjectBase):
-    def __init__(self,
-            sources = NotImplemented,
-            actions = NotImplemented,
-            messages = NotImplemented,
-            playbackCaptions = NotImplemented,
-            plugins = NotImplemented):
-        KalturaObjectBase.__init__(self)
-
-        # Sources
-        # @var List[KalturaPlaybackSource]
-        self.sources = sources
-
-        # Actions
-        # @var List[KalturaRuleAction]
-        self.actions = actions
-
-        # Messages
-        # @var List[KalturaAccessControlMessage]
-        self.messages = messages
-
-        # Playback captions
-        # @var List[KalturaCaptionPlaybackPluginData]
-        self.playbackCaptions = playbackCaptions
-
-        # Plugins
-        # @var List[KalturaPlaybackPluginData]
-        self.plugins = plugins
-
-
-    PROPERTY_LOADERS = {
-        'sources': (KalturaObjectFactory.createArray, 'KalturaPlaybackSource'), 
-        'actions': (KalturaObjectFactory.createArray, 'KalturaRuleAction'), 
-        'messages': (KalturaObjectFactory.createArray, 'KalturaAccessControlMessage'), 
-        'playbackCaptions': (KalturaObjectFactory.createArray, 'KalturaCaptionPlaybackPluginData'), 
-        'plugins': (KalturaObjectFactory.createArray, 'KalturaPlaybackPluginData'), 
-    }
-
-    def fromXml(self, node):
-        KalturaObjectBase.fromXml(self, node)
-        self.fromXmlImpl(node, KalturaPlaybackContext.PROPERTY_LOADERS)
-
-    def toParams(self):
-        kparams = KalturaObjectBase.toParams(self)
-        kparams.put("objectType", "KalturaPlaybackContext")
-        kparams.addArrayIfDefined("sources", self.sources)
-        kparams.addArrayIfDefined("actions", self.actions)
-        kparams.addArrayIfDefined("messages", self.messages)
-        kparams.addArrayIfDefined("playbackCaptions", self.playbackCaptions)
-        kparams.addArrayIfDefined("plugins", self.plugins)
-        return kparams
-
-    def getSources(self):
-        return self.sources
-
-    def setSources(self, newSources):
-        self.sources = newSources
-
-    def getActions(self):
-        return self.actions
-
-    def setActions(self, newActions):
-        self.actions = newActions
-
-    def getMessages(self):
-        return self.messages
-
-    def setMessages(self, newMessages):
-        self.messages = newMessages
-
-    def getPlaybackCaptions(self):
-        return self.playbackCaptions
-
-    def setPlaybackCaptions(self, newPlaybackCaptions):
-        self.playbackCaptions = newPlaybackCaptions
-
-    def getPlugins(self):
-        return self.plugins
-
-    def setPlugins(self, newPlugins):
-        self.plugins = newPlugins
-
-
-# @package Kaltura
-# @subpackage Client
-class KalturaBulkPlaybackContextSuccess(KalturaBulkResponseItem):
-    """Wrapper for KalturaPlaybackContext to make it compatible with bulk response operations"""
-
-    def __init__(self,
-            isSuccess = NotImplemented,
-            playbackContext = NotImplemented):
-        KalturaBulkResponseItem.__init__(self,
-            isSuccess)
-
-        # The successful playback context
-        # @var KalturaPlaybackContext
-        self.playbackContext = playbackContext
-
-
-    PROPERTY_LOADERS = {
-        'playbackContext': (KalturaObjectFactory.create, 'KalturaPlaybackContext'), 
-    }
-
-    def fromXml(self, node):
-        KalturaBulkResponseItem.fromXml(self, node)
-        self.fromXmlImpl(node, KalturaBulkPlaybackContextSuccess.PROPERTY_LOADERS)
-
-    def toParams(self):
-        kparams = KalturaBulkResponseItem.toParams(self)
-        kparams.put("objectType", "KalturaBulkPlaybackContextSuccess")
-        kparams.addObjectIfDefined("playbackContext", self.playbackContext)
-        return kparams
-
-    def getPlaybackContext(self):
-        return self.playbackContext
-
-    def setPlaybackContext(self, newPlaybackContext):
-        self.playbackContext = newPlaybackContext
-
-
-# @package Kaltura
-# @subpackage Client
-class KalturaBumpersPlaybackPluginData(KalturaPlaybackPluginData):
-    def __init__(self,
-            url = NotImplemented,
-            streamertype = NotImplemented):
-        KalturaPlaybackPluginData.__init__(self)
-
-        # url
-        # @var str
-        self.url = url
-
-        # Streamer type: hls, dash, progressive.
-        # @var str
-        self.streamertype = streamertype
-
-
-    PROPERTY_LOADERS = {
-        'url': getXmlNodeText, 
-        'streamertype': getXmlNodeText, 
-    }
-
-    def fromXml(self, node):
-        KalturaPlaybackPluginData.fromXml(self, node)
-        self.fromXmlImpl(node, KalturaBumpersPlaybackPluginData.PROPERTY_LOADERS)
-
-    def toParams(self):
-        kparams = KalturaPlaybackPluginData.toParams(self)
-        kparams.put("objectType", "KalturaBumpersPlaybackPluginData")
-        kparams.addStringIfDefined("url", self.url)
-        kparams.addStringIfDefined("streamertype", self.streamertype)
-        return kparams
-
-    def getUrl(self):
-        return self.url
-
-    def setUrl(self, newUrl):
-        self.url = newUrl
-
-    def getStreamertype(self):
-        return self.streamertype
-
-    def setStreamertype(self, newStreamertype):
-        self.streamertype = newStreamertype
-
-
-# @package Kaltura
-# @subpackage Client
 class KalturaCDVRAdapterProfile(KalturaObjectBase):
     """C-DVR Adapter"""
 
@@ -46806,6 +46362,461 @@ class KalturaBulkPlaybackContextRequest(KalturaObjectBase):
 
     def setPlaybackContextParamSets(self, newPlaybackContextParamSets):
         self.playbackContextParamSets = newPlaybackContextParamSets
+
+
+# @package Kaltura
+# @subpackage Client
+class KalturaBulkResponseItem(KalturaObjectBase):
+    """Base class for objects that can be returned in bulk response operations"""
+
+    def __init__(self,
+            isSuccess = NotImplemented):
+        KalturaObjectBase.__init__(self)
+
+        # Indicates whether the bulk operation was successful
+        # @var bool
+        self.isSuccess = isSuccess
+
+
+    PROPERTY_LOADERS = {
+        'isSuccess': getXmlNodeBool, 
+    }
+
+    def fromXml(self, node):
+        KalturaObjectBase.fromXml(self, node)
+        self.fromXmlImpl(node, KalturaBulkResponseItem.PROPERTY_LOADERS)
+
+    def toParams(self):
+        kparams = KalturaObjectBase.toParams(self)
+        kparams.put("objectType", "KalturaBulkResponseItem")
+        kparams.addBoolIfDefined("isSuccess", self.isSuccess)
+        return kparams
+
+    def getIsSuccess(self):
+        return self.isSuccess
+
+    def setIsSuccess(self, newIsSuccess):
+        self.isSuccess = newIsSuccess
+
+
+# @package Kaltura
+# @subpackage Client
+class KalturaBulkPlaybackContextResponse(KalturaObjectBase):
+    """Response object for bulk getPlaybackContext operation.
+                Each item in the objects array corresponds to the request at the same index."""
+
+    def __init__(self,
+            objects = NotImplemented,
+            totalCount = NotImplemented):
+        KalturaObjectBase.__init__(self)
+
+        # Array of playback contexts or errors.
+        #             Each item corresponds to the request at the same index in the request array.
+        #             Items can be either KalturaPlaybackContext (success) or KalturaBulkPlaybackContextError (error).
+        # @var List[KalturaBulkResponseItem]
+        self.objects = objects
+
+        # Total items
+        # @var int
+        self.totalCount = totalCount
+
+
+    PROPERTY_LOADERS = {
+        'objects': (KalturaObjectFactory.createArray, 'KalturaBulkResponseItem'), 
+        'totalCount': getXmlNodeInt, 
+    }
+
+    def fromXml(self, node):
+        KalturaObjectBase.fromXml(self, node)
+        self.fromXmlImpl(node, KalturaBulkPlaybackContextResponse.PROPERTY_LOADERS)
+
+    def toParams(self):
+        kparams = KalturaObjectBase.toParams(self)
+        kparams.put("objectType", "KalturaBulkPlaybackContextResponse")
+        kparams.addArrayIfDefined("objects", self.objects)
+        kparams.addIntIfDefined("totalCount", self.totalCount)
+        return kparams
+
+    def getObjects(self):
+        return self.objects
+
+    def setObjects(self, newObjects):
+        self.objects = newObjects
+
+    def getTotalCount(self):
+        return self.totalCount
+
+    def setTotalCount(self, newTotalCount):
+        self.totalCount = newTotalCount
+
+
+# @package Kaltura
+# @subpackage Client
+class KalturaBulkPlaybackContextError(KalturaBulkResponseItem):
+    """Wrapper for KalturaAPIException to make it compatible with KalturaOTTObject inheritance requirement"""
+
+    def __init__(self,
+            isSuccess = NotImplemented,
+            code = NotImplemented,
+            message = NotImplemented,
+            args = NotImplemented):
+        KalturaBulkResponseItem.__init__(self,
+            isSuccess)
+
+        # The error code from the API exception
+        # @var str
+        self.code = code
+
+        # The error message from the API exception
+        # @var str
+        self.message = message
+
+        # Additional error arguments from the API exception
+        # @var List[KalturaApiExceptionArg]
+        self.args = args
+
+
+    PROPERTY_LOADERS = {
+        'code': getXmlNodeText, 
+        'message': getXmlNodeText, 
+        'args': (KalturaObjectFactory.createArray, 'KalturaApiExceptionArg'), 
+    }
+
+    def fromXml(self, node):
+        KalturaBulkResponseItem.fromXml(self, node)
+        self.fromXmlImpl(node, KalturaBulkPlaybackContextError.PROPERTY_LOADERS)
+
+    def toParams(self):
+        kparams = KalturaBulkResponseItem.toParams(self)
+        kparams.put("objectType", "KalturaBulkPlaybackContextError")
+        kparams.addStringIfDefined("code", self.code)
+        kparams.addStringIfDefined("message", self.message)
+        kparams.addArrayIfDefined("args", self.args)
+        return kparams
+
+    def getCode(self):
+        return self.code
+
+    def setCode(self, newCode):
+        self.code = newCode
+
+    def getMessage(self):
+        return self.message
+
+    def setMessage(self, newMessage):
+        self.message = newMessage
+
+    def getArgs(self):
+        return self.args
+
+    def setArgs(self, newArgs):
+        self.args = newArgs
+
+
+# @package Kaltura
+# @subpackage Client
+class KalturaAccessControlMessage(KalturaObjectBase):
+    def __init__(self,
+            message = NotImplemented,
+            code = NotImplemented):
+        KalturaObjectBase.__init__(self)
+
+        # Message
+        # @var str
+        self.message = message
+
+        # Code
+        # @var str
+        self.code = code
+
+
+    PROPERTY_LOADERS = {
+        'message': getXmlNodeText, 
+        'code': getXmlNodeText, 
+    }
+
+    def fromXml(self, node):
+        KalturaObjectBase.fromXml(self, node)
+        self.fromXmlImpl(node, KalturaAccessControlMessage.PROPERTY_LOADERS)
+
+    def toParams(self):
+        kparams = KalturaObjectBase.toParams(self)
+        kparams.put("objectType", "KalturaAccessControlMessage")
+        kparams.addStringIfDefined("message", self.message)
+        kparams.addStringIfDefined("code", self.code)
+        return kparams
+
+    def getMessage(self):
+        return self.message
+
+    def setMessage(self, newMessage):
+        self.message = newMessage
+
+    def getCode(self):
+        return self.code
+
+    def setCode(self, newCode):
+        self.code = newCode
+
+
+# @package Kaltura
+# @subpackage Client
+class KalturaCaptionPlaybackPluginData(KalturaObjectBase):
+    def __init__(self,
+            url = NotImplemented,
+            language = NotImplemented,
+            label = NotImplemented,
+            format = NotImplemented):
+        KalturaObjectBase.__init__(self)
+
+        # url
+        # @var str
+        self.url = url
+
+        # Language
+        # @var str
+        self.language = language
+
+        # Label
+        # @var str
+        self.label = label
+
+        # Format
+        # @var str
+        self.format = format
+
+
+    PROPERTY_LOADERS = {
+        'url': getXmlNodeText, 
+        'language': getXmlNodeText, 
+        'label': getXmlNodeText, 
+        'format': getXmlNodeText, 
+    }
+
+    def fromXml(self, node):
+        KalturaObjectBase.fromXml(self, node)
+        self.fromXmlImpl(node, KalturaCaptionPlaybackPluginData.PROPERTY_LOADERS)
+
+    def toParams(self):
+        kparams = KalturaObjectBase.toParams(self)
+        kparams.put("objectType", "KalturaCaptionPlaybackPluginData")
+        kparams.addStringIfDefined("url", self.url)
+        kparams.addStringIfDefined("language", self.language)
+        kparams.addStringIfDefined("label", self.label)
+        kparams.addStringIfDefined("format", self.format)
+        return kparams
+
+    def getUrl(self):
+        return self.url
+
+    def setUrl(self, newUrl):
+        self.url = newUrl
+
+    def getLanguage(self):
+        return self.language
+
+    def setLanguage(self, newLanguage):
+        self.language = newLanguage
+
+    def getLabel(self):
+        return self.label
+
+    def setLabel(self, newLabel):
+        self.label = newLabel
+
+    def getFormat(self):
+        return self.format
+
+    def setFormat(self, newFormat):
+        self.format = newFormat
+
+
+# @package Kaltura
+# @subpackage Client
+class KalturaPlaybackPluginData(KalturaObjectBase):
+    def __init__(self):
+        KalturaObjectBase.__init__(self)
+
+
+    PROPERTY_LOADERS = {
+    }
+
+    def fromXml(self, node):
+        KalturaObjectBase.fromXml(self, node)
+        self.fromXmlImpl(node, KalturaPlaybackPluginData.PROPERTY_LOADERS)
+
+    def toParams(self):
+        kparams = KalturaObjectBase.toParams(self)
+        kparams.put("objectType", "KalturaPlaybackPluginData")
+        return kparams
+
+
+# @package Kaltura
+# @subpackage Client
+class KalturaPlaybackContext(KalturaObjectBase):
+    def __init__(self,
+            sources = NotImplemented,
+            actions = NotImplemented,
+            messages = NotImplemented,
+            playbackCaptions = NotImplemented,
+            plugins = NotImplemented):
+        KalturaObjectBase.__init__(self)
+
+        # Sources
+        # @var List[KalturaPlaybackSource]
+        self.sources = sources
+
+        # Actions
+        # @var List[KalturaRuleAction]
+        self.actions = actions
+
+        # Messages
+        # @var List[KalturaAccessControlMessage]
+        self.messages = messages
+
+        # Playback captions
+        # @var List[KalturaCaptionPlaybackPluginData]
+        self.playbackCaptions = playbackCaptions
+
+        # Plugins
+        # @var List[KalturaPlaybackPluginData]
+        self.plugins = plugins
+
+
+    PROPERTY_LOADERS = {
+        'sources': (KalturaObjectFactory.createArray, 'KalturaPlaybackSource'), 
+        'actions': (KalturaObjectFactory.createArray, 'KalturaRuleAction'), 
+        'messages': (KalturaObjectFactory.createArray, 'KalturaAccessControlMessage'), 
+        'playbackCaptions': (KalturaObjectFactory.createArray, 'KalturaCaptionPlaybackPluginData'), 
+        'plugins': (KalturaObjectFactory.createArray, 'KalturaPlaybackPluginData'), 
+    }
+
+    def fromXml(self, node):
+        KalturaObjectBase.fromXml(self, node)
+        self.fromXmlImpl(node, KalturaPlaybackContext.PROPERTY_LOADERS)
+
+    def toParams(self):
+        kparams = KalturaObjectBase.toParams(self)
+        kparams.put("objectType", "KalturaPlaybackContext")
+        kparams.addArrayIfDefined("sources", self.sources)
+        kparams.addArrayIfDefined("actions", self.actions)
+        kparams.addArrayIfDefined("messages", self.messages)
+        kparams.addArrayIfDefined("playbackCaptions", self.playbackCaptions)
+        kparams.addArrayIfDefined("plugins", self.plugins)
+        return kparams
+
+    def getSources(self):
+        return self.sources
+
+    def setSources(self, newSources):
+        self.sources = newSources
+
+    def getActions(self):
+        return self.actions
+
+    def setActions(self, newActions):
+        self.actions = newActions
+
+    def getMessages(self):
+        return self.messages
+
+    def setMessages(self, newMessages):
+        self.messages = newMessages
+
+    def getPlaybackCaptions(self):
+        return self.playbackCaptions
+
+    def setPlaybackCaptions(self, newPlaybackCaptions):
+        self.playbackCaptions = newPlaybackCaptions
+
+    def getPlugins(self):
+        return self.plugins
+
+    def setPlugins(self, newPlugins):
+        self.plugins = newPlugins
+
+
+# @package Kaltura
+# @subpackage Client
+class KalturaBulkPlaybackContextSuccess(KalturaBulkResponseItem):
+    """Wrapper for KalturaPlaybackContext to make it compatible with bulk response operations"""
+
+    def __init__(self,
+            isSuccess = NotImplemented,
+            playbackContext = NotImplemented):
+        KalturaBulkResponseItem.__init__(self,
+            isSuccess)
+
+        # The successful playback context
+        # @var KalturaPlaybackContext
+        self.playbackContext = playbackContext
+
+
+    PROPERTY_LOADERS = {
+        'playbackContext': (KalturaObjectFactory.create, 'KalturaPlaybackContext'), 
+    }
+
+    def fromXml(self, node):
+        KalturaBulkResponseItem.fromXml(self, node)
+        self.fromXmlImpl(node, KalturaBulkPlaybackContextSuccess.PROPERTY_LOADERS)
+
+    def toParams(self):
+        kparams = KalturaBulkResponseItem.toParams(self)
+        kparams.put("objectType", "KalturaBulkPlaybackContextSuccess")
+        kparams.addObjectIfDefined("playbackContext", self.playbackContext)
+        return kparams
+
+    def getPlaybackContext(self):
+        return self.playbackContext
+
+    def setPlaybackContext(self, newPlaybackContext):
+        self.playbackContext = newPlaybackContext
+
+
+# @package Kaltura
+# @subpackage Client
+class KalturaBumpersPlaybackPluginData(KalturaPlaybackPluginData):
+    def __init__(self,
+            url = NotImplemented,
+            streamertype = NotImplemented):
+        KalturaPlaybackPluginData.__init__(self)
+
+        # url
+        # @var str
+        self.url = url
+
+        # Streamer type: hls, dash, progressive.
+        # @var str
+        self.streamertype = streamertype
+
+
+    PROPERTY_LOADERS = {
+        'url': getXmlNodeText, 
+        'streamertype': getXmlNodeText, 
+    }
+
+    def fromXml(self, node):
+        KalturaPlaybackPluginData.fromXml(self, node)
+        self.fromXmlImpl(node, KalturaBumpersPlaybackPluginData.PROPERTY_LOADERS)
+
+    def toParams(self):
+        kparams = KalturaPlaybackPluginData.toParams(self)
+        kparams.put("objectType", "KalturaBumpersPlaybackPluginData")
+        kparams.addStringIfDefined("url", self.url)
+        kparams.addStringIfDefined("streamertype", self.streamertype)
+        return kparams
+
+    def getUrl(self):
+        return self.url
+
+    def setUrl(self, newUrl):
+        self.url = newUrl
+
+    def getStreamertype(self):
+        return self.streamertype
+
+    def setStreamertype(self, newStreamertype):
+        self.streamertype = newStreamertype
 
 
 # @package Kaltura
@@ -63358,15 +63369,6 @@ class KalturaCoreClient(KalturaClientPlugin):
             'KalturaConfigurationsListResponse': KalturaConfigurationsListResponse,
             'KalturaBillingTransaction': KalturaBillingTransaction,
             'KalturaBillingTransactionListResponse': KalturaBillingTransactionListResponse,
-            'KalturaBulkResponseItem': KalturaBulkResponseItem,
-            'KalturaBulkPlaybackContextResponse': KalturaBulkPlaybackContextResponse,
-            'KalturaBulkPlaybackContextError': KalturaBulkPlaybackContextError,
-            'KalturaAccessControlMessage': KalturaAccessControlMessage,
-            'KalturaCaptionPlaybackPluginData': KalturaCaptionPlaybackPluginData,
-            'KalturaPlaybackPluginData': KalturaPlaybackPluginData,
-            'KalturaPlaybackContext': KalturaPlaybackContext,
-            'KalturaBulkPlaybackContextSuccess': KalturaBulkPlaybackContextSuccess,
-            'KalturaBumpersPlaybackPluginData': KalturaBumpersPlaybackPluginData,
             'KalturaCDVRAdapterProfile': KalturaCDVRAdapterProfile,
             'KalturaCDVRAdapterProfileListResponse': KalturaCDVRAdapterProfileListResponse,
             'KalturaEntitlement': KalturaEntitlement,
@@ -63527,6 +63529,15 @@ class KalturaCoreClient(KalturaClientPlugin):
             'KalturaPlaybackContextOptions': KalturaPlaybackContextOptions,
             'KalturaGetPlaybackContextParams': KalturaGetPlaybackContextParams,
             'KalturaBulkPlaybackContextRequest': KalturaBulkPlaybackContextRequest,
+            'KalturaBulkResponseItem': KalturaBulkResponseItem,
+            'KalturaBulkPlaybackContextResponse': KalturaBulkPlaybackContextResponse,
+            'KalturaBulkPlaybackContextError': KalturaBulkPlaybackContextError,
+            'KalturaAccessControlMessage': KalturaAccessControlMessage,
+            'KalturaCaptionPlaybackPluginData': KalturaCaptionPlaybackPluginData,
+            'KalturaPlaybackPluginData': KalturaPlaybackPluginData,
+            'KalturaPlaybackContext': KalturaPlaybackContext,
+            'KalturaBulkPlaybackContextSuccess': KalturaBulkPlaybackContextSuccess,
+            'KalturaBumpersPlaybackPluginData': KalturaBumpersPlaybackPluginData,
             'KalturaAdsSource': KalturaAdsSource,
             'KalturaAdsContext': KalturaAdsContext,
             'KalturaBulkUploadJobData': KalturaBulkUploadJobData,
