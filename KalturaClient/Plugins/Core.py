@@ -46406,7 +46406,7 @@ class KalturaBulkPlaybackContextResponse(KalturaObjectBase):
                 Each item in the objects array corresponds to the request at the same index."""
 
     def __init__(self,
-            objects = NotImplemented,
+            items = NotImplemented,
             totalCount = NotImplemented):
         KalturaObjectBase.__init__(self)
 
@@ -46414,7 +46414,7 @@ class KalturaBulkPlaybackContextResponse(KalturaObjectBase):
         #             Each item corresponds to the request at the same index in the request array.
         #             Items can be either KalturaPlaybackContext (success) or KalturaBulkPlaybackContextError (error).
         # @var List[KalturaBulkResponseItem]
-        self.objects = objects
+        self.items = items
 
         # Total items
         # @var int
@@ -46422,7 +46422,7 @@ class KalturaBulkPlaybackContextResponse(KalturaObjectBase):
 
 
     PROPERTY_LOADERS = {
-        'objects': (KalturaObjectFactory.createArray, 'KalturaBulkResponseItem'), 
+        'items': (KalturaObjectFactory.createArray, 'KalturaBulkResponseItem'), 
         'totalCount': getXmlNodeInt, 
     }
 
@@ -46433,15 +46433,15 @@ class KalturaBulkPlaybackContextResponse(KalturaObjectBase):
     def toParams(self):
         kparams = KalturaObjectBase.toParams(self)
         kparams.put("objectType", "KalturaBulkPlaybackContextResponse")
-        kparams.addArrayIfDefined("objects", self.objects)
+        kparams.addArrayIfDefined("items", self.items)
         kparams.addIntIfDefined("totalCount", self.totalCount)
         return kparams
 
-    def getObjects(self):
-        return self.objects
+    def getItems(self):
+        return self.items
 
-    def setObjects(self, newObjects):
-        self.objects = newObjects
+    def setItems(self, newItems):
+        self.items = newItems
 
     def getTotalCount(self):
         return self.totalCount
