@@ -14170,8 +14170,7 @@ class KalturaTreeQuestion(KalturaObjectBase):
     def __init__(self,
             questionId = NotImplemented,
             text = NotImplemented,
-            level = NotImplemented,
-            metadataTypes = NotImplemented):
+            level = NotImplemented):
         KalturaObjectBase.__init__(self)
 
         # Unique identifier for the question.
@@ -14186,16 +14185,11 @@ class KalturaTreeQuestion(KalturaObjectBase):
         # @var int
         self.level = level
 
-        # Array of metadata categories this question focuses on.
-        # @var List[KalturaStringValue]
-        self.metadataTypes = metadataTypes
-
 
     PROPERTY_LOADERS = {
         'questionId': getXmlNodeText, 
         'text': getXmlNodeText, 
         'level': getXmlNodeInt, 
-        'metadataTypes': (KalturaObjectFactory.createArray, 'KalturaStringValue'), 
     }
 
     def fromXml(self, node):
@@ -14208,7 +14202,6 @@ class KalturaTreeQuestion(KalturaObjectBase):
         kparams.addStringIfDefined("questionId", self.questionId)
         kparams.addStringIfDefined("text", self.text)
         kparams.addIntIfDefined("level", self.level)
-        kparams.addArrayIfDefined("metadataTypes", self.metadataTypes)
         return kparams
 
     def getQuestionId(self):
@@ -14229,12 +14222,6 @@ class KalturaTreeQuestion(KalturaObjectBase):
     def setLevel(self, newLevel):
         self.level = newLevel
 
-    def getMetadataTypes(self):
-        return self.metadataTypes
-
-    def setMetadataTypes(self, newMetadataTypes):
-        self.metadataTypes = newMetadataTypes
-
 
 # @package Kaltura
 # @subpackage Client
@@ -14243,10 +14230,7 @@ class KalturaTreeAnswer(KalturaObjectBase):
 
     def __init__(self,
             answerId = NotImplemented,
-            text = NotImplemented,
-            hasNextQuestion = NotImplemented,
-            isSpecial = NotImplemented,
-            specialType = NotImplemented):
+            text = NotImplemented):
         KalturaObjectBase.__init__(self)
 
         # Unique identifier for the answer.
@@ -14257,25 +14241,10 @@ class KalturaTreeAnswer(KalturaObjectBase):
         # @var str
         self.text = text
 
-        # Boolean indicating if selecting this answer leads to another question.
-        # @var bool
-        self.hasNextQuestion = hasNextQuestion
-
-        # Flag for special answers like &quot;I don&#39;t know&quot; (optional).
-        # @var bool
-        self.isSpecial = isSpecial
-
-        # The type of special answer, e.g., &quot;unsure&quot; (optional).
-        # @var str
-        self.specialType = specialType
-
 
     PROPERTY_LOADERS = {
         'answerId': getXmlNodeText, 
         'text': getXmlNodeText, 
-        'hasNextQuestion': getXmlNodeBool, 
-        'isSpecial': getXmlNodeBool, 
-        'specialType': getXmlNodeText, 
     }
 
     def fromXml(self, node):
@@ -14287,9 +14256,6 @@ class KalturaTreeAnswer(KalturaObjectBase):
         kparams.put("objectType", "KalturaTreeAnswer")
         kparams.addStringIfDefined("answerId", self.answerId)
         kparams.addStringIfDefined("text", self.text)
-        kparams.addBoolIfDefined("hasNextQuestion", self.hasNextQuestion)
-        kparams.addBoolIfDefined("isSpecial", self.isSpecial)
-        kparams.addStringIfDefined("specialType", self.specialType)
         return kparams
 
     def getAnswerId(self):
@@ -14303,24 +14269,6 @@ class KalturaTreeAnswer(KalturaObjectBase):
 
     def setText(self, newText):
         self.text = newText
-
-    def getHasNextQuestion(self):
-        return self.hasNextQuestion
-
-    def setHasNextQuestion(self, newHasNextQuestion):
-        self.hasNextQuestion = newHasNextQuestion
-
-    def getIsSpecial(self):
-        return self.isSpecial
-
-    def setIsSpecial(self, newIsSpecial):
-        self.isSpecial = newIsSpecial
-
-    def getSpecialType(self):
-        return self.specialType
-
-    def setSpecialType(self, newSpecialType):
-        self.specialType = newSpecialType
 
 
 # @package Kaltura
@@ -15439,7 +15387,7 @@ class KalturaTreeRecommendations(KalturaObjectBase):
         # @var str
         self.title = title
 
-        # Array of content assets matching the recommendation criteria.
+        # Array of content assets matching the recommendation criteria, this is essentially a KalturaAssetListResponseObject.
         # @var List[KalturaAsset]
         self.assets = assets
 
@@ -15481,6 +15429,7 @@ class KalturaTreeNextNodeResponse(KalturaObjectBase):
 
     def __init__(self,
             question = NotImplemented,
+            totalLevelQuestions = NotImplemented,
             answers = NotImplemented,
             recommendations = NotImplemented):
         KalturaObjectBase.__init__(self)
@@ -15488,6 +15437,10 @@ class KalturaTreeNextNodeResponse(KalturaObjectBase):
         # The next question to present to the user, or null for terminal nodes.
         # @var KalturaTreeQuestion
         self.question = question
+
+        # Number of total questions in the level.
+        # @var int
+        self.totalLevelQuestions = totalLevelQuestions
 
         # Array of possible answer options for the question.
         # @var List[KalturaTreeAnswer]
@@ -15500,6 +15453,7 @@ class KalturaTreeNextNodeResponse(KalturaObjectBase):
 
     PROPERTY_LOADERS = {
         'question': (KalturaObjectFactory.create, 'KalturaTreeQuestion'), 
+        'totalLevelQuestions': getXmlNodeInt, 
         'answers': (KalturaObjectFactory.createArray, 'KalturaTreeAnswer'), 
         'recommendations': (KalturaObjectFactory.create, 'KalturaTreeRecommendations'), 
     }
@@ -15512,6 +15466,7 @@ class KalturaTreeNextNodeResponse(KalturaObjectBase):
         kparams = KalturaObjectBase.toParams(self)
         kparams.put("objectType", "KalturaTreeNextNodeResponse")
         kparams.addObjectIfDefined("question", self.question)
+        kparams.addIntIfDefined("totalLevelQuestions", self.totalLevelQuestions)
         kparams.addArrayIfDefined("answers", self.answers)
         kparams.addObjectIfDefined("recommendations", self.recommendations)
         return kparams
@@ -15521,6 +15476,12 @@ class KalturaTreeNextNodeResponse(KalturaObjectBase):
 
     def setQuestion(self, newQuestion):
         self.question = newQuestion
+
+    def getTotalLevelQuestions(self):
+        return self.totalLevelQuestions
+
+    def setTotalLevelQuestions(self, newTotalLevelQuestions):
+        self.totalLevelQuestions = newTotalLevelQuestions
 
     def getAnswers(self):
         return self.answers
@@ -17061,6 +17022,7 @@ class KalturaAiRecommendationTreePartnerConfiguration(KalturaObjectBase):
             topLevelQuestions = NotImplemented,
             answersPerQuestion = NotImplemented,
             levels = NotImplemented,
+            specialAnswers = NotImplemented,
             numOfRecommendedAssets = NotImplemented,
             treeGenerationFrequency = NotImplemented,
             activeTreeId = NotImplemented):
@@ -17070,19 +17032,23 @@ class KalturaAiRecommendationTreePartnerConfiguration(KalturaObjectBase):
         # @var map
         self.activeMetadataTypes = activeMetadataTypes
 
-        # Number of top-level questions to generate (range: 5-21).
+        # Number of top-level questions to generate (range: 5-30).
         # @var int
         self.topLevelQuestions = topLevelQuestions
 
-        # Number of regular answers per question (range: 2-3).
+        # Number of regular answers per question (range: 2-5).
         # @var int
         self.answersPerQuestion = answersPerQuestion
 
-        # Maximum depth of the decision tree (range: 1-5).
+        # Maximum depth of the decision tree (range: 1-4).
         # @var int
         self.levels = levels
 
-        # Number of assets to include in each recommendation set.
+        # Number of assets to include in each recommendation set (max limit is 50).
+        # @var bool
+        self.specialAnswers = specialAnswers
+
+        # Number of assets to include in each recommendation set (max limit is 50).
         # @var int
         self.numOfRecommendedAssets = numOfRecommendedAssets
 
@@ -17100,6 +17066,7 @@ class KalturaAiRecommendationTreePartnerConfiguration(KalturaObjectBase):
         'topLevelQuestions': getXmlNodeInt, 
         'answersPerQuestion': getXmlNodeInt, 
         'levels': getXmlNodeInt, 
+        'specialAnswers': getXmlNodeBool, 
         'numOfRecommendedAssets': getXmlNodeInt, 
         'treeGenerationFrequency': getXmlNodeText, 
         'activeTreeId': getXmlNodeText, 
@@ -17116,6 +17083,7 @@ class KalturaAiRecommendationTreePartnerConfiguration(KalturaObjectBase):
         kparams.addIntIfDefined("topLevelQuestions", self.topLevelQuestions)
         kparams.addIntIfDefined("answersPerQuestion", self.answersPerQuestion)
         kparams.addIntIfDefined("levels", self.levels)
+        kparams.addBoolIfDefined("specialAnswers", self.specialAnswers)
         kparams.addIntIfDefined("numOfRecommendedAssets", self.numOfRecommendedAssets)
         kparams.addStringIfDefined("treeGenerationFrequency", self.treeGenerationFrequency)
         kparams.addStringIfDefined("activeTreeId", self.activeTreeId)
@@ -17144,6 +17112,12 @@ class KalturaAiRecommendationTreePartnerConfiguration(KalturaObjectBase):
 
     def setLevels(self, newLevels):
         self.levels = newLevels
+
+    def getSpecialAnswers(self):
+        return self.specialAnswers
+
+    def setSpecialAnswers(self, newSpecialAnswers):
+        self.specialAnswers = newSpecialAnswers
 
     def getNumOfRecommendedAssets(self):
         return self.numOfRecommendedAssets
@@ -54320,12 +54294,11 @@ class KalturaAiRecommendationTreeService(KalturaServiceBase):
     def __init__(self, client = None):
         KalturaServiceBase.__init__(self, client)
 
-    def getNextNodeAndRecommendation(self, treeId = NotImplemented, previousQuestionId = NotImplemented, answerId = NotImplemented, topQuestionId = NotImplemented):
+    def getNextNodeAndRecommendation(self, treeId = NotImplemented, answerId = NotImplemented, topQuestionId = NotImplemented):
         """Returns the next question, available answers, and content recommendations based on the current path through the tree."""
 
         kparams = KalturaParams()
         kparams.addStringIfDefined("treeId", treeId)
-        kparams.addStringIfDefined("previousQuestionId", previousQuestionId)
         kparams.addStringIfDefined("answerId", answerId)
         kparams.addStringIfDefined("topQuestionId", topQuestionId)
         self.client.queueServiceActionCall("airecommendationtree", "getNextNodeAndRecommendation", "KalturaTreeNextNodeResponse", kparams)
@@ -54344,12 +54317,12 @@ class KalturaAiRecommendationTreeService(KalturaServiceBase):
         resultNode = self.client.doQueue()
         return KalturaObjectFactory.create(resultNode, 'KalturaAiRecommendationTreePartnerConfiguration')
 
-    def getRecommendationWithNaturalText(self, naturalTextQuery, previousQuestionId = NotImplemented, treeId = NotImplemented):
+    def getRecommendationWithNaturalText(self, naturalTextQuery, questionId = NotImplemented, treeId = NotImplemented):
         """Returns content recommendations based on natural language input."""
 
         kparams = KalturaParams()
         kparams.addStringIfDefined("naturalTextQuery", naturalTextQuery)
-        kparams.addStringIfDefined("previousQuestionId", previousQuestionId)
+        kparams.addStringIfDefined("questionId", questionId)
         kparams.addStringIfDefined("treeId", treeId)
         self.client.queueServiceActionCall("airecommendationtree", "getRecommendationWithNaturalText", "KalturaTreeNaturalTextResponse", kparams)
         if self.client.isMultiRequest():
