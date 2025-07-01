@@ -15428,11 +15428,16 @@ class KalturaTreeNextNodeResponse(KalturaObjectBase):
                 Contains the next question, possible answers, and content recommendations."""
 
     def __init__(self,
+            treeId = NotImplemented,
             question = NotImplemented,
             totalLevelQuestions = NotImplemented,
             answers = NotImplemented,
             recommendations = NotImplemented):
         KalturaObjectBase.__init__(self)
+
+        # The tree id whom this node belongs to.
+        # @var str
+        self.treeId = treeId
 
         # The next question to present to the user, or null for terminal nodes.
         # @var KalturaTreeQuestion
@@ -15452,6 +15457,7 @@ class KalturaTreeNextNodeResponse(KalturaObjectBase):
 
 
     PROPERTY_LOADERS = {
+        'treeId': getXmlNodeText, 
         'question': (KalturaObjectFactory.create, 'KalturaTreeQuestion'), 
         'totalLevelQuestions': getXmlNodeInt, 
         'answers': (KalturaObjectFactory.createArray, 'KalturaTreeAnswer'), 
@@ -15465,11 +15471,18 @@ class KalturaTreeNextNodeResponse(KalturaObjectBase):
     def toParams(self):
         kparams = KalturaObjectBase.toParams(self)
         kparams.put("objectType", "KalturaTreeNextNodeResponse")
+        kparams.addStringIfDefined("treeId", self.treeId)
         kparams.addObjectIfDefined("question", self.question)
         kparams.addIntIfDefined("totalLevelQuestions", self.totalLevelQuestions)
         kparams.addArrayIfDefined("answers", self.answers)
         kparams.addObjectIfDefined("recommendations", self.recommendations)
         return kparams
+
+    def getTreeId(self):
+        return self.treeId
+
+    def setTreeId(self, newTreeId):
+        self.treeId = newTreeId
 
     def getQuestion(self):
         return self.question
