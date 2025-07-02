@@ -6,7 +6,7 @@ with open(path.join(this_directory, 'README.txt')) as f:
 
 setup(
     name='KalturaOttApiClient',
-    version='11.2.1.0',
+    version='11.4.0.0',
     url='https://github.com/kaltura/KalturaOttGeneratedAPIClientsPython',
     packages=['KalturaClient', 'KalturaClient.Plugins'],
     install_requires=['requests>=2.4.2', 'requests-toolbelt', 'six'],

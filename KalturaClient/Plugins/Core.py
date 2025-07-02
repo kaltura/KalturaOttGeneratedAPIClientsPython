@@ -42,7 +42,7 @@ from ..Base import (
     KalturaServiceBase,
 )
 
-API_VERSION = '11.2.1.0'
+API_VERSION = '11.4.0.0'
 
 ########## enums ##########
 # @package Kaltura
@@ -1319,6 +1319,31 @@ class KalturaGenerateMetadataStatus(object):
 
 # @package Kaltura
 # @subpackage Client
+class KalturaGeoBlockMode(object):
+    ALLOWONLYSELECTED = "AllowOnlySelected"
+    BLOCKONLYSELECTED = "BlockOnlySelected"
+
+    def __init__(self, value):
+        self.value = value
+
+    def getValue(self):
+        return self.value
+
+# @package Kaltura
+# @subpackage Client
+class KalturaGeoBlockRuleOrderBy(object):
+    CREATE_DATE_DESC = "CREATE_DATE_DESC"
+    NAME_ASC = "NAME_ASC"
+    NAME_DESC = "NAME_DESC"
+
+    def __init__(self, value):
+        self.value = value
+
+    def getValue(self):
+        return self.value
+
+# @package Kaltura
+# @subpackage Client
 class KalturaGroupByField(object):
     MEDIA_TYPE_ID = "media_type_id"
     SUPPRESSED = "suppressed"
@@ -2295,6 +2320,18 @@ class KalturaProgramAssetGroupOfferOrderBy(object):
 class KalturaProtectionPolicy(object):
     EXTENDINGRECORDINGLIFETIME = "ExtendingRecordingLifetime"
     LIMITEDBYRECORDINGLIFETIME = "LimitedByRecordingLifetime"
+
+    def __init__(self, value):
+        self.value = value
+
+    def getValue(self):
+        return self.value
+
+# @package Kaltura
+# @subpackage Client
+class KalturaProxyRuleLevel(object):
+    MEDIUM = "Medium"
+    HIGH = "High"
 
     def __init__(self, value):
         self.value = value
@@ -13616,6 +13653,30 @@ class KalturaUserRoleFilter(KalturaFilter):
 
 # @package Kaltura
 # @subpackage Client
+class KalturaGeoBlockRuleFilter(KalturaFilter):
+    """Geo block rule filter"""
+
+    def __init__(self,
+            orderBy = NotImplemented):
+        KalturaFilter.__init__(self,
+            orderBy)
+
+
+    PROPERTY_LOADERS = {
+    }
+
+    def fromXml(self, node):
+        KalturaFilter.fromXml(self, node)
+        self.fromXmlImpl(node, KalturaGeoBlockRuleFilter.PROPERTY_LOADERS)
+
+    def toParams(self):
+        kparams = KalturaFilter.toParams(self)
+        kparams.put("objectType", "KalturaGeoBlockRuleFilter")
+        return kparams
+
+
+# @package Kaltura
+# @subpackage Client
 class KalturaEpgFilter(KalturaFilter):
     def __init__(self,
             orderBy = NotImplemented,
@@ -14048,16 +14109,13 @@ class KalturaAiMetadataGeneratorConfiguration(KalturaObjectBase):
     """The configuration object for the metadata enrichment feature."""
 
     def __init__(self,
-            isEnabled = NotImplemented,
             assetStructMetaNameMap = NotImplemented,
             supportedLanguages = NotImplemented):
         KalturaObjectBase.__init__(self)
 
-        # Specifies if the feature is enabled or disabled.
-        # @var bool
-        self.isEnabled = isEnabled
-
-        # A map (dictionary) to indicate to which existing metadata or tag the newly generated metadata value should be pushed, per assetStruct (per &#39;asset type&#39;)
+        # A type of dictionary defined as [long,KalturaMetaFieldNameMap]. 
+        #             This property is used to correlate the newly generated metadata to
+        #             existing metadata IDs which are available in the asset's struct.
         # @var map
         self.assetStructMetaNameMap = assetStructMetaNameMap
 
@@ -14069,7 +14127,6 @@ class KalturaAiMetadataGeneratorConfiguration(KalturaObjectBase):
 
 
     PROPERTY_LOADERS = {
-        'isEnabled': getXmlNodeBool, 
         'assetStructMetaNameMap': (KalturaObjectFactory.createMap, 'KalturaMetaFieldNameMap'), 
         'supportedLanguages': (KalturaObjectFactory.createArray, 'KalturaStringValue'), 
     }
@@ -14081,15 +14138,8 @@ class KalturaAiMetadataGeneratorConfiguration(KalturaObjectBase):
     def toParams(self):
         kparams = KalturaObjectBase.toParams(self)
         kparams.put("objectType", "KalturaAiMetadataGeneratorConfiguration")
-        kparams.addBoolIfDefined("isEnabled", self.isEnabled)
         kparams.addMapIfDefined("assetStructMetaNameMap", self.assetStructMetaNameMap)
         return kparams
-
-    def getIsEnabled(self):
-        return self.isEnabled
-
-    def setIsEnabled(self, newIsEnabled):
-        self.isEnabled = newIsEnabled
 
     def getAssetStructMetaNameMap(self):
         return self.assetStructMetaNameMap
@@ -45458,6 +45508,160 @@ class KalturaUserRoleListResponse(KalturaListResponse):
 
 # @package Kaltura
 # @subpackage Client
+class KalturaGeoBlockRule(KalturaObjectBase):
+    """Geo Block Rule"""
+
+    def __init__(self,
+            id = NotImplemented,
+            name = NotImplemented,
+            createDate = NotImplemented,
+            updateDate = NotImplemented,
+            countryIds = NotImplemented,
+            mode = NotImplemented,
+            isProxyRuleEnabled = NotImplemented,
+            proxyRuleLevel = NotImplemented):
+        KalturaObjectBase.__init__(self)
+
+        # Geo Block Rule id
+        # @var int
+        # @readonly
+        self.id = id
+
+        # Name
+        # @var str
+        self.name = name
+
+        # Create Date Epoch time in seconds
+        # @var int
+        # @readonly
+        self.createDate = createDate
+
+        # Update Date Epoch time in seconds
+        # @var int
+        # @readonly
+        self.updateDate = updateDate
+
+        # comma separated string representing list of countries that the rule shall apply to
+        # @var str
+        self.countryIds = countryIds
+
+        # mode - Defines the geo-blocking strategy based on user location.
+        #             AllowOnlySelected - Implements a restrictive whitelist approach where content is only accessible from explicitly selected countries. All other countries are blocked by default.
+        #             BlockOnlySelected - Implements a permissive blacklist approach where content is accessible from all countries except those explicitly selected for blocking.
+        # @var KalturaGeoBlockMode
+        self.mode = mode
+
+        # Should geo block rule check proxy as well
+        # @var bool
+        self.isProxyRuleEnabled = isProxyRuleEnabled
+
+        # Level of proxy rule check - medium or high
+        # @var KalturaProxyRuleLevel
+        self.proxyRuleLevel = proxyRuleLevel
+
+
+    PROPERTY_LOADERS = {
+        'id': getXmlNodeInt, 
+        'name': getXmlNodeText, 
+        'createDate': getXmlNodeInt, 
+        'updateDate': getXmlNodeInt, 
+        'countryIds': getXmlNodeText, 
+        'mode': (KalturaEnumsFactory.createString, "KalturaGeoBlockMode"), 
+        'isProxyRuleEnabled': getXmlNodeBool, 
+        'proxyRuleLevel': (KalturaEnumsFactory.createString, "KalturaProxyRuleLevel"), 
+    }
+
+    def fromXml(self, node):
+        KalturaObjectBase.fromXml(self, node)
+        self.fromXmlImpl(node, KalturaGeoBlockRule.PROPERTY_LOADERS)
+
+    def toParams(self):
+        kparams = KalturaObjectBase.toParams(self)
+        kparams.put("objectType", "KalturaGeoBlockRule")
+        kparams.addStringIfDefined("name", self.name)
+        kparams.addStringIfDefined("countryIds", self.countryIds)
+        kparams.addStringEnumIfDefined("mode", self.mode)
+        kparams.addBoolIfDefined("isProxyRuleEnabled", self.isProxyRuleEnabled)
+        kparams.addStringEnumIfDefined("proxyRuleLevel", self.proxyRuleLevel)
+        return kparams
+
+    def getId(self):
+        return self.id
+
+    def getName(self):
+        return self.name
+
+    def setName(self, newName):
+        self.name = newName
+
+    def getCreateDate(self):
+        return self.createDate
+
+    def getUpdateDate(self):
+        return self.updateDate
+
+    def getCountryIds(self):
+        return self.countryIds
+
+    def setCountryIds(self, newCountryIds):
+        self.countryIds = newCountryIds
+
+    def getMode(self):
+        return self.mode
+
+    def setMode(self, newMode):
+        self.mode = newMode
+
+    def getIsProxyRuleEnabled(self):
+        return self.isProxyRuleEnabled
+
+    def setIsProxyRuleEnabled(self, newIsProxyRuleEnabled):
+        self.isProxyRuleEnabled = newIsProxyRuleEnabled
+
+    def getProxyRuleLevel(self):
+        return self.proxyRuleLevel
+
+    def setProxyRuleLevel(self, newProxyRuleLevel):
+        self.proxyRuleLevel = newProxyRuleLevel
+
+
+# @package Kaltura
+# @subpackage Client
+class KalturaGeoBlockRuleListResponse(KalturaListResponse):
+    def __init__(self,
+            totalCount = NotImplemented,
+            objects = NotImplemented):
+        KalturaListResponse.__init__(self,
+            totalCount)
+
+        # Geo block rules
+        # @var List[KalturaGeoBlockRule]
+        self.objects = objects
+
+
+    PROPERTY_LOADERS = {
+        'objects': (KalturaObjectFactory.createArray, 'KalturaGeoBlockRule'), 
+    }
+
+    def fromXml(self, node):
+        KalturaListResponse.fromXml(self, node)
+        self.fromXmlImpl(node, KalturaGeoBlockRuleListResponse.PROPERTY_LOADERS)
+
+    def toParams(self):
+        kparams = KalturaListResponse.toParams(self)
+        kparams.put("objectType", "KalturaGeoBlockRuleListResponse")
+        kparams.addArrayIfDefined("objects", self.objects)
+        return kparams
+
+    def getObjects(self):
+        return self.objects
+
+    def setObjects(self, newObjects):
+        self.objects = newObjects
+
+
+# @package Kaltura
+# @subpackage Client
 class KalturaEpgListResponse(KalturaListResponse):
     """EPG wrapper"""
 
@@ -49115,7 +49319,10 @@ class KalturaVodIngestAssetResult(KalturaObjectBase):
             status = NotImplemented,
             vodTypeSystemName = NotImplemented,
             errors = NotImplemented,
-            warnings = NotImplemented):
+            warnings = NotImplemented,
+            fileUploadDate = NotImplemented,
+            processingStartDate = NotImplemented,
+            processingCompletionDate = NotImplemented):
         KalturaObjectBase.__init__(self)
 
         # Ingested asset name. Absent only in case of NameRequired error
@@ -49154,6 +49361,18 @@ class KalturaVodIngestAssetResult(KalturaObjectBase):
         # @var List[KalturaVodIngestAssetResultErrorMessage]
         self.warnings = warnings
 
+        # The date and time for which the ingest file was uploaded to the remote file server. Expressed in milliseconds EPOCH time.
+        # @var int
+        self.fileUploadDate = fileUploadDate
+
+        # The date and time for which the ingest file moved to in progress folder and started processing. Expressed in milliseconds EPOCH time.
+        # @var int
+        self.processingStartDate = processingStartDate
+
+        # The date and time for which the ingest file completed the ingest process. Expressed in milliseconds EPOCH time.
+        # @var int
+        self.processingCompletionDate = processingCompletionDate
+
 
     PROPERTY_LOADERS = {
         'assetName': getXmlNodeText, 
@@ -49164,6 +49383,9 @@ class KalturaVodIngestAssetResult(KalturaObjectBase):
         'vodTypeSystemName': getXmlNodeText, 
         'errors': (KalturaObjectFactory.createArray, 'KalturaVodIngestAssetResultErrorMessage'), 
         'warnings': (KalturaObjectFactory.createArray, 'KalturaVodIngestAssetResultErrorMessage'), 
+        'fileUploadDate': getXmlNodeInt, 
+        'processingStartDate': getXmlNodeInt, 
+        'processingCompletionDate': getXmlNodeInt, 
     }
 
     def fromXml(self, node):
@@ -49181,6 +49403,9 @@ class KalturaVodIngestAssetResult(KalturaObjectBase):
         kparams.addStringIfDefined("vodTypeSystemName", self.vodTypeSystemName)
         kparams.addArrayIfDefined("errors", self.errors)
         kparams.addArrayIfDefined("warnings", self.warnings)
+        kparams.addIntIfDefined("fileUploadDate", self.fileUploadDate)
+        kparams.addIntIfDefined("processingStartDate", self.processingStartDate)
+        kparams.addIntIfDefined("processingCompletionDate", self.processingCompletionDate)
         return kparams
 
     def getAssetName(self):
@@ -49230,6 +49455,24 @@ class KalturaVodIngestAssetResult(KalturaObjectBase):
 
     def setWarnings(self, newWarnings):
         self.warnings = newWarnings
+
+    def getFileUploadDate(self):
+        return self.fileUploadDate
+
+    def setFileUploadDate(self, newFileUploadDate):
+        self.fileUploadDate = newFileUploadDate
+
+    def getProcessingStartDate(self):
+        return self.processingStartDate
+
+    def setProcessingStartDate(self, newProcessingStartDate):
+        self.processingStartDate = newProcessingStartDate
+
+    def getProcessingCompletionDate(self):
+        return self.processingCompletionDate
+
+    def setProcessingCompletionDate(self, newProcessingCompletionDate):
+        self.processingCompletionDate = newProcessingCompletionDate
 
 
 # @package Kaltura
@@ -49287,7 +49530,11 @@ class KalturaVodIngestAssetResultAggregation(KalturaObjectBase):
             failureCount = NotImplemented,
             successCount = NotImplemented,
             externalFailureCount = NotImplemented,
-            successWithWarningCount = NotImplemented):
+            successWithWarningCount = NotImplemented,
+            averageTotalProcessingDuration = NotImplemented,
+            averageTotalActiveProcessingDuration = NotImplemented,
+            p95TotalProcessingDuration = NotImplemented,
+            p95TotalActiveProcessingDuration = NotImplemented):
         KalturaObjectBase.__init__(self)
 
         # Ingest date of the first asset in the response list. Date and time represented as epoch.
@@ -49314,6 +49561,22 @@ class KalturaVodIngestAssetResultAggregation(KalturaObjectBase):
         # @var int
         self.successWithWarningCount = successWithWarningCount
 
+        # Average calculated for the total processing duration of the assets returned according to the applied filters.
+        # @var int
+        self.averageTotalProcessingDuration = averageTotalProcessingDuration
+
+        # Average calculated for the active processing duration of the assets returned according to the applied filters.
+        # @var int
+        self.averageTotalActiveProcessingDuration = averageTotalActiveProcessingDuration
+
+        # 0.95 percentile calculated for the total processing duration of the assets returned according to the applied filters.
+        # @var int
+        self.p95TotalProcessingDuration = p95TotalProcessingDuration
+
+        # 0.95 percentile calculated for the active processing duration of the assets returned according to the applied filters.
+        # @var int
+        self.p95TotalActiveProcessingDuration = p95TotalActiveProcessingDuration
+
 
     PROPERTY_LOADERS = {
         'ingestDateFrom': getXmlNodeInt, 
@@ -49322,6 +49585,10 @@ class KalturaVodIngestAssetResultAggregation(KalturaObjectBase):
         'successCount': getXmlNodeInt, 
         'externalFailureCount': getXmlNodeInt, 
         'successWithWarningCount': getXmlNodeInt, 
+        'averageTotalProcessingDuration': getXmlNodeInt, 
+        'averageTotalActiveProcessingDuration': getXmlNodeInt, 
+        'p95TotalProcessingDuration': getXmlNodeInt, 
+        'p95TotalActiveProcessingDuration': getXmlNodeInt, 
     }
 
     def fromXml(self, node):
@@ -49337,6 +49604,10 @@ class KalturaVodIngestAssetResultAggregation(KalturaObjectBase):
         kparams.addIntIfDefined("successCount", self.successCount)
         kparams.addIntIfDefined("externalFailureCount", self.externalFailureCount)
         kparams.addIntIfDefined("successWithWarningCount", self.successWithWarningCount)
+        kparams.addIntIfDefined("averageTotalProcessingDuration", self.averageTotalProcessingDuration)
+        kparams.addIntIfDefined("averageTotalActiveProcessingDuration", self.averageTotalActiveProcessingDuration)
+        kparams.addIntIfDefined("p95TotalProcessingDuration", self.p95TotalProcessingDuration)
+        kparams.addIntIfDefined("p95TotalActiveProcessingDuration", self.p95TotalActiveProcessingDuration)
         return kparams
 
     def getIngestDateFrom(self):
@@ -49374,6 +49645,30 @@ class KalturaVodIngestAssetResultAggregation(KalturaObjectBase):
 
     def setSuccessWithWarningCount(self, newSuccessWithWarningCount):
         self.successWithWarningCount = newSuccessWithWarningCount
+
+    def getAverageTotalProcessingDuration(self):
+        return self.averageTotalProcessingDuration
+
+    def setAverageTotalProcessingDuration(self, newAverageTotalProcessingDuration):
+        self.averageTotalProcessingDuration = newAverageTotalProcessingDuration
+
+    def getAverageTotalActiveProcessingDuration(self):
+        return self.averageTotalActiveProcessingDuration
+
+    def setAverageTotalActiveProcessingDuration(self, newAverageTotalActiveProcessingDuration):
+        self.averageTotalActiveProcessingDuration = newAverageTotalActiveProcessingDuration
+
+    def getP95TotalProcessingDuration(self):
+        return self.p95TotalProcessingDuration
+
+    def setP95TotalProcessingDuration(self, newP95TotalProcessingDuration):
+        self.p95TotalProcessingDuration = newP95TotalProcessingDuration
+
+    def getP95TotalActiveProcessingDuration(self):
+        return self.p95TotalActiveProcessingDuration
+
+    def setP95TotalActiveProcessingDuration(self, newP95TotalActiveProcessingDuration):
+        self.p95TotalActiveProcessingDuration = newP95TotalActiveProcessingDuration
 
 
 # @package Kaltura
@@ -56424,6 +56719,59 @@ class KalturaFollowTvSeriesService(KalturaServiceBase):
 
 # @package Kaltura
 # @subpackage Client
+class KalturaGeoBlockRuleService(KalturaServiceBase):
+    def __init__(self, client = None):
+        KalturaServiceBase.__init__(self, client)
+
+    def add(self, geoBlockRule):
+        """Add a new geo block rule"""
+
+        kparams = KalturaParams()
+        kparams.addObjectIfDefined("geoBlockRule", geoBlockRule)
+        self.client.queueServiceActionCall("geoblockrule", "add", "KalturaGeoBlockRule", kparams)
+        if self.client.isMultiRequest():
+            return self.client.getMultiRequestResult()
+        resultNode = self.client.doQueue()
+        return KalturaObjectFactory.create(resultNode, 'KalturaGeoBlockRule')
+
+    def delete(self, id):
+        """Delete a geo block rule"""
+
+        kparams = KalturaParams()
+        kparams.addIntIfDefined("id", id);
+        self.client.queueServiceActionCall("geoblockrule", "delete", "None", kparams)
+        if self.client.isMultiRequest():
+            return self.client.getMultiRequestResult()
+        resultNode = self.client.doQueue()
+        return getXmlNodeBool(resultNode)
+
+    def list(self, filter = NotImplemented, pager = NotImplemented):
+        """Get the list of geo block rules for the partner"""
+
+        kparams = KalturaParams()
+        kparams.addObjectIfDefined("filter", filter)
+        kparams.addObjectIfDefined("pager", pager)
+        self.client.queueServiceActionCall("geoblockrule", "list", "KalturaGeoBlockRuleListResponse", kparams)
+        if self.client.isMultiRequest():
+            return self.client.getMultiRequestResult()
+        resultNode = self.client.doQueue()
+        return KalturaObjectFactory.create(resultNode, 'KalturaGeoBlockRuleListResponse')
+
+    def update(self, id, geoBlockRule):
+        """Update an existing geo block rule"""
+
+        kparams = KalturaParams()
+        kparams.addIntIfDefined("id", id);
+        kparams.addObjectIfDefined("geoBlockRule", geoBlockRule)
+        self.client.queueServiceActionCall("geoblockrule", "update", "KalturaGeoBlockRule", kparams)
+        if self.client.isMultiRequest():
+            return self.client.getMultiRequestResult()
+        resultNode = self.client.doQueue()
+        return KalturaObjectFactory.create(resultNode, 'KalturaGeoBlockRule')
+
+
+# @package Kaltura
+# @subpackage Client
 class KalturaHomeNetworkService(KalturaServiceBase):
     def __init__(self, client = None):
         KalturaServiceBase.__init__(self, client)
@@ -61864,6 +62212,7 @@ class KalturaCoreClient(KalturaClientPlugin):
             'externalChannelProfile': KalturaExternalChannelProfileService,
             'favorite': KalturaFavoriteService,
             'followTvSeries': KalturaFollowTvSeriesService,
+            'geoBlockRule': KalturaGeoBlockRuleService,
             'homeNetwork': KalturaHomeNetworkService,
             'household': KalturaHouseholdService,
             'householdCoupon': KalturaHouseholdCouponService,
@@ -62069,6 +62418,8 @@ class KalturaCoreClient(KalturaClientPlugin):
             'KalturaFavoriteOrderBy': KalturaFavoriteOrderBy,
             'KalturaFollowTvSeriesOrderBy': KalturaFollowTvSeriesOrderBy,
             'KalturaGenerateMetadataStatus': KalturaGenerateMetadataStatus,
+            'KalturaGeoBlockMode': KalturaGeoBlockMode,
+            'KalturaGeoBlockRuleOrderBy': KalturaGeoBlockRuleOrderBy,
             'KalturaGroupByField': KalturaGroupByField,
             'KalturaGroupByOrder': KalturaGroupByOrder,
             'KalturaGroupingOption': KalturaGroupingOption,
@@ -62143,6 +62494,7 @@ class KalturaCoreClient(KalturaClientPlugin):
             'KalturaProductPriceOrderBy': KalturaProductPriceOrderBy,
             'KalturaProgramAssetGroupOfferOrderBy': KalturaProgramAssetGroupOfferOrderBy,
             'KalturaProtectionPolicy': KalturaProtectionPolicy,
+            'KalturaProxyRuleLevel': KalturaProxyRuleLevel,
             'KalturaPurchaseSettingsType': KalturaPurchaseSettingsType,
             'KalturaPurchaseStatus': KalturaPurchaseStatus,
             'KalturaQuotaOveragePolicy': KalturaQuotaOveragePolicy,
@@ -62424,6 +62776,7 @@ class KalturaCoreClient(KalturaClientPlugin):
             'KalturaTvmRuleFilter': KalturaTvmRuleFilter,
             'KalturaUserAssetRuleFilter': KalturaUserAssetRuleFilter,
             'KalturaUserRoleFilter': KalturaUserRoleFilter,
+            'KalturaGeoBlockRuleFilter': KalturaGeoBlockRuleFilter,
             'KalturaEpgFilter': KalturaEpgFilter,
             'KalturaPropertySkipCondition': KalturaPropertySkipCondition,
             'KalturaAggregatedPropertySkipCondition': KalturaAggregatedPropertySkipCondition,
@@ -62935,6 +63288,8 @@ class KalturaCoreClient(KalturaClientPlugin):
             'KalturaUserAssetRuleListResponse': KalturaUserAssetRuleListResponse,
             'KalturaUserRole': KalturaUserRole,
             'KalturaUserRoleListResponse': KalturaUserRoleListResponse,
+            'KalturaGeoBlockRule': KalturaGeoBlockRule,
+            'KalturaGeoBlockRuleListResponse': KalturaGeoBlockRuleListResponse,
             'KalturaEpgListResponse': KalturaEpgListResponse,
             'KalturaAppToken': KalturaAppToken,
             'KalturaSession': KalturaSession,
