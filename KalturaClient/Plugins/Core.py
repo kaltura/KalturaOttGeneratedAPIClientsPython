@@ -14017,12 +14017,12 @@ class KalturaGenerateMetadataByDescription(KalturaObjectBase):
 
         # A string that uniquely identifies the asset which will be enriched and from which the description will be extracted.
         #             This is the external asset ID set by the customer (CoGuid) and not the internal Kaltura asset ID.
-        # @var KalturaStringValue
+        # @var str
         self.externalAssetId = externalAssetId
 
 
     PROPERTY_LOADERS = {
-        'externalAssetId': (KalturaObjectFactory.create, 'KalturaStringValue'), 
+        'externalAssetId': getXmlNodeText, 
     }
 
     def fromXml(self, node):
@@ -14032,7 +14032,7 @@ class KalturaGenerateMetadataByDescription(KalturaObjectBase):
     def toParams(self):
         kparams = KalturaObjectBase.toParams(self)
         kparams.put("objectType", "KalturaGenerateMetadataByDescription")
-        kparams.addObjectIfDefined("externalAssetId", self.externalAssetId)
+        kparams.addStringIfDefined("externalAssetId", self.externalAssetId)
         return kparams
 
     def getExternalAssetId(self):
