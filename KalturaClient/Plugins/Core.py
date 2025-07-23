@@ -42,7 +42,7 @@ from ..Base import (
     KalturaServiceBase,
 )
 
-API_VERSION = '11.4.0.3'
+API_VERSION = '11.4.0.4'
 
 ########## enums ##########
 # @package Kaltura
@@ -13881,14 +13881,14 @@ class KalturaSkipOnErrorCondition(KalturaSkipCondition):
 # @subpackage Client
 class KalturaGenerateMetadataBySubtitles(KalturaObjectBase):
     def __init__(self,
-            id = NotImplemented,
+            subtitlesFileId = NotImplemented,
             externalAssetIds = NotImplemented):
         KalturaObjectBase.__init__(self)
 
         # A mandatory Long type with the subtitles file ID returned from the subtitles.uploadFile request.
         #             It is used to correlate the uploaded file with the metadata generation request.
         # @var int
-        self.id = id
+        self.subtitlesFileId = subtitlesFileId
 
         # An optional array of KalturaStringValue specifying the target assets to which the generated metadata will be pushed.
         # @var List[KalturaStringValue]
@@ -13896,7 +13896,7 @@ class KalturaGenerateMetadataBySubtitles(KalturaObjectBase):
 
 
     PROPERTY_LOADERS = {
-        'id': getXmlNodeInt, 
+        'subtitlesFileId': getXmlNodeInt, 
         'externalAssetIds': (KalturaObjectFactory.createArray, 'KalturaStringValue'), 
     }
 
@@ -13907,15 +13907,15 @@ class KalturaGenerateMetadataBySubtitles(KalturaObjectBase):
     def toParams(self):
         kparams = KalturaObjectBase.toParams(self)
         kparams.put("objectType", "KalturaGenerateMetadataBySubtitles")
-        kparams.addIntIfDefined("id", self.id)
+        kparams.addIntIfDefined("subtitlesFileId", self.subtitlesFileId)
         kparams.addArrayIfDefined("externalAssetIds", self.externalAssetIds)
         return kparams
 
-    def getId(self):
-        return self.id
+    def getSubtitlesFileId(self):
+        return self.subtitlesFileId
 
-    def setId(self, newId):
-        self.id = newId
+    def setSubtitlesFileId(self, newSubtitlesFileId):
+        self.subtitlesFileId = newSubtitlesFileId
 
     def getExternalAssetIds(self):
         return self.externalAssetIds
