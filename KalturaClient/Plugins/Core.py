@@ -17933,9 +17933,7 @@ class KalturaAssetFilePpv(KalturaOTTObjectSupportNullable):
             assetFileId = NotImplemented,
             ppvModuleId = NotImplemented,
             startDate = NotImplemented,
-            endDate = NotImplemented,
-            purchaseStartDate = NotImplemented,
-            purchaseEndDate = NotImplemented):
+            endDate = NotImplemented):
         KalturaOTTObjectSupportNullable.__init__(self)
 
         # Asset file identifier
@@ -17954,22 +17952,12 @@ class KalturaAssetFilePpv(KalturaOTTObjectSupportNullable):
         # @var int
         self.endDate = endDate
 
-        # First date and time an KalturaAssetFilePpv.AssetFileId can be purchased with the given KalturaAssetFilePpv.PpvModuleId. Represented as epoch
-        # @var int
-        self.purchaseStartDate = purchaseStartDate
-
-        # Final date and time an KalturaAssetFilePpv.AssetFileId can be purchased with the given KalturaAssetFilePpv.PpvModuleId. Represented as epoch
-        # @var int
-        self.purchaseEndDate = purchaseEndDate
-
 
     PROPERTY_LOADERS = {
         'assetFileId': getXmlNodeInt, 
         'ppvModuleId': getXmlNodeInt, 
         'startDate': getXmlNodeInt, 
         'endDate': getXmlNodeInt, 
-        'purchaseStartDate': getXmlNodeInt, 
-        'purchaseEndDate': getXmlNodeInt, 
     }
 
     def fromXml(self, node):
@@ -17983,8 +17971,6 @@ class KalturaAssetFilePpv(KalturaOTTObjectSupportNullable):
         kparams.addIntIfDefined("ppvModuleId", self.ppvModuleId)
         kparams.addIntIfDefined("startDate", self.startDate)
         kparams.addIntIfDefined("endDate", self.endDate)
-        kparams.addIntIfDefined("purchaseStartDate", self.purchaseStartDate)
-        kparams.addIntIfDefined("purchaseEndDate", self.purchaseEndDate)
         return kparams
 
     def getAssetFileId(self):
@@ -18010,18 +17996,6 @@ class KalturaAssetFilePpv(KalturaOTTObjectSupportNullable):
 
     def setEndDate(self, newEndDate):
         self.endDate = newEndDate
-
-    def getPurchaseStartDate(self):
-        return self.purchaseStartDate
-
-    def setPurchaseStartDate(self, newPurchaseStartDate):
-        self.purchaseStartDate = newPurchaseStartDate
-
-    def getPurchaseEndDate(self):
-        return self.purchaseEndDate
-
-    def setPurchaseEndDate(self, newPurchaseEndDate):
-        self.purchaseEndDate = newPurchaseEndDate
 
 
 # @package Kaltura
@@ -55331,7 +55305,7 @@ class KalturaAssetFilePpvService(KalturaServiceBase):
         return KalturaObjectFactory.create(resultNode, 'KalturaAssetFilePpvListResponse')
 
     def update(self, assetFileId, ppvModuleId, assetFilePpv):
-        """Update assetFilePpv dates"""
+        """Update assetFilePpv"""
 
         kparams = KalturaParams()
         kparams.addIntIfDefined("assetFileId", assetFileId);
