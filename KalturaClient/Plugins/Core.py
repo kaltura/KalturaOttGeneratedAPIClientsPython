@@ -42,7 +42,7 @@ from ..Base import (
     KalturaServiceBase,
 )
 
-API_VERSION = '11.5.0.0'
+API_VERSION = '11.5.0.2'
 
 ########## enums ##########
 # @package Kaltura
@@ -13879,61 +13879,14 @@ class KalturaSkipOnErrorCondition(KalturaSkipCondition):
 
 # @package Kaltura
 # @subpackage Client
-class KalturaGenerateMetadataBySubtitles(KalturaObjectBase):
-    def __init__(self,
-            subtitlesFileId = NotImplemented,
-            externalAssetIds = NotImplemented):
-        KalturaObjectBase.__init__(self)
-
-        # A mandatory Long type with the subtitles file ID returned from the subtitles.uploadFile request.
-        #             It is used to correlate the uploaded file with the metadata generation request.
-        # @var int
-        self.subtitlesFileId = subtitlesFileId
-
-        # An optional array of KalturaStringValue specifying the target assets to which the generated metadata will be pushed.
-        # @var List[KalturaStringValue]
-        self.externalAssetIds = externalAssetIds
-
-
-    PROPERTY_LOADERS = {
-        'subtitlesFileId': getXmlNodeInt, 
-        'externalAssetIds': (KalturaObjectFactory.createArray, 'KalturaStringValue'), 
-    }
-
-    def fromXml(self, node):
-        KalturaObjectBase.fromXml(self, node)
-        self.fromXmlImpl(node, KalturaGenerateMetadataBySubtitles.PROPERTY_LOADERS)
-
-    def toParams(self):
-        kparams = KalturaObjectBase.toParams(self)
-        kparams.put("objectType", "KalturaGenerateMetadataBySubtitles")
-        kparams.addIntIfDefined("subtitlesFileId", self.subtitlesFileId)
-        kparams.addArrayIfDefined("externalAssetIds", self.externalAssetIds)
-        return kparams
-
-    def getSubtitlesFileId(self):
-        return self.subtitlesFileId
-
-    def setSubtitlesFileId(self, newSubtitlesFileId):
-        self.subtitlesFileId = newSubtitlesFileId
-
-    def getExternalAssetIds(self):
-        return self.externalAssetIds
-
-    def setExternalAssetIds(self, newExternalAssetIds):
-        self.externalAssetIds = newExternalAssetIds
-
-
-# @package Kaltura
-# @subpackage Client
-class KalturaGenerateMetadataJob(KalturaObjectBase):
+class KalturaGenerateMetadataBySubtitlesJob(KalturaObjectBase):
     """An object containing information on the metadata generation job."""
 
     def __init__(self,
             id = NotImplemented,
             createDate = NotImplemented,
             updateDate = NotImplemented,
-            sourceName = NotImplemented,
+            fileName = NotImplemented,
             status = NotImplemented,
             errorMessage = NotImplemented):
         KalturaObjectBase.__init__(self)
@@ -13953,14 +13906,12 @@ class KalturaGenerateMetadataJob(KalturaObjectBase):
         # @readonly
         self.updateDate = updateDate
 
-        # Name of the source job element generating the metadata.
-        #             For generateMetadataBySubtitles: the uploaded subtitle file name.
-        #             For generateMetadataByDescription: the asset name from which metadata is generated.
+        # Name of the uploaded subtitles file from which the metadata is generated.
         # @var str
         # @readonly
-        self.sourceName = sourceName
+        self.fileName = fileName
 
-        # can be either Processing/Success/Failed, per the last status updated by the aiMetadataGenerator.
+        # Service status states.
         # @var KalturaGenerateMetadataStatus
         # @readonly
         self.status = status
@@ -13975,18 +13926,18 @@ class KalturaGenerateMetadataJob(KalturaObjectBase):
         'id': getXmlNodeInt, 
         'createDate': getXmlNodeInt, 
         'updateDate': getXmlNodeInt, 
-        'sourceName': getXmlNodeText, 
+        'fileName': getXmlNodeText, 
         'status': (KalturaEnumsFactory.createString, "KalturaGenerateMetadataStatus"), 
         'errorMessage': getXmlNodeText, 
     }
 
     def fromXml(self, node):
         KalturaObjectBase.fromXml(self, node)
-        self.fromXmlImpl(node, KalturaGenerateMetadataJob.PROPERTY_LOADERS)
+        self.fromXmlImpl(node, KalturaGenerateMetadataBySubtitlesJob.PROPERTY_LOADERS)
 
     def toParams(self):
         kparams = KalturaObjectBase.toParams(self)
-        kparams.put("objectType", "KalturaGenerateMetadataJob")
+        kparams.put("objectType", "KalturaGenerateMetadataBySubtitlesJob")
         return kparams
 
     def getId(self):
@@ -13998,48 +13949,14 @@ class KalturaGenerateMetadataJob(KalturaObjectBase):
     def getUpdateDate(self):
         return self.updateDate
 
-    def getSourceName(self):
-        return self.sourceName
+    def getFileName(self):
+        return self.fileName
 
     def getStatus(self):
         return self.status
 
     def getErrorMessage(self):
         return self.errorMessage
-
-
-# @package Kaltura
-# @subpackage Client
-class KalturaGenerateMetadataByDescription(KalturaObjectBase):
-    def __init__(self,
-            externalAssetId = NotImplemented):
-        KalturaObjectBase.__init__(self)
-
-        # A string that uniquely identifies the asset which will be enriched and from which the description will be extracted.
-        #             This is the external asset ID set by the customer (CoGuid) and not the internal Kaltura asset ID.
-        # @var str
-        self.externalAssetId = externalAssetId
-
-
-    PROPERTY_LOADERS = {
-        'externalAssetId': getXmlNodeText, 
-    }
-
-    def fromXml(self, node):
-        KalturaObjectBase.fromXml(self, node)
-        self.fromXmlImpl(node, KalturaGenerateMetadataByDescription.PROPERTY_LOADERS)
-
-    def toParams(self):
-        kparams = KalturaObjectBase.toParams(self)
-        kparams.put("objectType", "KalturaGenerateMetadataByDescription")
-        kparams.addStringIfDefined("externalAssetId", self.externalAssetId)
-        return kparams
-
-    def getExternalAssetId(self):
-        return self.externalAssetId
-
-    def setExternalAssetId(self, newExternalAssetId):
-        self.externalAssetId = newExternalAssetId
 
 
 # @package Kaltura
@@ -54721,34 +54638,17 @@ class KalturaAiMetadataGeneratorService(KalturaServiceBase):
     def __init__(self, client = None):
         KalturaServiceBase.__init__(self, client)
 
-    def generateMetadataByDescription(self, generateMetadataByDescription):
-        """Initiate the process of metadata generation based on existing asset description metadata.
-                    The service will analyze the asset&#39;s description and genre metadata using AI/LLM to generate
-                    additional enriched metadata fields including enhanced genre classifications, sentiment analysis,
-                    and relevant keywords. This method is useful for enriching assets that already have basic
-                    description metadata but need additional AI-generated metadata fields."""
+    def generateMetadataBySubtitles(self, subtitlesFileId, externalAssetIds = NotImplemented):
+        """Start metadata generation process based on subtitles."""
 
         kparams = KalturaParams()
-        kparams.addObjectIfDefined("generateMetadataByDescription", generateMetadataByDescription)
-        self.client.queueServiceActionCall("aimetadatagenerator", "generateMetadataByDescription", "KalturaGenerateMetadataJob", kparams)
+        kparams.addIntIfDefined("subtitlesFileId", subtitlesFileId);
+        kparams.addArrayIfDefined("externalAssetIds", externalAssetIds)
+        self.client.queueServiceActionCall("aimetadatagenerator", "generateMetadataBySubtitles", "KalturaGenerateMetadataBySubtitlesJob", kparams)
         if self.client.isMultiRequest():
             return self.client.getMultiRequestResult()
         resultNode = self.client.doQueue()
-        return KalturaObjectFactory.create(resultNode, 'KalturaGenerateMetadataJob')
-
-    def generateMetadataBySubtitles(self, generateMetadataBySubtitles):
-        """Initiate the process of metadata generation based on the subtitles file.
-                    The subtitles file must be previously uploaded using the subtitles.uploadFile service.
-                    The service will analyze the subtitle content using AI/LLM to generate enriched metadata including
-                    genre, description, keywords, sentiment analysis, and other metadata fields."""
-
-        kparams = KalturaParams()
-        kparams.addObjectIfDefined("generateMetadataBySubtitles", generateMetadataBySubtitles)
-        self.client.queueServiceActionCall("aimetadatagenerator", "generateMetadataBySubtitles", "KalturaGenerateMetadataJob", kparams)
-        if self.client.isMultiRequest():
-            return self.client.getMultiRequestResult()
-        resultNode = self.client.doQueue()
-        return KalturaObjectFactory.create(resultNode, 'KalturaGenerateMetadataJob')
+        return KalturaObjectFactory.create(resultNode, 'KalturaGenerateMetadataBySubtitlesJob')
 
     def getGeneratedMetadata(self, jobId):
         """Retrieve the generated metadata"""
@@ -54766,11 +54666,11 @@ class KalturaAiMetadataGeneratorService(KalturaServiceBase):
 
         kparams = KalturaParams()
         kparams.addIntIfDefined("id", id);
-        self.client.queueServiceActionCall("aimetadatagenerator", "getGenerateMetadataJob", "KalturaGenerateMetadataJob", kparams)
+        self.client.queueServiceActionCall("aimetadatagenerator", "getGenerateMetadataJob", "KalturaGenerateMetadataBySubtitlesJob", kparams)
         if self.client.isMultiRequest():
             return self.client.getMultiRequestResult()
         resultNode = self.client.doQueue()
-        return KalturaObjectFactory.create(resultNode, 'KalturaGenerateMetadataJob')
+        return KalturaObjectFactory.create(resultNode, 'KalturaGenerateMetadataBySubtitlesJob')
 
     def getMetadataFieldDefinitions(self):
         """Get metadata mapping structure and available generated metadata fields."""
@@ -63676,9 +63576,7 @@ class KalturaCoreClient(KalturaClientPlugin):
             'KalturaPropertySkipCondition': KalturaPropertySkipCondition,
             'KalturaAggregatedPropertySkipCondition': KalturaAggregatedPropertySkipCondition,
             'KalturaSkipOnErrorCondition': KalturaSkipOnErrorCondition,
-            'KalturaGenerateMetadataBySubtitles': KalturaGenerateMetadataBySubtitles,
-            'KalturaGenerateMetadataJob': KalturaGenerateMetadataJob,
-            'KalturaGenerateMetadataByDescription': KalturaGenerateMetadataByDescription,
+            'KalturaGenerateMetadataBySubtitlesJob': KalturaGenerateMetadataBySubtitlesJob,
             'KalturaGenerateMetadataResult': KalturaGenerateMetadataResult,
             'KalturaMetaFieldNameMap': KalturaMetaFieldNameMap,
             'KalturaAiMetadataGeneratorConfiguration': KalturaAiMetadataGeneratorConfiguration,
