@@ -42,7 +42,7 @@ from ..Base import (
     KalturaServiceBase,
 )
 
-API_VERSION = '11.5.0.0'
+API_VERSION = '11.4.0.4'
 
 ########## enums ##########
 # @package Kaltura
@@ -29430,7 +29430,9 @@ class KalturaWatchBasedRecommendationsProfile(KalturaObjectBase):
             minPlaybacks = NotImplemented,
             maxPlaybacks = NotImplemented,
             allowedRecommendationsKsql = NotImplemented,
-            playbackInterestsCalculationPeriodDays = NotImplemented):
+            playbackInterestsCalculationPeriodDays = NotImplemented,
+            userInterestPlayThresholdForEventInMinutes = NotImplemented,
+            maximumEventsPerSession = NotImplemented):
         KalturaObjectBase.__init__(self)
 
         # Unique identifier for the profile
@@ -29478,6 +29480,14 @@ class KalturaWatchBasedRecommendationsProfile(KalturaObjectBase):
         # @var int
         self.playbackInterestsCalculationPeriodDays = playbackInterestsCalculationPeriodDays
 
+        # Minimum required viewing time per session (in minutes) for live content to be considered in the analysis.
+        # @var int
+        self.userInterestPlayThresholdForEventInMinutes = userInterestPlayThresholdForEventInMinutes
+
+        # Minimum required viewing time per session (in minutes) for live content to be considered in the analysis.
+        # @var int
+        self.maximumEventsPerSession = maximumEventsPerSession
+
 
     PROPERTY_LOADERS = {
         'id': getXmlNodeInt, 
@@ -29491,6 +29501,8 @@ class KalturaWatchBasedRecommendationsProfile(KalturaObjectBase):
         'maxPlaybacks': getXmlNodeInt, 
         'allowedRecommendationsKsql': getXmlNodeText, 
         'playbackInterestsCalculationPeriodDays': getXmlNodeInt, 
+        'userInterestPlayThresholdForEventInMinutes': getXmlNodeInt, 
+        'maximumEventsPerSession': getXmlNodeInt, 
     }
 
     def fromXml(self, node):
@@ -29510,6 +29522,8 @@ class KalturaWatchBasedRecommendationsProfile(KalturaObjectBase):
         kparams.addIntIfDefined("maxPlaybacks", self.maxPlaybacks)
         kparams.addStringIfDefined("allowedRecommendationsKsql", self.allowedRecommendationsKsql)
         kparams.addIntIfDefined("playbackInterestsCalculationPeriodDays", self.playbackInterestsCalculationPeriodDays)
+        kparams.addIntIfDefined("userInterestPlayThresholdForEventInMinutes", self.userInterestPlayThresholdForEventInMinutes)
+        kparams.addIntIfDefined("maximumEventsPerSession", self.maximumEventsPerSession)
         return kparams
 
     def getId(self):
@@ -29574,6 +29588,18 @@ class KalturaWatchBasedRecommendationsProfile(KalturaObjectBase):
 
     def setPlaybackInterestsCalculationPeriodDays(self, newPlaybackInterestsCalculationPeriodDays):
         self.playbackInterestsCalculationPeriodDays = newPlaybackInterestsCalculationPeriodDays
+
+    def getUserInterestPlayThresholdForEventInMinutes(self):
+        return self.userInterestPlayThresholdForEventInMinutes
+
+    def setUserInterestPlayThresholdForEventInMinutes(self, newUserInterestPlayThresholdForEventInMinutes):
+        self.userInterestPlayThresholdForEventInMinutes = newUserInterestPlayThresholdForEventInMinutes
+
+    def getMaximumEventsPerSession(self):
+        return self.maximumEventsPerSession
+
+    def setMaximumEventsPerSession(self, newMaximumEventsPerSession):
+        self.maximumEventsPerSession = newMaximumEventsPerSession
 
 
 # @package Kaltura
