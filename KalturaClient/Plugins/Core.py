@@ -29431,6 +29431,8 @@ class KalturaWatchBasedRecommendationsProfile(KalturaObjectBase):
             maxPlaybacks = NotImplemented,
             allowedRecommendationsKsql = NotImplemented,
             playbackInterestsCalculationPeriodDays = NotImplemented,
+            analyzeCatchUps = NotImplemented,
+            analyzeLinearEvents = NotImplemented,
             userInterestPlayThresholdForEventInMinutes = NotImplemented,
             maximumEventsPerSession = NotImplemented):
         KalturaObjectBase.__init__(self)
@@ -29480,6 +29482,14 @@ class KalturaWatchBasedRecommendationsProfile(KalturaObjectBase):
         # @var int
         self.playbackInterestsCalculationPeriodDays = playbackInterestsCalculationPeriodDays
 
+        # Determines whether catch-up viewing data should be included in the user&#39;s interest analysis.
+        # @var bool
+        self.analyzeCatchUps = analyzeCatchUps
+
+        # Determines whether linear events viewing data should be included in the user&#39;s interest analysis.
+        # @var bool
+        self.analyzeLinearEvents = analyzeLinearEvents
+
         # Minimum required viewing time per session (in minutes) for live content to be considered in the analysis.
         # @var int
         self.userInterestPlayThresholdForEventInMinutes = userInterestPlayThresholdForEventInMinutes
@@ -29501,6 +29511,8 @@ class KalturaWatchBasedRecommendationsProfile(KalturaObjectBase):
         'maxPlaybacks': getXmlNodeInt, 
         'allowedRecommendationsKsql': getXmlNodeText, 
         'playbackInterestsCalculationPeriodDays': getXmlNodeInt, 
+        'analyzeCatchUps': getXmlNodeBool, 
+        'analyzeLinearEvents': getXmlNodeBool, 
         'userInterestPlayThresholdForEventInMinutes': getXmlNodeInt, 
         'maximumEventsPerSession': getXmlNodeInt, 
     }
@@ -29522,6 +29534,8 @@ class KalturaWatchBasedRecommendationsProfile(KalturaObjectBase):
         kparams.addIntIfDefined("maxPlaybacks", self.maxPlaybacks)
         kparams.addStringIfDefined("allowedRecommendationsKsql", self.allowedRecommendationsKsql)
         kparams.addIntIfDefined("playbackInterestsCalculationPeriodDays", self.playbackInterestsCalculationPeriodDays)
+        kparams.addBoolIfDefined("analyzeCatchUps", self.analyzeCatchUps)
+        kparams.addBoolIfDefined("analyzeLinearEvents", self.analyzeLinearEvents)
         kparams.addIntIfDefined("userInterestPlayThresholdForEventInMinutes", self.userInterestPlayThresholdForEventInMinutes)
         kparams.addIntIfDefined("maximumEventsPerSession", self.maximumEventsPerSession)
         return kparams
@@ -29588,6 +29602,18 @@ class KalturaWatchBasedRecommendationsProfile(KalturaObjectBase):
 
     def setPlaybackInterestsCalculationPeriodDays(self, newPlaybackInterestsCalculationPeriodDays):
         self.playbackInterestsCalculationPeriodDays = newPlaybackInterestsCalculationPeriodDays
+
+    def getAnalyzeCatchUps(self):
+        return self.analyzeCatchUps
+
+    def setAnalyzeCatchUps(self, newAnalyzeCatchUps):
+        self.analyzeCatchUps = newAnalyzeCatchUps
+
+    def getAnalyzeLinearEvents(self):
+        return self.analyzeLinearEvents
+
+    def setAnalyzeLinearEvents(self, newAnalyzeLinearEvents):
+        self.analyzeLinearEvents = newAnalyzeLinearEvents
 
     def getUserInterestPlayThresholdForEventInMinutes(self):
         return self.userInterestPlayThresholdForEventInMinutes
