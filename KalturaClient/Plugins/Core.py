@@ -42,7 +42,7 @@ from ..Base import (
     KalturaServiceBase,
 )
 
-API_VERSION = '11.5.0.0'
+API_VERSION = '11.6.0.1'
 
 ########## enums ##########
 # @package Kaltura
@@ -74,6 +74,18 @@ class KalturaAggregationType(object):
     COUNT = "Count"
     SUM = "Sum"
     AVG = "Avg"
+
+    def __init__(self, value):
+        self.value = value
+
+    def getValue(self):
+        return self.value
+
+# @package Kaltura
+# @subpackage Client
+class KalturaAiRecommendationTreeFeatureLevel(object):
+    BASIC = "Basic"
+    PREMIUM = "Premium"
 
     def __init__(self, value):
         self.value = value
@@ -17140,7 +17152,8 @@ class KalturaAiRecommendationTreePartnerConfiguration(KalturaObjectBase):
             specialAnswers = NotImplemented,
             numOfRecommendedAssets = NotImplemented,
             treeGenerationFrequency = NotImplemented,
-            activeTreeId = NotImplemented):
+            activeTreeId = NotImplemented,
+            featureType = NotImplemented):
         KalturaObjectBase.__init__(self)
 
         # Dictionary of metadata types to base questions on (genre, actor, director, etc.) with their respective counts.
@@ -17151,7 +17164,7 @@ class KalturaAiRecommendationTreePartnerConfiguration(KalturaObjectBase):
         # @var int
         self.topLevelQuestions = topLevelQuestions
 
-        # Number of regular answers per question (range: 2-5).
+        # Number of regular answers per question (range: 2-4).
         # @var int
         self.answersPerQuestion = answersPerQuestion
 
@@ -17176,6 +17189,11 @@ class KalturaAiRecommendationTreePartnerConfiguration(KalturaObjectBase):
         # @readonly
         self.activeTreeId = activeTreeId
 
+        # Feature level of the recommendation tree (e.g., Basic, Premium).
+        # @var KalturaAiRecommendationTreeFeatureLevel
+        # @readonly
+        self.featureType = featureType
+
 
     PROPERTY_LOADERS = {
         'activeMetadataTypes': (KalturaObjectFactory.createMap, 'KalturaIntegerValue'), 
@@ -17186,6 +17204,7 @@ class KalturaAiRecommendationTreePartnerConfiguration(KalturaObjectBase):
         'numOfRecommendedAssets': getXmlNodeInt, 
         'treeGenerationFrequency': getXmlNodeText, 
         'activeTreeId': getXmlNodeText, 
+        'featureType': (KalturaEnumsFactory.createString, "KalturaAiRecommendationTreeFeatureLevel"), 
     }
 
     def fromXml(self, node):
@@ -17248,6 +17267,9 @@ class KalturaAiRecommendationTreePartnerConfiguration(KalturaObjectBase):
 
     def getActiveTreeId(self):
         return self.activeTreeId
+
+    def getFeatureType(self):
+        return self.featureType
 
 
 # @package Kaltura
@@ -63220,6 +63242,7 @@ class KalturaCoreClient(KalturaClientPlugin):
             'KalturaAdsPolicy': KalturaAdsPolicy,
             'KalturaAggregationCountOrderBy': KalturaAggregationCountOrderBy,
             'KalturaAggregationType': KalturaAggregationType,
+            'KalturaAiRecommendationTreeFeatureLevel': KalturaAiRecommendationTreeFeatureLevel,
             'KalturaAnnouncementOrderBy': KalturaAnnouncementOrderBy,
             'KalturaAnnouncementRecipientsType': KalturaAnnouncementRecipientsType,
             'KalturaAnnouncementStatus': KalturaAnnouncementStatus,

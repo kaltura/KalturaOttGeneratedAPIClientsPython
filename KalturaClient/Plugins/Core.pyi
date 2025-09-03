@@ -52,6 +52,14 @@ class KalturaAggregationType(object):
 
     def getValue(self) -> str: ...
 
+class KalturaAiRecommendationTreeFeatureLevel(object):
+    BASIC = "Basic"
+    PREMIUM = "Premium"
+
+    def __init__(self, value: str): ...
+
+    def getValue(self) -> str: ...
+
 class KalturaAnnouncementOrderBy(object):
     NONE = "NONE"
 
@@ -6179,6 +6187,7 @@ class KalturaAiRecommendationTreePartnerConfiguration(KalturaObjectBase):
     numOfRecommendedAssets: int
     treeGenerationFrequency: str
     activeTreeId: str
+    featureType: KalturaAiRecommendationTreeFeatureLevel
     def __init__(self,
             activeMetadataTypes: map = NotImplemented,
             topLevelQuestions: int = NotImplemented,
@@ -6187,7 +6196,8 @@ class KalturaAiRecommendationTreePartnerConfiguration(KalturaObjectBase):
             specialAnswers: bool = NotImplemented,
             numOfRecommendedAssets: int = NotImplemented,
             treeGenerationFrequency: str = NotImplemented,
-            activeTreeId: str = NotImplemented): ...
+            activeTreeId: str = NotImplemented,
+            featureType: KalturaAiRecommendationTreeFeatureLevel = NotImplemented): ...
 
     def getActiveMetadataTypes(self) -> map: ...
     def setActiveMetadataTypes(self, newActiveMetadataTypes: map) -> None: ...
@@ -6204,6 +6214,7 @@ class KalturaAiRecommendationTreePartnerConfiguration(KalturaObjectBase):
     def getTreeGenerationFrequency(self) -> str: ...
     def setTreeGenerationFrequency(self, newTreeGenerationFrequency: str) -> None: ...
     def getActiveTreeId(self) -> str: ...
+    def getFeatureType(self) -> KalturaAiRecommendationTreeFeatureLevel: ...
 
 class KalturaAnnouncement(KalturaObjectBase):
     name: str
