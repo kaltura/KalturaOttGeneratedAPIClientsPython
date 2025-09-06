@@ -42,7 +42,7 @@ from ..Base import (
     KalturaServiceBase,
 )
 
-API_VERSION = '11.5.0.0'
+API_VERSION = '11.6.0.1'
 
 ########## enums ##########
 # @package Kaltura
@@ -1304,6 +1304,19 @@ class KalturaFollowTvSeriesOrderBy(object):
 
 # @package Kaltura
 # @subpackage Client
+class KalturaGenerateMetadataJobType(object):
+    VODBYDESCRIPTION = "VodByDescription"
+    VODBYSUBTITLES = "VodBySubtitles"
+    PROGRAMBYDESCRIPTION = "ProgramByDescription"
+
+    def __init__(self, value):
+        self.value = value
+
+    def getValue(self):
+        return self.value
+
+# @package Kaltura
+# @subpackage Client
 class KalturaGenerateMetadataStatus(object):
     PROCESSING = "Processing"
     PARTIALSUCCESS = "PartialSuccess"
@@ -1874,6 +1887,19 @@ class KalturaMetaDataType(object):
     BOOLEAN = "BOOLEAN"
     DATE = "DATE"
     RELEATED_ENTITY = "RELEATED_ENTITY"
+
+    def __init__(self, value):
+        self.value = value
+
+    def getValue(self):
+        return self.value
+
+# @package Kaltura
+# @subpackage Client
+class KalturaMetadataUpdateOperation(object):
+    PROTECT = "PROTECT"
+    EXTEND = "EXTEND"
+    OVERWRITE = "OVERWRITE"
 
     def __init__(self, value):
         self.value = value
@@ -13935,7 +13961,8 @@ class KalturaGenerateMetadataJob(KalturaObjectBase):
             updateDate = NotImplemented,
             sourceName = NotImplemented,
             status = NotImplemented,
-            errorMessage = NotImplemented):
+            errorMessage = NotImplemented,
+            type = NotImplemented):
         KalturaObjectBase.__init__(self)
 
         # Unique identifier for the generation job
@@ -13970,6 +13997,11 @@ class KalturaGenerateMetadataJob(KalturaObjectBase):
         # @readonly
         self.errorMessage = errorMessage
 
+        # Type of the metadata generation job (vodByDescription, vodBySubtitles, programByDescription)
+        # @var KalturaGenerateMetadataJobType
+        # @readonly
+        self.type = type
+
 
     PROPERTY_LOADERS = {
         'id': getXmlNodeInt, 
@@ -13978,6 +14010,7 @@ class KalturaGenerateMetadataJob(KalturaObjectBase):
         'sourceName': getXmlNodeText, 
         'status': (KalturaEnumsFactory.createString, "KalturaGenerateMetadataStatus"), 
         'errorMessage': getXmlNodeText, 
+        'type': (KalturaEnumsFactory.createString, "KalturaGenerateMetadataJobType"), 
     }
 
     def fromXml(self, node):
@@ -14006,6 +14039,9 @@ class KalturaGenerateMetadataJob(KalturaObjectBase):
 
     def getErrorMessage(self):
         return self.errorMessage
+
+    def getType(self):
+        return self.type
 
 
 # @package Kaltura
@@ -14044,6 +14080,43 @@ class KalturaGenerateMetadataByDescription(KalturaObjectBase):
 
 # @package Kaltura
 # @subpackage Client
+class KalturaGenerateProgramMetadatasByDescription(KalturaGenerateMetadataByDescription):
+    def __init__(self,
+            externalAssetId = NotImplemented,
+            regenerate = NotImplemented):
+        KalturaGenerateMetadataByDescription.__init__(self,
+            externalAssetId)
+
+        # A boolean flag that allows the API user to force the regeneration of metadata.
+        #             If true, the service will run a new analysis even if enriched metadata already exists for the program&#39;s CRID.
+        #             If false (default), the service will reuse existing metadata if available for the CRID.
+        # @var bool
+        self.regenerate = regenerate
+
+
+    PROPERTY_LOADERS = {
+        'regenerate': getXmlNodeBool, 
+    }
+
+    def fromXml(self, node):
+        KalturaGenerateMetadataByDescription.fromXml(self, node)
+        self.fromXmlImpl(node, KalturaGenerateProgramMetadatasByDescription.PROPERTY_LOADERS)
+
+    def toParams(self):
+        kparams = KalturaGenerateMetadataByDescription.toParams(self)
+        kparams.put("objectType", "KalturaGenerateProgramMetadatasByDescription")
+        kparams.addBoolIfDefined("regenerate", self.regenerate)
+        return kparams
+
+    def getRegenerate(self):
+        return self.regenerate
+
+    def setRegenerate(self, newRegenerate):
+        self.regenerate = newRegenerate
+
+
+# @package Kaltura
+# @subpackage Client
 class KalturaGenerateMetadataResult(KalturaObjectBase):
     """Metadata generation result object."""
 
@@ -14075,6 +14148,228 @@ class KalturaGenerateMetadataResult(KalturaObjectBase):
 
     def setEnrichedMetadata(self, newEnrichedMetadata):
         self.enrichedMetadata = newEnrichedMetadata
+
+
+# @package Kaltura
+# @subpackage Client
+class KalturaMetadataFieldConfig(KalturaObjectBase):
+    """Configuration for a specific metadata field including system name and update operation"""
+
+    def __init__(self,
+            systemName = NotImplemented,
+            operation = NotImplemented):
+        KalturaObjectBase.__init__(self)
+
+        # The system name of the metadata field in the asset struct
+        # @var str
+        self.systemName = systemName
+
+        # The update operation to be performed on this metadata field
+        # @var KalturaMetadataUpdateOperation
+        self.operation = operation
+
+
+    PROPERTY_LOADERS = {
+        'systemName': getXmlNodeText, 
+        'operation': (KalturaEnumsFactory.createString, "KalturaMetadataUpdateOperation"), 
+    }
+
+    def fromXml(self, node):
+        KalturaObjectBase.fromXml(self, node)
+        self.fromXmlImpl(node, KalturaMetadataFieldConfig.PROPERTY_LOADERS)
+
+    def toParams(self):
+        kparams = KalturaObjectBase.toParams(self)
+        kparams.put("objectType", "KalturaMetadataFieldConfig")
+        kparams.addStringIfDefined("systemName", self.systemName)
+        kparams.addStringEnumIfDefined("operation", self.operation)
+        return kparams
+
+    def getSystemName(self):
+        return self.systemName
+
+    def setSystemName(self, newSystemName):
+        self.systemName = newSystemName
+
+    def getOperation(self):
+        return self.operation
+
+    def setOperation(self, newOperation):
+        self.operation = newOperation
+
+
+# @package Kaltura
+# @subpackage Client
+class KalturaMetadataFieldConfigurationMap(KalturaObjectBase):
+    """Map a newly generated metadata field to an existing meta field on the assetStruct with configuration"""
+
+    def __init__(self,
+            genre = NotImplemented,
+            subGenre = NotImplemented,
+            sentiment = NotImplemented,
+            suggestedTitle = NotImplemented,
+            description = NotImplemented,
+            oneLiner = NotImplemented,
+            keywords = NotImplemented,
+            sensitiveContent = NotImplemented):
+        KalturaObjectBase.__init__(self)
+
+        # Configuration for &#39;genre&#39; AI generated metadata field
+        # @var KalturaMetadataFieldConfig
+        self.genre = genre
+
+        # Configuration for &#39;subGenre&#39; AI generated metadata field
+        # @var KalturaMetadataFieldConfig
+        self.subGenre = subGenre
+
+        # Configuration for &#39;sentiment&#39; AI generated metadata field
+        # @var KalturaMetadataFieldConfig
+        self.sentiment = sentiment
+
+        # Configuration for &#39;suggestedTitle&#39; AI generated metadata field
+        # @var KalturaMetadataFieldConfig
+        self.suggestedTitle = suggestedTitle
+
+        # Configuration for &#39;Description&#39; AI generated metadata field
+        # @var KalturaMetadataFieldConfig
+        self.description = description
+
+        # Configuration for &#39;oneLiner&#39; AI generated metadata field
+        # @var KalturaMetadataFieldConfig
+        self.oneLiner = oneLiner
+
+        # Configuration for &#39;Keywords&#39; AI generated metadata field
+        # @var KalturaMetadataFieldConfig
+        self.keywords = keywords
+
+        # Configuration for &#39;sensitiveContent&#39; AI generated metadata field
+        # @var KalturaMetadataFieldConfig
+        self.sensitiveContent = sensitiveContent
+
+
+    PROPERTY_LOADERS = {
+        'genre': (KalturaObjectFactory.create, 'KalturaMetadataFieldConfig'), 
+        'subGenre': (KalturaObjectFactory.create, 'KalturaMetadataFieldConfig'), 
+        'sentiment': (KalturaObjectFactory.create, 'KalturaMetadataFieldConfig'), 
+        'suggestedTitle': (KalturaObjectFactory.create, 'KalturaMetadataFieldConfig'), 
+        'description': (KalturaObjectFactory.create, 'KalturaMetadataFieldConfig'), 
+        'oneLiner': (KalturaObjectFactory.create, 'KalturaMetadataFieldConfig'), 
+        'keywords': (KalturaObjectFactory.create, 'KalturaMetadataFieldConfig'), 
+        'sensitiveContent': (KalturaObjectFactory.create, 'KalturaMetadataFieldConfig'), 
+    }
+
+    def fromXml(self, node):
+        KalturaObjectBase.fromXml(self, node)
+        self.fromXmlImpl(node, KalturaMetadataFieldConfigurationMap.PROPERTY_LOADERS)
+
+    def toParams(self):
+        kparams = KalturaObjectBase.toParams(self)
+        kparams.put("objectType", "KalturaMetadataFieldConfigurationMap")
+        kparams.addObjectIfDefined("genre", self.genre)
+        kparams.addObjectIfDefined("subGenre", self.subGenre)
+        kparams.addObjectIfDefined("sentiment", self.sentiment)
+        kparams.addObjectIfDefined("suggestedTitle", self.suggestedTitle)
+        kparams.addObjectIfDefined("description", self.description)
+        kparams.addObjectIfDefined("oneLiner", self.oneLiner)
+        kparams.addObjectIfDefined("keywords", self.keywords)
+        kparams.addObjectIfDefined("sensitiveContent", self.sensitiveContent)
+        return kparams
+
+    def getGenre(self):
+        return self.genre
+
+    def setGenre(self, newGenre):
+        self.genre = newGenre
+
+    def getSubGenre(self):
+        return self.subGenre
+
+    def setSubGenre(self, newSubGenre):
+        self.subGenre = newSubGenre
+
+    def getSentiment(self):
+        return self.sentiment
+
+    def setSentiment(self, newSentiment):
+        self.sentiment = newSentiment
+
+    def getSuggestedTitle(self):
+        return self.suggestedTitle
+
+    def setSuggestedTitle(self, newSuggestedTitle):
+        self.suggestedTitle = newSuggestedTitle
+
+    def getDescription(self):
+        return self.description
+
+    def setDescription(self, newDescription):
+        self.description = newDescription
+
+    def getOneLiner(self):
+        return self.oneLiner
+
+    def setOneLiner(self, newOneLiner):
+        self.oneLiner = newOneLiner
+
+    def getKeywords(self):
+        return self.keywords
+
+    def setKeywords(self, newKeywords):
+        self.keywords = newKeywords
+
+    def getSensitiveContent(self):
+        return self.sensitiveContent
+
+    def setSensitiveContent(self, newSensitiveContent):
+        self.sensitiveContent = newSensitiveContent
+
+
+# @package Kaltura
+# @subpackage Client
+class KalturaAiMetadataGeneratorConfiguration(KalturaObjectBase):
+    """The configuration object for the metadata enrichment feature."""
+
+    def __init__(self,
+            assetStructConfigMap = NotImplemented,
+            supportedLanguages = NotImplemented):
+        KalturaObjectBase.__init__(self)
+
+        # A type of dictionary defined as [string,KalturaMetadataFieldConfigurationMap].
+        #             This property is used to correlate the newly generated metadata to
+        #             existing metadata IDs which are available in the asset&#39;s struct with configuration.
+        # @var map
+        self.assetStructConfigMap = assetStructConfigMap
+
+        # A read only array to list the set of languages which can be used with the service.
+        #             In practice it is populated with the values set in KalturaMetadataGeneratorLanguages ENUM.
+        # @var List[KalturaStringValue]
+        # @readonly
+        self.supportedLanguages = supportedLanguages
+
+
+    PROPERTY_LOADERS = {
+        'assetStructConfigMap': (KalturaObjectFactory.createMap, 'KalturaMetadataFieldConfigurationMap'), 
+        'supportedLanguages': (KalturaObjectFactory.createArray, 'KalturaStringValue'), 
+    }
+
+    def fromXml(self, node):
+        KalturaObjectBase.fromXml(self, node)
+        self.fromXmlImpl(node, KalturaAiMetadataGeneratorConfiguration.PROPERTY_LOADERS)
+
+    def toParams(self):
+        kparams = KalturaObjectBase.toParams(self)
+        kparams.put("objectType", "KalturaAiMetadataGeneratorConfiguration")
+        kparams.addMapIfDefined("assetStructConfigMap", self.assetStructConfigMap)
+        return kparams
+
+    def getAssetStructConfigMap(self):
+        return self.assetStructConfigMap
+
+    def setAssetStructConfigMap(self, newAssetStructConfigMap):
+        self.assetStructConfigMap = newAssetStructConfigMap
+
+    def getSupportedLanguages(self):
+        return self.supportedLanguages
 
 
 # @package Kaltura
@@ -14201,54 +14496,6 @@ class KalturaMetaFieldNameMap(KalturaObjectBase):
 
     def setSensitiveContent(self, newSensitiveContent):
         self.sensitiveContent = newSensitiveContent
-
-
-# @package Kaltura
-# @subpackage Client
-class KalturaAiMetadataGeneratorConfiguration(KalturaObjectBase):
-    """The configuration object for the metadata enrichment feature."""
-
-    def __init__(self,
-            assetStructMetaNameMap = NotImplemented,
-            supportedLanguages = NotImplemented):
-        KalturaObjectBase.__init__(self)
-
-        # A type of dictionary defined as [long,KalturaMetaFieldNameMap]. 
-        #             This property is used to correlate the newly generated metadata to
-        #             existing metadata IDs which are available in the asset's struct.
-        # @var map
-        self.assetStructMetaNameMap = assetStructMetaNameMap
-
-        # A read only array to list the set of languages which can be used with the service.
-        #             In practice it is populated with the values set in KalturaMetadataGeneratorLanguages ENUM.
-        # @var List[KalturaStringValue]
-        # @readonly
-        self.supportedLanguages = supportedLanguages
-
-
-    PROPERTY_LOADERS = {
-        'assetStructMetaNameMap': (KalturaObjectFactory.createMap, 'KalturaMetaFieldNameMap'), 
-        'supportedLanguages': (KalturaObjectFactory.createArray, 'KalturaStringValue'), 
-    }
-
-    def fromXml(self, node):
-        KalturaObjectBase.fromXml(self, node)
-        self.fromXmlImpl(node, KalturaAiMetadataGeneratorConfiguration.PROPERTY_LOADERS)
-
-    def toParams(self):
-        kparams = KalturaObjectBase.toParams(self)
-        kparams.put("objectType", "KalturaAiMetadataGeneratorConfiguration")
-        kparams.addMapIfDefined("assetStructMetaNameMap", self.assetStructMetaNameMap)
-        return kparams
-
-    def getAssetStructMetaNameMap(self):
-        return self.assetStructMetaNameMap
-
-    def setAssetStructMetaNameMap(self, newAssetStructMetaNameMap):
-        self.assetStructMetaNameMap = newAssetStructMetaNameMap
-
-    def getSupportedLanguages(self):
-        return self.supportedLanguages
 
 
 # @package Kaltura
@@ -54750,6 +54997,21 @@ class KalturaAiMetadataGeneratorService(KalturaServiceBase):
         resultNode = self.client.doQueue()
         return KalturaObjectFactory.create(resultNode, 'KalturaGenerateMetadataJob')
 
+    def generateProgramMetadataByDescription(self, generateProgramMetadataByDescription):
+        """Initiate the process of metadata generation for Program assets based on existing asset description metadata.
+                    The service will analyze the program&#39;s description and genre metadata using AI/LLM to generate
+                    additional enriched metadata fields. This method is specifically designed for Program/EPG assets
+                    and supports CRID-based uniqueness, regeneration options, and configurable overwrite behavior.
+                    Programs without a CRID are out of scope for this feature."""
+
+        kparams = KalturaParams()
+        kparams.addObjectIfDefined("generateProgramMetadataByDescription", generateProgramMetadataByDescription)
+        self.client.queueServiceActionCall("aimetadatagenerator", "generateProgramMetadataByDescription", "KalturaGenerateMetadataJob", kparams)
+        if self.client.isMultiRequest():
+            return self.client.getMultiRequestResult()
+        resultNode = self.client.doQueue()
+        return KalturaObjectFactory.create(resultNode, 'KalturaGenerateMetadataJob')
+
     def getGeneratedMetadata(self, jobId):
         """Retrieve the generated metadata"""
 
@@ -63312,6 +63574,7 @@ class KalturaCoreClient(KalturaClientPlugin):
             'KalturaExternalRecordingResponseProfileOrderBy': KalturaExternalRecordingResponseProfileOrderBy,
             'KalturaFavoriteOrderBy': KalturaFavoriteOrderBy,
             'KalturaFollowTvSeriesOrderBy': KalturaFollowTvSeriesOrderBy,
+            'KalturaGenerateMetadataJobType': KalturaGenerateMetadataJobType,
             'KalturaGenerateMetadataStatus': KalturaGenerateMetadataStatus,
             'KalturaGeoBlockMode': KalturaGeoBlockMode,
             'KalturaGeoBlockRuleOrderBy': KalturaGeoBlockRuleOrderBy,
@@ -63356,6 +63619,7 @@ class KalturaCoreClient(KalturaClientPlugin):
             'KalturaMediaFileTypeQuality': KalturaMediaFileTypeQuality,
             'KalturaMessageTemplateType': KalturaMessageTemplateType,
             'KalturaMetaDataType': KalturaMetaDataType,
+            'KalturaMetadataUpdateOperation': KalturaMetadataUpdateOperation,
             'KalturaMetaOrderBy': KalturaMetaOrderBy,
             'KalturaMetaTagOrderBy': KalturaMetaTagOrderBy,
             'KalturaMonetizationType': KalturaMonetizationType,
@@ -63679,9 +63943,12 @@ class KalturaCoreClient(KalturaClientPlugin):
             'KalturaGenerateMetadataBySubtitles': KalturaGenerateMetadataBySubtitles,
             'KalturaGenerateMetadataJob': KalturaGenerateMetadataJob,
             'KalturaGenerateMetadataByDescription': KalturaGenerateMetadataByDescription,
+            'KalturaGenerateProgramMetadatasByDescription': KalturaGenerateProgramMetadatasByDescription,
             'KalturaGenerateMetadataResult': KalturaGenerateMetadataResult,
-            'KalturaMetaFieldNameMap': KalturaMetaFieldNameMap,
+            'KalturaMetadataFieldConfig': KalturaMetadataFieldConfig,
+            'KalturaMetadataFieldConfigurationMap': KalturaMetadataFieldConfigurationMap,
             'KalturaAiMetadataGeneratorConfiguration': KalturaAiMetadataGeneratorConfiguration,
+            'KalturaMetaFieldNameMap': KalturaMetaFieldNameMap,
             'KalturaTreeQuestion': KalturaTreeQuestion,
             'KalturaTreeAnswer': KalturaTreeAnswer,
             'KalturaMediaImage': KalturaMediaImage,
