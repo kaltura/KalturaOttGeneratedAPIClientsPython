@@ -42,7 +42,7 @@ from ..Base import (
     KalturaServiceBase,
 )
 
-API_VERSION = '11.5.0.0'
+API_VERSION = '11.8.0.0'
 
 ########## enums ##########
 # @package Kaltura
@@ -74,6 +74,18 @@ class KalturaAggregationType(object):
     COUNT = "Count"
     SUM = "Sum"
     AVG = "Avg"
+
+    def __init__(self, value):
+        self.value = value
+
+    def getValue(self):
+        return self.value
+
+# @package Kaltura
+# @subpackage Client
+class KalturaAiRecommendationTreeFeatureLevel(object):
+    BASIC = "Basic"
+    PREMIUM = "Premium"
 
     def __init__(self, value):
         self.value = value
@@ -17140,7 +17152,8 @@ class KalturaAiRecommendationTreePartnerConfiguration(KalturaObjectBase):
             specialAnswers = NotImplemented,
             numOfRecommendedAssets = NotImplemented,
             treeGenerationFrequency = NotImplemented,
-            activeTreeId = NotImplemented):
+            activeTreeId = NotImplemented,
+            featureType = NotImplemented):
         KalturaObjectBase.__init__(self)
 
         # Dictionary of metadata types to base questions on (genre, actor, director, etc.) with their respective counts.
@@ -17151,7 +17164,7 @@ class KalturaAiRecommendationTreePartnerConfiguration(KalturaObjectBase):
         # @var int
         self.topLevelQuestions = topLevelQuestions
 
-        # Number of regular answers per question (range: 2-5).
+        # Number of regular answers per question (range: 2-4).
         # @var int
         self.answersPerQuestion = answersPerQuestion
 
@@ -17176,6 +17189,11 @@ class KalturaAiRecommendationTreePartnerConfiguration(KalturaObjectBase):
         # @readonly
         self.activeTreeId = activeTreeId
 
+        # Feature level of the recommendation tree (e.g., Basic, Premium).
+        # @var KalturaAiRecommendationTreeFeatureLevel
+        # @readonly
+        self.featureType = featureType
+
 
     PROPERTY_LOADERS = {
         'activeMetadataTypes': (KalturaObjectFactory.createMap, 'KalturaIntegerValue'), 
@@ -17186,6 +17204,7 @@ class KalturaAiRecommendationTreePartnerConfiguration(KalturaObjectBase):
         'numOfRecommendedAssets': getXmlNodeInt, 
         'treeGenerationFrequency': getXmlNodeText, 
         'activeTreeId': getXmlNodeText, 
+        'featureType': (KalturaEnumsFactory.createString, "KalturaAiRecommendationTreeFeatureLevel"), 
     }
 
     def fromXml(self, node):
@@ -17248,6 +17267,9 @@ class KalturaAiRecommendationTreePartnerConfiguration(KalturaObjectBase):
 
     def getActiveTreeId(self):
         return self.activeTreeId
+
+    def getFeatureType(self):
+        return self.featureType
 
 
 # @package Kaltura
@@ -17933,7 +17955,9 @@ class KalturaAssetFilePpv(KalturaOTTObjectSupportNullable):
             assetFileId = NotImplemented,
             ppvModuleId = NotImplemented,
             startDate = NotImplemented,
-            endDate = NotImplemented):
+            endDate = NotImplemented,
+            purchaseStartDate = NotImplemented,
+            purchaseEndDate = NotImplemented):
         KalturaOTTObjectSupportNullable.__init__(self)
 
         # Asset file identifier
@@ -17952,12 +17976,22 @@ class KalturaAssetFilePpv(KalturaOTTObjectSupportNullable):
         # @var int
         self.endDate = endDate
 
+        # First date and time an KalturaAssetFilePpv.AssetFileId can be purchased with the given KalturaAssetFilePpv.PpvModuleId. Represented as epoch
+        # @var int
+        self.purchaseStartDate = purchaseStartDate
+
+        # Final date and time an KalturaAssetFilePpv.AssetFileId can be purchased with the given KalturaAssetFilePpv.PpvModuleId. Represented as epoch
+        # @var int
+        self.purchaseEndDate = purchaseEndDate
+
 
     PROPERTY_LOADERS = {
         'assetFileId': getXmlNodeInt, 
         'ppvModuleId': getXmlNodeInt, 
         'startDate': getXmlNodeInt, 
         'endDate': getXmlNodeInt, 
+        'purchaseStartDate': getXmlNodeInt, 
+        'purchaseEndDate': getXmlNodeInt, 
     }
 
     def fromXml(self, node):
@@ -17971,6 +18005,8 @@ class KalturaAssetFilePpv(KalturaOTTObjectSupportNullable):
         kparams.addIntIfDefined("ppvModuleId", self.ppvModuleId)
         kparams.addIntIfDefined("startDate", self.startDate)
         kparams.addIntIfDefined("endDate", self.endDate)
+        kparams.addIntIfDefined("purchaseStartDate", self.purchaseStartDate)
+        kparams.addIntIfDefined("purchaseEndDate", self.purchaseEndDate)
         return kparams
 
     def getAssetFileId(self):
@@ -17996,6 +18032,18 @@ class KalturaAssetFilePpv(KalturaOTTObjectSupportNullable):
 
     def setEndDate(self, newEndDate):
         self.endDate = newEndDate
+
+    def getPurchaseStartDate(self):
+        return self.purchaseStartDate
+
+    def setPurchaseStartDate(self, newPurchaseStartDate):
+        self.purchaseStartDate = newPurchaseStartDate
+
+    def getPurchaseEndDate(self):
+        return self.purchaseEndDate
+
+    def setPurchaseEndDate(self, newPurchaseEndDate):
+        self.purchaseEndDate = newPurchaseEndDate
 
 
 # @package Kaltura
@@ -29430,7 +29478,11 @@ class KalturaWatchBasedRecommendationsProfile(KalturaObjectBase):
             minPlaybacks = NotImplemented,
             maxPlaybacks = NotImplemented,
             allowedRecommendationsKsql = NotImplemented,
-            playbackInterestsCalculationPeriodDays = NotImplemented):
+            playbackInterestsCalculationPeriodDays = NotImplemented,
+            analyzeCatchUps = NotImplemented,
+            analyzeLinearEvents = NotImplemented,
+            userInterestPlayThresholdForEventInMinutes = NotImplemented,
+            maximumEventsPerSession = NotImplemented):
         KalturaObjectBase.__init__(self)
 
         # Unique identifier for the profile
@@ -29478,6 +29530,22 @@ class KalturaWatchBasedRecommendationsProfile(KalturaObjectBase):
         # @var int
         self.playbackInterestsCalculationPeriodDays = playbackInterestsCalculationPeriodDays
 
+        # Determines whether catch-up viewing data should be included in the user&#39;s interest analysis.
+        # @var bool
+        self.analyzeCatchUps = analyzeCatchUps
+
+        # Determines whether linear events viewing data should be included in the user&#39;s interest analysis.
+        # @var bool
+        self.analyzeLinearEvents = analyzeLinearEvents
+
+        # Minimum required viewing time per session (in minutes) for live content to be considered in the analysis.
+        # @var int
+        self.userInterestPlayThresholdForEventInMinutes = userInterestPlayThresholdForEventInMinutes
+
+        # Minimum required viewing time per session (in minutes) for live content to be considered in the analysis.
+        # @var int
+        self.maximumEventsPerSession = maximumEventsPerSession
+
 
     PROPERTY_LOADERS = {
         'id': getXmlNodeInt, 
@@ -29491,6 +29559,10 @@ class KalturaWatchBasedRecommendationsProfile(KalturaObjectBase):
         'maxPlaybacks': getXmlNodeInt, 
         'allowedRecommendationsKsql': getXmlNodeText, 
         'playbackInterestsCalculationPeriodDays': getXmlNodeInt, 
+        'analyzeCatchUps': getXmlNodeBool, 
+        'analyzeLinearEvents': getXmlNodeBool, 
+        'userInterestPlayThresholdForEventInMinutes': getXmlNodeInt, 
+        'maximumEventsPerSession': getXmlNodeInt, 
     }
 
     def fromXml(self, node):
@@ -29510,6 +29582,10 @@ class KalturaWatchBasedRecommendationsProfile(KalturaObjectBase):
         kparams.addIntIfDefined("maxPlaybacks", self.maxPlaybacks)
         kparams.addStringIfDefined("allowedRecommendationsKsql", self.allowedRecommendationsKsql)
         kparams.addIntIfDefined("playbackInterestsCalculationPeriodDays", self.playbackInterestsCalculationPeriodDays)
+        kparams.addBoolIfDefined("analyzeCatchUps", self.analyzeCatchUps)
+        kparams.addBoolIfDefined("analyzeLinearEvents", self.analyzeLinearEvents)
+        kparams.addIntIfDefined("userInterestPlayThresholdForEventInMinutes", self.userInterestPlayThresholdForEventInMinutes)
+        kparams.addIntIfDefined("maximumEventsPerSession", self.maximumEventsPerSession)
         return kparams
 
     def getId(self):
@@ -29574,6 +29650,30 @@ class KalturaWatchBasedRecommendationsProfile(KalturaObjectBase):
 
     def setPlaybackInterestsCalculationPeriodDays(self, newPlaybackInterestsCalculationPeriodDays):
         self.playbackInterestsCalculationPeriodDays = newPlaybackInterestsCalculationPeriodDays
+
+    def getAnalyzeCatchUps(self):
+        return self.analyzeCatchUps
+
+    def setAnalyzeCatchUps(self, newAnalyzeCatchUps):
+        self.analyzeCatchUps = newAnalyzeCatchUps
+
+    def getAnalyzeLinearEvents(self):
+        return self.analyzeLinearEvents
+
+    def setAnalyzeLinearEvents(self, newAnalyzeLinearEvents):
+        self.analyzeLinearEvents = newAnalyzeLinearEvents
+
+    def getUserInterestPlayThresholdForEventInMinutes(self):
+        return self.userInterestPlayThresholdForEventInMinutes
+
+    def setUserInterestPlayThresholdForEventInMinutes(self, newUserInterestPlayThresholdForEventInMinutes):
+        self.userInterestPlayThresholdForEventInMinutes = newUserInterestPlayThresholdForEventInMinutes
+
+    def getMaximumEventsPerSession(self):
+        return self.maximumEventsPerSession
+
+    def setMaximumEventsPerSession(self, newMaximumEventsPerSession):
+        self.maximumEventsPerSession = newMaximumEventsPerSession
 
 
 # @package Kaltura
@@ -55305,7 +55405,7 @@ class KalturaAssetFilePpvService(KalturaServiceBase):
         return KalturaObjectFactory.create(resultNode, 'KalturaAssetFilePpvListResponse')
 
     def update(self, assetFileId, ppvModuleId, assetFilePpv):
-        """Update assetFilePpv"""
+        """Update assetFilePpv dates"""
 
         kparams = KalturaParams()
         kparams.addIntIfDefined("assetFileId", assetFileId);
@@ -61866,13 +61966,14 @@ class KalturaStreamingDeviceService(KalturaServiceBase):
     def __init__(self, client = None):
         KalturaServiceBase.__init__(self, client)
 
-    def bookPlaybackSession(self, fileId, assetId, assetType):
+    def bookPlaybackSession(self, fileId, assetId, assetType, programId = NotImplemented):
         """Reserves a concurrency slot for the given asset-device combination"""
 
         kparams = KalturaParams()
         kparams.addStringIfDefined("fileId", fileId)
         kparams.addStringIfDefined("assetId", assetId)
         kparams.addStringIfDefined("assetType", assetType)
+        kparams.addIntIfDefined("programId", programId);
         self.client.queueServiceActionCall("streamingdevice", "bookPlaybackSession", "None", kparams)
         if self.client.isMultiRequest():
             return self.client.getMultiRequestResult()
@@ -63220,6 +63321,7 @@ class KalturaCoreClient(KalturaClientPlugin):
             'KalturaAdsPolicy': KalturaAdsPolicy,
             'KalturaAggregationCountOrderBy': KalturaAggregationCountOrderBy,
             'KalturaAggregationType': KalturaAggregationType,
+            'KalturaAiRecommendationTreeFeatureLevel': KalturaAiRecommendationTreeFeatureLevel,
             'KalturaAnnouncementOrderBy': KalturaAnnouncementOrderBy,
             'KalturaAnnouncementRecipientsType': KalturaAnnouncementRecipientsType,
             'KalturaAnnouncementStatus': KalturaAnnouncementStatus,
