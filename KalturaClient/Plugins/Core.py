@@ -42,7 +42,7 @@ from ..Base import (
     KalturaServiceBase,
 )
 
-API_VERSION = '11.5.0.0'
+API_VERSION = '11.8.0.0'
 
 ########## enums ##########
 # @package Kaltura
@@ -74,6 +74,18 @@ class KalturaAggregationType(object):
     COUNT = "Count"
     SUM = "Sum"
     AVG = "Avg"
+
+    def __init__(self, value):
+        self.value = value
+
+    def getValue(self):
+        return self.value
+
+# @package Kaltura
+# @subpackage Client
+class KalturaAiRecommendationTreeFeatureLevel(object):
+    BASIC = "Basic"
+    PREMIUM = "Premium"
 
     def __init__(self, value):
         self.value = value
@@ -1304,6 +1316,19 @@ class KalturaFollowTvSeriesOrderBy(object):
 
 # @package Kaltura
 # @subpackage Client
+class KalturaGenerateMetadataJobType(object):
+    VODBYDESCRIPTION = "VodByDescription"
+    VODBYSUBTITLES = "VodBySubtitles"
+    PROGRAMBYDESCRIPTION = "ProgramByDescription"
+
+    def __init__(self, value):
+        self.value = value
+
+    def getValue(self):
+        return self.value
+
+# @package Kaltura
+# @subpackage Client
 class KalturaGenerateMetadataStatus(object):
     PROCESSING = "Processing"
     PARTIALSUCCESS = "PartialSuccess"
@@ -1874,6 +1899,19 @@ class KalturaMetaDataType(object):
     BOOLEAN = "BOOLEAN"
     DATE = "DATE"
     RELEATED_ENTITY = "RELEATED_ENTITY"
+
+    def __init__(self, value):
+        self.value = value
+
+    def getValue(self):
+        return self.value
+
+# @package Kaltura
+# @subpackage Client
+class KalturaMetadataUpdateOperation(object):
+    PROTECT = "PROTECT"
+    EXTEND = "EXTEND"
+    OVERWRITE = "OVERWRITE"
 
     def __init__(self, value):
         self.value = value
@@ -2555,6 +2593,7 @@ class KalturaRuleActionType(object):
     FILTERFILEBYLABELINPLAYBACK = "FilterFileByLabelInPlayback"
     FILTERFILEBYDYNAMICDATAINDISCOVERY = "FilterFileByDynamicDataInDiscovery"
     FILTERFILEBYDYNAMICDATAINPLAYBACK = "FilterFileByDynamicDataInPlayback"
+    SET_PLAYBACK_CONTEXT_URL_TYPE = "SET_PLAYBACK_CONTEXT_URL_TYPE"
 
     def __init__(self, value):
         self.value = value
@@ -13935,7 +13974,8 @@ class KalturaGenerateMetadataJob(KalturaObjectBase):
             updateDate = NotImplemented,
             sourceName = NotImplemented,
             status = NotImplemented,
-            errorMessage = NotImplemented):
+            errorMessage = NotImplemented,
+            type = NotImplemented):
         KalturaObjectBase.__init__(self)
 
         # Unique identifier for the generation job
@@ -13970,6 +14010,11 @@ class KalturaGenerateMetadataJob(KalturaObjectBase):
         # @readonly
         self.errorMessage = errorMessage
 
+        # Type of the metadata generation job (vodByDescription, vodBySubtitles, programByDescription)
+        # @var KalturaGenerateMetadataJobType
+        # @readonly
+        self.type = type
+
 
     PROPERTY_LOADERS = {
         'id': getXmlNodeInt, 
@@ -13978,6 +14023,7 @@ class KalturaGenerateMetadataJob(KalturaObjectBase):
         'sourceName': getXmlNodeText, 
         'status': (KalturaEnumsFactory.createString, "KalturaGenerateMetadataStatus"), 
         'errorMessage': getXmlNodeText, 
+        'type': (KalturaEnumsFactory.createString, "KalturaGenerateMetadataJobType"), 
     }
 
     def fromXml(self, node):
@@ -14006,6 +14052,9 @@ class KalturaGenerateMetadataJob(KalturaObjectBase):
 
     def getErrorMessage(self):
         return self.errorMessage
+
+    def getType(self):
+        return self.type
 
 
 # @package Kaltura
@@ -14044,6 +14093,43 @@ class KalturaGenerateMetadataByDescription(KalturaObjectBase):
 
 # @package Kaltura
 # @subpackage Client
+class KalturaGenerateProgramMetadatasByDescription(KalturaGenerateMetadataByDescription):
+    def __init__(self,
+            externalAssetId = NotImplemented,
+            regenerate = NotImplemented):
+        KalturaGenerateMetadataByDescription.__init__(self,
+            externalAssetId)
+
+        # A boolean flag that allows the API user to force the regeneration of metadata.
+        #             If true, the service will run a new analysis even if enriched metadata already exists for the program&#39;s CRID.
+        #             If false (default), the service will reuse existing metadata if available for the CRID.
+        # @var bool
+        self.regenerate = regenerate
+
+
+    PROPERTY_LOADERS = {
+        'regenerate': getXmlNodeBool, 
+    }
+
+    def fromXml(self, node):
+        KalturaGenerateMetadataByDescription.fromXml(self, node)
+        self.fromXmlImpl(node, KalturaGenerateProgramMetadatasByDescription.PROPERTY_LOADERS)
+
+    def toParams(self):
+        kparams = KalturaGenerateMetadataByDescription.toParams(self)
+        kparams.put("objectType", "KalturaGenerateProgramMetadatasByDescription")
+        kparams.addBoolIfDefined("regenerate", self.regenerate)
+        return kparams
+
+    def getRegenerate(self):
+        return self.regenerate
+
+    def setRegenerate(self, newRegenerate):
+        self.regenerate = newRegenerate
+
+
+# @package Kaltura
+# @subpackage Client
 class KalturaGenerateMetadataResult(KalturaObjectBase):
     """Metadata generation result object."""
 
@@ -14075,6 +14161,228 @@ class KalturaGenerateMetadataResult(KalturaObjectBase):
 
     def setEnrichedMetadata(self, newEnrichedMetadata):
         self.enrichedMetadata = newEnrichedMetadata
+
+
+# @package Kaltura
+# @subpackage Client
+class KalturaMetadataFieldConfig(KalturaObjectBase):
+    """Configuration for a specific metadata field including system name and update operation."""
+
+    def __init__(self,
+            systemName = NotImplemented,
+            operation = NotImplemented):
+        KalturaObjectBase.__init__(self)
+
+        # The system name of the metadata field in the asset struct.
+        # @var str
+        self.systemName = systemName
+
+        # The update operation to be performed on this metadata field.
+        # @var KalturaMetadataUpdateOperation
+        self.operation = operation
+
+
+    PROPERTY_LOADERS = {
+        'systemName': getXmlNodeText, 
+        'operation': (KalturaEnumsFactory.createString, "KalturaMetadataUpdateOperation"), 
+    }
+
+    def fromXml(self, node):
+        KalturaObjectBase.fromXml(self, node)
+        self.fromXmlImpl(node, KalturaMetadataFieldConfig.PROPERTY_LOADERS)
+
+    def toParams(self):
+        kparams = KalturaObjectBase.toParams(self)
+        kparams.put("objectType", "KalturaMetadataFieldConfig")
+        kparams.addStringIfDefined("systemName", self.systemName)
+        kparams.addStringEnumIfDefined("operation", self.operation)
+        return kparams
+
+    def getSystemName(self):
+        return self.systemName
+
+    def setSystemName(self, newSystemName):
+        self.systemName = newSystemName
+
+    def getOperation(self):
+        return self.operation
+
+    def setOperation(self, newOperation):
+        self.operation = newOperation
+
+
+# @package Kaltura
+# @subpackage Client
+class KalturaMetadataFieldConfigurationMap(KalturaObjectBase):
+    """Map a newly generated metadata field to an existing meta field on the assetStruct with configuration"""
+
+    def __init__(self,
+            genre = NotImplemented,
+            subGenre = NotImplemented,
+            sentiment = NotImplemented,
+            suggestedTitle = NotImplemented,
+            description = NotImplemented,
+            oneLiner = NotImplemented,
+            keywords = NotImplemented,
+            sensitiveContent = NotImplemented):
+        KalturaObjectBase.__init__(self)
+
+        # Configuration for &#39;genre&#39; AI generated metadata field
+        # @var KalturaMetadataFieldConfig
+        self.genre = genre
+
+        # Configuration for &#39;subGenre&#39; AI generated metadata field
+        # @var KalturaMetadataFieldConfig
+        self.subGenre = subGenre
+
+        # Configuration for &#39;sentiment&#39; AI generated metadata field
+        # @var KalturaMetadataFieldConfig
+        self.sentiment = sentiment
+
+        # Configuration for &#39;suggestedTitle&#39; AI generated metadata field
+        # @var KalturaMetadataFieldConfig
+        self.suggestedTitle = suggestedTitle
+
+        # Configuration for &#39;Description&#39; AI generated metadata field
+        # @var KalturaMetadataFieldConfig
+        self.description = description
+
+        # Configuration for &#39;oneLiner&#39; AI generated metadata field
+        # @var KalturaMetadataFieldConfig
+        self.oneLiner = oneLiner
+
+        # Configuration for &#39;Keywords&#39; AI generated metadata field
+        # @var KalturaMetadataFieldConfig
+        self.keywords = keywords
+
+        # Configuration for &#39;sensitiveContent&#39; AI generated metadata field
+        # @var KalturaMetadataFieldConfig
+        self.sensitiveContent = sensitiveContent
+
+
+    PROPERTY_LOADERS = {
+        'genre': (KalturaObjectFactory.create, 'KalturaMetadataFieldConfig'), 
+        'subGenre': (KalturaObjectFactory.create, 'KalturaMetadataFieldConfig'), 
+        'sentiment': (KalturaObjectFactory.create, 'KalturaMetadataFieldConfig'), 
+        'suggestedTitle': (KalturaObjectFactory.create, 'KalturaMetadataFieldConfig'), 
+        'description': (KalturaObjectFactory.create, 'KalturaMetadataFieldConfig'), 
+        'oneLiner': (KalturaObjectFactory.create, 'KalturaMetadataFieldConfig'), 
+        'keywords': (KalturaObjectFactory.create, 'KalturaMetadataFieldConfig'), 
+        'sensitiveContent': (KalturaObjectFactory.create, 'KalturaMetadataFieldConfig'), 
+    }
+
+    def fromXml(self, node):
+        KalturaObjectBase.fromXml(self, node)
+        self.fromXmlImpl(node, KalturaMetadataFieldConfigurationMap.PROPERTY_LOADERS)
+
+    def toParams(self):
+        kparams = KalturaObjectBase.toParams(self)
+        kparams.put("objectType", "KalturaMetadataFieldConfigurationMap")
+        kparams.addObjectIfDefined("genre", self.genre)
+        kparams.addObjectIfDefined("subGenre", self.subGenre)
+        kparams.addObjectIfDefined("sentiment", self.sentiment)
+        kparams.addObjectIfDefined("suggestedTitle", self.suggestedTitle)
+        kparams.addObjectIfDefined("description", self.description)
+        kparams.addObjectIfDefined("oneLiner", self.oneLiner)
+        kparams.addObjectIfDefined("keywords", self.keywords)
+        kparams.addObjectIfDefined("sensitiveContent", self.sensitiveContent)
+        return kparams
+
+    def getGenre(self):
+        return self.genre
+
+    def setGenre(self, newGenre):
+        self.genre = newGenre
+
+    def getSubGenre(self):
+        return self.subGenre
+
+    def setSubGenre(self, newSubGenre):
+        self.subGenre = newSubGenre
+
+    def getSentiment(self):
+        return self.sentiment
+
+    def setSentiment(self, newSentiment):
+        self.sentiment = newSentiment
+
+    def getSuggestedTitle(self):
+        return self.suggestedTitle
+
+    def setSuggestedTitle(self, newSuggestedTitle):
+        self.suggestedTitle = newSuggestedTitle
+
+    def getDescription(self):
+        return self.description
+
+    def setDescription(self, newDescription):
+        self.description = newDescription
+
+    def getOneLiner(self):
+        return self.oneLiner
+
+    def setOneLiner(self, newOneLiner):
+        self.oneLiner = newOneLiner
+
+    def getKeywords(self):
+        return self.keywords
+
+    def setKeywords(self, newKeywords):
+        self.keywords = newKeywords
+
+    def getSensitiveContent(self):
+        return self.sensitiveContent
+
+    def setSensitiveContent(self, newSensitiveContent):
+        self.sensitiveContent = newSensitiveContent
+
+
+# @package Kaltura
+# @subpackage Client
+class KalturaAiMetadataGeneratorConfiguration(KalturaObjectBase):
+    """The configuration object for the metadata enrichment feature."""
+
+    def __init__(self,
+            assetStructConfigMap = NotImplemented,
+            supportedLanguages = NotImplemented):
+        KalturaObjectBase.__init__(self)
+
+        # A type of dictionary defined as [string,KalturaMetadataFieldConfigurationMap].
+        #             This property is used to correlate the newly generated metadata to
+        #             existing metadata IDs which are available in the asset&#39;s struct with configuration.
+        # @var map
+        self.assetStructConfigMap = assetStructConfigMap
+
+        # A read only array to list the set of languages which can be used with the service.
+        #             In practice it is populated with the values set in KalturaMetadataGeneratorLanguages ENUM.
+        # @var List[KalturaStringValue]
+        # @readonly
+        self.supportedLanguages = supportedLanguages
+
+
+    PROPERTY_LOADERS = {
+        'assetStructConfigMap': (KalturaObjectFactory.createMap, 'KalturaMetadataFieldConfigurationMap'), 
+        'supportedLanguages': (KalturaObjectFactory.createArray, 'KalturaStringValue'), 
+    }
+
+    def fromXml(self, node):
+        KalturaObjectBase.fromXml(self, node)
+        self.fromXmlImpl(node, KalturaAiMetadataGeneratorConfiguration.PROPERTY_LOADERS)
+
+    def toParams(self):
+        kparams = KalturaObjectBase.toParams(self)
+        kparams.put("objectType", "KalturaAiMetadataGeneratorConfiguration")
+        kparams.addMapIfDefined("assetStructConfigMap", self.assetStructConfigMap)
+        return kparams
+
+    def getAssetStructConfigMap(self):
+        return self.assetStructConfigMap
+
+    def setAssetStructConfigMap(self, newAssetStructConfigMap):
+        self.assetStructConfigMap = newAssetStructConfigMap
+
+    def getSupportedLanguages(self):
+        return self.supportedLanguages
 
 
 # @package Kaltura
@@ -14201,54 +14509,6 @@ class KalturaMetaFieldNameMap(KalturaObjectBase):
 
     def setSensitiveContent(self, newSensitiveContent):
         self.sensitiveContent = newSensitiveContent
-
-
-# @package Kaltura
-# @subpackage Client
-class KalturaAiMetadataGeneratorConfiguration(KalturaObjectBase):
-    """The configuration object for the metadata enrichment feature."""
-
-    def __init__(self,
-            assetStructMetaNameMap = NotImplemented,
-            supportedLanguages = NotImplemented):
-        KalturaObjectBase.__init__(self)
-
-        # A type of dictionary defined as [long,KalturaMetaFieldNameMap]. 
-        #             This property is used to correlate the newly generated metadata to
-        #             existing metadata IDs which are available in the asset's struct.
-        # @var map
-        self.assetStructMetaNameMap = assetStructMetaNameMap
-
-        # A read only array to list the set of languages which can be used with the service.
-        #             In practice it is populated with the values set in KalturaMetadataGeneratorLanguages ENUM.
-        # @var List[KalturaStringValue]
-        # @readonly
-        self.supportedLanguages = supportedLanguages
-
-
-    PROPERTY_LOADERS = {
-        'assetStructMetaNameMap': (KalturaObjectFactory.createMap, 'KalturaMetaFieldNameMap'), 
-        'supportedLanguages': (KalturaObjectFactory.createArray, 'KalturaStringValue'), 
-    }
-
-    def fromXml(self, node):
-        KalturaObjectBase.fromXml(self, node)
-        self.fromXmlImpl(node, KalturaAiMetadataGeneratorConfiguration.PROPERTY_LOADERS)
-
-    def toParams(self):
-        kparams = KalturaObjectBase.toParams(self)
-        kparams.put("objectType", "KalturaAiMetadataGeneratorConfiguration")
-        kparams.addMapIfDefined("assetStructMetaNameMap", self.assetStructMetaNameMap)
-        return kparams
-
-    def getAssetStructMetaNameMap(self):
-        return self.assetStructMetaNameMap
-
-    def setAssetStructMetaNameMap(self, newAssetStructMetaNameMap):
-        self.assetStructMetaNameMap = newAssetStructMetaNameMap
-
-    def getSupportedLanguages(self):
-        return self.supportedLanguages
 
 
 # @package Kaltura
@@ -17140,7 +17400,8 @@ class KalturaAiRecommendationTreePartnerConfiguration(KalturaObjectBase):
             specialAnswers = NotImplemented,
             numOfRecommendedAssets = NotImplemented,
             treeGenerationFrequency = NotImplemented,
-            activeTreeId = NotImplemented):
+            activeTreeId = NotImplemented,
+            featureType = NotImplemented):
         KalturaObjectBase.__init__(self)
 
         # Dictionary of metadata types to base questions on (genre, actor, director, etc.) with their respective counts.
@@ -17151,7 +17412,7 @@ class KalturaAiRecommendationTreePartnerConfiguration(KalturaObjectBase):
         # @var int
         self.topLevelQuestions = topLevelQuestions
 
-        # Number of regular answers per question (range: 2-5).
+        # Number of regular answers per question (range: 2-4).
         # @var int
         self.answersPerQuestion = answersPerQuestion
 
@@ -17176,6 +17437,11 @@ class KalturaAiRecommendationTreePartnerConfiguration(KalturaObjectBase):
         # @readonly
         self.activeTreeId = activeTreeId
 
+        # Feature level of the recommendation tree (e.g., Basic, Premium).
+        # @var KalturaAiRecommendationTreeFeatureLevel
+        # @readonly
+        self.featureType = featureType
+
 
     PROPERTY_LOADERS = {
         'activeMetadataTypes': (KalturaObjectFactory.createMap, 'KalturaIntegerValue'), 
@@ -17186,6 +17452,7 @@ class KalturaAiRecommendationTreePartnerConfiguration(KalturaObjectBase):
         'numOfRecommendedAssets': getXmlNodeInt, 
         'treeGenerationFrequency': getXmlNodeText, 
         'activeTreeId': getXmlNodeText, 
+        'featureType': (KalturaEnumsFactory.createString, "KalturaAiRecommendationTreeFeatureLevel"), 
     }
 
     def fromXml(self, node):
@@ -17248,6 +17515,9 @@ class KalturaAiRecommendationTreePartnerConfiguration(KalturaObjectBase):
 
     def getActiveTreeId(self):
         return self.activeTreeId
+
+    def getFeatureType(self):
+        return self.featureType
 
 
 # @package Kaltura
@@ -17933,7 +18203,9 @@ class KalturaAssetFilePpv(KalturaOTTObjectSupportNullable):
             assetFileId = NotImplemented,
             ppvModuleId = NotImplemented,
             startDate = NotImplemented,
-            endDate = NotImplemented):
+            endDate = NotImplemented,
+            purchaseStartDate = NotImplemented,
+            purchaseEndDate = NotImplemented):
         KalturaOTTObjectSupportNullable.__init__(self)
 
         # Asset file identifier
@@ -17952,12 +18224,22 @@ class KalturaAssetFilePpv(KalturaOTTObjectSupportNullable):
         # @var int
         self.endDate = endDate
 
+        # First date and time an KalturaAssetFilePpv.AssetFileId can be purchased with the given KalturaAssetFilePpv.PpvModuleId. Represented as epoch
+        # @var int
+        self.purchaseStartDate = purchaseStartDate
+
+        # Final date and time an KalturaAssetFilePpv.AssetFileId can be purchased with the given KalturaAssetFilePpv.PpvModuleId. Represented as epoch
+        # @var int
+        self.purchaseEndDate = purchaseEndDate
+
 
     PROPERTY_LOADERS = {
         'assetFileId': getXmlNodeInt, 
         'ppvModuleId': getXmlNodeInt, 
         'startDate': getXmlNodeInt, 
         'endDate': getXmlNodeInt, 
+        'purchaseStartDate': getXmlNodeInt, 
+        'purchaseEndDate': getXmlNodeInt, 
     }
 
     def fromXml(self, node):
@@ -17971,6 +18253,8 @@ class KalturaAssetFilePpv(KalturaOTTObjectSupportNullable):
         kparams.addIntIfDefined("ppvModuleId", self.ppvModuleId)
         kparams.addIntIfDefined("startDate", self.startDate)
         kparams.addIntIfDefined("endDate", self.endDate)
+        kparams.addIntIfDefined("purchaseStartDate", self.purchaseStartDate)
+        kparams.addIntIfDefined("purchaseEndDate", self.purchaseEndDate)
         return kparams
 
     def getAssetFileId(self):
@@ -17996,6 +18280,18 @@ class KalturaAssetFilePpv(KalturaOTTObjectSupportNullable):
 
     def setEndDate(self, newEndDate):
         self.endDate = newEndDate
+
+    def getPurchaseStartDate(self):
+        return self.purchaseStartDate
+
+    def setPurchaseStartDate(self, newPurchaseStartDate):
+        self.purchaseStartDate = newPurchaseStartDate
+
+    def getPurchaseEndDate(self):
+        return self.purchaseEndDate
+
+    def setPurchaseEndDate(self, newPurchaseEndDate):
+        self.purchaseEndDate = newPurchaseEndDate
 
 
 # @package Kaltura
@@ -23529,6 +23825,43 @@ class KalturaStartDateOffsetRuleAction(KalturaTimeOffsetRuleAction):
         kparams = KalturaTimeOffsetRuleAction.toParams(self)
         kparams.put("objectType", "KalturaStartDateOffsetRuleAction")
         return kparams
+
+
+# @package Kaltura
+# @subpackage Client
+class KalturaSetPlaybackContextUrlTypeAction(KalturaAssetRuleAction):
+    def __init__(self,
+            type = NotImplemented,
+            description = NotImplemented,
+            urlType = NotImplemented):
+        KalturaAssetRuleAction.__init__(self,
+            type,
+            description)
+
+        # URL Type to override (DIRECT or PLAYMANIFEST)
+        # @var KalturaUrlType
+        self.urlType = urlType
+
+
+    PROPERTY_LOADERS = {
+        'urlType': (KalturaEnumsFactory.createString, "KalturaUrlType"), 
+    }
+
+    def fromXml(self, node):
+        KalturaAssetRuleAction.fromXml(self, node)
+        self.fromXmlImpl(node, KalturaSetPlaybackContextUrlTypeAction.PROPERTY_LOADERS)
+
+    def toParams(self):
+        kparams = KalturaAssetRuleAction.toParams(self)
+        kparams.put("objectType", "KalturaSetPlaybackContextUrlTypeAction")
+        kparams.addStringEnumIfDefined("urlType", self.urlType)
+        return kparams
+
+    def getUrlType(self):
+        return self.urlType
+
+    def setUrlType(self, newUrlType):
+        self.urlType = newUrlType
 
 
 # @package Kaltura
@@ -29430,7 +29763,11 @@ class KalturaWatchBasedRecommendationsProfile(KalturaObjectBase):
             minPlaybacks = NotImplemented,
             maxPlaybacks = NotImplemented,
             allowedRecommendationsKsql = NotImplemented,
-            playbackInterestsCalculationPeriodDays = NotImplemented):
+            playbackInterestsCalculationPeriodDays = NotImplemented,
+            analyzeCatchUps = NotImplemented,
+            analyzeLinearEvents = NotImplemented,
+            userInterestPlayThresholdForEventInMinutes = NotImplemented,
+            maximumEventsPerSession = NotImplemented):
         KalturaObjectBase.__init__(self)
 
         # Unique identifier for the profile
@@ -29478,6 +29815,22 @@ class KalturaWatchBasedRecommendationsProfile(KalturaObjectBase):
         # @var int
         self.playbackInterestsCalculationPeriodDays = playbackInterestsCalculationPeriodDays
 
+        # Determines whether catch-up viewing data should be included in the user&#39;s interest analysis.
+        # @var bool
+        self.analyzeCatchUps = analyzeCatchUps
+
+        # Determines whether linear events viewing data should be included in the user&#39;s interest analysis.
+        # @var bool
+        self.analyzeLinearEvents = analyzeLinearEvents
+
+        # Minimum required viewing time per session (in minutes) for live content to be considered in the analysis.
+        # @var int
+        self.userInterestPlayThresholdForEventInMinutes = userInterestPlayThresholdForEventInMinutes
+
+        # Minimum required viewing time per session (in minutes) for live content to be considered in the analysis.
+        # @var int
+        self.maximumEventsPerSession = maximumEventsPerSession
+
 
     PROPERTY_LOADERS = {
         'id': getXmlNodeInt, 
@@ -29491,6 +29844,10 @@ class KalturaWatchBasedRecommendationsProfile(KalturaObjectBase):
         'maxPlaybacks': getXmlNodeInt, 
         'allowedRecommendationsKsql': getXmlNodeText, 
         'playbackInterestsCalculationPeriodDays': getXmlNodeInt, 
+        'analyzeCatchUps': getXmlNodeBool, 
+        'analyzeLinearEvents': getXmlNodeBool, 
+        'userInterestPlayThresholdForEventInMinutes': getXmlNodeInt, 
+        'maximumEventsPerSession': getXmlNodeInt, 
     }
 
     def fromXml(self, node):
@@ -29510,6 +29867,10 @@ class KalturaWatchBasedRecommendationsProfile(KalturaObjectBase):
         kparams.addIntIfDefined("maxPlaybacks", self.maxPlaybacks)
         kparams.addStringIfDefined("allowedRecommendationsKsql", self.allowedRecommendationsKsql)
         kparams.addIntIfDefined("playbackInterestsCalculationPeriodDays", self.playbackInterestsCalculationPeriodDays)
+        kparams.addBoolIfDefined("analyzeCatchUps", self.analyzeCatchUps)
+        kparams.addBoolIfDefined("analyzeLinearEvents", self.analyzeLinearEvents)
+        kparams.addIntIfDefined("userInterestPlayThresholdForEventInMinutes", self.userInterestPlayThresholdForEventInMinutes)
+        kparams.addIntIfDefined("maximumEventsPerSession", self.maximumEventsPerSession)
         return kparams
 
     def getId(self):
@@ -29574,6 +29935,30 @@ class KalturaWatchBasedRecommendationsProfile(KalturaObjectBase):
 
     def setPlaybackInterestsCalculationPeriodDays(self, newPlaybackInterestsCalculationPeriodDays):
         self.playbackInterestsCalculationPeriodDays = newPlaybackInterestsCalculationPeriodDays
+
+    def getAnalyzeCatchUps(self):
+        return self.analyzeCatchUps
+
+    def setAnalyzeCatchUps(self, newAnalyzeCatchUps):
+        self.analyzeCatchUps = newAnalyzeCatchUps
+
+    def getAnalyzeLinearEvents(self):
+        return self.analyzeLinearEvents
+
+    def setAnalyzeLinearEvents(self, newAnalyzeLinearEvents):
+        self.analyzeLinearEvents = newAnalyzeLinearEvents
+
+    def getUserInterestPlayThresholdForEventInMinutes(self):
+        return self.userInterestPlayThresholdForEventInMinutes
+
+    def setUserInterestPlayThresholdForEventInMinutes(self, newUserInterestPlayThresholdForEventInMinutes):
+        self.userInterestPlayThresholdForEventInMinutes = newUserInterestPlayThresholdForEventInMinutes
+
+    def getMaximumEventsPerSession(self):
+        return self.maximumEventsPerSession
+
+    def setMaximumEventsPerSession(self, newMaximumEventsPerSession):
+        self.maximumEventsPerSession = newMaximumEventsPerSession
 
 
 # @package Kaltura
@@ -54750,6 +55135,21 @@ class KalturaAiMetadataGeneratorService(KalturaServiceBase):
         resultNode = self.client.doQueue()
         return KalturaObjectFactory.create(resultNode, 'KalturaGenerateMetadataJob')
 
+    def generateProgramMetadataByDescription(self, generateProgramMetadataByDescription):
+        """Initiate the process of metadata generation for Program assets based on existing asset description metadata.
+                    The service will analyze the program&#39;s description and genre metadata using AI/LLM to generate
+                    additional enriched metadata fields. This method is specifically designed for Program/EPG assets
+                    and supports CRID-based uniqueness, regeneration options, and configurable overwrite behavior.
+                    Programs without a CRID are out of scope for this feature."""
+
+        kparams = KalturaParams()
+        kparams.addObjectIfDefined("generateProgramMetadataByDescription", generateProgramMetadataByDescription)
+        self.client.queueServiceActionCall("aimetadatagenerator", "generateProgramMetadataByDescription", "KalturaGenerateMetadataJob", kparams)
+        if self.client.isMultiRequest():
+            return self.client.getMultiRequestResult()
+        resultNode = self.client.doQueue()
+        return KalturaObjectFactory.create(resultNode, 'KalturaGenerateMetadataJob')
+
     def getGeneratedMetadata(self, jobId):
         """Retrieve the generated metadata"""
 
@@ -55305,7 +55705,7 @@ class KalturaAssetFilePpvService(KalturaServiceBase):
         return KalturaObjectFactory.create(resultNode, 'KalturaAssetFilePpvListResponse')
 
     def update(self, assetFileId, ppvModuleId, assetFilePpv):
-        """Update assetFilePpv"""
+        """Update assetFilePpv dates"""
 
         kparams = KalturaParams()
         kparams.addIntIfDefined("assetFileId", assetFileId);
@@ -63220,6 +63620,7 @@ class KalturaCoreClient(KalturaClientPlugin):
             'KalturaAdsPolicy': KalturaAdsPolicy,
             'KalturaAggregationCountOrderBy': KalturaAggregationCountOrderBy,
             'KalturaAggregationType': KalturaAggregationType,
+            'KalturaAiRecommendationTreeFeatureLevel': KalturaAiRecommendationTreeFeatureLevel,
             'KalturaAnnouncementOrderBy': KalturaAnnouncementOrderBy,
             'KalturaAnnouncementRecipientsType': KalturaAnnouncementRecipientsType,
             'KalturaAnnouncementStatus': KalturaAnnouncementStatus,
@@ -63312,6 +63713,7 @@ class KalturaCoreClient(KalturaClientPlugin):
             'KalturaExternalRecordingResponseProfileOrderBy': KalturaExternalRecordingResponseProfileOrderBy,
             'KalturaFavoriteOrderBy': KalturaFavoriteOrderBy,
             'KalturaFollowTvSeriesOrderBy': KalturaFollowTvSeriesOrderBy,
+            'KalturaGenerateMetadataJobType': KalturaGenerateMetadataJobType,
             'KalturaGenerateMetadataStatus': KalturaGenerateMetadataStatus,
             'KalturaGeoBlockMode': KalturaGeoBlockMode,
             'KalturaGeoBlockRuleOrderBy': KalturaGeoBlockRuleOrderBy,
@@ -63356,6 +63758,7 @@ class KalturaCoreClient(KalturaClientPlugin):
             'KalturaMediaFileTypeQuality': KalturaMediaFileTypeQuality,
             'KalturaMessageTemplateType': KalturaMessageTemplateType,
             'KalturaMetaDataType': KalturaMetaDataType,
+            'KalturaMetadataUpdateOperation': KalturaMetadataUpdateOperation,
             'KalturaMetaOrderBy': KalturaMetaOrderBy,
             'KalturaMetaTagOrderBy': KalturaMetaTagOrderBy,
             'KalturaMonetizationType': KalturaMonetizationType,
@@ -63679,9 +64082,12 @@ class KalturaCoreClient(KalturaClientPlugin):
             'KalturaGenerateMetadataBySubtitles': KalturaGenerateMetadataBySubtitles,
             'KalturaGenerateMetadataJob': KalturaGenerateMetadataJob,
             'KalturaGenerateMetadataByDescription': KalturaGenerateMetadataByDescription,
+            'KalturaGenerateProgramMetadatasByDescription': KalturaGenerateProgramMetadatasByDescription,
             'KalturaGenerateMetadataResult': KalturaGenerateMetadataResult,
-            'KalturaMetaFieldNameMap': KalturaMetaFieldNameMap,
+            'KalturaMetadataFieldConfig': KalturaMetadataFieldConfig,
+            'KalturaMetadataFieldConfigurationMap': KalturaMetadataFieldConfigurationMap,
             'KalturaAiMetadataGeneratorConfiguration': KalturaAiMetadataGeneratorConfiguration,
+            'KalturaMetaFieldNameMap': KalturaMetaFieldNameMap,
             'KalturaTreeQuestion': KalturaTreeQuestion,
             'KalturaTreeAnswer': KalturaTreeAnswer,
             'KalturaMediaImage': KalturaMediaImage,
@@ -63805,6 +64211,7 @@ class KalturaCoreClient(KalturaClientPlugin):
             'KalturaTimeOffsetRuleAction': KalturaTimeOffsetRuleAction,
             'KalturaEndDateOffsetRuleAction': KalturaEndDateOffsetRuleAction,
             'KalturaStartDateOffsetRuleAction': KalturaStartDateOffsetRuleAction,
+            'KalturaSetPlaybackContextUrlTypeAction': KalturaSetPlaybackContextUrlTypeAction,
             'KalturaBasePreActionCondition': KalturaBasePreActionCondition,
             'KalturaFilterAction': KalturaFilterAction,
             'KalturaFilterFileByAudioCodecAction': KalturaFilterFileByAudioCodecAction,
