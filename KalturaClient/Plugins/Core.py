@@ -55722,25 +55722,13 @@ class KalturaAssetService(KalturaServiceBase):
         resultNode = self.client.doQueue()
         return getXmlNodeBool(resultNode)
 
-    def semanticSearch(self, query, refineQuery = False, size = 10):
-        """Search for assets using semantic similarity to a natural language query, with optional query refinement using LLM."""
-
-        kparams = KalturaParams()
-        kparams.addStringIfDefined("query", query)
-        kparams.addBoolIfDefined("refineQuery", refineQuery);
-        kparams.addIntIfDefined("size", size);
-        self.client.queueServiceActionCall("asset", "semanticSearch", "KalturaAssetListResponse", kparams)
-        if self.client.isMultiRequest():
-            return self.client.getMultiRequestResult()
-        resultNode = self.client.doQueue()
-        return KalturaObjectFactory.create(resultNode, 'KalturaAssetListResponse')
-
-    def unifiedSemanticSearch(self, searchParams):
-        """Performs unified semantic search across media and programs."""
+    def semanticSearch(self, searchParams):
+        """Search for assets using semantic similarity to a natural language query.
+                    Supports unified search across both media/VOD assets and programs/EPG with optional type-specific filters."""
 
         kparams = KalturaParams()
         kparams.addObjectIfDefined("searchParams", searchParams)
-        self.client.queueServiceActionCall("asset", "unifiedSemanticSearch", "KalturaAssetListResponse", kparams)
+        self.client.queueServiceActionCall("asset", "semanticSearch", "KalturaAssetListResponse", kparams)
         if self.client.isMultiRequest():
             return self.client.getMultiRequestResult()
         resultNode = self.client.doQueue()
