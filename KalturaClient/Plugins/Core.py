@@ -53241,6 +53241,43 @@ class KalturaFilteringCondition(KalturaObjectBase):
 
 # @package Kaltura
 # @subpackage Client
+class KalturaProgramSearchableAttributes(KalturaObjectBase):
+    """Represents the searchable attributes configuration for Program (EPG/Catchup) assets.
+                Unlike VOD assets which use asset structs, Programs have a single unified configuration."""
+
+    def __init__(self,
+            attributes = NotImplemented):
+        KalturaObjectBase.__init__(self)
+
+        # Comma-separated list of Program metadata field names that should be searchable.
+        #             Examples: &quot;name,description,genre,tags,meta_cast,meta_director&quot;
+        # @var str
+        self.attributes = attributes
+
+
+    PROPERTY_LOADERS = {
+        'attributes': getXmlNodeText, 
+    }
+
+    def fromXml(self, node):
+        KalturaObjectBase.fromXml(self, node)
+        self.fromXmlImpl(node, KalturaProgramSearchableAttributes.PROPERTY_LOADERS)
+
+    def toParams(self):
+        kparams = KalturaObjectBase.toParams(self)
+        kparams.put("objectType", "KalturaProgramSearchableAttributes")
+        kparams.addStringIfDefined("attributes", self.attributes)
+        return kparams
+
+    def getAttributes(self):
+        return self.attributes
+
+    def setAttributes(self, newAttributes):
+        self.attributes = newAttributes
+
+
+# @package Kaltura
+# @subpackage Client
 class KalturaGenerateSemanticQuery(KalturaObjectBase):
     """Parameters required for generating semantic queries."""
 
@@ -61858,11 +61895,11 @@ class KalturaSemanticAssetSearchPartnerConfigService(KalturaServiceBase):
         """Retrieve the current program field configurations for semantic search."""
 
         kparams = KalturaParams()
-        self.client.queueServiceActionCall("semanticassetsearchpartnerconfig", "getProgramSearchableAttributes", "None", kparams)
+        self.client.queueServiceActionCall("semanticassetsearchpartnerconfig", "getProgramSearchableAttributes", "KalturaProgramSearchableAttributes", kparams)
         if self.client.isMultiRequest():
             return self.client.getMultiRequestResult()
         resultNode = self.client.doQueue()
-        return getXmlNodeText(resultNode)
+        return KalturaObjectFactory.create(resultNode, 'KalturaProgramSearchableAttributes')
 
     def getSearchableAttributes(self, assetStructId):
         """Retrieve the current field configurations for semantic search."""
@@ -61901,12 +61938,12 @@ class KalturaSemanticAssetSearchPartnerConfigService(KalturaServiceBase):
         """Update which fields should be included in semantic search for program assets."""
 
         kparams = KalturaParams()
-        kparams.addStringIfDefined("programAttributes", programAttributes)
-        self.client.queueServiceActionCall("semanticassetsearchpartnerconfig", "upsertProgramSearchableAttributes", "None", kparams)
+        kparams.addObjectIfDefined("programAttributes", programAttributes)
+        self.client.queueServiceActionCall("semanticassetsearchpartnerconfig", "upsertProgramSearchableAttributes", "KalturaProgramSearchableAttributes", kparams)
         if self.client.isMultiRequest():
             return self.client.getMultiRequestResult()
         resultNode = self.client.doQueue()
-        return getXmlNodeText(resultNode)
+        return KalturaObjectFactory.create(resultNode, 'KalturaProgramSearchableAttributes')
 
     def upsertSearchableAttributes(self, attributes):
         """Update which fields should be included in semantic search for specific asset types."""
@@ -64886,6 +64923,7 @@ class KalturaCoreClient(KalturaClientPlugin):
             'KalturaSearchableAttribute': KalturaSearchableAttribute,
             'KalturaSearchableAttributes': KalturaSearchableAttributes,
             'KalturaFilteringCondition': KalturaFilteringCondition,
+            'KalturaProgramSearchableAttributes': KalturaProgramSearchableAttributes,
             'KalturaGenerateSemanticQuery': KalturaGenerateSemanticQuery,
             'KalturaSemanticSubQuery': KalturaSemanticSubQuery,
             'KalturaSemanticQuery': KalturaSemanticQuery,
