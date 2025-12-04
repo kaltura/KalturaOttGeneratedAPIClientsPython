@@ -595,13 +595,8 @@ class KalturaConcurrencyLimitationType(object):
     def getValue(self) -> str: ...
 
 class KalturaConditionOperator(object):
-    UNKNOWN = "Unknown"
     EQUAL = "Equal"
     NOTEQUAL = "NotEqual"
-    GREATERTHAN = "GreaterThan"
-    LESSTHAN = "LessThan"
-    GREATERTHANOREQUAL = "GreaterThanOrEqual"
-    LESSTHANOREQUAL = "LessThanOrEqual"
 
     def __init__(self, value: str): ...
 
@@ -14344,14 +14339,14 @@ class KalturaSessionInfo(KalturaSession):
         pass
 
 class KalturaProgramSemanticSearchParams(KalturaObjectBase):
-    endsAfter: int
+    endsBefore: int
     expiresAfter: int
     def __init__(self,
-            endsAfter: int = NotImplemented,
+            endsBefore: int = NotImplemented,
             expiresAfter: int = NotImplemented): ...
 
-    def getEndsAfter(self) -> int: ...
-    def setEndsAfter(self, newEndsAfter: int) -> None: ...
+    def getEndsBefore(self) -> int: ...
+    def setEndsBefore(self, newEndsBefore: int) -> None: ...
     def getExpiresAfter(self) -> int: ...
     def setExpiresAfter(self, newExpiresAfter: int) -> None: ...
 

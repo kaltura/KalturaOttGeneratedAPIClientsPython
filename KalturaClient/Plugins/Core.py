@@ -842,13 +842,8 @@ class KalturaConcurrencyLimitationType(object):
 # @package Kaltura
 # @subpackage Client
 class KalturaConditionOperator(object):
-    UNKNOWN = "Unknown"
     EQUAL = "Equal"
     NOTEQUAL = "NotEqual"
-    GREATERTHAN = "GreaterThan"
-    LESSTHAN = "LessThan"
-    GREATERTHANOREQUAL = "GreaterThanOrEqual"
-    LESSTHANOREQUAL = "LessThanOrEqual"
 
     def __init__(self, value):
         self.value = value
@@ -46868,14 +46863,14 @@ class KalturaProgramSemanticSearchParams(KalturaObjectBase):
                 Presence of this object indicates programs should be included in search results."""
 
     def __init__(self,
-            endsAfter = NotImplemented,
+            endsBefore = NotImplemented,
             expiresAfter = NotImplemented):
         KalturaObjectBase.__init__(self)
 
-        # Only include programs that end after this timestamp (Unix epoch seconds).
+        # Only include programs that end before this timestamp (Unix epoch seconds).
         #             Optional filter.
         # @var int
-        self.endsAfter = endsAfter
+        self.endsBefore = endsBefore
 
         # Only include programs that expire after this timestamp (Unix epoch seconds).
         #             Optional filter.
@@ -46884,7 +46879,7 @@ class KalturaProgramSemanticSearchParams(KalturaObjectBase):
 
 
     PROPERTY_LOADERS = {
-        'endsAfter': getXmlNodeInt, 
+        'endsBefore': getXmlNodeInt, 
         'expiresAfter': getXmlNodeInt, 
     }
 
@@ -46895,15 +46890,15 @@ class KalturaProgramSemanticSearchParams(KalturaObjectBase):
     def toParams(self):
         kparams = KalturaObjectBase.toParams(self)
         kparams.put("objectType", "KalturaProgramSemanticSearchParams")
-        kparams.addIntIfDefined("endsAfter", self.endsAfter)
+        kparams.addIntIfDefined("endsBefore", self.endsBefore)
         kparams.addIntIfDefined("expiresAfter", self.expiresAfter)
         return kparams
 
-    def getEndsAfter(self):
-        return self.endsAfter
+    def getEndsBefore(self):
+        return self.endsBefore
 
-    def setEndsAfter(self, newEndsAfter):
-        self.endsAfter = newEndsAfter
+    def setEndsBefore(self, newEndsBefore):
+        self.endsBefore = newEndsBefore
 
     def getExpiresAfter(self):
         return self.expiresAfter
