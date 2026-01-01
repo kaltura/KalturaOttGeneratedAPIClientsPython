@@ -2593,6 +2593,7 @@ class KalturaRuleActionType(object):
     FILTERFILEBYLABELINPLAYBACK = "FilterFileByLabelInPlayback"
     FILTERFILEBYDYNAMICDATAINDISCOVERY = "FilterFileByDynamicDataInDiscovery"
     FILTERFILEBYDYNAMICDATAINPLAYBACK = "FilterFileByDynamicDataInPlayback"
+    SET_PLAYBACK_CONTEXT_URL_TYPE = "SET_PLAYBACK_CONTEXT_URL_TYPE"
 
     def __init__(self, value):
         self.value = value
@@ -23824,6 +23825,43 @@ class KalturaStartDateOffsetRuleAction(KalturaTimeOffsetRuleAction):
         kparams = KalturaTimeOffsetRuleAction.toParams(self)
         kparams.put("objectType", "KalturaStartDateOffsetRuleAction")
         return kparams
+
+
+# @package Kaltura
+# @subpackage Client
+class KalturaSetPlaybackContextUrlTypeAction(KalturaAssetRuleAction):
+    def __init__(self,
+            type = NotImplemented,
+            description = NotImplemented,
+            urlType = NotImplemented):
+        KalturaAssetRuleAction.__init__(self,
+            type,
+            description)
+
+        # URL Type to override (DIRECT or PLAYMANIFEST)
+        # @var KalturaUrlType
+        self.urlType = urlType
+
+
+    PROPERTY_LOADERS = {
+        'urlType': (KalturaEnumsFactory.createString, "KalturaUrlType"), 
+    }
+
+    def fromXml(self, node):
+        KalturaAssetRuleAction.fromXml(self, node)
+        self.fromXmlImpl(node, KalturaSetPlaybackContextUrlTypeAction.PROPERTY_LOADERS)
+
+    def toParams(self):
+        kparams = KalturaAssetRuleAction.toParams(self)
+        kparams.put("objectType", "KalturaSetPlaybackContextUrlTypeAction")
+        kparams.addStringEnumIfDefined("urlType", self.urlType)
+        return kparams
+
+    def getUrlType(self):
+        return self.urlType
+
+    def setUrlType(self, newUrlType):
+        self.urlType = newUrlType
 
 
 # @package Kaltura
@@ -64174,6 +64212,7 @@ class KalturaCoreClient(KalturaClientPlugin):
             'KalturaTimeOffsetRuleAction': KalturaTimeOffsetRuleAction,
             'KalturaEndDateOffsetRuleAction': KalturaEndDateOffsetRuleAction,
             'KalturaStartDateOffsetRuleAction': KalturaStartDateOffsetRuleAction,
+            'KalturaSetPlaybackContextUrlTypeAction': KalturaSetPlaybackContextUrlTypeAction,
             'KalturaBasePreActionCondition': KalturaBasePreActionCondition,
             'KalturaFilterAction': KalturaFilterAction,
             'KalturaFilterFileByAudioCodecAction': KalturaFilterFileByAudioCodecAction,

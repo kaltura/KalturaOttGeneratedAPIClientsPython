@@ -1818,6 +1818,7 @@ class KalturaRuleActionType(object):
     FILTERFILEBYLABELINPLAYBACK = "FilterFileByLabelInPlayback"
     FILTERFILEBYDYNAMICDATAINDISCOVERY = "FilterFileByDynamicDataInDiscovery"
     FILTERFILEBYDYNAMICDATAINPLAYBACK = "FilterFileByDynamicDataInPlayback"
+    SET_PLAYBACK_CONTEXT_URL_TYPE = "SET_PLAYBACK_CONTEXT_URL_TYPE"
 
     def __init__(self, value: str): ...
 
@@ -8051,6 +8052,16 @@ class KalturaStartDateOffsetRuleAction(KalturaTimeOffsetRuleAction):
             offset: int = NotImplemented,
             timeZone: bool = NotImplemented): ...
         pass
+
+class KalturaSetPlaybackContextUrlTypeAction(KalturaAssetRuleAction):
+    urlType: KalturaUrlType
+    def __init__(self,
+            type: KalturaRuleActionType = NotImplemented,
+            description: str = NotImplemented,
+            urlType: KalturaUrlType = NotImplemented): ...
+
+    def getUrlType(self) -> KalturaUrlType: ...
+    def setUrlType(self, newUrlType: KalturaUrlType) -> None: ...
 
 class KalturaBasePreActionCondition(KalturaObjectBase):
     def __init__(self): ...
