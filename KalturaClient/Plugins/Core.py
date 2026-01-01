@@ -46896,6 +46896,172 @@ class KalturaSessionInfo(KalturaSession):
 
 # @package Kaltura
 # @subpackage Client
+class KalturaProgramSemanticSearchParams(KalturaObjectBase):
+    """Program-specific semantic search parameters.
+                Presence of this object indicates programs should be included in search results."""
+
+    def __init__(self,
+            endsBefore = NotImplemented,
+            expiresAfter = NotImplemented):
+        KalturaObjectBase.__init__(self)
+
+        # Only include programs that end before this timestamp (Unix epoch seconds).
+        #             Optional filter.
+        # @var int
+        self.endsBefore = endsBefore
+
+        # Only include programs that expire after this timestamp (Unix epoch seconds).
+        #             Optional filter.
+        # @var int
+        self.expiresAfter = expiresAfter
+
+
+    PROPERTY_LOADERS = {
+        'endsBefore': getXmlNodeInt, 
+        'expiresAfter': getXmlNodeInt, 
+    }
+
+    def fromXml(self, node):
+        KalturaObjectBase.fromXml(self, node)
+        self.fromXmlImpl(node, KalturaProgramSemanticSearchParams.PROPERTY_LOADERS)
+
+    def toParams(self):
+        kparams = KalturaObjectBase.toParams(self)
+        kparams.put("objectType", "KalturaProgramSemanticSearchParams")
+        kparams.addIntIfDefined("endsBefore", self.endsBefore)
+        kparams.addIntIfDefined("expiresAfter", self.expiresAfter)
+        return kparams
+
+    def getEndsBefore(self):
+        return self.endsBefore
+
+    def setEndsBefore(self, newEndsBefore):
+        self.endsBefore = newEndsBefore
+
+    def getExpiresAfter(self):
+        return self.expiresAfter
+
+    def setExpiresAfter(self, newExpiresAfter):
+        self.expiresAfter = newExpiresAfter
+
+
+# @package Kaltura
+# @subpackage Client
+class KalturaMediaSemanticSearchParams(KalturaObjectBase):
+    """Media-specific semantic search parameters.
+                Presence of this object indicates media/VOD assets should be included in search results.
+                Currently empty - designed for future extensibility (e.g., duration filters, creation date filters)."""
+
+    def __init__(self):
+        KalturaObjectBase.__init__(self)
+
+
+    PROPERTY_LOADERS = {
+    }
+
+    def fromXml(self, node):
+        KalturaObjectBase.fromXml(self, node)
+        self.fromXmlImpl(node, KalturaMediaSemanticSearchParams.PROPERTY_LOADERS)
+
+    def toParams(self):
+        kparams = KalturaObjectBase.toParams(self)
+        kparams.put("objectType", "KalturaMediaSemanticSearchParams")
+        return kparams
+
+
+# @package Kaltura
+# @subpackage Client
+class KalturaSemanticSearchParams(KalturaObjectBase):
+    """Parameters for unified semantic search across media and programs.
+                At least one of programParams or mediaParams must be provided.
+                Presence of a parameter object indicates inclusion in search results."""
+
+    def __init__(self,
+            query = NotImplemented,
+            refineQuery = NotImplemented,
+            size = NotImplemented,
+            programParams = NotImplemented,
+            mediaParams = NotImplemented):
+        KalturaObjectBase.__init__(self)
+
+        # Search query text.
+        # @var str
+        self.query = query
+
+        # Whether to refine the query using LLM.
+        # @var bool
+        self.refineQuery = refineQuery
+
+        # Maximum number of results to return.
+        # @var int
+        self.size = size
+
+        # Program-specific search parameters.
+        #             If provided, programs will be included in search results.
+        # @var KalturaProgramSemanticSearchParams
+        self.programParams = programParams
+
+        # Media-specific search parameters.
+        #             If provided, media/VOD assets will be included in search results.
+        # @var KalturaMediaSemanticSearchParams
+        self.mediaParams = mediaParams
+
+
+    PROPERTY_LOADERS = {
+        'query': getXmlNodeText, 
+        'refineQuery': getXmlNodeBool, 
+        'size': getXmlNodeInt, 
+        'programParams': (KalturaObjectFactory.create, 'KalturaProgramSemanticSearchParams'), 
+        'mediaParams': (KalturaObjectFactory.create, 'KalturaMediaSemanticSearchParams'), 
+    }
+
+    def fromXml(self, node):
+        KalturaObjectBase.fromXml(self, node)
+        self.fromXmlImpl(node, KalturaSemanticSearchParams.PROPERTY_LOADERS)
+
+    def toParams(self):
+        kparams = KalturaObjectBase.toParams(self)
+        kparams.put("objectType", "KalturaSemanticSearchParams")
+        kparams.addStringIfDefined("query", self.query)
+        kparams.addBoolIfDefined("refineQuery", self.refineQuery)
+        kparams.addIntIfDefined("size", self.size)
+        kparams.addObjectIfDefined("programParams", self.programParams)
+        kparams.addObjectIfDefined("mediaParams", self.mediaParams)
+        return kparams
+
+    def getQuery(self):
+        return self.query
+
+    def setQuery(self, newQuery):
+        self.query = newQuery
+
+    def getRefineQuery(self):
+        return self.refineQuery
+
+    def setRefineQuery(self, newRefineQuery):
+        self.refineQuery = newRefineQuery
+
+    def getSize(self):
+        return self.size
+
+    def setSize(self, newSize):
+        self.size = newSize
+
+    def getProgramParams(self):
+        return self.programParams
+
+    def setProgramParams(self, newProgramParams):
+        self.programParams = newProgramParams
+
+    def getMediaParams(self):
+        return self.mediaParams
+
+    def setMediaParams(self, newMediaParams):
+        self.mediaParams = newMediaParams
+
+
+# @package Kaltura
+# @subpackage Client
 class KalturaRepresentativeSelectionPolicy(KalturaObjectBase):
     def __init__(self):
         KalturaObjectBase.__init__(self)
@@ -53108,6 +53274,43 @@ class KalturaFilteringCondition(KalturaObjectBase):
 
 # @package Kaltura
 # @subpackage Client
+class KalturaProgramSearchableAttributes(KalturaObjectBase):
+    """Represents the searchable attributes configuration for Program (EPG/Catchup) assets.
+                Unlike VOD assets which use asset structs, Programs have a single unified configuration."""
+
+    def __init__(self,
+            attributes = NotImplemented):
+        KalturaObjectBase.__init__(self)
+
+        # Comma-separated list of Program metadata field names that should be searchable.
+        #             Examples: &quot;name,description,genre,tags,meta_cast,meta_director&quot;
+        # @var str
+        self.attributes = attributes
+
+
+    PROPERTY_LOADERS = {
+        'attributes': getXmlNodeText, 
+    }
+
+    def fromXml(self, node):
+        KalturaObjectBase.fromXml(self, node)
+        self.fromXmlImpl(node, KalturaProgramSearchableAttributes.PROPERTY_LOADERS)
+
+    def toParams(self):
+        kparams = KalturaObjectBase.toParams(self)
+        kparams.put("objectType", "KalturaProgramSearchableAttributes")
+        kparams.addStringIfDefined("attributes", self.attributes)
+        return kparams
+
+    def getAttributes(self):
+        return self.attributes
+
+    def setAttributes(self, newAttributes):
+        self.attributes = newAttributes
+
+
+# @package Kaltura
+# @subpackage Client
 class KalturaGenerateSemanticQuery(KalturaObjectBase):
     """Parameters required for generating semantic queries."""
 
@@ -55589,13 +55792,12 @@ class KalturaAssetService(KalturaServiceBase):
         resultNode = self.client.doQueue()
         return getXmlNodeBool(resultNode)
 
-    def semanticSearch(self, query, refineQuery = False, size = 10):
-        """Search for assets using semantic similarity to a natural language query, with optional query refinement using LLM."""
+    def semanticSearch(self, searchParams):
+        """Search for assets using semantic similarity to a natural language query.
+                    Supports unified search across both media/VOD assets and programs/EPG with optional type-specific filters."""
 
         kparams = KalturaParams()
-        kparams.addStringIfDefined("query", query)
-        kparams.addBoolIfDefined("refineQuery", refineQuery);
-        kparams.addIntIfDefined("size", size);
+        kparams.addObjectIfDefined("searchParams", searchParams)
         self.client.queueServiceActionCall("asset", "semanticSearch", "KalturaAssetListResponse", kparams)
         if self.client.isMultiRequest():
             return self.client.getMultiRequestResult()
@@ -61712,6 +61914,26 @@ class KalturaSemanticAssetSearchPartnerConfigService(KalturaServiceBase):
         resultNode = self.client.doQueue()
         return KalturaObjectFactory.create(resultNode, 'KalturaFilteringCondition')
 
+    def getProgramFilteringCondition(self):
+        """Retrieve the filtering condition configuration for program assets."""
+
+        kparams = KalturaParams()
+        self.client.queueServiceActionCall("semanticassetsearchpartnerconfig", "getProgramFilteringCondition", "KalturaFilteringCondition", kparams)
+        if self.client.isMultiRequest():
+            return self.client.getMultiRequestResult()
+        resultNode = self.client.doQueue()
+        return KalturaObjectFactory.create(resultNode, 'KalturaFilteringCondition')
+
+    def getProgramSearchableAttributes(self):
+        """Retrieve the current program field configurations for semantic search."""
+
+        kparams = KalturaParams()
+        self.client.queueServiceActionCall("semanticassetsearchpartnerconfig", "getProgramSearchableAttributes", "KalturaProgramSearchableAttributes", kparams)
+        if self.client.isMultiRequest():
+            return self.client.getMultiRequestResult()
+        resultNode = self.client.doQueue()
+        return KalturaObjectFactory.create(resultNode, 'KalturaProgramSearchableAttributes')
+
     def getSearchableAttributes(self, assetStructId):
         """Retrieve the current field configurations for semantic search."""
 
@@ -61733,6 +61955,28 @@ class KalturaSemanticAssetSearchPartnerConfigService(KalturaServiceBase):
             return self.client.getMultiRequestResult()
         resultNode = self.client.doQueue()
         return KalturaObjectFactory.create(resultNode, 'KalturaFilteringCondition')
+
+    def upsertProgramFilteringCondition(self, filteringCondition):
+        """Update rule that controls embedding generation and search behavior for program assets."""
+
+        kparams = KalturaParams()
+        kparams.addObjectIfDefined("filteringCondition", filteringCondition)
+        self.client.queueServiceActionCall("semanticassetsearchpartnerconfig", "upsertProgramFilteringCondition", "KalturaFilteringCondition", kparams)
+        if self.client.isMultiRequest():
+            return self.client.getMultiRequestResult()
+        resultNode = self.client.doQueue()
+        return KalturaObjectFactory.create(resultNode, 'KalturaFilteringCondition')
+
+    def upsertProgramSearchableAttributes(self, programAttributes):
+        """Update which fields should be included in semantic search for program assets."""
+
+        kparams = KalturaParams()
+        kparams.addObjectIfDefined("programAttributes", programAttributes)
+        self.client.queueServiceActionCall("semanticassetsearchpartnerconfig", "upsertProgramSearchableAttributes", "KalturaProgramSearchableAttributes", kparams)
+        if self.client.isMultiRequest():
+            return self.client.getMultiRequestResult()
+        resultNode = self.client.doQueue()
+        return KalturaObjectFactory.create(resultNode, 'KalturaProgramSearchableAttributes')
 
     def upsertSearchableAttributes(self, attributes):
         """Update which fields should be included in semantic search for specific asset types."""
@@ -64605,6 +64849,9 @@ class KalturaCoreClient(KalturaClientPlugin):
             'KalturaAppToken': KalturaAppToken,
             'KalturaSession': KalturaSession,
             'KalturaSessionInfo': KalturaSessionInfo,
+            'KalturaProgramSemanticSearchParams': KalturaProgramSemanticSearchParams,
+            'KalturaMediaSemanticSearchParams': KalturaMediaSemanticSearchParams,
+            'KalturaSemanticSearchParams': KalturaSemanticSearchParams,
             'KalturaRepresentativeSelectionPolicy': KalturaRepresentativeSelectionPolicy,
             'KalturaTopEntitledOrFreeRsp': KalturaTopEntitledOrFreeRsp,
             'KalturaTopRsp': KalturaTopRsp,
@@ -64711,6 +64958,7 @@ class KalturaCoreClient(KalturaClientPlugin):
             'KalturaSearchableAttribute': KalturaSearchableAttribute,
             'KalturaSearchableAttributes': KalturaSearchableAttributes,
             'KalturaFilteringCondition': KalturaFilteringCondition,
+            'KalturaProgramSearchableAttributes': KalturaProgramSearchableAttributes,
             'KalturaGenerateSemanticQuery': KalturaGenerateSemanticQuery,
             'KalturaSemanticSubQuery': KalturaSemanticSubQuery,
             'KalturaSemanticQuery': KalturaSemanticQuery,
