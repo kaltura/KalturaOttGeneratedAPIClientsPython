@@ -853,6 +853,18 @@ class KalturaConditionOperator(object):
 
 # @package Kaltura
 # @subpackage Client
+class KalturaConditionScope(object):
+    USER = "USER"
+    HOUSEHOLD = "HOUSEHOLD"
+
+    def __init__(self, value):
+        self.value = value
+
+    def getValue(self):
+        return self.value
+
+# @package Kaltura
+# @subpackage Client
 class KalturaConfigurationGroupDeviceOrderBy(object):
     NONE = "NONE"
 
@@ -28313,13 +28325,19 @@ class KalturaHouseholdSegmentListResponse(KalturaListResponse):
 # @package Kaltura
 # @subpackage Client
 class KalturaBaseSegmentCondition(KalturaObjectBase):
-    """Base class that defines segment condition"""
+    """Base class that defines a segment condition."""
 
-    def __init__(self):
+    def __init__(self,
+            scope = NotImplemented):
         KalturaObjectBase.__init__(self)
+
+        # Defines the scope of the condition evaluation.
+        # @var KalturaConditionScope
+        self.scope = scope
 
 
     PROPERTY_LOADERS = {
+        'scope': (KalturaEnumsFactory.createString, "KalturaConditionScope"), 
     }
 
     def fromXml(self, node):
@@ -28329,7 +28347,14 @@ class KalturaBaseSegmentCondition(KalturaObjectBase):
     def toParams(self):
         kparams = KalturaObjectBase.toParams(self)
         kparams.put("objectType", "KalturaBaseSegmentCondition")
+        kparams.addStringEnumIfDefined("scope", self.scope)
         return kparams
+
+    def getScope(self):
+        return self.scope
+
+    def setScope(self, newScope):
+        self.scope = newScope
 
 
 # @package Kaltura
@@ -28393,7 +28418,8 @@ class KalturaSegmentationType(KalturaObjectBase):
             updateDate = NotImplemented,
             executeDate = NotImplemented,
             version = NotImplemented,
-            assetUserRuleId = NotImplemented):
+            assetUserRuleId = NotImplemented,
+            scope = NotImplemented):
         KalturaObjectBase.__init__(self)
 
         # Id of segmentation type
@@ -28450,6 +28476,10 @@ class KalturaSegmentationType(KalturaObjectBase):
         # @insertonly
         self.assetUserRuleId = assetUserRuleId
 
+        # Defines whether segments are applied to users or households
+        # @var KalturaConditionScope
+        self.scope = scope
+
 
     PROPERTY_LOADERS = {
         'id': getXmlNodeInt, 
@@ -28464,6 +28494,7 @@ class KalturaSegmentationType(KalturaObjectBase):
         'executeDate': getXmlNodeInt, 
         'version': getXmlNodeInt, 
         'assetUserRuleId': getXmlNodeInt, 
+        'scope': (KalturaEnumsFactory.createString, "KalturaConditionScope"), 
     }
 
     def fromXml(self, node):
@@ -28480,6 +28511,7 @@ class KalturaSegmentationType(KalturaObjectBase):
         kparams.addArrayIfDefined("actions", self.actions)
         kparams.addObjectIfDefined("value", self.value)
         kparams.addIntIfDefined("assetUserRuleId", self.assetUserRuleId)
+        kparams.addStringEnumIfDefined("scope", self.scope)
         return kparams
 
     def getId(self):
@@ -28539,6 +28571,12 @@ class KalturaSegmentationType(KalturaObjectBase):
     def setAssetUserRuleId(self, newAssetUserRuleId):
         self.assetUserRuleId = newAssetUserRuleId
 
+    def getScope(self):
+        return self.scope
+
+    def setScope(self, newScope):
+        self.scope = newScope
+
 
 # @package Kaltura
 # @subpackage Client
@@ -28575,6 +28613,805 @@ class KalturaSegmentationTypeListResponse(KalturaListResponse):
 
     def setObjects(self, newObjects):
         self.objects = newObjects
+
+
+# @package Kaltura
+# @subpackage Client
+class KalturaContentTypeSelector(KalturaObjectBase):
+    """Defines the scope of content types to consider for the watch condition.
+                Default Behavior: If the object is empty or no properties are sent, ALL content types (Recordings, Programs, and all Media Types) are counted."""
+
+    def __init__(self,
+            includeRecordings = NotImplemented,
+            includePrograms = NotImplemented,
+            mediaTypeIdIn = NotImplemented):
+        KalturaObjectBase.__init__(self)
+
+        # Determines if Recording assets are counted.
+        #             Omitted or true: Recordings are included.
+        #             false: Recordings are excluded.
+        # @var bool
+        self.includeRecordings = includeRecordings
+
+        # Determines if EPG Program assets (Live, Catch-up, Start-over) are counted.
+        #             Omitted or true: Programs are included.
+        #             false: Programs are excluded.
+        # @var bool
+        self.includePrograms = includePrograms
+
+        # Filter for specific playable media types (e.g., Movie, Episode).
+        #             Omitted: ALL playable media types are included.
+        #             Provided (List of IDs): ONLY the media types matching the listed IDs are included.
+        #             Provided (Empty String): NO media types are included.
+        #             Constraint: IDs must correspond to valid playable media types. Providing an invalid ID will result in an error.
+        # @var str
+        self.mediaTypeIdIn = mediaTypeIdIn
+
+
+    PROPERTY_LOADERS = {
+        'includeRecordings': getXmlNodeBool, 
+        'includePrograms': getXmlNodeBool, 
+        'mediaTypeIdIn': getXmlNodeText, 
+    }
+
+    def fromXml(self, node):
+        KalturaObjectBase.fromXml(self, node)
+        self.fromXmlImpl(node, KalturaContentTypeSelector.PROPERTY_LOADERS)
+
+    def toParams(self):
+        kparams = KalturaObjectBase.toParams(self)
+        kparams.put("objectType", "KalturaContentTypeSelector")
+        kparams.addBoolIfDefined("includeRecordings", self.includeRecordings)
+        kparams.addBoolIfDefined("includePrograms", self.includePrograms)
+        kparams.addStringIfDefined("mediaTypeIdIn", self.mediaTypeIdIn)
+        return kparams
+
+    def getIncludeRecordings(self):
+        return self.includeRecordings
+
+    def setIncludeRecordings(self, newIncludeRecordings):
+        self.includeRecordings = newIncludeRecordings
+
+    def getIncludePrograms(self):
+        return self.includePrograms
+
+    def setIncludePrograms(self, newIncludePrograms):
+        self.includePrograms = newIncludePrograms
+
+    def getMediaTypeIdIn(self):
+        return self.mediaTypeIdIn
+
+    def setMediaTypeIdIn(self, newMediaTypeIdIn):
+        self.mediaTypeIdIn = newMediaTypeIdIn
+
+
+# @package Kaltura
+# @subpackage Client
+class KalturaViewTimeConstraint(KalturaObjectBase):
+    """Filters watch actions that occurred within a specific time window."""
+
+    def __init__(self,
+            startTime = NotImplemented,
+            endTime = NotImplemented):
+        KalturaObjectBase.__init__(self)
+
+        # The starting time of the viewing window.
+        # @var str
+        self.startTime = startTime
+
+        # The ending time of the viewing window.
+        # @var str
+        self.endTime = endTime
+
+
+    PROPERTY_LOADERS = {
+        'startTime': getXmlNodeText, 
+        'endTime': getXmlNodeText, 
+    }
+
+    def fromXml(self, node):
+        KalturaObjectBase.fromXml(self, node)
+        self.fromXmlImpl(node, KalturaViewTimeConstraint.PROPERTY_LOADERS)
+
+    def toParams(self):
+        kparams = KalturaObjectBase.toParams(self)
+        kparams.put("objectType", "KalturaViewTimeConstraint")
+        kparams.addStringIfDefined("startTime", self.startTime)
+        kparams.addStringIfDefined("endTime", self.endTime)
+        return kparams
+
+    def getStartTime(self):
+        return self.startTime
+
+    def setStartTime(self, newStartTime):
+        self.startTime = newStartTime
+
+    def getEndTime(self):
+        return self.endTime
+
+    def setEndTime(self, newEndTime):
+        self.endTime = newEndTime
+
+
+# @package Kaltura
+# @subpackage Client
+class KalturaBaseAttributeConstraint(KalturaObjectBase):
+    """Base class for specific attribute constraints."""
+
+    def __init__(self,
+            key = NotImplemented):
+        KalturaObjectBase.__init__(self)
+
+        # The system name of the metadata field to query.
+        # @var str
+        self.key = key
+
+
+    PROPERTY_LOADERS = {
+        'key': getXmlNodeText, 
+    }
+
+    def fromXml(self, node):
+        KalturaObjectBase.fromXml(self, node)
+        self.fromXmlImpl(node, KalturaBaseAttributeConstraint.PROPERTY_LOADERS)
+
+    def toParams(self):
+        kparams = KalturaObjectBase.toParams(self)
+        kparams.put("objectType", "KalturaBaseAttributeConstraint")
+        kparams.addStringIfDefined("key", self.key)
+        return kparams
+
+    def getKey(self):
+        return self.key
+
+    def setKey(self, newKey):
+        self.key = newKey
+
+
+# @package Kaltura
+# @subpackage Client
+class KalturaBaseWatchCondition(KalturaBaseSegmentCondition):
+    """A helper schema containing shared properties used for defining watch history conditions.
+                Implements KalturaBaseSegmentCondition."""
+
+    def __init__(self,
+            scope = NotImplemented,
+            contentFilter = NotImplemented,
+            evaluationDays = NotImplemented,
+            deviceFamilyIn = NotImplemented,
+            viewTimeConstraint = NotImplemented,
+            constraintsOperator = NotImplemented,
+            constraintAttributes = NotImplemented):
+        KalturaBaseSegmentCondition.__init__(self,
+            scope)
+
+        # Specifies criteria to include or exclude specific content types (recordings, programs, media types) from the evaluation.
+        # @var KalturaContentTypeSelector
+        self.contentFilter = contentFilter
+
+        # The period in days to look back for watch history.
+        # @var int
+        self.evaluationDays = evaluationDays
+
+        # A comma-separated list of device family names (e.g., &#39;mobile&#39;, &#39;web&#39;, &#39;stb&#39;).
+        # @var str
+        self.deviceFamilyIn = deviceFamilyIn
+
+        # Filters watch actions that occurred within a specific time window.
+        # @var KalturaViewTimeConstraint
+        self.viewTimeConstraint = viewTimeConstraint
+
+        # Defines whether to use AND or OR between the items in constraintAttributes.
+        # @var KalturaBooleanOperator
+        self.constraintsOperator = constraintsOperator
+
+        # A list of up to 5 specific constraints to filter the watch history.
+        # @var List[KalturaBaseAttributeConstraint]
+        self.constraintAttributes = constraintAttributes
+
+
+    PROPERTY_LOADERS = {
+        'contentFilter': (KalturaObjectFactory.create, 'KalturaContentTypeSelector'), 
+        'evaluationDays': getXmlNodeInt, 
+        'deviceFamilyIn': getXmlNodeText, 
+        'viewTimeConstraint': (KalturaObjectFactory.create, 'KalturaViewTimeConstraint'), 
+        'constraintsOperator': (KalturaEnumsFactory.createString, "KalturaBooleanOperator"), 
+        'constraintAttributes': (KalturaObjectFactory.createArray, 'KalturaBaseAttributeConstraint'), 
+    }
+
+    def fromXml(self, node):
+        KalturaBaseSegmentCondition.fromXml(self, node)
+        self.fromXmlImpl(node, KalturaBaseWatchCondition.PROPERTY_LOADERS)
+
+    def toParams(self):
+        kparams = KalturaBaseSegmentCondition.toParams(self)
+        kparams.put("objectType", "KalturaBaseWatchCondition")
+        kparams.addObjectIfDefined("contentFilter", self.contentFilter)
+        kparams.addIntIfDefined("evaluationDays", self.evaluationDays)
+        kparams.addStringIfDefined("deviceFamilyIn", self.deviceFamilyIn)
+        kparams.addObjectIfDefined("viewTimeConstraint", self.viewTimeConstraint)
+        kparams.addStringEnumIfDefined("constraintsOperator", self.constraintsOperator)
+        kparams.addArrayIfDefined("constraintAttributes", self.constraintAttributes)
+        return kparams
+
+    def getContentFilter(self):
+        return self.contentFilter
+
+    def setContentFilter(self, newContentFilter):
+        self.contentFilter = newContentFilter
+
+    def getEvaluationDays(self):
+        return self.evaluationDays
+
+    def setEvaluationDays(self, newEvaluationDays):
+        self.evaluationDays = newEvaluationDays
+
+    def getDeviceFamilyIn(self):
+        return self.deviceFamilyIn
+
+    def setDeviceFamilyIn(self, newDeviceFamilyIn):
+        self.deviceFamilyIn = newDeviceFamilyIn
+
+    def getViewTimeConstraint(self):
+        return self.viewTimeConstraint
+
+    def setViewTimeConstraint(self, newViewTimeConstraint):
+        self.viewTimeConstraint = newViewTimeConstraint
+
+    def getConstraintsOperator(self):
+        return self.constraintsOperator
+
+    def setConstraintsOperator(self, newConstraintsOperator):
+        self.constraintsOperator = newConstraintsOperator
+
+    def getConstraintAttributes(self):
+        return self.constraintAttributes
+
+    def setConstraintAttributes(self, newConstraintAttributes):
+        self.constraintAttributes = newConstraintAttributes
+
+
+# @package Kaltura
+# @subpackage Client
+class KalturaWatchCountCondition(KalturaBaseWatchCondition):
+    """Evaluates the number of times the user watched content matching the min and max criterias."""
+
+    def __init__(self,
+            scope = NotImplemented,
+            contentFilter = NotImplemented,
+            evaluationDays = NotImplemented,
+            deviceFamilyIn = NotImplemented,
+            viewTimeConstraint = NotImplemented,
+            constraintsOperator = NotImplemented,
+            constraintAttributes = NotImplemented,
+            minCount = NotImplemented,
+            maxCount = NotImplemented):
+        KalturaBaseWatchCondition.__init__(self,
+            scope,
+            contentFilter,
+            evaluationDays,
+            deviceFamilyIn,
+            viewTimeConstraint,
+            constraintsOperator,
+            constraintAttributes)
+
+        # The minimum count to be met.
+        #             Constraint: Must be less than or equal to maxCount.
+        # @var int
+        self.minCount = minCount
+
+        # The maximum count to be met.
+        #             Constraint: Must be greater than or equal to minCount.
+        # @var int
+        self.maxCount = maxCount
+
+
+    PROPERTY_LOADERS = {
+        'minCount': getXmlNodeInt, 
+        'maxCount': getXmlNodeInt, 
+    }
+
+    def fromXml(self, node):
+        KalturaBaseWatchCondition.fromXml(self, node)
+        self.fromXmlImpl(node, KalturaWatchCountCondition.PROPERTY_LOADERS)
+
+    def toParams(self):
+        kparams = KalturaBaseWatchCondition.toParams(self)
+        kparams.put("objectType", "KalturaWatchCountCondition")
+        kparams.addIntIfDefined("minCount", self.minCount)
+        kparams.addIntIfDefined("maxCount", self.maxCount)
+        return kparams
+
+    def getMinCount(self):
+        return self.minCount
+
+    def setMinCount(self, newMinCount):
+        self.minCount = newMinCount
+
+    def getMaxCount(self):
+        return self.maxCount
+
+    def setMaxCount(self, newMaxCount):
+        self.maxCount = newMaxCount
+
+
+# @package Kaltura
+# @subpackage Client
+class KalturaWatchDurationCondition(KalturaBaseWatchCondition):
+    """Evaluates the total duration (in hours) the user watched content matching the min and max criterias."""
+
+    def __init__(self,
+            scope = NotImplemented,
+            contentFilter = NotImplemented,
+            evaluationDays = NotImplemented,
+            deviceFamilyIn = NotImplemented,
+            viewTimeConstraint = NotImplemented,
+            constraintsOperator = NotImplemented,
+            constraintAttributes = NotImplemented,
+            minDurationHours = NotImplemented,
+            maxDurationHours = NotImplemented):
+        KalturaBaseWatchCondition.__init__(self,
+            scope,
+            contentFilter,
+            evaluationDays,
+            deviceFamilyIn,
+            viewTimeConstraint,
+            constraintsOperator,
+            constraintAttributes)
+
+        # The minimum duration in hours to be met.
+        #             Constraint: Must be less than or equal to maxDurationHours.
+        # @var int
+        self.minDurationHours = minDurationHours
+
+        # The maximum duration in hours to be met.
+        #             Constraint: Must be greater than or equal to minDurationHours.
+        # @var int
+        self.maxDurationHours = maxDurationHours
+
+
+    PROPERTY_LOADERS = {
+        'minDurationHours': getXmlNodeInt, 
+        'maxDurationHours': getXmlNodeInt, 
+    }
+
+    def fromXml(self, node):
+        KalturaBaseWatchCondition.fromXml(self, node)
+        self.fromXmlImpl(node, KalturaWatchDurationCondition.PROPERTY_LOADERS)
+
+    def toParams(self):
+        kparams = KalturaBaseWatchCondition.toParams(self)
+        kparams.put("objectType", "KalturaWatchDurationCondition")
+        kparams.addIntIfDefined("minDurationHours", self.minDurationHours)
+        kparams.addIntIfDefined("maxDurationHours", self.maxDurationHours)
+        return kparams
+
+    def getMinDurationHours(self):
+        return self.minDurationHours
+
+    def setMinDurationHours(self, newMinDurationHours):
+        self.minDurationHours = newMinDurationHours
+
+    def getMaxDurationHours(self):
+        return self.maxDurationHours
+
+    def setMaxDurationHours(self, newMaxDurationHours):
+        self.maxDurationHours = newMaxDurationHours
+
+
+# @package Kaltura
+# @subpackage Client
+class KalturaAudioLanguageConstraint(KalturaBaseAttributeConstraint):
+    """Filters watch actions where the content was played with specific audio languages."""
+
+    def __init__(self,
+            key = NotImplemented,
+            languageCodes = NotImplemented):
+        KalturaBaseAttributeConstraint.__init__(self,
+            key)
+
+        # A comma-separated list of audio language codes.
+        # @var str
+        self.languageCodes = languageCodes
+
+
+    PROPERTY_LOADERS = {
+        'languageCodes': getXmlNodeText, 
+    }
+
+    def fromXml(self, node):
+        KalturaBaseAttributeConstraint.fromXml(self, node)
+        self.fromXmlImpl(node, KalturaAudioLanguageConstraint.PROPERTY_LOADERS)
+
+    def toParams(self):
+        kparams = KalturaBaseAttributeConstraint.toParams(self)
+        kparams.put("objectType", "KalturaAudioLanguageConstraint")
+        kparams.addStringIfDefined("languageCodes", self.languageCodes)
+        return kparams
+
+    def getLanguageCodes(self):
+        return self.languageCodes
+
+    def setLanguageCodes(self, newLanguageCodes):
+        self.languageCodes = newLanguageCodes
+
+
+# @package Kaltura
+# @subpackage Client
+class KalturaDateMetaConstraint(KalturaBaseAttributeConstraint):
+    """Filters assets based on a date metadata field (epoch) using range comparisons.
+                Attempting to create KalturaDateMetaConstraint for key that is not type of Date will fail."""
+
+    def __init__(self,
+            key = NotImplemented,
+            equals = NotImplemented,
+            greaterThan = NotImplemented,
+            smallerThan = NotImplemented):
+        KalturaBaseAttributeConstraint.__init__(self,
+            key)
+
+        # The exact epoch timestamp the field must equal.
+        # @var int
+        self.equals = equals
+
+        # The epoch timestamp the field must be greater than.
+        # @var int
+        self.greaterThan = greaterThan
+
+        # The epoch timestamp the field must be smaller than.
+        # @var int
+        self.smallerThan = smallerThan
+
+
+    PROPERTY_LOADERS = {
+        'equals': getXmlNodeInt, 
+        'greaterThan': getXmlNodeInt, 
+        'smallerThan': getXmlNodeInt, 
+    }
+
+    def fromXml(self, node):
+        KalturaBaseAttributeConstraint.fromXml(self, node)
+        self.fromXmlImpl(node, KalturaDateMetaConstraint.PROPERTY_LOADERS)
+
+    def toParams(self):
+        kparams = KalturaBaseAttributeConstraint.toParams(self)
+        kparams.put("objectType", "KalturaDateMetaConstraint")
+        kparams.addIntIfDefined("equals", self.equals)
+        kparams.addIntIfDefined("greaterThan", self.greaterThan)
+        kparams.addIntIfDefined("smallerThan", self.smallerThan)
+        return kparams
+
+    def getEquals(self):
+        return self.equals
+
+    def setEquals(self, newEquals):
+        self.equals = newEquals
+
+    def getGreaterThan(self):
+        return self.greaterThan
+
+    def setGreaterThan(self, newGreaterThan):
+        self.greaterThan = newGreaterThan
+
+    def getSmallerThan(self):
+        return self.smallerThan
+
+    def setSmallerThan(self, newSmallerThan):
+        self.smallerThan = newSmallerThan
+
+
+# @package Kaltura
+# @subpackage Client
+class KalturaEntitlementConstraint(KalturaBaseAttributeConstraint):
+    """Filters watch actions that were authorized by specific entitlement product IDs."""
+
+    def __init__(self,
+            key = NotImplemented,
+            productIds = NotImplemented):
+        KalturaBaseAttributeConstraint.__init__(self,
+            key)
+
+        # A comma-separated list of entitlement product IDs.
+        # @var str
+        self.productIds = productIds
+
+
+    PROPERTY_LOADERS = {
+        'productIds': getXmlNodeText, 
+    }
+
+    def fromXml(self, node):
+        KalturaBaseAttributeConstraint.fromXml(self, node)
+        self.fromXmlImpl(node, KalturaEntitlementConstraint.PROPERTY_LOADERS)
+
+    def toParams(self):
+        kparams = KalturaBaseAttributeConstraint.toParams(self)
+        kparams.put("objectType", "KalturaEntitlementConstraint")
+        kparams.addStringIfDefined("productIds", self.productIds)
+        return kparams
+
+    def getProductIds(self):
+        return self.productIds
+
+    def setProductIds(self, newProductIds):
+        self.productIds = newProductIds
+
+
+# @package Kaltura
+# @subpackage Client
+class KalturaEnumMetaConstraint(KalturaBaseAttributeConstraint):
+    """Filters assets based on an enum metadata field matching one of the values.
+                Attempting to create KalturaEnumMetaConstraint for key that is not type of Enum will fail."""
+
+    def __init__(self,
+            key = NotImplemented,
+            oneOf = NotImplemented):
+        KalturaBaseAttributeConstraint.__init__(self,
+            key)
+
+        # A comma-separated list of values. The metadata field enum&#39;s values must match at least one of these items.
+        # @var str
+        self.oneOf = oneOf
+
+
+    PROPERTY_LOADERS = {
+        'oneOf': getXmlNodeText, 
+    }
+
+    def fromXml(self, node):
+        KalturaBaseAttributeConstraint.fromXml(self, node)
+        self.fromXmlImpl(node, KalturaEnumMetaConstraint.PROPERTY_LOADERS)
+
+    def toParams(self):
+        kparams = KalturaBaseAttributeConstraint.toParams(self)
+        kparams.put("objectType", "KalturaEnumMetaConstraint")
+        kparams.addStringIfDefined("oneOf", self.oneOf)
+        return kparams
+
+    def getOneOf(self):
+        return self.oneOf
+
+    def setOneOf(self, newOneOf):
+        self.oneOf = newOneOf
+
+
+# @package Kaltura
+# @subpackage Client
+class KalturaNumberMetaConstraint(KalturaBaseAttributeConstraint):
+    """Filters assets based on a numeric metadata field using range comparisons.
+                Attempting to create KalturaNumberMetaConstraint for key that is not type of Number will fail."""
+
+    def __init__(self,
+            key = NotImplemented,
+            equals = NotImplemented,
+            greaterThan = NotImplemented,
+            smallerThan = NotImplemented):
+        KalturaBaseAttributeConstraint.__init__(self,
+            key)
+
+        # The exact numeric value the field must equal.
+        # @var int
+        self.equals = equals
+
+        # The numeric value the field must be greater than.
+        # @var int
+        self.greaterThan = greaterThan
+
+        # The numeric value the field must be smaller than.
+        # @var int
+        self.smallerThan = smallerThan
+
+
+    PROPERTY_LOADERS = {
+        'equals': getXmlNodeInt, 
+        'greaterThan': getXmlNodeInt, 
+        'smallerThan': getXmlNodeInt, 
+    }
+
+    def fromXml(self, node):
+        KalturaBaseAttributeConstraint.fromXml(self, node)
+        self.fromXmlImpl(node, KalturaNumberMetaConstraint.PROPERTY_LOADERS)
+
+    def toParams(self):
+        kparams = KalturaBaseAttributeConstraint.toParams(self)
+        kparams.put("objectType", "KalturaNumberMetaConstraint")
+        kparams.addIntIfDefined("equals", self.equals)
+        kparams.addIntIfDefined("greaterThan", self.greaterThan)
+        kparams.addIntIfDefined("smallerThan", self.smallerThan)
+        return kparams
+
+    def getEquals(self):
+        return self.equals
+
+    def setEquals(self, newEquals):
+        self.equals = newEquals
+
+    def getGreaterThan(self):
+        return self.greaterThan
+
+    def setGreaterThan(self, newGreaterThan):
+        self.greaterThan = newGreaterThan
+
+    def getSmallerThan(self):
+        return self.smallerThan
+
+    def setSmallerThan(self, newSmallerThan):
+        self.smallerThan = newSmallerThan
+
+
+# @package Kaltura
+# @subpackage Client
+class KalturaSubtitleLanguageConstraint(KalturaBaseAttributeConstraint):
+    """Filters watch actions where the content was played with specific subtitle languages."""
+
+    def __init__(self,
+            key = NotImplemented,
+            languageCodes = NotImplemented):
+        KalturaBaseAttributeConstraint.__init__(self,
+            key)
+
+        # A comma-separated list of subtitle language codes.
+        # @var str
+        self.languageCodes = languageCodes
+
+
+    PROPERTY_LOADERS = {
+        'languageCodes': getXmlNodeText, 
+    }
+
+    def fromXml(self, node):
+        KalturaBaseAttributeConstraint.fromXml(self, node)
+        self.fromXmlImpl(node, KalturaSubtitleLanguageConstraint.PROPERTY_LOADERS)
+
+    def toParams(self):
+        kparams = KalturaBaseAttributeConstraint.toParams(self)
+        kparams.put("objectType", "KalturaSubtitleLanguageConstraint")
+        kparams.addStringIfDefined("languageCodes", self.languageCodes)
+        return kparams
+
+    def getLanguageCodes(self):
+        return self.languageCodes
+
+    def setLanguageCodes(self, newLanguageCodes):
+        self.languageCodes = newLanguageCodes
+
+
+# @package Kaltura
+# @subpackage Client
+class KalturaTagsMetaConstraint(KalturaBaseAttributeConstraint):
+    """Filters assets based on a tags metadata field (multivalue) where at least one tag matches.
+                Attempting to create KalturaTagsMetaConstraint for key that is not type of Tags will fail."""
+
+    def __init__(self,
+            key = NotImplemented,
+            oneOf = NotImplemented):
+        KalturaBaseAttributeConstraint.__init__(self,
+            key)
+
+        # A comma-separated list of values. The metadata field tag&#39;s values must match at least one of these items.
+        # @var str
+        self.oneOf = oneOf
+
+
+    PROPERTY_LOADERS = {
+        'oneOf': getXmlNodeText, 
+    }
+
+    def fromXml(self, node):
+        KalturaBaseAttributeConstraint.fromXml(self, node)
+        self.fromXmlImpl(node, KalturaTagsMetaConstraint.PROPERTY_LOADERS)
+
+    def toParams(self):
+        kparams = KalturaBaseAttributeConstraint.toParams(self)
+        kparams.put("objectType", "KalturaTagsMetaConstraint")
+        kparams.addStringIfDefined("oneOf", self.oneOf)
+        return kparams
+
+    def getOneOf(self):
+        return self.oneOf
+
+    def setOneOf(self, newOneOf):
+        self.oneOf = newOneOf
+
+
+# @package Kaltura
+# @subpackage Client
+class KalturaTextMetaConstraint(KalturaBaseAttributeConstraint):
+    """Filters assets based on a text metadata field containing a substring."""
+
+    def __init__(self,
+            key = NotImplemented,
+            contains = NotImplemented,
+            equals = NotImplemented):
+        KalturaBaseAttributeConstraint.__init__(self,
+            key)
+
+        # The substring that the metadata field value must contain.
+        # @var str
+        self.contains = contains
+
+        # The exact string value the field must equal.
+        # @var str
+        self.equals = equals
+
+
+    PROPERTY_LOADERS = {
+        'contains': getXmlNodeText, 
+        'equals': getXmlNodeText, 
+    }
+
+    def fromXml(self, node):
+        KalturaBaseAttributeConstraint.fromXml(self, node)
+        self.fromXmlImpl(node, KalturaTextMetaConstraint.PROPERTY_LOADERS)
+
+    def toParams(self):
+        kparams = KalturaBaseAttributeConstraint.toParams(self)
+        kparams.put("objectType", "KalturaTextMetaConstraint")
+        kparams.addStringIfDefined("contains", self.contains)
+        kparams.addStringIfDefined("equals", self.equals)
+        return kparams
+
+    def getContains(self):
+        return self.contains
+
+    def setContains(self, newContains):
+        self.contains = newContains
+
+    def getEquals(self):
+        return self.equals
+
+    def setEquals(self, newEquals):
+        self.equals = newEquals
+
+
+# @package Kaltura
+# @subpackage Client
+class KalturaCollectionPurchasedCondition(KalturaBaseSegmentCondition):
+    """Evaluates whether a user purchased a specific Collection (BoxSet)."""
+
+    def __init__(self,
+            scope = NotImplemented,
+            collectionIdEquals = NotImplemented,
+            days = NotImplemented):
+        KalturaBaseSegmentCondition.__init__(self,
+            scope)
+
+        # The specific purchased collection product identifier to check.
+        # @var int
+        self.collectionIdEquals = collectionIdEquals
+
+        # The number of days to look back for the purchase.
+        # @var int
+        self.days = days
+
+
+    PROPERTY_LOADERS = {
+        'collectionIdEquals': getXmlNodeInt, 
+        'days': getXmlNodeInt, 
+    }
+
+    def fromXml(self, node):
+        KalturaBaseSegmentCondition.fromXml(self, node)
+        self.fromXmlImpl(node, KalturaCollectionPurchasedCondition.PROPERTY_LOADERS)
+
+    def toParams(self):
+        kparams = KalturaBaseSegmentCondition.toParams(self)
+        kparams.put("objectType", "KalturaCollectionPurchasedCondition")
+        kparams.addIntIfDefined("collectionIdEquals", self.collectionIdEquals)
+        kparams.addIntIfDefined("days", self.days)
+        return kparams
+
+    def getCollectionIdEquals(self):
+        return self.collectionIdEquals
+
+    def setCollectionIdEquals(self, newCollectionIdEquals):
+        self.collectionIdEquals = newCollectionIdEquals
+
+    def getDays(self):
+        return self.days
+
+    def setDays(self, newDays):
+        self.days = newDays
 
 
 # @package Kaltura
@@ -28657,13 +29494,15 @@ class KalturaContentScoreCondition(KalturaBaseSegmentCondition):
     """Defines a condition which is essentially a combination of several content-based actions, each has their own score multiplier"""
 
     def __init__(self,
+            scope = NotImplemented,
             minScore = NotImplemented,
             maxScore = NotImplemented,
             days = NotImplemented,
             field = NotImplemented,
             values = NotImplemented,
             actions = NotImplemented):
-        KalturaBaseSegmentCondition.__init__(self)
+        KalturaBaseSegmentCondition.__init__(self,
+            scope)
 
         # The minimum score to be met
         # @var int
@@ -28755,55 +29594,59 @@ class KalturaContentScoreCondition(KalturaBaseSegmentCondition):
 # @package Kaltura
 # @subpackage Client
 class KalturaMonetizationCondition(KalturaBaseSegmentCondition):
-    """Defines a condition which is essentially a combination of several monetization-based actions, each has their own score multiplier"""
+    """Defines a condition based on monetization actions."""
 
     def __init__(self,
-            days = NotImplemented,
-            type = NotImplemented,
-            operator = NotImplemented,
+            scope = NotImplemented,
             businessModuleIdIn = NotImplemented,
             currencyCode = NotImplemented,
+            days = NotImplemented,
+            maxValue = NotImplemented,
             minValue = NotImplemented,
-            maxValue = NotImplemented):
-        KalturaBaseSegmentCondition.__init__(self)
+            operator = NotImplemented,
+            type = NotImplemented):
+        KalturaBaseSegmentCondition.__init__(self,
+            scope)
 
-        # How many days back should the actions be considered
-        # @var int
-        self.days = days
-
-        # Purchase type
-        # @var KalturaMonetizationType
-        self.type = type
-
-        # Mathermtical operator to calculate
-        # @var KalturaMathemticalOperatorType
-        self.operator = operator
-
-        # Comma saperated list of business module IDs
+        # A comma-separated list of business module IDs to include in the filter.
         # @var str
         self.businessModuleIdIn = businessModuleIdIn
 
-        # Which currency code should be taken into consideration
+        # The ISO 4217 currency code to filter by.
         # @var str
         self.currencyCode = currencyCode
 
-        # The minimum value to be met
+        # The number of days to look back for monetization actions.
         # @var int
-        self.minValue = minValue
+        self.days = days
 
-        # The maximum value to be met
+        # The maximum allowable value for the calculated metric.
+        #             MinValue must be greater than or equal to MaxValue.
         # @var int
         self.maxValue = maxValue
 
+        # The minimum required value for the calculated metric.
+        #             MinValue must be less than or equal to MaxValue.
+        # @var int
+        self.minValue = minValue
+
+        # The aggregation method used to calculate the value (e.g., counting transactions, summing amounts).
+        # @var KalturaMathemticalOperatorType
+        self.operator = operator
+
+        # The specific monetization type to filter by.
+        # @var KalturaMonetizationType
+        self.type = type
+
 
     PROPERTY_LOADERS = {
-        'days': getXmlNodeInt, 
-        'type': (KalturaEnumsFactory.createString, "KalturaMonetizationType"), 
-        'operator': (KalturaEnumsFactory.createString, "KalturaMathemticalOperatorType"), 
         'businessModuleIdIn': getXmlNodeText, 
         'currencyCode': getXmlNodeText, 
-        'minValue': getXmlNodeInt, 
+        'days': getXmlNodeInt, 
         'maxValue': getXmlNodeInt, 
+        'minValue': getXmlNodeInt, 
+        'operator': (KalturaEnumsFactory.createString, "KalturaMathemticalOperatorType"), 
+        'type': (KalturaEnumsFactory.createString, "KalturaMonetizationType"), 
     }
 
     def fromXml(self, node):
@@ -28813,32 +29656,14 @@ class KalturaMonetizationCondition(KalturaBaseSegmentCondition):
     def toParams(self):
         kparams = KalturaBaseSegmentCondition.toParams(self)
         kparams.put("objectType", "KalturaMonetizationCondition")
-        kparams.addIntIfDefined("days", self.days)
-        kparams.addStringEnumIfDefined("type", self.type)
-        kparams.addStringEnumIfDefined("operator", self.operator)
         kparams.addStringIfDefined("businessModuleIdIn", self.businessModuleIdIn)
         kparams.addStringIfDefined("currencyCode", self.currencyCode)
-        kparams.addIntIfDefined("minValue", self.minValue)
+        kparams.addIntIfDefined("days", self.days)
         kparams.addIntIfDefined("maxValue", self.maxValue)
+        kparams.addIntIfDefined("minValue", self.minValue)
+        kparams.addStringEnumIfDefined("operator", self.operator)
+        kparams.addStringEnumIfDefined("type", self.type)
         return kparams
-
-    def getDays(self):
-        return self.days
-
-    def setDays(self, newDays):
-        self.days = newDays
-
-    def getType(self):
-        return self.type
-
-    def setType(self, newType):
-        self.type = newType
-
-    def getOperator(self):
-        return self.operator
-
-    def setOperator(self, newOperator):
-        self.operator = newOperator
 
     def getBusinessModuleIdIn(self):
         return self.businessModuleIdIn
@@ -28852,17 +29677,135 @@ class KalturaMonetizationCondition(KalturaBaseSegmentCondition):
     def setCurrencyCode(self, newCurrencyCode):
         self.currencyCode = newCurrencyCode
 
-    def getMinValue(self):
-        return self.minValue
+    def getDays(self):
+        return self.days
 
-    def setMinValue(self, newMinValue):
-        self.minValue = newMinValue
+    def setDays(self, newDays):
+        self.days = newDays
 
     def getMaxValue(self):
         return self.maxValue
 
     def setMaxValue(self, newMaxValue):
         self.maxValue = newMaxValue
+
+    def getMinValue(self):
+        return self.minValue
+
+    def setMinValue(self, newMinValue):
+        self.minValue = newMinValue
+
+    def getOperator(self):
+        return self.operator
+
+    def setOperator(self, newOperator):
+        self.operator = newOperator
+
+    def getType(self):
+        return self.type
+
+    def setType(self, newType):
+        self.type = newType
+
+
+# @package Kaltura
+# @subpackage Client
+class KalturaSubscriptionEntitledCondition(KalturaBaseSegmentCondition):
+    """Evaluates whether a user holds an entitlement for a specific subscription."""
+
+    def __init__(self,
+            scope = NotImplemented,
+            subscriptionIdEquals = NotImplemented):
+        KalturaBaseSegmentCondition.__init__(self,
+            scope)
+
+        # The specific subscription product identifier to check.
+        # @var int
+        self.subscriptionIdEquals = subscriptionIdEquals
+
+
+    PROPERTY_LOADERS = {
+        'subscriptionIdEquals': getXmlNodeInt, 
+    }
+
+    def fromXml(self, node):
+        KalturaBaseSegmentCondition.fromXml(self, node)
+        self.fromXmlImpl(node, KalturaSubscriptionEntitledCondition.PROPERTY_LOADERS)
+
+    def toParams(self):
+        kparams = KalturaBaseSegmentCondition.toParams(self)
+        kparams.put("objectType", "KalturaSubscriptionEntitledCondition")
+        kparams.addIntIfDefined("subscriptionIdEquals", self.subscriptionIdEquals)
+        return kparams
+
+    def getSubscriptionIdEquals(self):
+        return self.subscriptionIdEquals
+
+    def setSubscriptionIdEquals(self, newSubscriptionIdEquals):
+        self.subscriptionIdEquals = newSubscriptionIdEquals
+
+
+# @package Kaltura
+# @subpackage Client
+class KalturaTvodPurchasedCondition(KalturaBaseSegmentCondition):
+    """Evaluates whether a user purchased a specific TVOD."""
+
+    def __init__(self,
+            scope = NotImplemented,
+            ppvIdEquals = NotImplemented,
+            mediaIdEquals = NotImplemented,
+            days = NotImplemented):
+        KalturaBaseSegmentCondition.__init__(self,
+            scope)
+
+        # The specific purchased ppv product identifier to check.
+        # @var int
+        self.ppvIdEquals = ppvIdEquals
+
+        # The specific purchased media entry identifier to check.
+        # @var int
+        self.mediaIdEquals = mediaIdEquals
+
+        # The number of days to look back for the purchase.
+        # @var int
+        self.days = days
+
+
+    PROPERTY_LOADERS = {
+        'ppvIdEquals': getXmlNodeInt, 
+        'mediaIdEquals': getXmlNodeInt, 
+        'days': getXmlNodeInt, 
+    }
+
+    def fromXml(self, node):
+        KalturaBaseSegmentCondition.fromXml(self, node)
+        self.fromXmlImpl(node, KalturaTvodPurchasedCondition.PROPERTY_LOADERS)
+
+    def toParams(self):
+        kparams = KalturaBaseSegmentCondition.toParams(self)
+        kparams.put("objectType", "KalturaTvodPurchasedCondition")
+        kparams.addIntIfDefined("ppvIdEquals", self.ppvIdEquals)
+        kparams.addIntIfDefined("mediaIdEquals", self.mediaIdEquals)
+        kparams.addIntIfDefined("days", self.days)
+        return kparams
+
+    def getPpvIdEquals(self):
+        return self.ppvIdEquals
+
+    def setPpvIdEquals(self, newPpvIdEquals):
+        self.ppvIdEquals = newPpvIdEquals
+
+    def getMediaIdEquals(self):
+        return self.mediaIdEquals
+
+    def setMediaIdEquals(self, newMediaIdEquals):
+        self.mediaIdEquals = newMediaIdEquals
+
+    def getDays(self):
+        return self.days
+
+    def setDays(self, newDays):
+        self.days = newDays
 
 
 # @package Kaltura
@@ -28871,9 +29814,11 @@ class KalturaUserDataCondition(KalturaBaseSegmentCondition):
     """User data condition for segmentation"""
 
     def __init__(self,
+            scope = NotImplemented,
             field = NotImplemented,
             value = NotImplemented):
-        KalturaBaseSegmentCondition.__init__(self)
+        KalturaBaseSegmentCondition.__init__(self,
+            scope)
 
         # Field name
         # @var str
@@ -64333,6 +65278,7 @@ class KalturaCoreClient(KalturaClientPlugin):
             'KalturaCompensationType': KalturaCompensationType,
             'KalturaConcurrencyLimitationType': KalturaConcurrencyLimitationType,
             'KalturaConditionOperator': KalturaConditionOperator,
+            'KalturaConditionScope': KalturaConditionScope,
             'KalturaConfigurationGroupDeviceOrderBy': KalturaConfigurationGroupDeviceOrderBy,
             'KalturaConfigurationGroupTagOrderBy': KalturaConfigurationGroupTagOrderBy,
             'KalturaConfigurationsOrderBy': KalturaConfigurationsOrderBy,
@@ -64964,9 +65910,26 @@ class KalturaCoreClient(KalturaClientPlugin):
             'KalturaBaseSegmentValue': KalturaBaseSegmentValue,
             'KalturaSegmentationType': KalturaSegmentationType,
             'KalturaSegmentationTypeListResponse': KalturaSegmentationTypeListResponse,
+            'KalturaContentTypeSelector': KalturaContentTypeSelector,
+            'KalturaViewTimeConstraint': KalturaViewTimeConstraint,
+            'KalturaBaseAttributeConstraint': KalturaBaseAttributeConstraint,
+            'KalturaBaseWatchCondition': KalturaBaseWatchCondition,
+            'KalturaWatchCountCondition': KalturaWatchCountCondition,
+            'KalturaWatchDurationCondition': KalturaWatchDurationCondition,
+            'KalturaAudioLanguageConstraint': KalturaAudioLanguageConstraint,
+            'KalturaDateMetaConstraint': KalturaDateMetaConstraint,
+            'KalturaEntitlementConstraint': KalturaEntitlementConstraint,
+            'KalturaEnumMetaConstraint': KalturaEnumMetaConstraint,
+            'KalturaNumberMetaConstraint': KalturaNumberMetaConstraint,
+            'KalturaSubtitleLanguageConstraint': KalturaSubtitleLanguageConstraint,
+            'KalturaTagsMetaConstraint': KalturaTagsMetaConstraint,
+            'KalturaTextMetaConstraint': KalturaTextMetaConstraint,
+            'KalturaCollectionPurchasedCondition': KalturaCollectionPurchasedCondition,
             'KalturaContentActionCondition': KalturaContentActionCondition,
             'KalturaContentScoreCondition': KalturaContentScoreCondition,
             'KalturaMonetizationCondition': KalturaMonetizationCondition,
+            'KalturaSubscriptionEntitledCondition': KalturaSubscriptionEntitledCondition,
+            'KalturaTvodPurchasedCondition': KalturaTvodPurchasedCondition,
             'KalturaUserDataCondition': KalturaUserDataCondition,
             'KalturaAssetOrderSegmentAction': KalturaAssetOrderSegmentAction,
             'KalturaKsqlSegmentAction': KalturaKsqlSegmentAction,
