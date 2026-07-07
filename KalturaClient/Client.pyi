@@ -31,6 +31,7 @@ from KalturaClient.Plugins.Core import KalturaObject
 from KalturaClient.Plugins.Core import KalturaAiMetadataGeneratorService
 from KalturaClient.Plugins.Core import KalturaAiRecommendationTreeService
 from KalturaClient.Plugins.Core import KalturaAnnouncementService
+from KalturaClient.Plugins.Core import KalturaAppleIdpService
 from KalturaClient.Plugins.Core import KalturaAppTokenService
 from KalturaClient.Plugins.Core import KalturaAssetCommentService
 from KalturaClient.Plugins.Core import KalturaAssetService
@@ -83,9 +84,11 @@ from KalturaClient.Plugins.Core import KalturaEventNotificationActionService
 from KalturaClient.Plugins.Core import KalturaEventNotificationService
 from KalturaClient.Plugins.Core import KalturaExportTaskService
 from KalturaClient.Plugins.Core import KalturaExternalChannelProfileService
+from KalturaClient.Plugins.Core import KalturaFacebookIdpService
 from KalturaClient.Plugins.Core import KalturaFavoriteService
 from KalturaClient.Plugins.Core import KalturaFollowTvSeriesService
 from KalturaClient.Plugins.Core import KalturaGeoBlockRuleService
+from KalturaClient.Plugins.Core import KalturaGoogleIdpService
 from KalturaClient.Plugins.Core import KalturaHomeNetworkService
 from KalturaClient.Plugins.Core import KalturaHouseholdService
 from KalturaClient.Plugins.Core import KalturaHouseholdCouponService
@@ -217,6 +220,7 @@ class KalturaClient:
     aiMetadataGenerator: KalturaAiMetadataGeneratorService
     aiRecommendationTree: KalturaAiRecommendationTreeService
     announcement: KalturaAnnouncementService
+    appleIdp: KalturaAppleIdpService
     appToken: KalturaAppTokenService
     assetComment: KalturaAssetCommentService
     asset: KalturaAssetService
@@ -269,9 +273,11 @@ class KalturaClient:
     eventNotification: KalturaEventNotificationService
     exportTask: KalturaExportTaskService
     externalChannelProfile: KalturaExternalChannelProfileService
+    facebookIdp: KalturaFacebookIdpService
     favorite: KalturaFavoriteService
     followTvSeries: KalturaFollowTvSeriesService
     geoBlockRule: KalturaGeoBlockRuleService
+    googleIdp: KalturaGoogleIdpService
     homeNetwork: KalturaHomeNetworkService
     household: KalturaHouseholdService
     householdCoupon: KalturaHouseholdCouponService
