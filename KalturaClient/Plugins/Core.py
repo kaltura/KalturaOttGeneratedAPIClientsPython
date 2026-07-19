@@ -55183,7 +55183,7 @@ class KalturaTimeShiftedTvPartnerSettings(KalturaObjectBase):
             maxRecordingConcurrency = NotImplemented,
             maxConcurrencyMargin = NotImplemented,
             shouldRoundStopRecordingsBySeconds = NotImplemented,
-            recordingsV2Enabled = NotImplemented):
+            isRecordingsV2Enabled = NotImplemented):
         KalturaObjectBase.__init__(self)
 
         # Is catch-up enabled
@@ -55299,7 +55299,7 @@ class KalturaTimeShiftedTvPartnerSettings(KalturaObjectBase):
         #             using MongoDB storage and async handlers, while maintaining backward compatibility with the existing
         #             KalturaRecording API. Uses partner default padding. Default value should be FALSE
         # @var bool
-        self.recordingsV2Enabled = recordingsV2Enabled
+        self.isRecordingsV2Enabled = isRecordingsV2Enabled
 
 
     PROPERTY_LOADERS = {
@@ -55330,7 +55330,7 @@ class KalturaTimeShiftedTvPartnerSettings(KalturaObjectBase):
         'maxRecordingConcurrency': getXmlNodeInt, 
         'maxConcurrencyMargin': getXmlNodeInt, 
         'shouldRoundStopRecordingsBySeconds': getXmlNodeBool, 
-        'recordingsV2Enabled': getXmlNodeBool, 
+        'isRecordingsV2Enabled': getXmlNodeBool, 
     }
 
     def fromXml(self, node):
@@ -55367,7 +55367,7 @@ class KalturaTimeShiftedTvPartnerSettings(KalturaObjectBase):
         kparams.addIntIfDefined("maxRecordingConcurrency", self.maxRecordingConcurrency)
         kparams.addIntIfDefined("maxConcurrencyMargin", self.maxConcurrencyMargin)
         kparams.addBoolIfDefined("shouldRoundStopRecordingsBySeconds", self.shouldRoundStopRecordingsBySeconds)
-        kparams.addBoolIfDefined("recordingsV2Enabled", self.recordingsV2Enabled)
+        kparams.addBoolIfDefined("isRecordingsV2Enabled", self.isRecordingsV2Enabled)
         return kparams
 
     def getCatchUpEnabled(self):
@@ -55532,11 +55532,11 @@ class KalturaTimeShiftedTvPartnerSettings(KalturaObjectBase):
     def setShouldRoundStopRecordingsBySeconds(self, newShouldRoundStopRecordingsBySeconds):
         self.shouldRoundStopRecordingsBySeconds = newShouldRoundStopRecordingsBySeconds
 
-    def getRecordingsV2Enabled(self):
-        return self.recordingsV2Enabled
+    def getIsRecordingsV2Enabled(self):
+        return self.isRecordingsV2Enabled
 
-    def setRecordingsV2Enabled(self, newRecordingsV2Enabled):
-        self.recordingsV2Enabled = newRecordingsV2Enabled
+    def setIsRecordingsV2Enabled(self, newIsRecordingsV2Enabled):
+        self.isRecordingsV2Enabled = newIsRecordingsV2Enabled
 
 
 # @package Kaltura
